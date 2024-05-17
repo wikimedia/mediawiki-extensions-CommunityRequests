@@ -1,0 +1,36 @@
+{
+	"name": "CommunityRequests",
+	"author": [
+		"[https://meta.wikimedia.org/wiki/Special:MyLanguage/Community_Tech WMF Community Tech team]"
+	],
+	"url": "https://www.mediawiki.org/wiki/Special:MyLanguage/Extension:CommunityRequests",
+	"descriptionmsg": "communityrequests-desc",
+	"license-name": "GPL-2.0-or-later",
+	"type": "other",
+	"requires": {
+		"MediaWiki": ">= 1.43.0"
+	},
+	"AutoloadNamespaces": {
+		"MediaWiki\\Extension\\CommunityRequests\\": "src/"
+	},
+	"config": {
+		"CommunityRequestsEnable": {
+			"description": "Enable the CommunityRequests extension.",
+			"value": true
+		}
+	},
+	"HookHandlers": {
+		"CommunityRequestsHooks": {
+			"class": "MediaWiki\\Extension\\CommunityRequests\\Hooks"
+		}
+	},
+	"Hooks": {
+		"BeforePageDisplay": "CommunityRequestsHooks"
+	},
+	"MessagesDirs": {
+		"CommunityRequests": [
+			"i18n"
+		]
+	},
+	"manifest_version": 2
+}

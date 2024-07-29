@@ -10,23 +10,6 @@
 	"requires": {
 		"MediaWiki": ">= 1.43.0"
 	},
-	"AutoloadNamespaces": {
-		"MediaWiki\\Extension\\CommunityRequests\\": "src/"
-	},
-	"config": {
-		"CommunityRequestsEnable": {
-			"description": "Enable the CommunityRequests extension.",
-			"value": true
-		}
-	},
-	"HookHandlers": {
-		"CommunityRequestsHooks": {
-			"class": "MediaWiki\\Extension\\CommunityRequests\\Hooks"
-		}
-	},
-	"Hooks": {
-		"BeforePageDisplay": "CommunityRequestsHooks"
-	},
 	"MessagesDirs": {
 		"CommunityRequests": [
 			"i18n"

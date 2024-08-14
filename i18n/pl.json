@@ -1,0 +1,32 @@
+{
+	"@metadata": {
+		"authors": [
+		]
+	},
+	"communityrequests-status-draft": "Brudnopis",
+	"communityrequests-status-submitted": "Zgłoszone",
+	"communityrequests-status-open": "Otwarte",
+	"communityrequests-status-in-progress": "W trakcie",
+	"communityrequests-status-delivered": "Doręczone",
+	"communityrequests-status-blocked": "Zablokowane",
+	"communityrequests-status-archived": "Zarchiwizowane",
+	"communityrequests-status-unknown": "Nieznane",
+	"communityrequests-type-1": "Prośba o funkcję",
+	"communityrequests-type-3": "Zmiana systemowa",
+	"communityrequests-edit-wish": "Edytuj życzenie",
+	"communityrequests-discuss-wish": "Przedyskutuj to życzenie",
+	"communityrequests-wish-description-heading": "Opis",
+	"communityrequests-wish-focus-area-heading": "Przypisany obszar",
+	"communityrequests-wish-type-heading": "Rodzaj życzenia",
+	"communityrequests-wish-related-heading": "Powiązane projekty",
+	"communityrequests-submit-wish": "Prześlij życzenie",
+	"communityrequests-desktop-only": "Niestety, wysyłanie zgłoszeń do Listy Życzeń Społeczności wymaga do działania uruchomienie w [$1 interfejsie na komputery stacjonarne].",
+	"communityrequests-form-loading": "Ładowanie formularza zgłoszeniowego…",
+	"communityrequests-form-loading-1": "Jeśli formularz nie zostanie załadowany, upewnij się, że obsługa JavaScript jest włączona.",
+	"communityrequests-form-loading-2": "Jeśli nadal masz problemy, poproś o pomoc na $1.",
+	"communityrequests-please-log-in": "Proszę się zalogować, aby przesłać życzenie.",
+	"communityrequests-focus-area-supported": "Poparte przez:",
+	"communityrequests-focus-area-supported-val": "$1 {{PLURAL:$2|ludzi|osobę}}",
+	"communityrequests-focus-area-owners": "Odpowiedzialni:",
+	"communityrequests-focus-area-view-wishes": "Zobacz życzenia z tego obszaru"
+}

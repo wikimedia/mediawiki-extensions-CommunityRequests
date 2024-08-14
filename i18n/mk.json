@@ -1,0 +1,34 @@
+{
+	"@metadata": {
+		"authors": [
+		]
+	},
+	"communityrequests-status-draft": "Нацрт",
+	"communityrequests-status-submitted": "Поднесено",
+	"communityrequests-status-open": "Отворено",
+	"communityrequests-status-in-progress": "Во тек",
+	"communityrequests-status-delivered": "Доставено",
+	"communityrequests-status-blocked": "Блокирано",
+	"communityrequests-status-archived": "Архивирано",
+	"communityrequests-status-unknown": "Непознато",
+	"communityrequests-type-1": "Барање за функција",
+	"communityrequests-type-3": "Системска промена",
+	"communityrequests-edit-wish": "Уреди желба",
+	"communityrequests-wish-description-heading": "Опис",
+	"communityrequests-wish-focus-area-heading": "Укажана клучна област",
+	"communityrequests-wish-type-heading": "Тип на желба",
+	"communityrequests-wish-related-heading": "Сродни проекти",
+	"communityrequests-wish-audience-heading": "Засегнати корисници",
+	"communityrequests-wish-phabricator-heading": "Задачи на Фабрикатор",
+	"communityrequests-wish-other-details-heading": "Други поединости",
+	"communityrequests-wish-created": "Создадено",
+	"communityrequests-wish-updated": "Последна поднова",
+	"communityrequests-wish-proposer": "Автор",
+	"communityrequests-all-projects-1": "Сите проекти",
+	"communityrequests-wishes-type-header": "Тип",
+	"communityrequests-wishes-projects-header": "Проекти",
+	"communityrequests-wishes-date-header": "Датум (UTC)",
+	"communityrequests-wishes-status-header": "Состојба",
+	"communityrequests-focus-area-unassigned": "Неукажано",
+	"communityrequests-submit-wish": "Поднеси желба"
+}

@@ -1,0 +1,34 @@
+{
+	"@metadata": {
+		"authors": [
+		]
+	},
+	"communityrequests-status-draft": "Draf",
+	"communityrequests-status-submitted": "Diserahkan",
+	"communityrequests-status-open": "Terbuka",
+	"communityrequests-status-in-progress": "Sedang berjalan",
+	"communityrequests-status-delivered": "Ditunaikan",
+	"communityrequests-status-blocked": "Disekat",
+	"communityrequests-status-archived": "Diarkibkan",
+	"communityrequests-status-unknown": "Tidak diketahui",
+	"communityrequests-type-1": "Permintaan ciri",
+	"communityrequests-type-3": "Perubahan sistem",
+	"communityrequests-edit-wish": "Sunting hajat",
+	"communityrequests-discuss-wish": "Bincang hajat ini",
+	"communityrequests-wish-description-heading": "Keterangan",
+	"communityrequests-wish-focus-area-heading": "Kawasan fokus yang ditugaskan",
+	"communityrequests-wish-type-heading": "Jenis hajat",
+	"communityrequests-wish-related-heading": "Projek berkaitan",
+	"communityrequests-wish-audience-heading": "Pengguna yang terkesan",
+	"communityrequests-wish-phabricator-heading": "Tugasan Phabricator",
+	"communityrequests-wish-other-details-heading": "Butiran lain",
+	"communityrequests-wish-created": "Dicipta",
+	"communityrequests-wish-updated": "Kemas kini terakhir",
+	"communityrequests-wish-proposer": "Pengarang",
+	"communityrequests-all-projects-1": "Semua projek",
+	"communityrequests-wishes-type-header": "Jenis",
+	"communityrequests-wishes-projects-header": "Projek",
+	"communityrequests-wishes-date-header": "Tarikh (UTC)",
+	"communityrequests-wishes-status-header": "Status",
+	"communityrequests-focus-area-unassigned": "Belum ditugaskan"
+}

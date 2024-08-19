@@ -1,0 +1,11 @@
+{
+	"@metadata": {
+		"authors": [
+		]
+	},
+	"communityrequests-status-draft": "प्रारूप",
+	"communityrequests-status-open": "खुला",
+	"communityrequests-status-in-progress": "प्रगति में",
+	"communityrequests-status-blocked": "अवरोधित",
+	"communityrequests-status-unknown": "अज्ञात"
+}

@@ -1,7 +1,6 @@
 {
 	"@metadata": {
-		"authors": [
-		]
+		"authors": []
 	},
 	"communityrequests-status-draft": "Чернетка",
 	"communityrequests-status-submitted": "Подано",
@@ -11,9 +10,6 @@
 	"communityrequests-status-blocked": "Заблоковано",
 	"communityrequests-status-archived": "Архівовано",
 	"communityrequests-status-unknown": "Невідомо",
-	"communityrequests-type-1": "Запит на функцію",
-	"communityrequests-type-3": "Системна зміна",
-	"communityrequests-type-4": "Невідомий",
 	"communityrequests-edit-wish": "Редагувати побажання",
 	"communityrequests-discuss-wish": "Обговорити це побажання",
 	"communityrequests-wish-description-heading": "Опис",
@@ -26,7 +22,6 @@
 	"communityrequests-wish-created": "Створено",
 	"communityrequests-wish-updated": "Останнє оновлення",
 	"communityrequests-wish-proposer": "Автор",
-	"communityrequests-all-projects-1": "Усі проєкти",
 	"communityrequests-wishes-type-header": "Тип",
 	"communityrequests-wishes-projects-header": "Проєкти",
 	"communityrequests-wishes-date-header": "Дата (UTC)",

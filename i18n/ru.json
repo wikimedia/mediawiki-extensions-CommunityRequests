@@ -1,7 +1,6 @@
 {
 	"@metadata": {
-		"authors": [
-		]
+		"authors": []
 	},
 	"communityrequests-status-draft": "Черновик",
 	"communityrequests-status-submitted": "Добавлено",
@@ -11,8 +10,6 @@
 	"communityrequests-status-blocked": "Заблокировано",
 	"communityrequests-status-archived": "Архив",
 	"communityrequests-status-unknown": "Неизвестно",
-	"communityrequests-type-1": "Новая функциональность",
-	"communityrequests-type-3": "Изменение системы",
 	"communityrequests-edit-wish": "Изменить пожелание",
 	"communityrequests-discuss-wish": "Обсудить это пожелание",
 	"communityrequests-wish-description-heading": "Описание",
@@ -25,7 +22,6 @@
 	"communityrequests-wish-created": "Создано",
 	"communityrequests-wish-updated": "Дата последнего обновления",
 	"communityrequests-wish-proposer": "Автор",
-	"communityrequests-all-projects-1": "Все проекты",
 	"communityrequests-wishes-type-header": "Тип",
 	"communityrequests-wishes-projects-header": "Проекты",
 	"communityrequests-wishes-date-header": "Дата по UTC",

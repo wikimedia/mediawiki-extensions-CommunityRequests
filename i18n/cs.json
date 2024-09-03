@@ -1,7 +1,6 @@
 {
 	"@metadata": {
-		"authors": [
-		]
+		"authors": []
 	},
 	"communityrequests-wish-loading-error": "Při analýze zdrojového textu přání došlo k chybě. Možná obsahuje chybný wikitext. [$1 Obnovte prosím stránku] a zkuste to znovu, použite [[$2|editor zdrojového kódu]] nebo požádejte o pomoc v [[$3|diskusi]].",
 	"communityrequests-edit-with-form": "Editovat pomocí formuláře",

@@ -1,7 +1,6 @@
 {
 	"@metadata": {
-		"authors": [
-		]
+		"authors": []
 	},
 	"communityrequests-status-draft": "Utkast",
 	"communityrequests-status-submitted": "Inskickad",
@@ -11,8 +10,6 @@
 	"communityrequests-status-blocked": "Blockerad",
 	"communityrequests-status-archived": "Arkiverad",
 	"communityrequests-status-unknown": "Okänd",
-	"communityrequests-type-1": "Funktionsönskemål",
-	"communityrequests-type-3": "Systemändring",
 	"communityrequests-edit-wish": "Redigera önskan",
 	"communityrequests-discuss-wish": "Diskutera den här önskan",
 	"communityrequests-wish-description-heading": "Beskrivning",
@@ -25,7 +22,6 @@
 	"communityrequests-wish-created": "Skapad",
 	"communityrequests-wish-updated": "Senast uppdaterad",
 	"communityrequests-wish-proposer": "Författare",
-	"communityrequests-all-projects-1": "Alla projekt",
 	"communityrequests-wishes-type-header": "Typ",
 	"communityrequests-wishes-projects-header": "Projekt",
 	"communityrequests-wishes-date-header": "Datum (UTC)",

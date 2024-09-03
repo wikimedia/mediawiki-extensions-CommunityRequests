@@ -1,7 +1,6 @@
 {
 	"@metadata": {
-		"authors": [
-		]
+		"authors": []
 	},
 	"communityrequests-status-draft": "Draf",
 	"communityrequests-status-submitted": "Diserahkan",
@@ -11,8 +10,6 @@
 	"communityrequests-status-blocked": "Disekat",
 	"communityrequests-status-archived": "Diarkibkan",
 	"communityrequests-status-unknown": "Tidak diketahui",
-	"communityrequests-type-1": "Permintaan ciri",
-	"communityrequests-type-3": "Perubahan sistem",
 	"communityrequests-edit-wish": "Sunting hajat",
 	"communityrequests-discuss-wish": "Bincang hajat ini",
 	"communityrequests-wish-description-heading": "Keterangan",
@@ -25,7 +22,6 @@
 	"communityrequests-wish-created": "Dicipta",
 	"communityrequests-wish-updated": "Kemas kini terakhir",
 	"communityrequests-wish-proposer": "Pengarang",
-	"communityrequests-all-projects-1": "Semua projek",
 	"communityrequests-wishes-type-header": "Jenis",
 	"communityrequests-wishes-projects-header": "Projek",
 	"communityrequests-wishes-date-header": "Tarikh (UTC)",

@@ -1,0 +1,36 @@
+{
+	"@metadata": {
+		"authors": [
+			"Volvox"
+		]
+	},
+	"communityrequests-description": "Beschreift Äre Problem",
+	"communityrequests-wishtype-unknown-label": "Ech si mir net sécher oder ech weess et net",
+	"communityrequests-project-all-projects": "All Projeten",
+	"communityrequests-project-show-less": "Manner weisen",
+	"communityrequests-project-show-all": "Alles weisen",
+	"communityrequests-project-other-label": "Et ass eppes anescht",
+	"communityrequests-create-success": "Äre Wonsch gouf ofgeschéckt.",
+	"communityrequests-edit-success": "Äre Wonsch gouf gespäichert.",
+	"communityrequests-view-all-wishes": "All Wënsch weisen.",
+	"communityrequests-close": "Zoumaachen",
+	"communityrequests-publish": "Wonsch verëffentlechen",
+	"communityrequests-save": "Ännerunge späicheren",
+	"communityrequests-status-open": "Oppen",
+	"communityrequests-status-archived": "Archivéiert",
+	"communityrequests-status-unknown": "Onbekannt",
+	"communityrequests-edit-wish": "Wonsch änneren",
+	"communityrequests-discuss-wish": "Dëse Wonsch diskutéieren",
+	"communityrequests-wish-description-heading": "Beschreiwung",
+	"communityrequests-wish-other-details-heading": "Aner Detailer",
+	"communityrequests-wish-created": "Ugeluecht",
+	"communityrequests-wish-proposer": "Auteur",
+	"communityrequests-wishes-type-header": "Typ",
+	"communityrequests-wishes-projects-header": "Projeten",
+	"communityrequests-wishes-date-header": "Datum (UTC)",
+	"communityrequests-wishes-status-header": "Status",
+	"communityrequests-focus-area-supported": "Ënnerstëtzt vun:",
+	"communityrequests-focus-area-supported-val": "$1 {{PLURAL:$2|Persoun|Persounen}}",
+	"communityrequests-focus-area-th-wish": "Wonsch",
+	"communityrequests-focus-area-no-votes": "Nach keng Ënnerstëtzer."
+}

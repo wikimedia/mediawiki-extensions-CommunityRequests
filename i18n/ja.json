@@ -1,7 +1,6 @@
 {
 	"@metadata": {
-		"authors": [
-		]
+		"authors": []
 	},
 	"communityrequests-status-draft": "下書き",
 	"communityrequests-status-submitted": "投稿済",
@@ -11,11 +10,8 @@
 	"communityrequests-status-blocked": "ブロック済",
 	"communityrequests-status-archived": "アーカイブ済",
 	"communityrequests-status-unknown": "不明",
-	"communityrequests-type-1": "機能についての要望",
-	"communityrequests-type-3": "システム変更の要望",
 	"communityrequests-edit-wish": "要望を編集",
 	"communityrequests-discuss-wish": "この要望について話し合う",
-	"communityrequests-wish-3": "「要望」を編集",
 	"communityrequests-wish-description-heading": "説明",
 	"communityrequests-wish-focus-area-heading": "割り当てられ済の重点領域",
 	"communityrequests-wish-type-heading": "「要望」の分類",
@@ -26,7 +22,6 @@
 	"communityrequests-wish-created": "作成済",
 	"communityrequests-wish-updated": "最終更新",
 	"communityrequests-wish-proposer": "記入者",
-	"communityrequests-all-projects-1": "全てのプロジェクト",
 	"communityrequests-wishes-type-header": "分類",
 	"communityrequests-wishes-projects-header": "プロジェクト",
 	"communityrequests-wishes-date-header": "日付（UTC）",

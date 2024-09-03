@@ -1,14 +1,8 @@
 {
 	"@metadata": {
-		"authors": [
-		]
+		"authors": []
 	},
 	"communityrequests-status-unknown": "અજ્ઞાત",
 	"communityrequests-wish-description-heading": "વિવરણ",
-	"communityrequests-wish-proposer": "લેખક",
-	"communityrequests-20": "શીર્ષક",
-	"communityrequests-26": "પ્રકાર",
-	"communityrequests-30": "વિકિપીડિયા",
-	"communityrequests-34": "સંપાદકો",
-	"communityrequests-37": "વારંવાર પૂછાતા પ્રશ્નો"
+	"communityrequests-wish-proposer": "લેખક"
 }

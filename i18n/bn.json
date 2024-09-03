@@ -1,7 +1,6 @@
 {
 	"@metadata": {
-		"authors": [
-		]
+		"authors": []
 	},
 	"communityrequests-edit-with-form": "ফরম সহকারে সম্পাদনা করুন",
 	"communityrequests-form-subtitle": "সম্প্রদায়ের নতুন ইচ্ছাতালিকায় স্বাগতম। আপনার ইচ্ছা জমা দেওয়ার জন্য দয়া করে নিচের ফরমটি পূরণ করুন।",
@@ -64,7 +63,6 @@
 	"communityrequests-wish-created": "তৈরি করা হয়েছে",
 	"communityrequests-wish-updated": "সর্বশেষ হালনাগাদ",
 	"communityrequests-wish-proposer": "লেখক",
-	"communityrequests-all-projects-1": "সকল প্রকল্প",
 	"communityrequests-wishes-type-header": "ধরন",
 	"communityrequests-wishes-projects-header": "প্রকল্প",
 	"communityrequests-wishes-date-header": "তারিখ (ইউটিসি)",

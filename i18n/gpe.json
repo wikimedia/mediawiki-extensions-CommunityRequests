@@ -1,7 +1,6 @@
 {
 	"@metadata": {
-		"authors": [
-		]
+		"authors": []
 	},
 	"communityrequests-wish-loading-error": "There was an error while parsing the wish source text. It may contain invalid wikitext. Please [$1 refresh] and try again, use the [[$2|source editor]], or ask for help on the [[$3|talk page]].",
 	"communityrequests-edit-with-form": "Edit plus form",

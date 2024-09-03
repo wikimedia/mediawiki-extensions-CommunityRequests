@@ -1,7 +1,6 @@
 {
 	"@metadata": {
-		"authors": [
-		]
+		"authors": []
 	},
 	"communityrequests-wish-loading-error": "Une erreur s'est produite lors de l'analyse du texte source du souhait. Il se peut qu'il contienne un texte invalide. Veuillez [$1 rafraîchir] et réessayer, utiliser l'[[$2|éditeur de source]], ou demander de l'aide sur la [[$3|page de discussion]].",
 	"communityrequests-edit-with-form": "Modifier avec le formulaire",

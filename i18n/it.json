@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Beta16"
 		]
 	},
 	"communityrequests-wish-loading-error": "Si è verificato un errore durante l'analisi del testo sorgente. Potrebbe contenere wikitesto non valido. Si prega di [$1 aggiornare] e riprovare, di usare l'[[$2|editor di testo]] o di chiedere aiuto in [[$3|pagina di discussione]].",
@@ -75,5 +76,10 @@
 	"communityrequests-form-loading": "Caricando modulo di inserimento...",
 	"communityrequests-form-loading-1": "Se il modulo non si carica, assicuratevi di avere abilitato JavaScript.",
 	"communityrequests-form-loading-2": "Se avete ancora problemi, chiedete aiuto a $1.",
-	"communityrequests-please-log-in": "Per favore accedete per presentare un desiderio."
+	"communityrequests-please-log-in": "Per favore accedete per presentare un desiderio.",
+	"communityrequests-focus-area-supported-val": "$1 {{PLURAL:$2|persona|persone}}",
+	"communityrequests-translation-translated": "Questa pagina contiene $1 {{PLURAL:$1|parte|parti}} di testo che sono state tradotte automaticamente.",
+	"communityrequests-translation-show-now": "Traduci",
+	"communityrequests-translation-progress": "{{PLURAL:$1|Tradotta|Tradotte}} $1 di $2 {{PLURAL:$2|parte|parti}} di testo.",
+	"communityrequests-translation-errors": "Si è verificato un errore:"
 }

@@ -1,8 +1,19 @@
 {
 	"@metadata": {
 		"authors": [
+			"Bjankuloski06"
 		]
 	},
+	"communityrequests-desc": "Систем за управување со техничките предлози и барања на заедницата.",
+	"communityrequests-wish-loading-error": "Се јави грешка при расчленувањето на изворниот текст на желбите. Може да содржи неважечки викитекст. [$1 Превчитајте] и обидете се повторно, послужете се со [[$2|изворниот уредник]] или побарајте помош на [[$3|разговорната страница]].",
+	"communityrequests-edit-with-form": "Уреди со образец",
+	"communityrequests-form-subtitle": "Добрео дојдовте на новите Желби на заедницата. Пополнете го образецот подолу за да ја поднесете вашата желба.",
+	"communityrequests-form-error": "Нешто не е во ред. Обидете се да зачувате повторно, или пак побарајте помош на [[$1|разговорната страница]].",
+	"communityrequests-description": "Опишете го проблемот",
+	"communityrequests-description-description": "Подробно објаснете ја желбата или проблемот што сакате да се реши.",
+	"communityrequests-title": "Наслов на желбата",
+	"communityrequests-title-error": "Внесете вредност за ова поле (помеѓу $1 и $2 {{PLURAL:$2|знак|знаци}}).",
+	"communityrequests-title-description": "Насловот треба да содржи краток опис на желбата или проблемот.",
 	"communityrequests-status-draft": "Нацрт",
 	"communityrequests-status-submitted": "Поднесено",
 	"communityrequests-status-open": "Отворено",
@@ -11,8 +22,6 @@
 	"communityrequests-status-blocked": "Блокирано",
 	"communityrequests-status-archived": "Архивирано",
 	"communityrequests-status-unknown": "Непознато",
-	"communityrequests-type-1": "Барање за функција",
-	"communityrequests-type-3": "Системска промена",
 	"communityrequests-edit-wish": "Уреди желба",
 	"communityrequests-wish-description-heading": "Опис",
 	"communityrequests-wish-focus-area-heading": "Укажана клучна област",
@@ -24,11 +33,16 @@
 	"communityrequests-wish-created": "Создадено",
 	"communityrequests-wish-updated": "Последна поднова",
 	"communityrequests-wish-proposer": "Автор",
-	"communityrequests-all-projects-1": "Сите проекти",
 	"communityrequests-wishes-type-header": "Тип",
 	"communityrequests-wishes-projects-header": "Проекти",
 	"communityrequests-wishes-date-header": "Датум (UTC)",
 	"communityrequests-wishes-status-header": "Состојба",
 	"communityrequests-focus-area-unassigned": "Неукажано",
-	"communityrequests-submit-wish": "Поднеси желба"
+	"communityrequests-submit-wish": "Поднеси желба",
+	"communityrequests-focus-area-owners-label": "Сопственици:",
+	"communityrequests-focus-area-th-wish": "Желба",
+	"communityrequests-focus-area-stakeholders": "Екипи и подружници",
+	"communityrequests-focus-area-owners": "Сопственици",
+	"communityrequests-focus-area-volunteers": "Членови на заедницата",
+	"communityrequests-focus-area-voting": "Гласање"
 }

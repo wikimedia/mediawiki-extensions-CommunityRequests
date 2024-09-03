@@ -1,7 +1,6 @@
 {
 	"@metadata": {
-		"authors": [
-		]
+		"authors": []
 	},
 	"communityrequests-status-draft": "Utkast",
 	"communityrequests-status-submitted": "Innsendt",
@@ -11,8 +10,6 @@
 	"communityrequests-status-blocked": "Blokkert",
 	"communityrequests-status-archived": "Arkivert",
 	"communityrequests-status-unknown": "Ukjent",
-	"communityrequests-type-1": "Funksjonsforespørsel",
-	"communityrequests-type-3": "Systemendring",
 	"communityrequests-edit-wish": "Rediger ønske",
 	"communityrequests-discuss-wish": "Diskuter dette ønsket",
 	"communityrequests-wish-description-heading": "Beskrivelse",
@@ -25,7 +22,6 @@
 	"communityrequests-wish-created": "Opprettet",
 	"communityrequests-wish-updated": "Sist oppdatert",
 	"communityrequests-wish-proposer": "Forfatter",
-	"communityrequests-all-projects-1": "Alle prosjekter",
 	"communityrequests-wishes-type-header": "Type",
 	"communityrequests-wishes-projects-header": "Prosjekter",
 	"communityrequests-wishes-date-header": "Dato (UTC)",

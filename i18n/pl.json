@@ -1,7 +1,6 @@
 {
 	"@metadata": {
-		"authors": [
-		]
+		"authors": []
 	},
 	"communityrequests-status-draft": "Brudnopis",
 	"communityrequests-status-submitted": "Zgłoszone",
@@ -11,8 +10,6 @@
 	"communityrequests-status-blocked": "Zablokowane",
 	"communityrequests-status-archived": "Zarchiwizowane",
 	"communityrequests-status-unknown": "Nieznane",
-	"communityrequests-type-1": "Prośba o funkcję",
-	"communityrequests-type-3": "Zmiana systemowa",
 	"communityrequests-edit-wish": "Edytuj życzenie",
 	"communityrequests-discuss-wish": "Przedyskutuj to życzenie",
 	"communityrequests-wish-description-heading": "Opis",
@@ -27,6 +24,6 @@
 	"communityrequests-please-log-in": "Proszę się zalogować, aby przesłać życzenie.",
 	"communityrequests-focus-area-supported": "Poparte przez:",
 	"communityrequests-focus-area-supported-val": "$1 {{PLURAL:$2|ludzi|osobę}}",
-	"communityrequests-focus-area-owners": "Odpowiedzialni:",
-	"communityrequests-focus-area-view-wishes": "Zobacz życzenia z tego obszaru"
+	"communityrequests-focus-area-view-wishes": "Zobacz życzenia z tego obszaru",
+	"communityrequests-focus-area-owners": "Odpowiedzialni:"
 }

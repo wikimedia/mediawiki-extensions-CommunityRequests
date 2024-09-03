@@ -97,5 +97,10 @@
 	"communityrequests-focus-area-voting-info": "Descriptive text in the voting section of the focus area page.",
 	"communityrequests-focus-area-voting-not-logged-in": "Warning shown instead of the voting button when a user is not logged in and so cannot vote.",
 	"communityrequests-focus-area-voters-heading": "Section heading shown above the votes list.",
-	"communityrequests-focus-area-no-votes": "Text shown when there are no votes for a focus area."
+	"communityrequests-focus-area-no-votes": "Text shown when there are no votes for a focus area.",
+	"communityrequests-translation-translatable": "Banner message shown when untranslated text is found in a page.",
+	"communityrequests-translation-translated": "Message shown in the translation banner (below {{msg|communityrequests-translation-translatable}}) after the user has clicked the Translate button and some parts of the page have been translated.\n\nParameters:\n\n* $1 — Integer count of page elements that have been translated.",
+	"communityrequests-translation-show-now": "Button text in the translation banner for the main translation button",
+	"communityrequests-translation-progress": "Text shown under a progress bar while a page is being translated, telling the user how much has been translated so far.\n\nParameters:\n\n* $1 — The count of already-translated elements.\n* $2 — The total count of translatable elements.",
+	"communityrequests-translation-errors": "Label shown above a list of errors, if any errors occur during translation."
 }

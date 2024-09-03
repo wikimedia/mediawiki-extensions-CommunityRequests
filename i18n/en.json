@@ -97,5 +97,10 @@
 	"communityrequests-focus-area-voting-info": "This area currently has\n'''$1 {{PLURAL:$2|supporter|supporters}}'''.\nVoting for this area is open until it is completed.\nShow your support using the button below.",
 	"communityrequests-focus-area-voting-not-logged-in": "Please log in to support this focus area",
 	"communityrequests-focus-area-voters-heading": "Supporters of this area",
-	"communityrequests-focus-area-no-votes": "No supporters yet."
+	"communityrequests-focus-area-no-votes": "No supporters yet.",
+	"communityrequests-translation-translatable": "This page contains text that is not in your current interface language. You can translate it now using Wikimedia's machine translation tool.",
+	"communityrequests-translation-translated": "This page contains $1 {{PLURAL:$1|part|parts}} of text that have been machine translated.",
+	"communityrequests-translation-show-now": "Translate",
+	"communityrequests-translation-progress": "Translated $1 of $2 {{PLURAL:$2|part|parts}} of text.",
+	"communityrequests-translation-errors": "An error occurred:"
 }

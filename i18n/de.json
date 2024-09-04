@@ -95,13 +95,13 @@
 	"communityrequests-focus-area-owners": "Besitzer",
 	"communityrequests-focus-area-volunteers": "Gemeinschaftsmitglieder",
 	"communityrequests-focus-area-voting": "Abstimmung",
-	"communityrequests-focus-area-voting-info": "Dieser Bereich hat momentan\n'''$1 {{PLURAL:$2|Unterstützer|Unterstützende}}'''.\nDie Abstimmung für diesen Bereich ist offen, bis er abgeschlossen ist.\nZeig deine Unterstützung, indem du unten auf den Button klickst.",
+	"communityrequests-focus-area-voting-info": "Dieser Bereich hat momentan\n'''$1 {{PLURAL:$2|Unterstützer}}'''.\nDie Abstimmung für diesen Bereich ist offen, bis er abgeschlossen ist.\nZeig deine Unterstützung, indem du unten auf den Button klickst.",
 	"communityrequests-focus-area-voting-not-logged-in": "Bitte logge dich ein, um diesen Schwerpunktbereich zu unterstützen",
 	"communityrequests-focus-area-voters-heading": "Unterstützende dieses Bereichs",
 	"communityrequests-focus-area-no-votes": "Bisher keine Unterstützer.",
 	"communityrequests-translation-translatable": "Diese Seite enthält Text, der nicht in deiner aktuellen Oberflächensprache vorliegt. Du kannst ihn jetzt mit dem maschinellen Übersetzungstool von Wikimedia übersetzen.",
-	"communityrequests-translation-translated": "Diese Seite enthält $1 {{PLURAL:$1|Textteil|Textteile}}, der maschinell übersetzt worden ist.",
+	"communityrequests-translation-translated": "Diese Seite enthält $1 {{PLURAL:$1|maschinell übersetzten Textteil|maschinell übersetzte Textteile}}.",
 	"communityrequests-translation-show-now": "Übersetzen",
-	"communityrequests-translation-progress": "$1 von $2 {{PLURAL:$2|Textteil|Textteile}} übersetzt.",
+	"communityrequests-translation-progress": "$1 von $2 {{PLURAL:$2|Textteil|Textteilen}} übersetzt.",
 	"communityrequests-translation-errors": "Es ist ein Fehler aufgetreten:"
 }

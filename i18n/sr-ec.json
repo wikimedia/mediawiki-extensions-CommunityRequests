@@ -1,0 +1,17 @@
+{
+	"@metadata": {
+		"authors": [
+			"Milicevic01"
+		]
+	},
+	"communityrequests-description": "Опишите Ваш проблем",
+	"communityrequests-project-show-less": "Прикажи мање",
+	"communityrequests-view-all-wishes": "Види све жеље.",
+	"communityrequests-close": "Затвори",
+	"communityrequests-status-draft": "Нацрт",
+	"communityrequests-status-blocked": "Блокирано",
+	"communityrequests-wish-proposer": "Аутор",
+	"communityrequests-wishes-date-header": "Датум (UTC)",
+	"communityrequests-translation-show-now": "Преведи",
+	"communityrequests-translation-errors": "Дошло је до грешке:"
+}

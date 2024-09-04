@@ -4,6 +4,7 @@
 			"Saraiki"
 		]
 	},
+	"communityrequests-wishtype-bug-label": "بگ رپورٹ",
 	"communityrequests-project-all-projects": "سارے منصوبے",
 	"communityrequests-project-show-less": "گھٹ ݙکھاؤ",
 	"communityrequests-project-show-all": "سب ݙکھاؤ",
@@ -14,6 +15,7 @@
 	"communityrequests-status-open": "کھولو",
 	"communityrequests-status-in-progress": "تھیندا پئے",
 	"communityrequests-status-blocked": "بلاک تھی ڳیا",
+	"communityrequests-wish-description-heading": "تفصیل",
 	"communityrequests-wish-created": "بݨ ڳیا",
 	"communityrequests-wish-proposer": "مصنف",
 	"communityrequests-wishes-type-header": "قسم",
@@ -21,5 +23,8 @@
 	"communityrequests-wishes-status-header": "حیثیت",
 	"communityrequests-focus-area-unassigned": "کہیں دے ذمے کائنی لڳی",
 	"communityrequests-focus-area-owners-label": "مالک:",
-	"communityrequests-focus-area-owners": "مالک"
+	"communityrequests-focus-area-th-wish": "خواہش",
+	"communityrequests-focus-area-owners": "مالک",
+	"communityrequests-translation-show-now": "ترجمہ کرو",
+	"communityrequests-translation-errors": "ہک خرابی تھی ڳئی:"
 }

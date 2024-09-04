@@ -1,6 +1,8 @@
 {
 	"@metadata": {
-		"authors": []
+		"authors": [
+			"Amire80"
+		]
 	},
 	"communityrequests-desc": "{{desc|name=CommunityRequests|url=https://www.mediawiki.org/wiki/Special:MyLanguage/Extension:CommunityRequests}}",
 	"communityrequests-wish-loading-error": "Error message shown when loading the form.",
@@ -48,17 +50,17 @@
 	"communityrequests-support-focus-area": "Button label for the voting button on focus area pages.",
 	"communityrequests-support-focus-area-dialog-title": "Title of voting dialog window.",
 	"communityrequests-optional-comment": "Form field label in the voting dialog window.",
-	"communityrequests-support": "Primary button label in the voting dialog window.",
+	"communityrequests-support": "Primary button label in the voting dialog window. It describes an action: \"Express support for a wish, vote for a wish\".",
 	"communityrequests-supported": "Button label shown on the (disabled) voting button if someone's already voted.",
 	"communityrequests-support-focus-area-confirmed": "Message shown after voting for a focus area.",
 	"communityrequests-unsupport-focus-area": "Button label on the button with which to remove a vote.",
 	"communityrequests-status-draft": "Label for a status chip.",
-	"communityrequests-status-submitted": "Label for a status chip.",
-	"communityrequests-status-open": "Label for a status chip.",
-	"communityrequests-status-in-progress": "Label for a status chip.",
-	"communityrequests-status-delivered": "Label for a status chip.",
-	"communityrequests-status-blocked": "Label for a status chip.",
-	"communityrequests-status-archived": "Label for a status chip.",
+	"communityrequests-status-submitted": "Label for a status chip. An adjective or a passive participle that describes a wish.",
+	"communityrequests-status-open": "Label for a status chip. An adjective or a passive participle that describes a wish.",
+	"communityrequests-status-in-progress": "Label for a status chip. An adjective or a passive participle that describes a wish.",
+	"communityrequests-status-delivered": "Label for a status chip. An adjective or a passive participle that describes a wish.",
+	"communityrequests-status-blocked": "Label for a status chip. An adjective or a passive participle that describes a wish.",
+	"communityrequests-status-archived": "Label for a status chip. An adjective or a passive participle that describes a wish.",
 	"communityrequests-status-unknown": "Label for a status chip.",
 	"communityrequests-edit-wish": "Label for button to open a wish for editing.",
 	"communityrequests-discuss-wish": "Label for button/link to a wish's talk page.",
@@ -84,7 +86,7 @@
 	"communityrequests-form-loading-2": "Second help message shown while the wish form loads.\n\nParameters:\n* $1 — Wikitext link to help page.",
 	"communityrequests-please-log-in": "Notice text shown if a user is not logged in when they try to open in the wish form.",
 	"communityrequests-focus-area-supported": "Label for number of supporters of a focus area.",
-	"communityrequests-focus-area-supported-val": "Value for number of supporters.\n\nParameters:\n* $1 — Formatted number of supporters.\n* $2 — Unformatted/integer number of supporters, to determin plural grammar.",
+	"communityrequests-focus-area-supported-val": "Value for number of supporters.\n\nParameters:\n* $1 — Formatted number of supporters.\n* $2 — Unformatted integer number of supporters, to determine plural grammar.",
 	"communityrequests-focus-area-owners-label": "Label for the list of owners of a focus area.",
 	"communityrequests-focus-area-view-wishes": "Link text shown on focus area cards, linking to the focus area's page.",
 	"communityrequests-focus-area-wishes-list": "Link text shown on focus area cards, linking to the focus area's page.",

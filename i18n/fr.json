@@ -1,6 +1,8 @@
 {
 	"@metadata": {
-		"authors": []
+		"authors": [
+			"E4Esau"
+		]
 	},
 	"communityrequests-wish-loading-error": "Une erreur s'est produite lors de l'analyse du texte source du souhait. Il se peut qu'il contienne un texte invalide. Veuillez [$1 rafraîchir] et réessayer, utiliser l'[[$2|éditeur de source]], ou demander de l'aide sur la [[$3|page de discussion]].",
 	"communityrequests-edit-with-form": "Modifier avec le formulaire",
@@ -16,14 +18,14 @@
 	"communityrequests-wishtype-description": "Pour soumettre une demande de changement de politique, veuillez consulter le projet concerné.",
 	"communityrequests-wishtype-feature-label": "Demande de fonctionnalité",
 	"communityrequests-wishtype-feature-description": "Vous voulez de nouvelles fonctionnalités et des fonctions qui n'existent pas encore.",
-	"communityrequests-wishtype-bug-label": "Rapport d'erreurs",
+	"communityrequests-wishtype-bug-label": "Rapport de bogue",
 	"communityrequests-wishtype-bug-description": "Vous voulez résoudre un problème ou une erreur avec les fonctionnalités existantes.",
 	"communityrequests-wishtype-change-label": "Changement de système",
 	"communityrequests-wishtype-change-description": "Vous souhaitez modifier une caractéristique ou une fonction en cours d'utilisation.",
 	"communityrequests-wishtype-unknown-label": "Je ne suis pas sûr ou je ne sais pas",
 	"communityrequests-wishtype-unknown-description": "Après avoir reçu votre souhait, nous vous attribuerons un type approprié.",
 	"communityrequests-wishtype-error": "Veuillez sélectionner un type de souhait.",
-	"communityrequests-project-intro": "quels sont les projets concernés par votre souhait ?",
+	"communityrequests-project-intro": "À quels projets votre souhait est-il lié ?",
 	"communityrequests-project-help": "Sélectionnez tous les projets sur lesquels votre souhait aura un impact.",
 	"communityrequests-project-all-projects": "Tous les projets",
 	"communityrequests-project-show-less": "Afficher moins",
@@ -35,7 +37,7 @@
 	"communityrequests-audience-label": "Principaux utilisateurs concernés",
 	"communityrequests-audience-description": "Décrire le groupe d'utilisateurs et la situation qui seront les plus concernés",
 	"communityrequests-audience-error": "Veuillez saisir une valeur pour ce champ (entre $1 et $2 {{PLURAL:$2|caractères}}).",
-	"communityrequests-phabricator-label": "Tâches sur Phabricator (facultatif)",
+	"communityrequests-phabricator-label": "Tâches du Phabricator (optionnel)",
 	"communityrequests-phabricator-desc": "Saisissez les ID ou URL des tâches ouvertes sur Phabricator.",
 	"communityrequests-phabricator-chip-desc": "Une liste d'ID de tâches Phabricator.",
 	"communityrequests-create-success": "Votre souhait a été soumis.",

@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"E4Esau"
+			"E4Esau",
+			"Goombiis"
 		]
 	},
 	"communityrequests-wish-loading-error": "Une erreur s'est produite lors de l'analyse du texte source du souhait. Il se peut qu'il contienne un texte invalide. Veuillez [$1 rafraîchir] et réessayer, utiliser l'[[$2|éditeur de source]], ou demander de l'aide sur la [[$3|page de discussion]].",
@@ -46,6 +47,11 @@
 	"communityrequests-close": "Fermer",
 	"communityrequests-publish": "Publier le souhait",
 	"communityrequests-save": "Enregistrer les modifications",
+	"communityrequests-optional-comment": "Commentaire optionnel",
+	"communityrequests-support": "Soutenir",
+	"communityrequests-supported": "Déjà pris en charge",
+	"communityrequests-support-focus-area-confirmed": "Vous avez voté en faveur de ce domaine d’action.",
+	"communityrequests-unsupport-focus-area": "Retirez votre vote de soutien",
 	"communityrequests-status-draft": "Ébauche",
 	"communityrequests-status-submitted": "Soumis",
 	"communityrequests-status-open": "Ouvert",
@@ -55,6 +61,7 @@
 	"communityrequests-status-archived": "Archivé",
 	"communityrequests-status-unknown": "Inconnu",
 	"communityrequests-edit-wish": "Modifier le souhait",
+	"communityrequests-discuss-wish": "Discutez de ce souhait",
 	"communityrequests-wish-description-heading": "Description",
 	"communityrequests-wish-focus-area-heading": "Domaine assigné",
 	"communityrequests-wish-type-heading": "Type de souhait",
@@ -69,5 +76,25 @@
 	"communityrequests-wishes-projects-header": "Projets",
 	"communityrequests-wishes-date-header": "Date (UTC)",
 	"communityrequests-wishes-status-header": "Statut",
-	"communityrequests-submit-wish": "Soumettre un souhait"
+	"communityrequests-focus-area-unassigned": "Non affecté",
+	"communityrequests-submit-wish": "Soumettre un souhait",
+	"communityrequests-desktop-only": "Désolé, la liste de souhaits de la communauté nécessite actuellement l'utilisation de l'interface de bureau.",
+	"communityrequests-form-loading": "Chargement du formulaire d'admission…",
+	"communityrequests-form-loading-1": "Si le formulaire ne se charge pas, assurez-vous que JavaScript est activé.",
+	"communityrequests-form-loading-2": "Si vous avez encore des problèmes, demandez de l'aide à 1 $.",
+	"communityrequests-please-log-in": "Veuillez vous connecter pour soumettre un souhait.",
+	"communityrequests-focus-area-supported": "Soutenu par :",
+	"communityrequests-focus-area-owners-label": "Propriétaires :",
+	"communityrequests-focus-area-view-wishes": "Voir les souhaits dans ce domaine",
+	"communityrequests-focus-area-wishes-list": "Souhaits dans ce domaine d'action",
+	"communityrequests-focus-area-th-wish": "Souhait",
+	"communityrequests-focus-area-stakeholders": "Equipes et affiliés",
+	"communityrequests-focus-area-owners": "Propriétaires",
+	"communityrequests-focus-area-volunteers": "Membres de la communauté",
+	"communityrequests-focus-area-voting": "Vote",
+	"communityrequests-focus-area-voting-not-logged-in": "Veuillez vous connecter pour soutenir ce domaine d'action",
+	"communityrequests-focus-area-voters-heading": "Les soutiens de ce domaine",
+	"communityrequests-focus-area-no-votes": "Pas de partisans encore.",
+	"communityrequests-translation-show-now": "Traduire",
+	"communityrequests-translation-errors": "Une erreur s’est produite:"
 }

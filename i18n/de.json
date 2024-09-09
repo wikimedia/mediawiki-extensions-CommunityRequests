@@ -1,11 +1,12 @@
 {
 	"@metadata": {
 		"authors": [
-			"Brettchenweber"
+			"Brettchenweber",
+			"McDutchie"
 		]
 	},
 	"communityrequests-desc": "Ein System zur Verwaltung der technischen Vorschläge und Anfragen einer Wiki-Community.",
-	"communityrequests-wish-loading-error": "Beim Parsing des Wunsch-Quelltextes ist ein Fehler aufgetreten. Er könnte ungültigen Wikitext enthalten. Bitte [$1] aktualisieren und erneut versuchen, den [[$2|Quelltext-Editor]] benutzen, oder auf der [[$3|Talk-Seite]] um Hilfe bitten.",
+	"communityrequests-wish-loading-error": "Beim Parsing des Wunsch-Quelltextes ist ein Fehler aufgetreten. Er könnte ungültigen Wikitext enthalten. Bitte [$1 aktualisieren] und erneut versuchen, den [[$2|Quelltext-Editor]] benutzen, oder auf der [[$3|Talk-Seite]] um Hilfe bitten.",
 	"communityrequests-edit-with-form": "Mit Formular bearbeiten",
 	"communityrequests-form-subtitle": "Willkommen bei der neuen Community-Wunschliste. Bitte fülle das untenstehende Formular aus, um deinen Wunsch zu übermitteln.",
 	"communityrequests-form-error": "Es ist etwas schiefgegangen. Bitte versuche erneut zu speichern oder bitte um Hilfe auf der [[$1|Diskussionsseite]].",

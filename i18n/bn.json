@@ -1,6 +1,8 @@
 {
 	"@metadata": {
-		"authors": []
+		"authors": [
+			"আফতাবুজ্জামান"
+		]
 	},
 	"communityrequests-edit-with-form": "ফরম সহকারে সম্পাদনা করুন",
 	"communityrequests-form-subtitle": "সম্প্রদায়ের নতুন ইচ্ছাতালিকায় স্বাগতম। আপনার ইচ্ছা জমা দেওয়ার জন্য দয়া করে নিচের ফরমটি পূরণ করুন।",
@@ -43,6 +45,11 @@
 	"communityrequests-close": "বন্ধ করুন",
 	"communityrequests-publish": "ইচ্ছা প্রকাশ করুন",
 	"communityrequests-save": "পরিবর্তন সংরক্ষণ করুন",
+	"communityrequests-support-focus-area-dialog-title": "\"$1\" সমর্থন করুন",
+	"communityrequests-optional-comment": "ঐচ্ছিক মন্তব্য",
+	"communityrequests-support": "সমর্থন",
+	"communityrequests-supported": "ইতিমধ্যেই সমর্থিত",
+	"communityrequests-unsupport-focus-area": "আপনার সমর্থন ভোট সরিয়ে ফেলুন",
 	"communityrequests-status-draft": "খসড়া",
 	"communityrequests-status-submitted": "জমা দেওয়া হয়েছে",
 	"communityrequests-status-open": "খোলা",
@@ -73,5 +80,13 @@
 	"communityrequests-form-loading": "গ্রহণের ফরম লোড করা হচ্ছে...",
 	"communityrequests-form-loading-1": "যদি ফরমটি লোড না হয়, তাহলে দয়া করে নিশ্চিত করুন যে আপনার জাভাস্ক্রিপ্ট সক্রিয় আছে।",
 	"communityrequests-form-loading-2": "আপনার যদি এখনও সমস্যা হয়, তাহলে দয়া করে $1 পাতায় সাহায্যের জন্য অনুরোধ করুন।",
-	"communityrequests-please-log-in": "একটি ইচ্ছা জমা দিতে দয়া করে প্রবেশ করুন।"
+	"communityrequests-please-log-in": "একটি ইচ্ছা জমা দিতে দয়া করে প্রবেশ করুন।",
+	"communityrequests-focus-area-supported": "সমর্থন করেছেন:",
+	"communityrequests-focus-area-supported-val": "$1 জন {{PLURAL:$2|ব্যক্তি}}",
+	"communityrequests-focus-area-owners-label": "মালিক:",
+	"communityrequests-focus-area-th-wish": "ইচ্ছা",
+	"communityrequests-focus-area-stakeholders": "দল ও অধিভুক্ত",
+	"communityrequests-focus-area-volunteers": "সম্প্রদায়ের সদস্য",
+	"communityrequests-focus-area-voting": "ভোটদান",
+	"communityrequests-translation-show-now": "অনুবাদ"
 }

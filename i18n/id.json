@@ -1,17 +1,19 @@
 {
 	"@metadata": {
-		"authors": []
+		"authors": [
+			"Birusian"
+		]
 	},
 	"communityrequests-wish-loading-error": "There was an error while parsing the wish source text. It may contain invalid wikitext. Please [$1 refresh] and try again, use the [[$2|source editor]], or ask for help on the [[$3|talk page]].",
 	"communityrequests-edit-with-form": "Menyunting dengan formulir",
 	"communityrequests-form-subtitle": "Selamat datang di halaman Harapan Komunitas yang terbaru (sebelumnya Survei Harapan Komunitas). Silakan isi formulir berikut untuk menyampaikan permohonan Anda.",
-	"communityrequests-form-error": "Something went wrong. Please try saving again, or ask for help on the [[$1|talk page]].",
+	"communityrequests-form-error": "Terjadi kesalahan. Silahkan coba simpan lagi, atau minta bantuan di [[$1|halaman pembicaraan]].",
 	"communityrequests-description": "Jelaskan masalah Anda",
 	"communityrequests-description-description": "Jelaskan secara rinci keinginan atau permasalahan yang sedang Anda alami.",
 	"communityrequests-title": "Judul permohonan",
-	"communityrequests-title-error": "Masukkan teks pada bagian ini (sebanyak $1 hingga $2 karakter).",
+	"communityrequests-title-error": "Harap isi bidang ini (sebanyak $1 hingga $2 karakter).",
 	"communityrequests-title-description": "Pastikan judul Anda berisi deskripsi singkat perihal keinginan atau permasalahan terkait.",
-	"communityrequests-description-error": "Masukkan teks pada bagian ini (sebanyak $1 hingga lebih karakter).",
+	"communityrequests-description-error": "Harap isi bidang ini (sebanyak $1 atau lebih karakter).",
 	"communityrequests-wishtype-label": "Manakah yang paling menggambarkan keinginan Anda?",
 	"communityrequests-wishtype-description": "Apabila Anda ingin mengajukan permintaan perubahan kebijakan maupun pedoman, silakan untuk mengajukannya secara langsung di situs web proyek terkait.",
 	"communityrequests-wishtype-feature-label": "Permintaan fitur",
@@ -30,11 +32,11 @@
 	"communityrequests-project-show-all": "Tampilkan semua",
 	"communityrequests-project-other-label": "Lainnya",
 	"communityrequests-project-other-description": "misalnya perkakas, bot, dan peralatan eksternal lainnya",
-	"communityrequests-project-other-error": "Masukkan teks pada bagian ini (lebih dari $1 karakter), atau centang pilihan proyek berikut.",
-	"communityrequests-project-no-selection": "Pilih setidaknya $1 pilihan proyek yang ada, atau masukkan teks pada bagian berikut \"$2\".",
+	"communityrequests-project-other-error": "Harap isi bidang ini (lebih dari $1 karakter), atau pilih kotak centang proyek.",
+	"communityrequests-project-no-selection": "Harap pilih setidaknya $1 kotak centang proyek, atau masukkan nilai untuk bidang \"$2\".",
 	"communityrequests-audience-label": "Pengguna yang paling berpengaruh",
 	"communityrequests-audience-description": "Jelaskan kelompok pengguna dan situasi manakah yang paling akan berpengaruh",
-	"communityrequests-audience-error": "Masukkan teks pada bagian ini (sebanyak $1 hingga $2 karakter).",
+	"communityrequests-audience-error": "Harap isi bidang ini (sebanyak $1 hingga $2 karakter).",
 	"communityrequests-phabricator-label": "Tiket Phabricator (opsional)",
 	"communityrequests-phabricator-desc": "Masukkan ID atau pranala dari tiket Phabricator terkait.",
 	"communityrequests-phabricator-chip-desc": "Daftar ID tiket Phabricator terkait.",

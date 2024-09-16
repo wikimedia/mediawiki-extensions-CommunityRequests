@@ -38,5 +38,13 @@
 	"communityrequests-audience-label": "Usatores principalmente concernite",
 	"communityrequests-audience-description": "Describe qual gruppo de usatores e qual situation isto influentiara le plus",
 	"communityrequests-audience-error": "Per favor insere un valor pro iste campo (inter $1 e $2 character{{PLURAL:$2||es}}).",
-	"communityrequests-phabricator-label": "Cargas de Phabricator (optional)"
+	"communityrequests-phabricator-label": "Cargas de Phabricator (optional)",
+	"communityrequests-phabricator-desc": "Insere IDs o URLs de cargas Phabricator.",
+	"communityrequests-phabricator-chip-desc": "Un lista de IDs de cargas Phabricator.",
+	"communityrequests-create-success": "Tu desiro ha essite submittite.",
+	"communityrequests-edit-success": "Tu desiro ha essite salveguardate.",
+	"communityrequests-view-all-wishes": "Vider tote le desiros.",
+	"communityrequests-close": "Clauder",
+	"communityrequests-publish": "Publicar desiro",
+	"communityrequests-save": "Salveguardar modificationes"
 }

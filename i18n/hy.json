@@ -1,0 +1,18 @@
+{
+	"@metadata": {
+		"authors": [
+			"Kareyac"
+		]
+	},
+	"communityrequests-project-all-projects": "Բոլոր նախագծեր",
+	"communityrequests-project-other-description": "օրինակ՝ գաջեթներ, բոտեր և արտաքին գործիքներ",
+	"communityrequests-close": "Փակել",
+	"communityrequests-status-blocked": "Արգելափակված է",
+	"communityrequests-wish-description-heading": "Նկարագրություն",
+	"communityrequests-wish-created": "Ստեղծված է",
+	"communityrequests-wish-proposer": "Հեղինակ",
+	"communityrequests-wishes-type-header": "Տեսակ",
+	"communityrequests-wishes-projects-header": "Նախագծեր",
+	"communityrequests-wishes-status-header": "Կարգավիճակ",
+	"communityrequests-translation-show-now": "Թարգմանել"
+}

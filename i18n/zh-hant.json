@@ -33,7 +33,7 @@
 	"communityrequests-project-show-less": "顯示較少",
 	"communityrequests-project-show-all": "顯示全部",
 	"communityrequests-project-other-label": "其他",
-	"communityrequests-project-other-description": "例如：小工具、機器人和外部工具",
+	"communityrequests-project-other-description": "例如：小工具、機器人、外部工具",
 	"communityrequests-project-other-error": "請在此欄位中輸入一個值（超過$1個{{PLURAL:$1|字元}}），或選擇一個專案核選框。",
 	"communityrequests-project-no-selection": "請選擇至少$1個{{PLURAL:$1|專案核選框}}，或在「$2」欄位中輸​​入一個值。",
 	"communityrequests-audience-label": "主要涉及使用者",

@@ -10,10 +10,65 @@
 	"requires": {
 		"MediaWiki": ">= 1.43.0"
 	},
+	"AutoloadNamespaces": {
+		"MediaWiki\\Extension\\CommunityRequests\\": "includes/"
+	},
+	"TestAutoloadNamespaces": {
+		"MediaWiki\\Extension\\CommunityRequests\\Tests\\": "tests/phpunit/"
+	},
 	"MessagesDirs": {
 		"CommunityRequests": [
 			"i18n"
 		]
+	},
+	"ExtensionMessagesFiles": {
+		"CommunityRequestsMagic": "CommunityRequests.i18n.magic.php"
+	},
+	"Hooks": {
+		"GetDoubleUnderscoreIDs": "main",
+		"ParserAfterParse": "main"
+	},
+	"HookHandlers": {
+		"main": {
+			"class": "MediaWiki\\Extension\\CommunityRequests\\CommunityRequestsHooks",
+			"services": [ "MainConfig" ]
+		}
+	},
+	"ResourceFileModulePaths": {
+		"localBasePath": "modules",
+		"remoteExtPath": "CommunityRequsts/modules"
+	},
+	"ResourceModules": {
+		"ext.communityrequests.mint": {
+			"packageFiles": [
+				"mint/banner.js",
+				"mint/TranslationBanner.vue",
+				{
+					"name": "mint/icons.json",
+					"callback": "MediaWiki\\ResourceLoader\\CodexModule::getIcons",
+					"callbackParam": [ "cdxIconRobot", "cdxIconLanguage" ]
+				}
+			],
+			"dependencies": [
+				"vue",
+				"@wikimedia/codex",
+				"mediawiki.language",
+				"mediawiki.storage"
+			],
+			"messages": [
+				"communityrequests-translation-translatable",
+				"communityrequests-translation-translated",
+				"communityrequests-translation-show-now",
+				"communityrequests-translation-progress",
+				"communityrequests-translation-errors"
+			]
+		}
+	},
+	"config": {
+		"CommunityRequestsEnable": {
+			"description": "Whether to enable any functionality of the CommunityRequests extension.",
+			"value": false
+		}
 	},
 	"manifest_version": 2
 }

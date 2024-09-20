@@ -1,0 +1,65 @@
+[
+	{
+		"name": "community_requests_votes",
+		"comment": "Holds data about votes of community requests and focus areas",
+		"columns": [
+			{
+				"name": "crv_id",
+				"comment": "Primary key for the community_requests_votes table",
+				"type": "integer",
+				"options": { "unsigned": true, "notnull": true, "autoincrement": true }
+			},
+			{
+				"name": "crv_request",
+				"comment": "Foreign key to cr_page",
+				"type": "integer",
+				"options": { "unsigned": true, "notnull": false }
+			},
+			{
+				"name": "crv_focus_area",
+				"comment": "Foreign key to crfa_page",
+				"type": "integer",
+				"options": { "unsigned": true, "notnull": false }
+			},
+			{
+				"name": "crv_vote",
+				"comment": "Enum ID of the vote",
+				"type": "integer",
+				"options": { "unsigned": true, "notnull": true }
+			},
+			{
+				"name": "crv_actor",
+				"comment": "Actor ID of the voter",
+				"type": "bigint",
+				"options": { "unsigned": true, "notnull": true }
+			},
+			{
+				"name": "crv_timestamp",
+				"comment": "Timestamp of the vote",
+				"type": "mwtimestamp",
+				"options": { "notnull": true }
+			}
+		],
+		"indexes": [
+			{
+				"name": "crv_request",
+				"comment": "Index for sorting votes by request",
+				"columns": [ "crv_request" ],
+				"unique": false
+			},
+			{
+				"name": "crv_focus_area",
+				"comment": "Index for sorting votes by focus area",
+				"columns": [ "crv_focus_area" ],
+				"unique": false
+			},
+			{
+				"name": "crv_request_focus_area_actor",
+				"comment": "Enforce uniqueness of the request/actor and focus area/actor pairs",
+				"columns": [ "crv_request", "crv_focus_area", "crv_actor" ],
+				"unique": true
+			}
+		],
+		"pk": [ "crv_id" ]
+	}
+]

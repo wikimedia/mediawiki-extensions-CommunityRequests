@@ -1,0 +1,117 @@
+[
+	{
+		"name": "community_requests",
+		"comment": "Holds data about individual community requests",
+		"columns": [
+			{
+				"name": "cr_page",
+				"type": "integer",
+				"comment": "Foreign key to page_id and primary key for the community_request table",
+				"options": {
+					"unsigned": true,
+					"notnull": true
+				}
+			},
+			{
+				"name": "cr_status",
+				"comment": "Enum ID of the status of the request",
+				"type": "integer",
+				"options": {
+					"unsigned": true,
+					"notnull": true
+				}
+			},
+			{
+				"name": "cr_type",
+				"comment": "Enum ID of the type of the request",
+				"type": "integer",
+				"options": {
+					"unsigned": true,
+					"notnull": true
+				}
+			},
+			{
+				"name": "cr_title",
+				"comment": "Title of the request",
+				"type": "binary",
+				"options": {
+					"length": 255,
+					"notnull": true
+				}
+			},
+			{
+				"name": "cr_audience",
+				"comment": "Describes who would benefit if the request were fulfilled",
+				"type": "binary",
+				"options": {
+					"length": 255,
+					"notnull": false
+				}
+			},
+			{
+				"name": "cr_other_project",
+				"comment": "Free-form text field to supplement community_request_projects",
+				"type": "binary",
+				"options": {
+					"length": 255,
+					"notnull": false
+				}
+			},
+			{
+				"name": "cr_focus_area",
+				"comment": "Numerical ID of the focus area the request belongs to",
+				"type": "integer",
+				"options": {
+					"unsigned": true,
+					"notnull": false
+				}
+			},
+			{
+				"name": "cr_actor",
+				"comment": "Actor ID of the author of the request",
+				"type": "bigint",
+				"options": {
+					"unsigned": true,
+					"notnull": true
+				}
+			},
+			{
+				"name": "cr_timestamp",
+				"comment": "Timestamp of the creation of the request",
+				"type": "mwtimestamp",
+				"options": {
+					"notnull": true
+				}
+			}
+		],
+		"indexes": [
+			{
+				"name": "cr_timestamp",
+				"comment": "Index for sorting requests by timestamp",
+				"columns": [
+					"cr_timestamp"
+				],
+				"unique": false
+			},
+			{
+				"name": "cr_title",
+				"comment": "Index for sorting requests by title",
+				"columns": [
+					"cr_title"
+				],
+				"unique": false
+			},
+			{
+				"name": "cr_page",
+				"comment": "Enforce uniqueness of the page_id",
+				"columns": [
+					"cr_page"
+				],
+				"unique": true
+			}
+		],
+		"pk": [
+			"cr_page"
+		]
+	}
+]

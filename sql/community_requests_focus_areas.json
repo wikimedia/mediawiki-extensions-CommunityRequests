@@ -1,0 +1,64 @@
+[
+	{
+		"name": "community_requests_focus_areas",
+		"comment": "Holds data about the focus areas of community requests",
+		"columns": [
+			{
+				"name": "crfa_page",
+				"comment": "Foreign key to page_id and primary key for the community_requests_focus_areas table",
+				"type": "integer",
+				"options": {
+					"unsigned": true,
+					"notnull": true
+				}
+			},
+			{
+				"name": "crfa_title",
+				"comment": "Title of the focus area",
+				"type": "binary",
+				"options": {
+					"length": 255,
+					"notnull": true
+				}
+			},
+			{
+				"name": "crfa_status",
+				"comment": "Enum ID of the status of the focus area",
+				"type": "integer",
+				"options": {
+					"unsigned": true,
+					"notnull": true
+				}
+			},
+			{
+				"name": "crfa_timestamp",
+				"comment": "Timestamp of the creation of the focus area",
+				"type": "mwtimestamp",
+				"options": {
+					"notnull": true
+				}
+			}
+		],
+		"indexes": [
+			{
+				"name": "crfa_title",
+				"comment": "Index for sorting focus areas by title",
+				"columns": [ "crfa_title" ],
+				"unique": false
+			},
+			{
+				"name": "crfa_timestamp",
+				"comment": "Index for sorting focus areas by timestamp",
+				"columns": [ "crfa_timestamp" ],
+				"unique": false
+			},
+			{
+				"name": "crfa_page",
+				"comment": "Enforce uniqueness of the page_id",
+				"columns": [ "crfa_page" ],
+				"unique": true
+			}
+		],
+		"pk": [ "crfa_page" ]
+	}
+]

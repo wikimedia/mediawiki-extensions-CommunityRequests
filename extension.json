@@ -6,7 +6,7 @@
 	"url": "https://www.mediawiki.org/wiki/Special:MyLanguage/Extension:CommunityRequests",
 	"descriptionmsg": "communityrequests-desc",
 	"license-name": "GPL-2.0-or-later",
-	"type": "other",
+	"type": "parserhook",
 	"requires": {
 		"MediaWiki": ">= 1.43.0"
 	},
@@ -26,12 +26,17 @@
 	},
 	"Hooks": {
 		"GetDoubleUnderscoreIDs": "main",
-		"ParserAfterParse": "main"
+		"LoadExtensionSchemaUpdates": "schema",
+		"ParserAfterParse": "main",
+		"ParserFirstCallInit": "main"
 	},
 	"HookHandlers": {
 		"main": {
 			"class": "MediaWiki\\Extension\\CommunityRequests\\CommunityRequestsHooks",
 			"services": [ "MainConfig" ]
+		},
+		"schema": {
+			"class": "MediaWiki\\Extension\\CommunityRequests\\SchemaHooks"
 		}
 	},
 	"ResourceFileModulePaths": {
@@ -68,6 +73,14 @@
 		"CommunityRequestsEnable": {
 			"description": "Whether to enable any functionality of the CommunityRequests extension.",
 			"value": false
+		}
+	},
+	"attributes": {
+		"CodeMirror": {
+			"TagModes": {
+				"community-request": "mediawiki",
+				"focus-area": "mediawiki"
+			}
 		}
 	},
 	"manifest_version": 2

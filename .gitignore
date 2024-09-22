@@ -1,4 +1,7 @@
 /composer.lock
+/coverage
+/tests/selenium/log/
 /vendor
 /node_modules
 .eslintcache
+.env

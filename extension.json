@@ -8,7 +8,18 @@
 	"license-name": "GPL-2.0-or-later",
 	"type": "parserhook",
 	"requires": {
-		"MediaWiki": ">= 1.43.0"
+		"MediaWiki": ">= 1.43.0",
+		"extensions": {
+			"VisualEditor": "*",
+			"WikimediaMessages": "*"
+		}
+	},
+	"suggests": {
+		"extensions": {
+			"Cite": "*",
+			"Citoid": "*",
+			"Translate": "*"
+		}
 	},
 	"AutoloadNamespaces": {
 		"MediaWiki\\Extension\\CommunityRequests\\": "includes/"
@@ -22,11 +33,12 @@
 		]
 	},
 	"ExtensionMessagesFiles": {
-		"CommunityRequestsMagic": "CommunityRequests.i18n.magic.php"
+		"CommunityRequestsAlias": "CommunityRequests.i18n.alias.php"
 	},
 	"Hooks": {
 		"GetDoubleUnderscoreIDs": "main",
 		"LoadExtensionSchemaUpdates": "schema",
+		"LoginFormValidErrorMessages": "main",
 		"ParserAfterParse": "main",
 		"ParserFirstCallInit": "main"
 	},
@@ -39,11 +51,126 @@
 			"class": "MediaWiki\\Extension\\CommunityRequests\\SchemaHooks"
 		}
 	},
+	"SpecialPages": {
+		"WishlistIntake": {
+			"class": "MediaWiki\\Extension\\CommunityRequests\\SpecialWishlistIntake",
+			"services": [ "ParserFactory", "MainConfig" ]
+		}
+	},
 	"ResourceFileModulePaths": {
 		"localBasePath": "modules",
 		"remoteExtPath": "CommunityRequsts/modules"
 	},
 	"ResourceModules": {
+		"ext.communityrequests.intake": {
+			"packageFiles": [
+				"intake/init.js",
+				"intake/SpecialWishlistIntake.vue",
+				"intake/AudienceSection.vue",
+				"intake/DescriptionField.js",
+				"intake/DescriptionSection.vue",
+				"intake/PhabricatorTasks.vue",
+				"intake/ProjectSection.vue",
+				"intake/StatusSection.vue",
+				"intake/WishTypeSection.vue",
+				"common/TemplateParser.js",
+				"common/TemplateParserError.js",
+				"common/Util.js",
+				"common/Wish.js",
+				"common/WishTemplate.js",
+				{
+					"name": "intake/icons.json",
+					"callback": "MediaWiki\\ResourceLoader\\CodexModule::getIcons",
+					"callbackParam": [
+						"cdxIconClose",
+						"cdxIconCollapse",
+						"cdxIconExpand"
+					]
+				},
+				{
+					"name": "common/config.json",
+					"config": [
+						"CommunityRequestsEnable",
+						"CommunityRequestsHomepage",
+						"CommunityRequestsWishCategory",
+						"CommunityRequestsWishPagePrefix",
+						"CommunityRequestsWishTemplate"
+					]
+				}
+			],
+			"dependencies": [
+				"vue",
+				"@wikimedia/codex",
+				"mediawiki.api",
+				"mediawiki.util",
+				"mediawiki.language",
+				"mediawiki.action.view.postEdit",
+				"mediawiki.confirmCloseWindow",
+				"mediawiki.jqueryMsg",
+				"mediawiki.storage"
+			],
+			"messages": [
+				"communityrequests-form-subtitle",
+				"communityrequests-title",
+				"communityrequests-title-description",
+				"communityrequests-description",
+				"communityrequests-description-description",
+				"communityrequests-wishtype-label",
+				"communityrequests-wishtype-description",
+				"communityrequests-wishtype-feature-label",
+				"communityrequests-wishtype-feature-description",
+				"communityrequests-wishtype-bug-label",
+				"communityrequests-wishtype-bug-description",
+				"communityrequests-wishtype-change-label",
+				"communityrequests-wishtype-change-description",
+				"communityrequests-wishtype-unknown-label",
+				"communityrequests-wishtype-unknown-description",
+				"communityrequests-project-intro",
+				"communityrequests-project-help",
+				"communityrequests-project-all-projects",
+				"project-localized-name-commonswiki",
+				"project-localized-name-group-wikinews",
+				"project-localized-name-group-wikipedia",
+				"project-localized-name-group-wikiquote",
+				"project-localized-name-group-wikisource",
+				"project-localized-name-group-wikiversity",
+				"project-localized-name-group-wikivoyage",
+				"project-localized-name-group-wiktionary",
+				"project-localized-name-mediawikiwiki",
+				"project-localized-name-metawiki",
+				"project-localized-name-specieswiki",
+				"project-localized-name-wikidatawiki",
+				"project-localized-name-wikifunctionswiki",
+				"wikimedia-otherprojects-cloudservices",
+				"communityrequests-project-show-all",
+				"communityrequests-project-show-less",
+				"communityrequests-project-other-label",
+				"communityrequests-project-other-description",
+				"communityrequests-audience-label",
+				"communityrequests-audience-description",
+				"communityrequests-phabricator-label",
+				"communityrequests-phabricator-desc",
+				"wikimedia-copyrightwarning",
+				"communityrequests-save",
+				"communityrequests-publish",
+				"cancel",
+				"communityrequests-wish-loading-error",
+				"communityrequests-form-error",
+				"communityrequests-title-error",
+				"communityrequests-description-error",
+				"communityrequests-wishtype-error",
+				"communityrequests-project-no-selection",
+				"communityrequests-audience-error",
+				"communityrequests-status",
+				"communityrequests-status-draft",
+				"communityrequests-status-submitted",
+				"communityrequests-status-open",
+				"communityrequests-status-in-progress",
+				"communityrequests-status-delivered",
+				"communityrequests-status-blocked",
+				"communityrequests-status-archived"
+			]
+		},
 		"ext.communityrequests.mint": {
 			"packageFiles": [
 				"mint/banner.js",
@@ -71,7 +198,23 @@
 	"config": {
 		"CommunityRequestsEnable": {
 			"description": "Whether to enable any functionality of the CommunityRequests extension.",
-			"value": false
+			"value": true
+		},
+		"CommunityRequestsHomepage": {
+			"description": "The title of the page to use as the homepage for Community Requests.",
+			"value": "Community Wishlist"
+		},
+		"CommunityRequestsWishCategory": {
+			"description": "The category to put all wishes in.",
+			"value": "Category:Community Wishlist/Wishes"
+		},
+		"CommunityRequestsWishPagePrefix": {
+			"description": "Prefix for the page title of wishes.",
+			"value": "Community Wishlist/Wishes/"
+		},
+		"CommunityRequestsWishTemplate": {
+			"description": "The template page title for displaying and storing wishes.",
+			"value": "Template:Community Wishlist/Wish"
 		}
 	},
 	"attributes": {

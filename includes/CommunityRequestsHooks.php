@@ -4,22 +4,29 @@ namespace MediaWiki\Extension\CommunityRequests;
 
 use MediaWiki\Config\Config;
 use MediaWiki\Hook\GetDoubleUnderscoreIDsHook;
+use MediaWiki\Hook\LoginFormValidErrorMessagesHook;
 use MediaWiki\Hook\ParserFirstCallInitHook;
 use MediaWiki\Parser\Parser;
 
-class CommunityRequestsHooks implements GetDoubleUnderscoreIDsHook, ParserFirstCallInitHook {
+class CommunityRequestsHooks implements
+	GetDoubleUnderscoreIDsHook,
+	LoginFormValidErrorMessagesHook,
+	ParserFirstCallInitHook
+{
 
 	public const MAGIC_MACHINETRANSLATION = 'machinetranslation';
 
 	private Config $config;
+	private bool $enabled;
 
 	public function __construct( Config $config ) {
 		$this->config = $config;
+		$this->enabled = $this->config->get( 'CommunityRequestsEnable' );
 	}
 
 	/** @inheritDoc */
 	public function onGetDoubleUnderscoreIDs( &$doubleUnderscoreIDs ) {
-		if ( !$this->config->get( 'CommunityRequestsEnable' ) ) {
+		if ( !$this->enabled ) {
 			return;
 		}
 		$doubleUnderscoreIDs[] = self::MAGIC_MACHINETRANSLATION;
@@ -27,7 +34,7 @@ class CommunityRequestsHooks implements GetDoubleUnderscoreIDsHook, ParserFirstC
 
 	/** @inheritDoc */
 	public function onParserAfterParse( $parser, &$text, $stripState ) {
-		if ( !$this->config->get( 'CommunityRequestsEnable' ) ) {
+		if ( !$this->enabled ) {
 			return;
 		}
 		if ( $parser->getOutput()->getPageProperty( self::MAGIC_MACHINETRANSLATION ) !== null ) {
@@ -37,11 +44,19 @@ class CommunityRequestsHooks implements GetDoubleUnderscoreIDsHook, ParserFirstC
 
 	/** @inheritDoc */
 	public function onParserFirstCallInit( $parser ) {
-		if ( !$this->config->get( 'CommunityRequestsEnable' ) ) {
+		if ( !$this->enabled ) {
 			return;
 		}
 		$parser->setHook( 'community-request', [ $this, 'renderRequest' ] );
 		$parser->setHook( 'focus-area', [ $this, 'renderFocusArea' ] );
+	}
+
+	/** @inheritDoc */
+	public function onLoginFormValidErrorMessages( array &$messages ) {
+		if ( !$this->enabled ) {
+			return;
+		}
+		$messages[] = 'communityrequests-please-log-in';
 	}
 
 	/**

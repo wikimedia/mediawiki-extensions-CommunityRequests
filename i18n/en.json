@@ -6,6 +6,7 @@
 	"communityrequests-desc": "A system of managing a wiki community's technical suggestions and requests.",
 	"communityrequests-wish-loading-error": "There was an error while parsing the wish source text. It may contain invalid wikitext. Please [$1 refresh] and try again, use the [[$2|source editor]], or ask for help on the [[$3|talk page]].",
 	"communityrequests-edit-with-form": "Edit with form",
+	"communityrequests-wishlistintake": "Community Wishlist intake",
 	"communityrequests-form-subtitle": "Welcome to the new Community Wishlist. Please fill in the form below to submit your wish.",
 	"communityrequests-form-error": "Something went wrong. Please try saving again, or ask for help on the [[$1|talk page]].",
 	"communityrequests-description": "Describe your problem",
@@ -54,6 +55,7 @@
 	"communityrequests-supported": "Already supported",
 	"communityrequests-support-focus-area-confirmed": "You have voted in support of this focus area.",
 	"communityrequests-unsupport-focus-area": "Remove your support vote",
+	"communityrequests-status": "Status",
 	"communityrequests-status-draft": "Draft",
 	"communityrequests-status-submitted": "Submitted",
 	"communityrequests-status-open": "Open",
@@ -80,7 +82,6 @@
 	"communityrequests-wishes-status-header": "Status",
 	"communityrequests-focus-area-unassigned": "Unassigned",
 	"communityrequests-submit-wish": "Submit wish",
-	"communityrequests-desktop-only": "Sorry, the Community Wishlist currently requires the use of the [$1 desktop interface].",
 	"communityrequests-form-loading": "Loading intake form…",
 	"communityrequests-form-loading-1": "If the form does not load, please ensure you have JavaScript enabled.",
 	"communityrequests-form-loading-2": "If you are still having problems, please seek assistance at $1.",
@@ -102,5 +103,6 @@
 	"communityrequests-translation-translatable": "This page contains text that is not in $1.",
 	"communityrequests-translation-switch": "Automatically translate it using [https://www.mediawiki.org/wiki/Special:MyLanguage/MinT Wikimedia's machine translation tool].",
 	"communityrequests-translation-progress": "Translated $1 of $2 {{PLURAL:$2|part|parts}} of text.",
-	"communityrequests-translation-errors": "An error occurred:"
+	"communityrequests-translation-errors": "An error occurred:",
+	"communityrequests-disabled": "This functionality of the Community Wishlist is currently disabled."
 }

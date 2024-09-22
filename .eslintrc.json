@@ -1,10 +1,25 @@
 {
 	"root": true,
 	"extends": [
-		"wikimedia/client-common",
-		"wikimedia/language/es6",
+		"wikimedia/client",
+		"wikimedia/jquery",
 		"wikimedia/vue3-es6",
 		"wikimedia/mediawiki"
 	],
-	"rules": {}
+	"parserOptions": {
+		"sourceType": "module"
+	},
+	"env": {
+		"browser": true,
+		"jest": true
+	},
+	"globals": {
+		"global": "writable",
+		"ve": "readonly"
+	},
+	"rules": {
+		"es-x/no-array-prototype-includes": "off",
+		"es-x/no-string-prototype-replaceall": "off",
+		"no-implicit-globals": "off"
+	}
 }

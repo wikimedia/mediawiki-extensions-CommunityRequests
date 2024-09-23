@@ -98,9 +98,8 @@
 	"communityrequests-focus-area-voting-not-logged-in": "Please log in to support this focus area",
 	"communityrequests-focus-area-voters-heading": "Supporters of this area",
 	"communityrequests-focus-area-no-votes": "No supporters yet.",
-	"communityrequests-translation-translatable": "This page contains text that is not in your current interface language. You can translate it now using [https://www.mediawiki.org/wiki/Special:MyLanguage/MinT Wikimedia's machine translation tool].",
-	"communityrequests-translation-translated": "This page contains $1 {{PLURAL:$1|part|parts}} of text that have been machine translated.",
-	"communityrequests-translation-show-now": "Translate",
+	"communityrequests-translation-translatable": "This page contains text that is not in $1.",
+	"communityrequests-translation-switch": "Automatically translate it using [https://www.mediawiki.org/wiki/Special:MyLanguage/MinT Wikimedia's machine translation tool].",
 	"communityrequests-translation-progress": "Translated $1 of $2 {{PLURAL:$2|part|parts}} of text.",
 	"communityrequests-translation-errors": "An error occurred:"
 }

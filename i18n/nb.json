@@ -1,7 +1,10 @@
 {
 	"@metadata": {
-		"authors": []
+		"authors": [
+			"Jon Harald Søby"
+		]
 	},
+	"communityrequests-desc": "Et system for å behandle et wikifellesskaps tekniske forslag og forespørsler.",
 	"communityrequests-status-draft": "Utkast",
 	"communityrequests-status-submitted": "Innsendt",
 	"communityrequests-status-open": "Åpen",

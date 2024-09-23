@@ -22,7 +22,7 @@
 	"communityrequests-focus-area-volunteers": "Membrii comunității",
 	"communityrequests-focus-area-voting": "Votare",
 	"communityrequests-focus-area-voting-not-logged-in": "Vă rugăm să vă conectați pentru a sprijini acest domeniu de interes",
-	"communityrequests-translation-translatable": "Această pagină conține text care nu este în limba actuală a interfeței. Îl puteți traduce acum folosind instrumentul de traducere automată al Wikimedia.",
+	"communityrequests-translation-translatable": "Această pagină conține text care nu este în limba actuală a interfeței. Îl puteți traduce acum folosind [https://www.mediawiki.org/wiki/Special:MyLanguage/MinT Instrumentul de traducere automată de la Wikimedia].",
 	"communityrequests-translation-translated": "Această pagină conține $1 {{PLURAL:$1| parte|părți}} de text care au fost traduse automat.",
 	"communityrequests-translation-show-now": "Traducere",
 	"communityrequests-translation-progress": "Tradus $1 din $2 {{PLURAL:$2| parte|părți}} de text.",

@@ -99,7 +99,7 @@
 	"communityrequests-focus-area-voting-not-logged-in": "נא להיכנס לחשבון כדי לתמוך בתחום המיקוד הזה",
 	"communityrequests-focus-area-voters-heading": "תומכי התחום הזה",
 	"communityrequests-focus-area-no-votes": "עדיין אין תומכים.",
-	"communityrequests-translation-translatable": "הדף הזה מכיל טקסט שאינו כתוב בשפת הממשק הנוכחית שלך. באפשרותך לתרגם אותו כעת באמצעות כלי תרגום המכונה של ויקימדיה.",
+	"communityrequests-translation-translatable": "הדף הזה מכיל טקסט שאינו כתוב בשפת הממשק הנוכחית שלך. באפשרותך לתרגם אותו כעת באמצעות [https://www.mediawiki.org/wiki/Special:MyLanguage/MinT כלי תרגום המכונה של ויקימדיה].",
 	"communityrequests-translation-translated": "הדף הזה מכיל {{PLURAL:$1|חלק אחד|$1 חלקים}} של טקסט שנוצר באמצעות תרגום מכונה.",
 	"communityrequests-translation-show-now": "תרגום",
 	"communityrequests-translation-progress": "{{PLURAL:$2|תורגם חלק אחד|תורגמו $1 חלקים}} של הטקסט",

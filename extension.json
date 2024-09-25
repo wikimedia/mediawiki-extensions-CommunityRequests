@@ -57,13 +57,12 @@
 			"dependencies": [
 				"vue",
 				"@wikimedia/codex",
-				"mediawiki.language",
+				"mediawiki.language.names",
 				"mediawiki.storage"
 			],
 			"messages": [
 				"communityrequests-translation-translatable",
-				"communityrequests-translation-translated",
-				"communityrequests-translation-show-now",
+				"communityrequests-translation-switch",
 				"communityrequests-translation-progress",
 				"communityrequests-translation-errors"
 			]

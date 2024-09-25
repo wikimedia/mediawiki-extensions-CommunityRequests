@@ -1,26 +1,26 @@
 <template>
+	<!-- eslint-disable vue/no-v-html -->
 	<cdx-message allow-user-dismiss :icon="cdxIconRobot">
-		<!-- eslint-disable-next-line vue/no-v-html -->
-		<p v-html="$i18n( 'communityrequests-translation-translatable', userLanguageName ).parse()">
-		</p>
+		<div
+			v-html="$i18n(
+				'communityrequests-translation-translatable', userLanguageName
+			).parse()">
+		</div>
 		<p>
-			<cdx-toggle-button
+			<cdx-toggle-switch
 				v-model="enabled"
 				@update:model-value="onToggle"
 			>
-				<cdx-icon :icon="cdxIconLanguage"></cdx-icon>
-				{{ $i18n( 'communityrequests-translation-show-now' ).text() }}
-			</cdx-toggle-button>
+				<span v-html="$i18n( 'communityrequests-translation-switch' ).parse()">
+				</span>
+			</cdx-toggle-switch>
 		</p>
-		<p v-if="enabled && !inprogress">
-			{{ $i18n( 'communityrequests-translation-translated', translatedNodeCount ).text() }}
-		</p>
-		<p v-if="enabled && inprogress">
+		<div v-if="enabled && inprogress">
 			<cdx-progress-bar aria-hidden="true"></cdx-progress-bar>
 			{{ $i18n( 'communityrequests-translation-progress' )
 				.params( [ translatedNodeCount, translatableNodeCount ] )
 				.text() }}
-		</p>
+		</div>
 		<div v-if="enabled && errors.length > 0" class="wishlist-translation-errors">
 			<strong>{{ $i18n( 'communityrequests-translation-errors' ).text() }}</strong>
 			<ul>
@@ -33,17 +33,16 @@
 </template>
 
 <script>
-const { CdxIcon, CdxMessage, CdxProgressBar, CdxToggleButton } = require( '@wikimedia/codex' );
-const { cdxIconRobot, cdxIconLanguage } = require( './icons.json' );
+const { CdxMessage, CdxProgressBar, CdxToggleSwitch } = require( '@wikimedia/codex' );
+const { cdxIconRobot } = require( './icons.json' );
 
 // @vue/component
 module.exports = exports = {
 	name: 'TranslationBanner',
 	components: {
-		CdxIcon,
 		CdxMessage,
 		CdxProgressBar,
-		CdxToggleButton
+		CdxToggleSwitch
 	},
 	props: {
 		translatableNodes: { type: Array, default: () => [] },
@@ -52,7 +51,6 @@ module.exports = exports = {
 	},
 	data() {
 		return {
-			cdxIconLanguage,
 			cdxIconRobot,
 			enabled: false,
 			inprogress: 0,
@@ -69,7 +67,6 @@ module.exports = exports = {
 			if ( langNames && langNames[ this.targetLang ] !== undefined ) {
 				return langNames[ this.targetLang ];
 			}
-			// @todo Use ULS data as well.
 			return this.targetLang;
 		}
 	},

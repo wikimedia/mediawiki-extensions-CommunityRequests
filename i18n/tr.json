@@ -99,9 +99,8 @@
 	"communityrequests-focus-area-voting-not-logged-in": "Bu odak alanını desteklemek için lütfen giriş yapın",
 	"communityrequests-focus-area-voters-heading": "Bu alanın destekçileri",
 	"communityrequests-focus-area-no-votes": "Henüz destekçi yok.",
-	"communityrequests-translation-translatable": "Bu sayfa, geçerli arayüz dilinizde olmayan metin içeriyor. [https://www.mediawiki.org/wiki/Special:MyLanguage/MinT Wikimedia'nın makine çeviri aracını] kullanarak şimdi çevirebilirsiniz.",
-	"communityrequests-translation-translated": "Bu sayfada makine çevirisi yapılmış $1 {{PLURAL:$1|bölüm}} metin bulunmaktadır.",
-	"communityrequests-translation-show-now": "Çevir",
+	"communityrequests-translation-translatable": "Bu sayfa, $1 olmayan metin içeriyor.",
+	"communityrequests-translation-switch": "[https://www.mediawiki.org/wiki/Special:MyLanguage/MinT Wikimedia'nın makine çeviri aracını] kullanarak otomatik olarak çevirin.",
 	"communityrequests-translation-progress": "Metnin $2 {{PLURAL:$2|bölümünden}} $1 {{PLURAL:$1|bölümü}} çevrildi.",
 	"communityrequests-translation-errors": "Bir hata oluştu:"
 }

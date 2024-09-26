@@ -100,9 +100,8 @@
 	"communityrequests-focus-area-voting-not-logged-in": "Bitte logge dich ein, um diesen Schwerpunktbereich zu unterstützen",
 	"communityrequests-focus-area-voters-heading": "Unterstützende dieses Bereichs",
 	"communityrequests-focus-area-no-votes": "Bisher keine Unterstützer.",
-	"communityrequests-translation-translatable": "Diese Seite enthält Text, der nicht in deiner aktuellen Oberflächensprache vorliegt. Du kannst ihn jetzt mit dem  [https://www.mediawiki.org/wiki/Special:MyLanguage/MinTmaschinellen Übersetzungstool von Wikimedia] übersetzen.",
-	"communityrequests-translation-translated": "Diese Seite enthält $1 {{PLURAL:$1|maschinell übersetzten Textteil|maschinell übersetzte Textteile}}.",
-	"communityrequests-translation-show-now": "Übersetzen",
+	"communityrequests-translation-translatable": "Diese Seite enthält Text, der nicht auf $1 ist.",
+	"communityrequests-translation-switch": "Automatisch übersetzen mit [https://www.mediawiki.org/wiki/Special:MyLanguage/MinT dem maschinellen Übersetzungstool von Wikimedia].",
 	"communityrequests-translation-progress": "$1 von $2 {{PLURAL:$2|Textteil|Textteilen}} übersetzt.",
 	"communityrequests-translation-errors": "Es ist ein Fehler aufgetreten:"
 }

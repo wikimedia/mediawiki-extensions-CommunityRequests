@@ -100,8 +100,6 @@
 	"communityrequests-focus-area-voters-heading": "Поддржувачите на оваа област",
 	"communityrequests-focus-area-no-votes": "Засега нема поддржувачи.",
 	"communityrequests-translation-translatable": "Оваа страница содржи текст кој не е на вашиот моментален јазик на посредникот. Можете да го преведете со Викимедиината алатка за машински превод.",
-	"communityrequests-translation-translated": "Оваа страница содржи $1 {{PLURAL:$1|машински преведен дел|машински преведени делови}} од текстот.",
-	"communityrequests-translation-show-now": "Преведи",
 	"communityrequests-translation-progress": "{{PLURAL:$1|Преведен|Преведени}} $1 од $2 {{PLURAL:$2|дел|делови}} на текстот.",
 	"communityrequests-translation-errors": "Се појави грешка:"
 }

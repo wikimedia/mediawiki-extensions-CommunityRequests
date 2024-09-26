@@ -100,8 +100,6 @@
 	"communityrequests-focus-area-voters-heading": "Incondicionais desta área",
 	"communityrequests-focus-area-no-votes": "Aínda non hai incondicionais.",
 	"communityrequests-translation-translatable": "Esta páxina contén texto que non está na lingua da túa interface. Podes traducilo usando a ferramenta de tradución automática da Wikimedia.",
-	"communityrequests-translation-translated": "Esta páxina contén $1 {{PLURAL:$1|parte|partes}} do texto {{PLURAL:$1|traducida|traducidas}} automaticamente.",
-	"communityrequests-translation-show-now": "Traducir",
 	"communityrequests-translation-progress": "{{PLURAL:$1|Traducida|Traducidas}} $1 de $2 {{PLURAL:$2|parte|partes}} do texto.",
 	"communityrequests-translation-errors": "Produciuse un erro:"
 }

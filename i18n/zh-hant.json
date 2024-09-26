@@ -101,8 +101,6 @@
 	"communityrequests-focus-area-voters-heading": "此領域的支持者",
 	"communityrequests-focus-area-no-votes": "尚未有支持者。",
 	"communityrequests-translation-translatable": "此頁面包含並非您目前介面語言的文字。您可以使用[https://www.mediawiki.org/wiki/Special:MyLanguage/MinT 維基媒體的機器翻譯工具]來翻譯它。",
-	"communityrequests-translation-translated": "此頁面包含$1{{PLURAL:$1|段}}已機器翻譯的文字。",
-	"communityrequests-translation-show-now": "翻譯",
 	"communityrequests-translation-progress": "已翻譯$1段文字，共$2{{PLURAL:$2|段}}。",
 	"communityrequests-translation-errors": "發生錯誤："
 }

@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Mainframe98",
 			"McDutchie"
 		]
 	},
@@ -99,9 +100,8 @@
 	"communityrequests-focus-area-voting-not-logged-in": "Meld u aan om dit aandachtsgebied te steunen",
 	"communityrequests-focus-area-voters-heading": "Voorstanders van dit gebied",
 	"communityrequests-focus-area-no-votes": "Er zijn nog geen voorstanders.",
-	"communityrequests-translation-translatable": "Deze pagina bevat tekst die niet in uw huidige interfacetaal is geschreven. U kunt de tekst nu vertalen met Wikimedia’s machinevertaaltool.",
-	"communityrequests-translation-translated": "Deze pagina bevat $1 tekst{{PLURAL:$1|deel dat|delen die}} machinaal {{PLURAL:$1|is|zijn}} vertaald.",
-	"communityrequests-translation-show-now": "Vertalen",
+	"communityrequests-translation-translatable": "Deze pagina bevat tekst die niet in $1 geschreven is.",
+	"communityrequests-translation-switch": "Vertaal het automatisch met behulp van [https://www.mediawiki.org/wiki/Special:MyLanguage/MinT Wikimedia's machinevertaalhulpmiddel].",
 	"communityrequests-translation-progress": "{{PLURAL:$2|Het tekstdeel is {{PLURAL:$1|0=nog niet}} vertaald|$1 van de $2 tekstdelen {{PLURAL:$1|is|zijn}} vertaald}}.",
 	"communityrequests-translation-errors": "Er is een fout opgetreden:"
 }

@@ -34,6 +34,5 @@
 	"communityrequests-form-loading": "Загрузка формы приёма пожеланий…",
 	"communityrequests-form-loading-1": "Если форма не загружается, пожалуйста, убедитесь, что у вас включен JavaScript.",
 	"communityrequests-form-loading-2": "Если у вас все еще есть проблемы, обратитесь за поддержкой по адресу $1.",
-	"communityrequests-please-log-in": "Пожалуйста, выполните вход, чтобы отправить запрос.",
-	"communityrequests-translation-show-now": "Перевести"
+	"communityrequests-please-log-in": "Пожалуйста, выполните вход, чтобы отправить запрос."
 }

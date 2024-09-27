@@ -12,5 +12,6 @@
 	"communityrequests-status-blocked": "Блокирано",
 	"communityrequests-wish-proposer": "Аутор",
 	"communityrequests-wishes-date-header": "Датум (UTC)",
+	"communityrequests-translation-translatable": "Ова страница садржи текст који није на $1.",
 	"communityrequests-translation-errors": "Дошло је до грешке:"
 }

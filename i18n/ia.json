@@ -99,7 +99,8 @@
 	"communityrequests-focus-area-voting-not-logged-in": "Per favor aperi session pro appoiar iste area de interesse",
 	"communityrequests-focus-area-voters-heading": "Appoiantes de iste area",
 	"communityrequests-focus-area-no-votes": "Necun appoiante ancora,",
-	"communityrequests-translation-translatable": "Iste pagina contine texto que non es in tu lingua de interfacie actual. Tu pote traducer lo ora, usante le [https://www.mediawiki.org/wiki/Special:MyLanguage/MinT instrumento de traduction machinal de Wikimedia].",
+	"communityrequests-translation-translatable": "Iste pagina contine texto que non es in $1.",
+	"communityrequests-translation-switch": "Traduce lo automaticamente con le [https://www.mediawiki.org/wiki/Special:MyLanguage/MinT utensile de traduction machinal de Wikimedia].",
 	"communityrequests-translation-progress": "$1 de $2 parte{{PLURAL:$2||s}} de texto traducite.",
 	"communityrequests-translation-errors": "Un error ha occurrite:"
 }

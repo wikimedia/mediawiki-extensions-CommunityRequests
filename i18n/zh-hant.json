@@ -26,7 +26,7 @@
 	"communityrequests-wishtype-change-description": "您想要改變目前正在運作的特性或功能。",
 	"communityrequests-wishtype-unknown-label": "我不確定／我不知道",
 	"communityrequests-wishtype-unknown-description": "收到您的願望後，將由我們分配至合適的類型。",
-	"communityrequests-wishtype-error": "請選擇一種願望類型。",
+	"communityrequests-wishtype-error": "請選擇願望類型。",
 	"communityrequests-project-intro": "您的願望與哪些專案相關？",
 	"communityrequests-project-help": "選擇您的願望涉及的所有專案。",
 	"communityrequests-project-all-projects": "所有專案",
@@ -37,7 +37,7 @@
 	"communityrequests-project-other-error": "請在此欄位中輸入一個值（超過$1個{{PLURAL:$1|字元}}），或選擇一個專案核選框。",
 	"communityrequests-project-no-selection": "請選擇至少$1個{{PLURAL:$1|專案核選框}}，或在「$2」欄位中輸​​入一個值。",
 	"communityrequests-audience-label": "主要涉及使用者",
-	"communityrequests-audience-description": "描述這將主要影響哪些使用者群組和情境",
+	"communityrequests-audience-description": "描述這將主要影響哪些使用者群體和情境",
 	"communityrequests-audience-error": "請在此欄位中輸入一個值（介於$1至$2個{{PLURAL:$2|字元}}）。",
 	"communityrequests-phabricator-label": "Phabricator工單（非必填）",
 	"communityrequests-phabricator-desc": "輸入Phabricator工單ID或URL。",
@@ -100,7 +100,8 @@
 	"communityrequests-focus-area-voting-not-logged-in": "請先登入以支持重點領域",
 	"communityrequests-focus-area-voters-heading": "此領域的支持者",
 	"communityrequests-focus-area-no-votes": "尚未有支持者。",
-	"communityrequests-translation-translatable": "此頁面包含並非您目前介面語言的文字。您可以使用[https://www.mediawiki.org/wiki/Special:MyLanguage/MinT 維基媒體的機器翻譯工具]來翻譯它。",
+	"communityrequests-translation-translatable": "此頁面包含未翻成$1的文字。",
+	"communityrequests-translation-switch": "使用 [https://www.mediawiki.org/wiki/Special:MyLanguage/MinT Wikimedia 的機器翻譯工具]來自動翻譯。",
 	"communityrequests-translation-progress": "已翻譯$1段文字，共$2{{PLURAL:$2|段}}。",
 	"communityrequests-translation-errors": "發生錯誤："
 }

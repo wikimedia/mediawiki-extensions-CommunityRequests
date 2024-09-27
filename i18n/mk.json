@@ -99,7 +99,8 @@
 	"communityrequests-focus-area-voting-not-logged-in": "Најавете се за да го поддржите ова поле на задршка",
 	"communityrequests-focus-area-voters-heading": "Поддржувачите на оваа област",
 	"communityrequests-focus-area-no-votes": "Засега нема поддржувачи.",
-	"communityrequests-translation-translatable": "Оваа страница содржи текст кој не е на вашиот моментален јазик на посредникот. Можете да го преведете со Викимедиината алатка за машински превод.",
+	"communityrequests-translation-translatable": "Оваа страница содржи текст кој не е на $1.",
+	"communityrequests-translation-switch": "Преведете ја автоматски со [https://www.mediawiki.org/wiki/Special:MyLanguage/MinT Алатката за машински превод на Викимедија].",
 	"communityrequests-translation-progress": "{{PLURAL:$1|Преведен|Преведени}} $1 од $2 {{PLURAL:$2|дел|делови}} на текстот.",
 	"communityrequests-translation-errors": "Се појави грешка:"
 }

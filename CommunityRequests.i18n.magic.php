@@ -3,5 +3,5 @@
 $magicWords = [];
 
 $magicWords['en'] = [
-	'MACHINETRANSLATION' => [ 0, '__MACHINETRANSLATION__' ],
+	'machinetranslation' => [ 0, '__MACHINETRANSLATION__' ],
 ];

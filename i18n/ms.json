@@ -1,7 +1,21 @@
 {
 	"@metadata": {
-		"authors": []
+		"authors": [
+			"Tofeiku"
+		]
 	},
+	"communityrequests-description": "Terangkan masalah anda",
+	"communityrequests-title": "Tajuk hajat",
+	"communityrequests-wishtype-bug-label": "Laporan pepijat",
+	"communityrequests-wishtype-change-label": "Perubahan sistem",
+	"communityrequests-wishtype-unknown-label": "Saya tidak pasti atau saya tidak tahu",
+	"communityrequests-project-all-projects": "Semua projek",
+	"communityrequests-view-all-wishes": "Lihat semua hajat.",
+	"communityrequests-close": "Tutup",
+	"communityrequests-publish": "Terbitkan hajat",
+	"communityrequests-save": "Simpan perubahan",
+	"communityrequests-support": "Sokong",
+	"communityrequests-supported": "Sudah disokong",
 	"communityrequests-status-draft": "Draf",
 	"communityrequests-status-submitted": "Diserahkan",
 	"communityrequests-status-open": "Terbuka",
@@ -26,5 +40,14 @@
 	"communityrequests-wishes-projects-header": "Projek",
 	"communityrequests-wishes-date-header": "Tarikh (UTC)",
 	"communityrequests-wishes-status-header": "Status",
-	"communityrequests-focus-area-unassigned": "Belum ditugaskan"
+	"communityrequests-focus-area-unassigned": "Belum ditugaskan",
+	"communityrequests-focus-area-supported": "Disokong oleh:",
+	"communityrequests-focus-area-supported-val": "$1 {{PLURAL:$2|orang}}",
+	"communityrequests-focus-area-owners-label": "Pemilik:",
+	"communityrequests-focus-area-th-wish": "Hajat",
+	"communityrequests-focus-area-owners": "Pemilik",
+	"communityrequests-focus-area-volunteers": "Ahli komuniti",
+	"communityrequests-focus-area-no-votes": "Tiada penyokong lagi.",
+	"communityrequests-translation-translatable": "Laman ini mengandungi teks yang bukan dalam $1.",
+	"communityrequests-translation-errors": "Ralat berlaku:"
 }

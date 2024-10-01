@@ -1,0 +1,22 @@
+{
+	"@metadata": {
+		"authors": [
+			"Cabal"
+		]
+	},
+	"communityrequests-project-all-projects": "ਸਾਰੇ ਪ੍ਰੋਜੈਕਟ",
+	"communityrequests-project-show-all": "ਸਾਰੇ ਵਿਖਾਓ",
+	"communityrequests-close": "ਬੰਦ ਕਰੋ",
+	"communityrequests-save": "ਤਬਦੀਲੀਆਂ ਸਾਂਭੋ",
+	"communityrequests-status-submitted": "ਪੇਸ਼ ਕੀਤਾ",
+	"communityrequests-status-in-progress": "ਕੰਮ ਚੱਲ ਰਿਹਾ ਹੈ",
+	"communityrequests-wish-type-heading": "ਇੱਛਾ ਦੀ ਕਿਸਮ",
+	"communityrequests-wish-other-details-heading": "ਹੋਰ ਵੇਰਵੇ",
+	"communityrequests-wish-created": "ਬਣਾਇਆ ਗਿਆ",
+	"communityrequests-wish-proposer": "ਲਿਖਾਰੀ",
+	"communityrequests-wishes-type-header": "ਕਿਸਮ",
+	"communityrequests-wishes-date-header": "ਮਿਤੀ (UTC)",
+	"communityrequests-focus-area-owners-label": "ਮਾਲਕ:",
+	"communityrequests-focus-area-owners": "ਮਾਲਕ:",
+	"communityrequests-translation-errors": "ਇੱਕ ਗਲਤੀ ਆਈ ਹੈ:"
+}

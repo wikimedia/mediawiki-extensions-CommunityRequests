@@ -78,6 +78,7 @@
 	"communityrequests-form-loading-2": "Se avete ancora problemi, chiedete aiuto a $1.",
 	"communityrequests-please-log-in": "Per favore accedete per presentare un desiderio.",
 	"communityrequests-focus-area-supported-val": "$1 {{PLURAL:$2|persona|persone}}",
+	"communityrequests-translation-translatable": "Questa pagina contiene testo che non è in $1.",
 	"communityrequests-translation-progress": "{{PLURAL:$1|Tradotta|Tradotte}} $1 di $2 {{PLURAL:$2|parte|parti}} di testo.",
 	"communityrequests-translation-errors": "Si è verificato un errore:"
 }

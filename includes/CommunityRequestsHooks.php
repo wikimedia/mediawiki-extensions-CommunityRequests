@@ -9,7 +9,7 @@ use MediaWiki\Parser\Parser;
 
 class CommunityRequestsHooks implements GetDoubleUnderscoreIDsHook, ParserFirstCallInitHook {
 
-	public const MAGIC_MACHINETRANSLATION = 'MACHINETRANSLATION';
+	public const MAGIC_MACHINETRANSLATION = 'machinetranslation';
 
 	private Config $config;
 

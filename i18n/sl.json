@@ -4,6 +4,7 @@
 			"Eleassar"
 		]
 	},
+	"communityrequests-wishtype-unknown-label-short": "Neznano",
 	"communityrequests-translation-translatable": "Ta stran vsebuje besedilo, ki ni v $1.",
 	"communityrequests-translation-switch": "Samodejno prevajaj z uporabo [https://www.mediawiki.org/wiki/Special:MyLanguage/MinT Wikimedijinega orodja za strojno prevajanje]."
 }

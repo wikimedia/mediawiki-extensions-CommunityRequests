@@ -26,6 +26,7 @@
 	"communityrequests-wishtype-change-description": "Du möchtest, dass ein derzeit funktionierendes Feature oder eine Funktion geändert wird.",
 	"communityrequests-wishtype-unknown-label": "Ich bin mir nicht sicher oder ich weiß es nicht",
 	"communityrequests-wishtype-unknown-description": "Nachdem wir deinen Wunsch erhalten haben, werden wir diesem einen entsprechenden Typ zuweisen.",
+	"communityrequests-wishtype-unknown-label-short": "Unbekannt",
 	"communityrequests-wishtype-error": "Bitte wähle einen Wunschtyp aus.",
 	"communityrequests-project-intro": "Auf welche Projekte bezieht sich dein Wunsch?",
 	"communityrequests-project-help": "Wähle alle Projekte aus, auf die sich dein Wunsch auswirken wird.",

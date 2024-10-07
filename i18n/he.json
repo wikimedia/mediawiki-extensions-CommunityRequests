@@ -25,6 +25,7 @@
 	"communityrequests-wishtype-change-description": "{{GENDER:|אתה|את}} רוצה לשנות תכונה או פונקציה שפועלת כעת.",
 	"communityrequests-wishtype-unknown-label": "אני לא {{GENDER:|בטוח או לא יודע|בטוח או לא יודע}}",
 	"communityrequests-wishtype-unknown-description": "לאחר קבלת הבקשה שלך, נקצה סוג מתאים.",
+	"communityrequests-wishtype-unknown-label-short": "לא ידוע",
 	"communityrequests-wishtype-error": "נא לבחור את סוג המשאלה.",
 	"communityrequests-project-intro": "לאילו מיזמים המשאלה שלך קשורה?",
 	"communityrequests-project-help": "נא לבחור את כל המיזמים שהמשאלה שלך תשפיע עליהם.",

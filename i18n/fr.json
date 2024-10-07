@@ -2,7 +2,8 @@
 	"@metadata": {
 		"authors": [
 			"E4Esau",
-			"Goombiis"
+			"Goombiis",
+			"SleaY"
 		]
 	},
 	"communityrequests-wish-loading-error": "Une erreur s'est produite lors de l'analyse du texte source du souhait. Il se peut qu'il contienne un texte invalide. Veuillez [$1 rafraîchir] et réessayer, utiliser l'[[$2|éditeur de source]], ou demander de l'aide sur la [[$3|page de discussion]].",
@@ -25,6 +26,7 @@
 	"communityrequests-wishtype-change-description": "Vous souhaitez modifier une caractéristique ou une fonction en cours d'utilisation.",
 	"communityrequests-wishtype-unknown-label": "Je ne suis pas sûr ou je ne sais pas",
 	"communityrequests-wishtype-unknown-description": "Après avoir reçu votre souhait, nous vous attribuerons un type approprié.",
+	"communityrequests-wishtype-unknown-label-short": "Inconnu",
 	"communityrequests-wishtype-error": "Veuillez sélectionner un type de souhait.",
 	"communityrequests-project-intro": "À quels projets votre souhait est-il lié ?",
 	"communityrequests-project-help": "Sélectionnez tous les projets sur lesquels votre souhait aura un impact.",

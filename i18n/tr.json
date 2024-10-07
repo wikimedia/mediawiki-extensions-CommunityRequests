@@ -25,6 +25,7 @@
 	"communityrequests-wishtype-change-description": "Şu anda çalışan bir özelliğin ya da işlevin değiştirilmesini istiyorsunuz.",
 	"communityrequests-wishtype-unknown-label": "Emin değilim ya da bilmiyorum",
 	"communityrequests-wishtype-unknown-description": "Dileğinizi aldıktan sonra ilgili bir tür atayacağız.",
+	"communityrequests-wishtype-unknown-label-short": "Bilinmeyen",
 	"communityrequests-wishtype-error": "Lütfen bir dilek türü seçin.",
 	"communityrequests-project-intro": "Dileğiniz hangi projelerle ilgili?",
 	"communityrequests-project-help": "Dileğinizin etki edeceği tüm projeleri seçin.",

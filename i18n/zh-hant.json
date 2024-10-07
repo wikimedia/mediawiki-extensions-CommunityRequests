@@ -26,6 +26,7 @@
 	"communityrequests-wishtype-change-description": "您想要改變目前正在運作的特性或功能。",
 	"communityrequests-wishtype-unknown-label": "我不確定／我不知道",
 	"communityrequests-wishtype-unknown-description": "收到您的願望後，將由我們分配至合適的類型。",
+	"communityrequests-wishtype-unknown-label-short": "未知",
 	"communityrequests-wishtype-error": "請選擇願望類型。",
 	"communityrequests-project-intro": "您的願望與哪些專案相關？",
 	"communityrequests-project-help": "選擇您的願望涉及的所有專案。",

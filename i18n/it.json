@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"Beta16"
+			"Beta16",
+			"Egidio24"
 		]
 	},
 	"communityrequests-wish-loading-error": "Si è verificato un errore durante l'analisi del testo sorgente. Potrebbe contenere wikitesto non valido. Si prega di [$1 aggiornare] e riprovare, di usare l'[[$2|editor di testo]] o di chiedere aiuto in [[$3|pagina di discussione]].",
@@ -24,6 +25,7 @@
 	"communityrequests-wishtype-change-description": "Vuoi che una funzionalità esistente venga modificata.",
 	"communityrequests-wishtype-unknown-label": "Non ne sono sicuro o non lo so",
 	"communityrequests-wishtype-unknown-description": "Dopo aver ricevuto il tuo desiderio, gli assegneremo una tipologia apposita.",
+	"communityrequests-wishtype-unknown-label-short": "Sconosciuto",
 	"communityrequests-wishtype-error": "Seleziona una tipologia di desiderio.",
 	"communityrequests-project-intro": "A quali progetti è legato il tuo desiderio?",
 	"communityrequests-project-help": "Seleziona tutti i progetti sui quali il tuo desiderio avrà un impatto.",

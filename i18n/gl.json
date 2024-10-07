@@ -25,6 +25,7 @@
 	"communityrequests-wishtype-change-description": "Queres que se cambie unha característica ou función que funciona actualmente.",
 	"communityrequests-wishtype-unknown-label": "Teño dúbidas ou non o sei",
 	"communityrequests-wishtype-unknown-description": "Despois de recibirmos a túa petición, asignarémoslle un tipo relevante.",
+	"communityrequests-wishtype-unknown-label-short": "Descoñecido",
 	"communityrequests-wishtype-error": "Selecciona un tipo de petición.",
 	"communityrequests-project-intro": "Con que proxectos está relacionada a túa petición?",
 	"communityrequests-project-help": "Selecciona todos os proxectos nos que terá impacto a túa petición.",

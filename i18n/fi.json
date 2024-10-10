@@ -25,6 +25,7 @@
 	"communityrequests-wishtype-change-description": "Haluat, että tällä hetkellä käytössä olevaa ominaisuutta tai toimintoa muutetaan.",
 	"communityrequests-wishtype-unknown-label": "En ole varma tai en tiedä",
 	"communityrequests-wishtype-unknown-description": "Saatuamme toivomuksesi määritämme sille sopivan tyypin.",
+	"communityrequests-wishtype-unknown-label-short": "Tuntematon",
 	"communityrequests-wishtype-error": "Valitse toivomustyyppi.",
 	"communityrequests-project-intro": "Mihin hankkeeseen toivomuksesi liittyy?",
 	"communityrequests-project-help": "Valitse kaikki hankkeet, joihin toivomuksesi vaikuttaa.",

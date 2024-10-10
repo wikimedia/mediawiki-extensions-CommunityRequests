@@ -25,6 +25,7 @@
 	"communityrequests-wishtype-change-description": "Сакате да се измени тековно работечка функција.",
 	"communityrequests-wishtype-unknown-label": "Не сум сигурен или не знам",
 	"communityrequests-wishtype-unknown-description": "Откако ќе ја примиме вашата желба, ќе ѝ доделиме вид.",
+	"communityrequests-wishtype-unknown-label-short": "Непознато",
 	"communityrequests-wishtype-error": "Изберете вид на желба.",
 	"communityrequests-project-intro": "На кој проект се однесува вашата желба?",
 	"communityrequests-project-help": "Изберете ги сите проекти кои би ги засегнала вашата желба.",

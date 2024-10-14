@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"San1joy23",
 			"আফতাবুজ্জামান"
 		]
 	},
@@ -88,5 +89,7 @@
 	"communityrequests-focus-area-th-wish": "ইচ্ছা",
 	"communityrequests-focus-area-stakeholders": "দল ও অধিভুক্ত",
 	"communityrequests-focus-area-volunteers": "সম্প্রদায়ের সদস্য",
-	"communityrequests-focus-area-voting": "ভোটদান"
+	"communityrequests-focus-area-voting": "ভোটদান",
+	"communityrequests-translation-translatable": "এই পৃষ্ঠায় এমন পাঠ্য রয়েছে যা $1 -এ নেই।",
+	"communityrequests-translation-switch": "[https://www.mediawiki.org/wiki/Special:MyLanguage/MinTউইকিমিডিয়ার মেশিন অনুবাদ টুল] ব্যবহার করে স্বয়ংক্রিয়ভাবে এটি অনুবাদ করুন।"
 }

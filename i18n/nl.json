@@ -26,6 +26,7 @@
 	"communityrequests-wishtype-change-description": "U wilt dat een functie die momenteel werkt wordt gewijzigd.",
 	"communityrequests-wishtype-unknown-label": "Ik weet het niet, of niet zeker",
 	"communityrequests-wishtype-unknown-description": "Nadat wij uw wens hebben ontvangen wijzen wij er een passend type aan toe.",
+	"communityrequests-wishtype-unknown-label-short": "Onbekend",
 	"communityrequests-wishtype-error": "Kies een wenstype.",
 	"communityrequests-project-intro": "Op welke projecten heeft uw wens betrekking?",
 	"communityrequests-project-help": "Selecteer alle projecten waarop uw wens van invloed zal zijn.",

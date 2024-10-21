@@ -99,7 +99,7 @@
 	"communityrequests-focus-area-voting-not-logged-in": "Zaloguj się, aby wesprzeć ten obszar zainteresowań",
 	"communityrequests-focus-area-voters-heading": "Zwolennicy tego obszaru",
 	"communityrequests-focus-area-no-votes": "Na razie nie ma zwolenników.",
-	"communityrequests-translation-translatable": "Ta strona zawiera tekst, który nie jest w Twoim bieżącym języku interfejsu. Możesz wyświetlić tłumaczenie, korzystając z [https://www.mediawiki.org/wiki/Special:MyLanguage/MinT narzędzia do tłumaczenia maszynowego Wikimedia].",
+	"communityrequests-translation-translatable": "Ta strona zawiera tekst, który nie jest w języku $1.",
 	"communityrequests-translation-progress": "Przetłumaczono $1 z $2 {{PLURAL:$2|części}} tekstu.",
 	"communityrequests-translation-errors": "Wystąpił błąd:"
 }

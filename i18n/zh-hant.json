@@ -14,7 +14,7 @@
 	"communityrequests-description-description": "詳細說明您的願望或想解決的問題。",
 	"communityrequests-title": "願望標題",
 	"communityrequests-title-error": "請在此欄位中輸入一個值（介於$1至$2個{{PLURAL:$2|字元}}）。",
-	"communityrequests-title-description": "確保您的標題包含願望或問題的簡短描述",
+	"communityrequests-title-description": "確保您的標題包含願望或問題的簡短描述。",
 	"communityrequests-description-error": "請在此欄位中輸入一個值（多於$1個{{PLURAL:$1|字元}}）。",
 	"communityrequests-wishtype-label": "您的願望屬於哪種類型？",
 	"communityrequests-wishtype-description": "如果您想要請求方針變更，請諮詢相關專案。",
@@ -101,8 +101,8 @@
 	"communityrequests-focus-area-voting-not-logged-in": "請先登入以支持重點領域",
 	"communityrequests-focus-area-voters-heading": "此領域的支持者",
 	"communityrequests-focus-area-no-votes": "尚未有支持者。",
-	"communityrequests-translation-translatable": "此頁面包含未翻成$1的文字。",
-	"communityrequests-translation-switch": "使用[https://www.mediawiki.org/wiki/Special:MyLanguage/MinT Wikimedia的機器翻譯工具]來自動翻譯。",
+	"communityrequests-translation-translatable": "此頁面包含未翻譯成$1的文字。",
+	"communityrequests-translation-switch": "使用[https://www.mediawiki.org/wiki/Special:MyLanguage/MinT 維基媒體機器翻譯工具]自動翻譯。",
 	"communityrequests-translation-progress": "已翻譯$1段文字，共$2{{PLURAL:$2|段}}。",
 	"communityrequests-translation-errors": "發生錯誤："
 }

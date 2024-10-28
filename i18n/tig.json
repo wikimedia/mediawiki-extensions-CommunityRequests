@@ -1,8 +1,11 @@
 {
 	"@metadata": {
 		"authors": [
+			"Bbeshir",
 			"Kassala"
 		]
 	},
+	"communityrequests-wishtype-unknown-label-short": "ለይትኣመራ",
+	"communityrequests-wish-description-heading": "ሸርሕ",
 	"communityrequests-translation-translatable": "እሊ ግጸ ክቱብ ጻብጥ ቱ ዲብ $1 ሊሀላ"
 }

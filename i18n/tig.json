@@ -6,9 +6,13 @@
 		]
 	},
 	"communityrequests-wishtype-unknown-label-short": "ለይትኣመራ",
+	"communityrequests-project-show-less": "ሑድ ኣርአ",
+	"communityrequests-project-show-all": "ኩሉ ኣርአ",
 	"communityrequests-close": "ድባእ",
+	"communityrequests-status-open": "ፍቱሕ",
 	"communityrequests-status-unknown": "ለይትኣመራ",
 	"communityrequests-wish-description-heading": "ሸርሕ",
+	"communityrequests-wish-created": "ኽለቀት",
 	"communityrequests-wish-proposer": "ኬትባይ",
 	"communityrequests-translation-translatable": "እሊ ግጸ ክቱብ ጻብጥ ቱ ዲብ $1 ሊሀላ"
 }

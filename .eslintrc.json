@@ -6,6 +6,5 @@
 		"wikimedia/vue3-es6",
 		"wikimedia/mediawiki"
 	],
-	"rules": {
-	}
+	"rules": {}
 }

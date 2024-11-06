@@ -8,6 +8,7 @@
 	"communityrequests-desc": "Ein System zur Verwaltung der technischen Vorschläge und Anfragen einer Wiki-Community.",
 	"communityrequests-wish-loading-error": "Beim Parsing des Wunsch-Quelltextes ist ein Fehler aufgetreten. Er könnte ungültigen Wikitext enthalten. Bitte [$1 aktualisieren] und erneut versuchen, den [[$2|Quelltext-Editor]] benutzen, oder auf der [[$3|Talk-Seite]] um Hilfe bitten.",
 	"communityrequests-edit-with-form": "Mit Formular bearbeiten",
+	"communityrequests-wishlistintake": "Aufnahme in die Community-Wunschliste",
 	"communityrequests-form-subtitle": "Willkommen bei der neuen Community-Wunschliste. Bitte fülle das untenstehende Formular aus, um deinen Wunsch zu übermitteln.",
 	"communityrequests-form-error": "Es ist etwas schiefgegangen. Bitte versuche erneut zu speichern oder bitte um Hilfe auf der [[$1|Diskussionsseite]].",
 	"communityrequests-description": "Beschreibe dein Problem",
@@ -56,6 +57,7 @@
 	"communityrequests-supported": "Schon unterstützt",
 	"communityrequests-support-focus-area-confirmed": "Du hast mit deiner Stimme diesen Schwerpunktbereich unterstützt.",
 	"communityrequests-unsupport-focus-area": "Entferne deine Unterstützung",
+	"communityrequests-status": "Status",
 	"communityrequests-status-draft": "Entwurf",
 	"communityrequests-status-submitted": "Eingereicht",
 	"communityrequests-status-open": "Offen",
@@ -82,7 +84,6 @@
 	"communityrequests-wishes-status-header": "Status",
 	"communityrequests-focus-area-unassigned": "Nicht zugewiesen",
 	"communityrequests-submit-wish": "Wunsch einreichen",
-	"communityrequests-desktop-only": "Leider erfordert die Community-Wunschliste derzeit das [$1 Desktop Interface].",
 	"communityrequests-form-loading": "Aufnahmeformular laden …",
 	"communityrequests-form-loading-1": "Wenn das Formular nicht lädt, stelle bitte sicher, dass du JavaScript aktiviert hast.",
 	"communityrequests-form-loading-2": "Wenn du weiterhin Probleme hast, wende dich bitte an $1.",
@@ -104,5 +105,6 @@
 	"communityrequests-translation-translatable": "Diese Seite enthält Text, der nicht auf $1 ist.",
 	"communityrequests-translation-switch": "Automatisch übersetzen mit [https://www.mediawiki.org/wiki/Special:MyLanguage/MinT dem maschinellen Übersetzungstool von Wikimedia].",
 	"communityrequests-translation-progress": "$1 von $2 {{PLURAL:$2|Textteil|Textteilen}} übersetzt.",
-	"communityrequests-translation-errors": "Es ist ein Fehler aufgetreten:"
+	"communityrequests-translation-errors": "Es ist ein Fehler aufgetreten:",
+	"communityrequests-disabled": "Diese Funktion der Community-Wunschliste ist derzeit deaktiviert."
 }

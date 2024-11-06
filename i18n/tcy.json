@@ -1,9 +1,11 @@
 {
 	"@metadata": {
 		"authors": [
-			"Pragathi. BH"
+			"Pragathi. BH",
+			"Vinoda mamatharai"
 		]
 	},
+	"communityrequests-status": "ಸ್ಥಿತಿ",
 	"communityrequests-translation-translatable": "ಈ ಪುಟೊಡು $1 ಡ್ ಇಜ್ಜಂದಿನ ಪಠ್ಯ ಉಂಡು.",
 	"communityrequests-translation-switch": "[https://www.mediawiki.org/wiki/Special:MyLanguage/MinT ವಿಕಿಮೀಡಿಯಾದ ಯಂತ್ರ ಅನುವಾದ ಸಾಧನ] ನ್ ಬಳಕೆ ಮಲ್ತ್ ದ್ ಸ್ವಯಂಚಾಲಿತವಾದ್ ಅನುವಾದ ಮಲ್ಪುಲೆ."
 }

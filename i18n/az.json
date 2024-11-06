@@ -7,6 +7,7 @@
 	"communityrequests-desc": "Viki icmasının texniki təklif və sorğularını idarə etmək sistemi.",
 	"communityrequests-wish-loading-error": "İstək mənbə mətnini təhlil edərkən xəta baş verdi. Etibarsız vikimətn ola bilər. Zəhmət olmasa, [$1 səhifəni yeniləyin] və yenidən cəhd edin, [[$2|mənbə redaktoru]] istifadə edin və ya [[$3|müzakirə səhifəsində]] kömək istəyin.",
 	"communityrequests-edit-with-form": "Forma ilə redaktə et",
+	"communityrequests-wishlistintake": "İcma İstək Siyahısının qəbulu",
 	"communityrequests-form-subtitle": "Yeni İcma İstək Siyahısına xoş gəlmisiniz. İstəklərinizi bildirmək üçün aşağıdakı formanı doldurun.",
 	"communityrequests-form-error": "Nəsə xəta baş verdi. Zəhmət olmasa, yenidən yadda saxlamağa cəhd edin və ya [[$1|müzakirə səhifəsində]] kömək istəyin.",
 	"communityrequests-description": "Probleminizi təsvir edin",
@@ -55,6 +56,7 @@
 	"communityrequests-supported": "Onsuz da dəstəklənir",
 	"communityrequests-support-focus-area-confirmed": "Siz bu fokus səhasinə səs verdiniz.",
 	"communityrequests-unsupport-focus-area": "Dəstək səsinizi silin",
+	"communityrequests-status": "Statusu",
 	"communityrequests-status-draft": "Qaralama",
 	"communityrequests-status-submitted": "Təqdim edilib",
 	"communityrequests-status-open": "Açıq",
@@ -81,7 +83,6 @@
 	"communityrequests-wishes-status-header": "Statusu",
 	"communityrequests-focus-area-unassigned": "Təyin edilməmiş",
 	"communityrequests-submit-wish": "İstəyi təqdim et",
-	"communityrequests-desktop-only": "Üzr istəyirik, İcma İstək Siyahısı hal-hazırda [$1 iş masası interfeysi] istifadəsini tələb edir.",
 	"communityrequests-form-loading": "Qəbul forması yüklənir…",
 	"communityrequests-form-loading-1": "Forma yüklənmirsə, JavaScript-in aktiv olduğundan əmin olun.",
 	"communityrequests-form-loading-2": "Hələ də problem yaşayırsınızsa, zəhmət olmasa, $1 səhifəsinə yazın.",
@@ -103,5 +104,6 @@
 	"communityrequests-translation-translatable": "Bu səhifədə $1 olmayan mətn var.",
 	"communityrequests-translation-switch": "[https://www.mediawiki.org/wiki/Special:MyLanguage/MinT Vikimedianın maşın tərcümə alətindən] istifadə edərək onu avtomatik tərcümə edin.",
 	"communityrequests-translation-progress": "Mətnin $2 {{PLURAL:$2|hissəsindən}} $1 ədədi tərcümə olunub.",
-	"communityrequests-translation-errors": "Xəta baş verdi:"
+	"communityrequests-translation-errors": "Xəta baş verdi:",
+	"communityrequests-disabled": "İcma İstək Siyahısının bu funksiyası hazırda deaktivdir."
 }

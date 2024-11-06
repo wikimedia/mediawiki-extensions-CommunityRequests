@@ -8,6 +8,7 @@
 	"communityrequests-desc": "Een systeem voor het beheren van de technische suggesties en verzoeken van een wikigemeenschap.",
 	"communityrequests-wish-loading-error": "Er is een fout opgetreden bij het verwerken van de brontekst van de wens. Er kan ongeldige wikitekst in staan. [$1 Herlaad de pagina] en probeer het opnieuw, gebruik de [[$2|bron-editor]] of vraag om hulp op de [[$3|overlegpagina]].",
 	"communityrequests-edit-with-form": "Bewerken met formulier",
+	"communityrequests-wishlistintake": "Opname in de gemeenschapswensenlijst",
 	"communityrequests-form-subtitle": "Welkom op de nieuwe gemeenschapswensenlijst. Vul het onderstaande formulier in om uw wens in te dienen.",
 	"communityrequests-form-error": "Er is iets fout gegaan. Probeer opnieuw op te slaan of vraag op de [[$1|overlegpagina]] om hulp.",
 	"communityrequests-description": "Beschrijf uw probleem",
@@ -56,6 +57,7 @@
 	"communityrequests-supported": "Al gesteund",
 	"communityrequests-support-focus-area-confirmed": "U hebt voor dit aandachtsgebied gestemd.",
 	"communityrequests-unsupport-focus-area": "Uw steunstem verwijderen",
+	"communityrequests-status": "Status",
 	"communityrequests-status-draft": "Concept",
 	"communityrequests-status-submitted": "Ingediend",
 	"communityrequests-status-open": "Open",
@@ -82,7 +84,6 @@
 	"communityrequests-wishes-status-header": "Status",
 	"communityrequests-focus-area-unassigned": "Niet toegewezen",
 	"communityrequests-submit-wish": "Wens indienen",
-	"communityrequests-desktop-only": "Helaas, de Gemeenschapswensenlijst vereist momenteel het gebruik van de [$1 bureaublad-interface].",
 	"communityrequests-form-loading": "Het intakeformulier wordt geladen…",
 	"communityrequests-form-loading-1": "Als het formulier niet wordt geladen, controleer dan of JavaScript is ingeschakeld.",
 	"communityrequests-form-loading-2": "Als u problemen blijft ondervinden, kunt u contact opnemen met $1 voor hulp.",
@@ -104,5 +105,6 @@
 	"communityrequests-translation-translatable": "Deze pagina bevat tekst die niet in $1 geschreven is.",
 	"communityrequests-translation-switch": "Vertaal het automatisch met behulp van [https://www.mediawiki.org/wiki/Special:MyLanguage/MinT Wikimedia's machinevertaalhulpmiddel].",
 	"communityrequests-translation-progress": "{{PLURAL:$2|Het tekstdeel is {{PLURAL:$1|0=nog niet}} vertaald|$1 van de $2 tekstdelen {{PLURAL:$1|is|zijn}} vertaald}}.",
-	"communityrequests-translation-errors": "Er is een fout opgetreden:"
+	"communityrequests-translation-errors": "Er is een fout opgetreden:",
+	"communityrequests-disabled": "Deze functionaliteit van de gemeenschapswensenlijst is momenteel uitgeschakeld."
 }

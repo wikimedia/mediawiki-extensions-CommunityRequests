@@ -8,6 +8,7 @@
 	"communityrequests-desc": "管理wiki社群的技術建議和請求的系統。",
 	"communityrequests-wish-loading-error": "解析願望原文時出現錯誤。其中可能包含無效wikitext。請[$1 重新整理]後再試一次，或者使用[[$2|原始碼編輯器]]，或者在[[$3|討論頁]]尋求協助。",
 	"communityrequests-edit-with-form": "用表單編輯",
+	"communityrequests-wishlistintake": "社群願望清單登記表",
 	"communityrequests-form-subtitle": "歡迎來到新的社群願望清單。請填寫以下表單來提交您的願望。",
 	"communityrequests-form-error": "發生不明錯誤。請嘗試再次儲存，或在[[$1|討論頁]]尋求協助。",
 	"communityrequests-description": "描述您的問題",
@@ -56,6 +57,7 @@
 	"communityrequests-supported": "已支持",
 	"communityrequests-support-focus-area-confirmed": "您已投票支持該重點領域。",
 	"communityrequests-unsupport-focus-area": "移除您的支持票",
+	"communityrequests-status": "狀態",
 	"communityrequests-status-draft": "草稿",
 	"communityrequests-status-submitted": "已提交",
 	"communityrequests-status-open": "開放",
@@ -82,7 +84,6 @@
 	"communityrequests-wishes-status-header": "狀態",
 	"communityrequests-focus-area-unassigned": "未分配",
 	"communityrequests-submit-wish": "提交願望",
-	"communityrequests-desktop-only": "很抱歉，社群願望清單目前僅能在[$1 桌面版介面]使用。",
 	"communityrequests-form-loading": "正在載入登記表…",
 	"communityrequests-form-loading-1": "如果表單未載入，請確保您已啟用JavaScript。",
 	"communityrequests-form-loading-2": "如果您仍遇到問題，請在$1尋求協助。",
@@ -104,5 +105,6 @@
 	"communityrequests-translation-translatable": "此頁面包含未翻譯成$1的文字。",
 	"communityrequests-translation-switch": "使用[https://www.mediawiki.org/wiki/Special:MyLanguage/MinT 維基媒體機器翻譯工具]自動翻譯。",
 	"communityrequests-translation-progress": "已翻譯$1段文字，共$2{{PLURAL:$2|段}}。",
-	"communityrequests-translation-errors": "發生錯誤："
+	"communityrequests-translation-errors": "發生錯誤：",
+	"communityrequests-disabled": "社群願望清單的這項功能已停用。"
 }

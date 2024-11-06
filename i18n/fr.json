@@ -81,7 +81,6 @@
 	"communityrequests-wishes-status-header": "Statut",
 	"communityrequests-focus-area-unassigned": "Non affecté",
 	"communityrequests-submit-wish": "Soumettre un souhait",
-	"communityrequests-desktop-only": "Désolé, la liste de souhaits de la communauté nécessite actuellement l'utilisation de l'[interface de bureau $1].",
 	"communityrequests-form-loading": "Chargement du formulaire d'admission…",
 	"communityrequests-form-loading-1": "Si le formulaire ne se charge pas, assurez-vous que JavaScript est activé.",
 	"communityrequests-form-loading-2": "Si vous avez encore des problèmes, demandez de l'aide sur $1.",

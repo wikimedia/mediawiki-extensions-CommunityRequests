@@ -7,6 +7,7 @@
 	"communityrequests-desc": "מערכת לניהול הצעות ובקשות טכניות של קהילת ויקי.",
 	"communityrequests-wish-loading-error": "אירעה שגיאה בעת ניתוח טקסט המקור של המשאלה. ייתכן שהוא מכיל קוד ויקי בלתי־תקין. נא [$1 לרענן] ולנסות שוב, להשתמש ב[[$2|עורך קוד מקור]] או לבקש עזרה ב[[$3|דף השיחה]].",
 	"communityrequests-edit-with-form": "עריכה באמצעות טופס",
+	"communityrequests-wishlistintake": "קליטת משאלות קהילה",
 	"communityrequests-form-subtitle": "ברוך בואך לגרסה החדשה של משאלות הקהילה. נא למלא את הטופס למטה כדי להגיש את הבקשה שלך.",
 	"communityrequests-form-error": "משהו השתבש. נא לנסות לשמור שוב או לבקש עזרה ב[[$1|דף השיחה]].",
 	"communityrequests-description": "נא לתאר את הבעיה שלך",
@@ -55,6 +56,7 @@
 	"communityrequests-supported": "כבר נתמך",
 	"communityrequests-support-focus-area-confirmed": "הצבעת בעד תמיכה בהתמקדות בזה",
 	"communityrequests-unsupport-focus-area": "הסרת הצבעת התמיכה שלך",
+	"communityrequests-status": "מצב",
 	"communityrequests-status-draft": "טיוטה",
 	"communityrequests-status-submitted": "מוגשת",
 	"communityrequests-status-open": "פתוחה",
@@ -81,7 +83,6 @@
 	"communityrequests-wishes-status-header": "מצב",
 	"communityrequests-focus-area-unassigned": "לא מוקצות",
 	"communityrequests-submit-wish": "שליחת משאלה",
-	"communityrequests-desktop-only": "מצטערים, רשימת משאלות הקהילה דורשת כרגע שימוש בממשק של [$1 ממשק מחשבים].",
 	"communityrequests-form-loading": "טעינת טופס קליטה...",
 	"communityrequests-form-loading-1": "אם הטופס לא נטען, נא לוודא שהפעלת JavaScript.",
 	"communityrequests-form-loading-2": "אם {{אתה עדיין נתקל בביעות, בקש|את עדיין נתקלת בבעיות, בקשי}} עזרה בדף $1.",
@@ -103,5 +104,6 @@
 	"communityrequests-translation-translatable": "הדף הזה מכיל טקסט שאינו כתוב ב{{GRAMMAR:תחילית|$1}}.",
 	"communityrequests-translation-switch": "לתרגם אותו אוטומטית באמצעות [https://www.mediawiki.org/wiki/Special:MyLanguage/MinT כלי תרגום המכונה של ויקימדיה].",
 	"communityrequests-translation-progress": "{{PLURAL:$2|תורגם חלק אחד|תורגמו $1 חלקים}} של הטקסט",
-	"communityrequests-translation-errors": "אירעה שגיאה:"
+	"communityrequests-translation-errors": "אירעה שגיאה:",
+	"communityrequests-disabled": "האפשרות הזאת של רשימת משאלות הקהילה אינה פעילה כעת."
 }

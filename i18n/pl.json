@@ -80,7 +80,6 @@
 	"communityrequests-wishes-status-header": "Status",
 	"communityrequests-focus-area-unassigned": "Nieprzypisany",
 	"communityrequests-submit-wish": "Prześlij życzenie",
-	"communityrequests-desktop-only": "Niestety, wysyłanie zgłoszeń do Listy Życzeń Społeczności wymaga do działania uruchomienie w [$1 interfejsie na komputery stacjonarne].",
 	"communityrequests-form-loading": "Ładowanie formularza zgłoszeniowego…",
 	"communityrequests-form-loading-1": "Jeśli formularz nie zostanie załadowany, upewnij się, że obsługa JavaScript jest włączona.",
 	"communityrequests-form-loading-2": "Jeśli nadal masz problemy, poproś o pomoc na $1.",

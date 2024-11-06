@@ -31,7 +31,6 @@
 	"communityrequests-wishes-status-header": "状況",
 	"communityrequests-focus-area-unassigned": "未割り当て",
 	"communityrequests-submit-wish": "「要望」を投稿",
-	"communityrequests-desktop-only": "申し訳ありません。コミュニティ要望リストは、現在[$1 デスクトップ・インターフェース]をご使用いただく必要があります。",
 	"communityrequests-form-loading": "受付フォームを読み込み中...",
 	"communityrequests-form-loading-1": "フォームが読み込まれない場合は、恐れ入りますが、JavaScriptが有効であるかをご確認ください。",
 	"communityrequests-form-loading-2": "それでも問題が解決しない場合は、恐れ入りますが、$1にてお知らせください。",

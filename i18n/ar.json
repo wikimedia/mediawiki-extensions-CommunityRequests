@@ -1,6 +1,8 @@
 {
 	"@metadata": {
-		"authors": []
+		"authors": [
+			"Meno25"
+		]
 	},
 	"communityrequests-wish-loading-error": "كان ثمة خطأ أثناء الإعراب البرمجي للنص المصدر للأمنية. يجوز أنه يحتوي على نص ويكي غير صالح. يرجى [$1 تحديث] الصفحة والمحاولة مرة أخرى أو استخدام [[$2|محرر النص المصدر]] أو طلب المساعدة على [[$3|صفحة النقاش]].",
 	"communityrequests-edit-with-form": "عدّل مستخدمًا النموذج",
@@ -11,7 +13,7 @@
 	"communityrequests-title": "عنوان الأمنية",
 	"communityrequests-title-error": "يرجى إدخال قيمة في هذه الخانة (بين $1 و$2 {{PLURAL:$2|محرف|محارف}}).",
 	"communityrequests-title-description": "احرصوا على أن يكون العنوان المختار يحتوي على بيان قصير بالأمنية أو المشكلة.",
-	"communityrequests-description-error": "يرجى إدخال قيمة في هذه الخانة (بين $1 أو أكثر {{PLURAL:$2|محرف|محارف}}).",
+	"communityrequests-description-error": "الرجاء إدخال قيمة لهذا الحقل ( $1 أو أكثر {{PLURAL:$1| حرف|أحرف}}).",
 	"communityrequests-wishtype-label": "ما النوع الذين يصف أمنيتكم أفضل وصفٍ؟",
 	"communityrequests-wishtype-description": "إن كنتم ترغبون في طلب تغيير سياسة، يرجى استشارة المشروع المعني بهذه السياسة.",
 	"communityrequests-wishtype-feature-label": "طلبات السمات البرمجية",
@@ -77,7 +79,6 @@
 	"communityrequests-wishes-status-header": "الحالة",
 	"communityrequests-focus-area-unassigned": "غير مُعيّن",
 	"communityrequests-submit-wish": "رفع الأمنية",
-	"communityrequests-desktop-only": "عذرًا، قائمة أمنيات المجتمع تتطلب حاليًا استخدام [$1 واجهة سطح مكتب].",
 	"communityrequests-form-loading": "جارٍ تحميل نموذج التلقي...",
 	"communityrequests-form-loading-1": "إن لم يحمّل النموذج، يرجى التأكد من تمكين جافا سكريبت.",
 	"communityrequests-form-loading-2": "لو كنتم لا زلتم تعانون من مشاكل، يرجى طلب المساعدة على $1.",

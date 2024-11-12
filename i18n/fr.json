@@ -3,9 +3,11 @@
 		"authors": [
 			"E4Esau",
 			"Goombiis",
-			"SleaY"
+			"SleaY",
+			"Mahabarata"
 		]
 	},
+	"communityrequests-desc": "Un système de gestion des suggestions et des demandes techniques d'une communauté wiki.",
 	"communityrequests-wish-loading-error": "Une erreur s'est produite lors de l'analyse du texte source du souhait. Il se peut qu'il contienne un texte invalide. Veuillez [$1 rafraîchir] et réessayer, utiliser l'[[$2|éditeur de source]], ou demander de l'aide sur la [[$3|page de discussion]].",
 	"communityrequests-edit-with-form": "Modifier avec le formulaire",
 	"communityrequests-form-subtitle": "Bienvenue sur la nouvelle liste de souhaits de la Communauté. Veuillez remplir le formulaire ci-dessous pour soumettre votre souhait.",
@@ -49,6 +51,8 @@
 	"communityrequests-close": "Fermer",
 	"communityrequests-publish": "Publier le souhait",
 	"communityrequests-save": "Enregistrer les modifications",
+	"communityrequests-support-focus-area": "Soutenir ce domaine d'action",
+	"communityrequests-support-focus-area-dialog-title": "Soutenir « $1 »",
 	"communityrequests-optional-comment": "Commentaire optionnel",
 	"communityrequests-support": "Soutenir",
 	"communityrequests-supported": "Déjà pris en charge",
@@ -83,9 +87,10 @@
 	"communityrequests-desktop-only": "Désolé, la liste de souhaits de la communauté nécessite actuellement l'utilisation de l'interface de bureau.",
 	"communityrequests-form-loading": "Chargement du formulaire d'admission…",
 	"communityrequests-form-loading-1": "Si le formulaire ne se charge pas, assurez-vous que JavaScript est activé.",
-	"communityrequests-form-loading-2": "Si vous avez encore des problèmes, demandez de l'aide à 1 $.",
+	"communityrequests-form-loading-2": "Si vous avez encore des problèmes, demandez de l'aide sur $1.",
 	"communityrequests-please-log-in": "Veuillez vous connecter pour soumettre un souhait.",
 	"communityrequests-focus-area-supported": "Soutenu par :",
+	"communityrequests-focus-area-supported-val": "$1 {{PLURAL:$2|personne|personnes}}",
 	"communityrequests-focus-area-owners-label": "Propriétaires :",
 	"communityrequests-focus-area-view-wishes": "Voir les souhaits dans ce domaine",
 	"communityrequests-focus-area-wishes-list": "Souhaits dans ce domaine d'action",
@@ -94,8 +99,12 @@
 	"communityrequests-focus-area-owners": "Propriétaires",
 	"communityrequests-focus-area-volunteers": "Membres de la communauté",
 	"communityrequests-focus-area-voting": "Vote",
+	"communityrequests-focus-area-voting-info": "Ce domaine compte actuellement '''$1 {{PLURAL:$2|supporter|supporters}}'''. Le vote pour ce domaine est ouvert jusqu'à ce qu'il soit terminée. Montrez votre soutien en utilisant le bouton ci-dessous.",
 	"communityrequests-focus-area-voting-not-logged-in": "Veuillez vous connecter pour soutenir ce domaine d'action",
 	"communityrequests-focus-area-voters-heading": "Les soutiens de ce domaine",
 	"communityrequests-focus-area-no-votes": "Pas de partisans encore.",
+	"communityrequests-translation-translatable": "Cette page contient du texte qui n'est pas en $1.",
+	"communityrequests-translation-switch": "Traduisez-le automatiquement en utilisant [https://www.mediawiki.org/wiki/Special:MyLanguage/MinT l'outil de traduction automatique de Wikimédia].",
+	"communityrequests-translation-progress": "Traduit $1 sur $2 {{PLURAL:$2|partie|parties}} de texte.",
 	"communityrequests-translation-errors": "Une erreur s’est produite:"
 }

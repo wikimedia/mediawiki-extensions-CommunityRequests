@@ -4,10 +4,10 @@ namespace MediaWiki\Extension\CommunityRequests;
 
 use MediaWiki\Config\Config;
 use MediaWiki\Message\Message;
+use MediaWiki\Parser\ParserFactory;
 use MediaWiki\Registration\ExtensionRegistry;
 use MediaWiki\SpecialPage\SpecialPage;
 use MediaWiki\Title\Title;
-use ParserFactory;
 
 /**
  * JS-only Special page for submitting a new community request.

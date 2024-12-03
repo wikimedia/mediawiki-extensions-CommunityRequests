@@ -1,0 +1,13 @@
+{
+	"@metadata": {
+		"authors": [
+			"GianAntonucci"
+		]
+	},
+	"communityrequests-desc": "Un sistema pi manijari i cunzigghi e i dumanni tècnichi di na cumunità wiki.",
+	"communityrequests-wish-loading-error": "Mmattìu nu sbagghiu a l'analizzari u còdici dû mòdulu dî dumanni. Capaci ca àvi un testu wiki senza vàlitu. [$1 Attualizza a pàggina] e torna a prova, usa l'[[$2|edituri dû còdici]] o addumanna ajutu nnâ [[$3|pàggina di discurruta]].",
+	"communityrequests-edit-with-form": "Cancia cû mòdulu",
+	"communityrequests-form-subtitle": "Bimminuti nnâ lista nova dî disiji dâ cumunità. Jinchi u mòdulu d'appressu pi mannari u to disiju.",
+	"communityrequests-form-error": "Quarchi cosa finìu tinta. Prova a riggistrari nn'arrè o addumanna ajutu nnâ [[$1|pàggina di discurruta]].",
+	"communityrequests-description": "Discrivi u to prubblema"
+}

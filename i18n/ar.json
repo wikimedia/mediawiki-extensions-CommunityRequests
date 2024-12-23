@@ -97,10 +97,12 @@
 	"communityrequests-focus-area-owners": "المالك",
 	"communityrequests-focus-area-volunteers": "أعضاء المجتمع",
 	"communityrequests-focus-area-voting": "التصويت",
+	"communityrequests-focus-area-voting-info": "يوجد في هذه المنطقة حاليًا\n''' $1 {{PLURAL:$2|داعم}}'''.\nالتصويت لهذه المنطقة مفتوح حتى اكتمالها.\nأظهر دعمك باستخدام الزر أدناه.",
 	"communityrequests-focus-area-voting-not-logged-in": "يرجى تسجيل الدخول لدعم هذا المجال",
 	"communityrequests-focus-area-voters-heading": "مناصري هذه المنطقة",
 	"communityrequests-focus-area-no-votes": "لا يوجد مؤيدين حتى الآن.",
 	"communityrequests-translation-translatable": "تحتوي هذه الصفحة على نص غير موجود في $1.",
+	"communityrequests-translation-switch": "ترجمها تلقائيا باستخدام [https://www.mediawiki.org/wiki/Special:MyLanguage/MinT أداة الترجمة الآلية الخاصة بويكيميديا].",
 	"communityrequests-translation-progress": "تمت ترجمة $1 من $2 {{PLURAL:$2|جزء|أجزاء}} من النص.",
 	"communityrequests-translation-errors": "حدث خطأ:",
 	"communityrequests-disabled": "تم تعطيل هذه الوظيفة الخاصة بقائمة أمنيات المجتمع حاليًا."

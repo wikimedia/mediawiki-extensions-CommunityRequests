@@ -4,6 +4,7 @@
 			"Meno25"
 		]
 	},
+	"communityrequests-desc": "نظام لإدارة الاقتراحات والطلبات الفنية لمجتمع الويكي.",
 	"communityrequests-wish-loading-error": "كان ثمة خطأ أثناء الإعراب البرمجي للنص المصدر للأمنية. يجوز أنه يحتوي على نص ويكي غير صالح. يرجى [$1 تحديث] الصفحة والمحاولة مرة أخرى أو استخدام [[$2|محرر النص المصدر]] أو طلب المساعدة على [[$3|صفحة النقاش]].",
 	"communityrequests-edit-with-form": "عدّل مستخدمًا النموذج",
 	"communityrequests-form-subtitle": "مرحبًا بكم في قائمة أمنيات المجتمع الجديدة. يرجى ملء النموذج التالي كي ترسلوا أمنياتكم.",
@@ -24,6 +25,7 @@
 	"communityrequests-wishtype-change-description": "ترغبون في تغيير سمة برمجية أو وظيفة برمجية قائمة تعمل على ما يرام.",
 	"communityrequests-wishtype-unknown-label": "لست متأكدًا أو لا أعلم",
 	"communityrequests-wishtype-unknown-description": "بعد تسلم أمنيتكم، سوف نخصص لها نوعًا مناسبًا.",
+	"communityrequests-wishtype-unknown-label-short": "غير معروف",
 	"communityrequests-wishtype-error": "يرجى اختيار نوع الأمنية.",
 	"communityrequests-project-intro": "ما هي المشاريع التي تمسها أمنيتكم؟",
 	"communityrequests-project-help": "يرجى اختيار كافة المشاريع التي سوف تؤثر أمنيتكم عليها.",
@@ -83,5 +85,23 @@
 	"communityrequests-form-loading": "جارٍ تحميل نموذج التلقي...",
 	"communityrequests-form-loading-1": "إن لم يحمّل النموذج، يرجى التأكد من تمكين جافا سكريبت.",
 	"communityrequests-form-loading-2": "لو كنتم لا زلتم تعانون من مشاكل، يرجى طلب المساعدة على $1.",
-	"communityrequests-please-log-in": "يرجى تسجيل الدخول لرفع طلب أمنية."
+	"communityrequests-please-log-in": "يرجى تسجيل الدخول لرفع طلب أمنية.",
+	"communityrequests-focus-area-supported": "بدعم من:",
+	"communityrequests-focus-area-supported-val": "$1 {{PLURAL:$2|شخص|أشخاص}}",
+	"communityrequests-focus-area-owners-label": "المالك:",
+	"communityrequests-focus-area-view-wishes": "عرض الرغبات في هذه المنطقة",
+	"communityrequests-focus-area-wishes-list": "التمنيات في هذا المجال التركيز",
+	"communityrequests-focus-area-th-wish": "يتمنى",
+	"communityrequests-focus-area-stakeholders": "الفرق والشركات التابعة",
+	"communityrequests-focus-area-owners": "المالك",
+	"communityrequests-focus-area-volunteers": "أعضاء المجتمع",
+	"communityrequests-focus-area-voting": "التصويت",
+	"communityrequests-focus-area-voting-info": "يوجد في هذه المنطقة حاليًا\n''' $1 {{PLURAL:$2|داعم}}'''.\nالتصويت لهذه المنطقة مفتوح حتى اكتمالها.\nأظهر دعمك باستخدام الزر أدناه.",
+	"communityrequests-focus-area-voting-not-logged-in": "يرجى تسجيل الدخول لدعم هذا المجال",
+	"communityrequests-focus-area-voters-heading": "مناصري هذه المنطقة",
+	"communityrequests-focus-area-no-votes": "لا يوجد مؤيدين حتى الآن.",
+	"communityrequests-translation-translatable": "تحتوي هذه الصفحة على نص غير موجود في $1.",
+	"communityrequests-translation-switch": "ترجمها تلقائيا باستخدام [https://www.mediawiki.org/wiki/Special:MyLanguage/MinT أداة الترجمة الآلية الخاصة بويكيميديا].",
+	"communityrequests-translation-progress": "تمت ترجمة $1 من $2 {{PLURAL:$2|جزء|أجزاء}} من النص.",
+	"communityrequests-translation-errors": "حدث خطأ:"
 }

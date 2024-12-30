@@ -7,6 +7,7 @@
 	"communityrequests-desc": "Un systema pro gerer le suggestiones e requestas technic de un communitate wiki.",
 	"communityrequests-wish-loading-error": "Un error ha occurrite durante le processamento del texto fonte del desiro. Per favor [$1 refresca] e tenta lo de novo, usa le [[$2|editor de codice fonte]], o demanda adjuta sur le [[$3|pagina de discussion]].",
 	"communityrequests-edit-with-form": "Modificar con formulario",
+	"communityrequests-wishlistintake": "Entrata in le lista de desiros del communitate",
 	"communityrequests-form-subtitle": "Benvenite al nove Lista de desiros del communitate. Per favor completa le formulario infra pro submitter tu desiro.",
 	"communityrequests-form-error": "Un problema ha occurrite. Per favor tenta salveguardar de novo, o demanda adjuta sur le [[$1|pagina de discussion]].",
 	"communityrequests-description": "Describe tu problema",

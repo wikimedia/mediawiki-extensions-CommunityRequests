@@ -56,6 +56,7 @@
 	"communityrequests-supported": "Ja appoiate",
 	"communityrequests-support-focus-area-confirmed": "Tu ha votate in appoio de iste area de interesse.",
 	"communityrequests-unsupport-focus-area": "Retirar tu voto de appoio",
+	"communityrequests-status": "Stato",
 	"communityrequests-status-draft": "Provisori",
 	"communityrequests-status-submitted": "Submittite",
 	"communityrequests-status-open": "Aperte",
@@ -103,5 +104,6 @@
 	"communityrequests-translation-translatable": "Iste pagina contine texto que non es in $1.",
 	"communityrequests-translation-switch": "Traduce lo automaticamente con le [https://www.mediawiki.org/wiki/Special:MyLanguage/MinT utensile de traduction machinal de Wikimedia].",
 	"communityrequests-translation-progress": "$1 de $2 parte{{PLURAL:$2||s}} de texto traducite.",
-	"communityrequests-translation-errors": "Un error ha occurrite:"
+	"communityrequests-translation-errors": "Un error ha occurrite:",
+	"communityrequests-disabled": "Iste functionalitate del Lista de desiros del communitate es actualmente disactivate."
 }

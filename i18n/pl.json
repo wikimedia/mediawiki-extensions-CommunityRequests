@@ -7,6 +7,7 @@
 	"communityrequests-desc": "System zarządzania technicznymi sugestiami i prośbami społeczności wiki.",
 	"communityrequests-wish-loading-error": "Wystąpił błąd podczas parsowania tekstu źródłowego życzenia. Może zawierać nieprawidłowy wikikod. [$1 Odśwież] stronę i spróbuj ponownie, użyj [[$2|edytora kodu źródłowego]] lub poproś o pomoc na [[$3|stronie dyskusji]].",
 	"communityrequests-edit-with-form": "Edytuj formularzem",
+	"communityrequests-wishlistintake": "Przyjmowanie życzeń społeczności",
 	"communityrequests-form-subtitle": "Witamy w nowej Liście życzeń społeczności. Wypełnij poniższy formularz, aby przesłać swoje życzenie.",
 	"communityrequests-form-error": "Coś poszło nie tak. Spróbuj zapisać ponownie lub poproś o pomoc na [[$1|stronie dyskusji]].",
 	"communityrequests-description": "Opisz swój problem",
@@ -25,6 +26,7 @@
 	"communityrequests-wishtype-change-description": "Czyli kiedy chcesz zmienić działanie funkcji, która aktualnie działa.",
 	"communityrequests-wishtype-unknown-label": "Nie wiem lub nie jestem {{GENDER:|pewien|pewna|pewny(-a)}}",
 	"communityrequests-wishtype-unknown-description": "Po otrzymaniu twojego życzenia, przypiszemy mu odpowiedni rodzaj.",
+	"communityrequests-wishtype-unknown-label-short": "Nieznany",
 	"communityrequests-wishtype-error": "Prosimy o wybranie rodzaju życzenia.",
 	"communityrequests-project-intro": "Z jakimi projektami związane jest twoje życzenie?",
 	"communityrequests-project-help": "Wybierz wszystkie projekty, na które twoje życzenie będzie mieć wpływ.",
@@ -54,6 +56,7 @@
 	"communityrequests-supported": "Już poparte przez Ciebie",
 	"communityrequests-support-focus-area-confirmed": "{{GENDER:|Zagłosowałeś|Zagłosowałaś|Zagłosowałeś(-aś)}} za poparciem tego obszaru zainteresowań.",
 	"communityrequests-unsupport-focus-area": "Usuń swój głos poparcia",
+	"communityrequests-status": "Status",
 	"communityrequests-status-draft": "Brudnopis",
 	"communityrequests-status-submitted": "Zgłoszone",
 	"communityrequests-status-open": "Otwarte",
@@ -99,6 +102,8 @@
 	"communityrequests-focus-area-voters-heading": "Zwolennicy tego obszaru",
 	"communityrequests-focus-area-no-votes": "Na razie nie ma zwolenników.",
 	"communityrequests-translation-translatable": "Ta strona zawiera tekst, który nie jest w języku $1.",
+	"communityrequests-translation-switch": "Przetłumacz automatycznie za pomocą [https://www.mediawiki.org/wiki/Special:MyLanguage/MinT narzędzia do tłumaczenia maszynowego Wikimedia].",
 	"communityrequests-translation-progress": "Przetłumaczono $1 z $2 {{PLURAL:$2|części}} tekstu.",
-	"communityrequests-translation-errors": "Wystąpił błąd:"
+	"communityrequests-translation-errors": "Wystąpił błąd:",
+	"communityrequests-disabled": "Ta funkcjonalność listy życzeń społeczności jest obecnie wyłączona."
 }

@@ -7,6 +7,7 @@
 	},
 	"communityrequests-desc": "管理wiki社区的技术建议和请求的系统。",
 	"communityrequests-edit-with-form": "用表单编辑",
+	"communityrequests-form-subtitle": "欢迎来到新的社群愿望清单。请填写以下表单以提交您的愿望。",
 	"communityrequests-description": "描述您的问题",
 	"communityrequests-title": "愿望标题",
 	"communityrequests-wishtype-label": "您的愿望属于哪种类型？",
@@ -84,6 +85,7 @@
 	"communityrequests-focus-area-owners": "负责团队",
 	"communityrequests-focus-area-volunteers": "社群参与者",
 	"communityrequests-focus-area-voting": "投票",
+	"communityrequests-focus-area-voting-not-logged-in": "请登录以支持该重点领域",
 	"communityrequests-focus-area-voters-heading": "本领域的支持者",
 	"communityrequests-focus-area-no-votes": "尚未有支持者。",
 	"communityrequests-translation-errors": "发生错误："

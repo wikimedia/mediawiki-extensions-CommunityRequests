@@ -25,6 +25,7 @@
 	"communityrequests-wishtype-change-description": "Czyli kiedy chcesz zmienić działanie funkcji, która aktualnie działa.",
 	"communityrequests-wishtype-unknown-label": "Nie wiem lub nie jestem {{GENDER:|pewien|pewna|pewny(-a)}}",
 	"communityrequests-wishtype-unknown-description": "Po otrzymaniu twojego życzenia, przypiszemy mu odpowiedni rodzaj.",
+	"communityrequests-wishtype-unknown-label-short": "Nieznany",
 	"communityrequests-wishtype-error": "Prosimy o wybranie rodzaju życzenia.",
 	"communityrequests-project-intro": "Z jakimi projektami związane jest twoje życzenie?",
 	"communityrequests-project-help": "Wybierz wszystkie projekty, na które twoje życzenie będzie mieć wpływ.",
@@ -100,6 +101,7 @@
 	"communityrequests-focus-area-voters-heading": "Zwolennicy tego obszaru",
 	"communityrequests-focus-area-no-votes": "Na razie nie ma zwolenników.",
 	"communityrequests-translation-translatable": "Ta strona zawiera tekst, który nie jest w języku $1.",
+	"communityrequests-translation-switch": "Przetłumacz automatycznie za pomocą [https://www.mediawiki.org/wiki/Special:MyLanguage/MinT narzędzia do tłumaczenia maszynowego Wikimedia].",
 	"communityrequests-translation-progress": "Przetłumaczono $1 z $2 {{PLURAL:$2|części}} tekstu.",
 	"communityrequests-translation-errors": "Wystąpił błąd:"
 }

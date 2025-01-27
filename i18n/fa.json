@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"Jeeputer"
+			"Jeeputer",
+			"Mohammad ebz"
 		]
 	},
 	"communityrequests-desc": "سامانه‌ای برای مدیریت پیشنهادها و درخواست‌های فنی جامعهٔ یک ویکی.",
@@ -67,7 +68,7 @@
 	"communityrequests-status-unknown": "ناشناخته",
 	"communityrequests-edit-wish": "ویرایش خواسته",
 	"communityrequests-discuss-wish": "بحث پیرامون این خواسته",
-	"communityrequests-wish-description-heading": "توصیف",
+	"communityrequests-wish-description-heading": "توضیحات",
 	"communityrequests-wish-focus-area-heading": "محدودهٔ مورد تمرکز اختصاص‌یافته",
 	"communityrequests-wish-type-heading": "نوع خواسته",
 	"communityrequests-wish-related-heading": "پروژه‌های مرتبط",

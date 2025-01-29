@@ -1,6 +1,8 @@
 {
 	"@metadata": {
-		"authors": []
+		"authors": [
+			"Ата"
+		]
 	},
 	"communityrequests-status-draft": "Чернетка",
 	"communityrequests-status-submitted": "Подано",
@@ -29,6 +31,6 @@
 	"communityrequests-focus-area-unassigned": "Не призначено",
 	"communityrequests-submit-wish": "Подати побажання",
 	"communityrequests-form-loading": "Завантаження форми…",
-	"communityrequests-form-loading-1": "Якщо форма не завантажується, переконайтеся, що у ваших [[$2|налаштуваннях]] увімкнено додаток «$1».",
+	"communityrequests-form-loading-1": "Якщо форма не завантажується, переконайтеся, що у вас увімкнено JavaScript.",
 	"communityrequests-please-log-in": "Будь ласка, увійдіть, щоб подати побажання."
 }

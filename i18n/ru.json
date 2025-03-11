@@ -1,10 +1,12 @@
 {
 	"@metadata": {
 		"authors": [
-			"Kareyac"
+			"Kareyac",
+			"Yurina Tatiana"
 		]
 	},
 	"communityrequests-project-all-projects": "Все проекты",
+	"communityrequests-project-show-less": "Показать меньше",
 	"communityrequests-project-show-all": "Показать все",
 	"communityrequests-close": "Закрыть",
 	"communityrequests-status-draft": "Черновик",

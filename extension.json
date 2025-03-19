@@ -8,7 +8,7 @@
 	"license-name": "GPL-2.0-or-later",
 	"type": "parserhook",
 	"requires": {
-		"MediaWiki": ">= 1.43.0",
+		"MediaWiki": ">= 1.44",
 		"extensions": {
 			"VisualEditor": "*",
 			"WikimediaMessages": "*"
@@ -45,7 +45,9 @@
 	"HookHandlers": {
 		"main": {
 			"class": "MediaWiki\\Extension\\CommunityRequests\\CommunityRequestsHooks",
-			"services": [ "MainConfig" ]
+			"services": [
+				"MainConfig"
+			]
 		},
 		"schema": {
 			"class": "MediaWiki\\Extension\\CommunityRequests\\SchemaHooks"
@@ -54,7 +56,10 @@
 	"SpecialPages": {
 		"WishlistIntake": {
 			"class": "MediaWiki\\Extension\\CommunityRequests\\SpecialWishlistIntake",
-			"services": [ "ParserFactory", "MainConfig" ]
+			"services": [
+				"ParserFactory",
+				"MainConfig"
+			]
 		}
 	},
 	"ResourceFileModulePaths": {
@@ -178,7 +183,10 @@
 				{
 					"name": "mint/icons.json",
 					"callback": "MediaWiki\\ResourceLoader\\CodexModule::getIcons",
-					"callbackParam": [ "cdxIconRobot", "cdxIconLanguage" ]
+					"callbackParam": [
+						"cdxIconRobot",
+						"cdxIconLanguage"
+					]
 				}
 			],
 			"dependencies": [

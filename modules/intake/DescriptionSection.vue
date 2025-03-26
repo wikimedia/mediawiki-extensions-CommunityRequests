@@ -164,7 +164,7 @@ module.exports = exports = defineComponent( {
 
 		@keyframes cdx-animation-pending-stripes {
 			0% {
-				background-position: -@size-icon-medium 0;
+				background-position: calc( -1 * @size-icon-medium ) 0;
 			}
 
 			100% {

@@ -24,6 +24,7 @@
 	"communityrequests-wishes-projects-header": "Пројекти",
 	"communityrequests-wishes-date-header": "Датум (UTC)",
 	"communityrequests-wishes-status-header": "Статус",
+	"communityrequests-form-loading-1": "Ако се образац не учита, омогућите JavaScript.",
 	"communityrequests-translation-translatable": "Ова страница садржи текст који није на $1.",
 	"communityrequests-translation-errors": "Дошло је до грешке:"
 }

@@ -71,6 +71,7 @@ describe( 'WishlistIntake wish submission', () => {
 	} );
 
 	// FIXME: restore test after <community-request> parser tag is implemented.
+	// Skipped on 2024-11-05 in 1074712 because of T366194
 	it.skip( 'should show all the data entered in the form', async () => {
 		assert( await ViewWishPage.successMessage.waitForDisplayed( { timeout: 8000 } ) );
 		assert.strictEqual(

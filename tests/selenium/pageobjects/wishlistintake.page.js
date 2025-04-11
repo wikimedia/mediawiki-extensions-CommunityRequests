@@ -29,7 +29,7 @@ class WishlistIntakePage extends Page {
 	}
 
 	get typeError() {
-		return $( '.wishlist-intake-wishtype .cdx-message--error' );
+		return $( '.wishlist-intake-type .cdx-message--error' );
 	}
 
 	get allProjectsCheckbox() {

@@ -14,15 +14,30 @@ class SchemaHooks implements LoadExtensionSchemaUpdatesHook {
 	public function onLoadExtensionSchemaUpdates( $updater ) {
 		$sqlDir = __DIR__ . '/../sql';
 		$engine = $updater->getDB()->getType();
-		$updater->addExtensionTable( 'community_requests',
-			"$sqlDir/$engine/community_requests.sql" );
-		$updater->addExtensionTable( 'community_requests_projects',
-			"$sqlDir/$engine/community_requests_projects.sql" );
-		$updater->addExtensionTable( 'community_requests_phab_tasks',
-			"$sqlDir/$engine/community_requests_phab_tasks.sql" );
-		$updater->addExtensionTable( 'community_requests_focus_areas',
-			"$sqlDir/$engine/community_requests_focus_areas.sql" );
-		$updater->addExtensionTable( 'community_requests_votes',
-			"$sqlDir/$engine/community_requests_votes.sql" );
+
+		// For developer convenience from when redesigned the schema.
+		// TODO: Remove after some time.
+		$updater->dropExtensionTable( 'community_requests' );
+		$updater->dropExtensionTable( 'community_requests_projects' );
+		$updater->dropExtensionTable( 'community_requests_translations' );
+		$updater->dropExtensionTable( 'community_requests_focus_areas' );
+		$updater->dropExtensionTable( 'community_requests_focus_area_translations' );
+		$updater->dropExtensionTable( 'community_requests_projects' );
+		$updater->dropExtensionTable( 'community_requests_phab_tasks' );
+
+		$updater->addExtensionTable( 'communityrequests_wishes',
+			"$sqlDir/$engine/tables-generated.sql" );
+		$updater->addExtensionTable( 'communityrequests_focus_areas',
+			"$sqlDir/$engine/tables-generated.sql" );
+		$updater->addExtensionTable( 'communityrequests_wishes_translations',
+			"$sqlDir/$engine/tables-generated.sql" );
+		$updater->addExtensionTable( 'communityrequests_focus_areas_translations',
+			"$sqlDir/$engine/tables-generated.sql" );
+		$updater->addExtensionTable( 'communityrequests_projects',
+			"$sqlDir/$engine/tables-generated.sql" );
+		$updater->addExtensionTable( 'communityrequests_phab_tasks',
+			"$sqlDir/$engine/tables-generated.sql" );
+		$updater->addExtensionTable( 'communityrequests_counters',
+			"$sqlDir/$engine/tables-generated.sql" );
 	}
 }

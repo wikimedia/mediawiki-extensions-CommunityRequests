@@ -70,16 +70,4 @@ class Wish {
 // Delimiter for array types
 Wish.DELIMITER = ',';
 
-Wish.TYPE_FEATURE = 'feature';
-Wish.TYPE_BUG = 'bug';
-Wish.TYPE_CHANGE = 'change';
-Wish.TYPE_UNKNOWN = '';
-Wish.STATUS_DRAFT = 'draft';
-Wish.STATUS_SUBMITTED = 'submitted';
-Wish.STATUS_OPEN = 'open';
-Wish.STATUS_IN_PROGRESS = 'started';
-Wish.STATUS_DELIVERED = 'delivered';
-Wish.STATUS_BLOCKED = 'blocked';
-Wish.STATUS_ARCHIVED = 'archived';
-
 module.exports = Wish;

@@ -3,9 +3,11 @@
 namespace MediaWiki\Extension\CommunityRequests;
 
 use MediaWiki\Config\Config;
+use MediaWiki\MediaWikiServices;
 use MediaWiki\Message\Message;
 use MediaWiki\Parser\ParserFactory;
 use MediaWiki\Registration\ExtensionRegistry;
+use MediaWiki\ResourceLoader as RL;
 use MediaWiki\SpecialPage\SpecialPage;
 use MediaWiki\Title\Title;
 
@@ -54,8 +56,7 @@ class SpecialWishlistIntake extends SpecialPage {
 		}
 
 		$this->getOutput()->addJsConfigVars( [
-			'parserTags' => $this->parserFactory->getInstance()->getTags(),
-			'wgCommunityRequestsHomepage' => $this->config->get( 'CommunityRequestsHomepage' ),
+			'parserTags' => $this->parserFactory->getInstance()->getTags()
 		] );
 		$this->getOutput()->addElement( 'div', [ 'class' => 'wishlist-intake-container' ] );
 		$this->getOutput()->addModules( 'ext.communityrequests.intake' );
@@ -65,6 +66,31 @@ class SpecialWishlistIntake extends SpecialPage {
 		$this->getOutput()->addJsConfigVars( 'intakeVeModules', $this->preloadVeModules() );
 
 		return parent::execute( $wishSlug );
+	}
+
+	/**
+	 * Add configurable messages to the ResourceLoader module.
+	 *
+	 * @param array $moduleConfig
+	 * @return RL\Module
+	 */
+	public static function addResourceLoaderMessages( array $moduleConfig ): RL\Module {
+		$config = MediaWikiServices::getInstance()->getMainConfig();
+		$messages = [];
+		foreach ( $config->get( 'CommunityRequestsWishTypes' ) as $type ) {
+			$messages[] = $type['label'] . '-label';
+			$messages[] = $type['label'] . '-description';
+		}
+		foreach ( $config->get( 'CommunityRequestsProjects' ) as $project ) {
+			$messages[] = $project['label'];
+		}
+		foreach ( $config->get( 'CommunityRequestsStatuses' ) as $status ) {
+			$messages[] = $status['label'];
+		}
+
+		$moduleConfig['messages'] = array_merge( $moduleConfig['messages'], $messages );
+		$class = $moduleConfig['class'] ?? RL\FileModule::class;
+		return new $class( $moduleConfig );
 	}
 
 	/**

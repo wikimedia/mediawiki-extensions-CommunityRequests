@@ -32,7 +32,7 @@
 <script>
 const { defineComponent } = require( 'vue' );
 const { CdxField, CdxRadio } = require( '@wikimedia/codex' );
-const Wish = require( '../common/Wish.js' );
+const config = require( '../common/config.json' );
 
 module.exports = exports = defineComponent( {
 	name: 'TypeSection',
@@ -49,28 +49,23 @@ module.exports = exports = defineComponent( {
 		'update:type'
 	],
 	setup() {
-		const radios = [
-			{
-				label: mw.msg( 'communityrequests-wishtype-feature-label' ),
-				description: mw.msg( 'communityrequests-wishtype-feature-description' ),
-				value: Wish.TYPE_FEATURE
-			},
-			{
-				label: mw.msg( 'communityrequests-wishtype-bug-label' ),
-				description: mw.msg( 'communityrequests-wishtype-bug-description' ),
-				value: Wish.TYPE_BUG
-			},
-			{
-				label: mw.msg( 'communityrequests-wishtype-change-label' ),
-				description: mw.msg( 'communityrequests-wishtype-change-description' ),
-				value: Wish.TYPE_CHANGE
-			},
-			{
-				label: mw.msg( 'communityrequests-wishtype-unknown-label' ),
-				description: mw.msg( 'communityrequests-wishtype-unknown-description' ),
-				value: Wish.TYPE_UNKNOWN
-			}
-		];
+		const radios = config.CommunityRequestsWishTypes.map(
+			( type ) => ( {
+				// Messages are configurable. By default, they include:
+				// * communitywishlist-wishtype-feature-label
+				// * communitywishlist-wishtype-bug-label
+				// * communitywishlist-wishtype-change-label
+				// * communitywishlist-wishtype-unknown-label
+				label: mw.msg( type.label + '-label' ),
+				// Messages are configurable. By default, they include:
+				// * communitywishlist-wishtype-feature-description
+				// * communitywishlist-wishtype-bug-description
+				// * communitywishlist-wishtype-change-description
+				// * communitywishlist-wishtype-unknown-description
+				description: mw.msg( type.label + '-description' ),
+				value: type.id
+			} )
+		);
 
 		return {
 			radios

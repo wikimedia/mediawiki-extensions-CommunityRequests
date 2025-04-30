@@ -1,4 +1,5 @@
 const Util = require( '../common/Util.js' );
+const config = require( '../common/config.json' );
 
 class DescriptionField {
 	/**
@@ -177,7 +178,7 @@ class DescriptionField {
 		// Special pages won't work as they don't have parsable wikitext.
 		// Here we use the CommunityRequests homepage as a dummy value.
 		if ( Util.isNewWish() ) {
-			mw.config.set( 'wgRelevantPageName', mw.config.get( 'wgCommunityRequestsHomepage' ) );
+			mw.config.set( 'wgRelevantPageName', config.CommunityRequestsHomepage );
 		}
 		this.target = new ve.init.mw.Target( {
 			surfaceClasses: [ 'wishlist-intake-ve-surface' ],

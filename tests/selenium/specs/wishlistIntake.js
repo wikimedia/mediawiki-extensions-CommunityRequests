@@ -1,6 +1,4 @@
 'use strict';
-
-const assert = require( 'assert' );
 const UserPreferences = require( '../userpreferences.js' );
 const IntakePage = require( '../pageobjects/wishlistintake.page.js' );
 const ViewWishPage = require( '../pageobjects/viewwish.page.js' );
@@ -27,35 +25,35 @@ describe( 'WishlistIntake wish submission', () => {
 		await LoginPage.loginAdmin();
 		await UserPreferences.enableVisualEditor();
 		await IntakePage.open();
-		assert( IntakePage.titleInput.isDisplayed() );
-		assert( IntakePage.descriptionInput.isDisplayed() );
+		await expect( IntakePage.titleInput ).toBeDisplayed();
+		await expect( IntakePage.descriptionInput ).toBeDisplayed();
 	} );
 
 	it( 'should show errors when submitting an incomplete form', async () => {
 		await IntakePage.submitButton.click();
-		assert( IntakePage.titleError.isDisplayed() );
-		assert( IntakePage.descriptionError.isDisplayed() );
-		assert( IntakePage.typeError.isDisplayed() );
-		assert( IntakePage.projectsError.isDisplayed() );
-		assert( IntakePage.audienceError.isDisplayed() );
+
+		await expect( IntakePage.titleError ).toBeDisplayed();
+		await expect( IntakePage.descriptionError ).toBeDisplayed();
+		await expect( IntakePage.typeError ).toBeDisplayed();
+		await expect( IntakePage.projectsError ).toBeDisplayed();
+		await expect( IntakePage.audienceError ).toBeDisplayed();
 	} );
 
 	it( 'should not show an error if a title is over 100 chars because of translate tags', async () => {
 		await IntakePage.titleInput.setValue( 'Lorem ipsum this is 103 characters long and test test test test test test test test test test test test' );
 		await IntakePage.submitButton.click();
-		assert( IntakePage.titleError.waitForDisplayed() );
+		await expect( IntakePage.titleError ).toBeDisplayed();
 		await IntakePage.titleInput.setValue( 'Lorem ipsum this is 97 characters long and test test test test test test test test test test test' );
 		await IntakePage.submitButton.click();
-		assert( IntakePage.titleError.waitForDisplayed( { reverse: true } ) );
+		await expect( IntakePage.titleError ).not.toBeDisplayed();
 		await IntakePage.titleInput.setValue( '<translate><!--T:1--> Lorem ipsum this is 97 characters long and test test test test test test test test test test test</translate>' );
 		await IntakePage.submitButton.click();
-		assert( IntakePage.titleError.waitForDisplayed( { reverse: true } ) );
+		await expect( IntakePage.titleError ).not.toBeDisplayed();
 	} );
 
 	it( 'should reveal all projects and the "It\'s something else" field when the "All projects" checkbox is checked', async () => {
 		await IntakePage.allProjectsCheckbox.click();
-		assert( IntakePage.projectsError.waitForDisplayed( { reverse: true } ) );
-		assert( IntakePage.otherProjectInput.isDisplayed() );
+		await expect( IntakePage.otherProjectInput ).toBeDisplayed();
 	} );
 
 	it( 'should hide errors if all required fields are filled in on submission', async () => {
@@ -67,23 +65,26 @@ describe( 'WishlistIntake wish submission', () => {
 		await IntakePage.phabricatorTasksInput.setValue( 'T123,T456' );
 		await IntakePage.submitButton.waitForClickable();
 		await IntakePage.submitButton.click();
-		assert( await IntakePage.titleError.waitForDisplayed( { reverse: true } ) );
+		await expect( IntakePage.titleError ).not.toBeDisplayed();
 	} );
 
 	// FIXME: restore test after <community-request> parser tag is implemented.
-	// Skipped on 2024-11-05 in 1074712 because of T366194
 	it.skip( 'should show all the data entered in the form', async () => {
-		assert( await ViewWishPage.successMessage.waitForDisplayed( { timeout: 8000 } ) );
-		assert.strictEqual(
-			await browser.execute( () => mw.config.get( 'wgTitle' ) ),
-			wgConfig.CommunityRequestsWishPagePrefix + title
+		await expect( ViewWishPage.successMessage ).toBeDisplayed( { timeout: 8000 } );
+		await expect(
+			await browser.execute( () => mw.config.get( 'wgTitle' ) )
+		).toBe( wgConfig.CommunityRequestsWishPagePrefix + title );
+
+		await expect( ( await ViewWishPage.wishTitle.getText() ).trim() ).toBe( title );
+		await expect( await ViewWishPage.statusChip.getText() ).toBe( 'Submitted' );
+		await expect( await ViewWishPage.description.getText() ).toContain(
+			'This is a test description.'
 		);
-		assert.strictEqual( ( await ViewWishPage.wishTitle.getText() ).trim(), title );
-		assert.strictEqual( await ViewWishPage.statusChip.getText(), 'Submitted' );
-		assert( ( await ViewWishPage.description.getText() ).includes( 'This is a test description.' ) );
-		assert.strictEqual( await ViewWishPage.wishType.getText(), 'Feature request' );
-		assert.strictEqual( await ViewWishPage.projects.getText(), 'All projects' );
-		assert.strictEqual( ( await ViewWishPage.audience.getText() ).trim(), 'This is a test audience' );
+		await expect( await ViewWishPage.wishType.getText() ).toBe( 'Feature request' );
+		await expect( await ViewWishPage.projects.getText() ).toBe( 'All projects' );
+		await expect( ( await ViewWishPage.audience.getText() ).trim() ).toBe(
+			'This is a test audience'
+		);
 	} );
 
 	after( async () => {

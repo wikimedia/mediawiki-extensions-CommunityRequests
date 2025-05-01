@@ -44,7 +44,7 @@ class CommunityRequestsHooksTest extends MediaWikiUnitTestCase {
 		( new CommunityRequestsHooks( $config ) )->onParserAfterParse( $parser, $text, null );
 	}
 
-	public function provideOnParserAfterParse(): array {
+	public static function provideOnParserAfterParse(): array {
 		return [
 			[ 'enabled' => false, 'magic_word_prop' => false, 'module_added' => false ],
 			[ 'enabled' => false, 'magic_word_prop' => false, 'module_added' => true ],

@@ -6,7 +6,7 @@
 		]
 	},
 	"communityrequests-wish-loading-error": "Si è verificato un errore durante l'analisi del testo sorgente. Potrebbe contenere wikitesto non valido. Si prega di [$1 aggiornare] e riprovare, di usare l'[[$2|editor di testo]] o di chiedere aiuto in [[$3|pagina di discussione]].",
-	"communityrequests-edit-with-form": "Modifica attraverso il modulo",
+	"communityrequests-edit-with-form": "Modifica tramite un modulo",
 	"communityrequests-form-subtitle": "Benvenuto alla nuova Lista dei desideri della comunità. Per favore, compila il seguente modulo per inviare il tuo desiderio.",
 	"communityrequests-form-error": "Si è verificato un errore. Prova a salvare di nuovo o chiedi aiuto nella [[$1|pagina di discussione]].",
 	"communityrequests-description": "Descrivi il tuo problema",

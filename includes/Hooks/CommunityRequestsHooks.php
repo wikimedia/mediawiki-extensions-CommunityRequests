@@ -1,6 +1,6 @@
 <?php
 
-namespace MediaWiki\Extension\CommunityRequests;
+namespace MediaWiki\Extension\CommunityRequests\Hooks;
 
 use MediaWiki\Config\Config;
 use MediaWiki\Hook\GetDoubleUnderscoreIDsHook;

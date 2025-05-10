@@ -25,6 +25,9 @@
 	"TestAutoloadNamespaces": {
 		"MediaWiki\\Extension\\CommunityRequests\\Tests\\": "tests/phpunit/"
 	},
+	"ServiceWiringFiles": [
+		"includes/ServiceWiring.php"
+	],
 	"MessagesDirs": {
 		"CommunityRequests": [
 			"i18n"
@@ -42,13 +45,13 @@
 	},
 	"HookHandlers": {
 		"main": {
-			"class": "MediaWiki\\Extension\\CommunityRequests\\CommunityRequestsHooks",
+			"class": "MediaWiki\\Extension\\CommunityRequests\\Hooks\\CommunityRequestsHooks",
 			"services": [
 				"MainConfig"
 			]
 		},
 		"schema": {
-			"class": "MediaWiki\\Extension\\CommunityRequests\\SchemaHooks"
+			"class": "MediaWiki\\Extension\\CommunityRequests\\Hooks\\SchemaHooks"
 		}
 	},
 	"SpecialPages": {
@@ -191,7 +194,7 @@
 		},
 		"CommunityRequestsWishPagePrefix": {
 			"description": "Prefix for the page title of wishes.",
-			"value": "Community Wishlist/Wishes/"
+			"value": "Community Wishlist/Wishes/W"
 		},
 		"CommunityRequestsWishTemplate": {
 			"description": "The template page title for displaying and storing wishes.",

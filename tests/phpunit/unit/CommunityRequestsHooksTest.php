@@ -3,19 +3,19 @@
 namespace MediaWiki\Extension\CommunityRequests\Test\Unit;
 
 use MediaWiki\Config\HashConfig;
-use MediaWiki\Extension\CommunityRequests\CommunityRequestsHooks;
+use MediaWiki\Extension\CommunityRequests\Hooks\CommunityRequestsHooks;
 use MediaWiki\Parser\Parser;
 use MediaWiki\Parser\ParserOutput;
 use MediaWikiUnitTestCase;
 
 /**
  * @group CommunityRequests
- * @coversDefaultClass \MediaWiki\Extension\CommunityRequests\Hooks
+ * @coversDefaultClass \MediaWiki\Extension\CommunityRequests\Hooks\CommunityRequestsHooks
  */
 class CommunityRequestsHooksTest extends MediaWikiUnitTestCase {
 
 	/**
-	 * @covers MediaWiki\Extension\CommunityRequests\CommunityRequestsHooks::onParserAfterParse
+	 * @covers ::onParserAfterParse
 	 * @dataProvider provideOnParserAfterParse
 	 */
 	public function testOnParserAfterParse( bool $enabled, bool $magicWordPropSet, bool $moduleAdded ): void {

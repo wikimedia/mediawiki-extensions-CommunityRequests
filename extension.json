@@ -42,13 +42,14 @@
 	"Hooks": {
 		"ChangeTagsListActive": "wish",
 		"GetDoubleUnderscoreIDs": "main",
-		"LinksUpdateComplete": "wish",
 		"ListDefinedTags": "wish",
 		"LoadExtensionSchemaUpdates": "schema",
 		"LoginFormValidErrorMessages": "main",
-		"PageDeleteComplete": "wish",
-		"ParserFirstCallInit": "wish",
-		"BeforePageDisplay": "wish"
+		"ParserAfterParse": "main",
+		"BeforePageDisplay": "wish",
+		"ParserFirstCallInit": [ "wish", "focusarea" ],
+		"LinksUpdateComplete": [ "wish", "focusarea" ],
+		"PageDeleteComplete": [ "wish", "focusarea" ]
 	},
 	"HookHandlers": {
 		"main": {
@@ -61,6 +62,14 @@
 		},
 		"schema": {
 			"class": "MediaWiki\\Extension\\CommunityRequests\\HookHandler\\SchemaHooks"
+		},
+		"focusarea": {
+			"class": "MediaWiki\\Extension\\CommunityRequests\\HookHandler\\FocusAreaHookHandler",
+			"services": [
+				"CommunityRequests.WishlistConfig",
+				"CommunityRequests.FocusAreaStore",
+				"CommunityRequests.Logger"
+			]
 		}
 	},
 	"SpecialPages": {
@@ -123,6 +132,7 @@
 						"CommunityRequestsWishCategory",
 						"CommunityRequestsWishPagePrefix",
 						"CommunityRequestsWishIndexPage",
+						"CommunityRequestsFocusAreaPagePrefix",
 						"CommunityRequestsProjects",
 						"CommunityRequestsStatuses",
 						"CommunityRequestsWishTemplate",
@@ -224,6 +234,10 @@
 		"CommunityRequestsWishIndexPage": {
 			"description": "The title of the page to use as the index for all wishes.",
 			"value": "Community Wishlist/Wishes"
+		},
+		"CommunityRequestsFocusAreaPagePrefix": {
+			"description": "Prefixed page title (including the namespace) of focus areas. The focus area ID will be appended to this.",
+			"value": "Community Wishlist/Focus areas/FA"
 		},
 		"CommunityRequestsWishTemplate": {
 			"description": "Configuration for the template that displays and stores wishes.",

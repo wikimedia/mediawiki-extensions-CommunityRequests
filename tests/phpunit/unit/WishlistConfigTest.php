@@ -23,6 +23,7 @@ class WishlistConfigTest extends MediaWikiUnitTestCase {
 			WishlistConfig::CONFIG_HOMEPAGE => 'Community Wishlist',
 			WishlistConfig::CONFIG_WISH_CATEGORY => 'Category:Wishes',
 			WishlistConfig::CONFIG_WISH_PAGE_PREFIX => 'Community Wishlist/W',
+			WishlistConfig::CONFIG_FOCUS_AREA_PAGE_PREFIX => 'Community Wishlist/FA',
 			WishlistConfig::CONFIG_WISH_INDEX_PAGE => 'Community Wishlist/Wishes',
 			WishlistConfig::CONFIG_WISH_TEMPLATE => [
 				'page' => 'Template:Wish',
@@ -71,6 +72,7 @@ class WishlistConfigTest extends MediaWikiUnitTestCase {
 	 * @covers ::getHomepage
 	 * @covers ::getWishCategory
 	 * @covers ::getWishPagePrefix
+	 * @covers ::getFocusAreaPagePrefix
 	 * @covers ::getWishIndexPage
 	 * @covers ::getWishTemplate
 	 * @covers ::getStatuses
@@ -82,6 +84,7 @@ class WishlistConfigTest extends MediaWikiUnitTestCase {
 		$this->assertSame( 'Community Wishlist', $this->config->getHomepage() );
 		$this->assertSame( 'Category:Wishes', $this->config->getWishCategory() );
 		$this->assertSame( 'Community Wishlist/W', $this->config->getWishPagePrefix() );
+		$this->assertSame( 'Community Wishlist/FA', $this->config->getFocusAreaPagePrefix() );
 		$this->assertSame( 'Community Wishlist/Wishes', $this->config->getWishIndexPage() );
 		$this->assertSame( 'Template:Wish', $this->config->getWishTemplate()[ 'page' ] );
 		$this->assertSame(

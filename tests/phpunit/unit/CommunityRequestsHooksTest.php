@@ -3,14 +3,14 @@
 namespace MediaWiki\Extension\CommunityRequests\Test\Unit;
 
 use MediaWiki\Config\HashConfig;
-use MediaWiki\Extension\CommunityRequests\Hooks\CommunityRequestsHooks;
+use MediaWiki\Extension\CommunityRequests\HookHandler\CommunityRequestsHooks;
 use MediaWiki\Parser\Parser;
 use MediaWiki\Parser\ParserOutput;
 use MediaWikiUnitTestCase;
 
 /**
  * @group CommunityRequests
- * @coversDefaultClass \MediaWiki\Extension\CommunityRequests\Hooks\CommunityRequestsHooks
+ * @coversDefaultClass \MediaWiki\Extension\CommunityRequests\HookHandler\CommunityRequestsHooks
  */
 class CommunityRequestsHooksTest extends MediaWikiUnitTestCase {
 

@@ -1,8 +1,9 @@
 <?php
 
-use MediaWiki\Extension\CommunityRequests\Store\IdGenerator;
-use MediaWiki\Extension\CommunityRequests\Store\SqlIdGenerator;
-use MediaWiki\Extension\CommunityRequests\Store\UpsertSqlIdGenerator;
+use MediaWiki\Extension\CommunityRequests\IdGenerator\IdGenerator;
+use MediaWiki\Extension\CommunityRequests\IdGenerator\SqlIdGenerator;
+use MediaWiki\Extension\CommunityRequests\IdGenerator\UpsertSqlIdGenerator;
+use MediaWiki\Extension\CommunityRequests\Wish\WishStore;
 use MediaWiki\MainConfigNames;
 use MediaWiki\MediaWikiServices;
 
@@ -15,5 +16,13 @@ return [
 			return new UpsertSqlIdGenerator( $connectionProvider );
 		}
 		return new SqlIdGenerator( $connectionProvider );
+	},
+	'CommunityRequests.WishStore' => static function ( MediaWikiServices $services ): WishStore {
+		return new WishStore(
+			$services->getActorNormalization(),
+			$services->getConnectionProvider(),
+			$services->getUserFactory(),
+			$services->getLanguageFallback()
+		);
 	},
 ];

@@ -1,6 +1,6 @@
 <?php
 
-namespace MediaWiki\Extension\CommunityRequests;
+namespace MediaWiki\Extension\CommunityRequests\Wish;
 
 use MediaWiki\Config\Config;
 use MediaWiki\MediaWikiServices;

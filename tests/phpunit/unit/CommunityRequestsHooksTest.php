@@ -9,6 +9,7 @@ use MediaWiki\Parser\ParserOutput;
 use MediaWikiUnitTestCase;
 
 /**
+ * @group CommunityRequests
  * @coversDefaultClass \MediaWiki\Extension\CommunityRequests\Hooks
  */
 class CommunityRequestsHooksTest extends MediaWikiUnitTestCase {

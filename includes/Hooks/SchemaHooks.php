@@ -1,6 +1,6 @@
 <?php
 
-namespace MediaWiki\Extension\CommunityRequests;
+namespace MediaWiki\Extension\CommunityRequests\Hooks;
 
 use MediaWiki\Installer\Hook\LoadExtensionSchemaUpdatesHook;
 
@@ -12,7 +12,7 @@ class SchemaHooks implements LoadExtensionSchemaUpdatesHook {
 
 	/** @inheritDoc */
 	public function onLoadExtensionSchemaUpdates( $updater ) {
-		$sqlDir = __DIR__ . '/../sql';
+		$sqlDir = __DIR__ . '/../../sql';
 		$engine = $updater->getDB()->getType();
 
 		// For developer convenience from when redesigned the schema.

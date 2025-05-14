@@ -37,18 +37,18 @@ class SpecialWishlistIntake extends SpecialPage {
 	}
 
 	/** @inheritDoc */
-	public function execute( $wishSlug ): ?string {
+	public function execute( $wishId ): void {
 		$this->requireNamedUser( 'communityrequests-please-log-in' );
 
 		if ( !$this->getConfig()->get( 'CommunityRequestsEnable' ) ) {
 			$this->setHeaders();
 			$this->getOutput()->addWikiMsg( 'communityrequests-disabled' );
-			return null;
+			return;
 		}
 
-		$wishSlug ??= $this->getRequest()->getText( 'target' );
-		if ( $wishSlug ) {
-			$pageTitle = $this->config->get( 'CommunityRequestsWishPagePrefix' ) . $wishSlug;
+		$wishId ??= $this->getRequest()->getInt( 'id' );
+		if ( !$wishId ) {
+			$pageTitle = $this->config->get( 'CommunityRequestsWishPagePrefix' ) . $wishId;
 			// TODO: Fetch from db and pass Wish object instead of parsing wikitext in JS.
 			// Pass the wish title to the JS.
 			$this->getOutput()->addJsConfigVars( 'intakeWishTitle', $pageTitle );
@@ -65,7 +65,7 @@ class SpecialWishlistIntake extends SpecialPage {
 		// TODO: Remove hard dependency on VE
 		$this->getOutput()->addJsConfigVars( 'intakeVeModules', $this->preloadVeModules() );
 
-		return parent::execute( $wishSlug );
+		parent::execute( $wishId );
 	}
 
 	/**

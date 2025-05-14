@@ -2,6 +2,8 @@
 
 declare( strict_types = 1 );
 
+namespace MediaWiki\Extension\CommunityRequests\Tests\Integration;
+
 use MediaWiki\Tests\Structure\AbstractSchemaTestBase;
 
 /**

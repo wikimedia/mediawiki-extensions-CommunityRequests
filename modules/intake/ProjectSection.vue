@@ -38,7 +38,7 @@
 						</cdx-checkbox>
 					</template>
 					<template #description>
-						{{ project.url }}
+						{{ project.domain }}
 					</template>
 				</cdx-card>
 			</div>
@@ -86,6 +86,7 @@ const {
 	CdxTextInput
 } = require( '@wikimedia/codex' );
 const { cdxIconExpand, cdxIconCollapse } = require( './icons.json' );
+const availableProjects = require( '../common/config.json' ).CommunityRequestsProjects;
 
 module.exports = exports = defineComponent( {
 	name: 'ProjectSection',
@@ -214,49 +215,21 @@ module.exports = exports = defineComponent( {
 		 * @return {Array<Object>}
 		 */
 		getTopProjects() {
-			return [
-				{
-					// NOTE: values are mapped to localized strings in Module:Community_Wishlist.
-					value: 'wikipedia',
-					url: 'www.wikipedia.org',
-					label: mw.msg( 'project-localized-name-group-wikipedia' ),
-					thumbnail: {
-						width: 200,
-						height: 150,
-						url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/Wikipedia-logo-v2.svg/263px-Wikipedia-logo-v2.svg.png'
-					}
-				},
-				{
-					value: 'wikidata',
-					url: 'www.wikidata.org',
-					label: mw.msg( 'project-localized-name-wikidatawiki' ),
-					thumbnail: {
-						width: 200,
-						height: 150,
-						url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/Wikidata-logo.svg/200px-Wikidata-logo.svg.png'
-					}
-				},
-				{
-					value: 'commons',
-					url: 'commons.wikimedia.org',
-					label: mw.msg( 'project-localized-name-commonswiki' ),
-					thumbnail: {
-						width: 200,
-						height: 150,
-						url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Commons-logo.svg/200px-Commons-logo.svg.png'
-					}
-				},
-				{
-					value: 'wikisource',
-					url: 'www.wikisource.org',
-					label: mw.msg( 'project-localized-name-group-wikisource' ),
-					thumbnail: {
-						width: 200,
-						height: 150,
-						url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Wikisource-logo.svg/200px-Wikisource-logo.svg.png'
-					}
+			return availableProjects.slice( 0, 4 ).map( ( project ) => ( {
+				value: project.id,
+				domain: project.domain,
+				// Messages are configurable. By default they include:
+				// * project-localized-name-commonswiki
+				// * project-localized-name-group-wikipedia
+				// * project-localized-name-group-wikisource
+				// * project-localized-name-wikidatawiki
+				label: mw.msg( project.label ),
+				thumbnail: {
+					width: 200,
+					height: 150,
+					url: project.logo
 				}
-			];
+			} ) );
 		},
 		/**
 		 * Card data for the extended projects.
@@ -264,98 +237,28 @@ module.exports = exports = defineComponent( {
 		 * @return {Array<Object>}
 		 */
 		getExtendedProjects() {
-			return [
-				{
-					value: 'wiktionary',
-					url: 'www.wiktionary.org',
-					label: mw.msg( 'project-localized-name-group-wiktionary' ),
-					thumbnail: {
-						width: 200,
-						height: 150,
-						url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Wiktionary-logo.svg/200px-Wiktionary-logo.svg.png'
-					}
-				},
-				{
-					value: 'wikivoyage',
-					url: 'www.wikivoyage.org',
-					label: mw.msg( 'project-localized-name-group-wikivoyage' ),
-					thumbnail: {
-						width: 200,
-						height: 150,
-						url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/Wikivoyage-Logo-v3-icon.svg/200px-Wikivoyage-Logo-v3-icon.svg.png'
-					}
-				},
-				{
-					value: 'wikiquote',
-					url: 'www.wikiquote.org',
-					label: mw.msg( 'project-localized-name-group-wikiquote' ),
-					thumbnail: {
-						width: 200,
-						height: 150,
-						url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Wikiquote-logo.svg/200px-Wikiquote-logo.svg.png'
-					}
-				},
-				{
-					value: 'wikiversity',
-					url: 'www.wikiversity.org',
-					label: mw.msg( 'project-localized-name-group-wikiversity' ),
-					thumbnail: {
-						width: 200,
-						height: 150,
-						url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Wikiversity_logo_2017.svg/200px-Wikiversity_logo_2017.svg.png'
-					}
-				},
-				{
-					value: 'wikifunctions',
-					url: 'www.wikifunctions.org',
-					label: mw.msg( 'project-localized-name-wikifunctionswiki' ),
-					thumbnail: {
-						width: 200,
-						height: 150,
-						url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0c/Wikifunctions-logo.svg/200px-Wikifunctions-logo.svg.png'
-					}
-				},
-				{
-					value: 'wikispecies',
-					url: 'www.wikispecies.org',
-					label: mw.msg( 'project-localized-name-specieswiki' ),
-					thumbnail: {
-						width: 200,
-						height: 150,
-						url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/Wikispecies-logo.svg/200px-Wikispecies-logo.svg.png'
-					}
-				},
-				{
-					value: 'wikinews',
-					url: 'www.wikinews.org',
-					label: mw.msg( 'project-localized-name-group-wikinews' ),
-					thumbnail: {
-						width: 200,
-						height: 150,
-						url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Wikinews-logo.svg/200px-Wikinews-logo.svg.png'
-					}
-				},
-				{
-					value: 'metawiki',
-					url: 'meta.wikimedia.org',
-					label: mw.msg( 'project-localized-name-metawiki' ),
-					thumbnail: {
-						width: 200,
-						height: 150,
-						url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Wikimedia_Community_Logo.svg/200px-Wikimedia_Community_Logo.svg.png'
-					}
-				},
-				{
-					value: 'wmcs',
-					url: 'wikitech.wikimedia.org',
-					label: mw.msg( 'wikimedia-otherprojects-cloudservices' ),
-					thumbnail: {
-						width: 200,
-						height: 150,
-						url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/Wikimedia_Cloud_Services_logo.svg/200px-Wikimedia_Cloud_Services_logo.svg.png'
-					}
+			return availableProjects.slice( 4 ).map( ( project ) => ( {
+				value: project.id,
+				domain: project.domain,
+				// Messages are configurable. By default they include:
+				// * project-localized-name-group-wikinews
+				// * project-localized-name-group-wikiquote
+				// * project-localized-name-group-wikiversity
+				// * project-localized-name-group-wikivoyage
+				// * project-localized-name-group-wiktionary
+				// * project-localized-name-mediawikiwiki
+				// * project-localized-name-metawiki
+				// * project-localized-name-specieswiki
+				// * project-localized-name-wikidatawiki
+				// * project-localized-name-wikifunctionswiki
+				// * wikimedia-otherprojects-cloudservices
+				label: mw.msg( project.label ),
+				thumbnail: {
+					width: 200,
+					height: 150,
+					url: project.logo
 				}
-			];
+			} ) );
 		},
 		/**
 		 * Get a list of projects to display.
@@ -428,7 +331,7 @@ module.exports = exports = defineComponent( {
 	right: auto;
 }
 
-.wishlist-intake-project-toggle {
+.cdx-button.wishlist-intake-project-toggle {
 	margin-top: @spacing-100;
 }
 

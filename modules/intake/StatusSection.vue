@@ -20,7 +20,7 @@
 <script>
 const { defineComponent } = require( 'vue' );
 const { CdxField, CdxSelect } = require( '@wikimedia/codex' );
-const Wish = require( '../common/Wish.js' );
+const statuses = require( '../common/config.json' ).CommunityRequestsStatuses;
 
 module.exports = exports = defineComponent( {
 	name: 'StatusSection',
@@ -29,7 +29,7 @@ module.exports = exports = defineComponent( {
 		CdxSelect
 	},
 	props: {
-		status: { type: String, default: Wish.STATUS_SUBMITTED },
+		status: { type: Number, default: statuses.submitted.id },
 		disabled: { type: Boolean, default: false }
 	},
 	emits: [
@@ -38,15 +38,19 @@ module.exports = exports = defineComponent( {
 	data( props ) {
 		return {
 			statusValue: props.status,
-			statusOptions: [
-				{ label: mw.msg( 'communityrequests-status-draft' ), value: Wish.STATUS_DRAFT },
-				{ label: mw.msg( 'communityrequests-status-submitted' ), value: Wish.STATUS_SUBMITTED },
-				{ label: mw.msg( 'communityrequests-status-open' ), value: Wish.STATUS_OPEN },
-				{ label: mw.msg( 'communityrequests-status-in-progress' ), value: Wish.STATUS_IN_PROGRESS },
-				{ label: mw.msg( 'communityrequests-status-delivered' ), value: Wish.STATUS_DELIVERED },
-				{ label: mw.msg( 'communityrequests-status-blocked' ), value: Wish.STATUS_BLOCKED },
-				{ label: mw.msg( 'communityrequests-status-archived' ), value: Wish.STATUS_ARCHIVED }
-			]
+			statusOptions: Object.keys( statuses )
+				.map( ( status ) => ( {
+					// Messages are configurable. By default, they include:
+					// * communityrequests-status-draft
+					// * communityrequests-status-submitted
+					// * communityrequests-status-open
+					// * communityrequests-status-in-progress
+					// * communityrequests-status-delivered
+					// * communityrequests-status-blocked
+					// * communityrequests-status-archived
+					label: mw.msg( statuses[ status ].label ),
+					value: statuses[ status ].id
+				} ) )
 		};
 	}
 } );

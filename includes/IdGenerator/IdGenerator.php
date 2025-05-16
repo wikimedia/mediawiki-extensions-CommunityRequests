@@ -1,6 +1,6 @@
 <?php
 
-namespace MediaWiki\Extension\CommunityRequests\Store;
+namespace MediaWiki\Extension\CommunityRequests\IdGenerator;
 
 use RuntimeException;
 

@@ -1,6 +1,7 @@
 <?php
+declare( strict_types = 1 );
 
-namespace MediaWiki\Extension\CommunityRequests\Hooks;
+namespace MediaWiki\Extension\CommunityRequests\HookHandler;
 
 use MediaWiki\Installer\Hook\LoadExtensionSchemaUpdatesHook;
 

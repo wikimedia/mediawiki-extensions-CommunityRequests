@@ -1,9 +1,9 @@
 <?php
 
-use MediaWiki\Extension\CommunityRequests\SpecialWishlistIntake;
+use MediaWiki\Extension\CommunityRequests\Wish\SpecialWishlistIntake;
 
 /**
- * @coversDefaultClass \MediaWiki\Extension\CommunityRequests\SpecialWishlistIntake
+ * @coversDefaultClass \MediaWiki\Extension\CommunityRequests\Wish\SpecialWishlistIntake
  */
 class SpecialWishlistIntakeTest extends SpecialPageTestBase {
 	/**

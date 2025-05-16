@@ -2,15 +2,15 @@
 
 namespace MediaWiki\Extension\CommunityRequests\Tests\Integration;
 
-use MediaWiki\Extension\CommunityRequests\Store\IdGenerator;
+use MediaWiki\Extension\CommunityRequests\IdGenerator\IdGenerator;
 use MediaWiki\MediaWikiServices;
 use MediaWikiIntegrationTestCase;
 
 /**
  * Based on MediaWiki\Extensions\Wikibase\Repo\Tests\Store\IdGeneratorTest (GPL-2.0-or-later)
  *
- * @covers \MediaWiki\Extension\CommunityRequests\Store\SqlIdGenerator
- * @covers \MediaWiki\Extension\CommunityRequests\Store\UpsertSqlIdGenerator
+ * @covers \MediaWiki\Extension\CommunityRequests\IdGenerator\SqlIdGenerator
+ * @covers \MediaWiki\Extension\CommunityRequests\IdGenerator\UpsertSqlIdGenerator
  *
  * @group CommunityRequests
  * @group Database

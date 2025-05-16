@@ -45,18 +45,18 @@
 	},
 	"HookHandlers": {
 		"main": {
-			"class": "MediaWiki\\Extension\\CommunityRequests\\Hooks\\CommunityRequestsHooks",
+			"class": "MediaWiki\\Extension\\CommunityRequests\\HookHandler\\CommunityRequestsHooks",
 			"services": [
 				"MainConfig"
 			]
 		},
 		"schema": {
-			"class": "MediaWiki\\Extension\\CommunityRequests\\Hooks\\SchemaHooks"
+			"class": "MediaWiki\\Extension\\CommunityRequests\\HookHandler\\SchemaHooks"
 		}
 	},
 	"SpecialPages": {
 		"WishlistIntake": {
-			"class": "MediaWiki\\Extension\\CommunityRequests\\SpecialWishlistIntake",
+			"class": "MediaWiki\\Extension\\CommunityRequests\\Wish\\SpecialWishlistIntake",
 			"services": [
 				"ParserFactory",
 				"MainConfig"
@@ -150,7 +150,7 @@
 				"communityrequests-audience-error",
 				"communityrequests-status"
 			],
-			"factory": "\\MediaWiki\\Extension\\CommunityRequests\\SpecialWishlistIntake::addResourceLoaderMessages"
+			"factory": "\\MediaWiki\\Extension\\CommunityRequests\\Wish\\SpecialWishlistIntake::addResourceLoaderMessages"
 		},
 		"ext.communityrequests.mint": {
 			"packageFiles": [

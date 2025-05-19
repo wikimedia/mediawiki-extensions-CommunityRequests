@@ -20,6 +20,9 @@
 	"rules": {
 		"es-x/no-array-prototype-includes": "off",
 		"es-x/no-string-prototype-replaceall": "off",
-		"no-implicit-globals": "off"
+		"no-implicit-globals": "off",
+		"no-jquery/no-done-fail": "warn",
+		"unicorn/no-useless-promise-resolve-reject": "warn",
+		"unicorn/prefer-includes": "warn"
 	}
 }

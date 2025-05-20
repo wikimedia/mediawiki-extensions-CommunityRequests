@@ -40,15 +40,18 @@
 		"GetDoubleUnderscoreIDs": "main",
 		"LoadExtensionSchemaUpdates": "schema",
 		"LoginFormValidErrorMessages": "main",
-		"ParserAfterParse": "main",
-		"ParserFirstCallInit": "main"
+		"ParserFirstCallInit": "wish",
+		"LinksUpdateComplete": "wish",
+		"PageDeleteComplete": "wish"
 	},
 	"HookHandlers": {
 		"main": {
 			"class": "MediaWiki\\Extension\\CommunityRequests\\HookHandler\\CommunityRequestsHooks",
-			"services": [
-				"MainConfig"
-			]
+			"services": [ "MainConfig" ]
+		},
+		"wish": {
+			"class": "MediaWiki\\Extension\\CommunityRequests\\HookHandler\\WishHookHandler",
+			"services": [ "MainConfig", "CommunityRequests.WishStore" ]
 		},
 		"schema": {
 			"class": "MediaWiki\\Extension\\CommunityRequests\\HookHandler\\SchemaHooks"
@@ -193,7 +196,7 @@
 			"value": "Category:Community Wishlist/Wishes"
 		},
 		"CommunityRequestsWishPagePrefix": {
-			"description": "Prefix for the page title of wishes.",
+			"description": "Prefixed page title (including the namespace) of wishes. The wish ID will be appended to this.",
 			"value": "Community Wishlist/Wishes/W"
 		},
 		"CommunityRequestsWishTemplate": {
@@ -341,8 +344,7 @@
 	"attributes": {
 		"CodeMirror": {
 			"TagModes": {
-				"community-request": "mediawiki",
-				"focus-area": "mediawiki"
+				"wish": "mediawiki"
 			}
 		}
 	},

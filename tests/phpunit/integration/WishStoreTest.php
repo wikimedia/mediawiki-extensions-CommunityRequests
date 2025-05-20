@@ -4,15 +4,18 @@ declare( strict_types = 1 );
 namespace MediaWiki\Extension\CommunityRequests\Tests\Integration;
 
 use InvalidArgumentException;
+use MediaWiki\Context\RequestContext;
 use MediaWiki\Extension\CommunityRequests\Wish\Wish;
 use MediaWiki\Extension\CommunityRequests\Wish\WishStore;
 use MediaWiki\Extension\Translate\PageTranslation\TranslatablePageMarker;
 use MediaWiki\Extension\Translate\PageTranslation\TranslatablePageSettings;
 use MediaWiki\MainConfigNames;
+use MediaWiki\Specials\SpecialPageLanguage;
 use MediaWiki\Title\Title;
 use MediaWikiIntegrationTestCase;
 use MessageLocalizer;
 use MockTitleTrait;
+use Wikimedia\ObjectCache\EmptyBagOStuff;
 use Wikimedia\Rdbms\IDBAccessObject;
 
 /**
@@ -33,7 +36,16 @@ class WishStoreTest extends MediaWikiIntegrationTestCase {
 		$this->translateInstalled = $this->getServiceContainer()
 			->getExtensionRegistry()
 			->isLoaded( 'Translate' );
-		$this->overrideConfigValues( [ MainConfigNames::NamespacesWithSubpages => [ NS_MAIN => true ] ] );
+		$this->overrideConfigValues( [
+			MainConfigNames::NamespacesWithSubpages => [ NS_MAIN => true ],
+			'EnablePageTranslation' => true,
+		] );
+		$this->setService( 'LocalServerObjectCache', new EmptyBagOStuff() );
+	}
+
+	protected function tearDown(): void {
+		$this->resetServices();
+		parent::tearDown();
 	}
 
 	/**
@@ -41,7 +53,7 @@ class WishStoreTest extends MediaWikiIntegrationTestCase {
 	 * @covers ::getWish
 	 */
 	public function testSaveAndGetWish(): void {
-		$wish = $this->getTestWish( 'W123' );
+		$wish = $this->getTestWish( 'Community Wishlist/Wishes/W123' );
 		$this->wishStore->save( $wish );
 		$retrievedWish = $this->wishStore->getWish( $wish->getPage(), 'en' );
 		$this->assertInstanceOf( Wish::class, $retrievedWish );
@@ -54,22 +66,12 @@ class WishStoreTest extends MediaWikiIntegrationTestCase {
 	 * @covers ::save
 	 */
 	public function testSaveWishWithNoPage(): void {
-		$fauxPage = Title::newFromText( 'W111' );
+		$fauxPage = Title::newFromText( 'Community Wishlist/Wishes/W111' );
 		$wish = new Wish(
 			$fauxPage,
 			'en',
 			$this->getTestUser()->getUser(),
-			[
-				'type' => 1,
-				'status' => 2,
-				'focusAreaId' => null,
-				'voteCount' => 0,
-				'created' => '22220123000000',
-				'title' => 'translation-en-W111',
-				'projects' => [ 0, 1, 2 ],
-				'otherProject' => 'Test Other Project',
-				'phabTasks' => [ 123, 456 ],
-			]
+			[]
 		);
 		$this->expectException( InvalidArgumentException::class );
 		$this->wishStore->save( $wish );
@@ -79,8 +81,8 @@ class WishStoreTest extends MediaWikiIntegrationTestCase {
 	 * @covers ::getWishes
 	 */
 	public function testGetWishes(): void {
-		$wish1 = $this->getTestWish( 'W1', 'en', '22220123000000' );
-		$wish2 = $this->getTestWish( 'W2', 'en', '33330123000000' );
+		$wish1 = $this->getTestWish( 'Community Wishlist/Wishes/W1', 'en', '22220123000000' );
+		$wish2 = $this->getTestWish( 'Community Wishlist/Wishes/W2', 'en', '33330123000000' );
 		$this->wishStore->save( $wish1 );
 		$this->wishStore->save( $wish2 );
 
@@ -93,36 +95,62 @@ class WishStoreTest extends MediaWikiIntegrationTestCase {
 
 	/**
 	 * @covers ::getWishes
+	 * @covers ::delete
 	 */
 	public function testGetWishesLangFallbacks(): void {
 		$this->markTestSkippedIfExtensionNotLoaded( 'Translate' );
-		$wish1en = $this->getTestWish( 'W1', 'en', '22220123000000' );
-		$wish1bs = $this->getTestWish( 'W1/bs', 'bs', '2222123000000' );
-		$wish2hr = $this->getTestWish( 'W2', 'hr', '44440123000000' );
-		$wish3de = $this->getTestWish( 'W3', 'de', '33330123000000' );
+		$wish1en = $this->getTestWish( 'Community Wishlist/Wishes/W1', 'en', '22220123000000' );
+		$wish1bs = $this->getTestWish( 'Community Wishlist/Wishes/W1/bs', 'bs', '2222123000000' );
+		$wish2hr = $this->getTestWish( 'Community Wishlist/Wishes/W2', 'hr', '44440123000000' );
+		$wish3de = $this->getTestWish( 'Community Wishlist/Wishes/W3', 'de', '33330123000000' );
+		$wish3fr = $this->getTestWish( 'Community Wishlist/Wishes/W3/fr', 'fr', '33330123000000' );
 		$this->wishStore->save( $wish1en );
 		$this->wishStore->save( $wish1bs );
 		$this->wishStore->save( $wish2hr );
 		$this->wishStore->save( $wish3de );
+		$this->wishStore->save( $wish3fr );
 
+		// 'sh' should return W2, W3/de, W1/bs
 		$wishes = $this->wishStore->getWishes( 'sh' );
 		$this->assertCount( 3, $wishes );
-		$this->assertEquals( 'W2', $wishes[0]->getPage()->getDBkey() );
-		$this->assertEquals( 'translation-hr-W2', $wishes[0]->getTitle() );
-		$this->assertEquals( 'W3', $wishes[1]->getPage()->getDBkey() );
-		$this->assertEquals( 'translation-de-W3', $wishes[1]->getTitle() );
-		$this->assertEquals( 'W1', $wishes[2]->getPage()->getDBkey() );
-		$this->assertEquals( 'translation-bs-W1/bs', $wishes[2]->getTitle() );
+		$this->assertEquals( 'Community_Wishlist/Wishes/W2', $wishes[0]->getPage()->getDBkey() );
+		$this->assertEquals( 'translation-hr-Community Wishlist/Wishes/W2', $wishes[0]->getTitle() );
+		$this->assertEquals( 'Community_Wishlist/Wishes/W3', $wishes[1]->getPage()->getDBkey() );
+		$this->assertEquals( 'translation-de-Community Wishlist/Wishes/W3', $wishes[1]->getTitle() );
+		$this->assertEquals( 'Community_Wishlist/Wishes/W1', $wishes[2]->getPage()->getDBkey() );
+		$this->assertEquals( 'translation-bs-Community Wishlist/Wishes/W1/bs', $wishes[2]->getTitle() );
+
+		$this->wishStore->delete( $wish1bs );
+
+		// With the deletion of W1/bs, 'sh' should return W2, W3/de, W1/en
+		$wishes = $this->wishStore->getWishes( 'sh' );
+		$this->assertCount( 3, $wishes );
+		$this->assertEquals( 'Community_Wishlist/Wishes/W1', $wishes[2]->getPage()->getDBkey() );
+		$this->assertEquals( 'translation-en-Community Wishlist/Wishes/W1', $wishes[2]->getTitle() );
 	}
 
 	private function getTestWish(
-		?string $title = 'W123',
+		?string $title = 'Community Wishlist/Wishes/W123',
 		string $langCode = 'en',
 		string $created = '22220123000000'
 	): Wish {
 		$title = Title::newFromText( $title );
-		$shouldMarkForTranslation = $this->translateInstalled && !str_contains( $title->getDBkey(), '/' );
-		$this->insertPage( $title, $shouldMarkForTranslation ? '<translate>test</translate>' : 'Test' );
+		$shouldChangeLanguage = $this->translateInstalled && $langCode !== 'en';
+		$shouldMarkForTranslation = $this->translateInstalled && !str_ends_with( $title->getDBkey(), "/$langCode" );
+
+		/** @var Title $title */
+		$title = $this->insertPage(
+			$title,
+			$shouldMarkForTranslation ? '<translate>test</translate>' : 'Test'
+		)[ 'title' ];
+
+		if ( $shouldChangeLanguage ) {
+			// TODO: WishStore should change the language upon creation of the wish via a hook
+			$context = RequestContext::getMain();
+			$context->setUser( $this->getTestUser()->getUser() );
+			SpecialPageLanguage::changePageLanguage( $context, $title, $langCode );
+		}
+
 		if ( $shouldMarkForTranslation ) {
 			/** @var TranslatablePageMarker $transPageMarker */
 			$transPageMarker = $this->getServiceContainer()->get( 'Translate:TranslatablePageMarker' );
@@ -137,21 +165,30 @@ class WishStoreTest extends MediaWikiIntegrationTestCase {
 				$this->getTestUser()->getUser()
 			);
 		}
+
+		if ( $shouldChangeLanguage || $shouldMarkForTranslation ) {
+			$this->getServiceContainer()->getMainWANObjectCache()->clearProcessCache();
+		}
+
 		return new Wish(
 			$title,
 			$langCode,
 			$this->getTestUser()->getUser(),
 			[
-				'type' => 1,
-				'status' => 2,
-				'focusAreaId' => null,
-				'voteCount' => 0,
 				'created' => $created,
 				'title' => "translation-$langCode-$title",
-				'projects' => [ 0, 1, 2 ],
-				'otherProject' => 'Test Other Project',
+				'projects' => [ 1, 2, 3 ],
 				'phabTasks' => [ 123, 456 ],
 			]
 		);
+	}
+
+	/**
+	 * @covers ::isWishPage
+	 */
+	public function testIsWishPage(): void {
+		$this->assertFalse( $this->wishStore->isWishPage( Title::newFromText( 'W123' ) ) );
+		$this->assertTrue( $this->wishStore->isWishPage( 'Community Wishlist/Wishes/W123' ) );
+		$this->assertTrue( $this->wishStore->isWishPage( Title::newFromText( 'Community Wishlist/Wishes/W123/fr' ) ) );
 	}
 }

@@ -7,7 +7,7 @@ use MediaWiki\Extension\Translate\MessageLoading\MessageHandle;
 use MediaWiki\Extension\Translate\Utilities\Utilities;
 use MediaWiki\Page\PageIdentity;
 use MediaWiki\Title\Title;
-use MediaWiki\User\User;
+use MediaWiki\User\UserIdentity;
 
 /**
  * A value object representing a wish in a particular language.
@@ -17,40 +17,40 @@ class Wish {
 	private PageIdentity $pageTitle;
 	private string $language;
 	private string $baseLanguage;
-	private User $user;
+	private UserIdentity $user;
 	private int $type;
 	private int $status;
-	private int $focusAreaId;
+	private ?int $focusAreaId;
 	private int $voteCount;
 	private string $created;
 	private string $updated;
 	private string $title;
 	private array $projects;
 	private array $phabTasks;
-	private string $otherProject;
+	private ?string $otherProject;
 
 	/**
-	 * @param PageIdentity $pageTitle The Title of the wish page. If given a translation subpage,
+	 * @param PageIdentity $pageTitle The title of the wish page. If given a translation subpage,
 	 *   the constructor will set self::$pageTitle to the base page title, and self::$baseLanguage
 	 *   to the language of the base page.
 	 * @param string $language The language (or translated language) of the wish.
-	 * @param User $user The user who created the wish.
+	 * @param UserIdentity $user The user who created the wish.
 	 * @param array $fields The fields of the wish, including:
 	 *   - 'type' (int): The type ID of the wish.
 	 *   - 'status' (int): The status ID of the wish.
-	 *   - 'focusAreaId' (int): The ID of the focus area.
+	 *   - 'focusAreaId' (?int): The ID of the focus area.
 	 *   - 'voteCount' (int): The number of votes for the wish.
 	 *   - 'created' (string): The creation timestamp of the wish.
 	 *   - 'updated' (string): The last updated timestamp of the wish.
 	 *   - 'title' (string): The title of the wish.
 	 *   - 'projects' (array<int>): IDs of $CommunityRequestsProjects associated with the wish.
-	 *   - 'otherProject' (string): The 'other project' associated with the wish.
+	 *   - 'otherProject' (?string): The 'other project' associated with the wish.
 	 *   - 'phabTasks' (array<int>): IDs of Phabricator tasks associated with the wish.
 	 *   - 'baseLang' (string): The base language of the wish (fetched if not provided)
 	 */
-	public function __construct( PageIdentity $pageTitle, string $language, User $user, array $fields ) {
+	public function __construct( PageIdentity $pageTitle, string $language, UserIdentity $user, array $fields ) {
 		// Use the base non-translated page (if Translate is installed).
-		if ( !isset( $fields[ 'baseLang' ] ) &&
+		if ( !isset( $fields[ 'baselang' ] ) &&
 			// @phan-suppress-next-line PhanUndeclaredClassReference
 			class_exists( MessageHandle::class ) &&
 			// @phan-suppress-next-line PhanUndeclaredClassMethod
@@ -67,15 +67,15 @@ class Wish {
 		$this->pageTitle = $pageTitle;
 		$this->language = $language;
 		$this->user = $user;
-		$this->type = (int)$fields['type'];
-		$this->status = (int)$fields['status'];
-		$this->focusAreaId = (int)$fields['focusAreaId'];
-		$this->voteCount = (int)$fields['voteCount'];
-		$this->created = $fields['created'];
+		$this->type = intval( $fields['type'] ?? 0 );
+		$this->status = intval( $fields['status'] ?? 0 );
+		$this->focusAreaId = isset( $fields['focusAreaId'] ) ? (int)$fields['focusAreaId'] : null;
+		$this->voteCount = intval( $fields['voteCount'] ?? 0 );
+		$this->created = $fields['created'] ?? '';
 		$this->updated = $fields['updated'] ?? $this->created;
 		$this->title = $fields['title'] ?? '';
 		$this->projects = $fields['projects'] ?? [];
-		$this->otherProject = $fields['otherProject'] ?? '';
+		$this->otherProject = $fields['otherProject'] ?? null;
 		$this->phabTasks = $fields['phabTasks'] ?? [];
 	}
 
@@ -109,9 +109,9 @@ class Wish {
 	/**
 	 * Get the user who created the wish.
 	 *
-	 * @return User
+	 * @return UserIdentity
 	 */
-	public function getUser(): User {
+	public function getUser(): UserIdentity {
 		return $this->user;
 	}
 
@@ -136,9 +136,9 @@ class Wish {
 	/**
 	 * Get the ID of the focus area ID the wish is assigned to.
 	 *
-	 * @return int
+	 * @return ?int
 	 */
-	public function getFocusAreaId(): int {
+	public function getFocusAreaId(): ?int {
 		return $this->focusAreaId;
 	}
 
@@ -210,9 +210,9 @@ class Wish {
 	/**
 	 * Get the translated value of the 'other project' field.
 	 *
-	 * @return string
+	 * @return ?string
 	 */
-	public function getOtherProject(): string {
+	public function getOtherProject(): ?string {
 		return $this->otherProject;
 	}
 }

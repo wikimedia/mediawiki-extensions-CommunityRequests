@@ -4,10 +4,13 @@ declare( strict_types = 1 );
 namespace MediaWiki\Extension\CommunityRequests\Wish;
 
 use InvalidArgumentException;
+use MediaWiki\Config\Config;
 use MediaWiki\DAO\WikiAwareEntity;
 use MediaWiki\Languages\LanguageFallback;
 use MediaWiki\Page\PageIdentity;
 use MediaWiki\Page\PageIdentityValue;
+use MediaWiki\Title\TitleFormatter;
+use MediaWiki\Title\TitleParser;
 use MediaWiki\User\ActorNormalization;
 use MediaWiki\User\UserFactory;
 use Wikimedia\Rdbms\IConnectionProvider;
@@ -27,6 +30,9 @@ class WishStore {
 	private IConnectionProvider $dbProvider;
 	private UserFactory $userFactory;
 	private LanguageFallback $languageFallback;
+	private TitleParser $titleParser;
+	private TitleFormatter $titleFormatter;
+	private string $wishPagePrefix;
 
 	public const ORDER_BY_CREATION = 'cr_created';
 	public const ORDER_BY_UPDATED = 'cr_updated';
@@ -60,12 +66,18 @@ class WishStore {
 		ActorNormalization $actorNormalization,
 		IConnectionProvider $dbProvider,
 		UserFactory $userFactory,
-		LanguageFallback $languageFallback
+		LanguageFallback $languageFallback,
+		TitleParser $titleParser,
+		TitleFormatter $titleFormatter,
+		Config $config
 	) {
 		$this->actorNormalization = $actorNormalization;
 		$this->dbProvider = $dbProvider;
 		$this->userFactory = $userFactory;
 		$this->languageFallback = $languageFallback;
+		$this->titleParser = $titleParser;
+		$this->titleFormatter = $titleFormatter;
+		$this->wishPagePrefix = $config->get( 'CommunityRequestsWishPagePrefix' );
 	}
 
 	/**
@@ -115,9 +127,8 @@ class WishStore {
 	 * @param IDatabase $dbw The database connection.
 	 */
 	private function saveTranslations( Wish $wish, IDatabase $dbw ): void {
-		$data = [ 'crt_wish' => $wish->getPage()->getId() ];
+		$data = [ 'crt_wish' => $wish->getPage()->getId(), 'crt_lang' => $wish->getLanguage() ];
 		$dataSet = [
-			'crt_lang' => $wish->getLanguage(),
 			'crt_title' => $wish->getTitle(),
 			'crt_other_project' => $wish->getOtherProject(),
 		];
@@ -205,6 +216,10 @@ class WishStore {
 	 * @return ?Wish null if the wish does not exist.
 	 */
 	public function getWish( PageIdentity $pageTitle, ?string $langCode = null ): ?Wish {
+		if ( !$this->isWishPage( $pageTitle ) ) {
+			return null;
+		}
+
 		$dbr = $this->dbProvider->getReplicaDatabase();
 		$data = $dbr->newSelectQueryBuilder()
 			->caller( __METHOD__ )
@@ -290,7 +305,7 @@ class WishStore {
 
 		$wishes = [];
 
-		// Group the result set by wish page ID.
+		// Group the result set by wish page ID and language.
 		$wishDataByPage = [];
 		foreach ( $resultWrapper as $wishData ) {
 			$wishDataByPage[ $wishData->cr_page ][ $wishData->crt_lang ] = $wishData;
@@ -388,5 +403,67 @@ class WishStore {
 		}
 
 		return $phabTasksByWish;
+	}
+
+	/**
+	 * Delete a wish and all its associated data.
+	 * Called from WishHookHandler::onPageDeleteComplete().
+	 *
+	 * @param Wish $wish
+	 */
+	public function delete( Wish $wish ): void {
+		$dbw = $this->dbProvider->getPrimaryDatabase();
+		$dbw->startAtomic( __METHOD__ );
+
+		// First delete translations.
+		$delTranslations = $dbw->newDeleteQueryBuilder()
+			->deleteFrom( 'communityrequests_wishes_translations' )
+			->where( [ 'crt_wish' => $wish->getPage()->getId() ] );
+
+		// Delete only for the given language, if not the base language.
+		if ( $wish->getLanguage() !== $wish->getBaseLanguage() ) {
+			$delTranslations->andWhere( [ 'crt_lang' => $wish->getLanguage() ] );
+		}
+
+		$delTranslations->caller( __METHOD__ )
+			->execute();
+
+		// Delete everything else if we're dealing with the base language.
+		if ( $wish->getLanguage() === $wish->getBaseLanguage() ) {
+			foreach ( [
+				'communityrequests_wishes' => 'cr_page',
+				'communityrequests_projects' => 'crp_wish',
+				'communityrequests_phab_tasks' => 'crpt_wish'
+			] as $table => $foreignKey ) {
+				$dbw->newDeleteQueryBuilder()
+					->deleteFrom( $table )
+					->where( [ $foreignKey => $wish->getPage()->getId() ] )
+					->caller( __METHOD__ )
+					->execute();
+			}
+		}
+
+		$dbw->endAtomic( __METHOD__ );
+	}
+
+	/**
+	 * Check if the given PageIdentity could be a wish page based on its title.
+	 *
+	 * @param PageIdentity|string $identity
+	 * @return bool
+	 * @throws InvalidArgumentException
+	 */
+	public function isWishPage( $identity ): bool {
+		$pagePrefix = $this->titleParser->parseTitle( $this->wishPagePrefix );
+		if ( is_string( $identity ) ) {
+			$identity = $this->titleParser->parseTitle( $identity );
+		} elseif ( !$identity instanceof PageIdentity ) {
+			throw new InvalidArgumentException( 'Expected a PageIdentity or string.' );
+		}
+
+		return str_starts_with(
+			$this->titleFormatter->getPrefixedDBkey( $identity ),
+			$this->titleFormatter->getPrefixedDBkey( $pagePrefix )
+		);
 	}
 }

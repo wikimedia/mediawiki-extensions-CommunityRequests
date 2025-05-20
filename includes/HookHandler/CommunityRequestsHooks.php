@@ -6,19 +6,13 @@ namespace MediaWiki\Extension\CommunityRequests\HookHandler;
 use MediaWiki\Config\Config;
 use MediaWiki\Hook\GetDoubleUnderscoreIDsHook;
 use MediaWiki\Hook\LoginFormValidErrorMessagesHook;
-use MediaWiki\Hook\ParserFirstCallInitHook;
-use MediaWiki\Parser\Parser;
 
-class CommunityRequestsHooks implements
-	GetDoubleUnderscoreIDsHook,
-	LoginFormValidErrorMessagesHook,
-	ParserFirstCallInitHook
-{
+class CommunityRequestsHooks implements GetDoubleUnderscoreIDsHook, LoginFormValidErrorMessagesHook {
 
 	public const MAGIC_MACHINETRANSLATION = 'machinetranslation';
 
-	private Config $config;
-	private bool $enabled;
+	protected Config $config;
+	protected bool $enabled;
 
 	public function __construct( Config $config ) {
 		$this->config = $config;
@@ -44,45 +38,10 @@ class CommunityRequestsHooks implements
 	}
 
 	/** @inheritDoc */
-	public function onParserFirstCallInit( $parser ) {
-		if ( !$this->enabled ) {
-			return;
-		}
-		$parser->setHook( 'community-request', [ $this, 'renderRequest' ] );
-		$parser->setHook( 'focus-area', [ $this, 'renderFocusArea' ] );
-	}
-
-	/** @inheritDoc */
 	public function onLoginFormValidErrorMessages( array &$messages ) {
 		if ( !$this->enabled ) {
 			return;
 		}
 		$messages[] = 'communityrequests-please-log-in';
-	}
-
-	/**
-	 * Render the <community-request> parser function, persisting the data to the database.
-	 *
-	 * @param string|null $text
-	 * @param array $params
-	 * @param Parser $parser
-	 * @return string
-	 */
-	public function renderRequest( ?string $text, array $params, Parser $parser ): string {
-		// TODO: Implement
-		return '';
-	}
-
-	/**
-	 * Render the <focus-area> parser function, persisting the data to the database.
-	 *
-	 * @param string|null $text
-	 * @param array $params
-	 * @param Parser $parser
-	 * @return string
-	 */
-	public function renderFocusArea( ?string $text, array $params, Parser $parser ): string {
-		// TODO: Implement
-		return '';
 	}
 }

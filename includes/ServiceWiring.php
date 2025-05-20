@@ -22,7 +22,10 @@ return [
 			$services->getActorNormalization(),
 			$services->getConnectionProvider(),
 			$services->getUserFactory(),
-			$services->getLanguageFallback()
+			$services->getLanguageFallback(),
+			$services->getTitleParser(),
+			$services->getTitleFormatter(),
+			$services->getMainConfig()
 		);
 	},
 ];

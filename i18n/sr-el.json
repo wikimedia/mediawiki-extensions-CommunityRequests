@@ -1,0 +1,29 @@
+{
+	"@metadata": {
+		"authors": []
+	},
+	"communityrequests-description": "Opišite Vaš problem",
+	"communityrequests-wishtype-bug-label": "Prijava baga",
+	"communityrequests-wishtype-change-label": "Sistemska promena",
+	"communityrequests-wishtype-unknown-label": "Nisam siguran ili ne znam",
+	"communityrequests-wishtype-unknown-label-short": "Nepoznato",
+	"communityrequests-project-all-projects": "Svi projekti",
+	"communityrequests-project-show-less": "Prikaži manje",
+	"communityrequests-project-show-all": "Prikaži sve",
+	"communityrequests-view-all-wishes": "Vidi sve želje.",
+	"communityrequests-close": "Zatvori",
+	"communityrequests-save": "Sačuvaj izmene",
+	"communityrequests-status-draft": "Nacrt",
+	"communityrequests-status-blocked": "Blokirano",
+	"communityrequests-wish-other-details-heading": "Drugi detalji",
+	"communityrequests-wish-created": "Napravljeno",
+	"communityrequests-wish-proposer": "Autor",
+	"communityrequests-wishes-type-header": "Tip",
+	"communityrequests-wishes-projects-header": "Projekti",
+	"communityrequests-wishes-date-header": "Datum (UTC)",
+	"communityrequests-wishes-status-header": "Status",
+	"communityrequests-form-loading-1": "Ako se obrazac ne učita, omogućite JavaScript.",
+	"communityrequests-focus-area-owners-label": "Vlasnici:",
+	"communityrequests-translation-translatable": "Ova stranica sadrži tekst koji nije na $1.",
+	"communityrequests-translation-errors": "Došlo je do greške:"
+}

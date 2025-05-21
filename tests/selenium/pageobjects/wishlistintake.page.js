@@ -9,55 +9,55 @@ class WishlistIntakePage extends Page {
 	}
 
 	get titleInput() {
-		return $( '.community-wishlist-title-field input' );
+		return $( '.ext-communityrequests-intake__title input' );
 	}
 
 	get titleError() {
-		return $( '.community-wishlist-title-field .cdx-message--error' );
+		return $( '.ext-communityrequests-intake__title .cdx-message--error' );
 	}
 
 	get descriptionInput() {
-		return $( '.wishlist-intake-ve-surface' );
+		return $( '.ext-communityrequests-intake__ve-surface' );
 	}
 
 	get descriptionError() {
-		return $( '.community-wishlist-description-field .cdx-message--error' );
+		return $( '.ext-communityrequests-intake__description .cdx-message--error' );
 	}
 
 	get firstWishTypeInput() {
-		return $( '.wishlist-intake-type .cdx-radio__input' );
+		return $( '.ext-communityrequests-intake__type .cdx-radio__input' );
 	}
 
 	get typeError() {
-		return $( '.wishlist-intake-type .cdx-message--error' );
+		return $( '.ext-communityrequests-intake__type .cdx-message--error' );
 	}
 
 	get allProjectsCheckbox() {
-		return $( '.wishlist-intake-project .cdx-checkbox__input' );
+		return $( '.ext-communityrequests-intake__project .cdx-checkbox__input' );
 	}
 
 	get otherProjectInput() {
-		return $( '.wishlist-intake-project-other input' );
+		return $( '.ext-communityrequests-intake__project-other input' );
 	}
 
 	get projectsError() {
-		return $( '.wishlist-intake-project .cdx-message--error' );
+		return $( '.ext-communityrequests-intake__project .cdx-message--error' );
 	}
 
 	get audienceInput() {
-		return $( '.wishlist-intake-audience input' );
+		return $( '.ext-communityrequests-intake__audience input' );
 	}
 
 	get audienceError() {
-		return $( '.wishlist-intake-audience .cdx-message--error' );
+		return $( '.ext-communityrequests-intake__audience .cdx-message--error' );
 	}
 
 	get phabricatorTasksInput() {
-		return $( '.wishlist-intake-tasks input' );
+		return $( '.ext-communityrequests-intake__tasks input' );
 	}
 
 	get submitButton() {
-		return $( '.wishlist-intake-submit' );
+		return $( '.ext-communityrequests-intake__submit' );
 	}
 }
 

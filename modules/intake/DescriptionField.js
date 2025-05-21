@@ -1,12 +1,11 @@
 const Util = require( '../common/Util.js' );
-const config = require( '../common/config.json' );
+const { CommunityRequestsHomepage } = require( '../common/config.json' );
 
 class DescriptionField {
 	/**
 	 * @param {HTMLElement|jQuery|string} node
-	 * @param {string} content
 	 */
-	constructor( node, content ) {
+	constructor( node ) {
 		/**
 		 * The textarea that will be replaced by the VisualEditor.
 		 *
@@ -36,7 +35,7 @@ class DescriptionField {
 		 *
 		 * @type {string} Always wikitext.
 		 */
-		this.content = content;
+		this.content = this.$textarea.val();
 	}
 
 	/**
@@ -79,10 +78,10 @@ class DescriptionField {
 		}
 
 		ve.init.mw.Platform.static.initializedPromise
-			.fail( () => {
+			.catch( () => {
 				this.$veWrapper.text( 'Sorry, this browser is not supported.' );
 			} )
-			.done( this.createTarget.bind( this ) );
+			.then( this.createTarget.bind( this ) );
 	}
 
 	/**
@@ -173,15 +172,15 @@ class DescriptionField {
 	 * @param {string} mode 'source' or 'visual'
 	 * @return {jQuery.Promise}
 	 */
-	createTarget( mode = this.defaultMode ) {
+	async createTarget( mode = this.defaultMode ) {
 		// HACK: VE looks for page context from wgRelevantPageName.
 		// Special pages won't work as they don't have parsable wikitext.
 		// Here we use the CommunityRequests homepage as a dummy value.
 		if ( Util.isNewWish() ) {
-			mw.config.set( 'wgRelevantPageName', config.CommunityRequestsHomepage );
+			mw.config.set( 'wgRelevantPageName', CommunityRequestsHomepage );
 		}
 		this.target = new ve.init.mw.Target( {
-			surfaceClasses: [ 'wishlist-intake-ve-surface' ],
+			surfaceClasses: [ 'ext-communityrequests-intake__ve-surface' ],
 			modes: [ 'visual', 'source' ],
 			defaultMode: mode,
 			toolbarConfig: { position: 'top' },
@@ -204,12 +203,11 @@ class DescriptionField {
 		this.target.getToolbar().on( 'switchEditor', this.switchEditor.bind( this ) );
 
 		// Add initial content.
-		return this.setSurface( this.content, mode )
-			.then( () => {
-				// Add the target to the document.
-				this.$veWrapper.html( this.target.$element );
-				this.setPending( false );
-			} );
+		await this.setSurface( this.content, mode );
+		// Add the target to the document and hide the textarea.
+		this.$veWrapper.append( this.target.$element );
+		this.$textarea.hide();
+		this.setPending( false );
 	}
 
 	/**
@@ -218,27 +216,22 @@ class DescriptionField {
 	 * @param {string} mode 'source' or 'visual'
 	 * @return {jQuery.Promise}
 	 */
-	switchEditor( mode ) {
+	async switchEditor( mode ) {
 		if ( mode === this.mode ) {
 			return ve.createDeferred().resolve().promise();
 		}
 
 		this.setPending( true );
-		return this.getWikitext().then( ( content ) => {
-			this.content = content;
-		} ).then( () => {
-			const oldTarget = this.target;
-			return this.createTarget( mode ).then( () => {
-				oldTarget.destroy();
-				this.surface.focus();
+		this.content = await this.getWikitext();
+		const oldTarget = this.target;
+		await this.createTarget( mode );
+		oldTarget.destroy();
+		this.surface.focus();
 
-				// Silently save preference.
-				const editor = mode === 'source' ? 'wikitext' : 'visualeditor';
-				new mw.Api().saveOption( 'visualeditor-editor', editor ).then( () => {
-					mw.user.options.set( 'visualeditor-editor', editor );
-				} );
-			} );
-		} );
+		// Silently save preference.
+		const editor = mode === 'source' ? 'wikitext' : 'visualeditor';
+		new mw.Api().saveOption( 'visualeditor-editor', editor );
+		mw.user.options.set( 'visualeditor-editor', editor );
 	}
 
 	/**
@@ -248,11 +241,10 @@ class DescriptionField {
 	 * @param {string} mode 'source' or 'visual'
 	 * @return {jQuery.Promise}
 	 */
-	setSurface( wikitext, mode ) {
-		return this.getDocFromWikitext( wikitext, mode ).then( ( doc ) => {
-			this.target.clearSurfaces();
-			this.surface = this.target.addSurface( doc );
-		} );
+	async setSurface( wikitext, mode ) {
+		const doc = await this.getDocFromWikitext( wikitext, mode );
+		this.target.clearSurfaces();
+		this.surface = this.target.addSurface( doc );
 	}
 
 	/**
@@ -262,7 +254,7 @@ class DescriptionField {
 	 * @param {string} mode 'source' or 'visual'
 	 * @return {jQuery.Promise<ve.dm.Document>}
 	 */
-	getDocFromWikitext( wikitext, mode ) {
+	async getDocFromWikitext( wikitext, mode ) {
 		const options = {
 			lang: mw.config.get( 'wgContentLanguage' ),
 			dir: Util.isRtl() ? 'rtl' : 'ltr'
@@ -276,13 +268,12 @@ class DescriptionField {
 		const outerPromise = ve.createDeferred();
 
 		// Transform the wikitext to HTML.
-		this.target.parseWikitextFragment( wikitext ).then( ( resp ) => {
-			const htmlDoc = this.target.parseDocument( resp.visualeditor.content );
-			// Avoids issues like T253584 where IDs could clash.
-			mw.libs.ve.stripRestbaseIds( htmlDoc );
-			const doc = ve.dm.converter.getModelFromDom( htmlDoc, options );
-			outerPromise.resolve( doc );
-		} );
+		const resp = await this.target.parseWikitextFragment( wikitext );
+		const htmlDoc = this.target.parseDocument( resp.visualeditor.content );
+		// Avoids issues like T253584 where IDs could clash.
+		mw.libs.ve.stripRestbaseIds( htmlDoc );
+		const doc = ve.dm.converter.getModelFromDom( htmlDoc, options );
+		outerPromise.resolve( doc );
 
 		return outerPromise;
 	}
@@ -296,7 +287,7 @@ class DescriptionField {
 		return this.getWikitext().then( ( content ) => {
 			this.$textarea.val( this.escapePipesInTables( content ) );
 			// Propagate the change to the Vue model.
-			this.$textarea[ 0 ].dispatchEvent( new Event( 'input' ) );
+			this.$textarea[ 0 ].dispatchEvent( new Event( 'change' ) );
 		} );
 	}
 
@@ -357,8 +348,8 @@ class DescriptionField {
 	 * @param {boolean} pending
 	 */
 	setPending( pending ) {
-		this.$textarea.prop( 'disabled', pending );
-		this.$veWrapper.toggleClass( 'wishlist-intake-textarea-wrapper--loading', pending );
+		this.$textarea.prop( 'readonly', pending );
+		this.$veWrapper.toggleClass( 'ext-communityrequests-intake__textarea-wrapper--loading', pending );
 	}
 }
 

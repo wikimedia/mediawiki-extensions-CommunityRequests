@@ -23,8 +23,11 @@ return [
 			$services->getConnectionProvider(),
 			$services->getUserFactory(),
 			$services->getLanguageFallback(),
+			$services->getRevisionStore(),
+			$services->getParserFactory(),
 			$services->getTitleParser(),
 			$services->getTitleFormatter(),
+			$services->get( 'CommunityRequests.IdGenerator' ),
 			$services->getMainConfig()
 		);
 	},

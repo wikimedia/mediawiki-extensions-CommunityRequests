@@ -17,6 +17,7 @@ use MessageLocalizer;
 use MockTitleTrait;
 use Wikimedia\ObjectCache\EmptyBagOStuff;
 use Wikimedia\Rdbms\IDBAccessObject;
+use Wikimedia\Timestamp\ConvertibleTimestamp;
 
 /**
  * @group CommunityRequests
@@ -53,13 +54,26 @@ class WishStoreTest extends MediaWikiIntegrationTestCase {
 	 * @covers ::getWish
 	 */
 	public function testSaveAndGetWish(): void {
-		$wish = $this->getTestWish( 'Community Wishlist/Wishes/W123' );
+		ConvertibleTimestamp::setFakeTime( '2025-01-23T00:00:00Z' );
+		$page = $this->getExistingTestPage( 'Community Wishlist/Wishes/W123' );
+		$wish = new Wish(
+			$page,
+			'en',
+			$this->getTestUser()->getUser(),
+			[
+				'projects' => [ 1, 2, 3 ],
+				'phabTasks' => [ 123, 456 ],
+				'created' => '2025-01-01T00:00:00Z',
+			]
+		);
 		$this->wishStore->save( $wish );
 		$retrievedWish = $this->wishStore->getWish( $wish->getPage(), 'en' );
 		$this->assertInstanceOf( Wish::class, $retrievedWish );
-		$this->assertSame( $wish->getPage()->getId(), $retrievedWish->getPage()->getId() );
-		$this->assertSame( $wish->getProjects(), $retrievedWish->getProjects() );
-		$this->assertSame( $wish->getPhabTasks(), $retrievedWish->getPhabTasks() );
+		$this->assertSame( $page->getId(), $retrievedWish->getPage()->getId() );
+		$this->assertArrayEquals( [ 1, 2, 3 ], $retrievedWish->getProjects() );
+		$this->assertArrayEquals( [ 123, 456 ], $retrievedWish->getPhabTasks() );
+		$this->assertSame( '2025-01-01T00:00:00Z', $retrievedWish->getCreated() );
+		$this->assertSame( '2025-01-23T00:00:00Z', $retrievedWish->getUpdated() );
 	}
 
 	/**
@@ -78,11 +92,68 @@ class WishStoreTest extends MediaWikiIntegrationTestCase {
 	}
 
 	/**
+	 * @covers ::save
+	 */
+	public function testSaveNewWishWithNoProposer(): void {
+		$wish = new Wish(
+			Title::newFromText( 'Community Wishlist/Wishes/W123' ),
+			'en',
+			null,
+			[]
+		);
+		$this->expectException( InvalidArgumentException::class );
+		$this->wishStore->save( $wish );
+	}
+
+	/**
+	 * @covers ::save
+	 * @covers ::getWish
+	 */
+	public function testSaveThenResaveWithNoProposerOrCreationDate(): void {
+		$user = $this->getTestUser()->getUser();
+		ConvertibleTimestamp::setFakeTime( '2025-01-23T00:00:00Z' );
+		$page = $this->getExistingTestPage( 'Community Wishlist/Wishes/W123' );
+		ConvertibleTimestamp::setFakeTime( '2025-01-23T12:59:00Z' );
+		$wish1 = new Wish( $page, 'en', $user, [ 'created' => '2025-01-23T00:00:00Z' ] );
+		$this->wishStore->save( $wish1 );
+		// Sanity checks.
+		$retrievedWish1 = $this->wishStore->getWish( $page, 'en' );
+		$this->assertSame( $user->getId(), $retrievedWish1->getProposer()->getId() );
+		$this->assertSame( '2025-01-23T00:00:00Z', $retrievedWish1->getCreated() );
+		$this->assertSame( '2025-01-23T12:59:00Z', $retrievedWish1->getUpdated() );
+		// Now resave without a proposer or creation date, and with a different current (fake) time.
+		ConvertibleTimestamp::setFakeTime( '2025-02-01T00:00:00Z' );
+		$wish2 = new Wish( $page, 'en', null, [] );
+		$this->wishStore->save( $wish2 );
+		$retrievedWish2 = $this->wishStore->getWish( $page, 'en' );
+		// Proposer should still be set to the original user.
+		$this->assertSame( $user->getId(), $retrievedWish2->getProposer()->getId() );
+		// Creation datestamp should be the old fake time, when $page was created.
+		$this->assertSame( '2025-01-23T00:00:00Z', $retrievedWish2->getCreated() );
+		// And updated should be the new fake time.
+		$this->assertSame( '2025-02-01T00:00:00Z', $retrievedWish2->getUpdated() );
+	}
+
+	/**
+	 * @covers ::save
+	 */
+	public function testSaveWithNoCreationDate(): void {
+		$wish = new Wish(
+			Title::newFromText( 'Community Wishlist/Wishes/W123' ),
+			'en',
+			$this->getTestUser()->getUser(),
+			[ 'created' => null ]
+		);
+		$this->expectException( InvalidArgumentException::class );
+		$this->wishStore->save( $wish );
+	}
+
+	/**
 	 * @covers ::getWishes
 	 */
 	public function testGetWishes(): void {
-		$wish1 = $this->getTestWish( 'Community Wishlist/Wishes/W1', 'en', '22220123000000' );
-		$wish2 = $this->getTestWish( 'Community Wishlist/Wishes/W2', 'en', '33330123000000' );
+		$wish1 = $this->getTestWish( 'Community Wishlist/Wishes/W1', 'en', '2222-01-23T00:00:00Z' );
+		$wish2 = $this->getTestWish( 'Community Wishlist/Wishes/W2', 'en', '3333-01-23T00:00:00Z' );
 		$this->wishStore->save( $wish1 );
 		$this->wishStore->save( $wish2 );
 
@@ -99,11 +170,11 @@ class WishStoreTest extends MediaWikiIntegrationTestCase {
 	 */
 	public function testGetWishesLangFallbacks(): void {
 		$this->markTestSkippedIfExtensionNotLoaded( 'Translate' );
-		$wish1en = $this->getTestWish( 'Community Wishlist/Wishes/W1', 'en', '22220123000000' );
-		$wish1bs = $this->getTestWish( 'Community Wishlist/Wishes/W1/bs', 'bs', '2222123000000' );
-		$wish2hr = $this->getTestWish( 'Community Wishlist/Wishes/W2', 'hr', '44440123000000' );
-		$wish3de = $this->getTestWish( 'Community Wishlist/Wishes/W3', 'de', '33330123000000' );
-		$wish3fr = $this->getTestWish( 'Community Wishlist/Wishes/W3/fr', 'fr', '33330123000000' );
+		$wish1en = $this->getTestWish( 'Community Wishlist/Wishes/W1', 'en', '2222-01-23T00:00:00Z' );
+		$wish1bs = $this->getTestWish( 'Community Wishlist/Wishes/W1/bs', 'bs', '2222-12-30T00:00:00Z' );
+		$wish2hr = $this->getTestWish( 'Community Wishlist/Wishes/W2', 'hr', '4444-01-23T00:00:00' );
+		$wish3de = $this->getTestWish( 'Community Wishlist/Wishes/W3', 'de', '3333-01-23T00:00:00' );
+		$wish3fr = $this->getTestWish( 'Community Wishlist/Wishes/W3/fr', 'fr', '3333-01-23T00:00:00' );
 		$this->wishStore->save( $wish1en );
 		$this->wishStore->save( $wish1bs );
 		$this->wishStore->save( $wish2hr );
@@ -127,6 +198,42 @@ class WishStoreTest extends MediaWikiIntegrationTestCase {
 		$this->assertCount( 3, $wishes );
 		$this->assertEquals( 'Community_Wishlist/Wishes/W1', $wishes[2]->getPage()->getDBkey() );
 		$this->assertEquals( 'translation-en-Community Wishlist/Wishes/W1', $wishes[2]->getTitle() );
+	}
+
+	/**
+	 * @covers ::getDataFromWikitext
+	 */
+	public function testGetDataFromWikitext(): void {
+		$wikitext = <<<END
+{{Community Wishlist/Wish
+|status=2
+|type=1
+|title=<translate>Test</translate>
+|description=<translate>[[<tvar name="1">Foo</tvar>|Bar]] {{baz}}</translate>
+
+== Section ==
+Example text
+|created=22220123000000
+}}
+END;
+		$title = Title::newFromText( 'W999' );
+		$this->insertPage( $title, $wikitext );
+		$wish = new Wish(
+			$title,
+			'en',
+			$this->getTestUser()->getUser()
+		);
+
+		$actual = $this->wishStore->getDataFromWikitext( $wish );
+		$this->assertEquals(
+			"<translate>[[<tvar name=\"1\">Foo</tvar>|Bar]] {{baz}}</translate>\n\n== Section ==\nExample text",
+			$actual['description']
+		);
+		$this->assertArrayHasKey( 'status', $actual );
+		$this->assertArrayHasKey( 'type', $actual );
+		$this->assertArrayHasKey( 'title', $actual );
+		$this->assertArrayHasKey( 'description', $actual );
+		$this->assertArrayHasKey( 'created', $actual );
 	}
 
 	private function getTestWish(

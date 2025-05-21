@@ -1,28 +1,27 @@
 <template>
-	<section class="wishlist-intake-audience">
-		<cdx-field
-			:status="status"
-			:messages="messages"
-			:disabled="disabled"
+	<cdx-field
+		class="ext-communityrequests-intake__audience"
+		:status="status"
+		:messages="messages"
+	>
+		<cdx-text-input
+			:model-value="audience"
+			name="audience"
+			@input="$emit( 'update:audience', $event.target.value.trim() )"
 		>
-			<cdx-text-input
-				:model-value="audience"
-				@input="$emit( 'update:audience', $event.target.value.trim() )"
-			>
-			</cdx-text-input>
-			<template #label>
-				{{ $i18n( 'communityrequests-audience-label' ).text() }}
-			</template>
-			<template #description>
-				{{ $i18n( 'communityrequests-audience-description' ).text() }}
-			</template>
-		</cdx-field>
-	</section>
+		</cdx-text-input>
+		<template #label>
+			{{ $i18n( 'communityrequests-audience-label' ).text() }}
+		</template>
+		<template #description>
+			{{ $i18n( 'communityrequests-audience-description' ).text() }}
+		</template>
+	</cdx-field>
 </template>
 
 <script>
-const { CdxField, CdxTextInput } = require( '@wikimedia/codex' );
-const { defineComponent } = require( 'vue' );
+const { CdxField, CdxTextInput } = require( '../codex.js' );
+const { defineComponent, ref, watch, Ref } = require( 'vue' );
 
 module.exports = exports = defineComponent( {
 	name: 'AudienceSection',
@@ -32,29 +31,30 @@ module.exports = exports = defineComponent( {
 	},
 	props: {
 		audience: { type: String, default: '' },
-		status: { type: String, default: 'default' },
-		disabled: { type: Boolean, default: false }
+		status: { type: String, default: 'default' }
 	},
 	emits: [
 		'update:audience'
 	],
-	data() {
-		return {
-			messages: {}
-		};
-	},
-	watch: {
-		status: {
-			handler( newStatus ) {
-				if ( newStatus === 'error' ) {
-					this.messages = {
-						error: mw.msg( 'communityrequests-audience-error', 5, 300 )
-					};
-				} else {
-					this.messages = {};
-				}
+	setup( props ) {
+		/**
+		 * Error messages to display.
+		 *
+		 * @type {Ref<Object>}
+		 */
+		const messages = ref( {} );
+
+		watch( () => props.status, ( newStatus ) => {
+			if ( newStatus === 'error' ) {
+				messages.value = {
+					error: mw.msg( 'communityrequests-audience-error', 5, 300 )
+				};
+			} else {
+				messages.value = {};
 			}
-		}
+		} );
+
+		return { messages };
 	}
 } );
 </script>

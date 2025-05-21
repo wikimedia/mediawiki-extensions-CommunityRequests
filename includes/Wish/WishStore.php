@@ -5,14 +5,23 @@ namespace MediaWiki\Extension\CommunityRequests\Wish;
 
 use InvalidArgumentException;
 use MediaWiki\Config\Config;
+use MediaWiki\Content\WikitextContent;
 use MediaWiki\DAO\WikiAwareEntity;
+use MediaWiki\Extension\CommunityRequests\IdGenerator\IdGenerator;
 use MediaWiki\Languages\LanguageFallback;
 use MediaWiki\Page\PageIdentity;
 use MediaWiki\Page\PageIdentityValue;
+use MediaWiki\Parser\Parser;
+use MediaWiki\Parser\ParserFactory;
+use MediaWiki\Parser\ParserOptions;
+use MediaWiki\Parser\PPFrame;
+use MediaWiki\Parser\PPNode;
+use MediaWiki\Revision\RevisionStore;
 use MediaWiki\Title\TitleFormatter;
 use MediaWiki\Title\TitleParser;
 use MediaWiki\User\ActorNormalization;
 use MediaWiki\User\UserFactory;
+use MediaWiki\Utils\MWTimestamp;
 use Wikimedia\Rdbms\IConnectionProvider;
 use Wikimedia\Rdbms\IDatabase;
 use Wikimedia\Rdbms\IReadableDatabase;
@@ -30,9 +39,13 @@ class WishStore {
 	private IConnectionProvider $dbProvider;
 	private UserFactory $userFactory;
 	private LanguageFallback $languageFallback;
+	private RevisionStore $revisionStore;
+	private ParserFactory $parserFactory;
 	private TitleParser $titleParser;
 	private TitleFormatter $titleFormatter;
+	private IdGenerator $idGenerator;
 	private string $wishPagePrefix;
+	private string $wishTemplate;
 
 	public const ORDER_BY_CREATION = 'cr_created';
 	public const ORDER_BY_UPDATED = 'cr_updated';
@@ -67,43 +80,82 @@ class WishStore {
 		IConnectionProvider $dbProvider,
 		UserFactory $userFactory,
 		LanguageFallback $languageFallback,
+		RevisionStore $revisionStore,
+		ParserFactory $parserFactory,
 		TitleParser $titleParser,
 		TitleFormatter $titleFormatter,
+		IdGenerator $idGenerator,
 		Config $config
 	) {
 		$this->actorNormalization = $actorNormalization;
 		$this->dbProvider = $dbProvider;
 		$this->userFactory = $userFactory;
 		$this->languageFallback = $languageFallback;
+		$this->revisionStore = $revisionStore;
+		$this->parserFactory = $parserFactory;
 		$this->titleParser = $titleParser;
 		$this->titleFormatter = $titleFormatter;
+		$this->idGenerator = $idGenerator;
 		$this->wishPagePrefix = $config->get( 'CommunityRequestsWishPagePrefix' );
+		$this->wishTemplate = $config->get( 'CommunityRequestsWishTemplate' )[ 'page' ];
 	}
 
 	/**
 	 * Save a single wish to the database.
 	 *
 	 * @param Wish $wish The wish to save.
+	 * @throws InvalidArgumentException If the wish page has not been added to the database yet,
+	 *   or we're creating a new wish without a proposer.
 	 */
 	public function save( Wish $wish ): void {
 		if ( !$wish->getPage()->getId() ) {
 			throw new InvalidArgumentException( 'Wish page has not been added to the database yet!' );
 		}
 
+		$isUpdate = $wish->getPage()->exists();
 		$dbw = $this->dbProvider->getPrimaryDatabase();
 		$dbw->startAtomic( __METHOD__ );
 
+		// @phan-suppress-next-line PhanTypeMismatchArgumentNullable Proposer is checked and not null
+		$proposer = $wish->getProposer() ? $this->actorNormalization->findActorId( $wish->getProposer(), $dbw ) : null;
+		$created = $wish->getCreated();
+
+		if ( $isUpdate && ( !$proposer || !$created ) ) {
+			// Fetch proposer and creation date from the wishes table, or from the initial revision.
+			$proposerCreated = $dbw->newSelectQueryBuilder()
+				->caller( __METHOD__ )
+				->table( 'revision' )
+				->from( 'communityrequests_wishes' )
+				->fields( [ 'cr_actor', 'cr_created' ] )
+				->where( [ 'cr_page' => $wish->getPage()->getId() ] )
+				->forUpdate()
+				->fetchResultSet()
+				->fetchRow();
+			if ( $proposerCreated ) {
+				$proposer ??= $proposerCreated[ 'cr_actor' ];
+				$created ??= $proposerCreated[ 'cr_created' ];
+			}
+		}
+		if ( !$proposer ) {
+			throw new InvalidArgumentException( 'Wishes must have a proposer!' );
+		}
+		if ( !$created ) {
+			throw new InvalidArgumentException( 'Wishes must have a created date!' );
+		}
+
+		$now = wfTimestampNow();
+
 		$data = [
 			'cr_page' => $wish->getPage()->getId(),
-			'cr_actor' => $this->actorNormalization->findActorId( $wish->getUser(), $dbw ),
 			'cr_base_lang' => $wish->getBaseLanguage(),
-			'cr_created' => $wish->getCreated(),
 		];
 		$dataSet = [
+			'cr_actor' => $proposer,
 			'cr_type' => $wish->getType(),
 			'cr_status' => $wish->getStatus(),
 			'cr_focus_area' => $wish->getFocusAreaId(),
-			'cr_updated' => $wish->getUpdated(),
+			'cr_created' => MWTimestamp::convert( TS_MW, $isUpdate ? $created : $now ),
+			'cr_updated' => MWTimestamp::convert( TS_MW, $isUpdate ? $now : $created ),
 		];
 		$dbw->newInsertQueryBuilder()
 			->insert( 'communityrequests_wishes' )
@@ -130,7 +182,7 @@ class WishStore {
 		$data = [ 'crt_wish' => $wish->getPage()->getId(), 'crt_lang' => $wish->getLanguage() ];
 		$dataSet = [
 			'crt_title' => $wish->getTitle(),
-			'crt_other_project' => $wish->getOtherProject(),
+			'crt_other_project' => $wish->getOtherProject() ?: null,
 		];
 		$dbw->newInsertQueryBuilder()
 			->insert( 'communityrequests_wishes_translations' )
@@ -279,6 +331,64 @@ class WishStore {
 		}
 
 		return $wishes;
+	}
+
+	/**
+	 * Parse wish data from the template invocation on a wish page.
+	 *
+	 * @param Wish $wish The wish to get data from.
+	 * @return ?array<string, string> The parsed data from the wikitext, or null if not found.
+	 */
+	public function getDataFromWikitext( Wish $wish ): ?array {
+		if ( !$wish->getPage()->getId() ) {
+			return null;
+		}
+		$configTitle = $this->titleFormatter->getPrefixedDBkey(
+			$this->titleParser->parseTitle( $this->wishTemplate, NS_TEMPLATE )
+		);
+		/** @var WikitextContent $content */
+		$content = $this->revisionStore
+			->getRevisionByPageId( $wish->getPage()->getId() )
+			->getMainContentRaw();
+		'@phan-var WikitextContent $content';
+		$wikitext = $content->getText();
+		$parser = $this->parserFactory->getInstance();
+		$parser->startExternalParse(
+			null, ParserOptions::newFromAnon(), Parser::OT_PLAIN
+		);
+		$root = $parser->preprocessToDom( $wikitext );
+
+		for ( $child = $root->getFirstChild(); $child; $child = $child->getNextSibling() ) {
+			if ( $child->getName() === 'template' ) {
+				$frame = $parser->getPreprocessor()->newFrame();
+				$title = $this->titleParser->parseTitle(
+					$this->normalizeParsedValue( $parser, $frame, $child->getChildrenOfType( 'title' ) ),
+					NS_TEMPLATE
+				);
+				if ( $configTitle === $this->titleFormatter->getPrefixedDBkey( $title ) ) {
+					$args = $frame->newChild( $child->getChildrenOfType( 'part' ) )->getNamedArguments();
+					return array_map( function ( $value ) use ( $parser, $frame ) {
+						return $this->normalizeParsedValue( $parser, $frame, $value );
+					}, $args );
+				}
+			}
+		}
+
+		return null;
+	}
+
+	/**
+	 * Normalize a parsed value from the wikitext, removing strip markers and trailing newlines.
+	 *
+	 * @param Parser $parser The parser instance.
+	 * @param PPFrame $frame The parser frame.
+	 * @param PPNode|string $node The node to normalize.
+	 * @return string The normalized value.
+	 */
+	private function normalizeParsedValue( Parser $parser, PPFrame $frame, $node ): string {
+		return rtrim( $parser->getStripState()->unstripBoth(
+			$frame->expand( $node, PPFrame::RECOVER_ORIG )
+		), "\n" );
 	}
 
 	/**
@@ -465,5 +575,14 @@ class WishStore {
 			$this->titleFormatter->getPrefixedDBkey( $identity ),
 			$this->titleFormatter->getPrefixedDBkey( $pagePrefix )
 		);
+	}
+
+	/**
+	 * Get a new wish ID using the IdGenerator.
+	 *
+	 * @return int The new wish ID.
+	 */
+	public function getNewId(): int {
+		return $this->idGenerator->getNewId( IdGenerator::TYPE_WISH );
 	}
 }

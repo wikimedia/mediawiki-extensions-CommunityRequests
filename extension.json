@@ -19,6 +19,9 @@
 			"WikimediaMessages": "*"
 		}
 	},
+	"TrackingCategories": [
+		"communityrequests-error-category"
+	],
 	"AutoloadNamespaces": {
 		"MediaWiki\\Extension\\CommunityRequests\\": "includes/"
 	},
@@ -37,12 +40,15 @@
 		"CommunityRequestsAlias": "CommunityRequests.i18n.alias.php"
 	},
 	"Hooks": {
+		"ChangeTagsListActive": "wish",
 		"GetDoubleUnderscoreIDs": "main",
+		"LinksUpdateComplete": "wish",
+		"ListDefinedTags": "wish",
 		"LoadExtensionSchemaUpdates": "schema",
 		"LoginFormValidErrorMessages": "main",
+		"PageDeleteComplete": "wish",
 		"ParserFirstCallInit": "wish",
-		"LinksUpdateComplete": "wish",
-		"PageDeleteComplete": "wish"
+		"BeforePageDisplay": "wish"
 	},
 	"HookHandlers": {
 		"main": {
@@ -51,7 +57,7 @@
 		},
 		"wish": {
 			"class": "MediaWiki\\Extension\\CommunityRequests\\HookHandler\\WishHookHandler",
-			"services": [ "MainConfig", "CommunityRequests.WishStore" ]
+			"services": [ "MainConfig", "CommunityRequests.WishStore", "UserFactory" ]
 		},
 		"schema": {
 			"class": "MediaWiki\\Extension\\CommunityRequests\\HookHandler\\SchemaHooks"
@@ -61,8 +67,10 @@
 		"WishlistIntake": {
 			"class": "MediaWiki\\Extension\\CommunityRequests\\Wish\\SpecialWishlistIntake",
 			"services": [
-				"ParserFactory",
-				"MainConfig"
+				"CommunityRequests.WishStore",
+				"WikiPageFactory",
+				"TitleParser",
+				"HookContainer"
 			]
 		}
 	},
@@ -72,6 +80,20 @@
 	},
 	"ResourceModules": {
 		"ext.communityrequests.intake": {
+			"class": "MediaWiki\\ResourceLoader\\CodexModule",
+			"codexComponents": [
+				"CdxButton",
+				"CdxCard",
+				"CdxCheckbox",
+				"CdxChipInput",
+				"CdxField",
+				"CdxIcon",
+				"CdxLabel",
+				"CdxMessage",
+				"CdxRadio",
+				"CdxSelect",
+				"CdxTextInput"
+			],
 			"packageFiles": [
 				"intake/init.js",
 				"intake/SpecialWishlistIntake.vue",
@@ -82,11 +104,7 @@
 				"intake/ProjectSection.vue",
 				"intake/StatusSection.vue",
 				"intake/WishTypeSection.vue",
-				"common/TemplateParser.js",
-				"common/TemplateParserError.js",
 				"common/Util.js",
-				"common/Wish.js",
-				"common/WishTemplate.js",
 				{
 					"name": "intake/icons.json",
 					"callback": "MediaWiki\\ResourceLoader\\CodexModule::getIcons",
@@ -103,6 +121,7 @@
 						"CommunityRequestsHomepage",
 						"CommunityRequestsWishCategory",
 						"CommunityRequestsWishPagePrefix",
+						"CommunityRequestsWishIndexPage",
 						"CommunityRequestsProjects",
 						"CommunityRequestsStatuses",
 						"CommunityRequestsWishTemplate",
@@ -112,7 +131,6 @@
 			],
 			"dependencies": [
 				"vue",
-				"@wikimedia/codex",
 				"mediawiki.api",
 				"mediawiki.util",
 				"mediawiki.language",
@@ -122,7 +140,6 @@
 				"mediawiki.storage"
 			],
 			"messages": [
-				"communityrequests-form-subtitle",
 				"communityrequests-title",
 				"communityrequests-title-description",
 				"communityrequests-description",
@@ -151,7 +168,11 @@
 				"communityrequests-wishtype-error",
 				"communityrequests-project-no-selection",
 				"communityrequests-audience-error",
-				"communityrequests-status"
+				"communityrequests-status",
+				"communityrequests-close",
+				"communityrequests-create-success",
+				"communityrequests-edit-success",
+				"communityrequests-view-all-wishes"
 			],
 			"factory": "\\MediaWiki\\Extension\\CommunityRequests\\Wish\\SpecialWishlistIntake::addResourceLoaderMessages"
 		},
@@ -199,120 +220,141 @@
 			"description": "Prefixed page title (including the namespace) of wishes. The wish ID will be appended to this.",
 			"value": "Community Wishlist/Wishes/W"
 		},
+		"CommunityRequestsWishIndexPage": {
+			"description": "The title of the page to use as the index for all wishes.",
+			"value": "Community Wishlist/Wishes"
+		},
 		"CommunityRequestsWishTemplate": {
-			"description": "The template page title for displaying and storing wishes.",
-			"value": "Template:Community Wishlist/Wish"
+			"description": "Configuration for the template that displays and stores wishes.",
+			"value": {
+				"page": "Template:Community Wishlist/Wish",
+				"params": {
+					"status": "status",
+					"type": "type",
+					"title": "title",
+					"focusArea": "focusarea",
+					"description": "description",
+					"audience": "audience",
+					"projects": "projects",
+					"otherProject": "otherproject",
+					"phabTasks": "tasks",
+					"proposer": "proposer",
+					"created": "created"
+				}
+			}
 		},
 		"CommunityRequestsWishTypes": {
 			"description": "The available types of wishes. Labels are message keys to be suffixed with -label and -description.",
-			"value": [
-				{
+			"value": {
+				"feature": {
 					"id": 0,
 					"label": "communityrequests-wishtype-feature"
 				},
-				{
+				"bug": {
 					"id": 1,
 					"label": "communityrequests-wishtype-bug"
 				},
-				{
+				"change": {
 					"id": 2,
 					"label": "communityrequests-wishtype-change"
 				},
-				{
+				"unknown": {
+					"default": true,
 					"id": 3,
 					"label": "communityrequests-wishtype-unknown"
 				}
-			]
+			}
 		},
 		"CommunityRequestsProjects": {
 			"description": "The projects to show in the project selection.",
-			"value": [
-				{
+			"value": {
+				"wikipedia": {
 					"id": 0,
 					"domain": "www.wikipedia.org",
 					"label": "project-localized-name-group-wikipedia",
 					"logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/Wikipedia-logo-v2.svg/263px-Wikipedia-logo-v2.svg.png"
 				},
-				{
+				"wikidata": {
 					"id": 1,
 					"domain": "www.wikidata.org",
 					"label": "project-localized-name-wikidatawiki",
 					"logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/Wikidata-logo.svg/200px-Wikidata-logo.svg.png"
 				},
-				{
+				"commons": {
 					"id": 2,
 					"domain": "commons.wikimedia.org",
 					"label": "project-localized-name-commonswiki",
 					"logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Commons-logo.svg/200px-Commons-logo.svg.png"
 				},
-				{
+				"wikisource": {
 					"id": 3,
 					"domain": "www.wikisource.org",
 					"label": "project-localized-name-group-wikisource",
 					"logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Wikisource-logo.svg/200px-Wikisource-logo.svg.png"
 				},
-				{
+				"wiktionary": {
 					"id": 4,
 					"domain": "www.wiktionary.org",
 					"label": "project-localized-name-group-wiktionary",
 					"logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Wiktionary-logo.svg/200px-Wiktionary-logo.svg.png"
 				},
-				{
+				"wikivoyage": {
 					"id": 5,
 					"domain": "www.wikivoyage.org",
 					"label": "project-localized-name-group-wikivoyage",
 					"logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/Wikivoyage-Logo-v3-icon.svg/200px-Wikivoyage-Logo-v3-icon.svg.png"
 				},
-				{
+				"wikiquote": {
 					"id": 6,
 					"domain": "www.wikiquote.org",
 					"label": "project-localized-name-group-wikiquote",
 					"logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Wikiquote-logo.svg/200px-Wikiquote-logo.svg.png"
 				},
-				{
+				"wikiversity": {
 					"id": 7,
 					"domain": "www.wikiversity.org",
 					"label": "project-localized-name-group-wikiversity",
 					"logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Wikiversity_logo_2017.svg/200px-Wikiversity_logo_2017.svg.png"
 				},
-				{
+				"wikifunctions": {
 					"id": 8,
 					"domain": "www.wikifunctions.org",
 					"label": "project-localized-name-wikifunctionswiki",
 					"logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0c/Wikifunctions-logo.svg/200px-Wikifunctions-logo.svg.png"
 				},
-				{
+				"wikispecies": {
 					"id": 9,
 					"domain": "species.wikimedia.org",
 					"label": "project-localized-name-specieswiki",
 					"logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/Wikispecies-logo.svg/200px-Wikispecies-logo.svg.png"
 				},
-				{
+				"wikinews": {
 					"id": 10,
 					"domain": "www.wikinews.org",
 					"label": "project-localized-name-group-wikinews",
 					"logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Wikinews-logo.svg/200px-Wikinews-logo.svg.png"
 				},
-				{
+				"metawiki": {
 					"id": 11,
 					"domain": "meta.wikimedia.org",
 					"label": "project-localized-name-metawiki",
 					"logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Wikimedia_Community_Logo.svg/200px-Wikimedia_Community_Logo.svg.png"
 				},
-				{
+				"wmcs": {
 					"id": 12,
 					"domain": "wmcloud.org",
 					"label": "wikimedia-otherprojects-cloudservices",
 					"logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/Wikimedia_Cloud_Services_logo.svg/200px-Wikimedia_Cloud_Services_logo.svg.png"
 				}
-			]
+			}
 		},
 		"CommunityRequestsStatuses": {
 			"description": "The available statuses for wishes and focus areas.",
 			"value": {
 				"draft": {
 					"id": 0,
-					"label": "communityrequests-status-draft"
+					"label": "communityrequests-status-draft",
+					"default": true
 				},
 				"submitted": {
 					"id": 1,

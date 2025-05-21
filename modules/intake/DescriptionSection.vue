@@ -1,51 +1,54 @@
 <template>
-	<section class="wishlist-intake-description">
-		<cdx-field
-			:status="titlestatus"
-			:messages="titlemessage"
-			:disabled="disabled"
-			class="community-wishlist-title-field"
+	<cdx-field
+		class="ext-communityrequests-intake__title"
+		:status="titleStatus"
+		:messages="titleMessage"
+	>
+		<cdx-text-input
+			name="wishtitle"
+			:model-value="title"
+			@input="$emit( 'update:title', $event.target.value )"
 		>
-			<cdx-text-input
-				:model-value="title"
-				@input="$emit( 'update:title', $event.target.value.trim() )"
-			>
-			</cdx-text-input>
-			<template #label>
-				{{ $i18n( 'communityrequests-title' ).text() }}
-			</template>
-			<template #description>
-				{{ $i18n( 'communityrequests-title-description' ).text() }}
-			</template>
-		</cdx-field>
-		<cdx-field
-			:status="descriptionstatus"
-			:messages="descriptionmessage"
-			:disabled="disabled"
-			class="community-wishlist-description-field"
+		</cdx-text-input>
+		<template #label>
+			{{ $i18n( 'communityrequests-title' ).text() }}
+		</template>
+		<template #description>
+			{{ $i18n( 'communityrequests-title-description' ).text() }}
+		</template>
+	</cdx-field>
+	<cdx-field
+		class="ext-communityrequests-intake__description"
+		:status="descriptionStatus"
+		:messages="descriptionMessage"
+	>
+		<div
+			class="ext-communityrequests-intake__textarea-wrapper
+				ext-communityrequests-intake__textarea-wrapper--loading"
 		>
-			<div class="wishlist-intake-textarea-wrapper wishlist-intake-textarea-wrapper--loading">
-				<textarea
-					class="wishlist-intake-textarea"
-					:rows="8"
-					:value="description"
-					@input="$emit( 'update:description', $event.target.value.trim() )">
-				</textarea>
-			</div>
-			<template #label>
-				{{ $i18n( 'communityrequests-description' ).text() }}
-			</template>
-			<template #description>
-				{{ $i18n( 'communityrequests-description-description' ).text() }}
-			</template>
-		</cdx-field>
-	</section>
+			<textarea
+				class="ext-communityrequests-intake__textarea"
+				name="description"
+				:rows="8"
+				:value="description"
+				readonly="readonly"
+				@change="$emit( 'update:description', $event.target.value )">
+			</textarea>
+		</div>
+		<template #label>
+			{{ $i18n( 'communityrequests-description' ).text() }}
+		</template>
+		<template #description>
+			{{ $i18n( 'communityrequests-description-description' ).text() }}
+		</template>
+	</cdx-field>
 </template>
 
 <script>
-const { defineComponent } = require( 'vue' );
-const { CdxField, CdxTextInput } = require( '@wikimedia/codex' );
+const { computed, defineComponent, onMounted, ComputedRef } = require( 'vue' );
+const { CdxField, CdxTextInput } = require( '../codex.js' );
 const DescriptionField = require( './DescriptionField.js' );
+const { CommunityRequestsHomepage } = require( '../common/config.json' );
 
 // This must live here outside the Vue component to prevent Vue from interfering with VE.
 let descriptionField;
@@ -59,64 +62,57 @@ module.exports = exports = defineComponent( {
 	props: {
 		title: { type: String, default: '' },
 		description: { type: String, default: '' },
-		titlestatus: { type: String, default: 'default' },
-		descriptionstatus: { type: String, default: 'default' },
-		disabled: { type: Boolean, default: false }
+		titleStatus: { type: String, default: 'default' },
+		descriptionStatus: { type: String, default: 'default' }
 	},
 	emits: [
 		'update:title',
 		'update:description',
 		'update:pre-submit-promise'
 	],
-	data() {
-		return {
-			titlemessage: {},
-			descriptionmessage: {}
-		};
-	},
-	methods: {
-		setupDescriptionField() {
+	setup( props, { emit } ) {
+		/**
+		 * Status message for the title field.
+		 *
+		 * @type {ComputedRef<Object>}
+		 */
+		const titleMessage = computed(
+			() => props.titleStatus === 'error' ?
+				{ error: mw.msg( 'communityrequests-title-error', 5, 100 ) } :
+				{}
+		);
+		/**
+		 * Status message for the description field.
+		 *
+		 * @type {ComputedRef<Object>}
+		 */
+		const descriptionMessage = computed(
+			() => props.descriptionStatus === 'error' ?
+				{ error: mw.msg( 'communityrequests-description-error', 50 ) } :
+				{}
+		);
+
+		onMounted( async () => {
 			if ( descriptionField ) {
 				return;
 			}
-			const textarea = document.querySelector( '.wishlist-intake-textarea' );
-			descriptionField = new DescriptionField( textarea, this.description );
+			// Use $wgCommunityRequestsHomepage as the context for VE.
+			mw.config.set( 'wgRelevantPageName', CommunityRequestsHomepage );
+			const textarea = document.querySelector( '.ext-communityrequests-intake__textarea' );
+			descriptionField = new DescriptionField( textarea );
 			descriptionField.setPending( true );
-			return mw.loader.using( mw.config.get( 'intakeVeModules' ) ).then( () => {
-				descriptionField.init();
-				this.$emit(
-					'update:pre-submit-promise',
-					descriptionField.syncChangesToTextarea.bind( descriptionField )
-				);
-			} );
-		}
-	},
-	watch: {
-		titlestatus: {
-			handler( newStatus ) {
-				if ( newStatus === 'error' ) {
-					this.titlemessage = {
-						error: mw.msg( 'communityrequests-title-error', 5, 100 )
-					};
-				} else {
-					this.titlemessage = {};
-				}
-			}
-		},
-		descriptionstatus: {
-			handler( newStatus ) {
-				if ( newStatus === 'error' ) {
-					this.descriptionmessage = {
-						error: mw.msg( 'communityrequests-description-error', 50 )
-					};
-				} else {
-					this.descriptionmessage = {};
-				}
-			}
-		}
-	},
-	mounted() {
-		this.setupDescriptionField();
+			await mw.loader.using( mw.config.get( 'intakeVeModules' ) );
+			descriptionField.init();
+			emit(
+				'update:pre-submit-promise',
+				descriptionField.syncChangesToTextarea.bind( descriptionField )
+			);
+		} );
+
+		return {
+			titleMessage,
+			descriptionMessage
+		};
 	}
 } );
 </script>
@@ -126,8 +122,18 @@ module.exports = exports = defineComponent( {
 
 @min-height-editor: 194px;
 
+.ext-communityrequests-intake__textarea {
+	opacity: 0.5;
+	pointer-events: none;
+
+	.skin-minerva & {
+		box-sizing: border-box;
+		width: 100%;
+	}
+}
+
 /* Overrides to make OOUI sort of mimic Codex */
-.wishlist-intake-textarea-wrapper {
+.ext-communityrequests-intake__textarea-wrapper {
 	border: @border-base;
 
 	.ve-ui-surface-placeholder,
@@ -139,7 +145,7 @@ module.exports = exports = defineComponent( {
 		min-height: @min-height-editor;
 	}
 
-	.wishlist-intake-ve-surface {
+	.ext-communityrequests-intake__ve-surface {
 		transition-property: @transition-property-base;
 		/* XXX: doesn't appear to be a Codex token for this */
 		transition-duration: 0.25s;
@@ -151,8 +157,7 @@ module.exports = exports = defineComponent( {
 		}
 	}
 
-	/* TODO: Replace with official Codex loading styles once established. */
-	/* See https://w.wiki/AHp3 */
+	/* TODO: Replace with official Codex loading styles once established. See https://w.wiki/AHp3 */
 	&--loading {
 		background-color: @background-color-interactive;
 		background-image: linear-gradient( 135deg, @background-color-base 25%, @background-color-transparent 25%, @background-color-transparent 50%, @background-color-base 50%, @background-color-base 75%, @background-color-transparent 75%, @background-color-transparent );
@@ -172,15 +177,5 @@ module.exports = exports = defineComponent( {
 			}
 		}
 	}
-}
-
-.cdx-field--disabled .wishlist-intake-textarea-wrapper {
-	opacity: 0.5;
-	pointer-events: none;
-}
-
-.skin-minerva .wishlist-intake-textarea {
-	box-sizing: border-box;
-	width: 100%;
 }
 </style>

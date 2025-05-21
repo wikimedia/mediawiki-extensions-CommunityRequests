@@ -1,90 +1,82 @@
 <template>
-	<form @submit.prevent="handleSubmit">
+	<cdx-field
+		class="ext-communityrequests-intake__fieldset"
+		:is-fieldset="true"
+		:disabled="formDisabled"
+		@change="formChanged = true"
+	>
 		<status-section
 			v-if="isStaff"
 			v-model:status="wish.status"
-			:disabled="formDisabled"
-			@update:status="updateField( 'status', $event )"
+			@update:status="formChanged = true"
 		></status-section>
 		<description-section
 			v-model:title="wish.title"
 			v-model:description="wish.description"
-			:titlestatus="titleStatus"
-			:descriptionstatus="descriptionStatus"
-			:disabled="formDisabled"
-			@update:title="updateTitle"
-			@update:description="updateField( 'description', $event )"
+			:title-status="titleStatus"
+			:description-status="descriptionStatus"
+			@update:description="formChanged = true"
 			@update:pre-submit-promise="addPreSubmitFn"
 		></description-section>
 		<wish-type-section
-			v-model:type="wish.type"
+			:type="wish.type"
 			:status="typeStatus"
-			:disabled="formDisabled"
-			@update:type="updateField( 'type', $event )">
-		</wish-type-section>
+			@update:type="$event => ( wish.type = $event )"
+		></wish-type-section>
 		<project-section
 			v-model:projects="wish.projects"
-			v-model:otherproject="wish.otherproject"
-			:projects="projects"
-			:otherproject="otherproject"
-			:disabled="formDisabled"
+			v-model:other-project="wish.otherProject"
 			:status="projectStatus"
-			:statustype="projectStatusType"
-			@update:projects="updateField( 'projects', $event )"
-			@update:otherproject="updateField( 'otherproject', $event )">
-		</project-section>
+			:status-type="projectStatusType"
+		></project-section>
 		<audience-section
 			v-model:audience="wish.audience"
 			:status="audienceStatus"
-			:disabled="formDisabled"
-			@update:audience="updateField( 'audience', $event )"
 		></audience-section>
 		<phabricator-tasks
-			v-model:tasks="wish.tasks"
-			:disabled="formDisabled"
-			@update:tasks="updateField( 'tasks', $event )"
+			v-model:tasks="wish.phabTasks"
 		></phabricator-tasks>
 
-		<section class="wishlist-intake-form-footer">
+		<footer class="ext-communityrequests-intake__footer">
 			<hr>
 			<!-- eslint-disable-next-line vue/no-v-html -->
 			<p v-html="$i18n( 'wikimedia-copyrightwarning' ).parse()"></p>
 			<cdx-button
 				weight="primary"
 				action="progressive"
-				:disabled="formDisabled"
-				class="wishlist-intake-submit"
+				class="ext-communityrequests-intake__submit"
+				type="submit"
 				@click="handleSubmit"
 			>
 				<span v-if="exists">{{ $i18n( 'communityrequests-save' ).text() }}</span>
 				<span v-else>{{ $i18n( 'communityrequests-publish' ).text() }}</span>
 			</cdx-button>
 			<a
-				:href="returnto"
+				:href="returnTo"
 				class="cdx-button cdx-button--fake-button--enabled
-				cdx-button--weight-quiet wishlist-intake-cancel"
+			cdx-button--weight-quiet ext-communityrequests-intake__cancel"
 			>
 				{{ $i18n( 'cancel' ).text() }}
 			</a>
 			<cdx-message
 				v-if="formError"
 				type="error"
-				class="wishlist-intake-form-error"
+				class="ext-communityrequests-intake__form-error"
 			>
 				<!-- eslint-disable-next-line vue/no-v-html -->
 				<p><strong v-html="formErrorMsg"></strong></p>
 				<!-- eslint-disable-next-line vue/no-v-html -->
 				<div v-html="formError"></div>
 			</cdx-message>
-		</section>
-	</form>
+		</footer>
+	</cdx-field>
 </template>
 
 <script>
-const { defineComponent, reactive } = require( 'vue' );
-const { CdxButton, CdxMessage } = require( '@wikimedia/codex' );
-const config = require( '../common/config.json' );
-const Wish = require( '../common/Wish.js' );
+/* eslint-disable vue/no-unused-properties */
+const { computed, defineComponent, nextTick, onMounted, reactive, ref, ComputedRef, Ref } = require( 'vue' );
+const { CdxButton, CdxField, CdxMessage } = require( '../codex.js' );
+const { CommunityRequestsHomepage, CommunityRequestsStatuses } = require( '../common/config.json' );
 const Util = require( '../common/Util.js' );
 const StatusSection = require( './StatusSection.vue' );
 const WishTypeSection = require( './WishTypeSection.vue' );
@@ -94,6 +86,8 @@ const AudienceSection = require( './AudienceSection.vue' );
 const PhabricatorTasks = require( './PhabricatorTasks.vue' );
 
 const api = new mw.Api();
+const defaultStatusKey = Object.keys( CommunityRequestsStatuses )
+	.find( ( key ) => CommunityRequestsStatuses[ key ].default );
 
 // Functions returning Promises that must be resolved before the form can be validated/submitted.
 // This is outside the Vue component as it does not need to be reactive.
@@ -104,6 +98,7 @@ module.exports = exports = defineComponent( {
 	components: {
 		AudienceSection,
 		CdxButton,
+		CdxField,
 		CdxMessage,
 		DescriptionSection,
 		PhabricatorTasks,
@@ -113,156 +108,161 @@ module.exports = exports = defineComponent( {
 	},
 	props: {
 		audience: { type: String, default: '' },
-		baselang: { type: String, default: mw.config.get( 'wgUserLanguage' ) },
-		created: { type: String, default: '~~~~~' },
 		description: { type: String, default: '' },
-		otherproject: { type: String, default: '' },
+		otherProject: { type: String, default: '' },
+		phabTasks: { type: Array, default: () => [] },
 		projects: { type: Array, default: () => [] },
-		proposer: { type: String, default: '~~~' },
-		status: { type: String, default: Wish.STATUS_SUBMITTED },
-		tasks: { type: Array, default: () => [] },
+		proposer: { type: String, default: mw.config.get( 'wgUserName' ) },
+		status: {
+			type: String,
+			default: defaultStatusKey || Object.keys( CommunityRequestsStatuses )[ 0 ]
+		},
 		title: { type: String, default: '' },
-		type: { type: String, default: null },
-		area: { type: String, default: '' },
-		// These are from the initial fetch of wish content,
-		// and are later used for edit conflict detection on form submission.
-		basetimestamp: { type: String, default: '' },
-		curtimestamp: { type: String, default: '' }
+		type: { type: String, default: '' }
 	},
 	setup( props ) {
-		// Customize the subtitle.
-		document.querySelector( '#mw-content-subtitle' ).textContent = mw.msg( 'communityrequests-form-subtitle' );
+		// Reactive properties
 
-		// Reactive state for the form fields.
-		// This should map directly to properties of the Wish class.
-		const wish = reactive( {
-			audience: props.audience,
-			baselang: props.baselang,
-			created: props.created,
-			description: props.description,
-			otherproject: props.otherproject,
-			projects: props.projects,
-			proposer: props.proposer,
-			status: props.status,
-			tasks: props.tasks,
-			title: props.title,
-			type: props.type,
-			area: props.area
-		} );
+		/**
+		 * Reactive object representing the wish being edited or created.
+		 *
+		 * @type {Ref<Object>}
+		 */
+		const wish = reactive( Object.assign( {}, props ) );
+		/**
+		 * Status of the type field.
+		 *
+		 * @type {Ref<string>}
+		 */
+		const typeStatus = ref( 'default' );
+		/**
+		 * Status of the project field.
+		 *
+		 * @type {Ref<string>}
+		 */
+		const projectStatus = ref( 'default' );
+		/**
+		 * The type of error status for the project field.
+		 *
+		 * @type {Ref<string>}
+		 */
+		const projectStatusType = ref( 'default' );
+		/**
+		 * Status of the title field.
+		 *
+		 * @type {Ref<string>}
+		 */
+		const titleStatus = ref( 'default' );
+		/**
+		 * Status of the description field.
+		 *
+		 * @type {Ref<string>}
+		 */
+		const descriptionStatus = ref( 'default' );
+		/**
+		 * Status of the audience field.
+		 *
+		 * @type {Ref<string>}
+		 */
+		const audienceStatus = ref( 'default' );
+		/**
+		 * Whether the form has been changed since it was loaded.
+		 *
+		 * @type {Ref<boolean>}
+		 */
+		const formChanged = ref( false );
+		/**
+		 * Disabled state of the form fields and submit button.
+		 *
+		 * @type {Ref<boolean>}
+		 */
+		const formDisabled = ref( false );
+		/**
+		 * Error state of the form. Either false (no error), true (generic error),
+		 * or a string with a specific error message.
+		 *
+		 * @type {Ref<boolean|string>}
+		 */
+		const formError = ref( false );
 
-		return { wish };
-	},
-	data() {
-		return {
-			exists: false,
-			pagetitle: '',
-			typeStatus: 'default',
-			projectStatus: 'default',
-			projectStatusType: 'default',
-			titleStatus: 'default',
-			descriptionStatus: 'default',
-			audienceStatus: 'default',
-			/**
-			 * Whether the form has been changed since it was loaded.
-			 *
-			 * @type {boolean}
-			 */
-			formChanged: false,
-			/**
-			 * Disabled state of the form fields and submit button.
-			 *
-			 * @type {boolean}
-			 */
-			formDisabled: false,
-			/**
-			 * Error state of the form. Either false (no error), true (generic error),
-			 * or a string with a specific error message.
-			 *
-			 * @type {boolean|string}
-			 */
-			formError: false,
-			/**
-			 * Whether the form has been submitted.
-			 *
-			 * @type {boolean}
-			 */
-			formSubmitted: false,
-			/**
-			 * @type {Object}
-			 */
-			allowCloseWindow: mw.confirmCloseWindow(),
-			/**
-			 * URL to return to after the form is submitted.
-			 *
-			 * @type {string}
-			 */
-			returnto: mw.util.getUrl( config.CommunityRequestsHomepage )
-		};
-	},
-	computed: {
-		isStaff: Util.isStaff,
-		formErrorMsg: () => mw.message(
+		// Computed properties
+
+		/**
+		 * Error message to display when the form has an error.
+		 *
+		 * @type {ComputedRef<string>}
+		 */
+		const formErrorMsg = computed( () => mw.message(
 			'communityrequests-form-error',
-			config.CommunityRequestsHomepage
-		).parse()
-	},
-	methods: {
-		updateField( field, value ) {
-			if ( this.wish[ field ] !== value ) {
-				this.wish[ field ] = value;
-				this.formChanged = true;
-			}
-		},
-		updateTitle( title ) {
-			this.updateField( 'title', title );
-			if ( title && !this.exists ) {
-				// FIXME: this code may not be needed anymore?
-				// If this is a new proposal, keep the new page title in sync with the title field.
-				// Existing proposals can't change their page title via the form (but can change the
-				// title field).
-				title = mw.Title.newFromUserInput( this.wish.title.replaceAll( '/', '_' ) );
-				this.pagetitle = Util.getWishPageTitleFromSlug( title.getMainText() );
-			}
-			// VisualEditor and other scripts rely on this being the correct post-save page name.
-			// If the wish title is blank, we use the current page name as a fallback.
-			mw.config.set(
-				'wgRelevantPageName',
-				!this.wish.title ? Util.getPageName() : this.pagetitle
-			);
-		},
+			`Talk:${ CommunityRequestsHomepage }`
+		).parse() );
+
+		// Non-reactive properties
+
+		/**
+		 * Whether the user is a staff member.
+		 *
+		 * @todo replace with proper user group
+		 * @type {boolean}
+		 */
+		const isStaff = Util.isStaff();
+		/**
+		 * Whether the wish already exists (is being edited) or is a new wish.
+		 *
+		 * @type {boolean}
+		 */
+		const exists = Util.isWishEdit();
+		/**
+		 * URL to return to after the form is submitted.
+		 *
+		 * @type {string}
+		 */
+		const returnTo = mw.util.getUrl( exists ?
+			Util.getWishPageTitleFromId( mw.config.get( 'intakeWishId' ) ) :
+			CommunityRequestsHomepage
+		);
+		/**
+		 * The <form> element.
+		 *
+		 * @type {HTMLFormElement}
+		 */
+		let form;
+
+		// Functions
+
 		/**
 		 * Validate the form fields.
 		 *
 		 * @return {boolean} true if the form is valid, false otherwise.
 		 */
-		validateForm() {
-			this.formError = false;
+		function validateForm() {
+			formError.value = false;
 			// Remove translate tags before checking title length.
-			const title = this.wish.title
-				.replaceAll( /<\/?translate>/g, '' )
-				.replaceAll( /<!--T:[0-9]+-->/g, '' );
-			this.titleStatus = ( title.length < 5 || title.length > 100 ) ? 'error' : 'default';
-			this.descriptionStatus = ( this.wish.description.length < 50 ) ? 'error' : 'default';
-			this.typeStatus = this.wish.type === null ? 'error' : 'default';
+			const title = wish.title
+				.replace( /<\/?translate>/g, '' )
+				.replace( /<!--T:[0-9]+-->/g, '' );
+			titleStatus.value = ( title.length < 5 || title.length > 100 ) ? 'error' : 'default';
+			descriptionStatus.value = ( wish.description.length < 50 ) ? 'error' : 'default';
+			typeStatus.value = wish.type === '' ? 'error' : 'default';
 			// No project selected, other project is empty
-			if ( this.wish.projects.length === 0 && !this.wish.otherproject ) {
-				this.projectStatus = 'error';
-				this.projectStatusType = 'noSelection';
+			if ( wish.projects.length === 0 && !wish.otherProject ) {
+				projectStatus.value = 'error';
+				projectStatusType.value = 'noSelection';
 				// Other project has content > 3, but no other project is entered
-			} else if ( this.wish.otherproject.length < 3 && this.wish.projects.length < 1 ) {
-				this.projectStatus = 'error';
-				this.projectStatusType = 'invalidOther';
+			} else if ( wish.otherProject.length < 3 && wish.projects.length < 1 ) {
+				projectStatus.value = 'error';
+				projectStatusType.value = 'invalidOther';
 			} else {
-				this.projectStatus = 'default';
-				this.projectStatusType = 'default';
+				projectStatus.value = 'default';
+				projectStatusType.value = 'default';
 			}
-			this.audienceStatus = ( this.wish.audience.length < 5 || this.wish.audience.length > 300 ) ? 'error' : 'default';
-			return this.typeStatus !== 'error' &&
-				this.titleStatus !== 'error' &&
-				this.descriptionStatus !== 'error' &&
-				this.audienceStatus !== 'error' &&
-				this.projectStatus !== 'error';
-		},
+			audienceStatus.value = ( wish.audience.length < 5 || wish.audience.length > 300 ) ? 'error' : 'default';
+			return typeStatus.value !== 'error' &&
+				titleStatus.value !== 'error' &&
+				descriptionStatus.value !== 'error' &&
+				audienceStatus.value !== 'error' &&
+				projectStatus.value !== 'error';
+		}
 		/**
 		 * Add a function to be called before the form is submitted.
 		 * The function is expected to return a Promise, which is
@@ -270,98 +270,32 @@ module.exports = exports = defineComponent( {
 		 *
 		 * @param {Function<Promise|jQuery.Promise>} fn
 		 */
-		addPreSubmitFn( fn ) {
+		function addPreSubmitFn( fn ) {
 			preSubmitFns.push( fn );
-		},
-		/**
-		 * Get a unique page title by appending incremental numbers to the end of the title.
-		 *
-		 * @param {string} pageTitle
-		 * @param {number} [pageCounter]
-		 * @return {jQuery.Promise<string>|Promise<string>}
-		 */
-		getUniquePageTitle( pageTitle, pageCounter = 1 ) {
-			// A wish being edited is always going to already have a unique title.
-			if ( Util.isWishEdit() ) {
-				return Promise.resolve( pageTitle );
-			}
-			// Otherwise, see if it exists and start appending numbers.
-			const newTitle = pageTitle + ( pageCounter > 1 ? ' ' + pageCounter : '' );
-			return this.pageExists( newTitle ).then( ( exists ) => {
-				if ( exists ) {
-					return this.getUniquePageTitle( pageTitle, pageCounter + 1 );
-				} else {
-					return Promise.resolve( newTitle );
-				}
-			} );
-		},
-		/**
-		 * Get a promise for saving the wish page.
-		 *
-		 * @param {string} wikitext
-		 * @return {jQuery.Promise}
-		 */
-		getEditPromise( wikitext ) {
-			const params = api.assertCurrentUser( {
-				action: 'edit',
-				title: this.pagetitle,
-				text: wikitext,
-				formatversion: 2,
-				// Tag the edit to track usage of the form.
-				tags: [ 'community-wishlist' ],
-				// Protect against conflicts
-				basetimestamp: this.basetimestamp,
-				starttimestamp: this.curtimestamp,
-				// Localize errors
-				uselang: mw.config.get( 'wgUserLanguage' ),
-				errorformat: 'html',
-				errorlang: mw.config.get( 'wgUserLanguage' ),
-				errorsuselocal: true
-			} );
-			if ( Util.isNewWish() ) {
-				params.createonly = true;
-			} else {
-				params.nocreate = true;
-			}
-			return api.postWithEditToken( params );
-		},
+		}
 		/**
 		 * Handle form submission.
+		 *
+		 * @param {Event} e
 		 */
-		handleSubmit() {
-			this.formDisabled = true;
+		function handleSubmit( e ) {
+			e.preventDefault();
+			formDisabled.value = true;
 			Promise.all( preSubmitFns.map( ( p ) => p() ) ).then( () => {
-				// @todo Handle this nicer?
-				if ( !this.validateForm() ) {
-					this.formDisabled = false;
+				formDisabled.value = false;
+
+				if ( !validateForm() ) {
 					return;
 				}
 
-				// Save the wish page, first checking for duplicate titles.
-				this.getUniquePageTitle( this.pagetitle ).then( ( uniqueTitle ) => {
-					this.pagetitle = uniqueTitle;
-					const wikitext = Util.getWishTemplate().getWikitext( new Wish( this.wish ) );
-					this.getEditPromise( wikitext ).then( ( saveResult ) => {
-						if ( saveResult.edit && !saveResult.edit.nochange ) {
-							// Replicate what is done in postEdit's fireHookOnPageReload() function,
-							// but for a different page.
-							mw.storage.session.set(
-								// Same storage key structure as in MediaWiki's
-								// resources/src/mediawiki.action/mediawiki.action.view.postEdit.js
-								'mw-PostEdit' + this.pagetitle.replaceAll( ' ', '_' ),
-								Util.isWishEdit() ? 'saved' : 'created',
-								// Same duration as EditPage::POST_EDIT_COOKIE_DURATION.
-								1200
-							);
-						}
-						this.formSubmitted = true; // @todo Unused variable?
-						// Allow the window to close/navigate after submission was successful.
-						this.allowCloseWindow.release();
-						window.location.replace( mw.util.getUrl( this.pagetitle ) );
-					} ).fail( this.handleError.bind( this ) );
+				// Allows mw.confirmCloseWindow to release the lock on page unload.
+				formChanged.value = false;
+
+				nextTick( () => {
+					document.querySelector( '#ext-communityrequests-intake-form' ).submit();
 				} );
-			} ).catch( this.handleError.bind( this ) );
-		},
+			} ).catch( handleError.bind( this ) );
+		}
 		/**
 		 * Handle an error from the API.
 		 *
@@ -369,33 +303,39 @@ module.exports = exports = defineComponent( {
 		 * @param {Object} error Response from the API
 		 * @param {string} error.info
 		 */
-		handleError( errObj, error ) {
+		function handleError( errObj, error ) {
 			Util.logError( 'edit failed', errObj );
-			this.formError = api.getErrorMessage( error ).html();
-			this.formDisabled = false;
-		},
-		/**
-		 * Check if a page exists.
-		 *
-		 * @param {string} title
-		 * @return {Promise<boolean>}
-		 */
-		pageExists( title ) {
-			return api.get( {
-				action: 'query',
-				format: 'json',
-				titles: title
-			} ).then( ( res ) => Promise.resolve( res.query.pages[ -1 ] === undefined ) );
+			formError.value = api.getErrorMessage( error ).html();
+			formDisabled.value = false;
 		}
-	},
-	beforeMount() {
-		this.pagetitle = Util.getWishPageTitleFromSlug( Util.getWishSlug() );
-		if ( Util.isNewWish() ) {
-			this.exists = false;
-		} else {
-			this.returnto = mw.util.getUrl( this.pagetitle );
-			this.exists = true;
-		}
+
+		// Lifecycle hooks
+		onMounted( () => {
+			// Prevents the window from being closed or navigated away from if the form is dirty.
+			mw.confirmCloseWindow( { test: () => formChanged.value } );
+
+			form = document.querySelector( '#ext-communityrequests-intake-form' );
+			form.addEventListener( 'submit', handleSubmit );
+		} );
+
+		return {
+			wish,
+			typeStatus,
+			projectStatus,
+			projectStatusType,
+			titleStatus,
+			descriptionStatus,
+			audienceStatus,
+			formChanged,
+			formDisabled,
+			formError,
+			formErrorMsg,
+			isStaff,
+			exists,
+			returnTo,
+			addPreSubmitFn,
+			handleSubmit
+		};
 	}
 } );
 </script>
@@ -403,24 +343,29 @@ module.exports = exports = defineComponent( {
 <style lang="less">
 @import 'mediawiki.skin.variables.less';
 
-.wishlist-intake-container {
-	.cdx-field,
-	section:last-child,
-	.wishlist-intake-form-error {
+// Force full-width.
+.mw-htmlform-codex {
+	max-width: unset;
+}
+
+.ext-communityrequests-intake {
+	.ext-communityrequests-intake__fieldset .cdx-field:not( .ext-communityrequests-intake__status ),
+	&__footer,
+	&__form-error {
 		margin-top: @spacing-200;
 	}
-}
 
-.wishlist-intake-form-footer .cdx-checkbox {
-	margin: @spacing-100 auto;
-}
+	&__cancel {
+		margin-left: @spacing-75;
 
-.wishlist-intake-cancel {
-	margin-left: @spacing-75;
-}
+		[ dir='rtl' ] & {
+			margin-left: 0;
+			margin-right: @spacing-75;
+		}
+	}
 
-[ dir='rtl' ] .wishlist-intake-cancel {
-	margin-left: 0;
-	margin-right: @spacing-75;
+	.cdx-label:not( .cdx-radio__label, .cdx-checkbox__label ) .cdx-label__label__text {
+		font-weight: @font-weight-bold;
+	}
 }
 </style>

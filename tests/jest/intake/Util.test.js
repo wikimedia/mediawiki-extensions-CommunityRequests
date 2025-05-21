@@ -1,5 +1,5 @@
 const Util = require( '../../../modules/common/Util.js' );
-const wgConfig = require( '../../../modules/common/config.json' );
+const { CommunityRequestsWishPagePrefix } = require( '../../../modules/common/config.json' );
 
 const testCases = [
 	{
@@ -9,24 +9,22 @@ const testCases = [
 			wgPageName: 'Special:WishlistIntake',
 			wgCanonicalSpecialPageName: 'WishlistIntake',
 			paramValue: null,
-			intakeWishTitle: null
+			intakeWishId: null
 		},
 		expectations: {
 			isNewWish: true,
 			isWishView: false,
 			isWishEdit: false,
 			isManualWishEdit: false,
-			isWishRelatedPage: true,
-			shouldShowForm: true,
-			slug: ''
+			isWishRelatedPage: true
 		}
 	},
 	{
 		title: 'viewing a wish',
 		config: {
 			wgAction: 'view',
-			wgPageName: wgConfig.CommunityRequestsWishPagePrefix + 'Example_wish',
-			wgCategories: [ wgConfig.CommunityRequestsWishCategory ],
+			wgPageName: CommunityRequestsWishPagePrefix + 'W123',
+			wgCanonicalSpecialPageName: false,
 			paramValue: null
 		},
 		expectations: {
@@ -34,38 +32,32 @@ const testCases = [
 			isWishView: true,
 			isWishEdit: false,
 			isManualWishEdit: false,
-			isWishRelatedPage: true,
-			shouldShowForm: false,
-			slug: 'Example wish'
+			isWishRelatedPage: true
 		}
 	},
 	{
 		title: 'editing a wish',
 		config: {
 			wgAction: 'view',
-			wgPageName: 'Special:WishlistIntake/Example_wish',
+			wgPageName: 'Special:WishlistIntake/W123',
 			wgCanonicalSpecialPageName: 'WishlistIntake',
-			wgCategories: [ 'Community Wishlist/Wishes' ],
 			paramValue: '1',
-			intakeWishTitle: 'Example wish'
+			intakeWishId: 123
 		},
 		expectations: {
 			isNewWish: false,
 			isWishView: false,
 			isWishEdit: true,
 			isManualWishEdit: false,
-			isWishRelatedPage: true,
-			shouldShowForm: true,
-			slug: 'Example wish'
+			isWishRelatedPage: true
 		}
 	},
 	{
 		title: 'manually editing a wish',
 		config: {
 			wgAction: 'edit',
-			wgPageName: wgConfig.CommunityRequestsWishPagePrefix + 'Example_wish',
+			wgPageName: CommunityRequestsWishPagePrefix + 'W123',
 			wgCanonicalSpecialPageName: false,
-			wgCategories: [],
 			paramValue: null
 		},
 		expectations: {
@@ -73,9 +65,7 @@ const testCases = [
 			isWishView: false,
 			isWishEdit: false,
 			isManualWishEdit: true,
-			isWishRelatedPage: true,
-			shouldShowForm: false,
-			slug: 'Example wish'
+			isWishRelatedPage: true
 		}
 	}
 ];
@@ -84,21 +74,7 @@ describe( 'Util', () => {
 	it.each( testCases )(
 		'Util ($title)',
 		( { config, expectations } ) => {
-			// Mock known mw function calls.
-			mw.config.get = jest.fn().mockImplementation( ( key ) => {
-				// Check key against a list that we know are properly mocked.
-				const expectedKeys = [
-					'wgPageName',
-					'wgCanonicalSpecialPageName',
-					'wgCategories',
-					'wgAction',
-					'intakeWishTitle'
-				];
-				if ( !expectedKeys.includes( key ) ) {
-					throw new Error( 'Unexpected key: ' + key );
-				}
-				return config[ key ];
-			} );
+			mockMwConfigGet( config );
 			mw.util.getParamValue = jest.fn().mockImplementation( () => config.paramValue );
 
 			// Assert expectations.
@@ -106,7 +82,6 @@ describe( 'Util', () => {
 			expect( Util.isWishView() ).toStrictEqual( expectations.isWishView );
 			expect( Util.isWishEdit() ).toStrictEqual( expectations.isWishEdit );
 			expect( Util.isManualWishEdit() ).toStrictEqual( expectations.isManualWishEdit );
-			// expect( Util.getWishSlug() ).toStrictEqual( expectations.slug );
 		}
 	);
 } );

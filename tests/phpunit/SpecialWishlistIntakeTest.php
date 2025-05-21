@@ -1,9 +1,11 @@
 <?php
 
+use MediaWiki\Exception\UserNotLoggedIn;
 use MediaWiki\Extension\CommunityRequests\Wish\SpecialWishlistIntake;
 
 /**
  * @coversDefaultClass \MediaWiki\Extension\CommunityRequests\Wish\SpecialWishlistIntake
+ * @group Database
  */
 class SpecialWishlistIntakeTest extends SpecialPageTestBase {
 	/**
@@ -59,5 +61,25 @@ class SpecialWishlistIntakeTest extends SpecialPageTestBase {
 			'communityrequests-wishtype-feature-label',
 			'project-localized-name-group-wikipedia',
 		], $actual->getMessages(), true, true );
+	}
+
+	/**
+	 * @covers ::execute
+	 */
+	public function testLoggedOut(): void {
+		$this->expectException( UserNotLoggedIn::class );
+		$this->executeSpecialPage();
+	}
+
+	/**
+	 * @covers ::execute
+	 */
+	public function testNotFound(): void {
+		[ $html ] = $this->executeSpecialPage( '12345', null, null, $this->getTestUser()->getAuthority() );
+		$this->assertStringContainsString(
+			'communityrequests-wish-not-found',
+			$html,
+			'Should show error page when wish is not found'
+		);
 	}
 }

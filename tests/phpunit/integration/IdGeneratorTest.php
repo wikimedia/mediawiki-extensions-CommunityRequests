@@ -21,16 +21,16 @@ class IdGeneratorTest extends MediaWikiIntegrationTestCase {
 		$generator = MediaWikiServices::getInstance()->get( 'CommunityRequests.IdGenerator' );
 		$clone = clone $generator;
 
-		$id1 = $generator->getNewId( IdGenerator::TYPE_REQUEST );
+		$id1 = $generator->getNewId( IdGenerator::TYPE_WISH );
 		$this->assertSame( 1, $id1 );
 
-		$id2 = $generator->getNewId( IdGenerator::TYPE_REQUEST );
+		$id2 = $generator->getNewId( IdGenerator::TYPE_WISH );
 		$this->assertSame( 2, $id2 );
 
 		$id3 = $generator->getNewId( IdGenerator::TYPE_FOCUS_AREA );
 		$this->assertSame( 1, $id3 );
 
-		$id3 = $clone->getNewId( IdGenerator::TYPE_REQUEST );
+		$id3 = $clone->getNewId( IdGenerator::TYPE_WISH );
 		$this->assertSame( 3, $id3 );
 	}
 }

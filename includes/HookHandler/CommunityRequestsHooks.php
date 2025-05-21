@@ -10,6 +10,7 @@ use MediaWiki\Hook\LoginFormValidErrorMessagesHook;
 class CommunityRequestsHooks implements GetDoubleUnderscoreIDsHook, LoginFormValidErrorMessagesHook {
 
 	public const MAGIC_MACHINETRANSLATION = 'machinetranslation';
+	public const ERROR_TRACKING_CATEGORY = 'communityrequests-error-category';
 
 	protected Config $config;
 	protected bool $enabled;

@@ -48,7 +48,7 @@
 				// but we want a list of all possible source langs for our target.
 				if ( mintLangs[ targetLang ] ) {
 					for ( const sourceLang of Object.keys( mintLangs ) ) {
-						if ( mintLangs[ sourceLang ].indexOf( targetLang ) !== -1 ) {
+						if ( mintLangs[ sourceLang ].includes( targetLang ) ) {
 							sourceLangs.push( sourceLang );
 						}
 					}
@@ -105,7 +105,7 @@
 						return NodeFilter.FILTER_SKIP;
 					}
 					// Check if the source lang can be translated to the target lang.
-					if ( supportedLangs.indexOf( lang ) === -1 ) {
+					if ( !supportedLangs.includes( lang ) ) {
 						return NodeFilter.FILTER_SKIP;
 					}
 					// Save the parent lang on the node

@@ -1,13 +1,15 @@
 {
 	"@metadata": {
 		"authors": [
+			"MusikAnimal"
 		]
 	},
 	"communityrequests-desc": "A system of managing a wiki community's technical suggestions and requests.",
 	"communityrequests-wish-loading-error": "There was an error while parsing the wish source text. It may contain invalid wikitext. Please [$1 refresh] and try again, use the [[$2|source editor]], or ask for help on the [[$3|talk page]].",
 	"communityrequests-edit-with-form": "Edit with form",
 	"communityrequests-wishlistintake": "Community Wishlist intake",
-	"communityrequests-form-subtitle": "Welcome to the new Community Wishlist. Please fill in the form below to submit your wish.",
+	"communityrequests-form-subtitle": "Welcome to the Community Wishlist. Please fill in the form below to submit your wish.",
+	"communityrequests-wish-not-found": "The wish [[$1]] was not found or was not properly saved.",
 	"communityrequests-form-error": "Something went wrong. Please try saving again, or ask for help on the [[$1|talk page]].",
 	"communityrequests-description": "Describe your problem",
 	"communityrequests-description-description": "Explain in detail the wish or problem you are addressing.",
@@ -104,5 +106,9 @@
 	"communityrequests-translation-switch": "Automatically translate it using [https://www.mediawiki.org/wiki/Special:MyLanguage/MinT Wikimedia's machine translation tool].",
 	"communityrequests-translation-progress": "Translated $1 of $2 {{PLURAL:$2|part|parts}} of text.",
 	"communityrequests-translation-errors": "An error occurred:",
-	"communityrequests-disabled": "This functionality of the Community Wishlist is currently disabled."
+	"communityrequests-disabled": "This functionality of the Community Wishlist is currently disabled.",
+	"communityrequests-publish-wish-summary": "Publishing the wish \"$1\"",
+	"communityrequests-save-wish-summary": "Updating the wish \"$1\"",
+	"communityrequests-error-category": "Pages with Community Wishlist errors",
+	"communityrequests-error-category-desc": "Pages in this category are Community Wishlist wishes or focus areas that contain errors."
 }

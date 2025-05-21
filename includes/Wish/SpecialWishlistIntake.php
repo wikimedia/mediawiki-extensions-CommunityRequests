@@ -1,29 +1,58 @@
 <?php
+declare( strict_types = 1 );
 
 namespace MediaWiki\Extension\CommunityRequests\Wish;
 
-use MediaWiki\Config\Config;
+use MediaWiki\Api\ApiMain;
+use MediaWiki\Api\ApiUsageException;
+use MediaWiki\Content\WikitextContent;
+use MediaWiki\Context\DerivativeContext;
+use MediaWiki\HookContainer\HookContainer;
+use MediaWiki\Html\Html;
+use MediaWiki\HTMLForm\HTMLForm;
 use MediaWiki\MediaWikiServices;
 use MediaWiki\Message\Message;
-use MediaWiki\Parser\ParserFactory;
+use MediaWiki\Page\WikiPageFactory;
 use MediaWiki\Registration\ExtensionRegistry;
+use MediaWiki\Request\DerivativeRequest;
 use MediaWiki\ResourceLoader as RL;
-use MediaWiki\SpecialPage\SpecialPage;
+use MediaWiki\SpecialPage\FormSpecialPage;
+use MediaWiki\Status\Status;
 use MediaWiki\Title\Title;
+use MediaWiki\Title\TitleFormatter;
+use MediaWiki\Title\TitleParser;
 
 /**
  * JS-only Special page for submitting a new community request.
  */
-class SpecialWishlistIntake extends SpecialPage {
+class SpecialWishlistIntake extends FormSpecialPage {
 
-	protected ParserFactory $parserFactory;
-	protected ?Config $config;
+	public const SESSION_KEY = 'communityrequests-intake';
+	public const SESSION_VALUE_WISH_CREATED = 'created';
+	public const SESSION_VALUE_WISH_UPDATED = 'updated';
+	protected const EDIT_SUMMARY_PUBLISH = 'communityrequests-publish-wish-summary';
+	protected const EDIT_SUMMARY_SAVE = 'communityrequests-save-wish-summary';
+
+	protected WishStore $wishStore;
+	protected WikiPageFactory $wikiPageFactory;
+	protected Title $pageTitle;
+	protected TitleParser $titleParser;
+	protected TitleFormatter $titleFormatter;
+	protected HookContainer $hookContainer;
+	protected ?int $wishId = null;
 
 	/** @inheritDoc */
-	public function __construct( ParserFactory $parserFactory, ?Config $config = null ) {
+	public function __construct(
+		WishStore $wishStore,
+		WikiPageFactory $wikiPageFactory,
+		TitleParser $titleParser,
+		HookContainer $hookContainer
+	) {
 		parent::__construct( 'WishlistIntake' );
-		$this->parserFactory = $parserFactory;
-		$this->config = $config;
+		$this->wishStore = $wishStore;
+		$this->wikiPageFactory = $wikiPageFactory;
+		$this->titleParser = $titleParser;
+		$this->hookContainer = $hookContainer;
 	}
 
 	/** @inheritDoc */
@@ -33,39 +62,80 @@ class SpecialWishlistIntake extends SpecialPage {
 
 	/** @inheritDoc */
 	public function isListed(): bool {
-		return parent::isListed() && $this->config->get( 'CommunityRequestsEnable' );
+		return parent::isListed() && $this->getConfig()->get( 'CommunityRequestsEnable' );
 	}
 
 	/** @inheritDoc */
 	public function execute( $wishId ): void {
-		$this->requireNamedUser( 'communityrequests-please-log-in' );
-
 		if ( !$this->getConfig()->get( 'CommunityRequestsEnable' ) ) {
 			$this->setHeaders();
 			$this->getOutput()->addWikiMsg( 'communityrequests-disabled' );
 			return;
 		}
 
-		$wishId ??= $this->getRequest()->getInt( 'id' );
-		if ( !$wishId ) {
-			$pageTitle = $this->config->get( 'CommunityRequestsWishPagePrefix' ) . $wishId;
-			// TODO: Fetch from db and pass Wish object instead of parsing wikitext in JS.
-			// Pass the wish title to the JS.
-			$this->getOutput()->addJsConfigVars( 'intakeWishTitle', $pageTitle );
-			$this->getSkin()->setRelevantTitle( Title::newFromText( $pageTitle ) );
+		$this->requireNamedUser( 'communityrequests-please-log-in' );
+
+		// Permit the full page title to be passed instead of just the ID.
+		$wishId = ltrim( $wishId ?? '', $this->getConfig()->get( 'CommunityRequestsWishPagePrefix' ) );
+
+		// Extract the integer from the $wishId, which may be a string like "W123".
+		$wishId = preg_replace( '/[^0-9]/', '', $wishId ) ?: null;
+
+		if ( $wishId ) {
+			$ret = $this->loadExistingWish( (int)$wishId );
+			if ( !$ret ) {
+				return;
+			}
 		}
 
-		$this->getOutput()->addJsConfigVars( [
-			'parserTags' => $this->parserFactory->getInstance()->getTags()
-		] );
-		$this->getOutput()->addElement( 'div', [ 'class' => 'wishlist-intake-container' ] );
 		$this->getOutput()->addModules( 'ext.communityrequests.intake' );
 
 		// For VisualEditor.
 		// TODO: Remove hard dependency on VE
 		$this->getOutput()->addJsConfigVars( 'intakeVeModules', $this->preloadVeModules() );
 
+		$this->getOutput()->setSubtitle( $this->msg( 'communityrequests-form-subtitle' ) );
+
 		parent::execute( $wishId );
+	}
+
+	/**
+	 * Load an existing wish by its ID and prepare the data for the Vue app.
+	 *
+	 * @param int $wishId
+	 * @return bool False if there was an error.
+	 */
+	private function loadExistingWish( int $wishId ): bool {
+		$this->pageTitle = Title::newFromText(
+			$this->getConfig()->get( 'CommunityRequestsWishPagePrefix' ) . $wishId
+		);
+		$wish = $this->wishStore->getWish( $this->pageTitle );
+
+		if ( !$wish ) {
+			$this->getOutput()->showErrorPage(
+				'communityrequests-wishlistintake',
+				'communityrequests-wish-not-found',
+				[ $this->pageTitle->getPrefixedText() ],
+				$this->getConfig()->get( 'CommunityRequestsHomepage' )
+			);
+			return false;
+		}
+
+		$wikitextData = $this->wishStore->getDataFromWikitext( $wish );
+		'@phan-var array $wikitextData';
+		$wishTemplate = $this->getConfig()->get( 'CommunityRequestsWishTemplate' );
+		$this->getOutput()->addJsConfigVars( [
+			'intakeWishId' => $wishId,
+			'intakeWishData' => [
+				...$wish->toArray( $this->getConfig() ),
+				'description' => $wikitextData[ $wishTemplate[ 'params' ][ 'description' ] ],
+				'audience' => $wikitextData[ $wishTemplate[ 'params' ][ 'audience' ] ],
+			]
+		] );
+
+		$this->wishId = $wishId;
+
+		return true;
 	}
 
 	/**
@@ -126,5 +196,128 @@ class SpecialWishlistIntake extends SpecialPage {
 		}
 		$this->getOutput()->addModules( $modules );
 		return $modules;
+	}
+
+	/** @inheritDoc */
+	protected function getDisplayFormat() {
+		return 'codex';
+	}
+
+	/** @inheritDoc */
+	protected function getFormFields(): array {
+		// FIXME: Use form descriptor and leverage FormSpecialPage once Codex PHP is ready (T379662)
+		return [];
+	}
+
+	/** @inheritDoc */
+	protected function alterForm( HTMLForm $form, string $module = 'ext.communityrequests.intake' ) {
+		$form->setId( 'ext-communityrequests-intake-form' )
+			->suppressDefaultSubmit()
+			// Add div that the Vue app will be mounted to. This needs to be inside the server-generated <form> tag.
+			->addHeaderHtml( Html::element( 'div', [ 'class' => 'ext-communityrequests-intake' ] ) );
+	}
+
+	/** @inheritDoc */
+	public function onSubmit( array $data, ?HTMLForm $form = null ) {
+		// Grab data directly from POST request. We should use the given $data once ::getFormFields() is implemented.
+		$data = $form->getRequest()->getPostValues();
+		$data[ 'title' ] = $data[ 'wishtitle' ];
+
+		if ( $this->wishId === null ) {
+			// If this is a new wish, generate a new ID and page title.
+			$id = $this->wishStore->getNewId();
+			$this->pageTitle = Title::newFromText(
+				$this->getConfig()->get( 'CommunityRequestsWishPagePrefix' ) . $id
+			);
+		}
+
+		$wish = Wish::newFromWikitextParams(
+			$this->pageTitle,
+			$this->getContentLanguage()->getCode(),
+			$this->getUser(),
+			$data,
+			$this->getConfig()
+		);
+
+		$wishTemplate = $this->titleParser->parseTitle(
+			$this->getConfig()->get( 'CommunityRequestsWishTemplate' )[ 'page' ]
+		);
+
+		// Generate edit summary.
+		$summary = $this->msg(
+			$this->wishId === null ? self::EDIT_SUMMARY_PUBLISH : self::EDIT_SUMMARY_SAVE,
+			$data[ 'title' ]
+		)->text();
+
+		// If there are Phabricator tasks, add them to the edit summary.
+		if ( count( $wish->getPhabTasks() ) > 0 ) {
+			$taskLinks = array_map(
+				static fn ( int $taskId ) => "[[phab:T{$taskId}|T{$taskId}]]",
+				$wish->getPhabTasks()
+			);
+			$summary .= ' ' .
+				$this->msg( 'parentheses-start' )->text() .
+				$this->getLanguage()->commaList( $taskLinks ) .
+				$this->msg( 'parentheses-end' )->text();
+		}
+
+		$status = $this->save(
+			$wish->toWikitext( $wishTemplate, $this->getConfig() ),
+			$summary,
+			$data[ 'wpEditToken' ],
+			// FIXME: use Wish::WISHLIST_TAG once we have ApiWishEdit
+			// ApiEditPage doesn't allow for software-defined tags.
+			[]
+		);
+
+		if ( $status->isOK() ) {
+			// Set session variables to show post-edit messages.
+			$this->getRequest()->getSession()->set(
+				self::SESSION_KEY,
+				$this->wishId === null ? self::SESSION_VALUE_WISH_CREATED : self::SESSION_VALUE_WISH_UPDATED
+			);
+			// Redirect to wish page.
+			$this->getOutput()->redirect( $this->pageTitle->getFullURL() );
+		}
+
+		return $status;
+	}
+
+	/**
+	 * Save the wish content to the wiki page.
+	 * WishHookHandler will handle updating the CommunityRequests tables.
+	 *
+	 * @param WikitextContent $content
+	 * @param string $summary
+	 * @param string $token
+	 * @param string[] $tags
+	 * @return Status
+	 * @todo move to ApiWishEdit
+	 */
+	private function save( WikitextContent $content, string $summary, string $token, array $tags ): Status {
+		$apiParams = [
+			'action' => 'edit',
+			'title' => $this->pageTitle->getPrefixedDBkey(),
+			'text' => $content->getText(),
+			'summary' => $summary,
+			'token' => $token,
+			'tags' => implode( '|', $tags ),
+			'errorformat' => 'html',
+			'notminor' => true,
+		];
+
+		$context = new DerivativeContext( $this->getContext() );
+		$context->setRequest( new DerivativeRequest( $this->getRequest(), $apiParams ) );
+		$api = new ApiMain( $context, true );
+
+		// FIXME: make use of EditFilterMergedContent hook to impose our own edit checks
+		//   (Status will show up in SpecialFormPage) Such as a missing proposer or invalid creation date.
+		try {
+			$api->execute();
+		} catch ( ApiUsageException $e ) {
+			return Status::wrap( $e->getStatusValue() );
+		}
+
+		return Status::newGood( $api->getResult() );
 	}
 }

@@ -10,7 +10,7 @@ use RuntimeException;
  */
 interface IdGenerator {
 
-	public const TYPE_REQUEST = 0;
+	public const TYPE_WISH = 0;
 	public const TYPE_FOCUS_AREA = 1;
 
 	/**

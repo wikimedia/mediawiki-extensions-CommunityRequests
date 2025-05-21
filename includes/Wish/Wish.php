@@ -3,54 +3,101 @@ declare( strict_types = 1 );
 
 namespace MediaWiki\Extension\CommunityRequests\Wish;
 
+use MediaWiki\Config\Config;
+use MediaWiki\Config\ConfigException;
+use MediaWiki\Content\WikitextContent;
 use MediaWiki\Extension\Translate\MessageLoading\MessageHandle;
 use MediaWiki\Extension\Translate\Utilities\Utilities;
 use MediaWiki\Page\PageIdentity;
 use MediaWiki\Title\Title;
+use MediaWiki\Title\TitleValue;
 use MediaWiki\User\UserIdentity;
+use MediaWiki\Utils\MWTimestamp;
 
 /**
  * A value object representing a wish in a particular language.
  */
 class Wish {
 
+	// Constants used for parsing and constructing the template invocation.
+	public const WISHLIST_TAG = 'community-wishlist';
+	public const TEMPLATE_PARAM_STATUS = 'status';
+	public const TEMPLATE_PARAM_TYPE = 'type';
+	public const TEMPLATE_PARAM_TITLE = 'title';
+	public const TEMPLATE_PARAM_FOCUS_AREA = 'focusArea';
+	public const TEMPLATE_PARAM_DESCRIPTION = 'description';
+	public const TEMPLATE_PARAM_AUDIENCE = 'audience';
+	public const TEMPLATE_PARAM_PROJECTS = 'projects';
+	public const TEMPLATE_PARAM_OTHER_PROJECT = 'otherProject';
+	public const TEMPLATE_PARAM_PHAB_TASKS = 'phabTasks';
+	public const TEMPLATE_PARAM_PROPOSER = 'proposer';
+	public const TEMPLATE_PARAM_CREATED = 'created';
+	public const TEMPLATE_PARAMS = [
+		self::TEMPLATE_PARAM_STATUS,
+		self::TEMPLATE_PARAM_TYPE,
+		self::TEMPLATE_PARAM_TITLE,
+		self::TEMPLATE_PARAM_FOCUS_AREA,
+		self::TEMPLATE_PARAM_DESCRIPTION,
+		self::TEMPLATE_PARAM_AUDIENCE,
+		self::TEMPLATE_PARAM_PROJECTS,
+		self::TEMPLATE_PARAM_OTHER_PROJECT,
+		self::TEMPLATE_PARAM_PHAB_TASKS,
+		self::TEMPLATE_PARAM_PROPOSER,
+		self::TEMPLATE_PARAM_CREATED,
+	];
+	public const TEMPLATE_VALUE_PROJECTS_ALL = 'all';
+	public const TEMPLATE_ARRAY_DELIMITER = ',';
+
+	// Wish properties.
 	private PageIdentity $pageTitle;
 	private string $language;
 	private string $baseLanguage;
-	private UserIdentity $user;
+	private ?UserIdentity $proposer;
 	private int $type;
 	private int $status;
 	private ?int $focusAreaId;
 	private int $voteCount;
-	private string $created;
-	private string $updated;
+	private ?string $created;
+	private ?string $updated;
 	private string $title;
 	private array $projects;
 	private array $phabTasks;
 	private ?string $otherProject;
+	// Not stored in the database, but used for constructing the wikitext.
+	private string $audience;
+	private string $description;
 
 	/**
 	 * @param PageIdentity $pageTitle The title of the wish page. If given a translation subpage,
 	 *   the constructor will set self::$pageTitle to the base page title, and self::$baseLanguage
 	 *   to the language of the base page.
 	 * @param string $language The language (or translated language) of the wish.
-	 * @param UserIdentity $user The user who created the wish.
+	 * @param ?UserIdentity $proposer The user who created the wish. This may be left null for existing
+	 *   wishes if the proposer is unknown.
 	 * @param array $fields The fields of the wish, including:
 	 *   - 'type' (int): The type ID of the wish.
 	 *   - 'status' (int): The status ID of the wish.
 	 *   - 'focusAreaId' (?int): The ID of the focus area.
 	 *   - 'voteCount' (int): The number of votes for the wish.
-	 *   - 'created' (string): The creation timestamp of the wish.
-	 *   - 'updated' (string): The last updated timestamp of the wish.
+	 *   - 'created' (?string): The creation timestamp of the wish. If null, it will be fetched
+	 *       for existing wishes, and set to the current timestamp for new wishes.
+	 *   - 'updated' (?string): The last updated timestamp of the wish.
 	 *   - 'title' (string): The title of the wish.
 	 *   - 'projects' (array<int>): IDs of $CommunityRequestsProjects associated with the wish.
 	 *   - 'otherProject' (?string): The 'other project' associated with the wish.
 	 *   - 'phabTasks' (array<int>): IDs of Phabricator tasks associated with the wish.
 	 *   - 'baseLang' (string): The base language of the wish (fetched if not provided)
+	 *   - 'audience' (string): The group(s) of users the wish would benefit.
+	 *   - 'description' (string): The description of the wish.
 	 */
-	public function __construct( PageIdentity $pageTitle, string $language, UserIdentity $user, array $fields ) {
+	public function __construct(
+		PageIdentity $pageTitle,
+		string $language,
+		?UserIdentity $proposer,
+		array $fields = []
+	) {
 		// Use the base non-translated page (if Translate is installed).
-		if ( !isset( $fields[ 'baselang' ] ) &&
+		if ( !isset( $fields[ 'baseLang' ] ) &&
 			// @phan-suppress-next-line PhanUndeclaredClassReference
 			class_exists( MessageHandle::class ) &&
 			// @phan-suppress-next-line PhanUndeclaredClassMethod
@@ -66,17 +113,20 @@ class Wish {
 		}
 		$this->pageTitle = $pageTitle;
 		$this->language = $language;
-		$this->user = $user;
+		$this->proposer = $proposer;
 		$this->type = intval( $fields['type'] ?? 0 );
 		$this->status = intval( $fields['status'] ?? 0 );
 		$this->focusAreaId = isset( $fields['focusAreaId'] ) ? (int)$fields['focusAreaId'] : null;
 		$this->voteCount = intval( $fields['voteCount'] ?? 0 );
-		$this->created = $fields['created'] ?? '';
-		$this->updated = $fields['updated'] ?? $this->created;
+		// We use `?? null` in case the field is not set, and `?: null` to handle blank values.
+		$this->created = wfTimestampOrNull( TS_ISO_8601, ( $fields['created'] ?? null ) ?: null );
+		$this->updated = wfTimestampOrNull( TS_ISO_8601, ( $fields['updated'] ?? null ) ?: null );
 		$this->title = $fields['title'] ?? '';
 		$this->projects = $fields['projects'] ?? [];
-		$this->otherProject = $fields['otherProject'] ?? null;
+		$this->otherProject = ( $fields['otherProject'] ?? '' ) ?: null;
 		$this->phabTasks = $fields['phabTasks'] ?? [];
+		$this->audience = $fields['audience'] ?? '';
+		$this->description = $fields['description'] ?? '';
 	}
 
 	/**
@@ -107,18 +157,27 @@ class Wish {
 	}
 
 	/**
+	 * Check if the wish is in the base language.
+	 *
+	 * @return bool
+	 */
+	public function isBaseLanguage(): bool {
+		return $this->language === $this->baseLanguage;
+	}
+
+	/**
 	 * Get the user who created the wish.
 	 *
-	 * @return UserIdentity
+	 * @return ?UserIdentity
 	 */
-	public function getUser(): UserIdentity {
-		return $this->user;
+	public function getProposer(): ?UserIdentity {
+		return $this->proposer;
 	}
 
 	/**
 	 * Get the type of the wish.
 	 *
-	 * @return int
+	 * @return int One of the $wgCommunityRequestsWishTypes IDs
 	 */
 	public function getType(): int {
 		return $this->type;
@@ -152,15 +211,6 @@ class Wish {
 	}
 
 	/**
-	 * Set the vote count for the wish.
-	 *
-	 * @param int $voteCount The new vote count.
-	 */
-	public function setVoteCount( int $voteCount ): void {
-		$this->voteCount = $voteCount;
-	}
-
-	/**
 	 * Get the IDs of the projects associated with the wish.
 	 *
 	 * @return array<int>
@@ -179,20 +229,20 @@ class Wish {
 	}
 
 	/**
-	 * Get the creation timestamp of the wish.
+	 * Get the creation timestamp of the wish in TS_ISO_8601 format.
 	 *
-	 * @return string
+	 * @return ?string
 	 */
-	public function getCreated(): string {
+	public function getCreated(): ?string {
 		return $this->created;
 	}
 
 	/**
-	 * Get the last updated timestamp of the wish.
+	 * Get the last updated timestamp of the wish in TS_ISO_8601 format.
 	 *
-	 * @return string
+	 * @return ?string
 	 */
-	public function getUpdated(): string {
+	public function getUpdated(): ?string {
 		return $this->updated;
 	}
 
@@ -214,5 +264,233 @@ class Wish {
 	 */
 	public function getOtherProject(): ?string {
 		return $this->otherProject;
+	}
+
+	/**
+	 * Get wish data as an associative array, ready for consumption by the
+	 * ext.communityrequests.intake module.
+	 *
+	 * @param Config $config
+	 * @return array
+	 */
+	public function toArray( Config $config ): array {
+		$statusesConfig = $config->get( 'CommunityRequestsStatuses' );
+		$wishTypesConfig = $config->get( 'CommunityRequestsWishTypes' );
+		$projectsConfig = $config->get( 'CommunityRequestsProjects' );
+		return [
+			'status' => $this->numericIdToWikitextVal( $this->status, $statusesConfig ),
+			'type' => $this->numericIdToWikitextVal( $this->type, $wishTypesConfig ),
+			'title' => $this->title,
+			// FIXME: Focus area is not yet implemented.
+			'focusArea' => null,
+			'description' => $this->description,
+			'audience' => $this->audience,
+			'projects' => array_map(
+				fn ( $id ) => $this->numericIdToWikitextVal( $id, $projectsConfig ),
+				$this->projects
+			),
+			'otherProject' => (string)$this->otherProject,
+			'phabTasks' => array_map( static fn ( $t ) => "T$t", $this->phabTasks ),
+			'proposer' => $this->proposer ? $this->proposer->getName() : null,
+			'created' => $this->created,
+		];
+	}
+
+	/**
+	 * Convert the wish to WikitextContent, ready for storage in the database.
+	 * This uses the self::TEMPLATE_ constants and $wgCommunityRequestsWishTemplate['params']
+	 * to map the wish's properties to the template parameters. It also transforms numeric IDs
+	 * to their wikitext representations to make the wikitext easier to read and edit manually.
+	 *
+	 * @param TitleValue $template
+	 * @param Config $config
+	 * @return WikitextContent
+	 */
+	public function toWikitext( TitleValue $template, Config $config ): WikitextContent {
+		$templateConfig = $config->get( 'CommunityRequestsWishTemplate' );
+		$statusesConfig = $config->get( 'CommunityRequestsStatuses' );
+		$wishTypesConfig = $config->get( 'CommunityRequestsWishTypes' );
+		$projectsConfig = $config->get( 'CommunityRequestsProjects' );
+
+		$templateCall = $template->getNamespace() === NS_TEMPLATE ?
+			$template->getText() :
+			':' . $templateConfig[ 'page' ];
+
+		$wikitext = "{{" . $templateCall . "\n";
+
+		foreach ( self::TEMPLATE_PARAMS as $paramId ) {
+			$param = $templateConfig[ 'params' ][ $paramId ];
+			$value = '';
+
+			// Map ID values to their wikitext representations, as defined by site configuration.
+
+			switch ( $paramId ) {
+				case self::TEMPLATE_PARAM_PROJECTS:
+					$value = array_map(
+						fn ( $id ) => $this->numericIdToWikitextVal( $id, $projectsConfig ),
+						$this->projects
+					);
+					break;
+				case self::TEMPLATE_PARAM_PHAB_TASKS:
+					$value = array_map( static fn ( $id ) => "T$id", $this->phabTasks );
+					break;
+				case self::TEMPLATE_PARAM_STATUS:
+				case self::TEMPLATE_PARAM_TYPE:
+					$relevantConfig = $paramId === self::TEMPLATE_PARAM_STATUS ? $statusesConfig : $wishTypesConfig;
+					$value = $this->numericIdToWikitextVal( $this->{ $paramId }, $relevantConfig, $value );
+					break;
+				case self::TEMPLATE_PARAM_FOCUS_AREA:
+					// Focus area
+					// TODO: Fetch focus area name using FocusAreaStore service.
+					$value = $this->focusAreaId;
+					break;
+				case self::TEMPLATE_PARAM_CREATED:
+					$value = MWTimestamp::convert( TS_ISO_8601, $this->created );
+					break;
+				case self::TEMPLATE_PARAM_PROPOSER:
+					$value = $this->proposer ? $this->proposer->getName() : '';
+					break;
+				default:
+					$value = $this->{ $paramId } ?: '';
+			}
+
+			if ( is_array( $value ) ) {
+				// Convert arrays to a comma-separated string.
+				$value = implode( self::TEMPLATE_ARRAY_DELIMITER, $value );
+			}
+
+			// Append wikitext.
+			$value = trim( (string)$value );
+			$wikitext .= "| $param = $value\n";
+		}
+
+		$wikitext .= "}}\n";
+
+		return new WikitextContent( $wikitext );
+	}
+
+	/**
+	 * Until we have array_key_find() with PHP 8.1 as the minimum version.
+	 */
+	private function numericIdToWikitextVal( int $id, array $config, string $default = '' ): string {
+		foreach ( $config as $key => $p ) {
+			if ( $p[ 'id' ] === $id ) {
+				return $key;
+			}
+		}
+		return $default;
+	}
+
+	/**
+	 * Create a new Wish instance from the given wikitext parameters.
+	 * This should only be used on the base language wish page,
+	 * specifically by the callers SpecialWishlistIntake::onSubmit()
+	 * and WishHookHandler::onLinksUpdateComplete().
+	 *
+	 * @param PageIdentity $pageTitle
+	 * @param string $lang
+	 * @param ?UserIdentity $proposer
+	 * @param array $params
+	 * @param Config $config
+	 * @return Wish
+	 */
+	public static function newFromWikitextParams(
+		PageIdentity $pageTitle,
+		string $lang,
+		?UserIdentity $proposer,
+		array $params,
+		Config $config
+	): self {
+		$fields = [
+			'type' => self::getIdFromWikitextVal(
+				$params[ self::TEMPLATE_PARAM_TYPE ] ?? '',
+				$config->get( 'CommunityRequestsWishTypes' )
+			),
+			'status' => self::getIdFromWikitextVal(
+				$params[ self::TEMPLATE_PARAM_STATUS ] ?? '',
+				$config->get( 'CommunityRequestsStatuses' )
+			),
+			'title' => $params[ self::TEMPLATE_PARAM_TITLE ] ?? '',
+			'focusAreaId' => $params[ self::TEMPLATE_PARAM_FOCUS_AREA ] ?? null,
+			'created' => $params[ self::TEMPLATE_PARAM_CREATED ] ?? null,
+			'projects' => self::getProjectsFromCsv( $params[ self::TEMPLATE_PARAM_PROJECTS ] ?? '', $config ),
+			'otherProject' => $params[ self::TEMPLATE_PARAM_OTHER_PROJECT ] ?? null,
+			'audience' => $params[ self::TEMPLATE_PARAM_AUDIENCE ] ?? '',
+			'description' => $params[ self::TEMPLATE_PARAM_DESCRIPTION ] ?? '',
+			'phabTasks' => self::getPhabTasksFromCsv( $params[ self::TEMPLATE_PARAM_PHAB_TASKS ] ?? '' ),
+			'baseLang' => $lang,
+		];
+
+		return new self( $pageTitle, $lang, $proposer, $fields );
+	}
+
+	/**
+	 * Given a comma-separated wikitext value for projects,
+	 * get the project IDs as configured by $wgCommunityRequestsProjects.
+	 *
+	 * @param string $csvProjects
+	 * @param Config $config
+	 * @return int[]
+	 */
+	public static function getProjectsFromCsv( string $csvProjects, Config $config ): array {
+		$projectsConfig = $config->get( 'CommunityRequestsProjects' );
+
+		if ( $csvProjects === self::TEMPLATE_VALUE_PROJECTS_ALL ) {
+			// If the value is 'all', return all project IDs.
+			return array_values( array_map( static fn ( $p ) => (int)$p[ 'id' ], $projectsConfig ) );
+		}
+
+		$projects = [];
+		$projectNames = explode( self::TEMPLATE_ARRAY_DELIMITER, $csvProjects );
+		foreach ( $projectNames as $name ) {
+			$name = trim( $name );
+			if ( isset( $projectsConfig[ $name ] ) ) {
+				$projects[] = (int)$projectsConfig[ $name ][ 'id' ];
+			}
+		}
+		return $projects;
+	}
+
+	/**
+	 * Given a comma-separated wikitext value for Phabricator tasks, get the task IDs as integers.
+	 *
+	 * @param string $csvTasks
+	 * @return int[] The task IDs.
+	 */
+	public static function getPhabTasksFromCsv( string $csvTasks ): array {
+		$tasks = [];
+		$taskIds = explode( self::TEMPLATE_ARRAY_DELIMITER, $csvTasks );
+		foreach ( $taskIds as $id ) {
+			$matches = [];
+			preg_match( '/^T?(\d+)$/', trim( $id ), $matches );
+			if ( isset( $matches[1] ) ) {
+				$tasks[] = (int)$matches[1];
+			}
+		}
+		return $tasks;
+	}
+
+	/**
+	 * Get the ID of a status or type from its wikitext value.
+	 *
+	 * @param string $val The wikitext value to look up.
+	 * @param array $config The configuration array for statuses or types.
+	 * @return int The ID of the status or type.
+	 * @throws ConfigException If the value is not found and no default is set.
+	 */
+	public static function getIdFromWikitextVal( string $val, array $config ): int {
+		$val = trim( $val );
+		if ( isset( $config[ $val ] ) ) {
+			return (int)$config[ $val ][ 'id' ];
+		}
+		// If the value is not found, return the default value.
+		foreach ( $config as $item ) {
+			if ( $item[ 'default' ] ?? false ) {
+				return (int)$item[ 'id' ];
+			}
+		}
+		throw new ConfigException(
+			"Value '$val' not found in configuration, and no default is set."
+		);
 	}
 }

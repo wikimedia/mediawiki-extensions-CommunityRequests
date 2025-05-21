@@ -66,6 +66,10 @@ describe( 'WishlistIntake wish submission', () => {
 		await IntakePage.submitButton.waitForClickable();
 		await IntakePage.submitButton.click();
 		await expect( IntakePage.titleError ).not.toBeDisplayed();
+		await expect( IntakePage.descriptionError ).not.toBeDisplayed();
+		await expect( IntakePage.typeError ).not.toBeDisplayed();
+		await expect( IntakePage.projectsError ).not.toBeDisplayed();
+		await expect( IntakePage.audienceError ).not.toBeDisplayed();
 	} );
 
 	// FIXME: restore test after <community-request> parser tag is implemented.

@@ -88,5 +88,6 @@
 	"communityrequests-focus-area-voting-not-logged-in": "Kirjaudu sisään tukeaksesi tätä painopistealuetta",
 	"communityrequests-focus-area-voters-heading": "Tämän alueen tukijat",
 	"communityrequests-focus-area-no-votes": "Ei vielä tukijoita.",
-	"communityrequests-translation-switch": "Käännä se automaattisesti käyttämällä [https://www.mediawiki.org/wiki/Special:MyLanguage/MinT Wikimedian konekäännöstyökalua]."
+	"communityrequests-translation-switch": "Käännä se automaattisesti käyttämällä [https://www.mediawiki.org/wiki/Special:MyLanguage/MinT Wikimedian konekäännöstyökalua].",
+	"communityrequests-translation-errors": "Tapahtui virhe:"
 }

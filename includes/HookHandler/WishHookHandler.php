@@ -4,9 +4,9 @@ namespace MediaWiki\Extension\CommunityRequests\HookHandler;
 
 use MediaWiki\ChangeTags\Hook\ChangeTagsListActiveHook;
 use MediaWiki\ChangeTags\Hook\ListDefinedTagsHook;
-use MediaWiki\Config\Config;
 use MediaWiki\Extension\CommunityRequests\Wish\Wish;
 use MediaWiki\Extension\CommunityRequests\Wish\WishStore;
+use MediaWiki\Extension\CommunityRequests\WishlistConfig;
 use MediaWiki\Hook\LinksUpdateCompleteHook;
 use MediaWiki\Hook\ParserFirstCallInitHook;
 use MediaWiki\Logging\ManualLogEntry;
@@ -34,7 +34,7 @@ class WishHookHandler extends CommunityRequestsHooks implements
 	private WishStore $wishStore;
 	private UserFactory $userFactory;
 
-	public function __construct( Config $config, WishStore $wishStore, UserFactory $userFactory ) {
+	public function __construct( WishlistConfig $config, WishStore $wishStore, UserFactory $userFactory ) {
 		parent::__construct( $config );
 		$this->wishStore = $wishStore;
 		$this->userFactory = $userFactory;
@@ -42,7 +42,7 @@ class WishHookHandler extends CommunityRequestsHooks implements
 
 	/** @inheritDoc */
 	public function onParserFirstCallInit( $parser ) {
-		if ( !$this->enabled ) {
+		if ( !$this->config->isEnabled() ) {
 			return;
 		}
 		$parser->setHook( 'wish', [ $this, 'renderWish' ] );
@@ -59,7 +59,7 @@ class WishHookHandler extends CommunityRequestsHooks implements
 	 * @return string
 	 */
 	public function renderWish( $input, array $args, Parser $parser ): string {
-		if ( !$this->enabled ) {
+		if ( !$this->config->isEnabled() ) {
 			return '';
 		}
 		$args[ 'lang' ] = $parser->getContentLanguage()->getCode();
@@ -82,7 +82,7 @@ class WishHookHandler extends CommunityRequestsHooks implements
 
 	/** @inheritDoc */
 	public function onLinksUpdateComplete( $linksUpdate, $ticket ) {
-		if ( !$this->enabled ) {
+		if ( !$this->config->isEnabled() ) {
 			return;
 		}
 		$data = $linksUpdate->getParserOutput()->getExtensionData( self::EXT_DATA_WISH_KEY );
@@ -109,7 +109,7 @@ class WishHookHandler extends CommunityRequestsHooks implements
 
 	/** @inheritDoc */
 	public function onBeforePageDisplay( $out, $skin ): void {
-		if ( !$this->enabled || !$this->wishStore->isWishPage( $out->getTitle() ) ) {
+		if ( !$this->config->isEnabled() || !$this->wishStore->isWishPage( $out->getTitle() ) ) {
 			return;
 		}
 
@@ -135,7 +135,7 @@ class WishHookHandler extends CommunityRequestsHooks implements
 		ManualLogEntry $logEntry,
 		int $archivedRevisionCount
 	) {
-		if ( !$this->enabled ) {
+		if ( !$this->config->isEnabled() ) {
 			return;
 		}
 		$wish = $this->wishStore->getWish( $page );
@@ -148,14 +148,14 @@ class WishHookHandler extends CommunityRequestsHooks implements
 
 	/** @inheritDoc */
 	public function onListDefinedTags( &$tags ) {
-		if ( $this->enabled ) {
+		if ( $this->config->isEnabled() ) {
 			$tags[] = Wish::WISHLIST_TAG;
 		}
 	}
 
 	/** @inheritDoc */
 	public function onChangeTagsListActive( &$tags ) {
-		if ( $this->enabled ) {
+		if ( $this->config->isEnabled() ) {
 			$tags[] = Wish::WISHLIST_TAG;
 		}
 	}

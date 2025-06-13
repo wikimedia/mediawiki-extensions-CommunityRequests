@@ -1,21 +1,76 @@
 <?php
 declare( strict_types = 1 );
 
-namespace MediaWiki\Extension\CommunityRequests\Tests\Integration;
+namespace MediaWiki\Extension\CommunityRequests\Tests\Unit;
 
-use MediaWiki\Config\ConfigException;
+use MediaWiki\Config\ServiceOptions;
 use MediaWiki\Extension\CommunityRequests\Wish\Wish;
+use MediaWiki\Extension\CommunityRequests\WishlistConfig;
 use MediaWiki\Tests\Unit\Permissions\MockAuthorityTrait;
-use MediaWikiIntegrationTestCase;
+use MediaWiki\Title\TitleValue;
+use MediaWikiUnitTestCase;
 use MockTitleTrait;
 
 /**
  * @group CommunityRequests
  * @coversDefaultClass \MediaWiki\Extension\CommunityRequests\Wish\Wish
  */
-class WishTest extends MediaWikiIntegrationTestCase {
+class WishTest extends MediaWikiUnitTestCase {
 	use MockTitleTrait;
 	use MockAuthorityTrait;
+
+	protected WishlistConfig $config;
+
+	protected function setUp(): void {
+		parent::setUp();
+		$serviceOptions = new ServiceOptions( WishlistConfig::CONSTRUCTOR_OPTIONS, [
+			WishlistConfig::CONFIG_ENABLED => true,
+			WishlistConfig::CONFIG_HOMEPAGE => '',
+			WishlistConfig::CONFIG_WISH_CATEGORY => '',
+			WishlistConfig::CONFIG_WISH_PAGE_PREFIX => '',
+			WishlistConfig::CONFIG_WISH_INDEX_PAGE => '',
+			WishlistConfig::CONFIG_WISH_TEMPLATE => [
+				'page' => 'Template:Wish',
+				'params' => [
+					'status' => 'status',
+					'type' => 'type',
+					'title' => 'title',
+					'focusArea' => 'focusarea',
+					'description' => 'description',
+					'audience' => 'audience',
+					'projects' => 'projects',
+					'otherProject' => 'otherproject',
+					'phabTasks' => 'tasks',
+					'proposer' => 'proposer',
+					'created' => 'created',
+				]
+			],
+			WishlistConfig::CONFIG_WISH_TYPES => [
+				'bug' => [ 'id' => 1 ],
+				'change' => [ 'id' => 2 ],
+			],
+			WishlistConfig::CONFIG_PROJECTS => [
+				'wikipedia' => [ 'id' => 0 ],
+				'wikidata' => [ 'id' => 1 ],
+				'commons' => [ 'id' => 2 ],
+				'wikisource' => [ 'id' => 3 ],
+				'wiktionary' => [ 'id' => 4 ],
+				'wikivoyage' => [ 'id' => 5 ],
+				'wikiquote' => [ 'id' => 6 ],
+				'wikiversity' => [ 'id' => 7 ],
+				'wikifunctions' => [ 'id' => 8 ],
+				'wikispecies' => [ 'id' => 9 ],
+				'wikinews' => [ 'id' => 10 ],
+				'metawiki' => [ 'id' => 11 ],
+				'wmcs' => [ 'id' => 12 ],
+			],
+			WishlistConfig::CONFIG_STATUSES => [
+				'submitted' => [ 'id' => 1 ],
+				'archived' => [ 'id' => 6 ],
+			],
+		] );
+		$this->config = new WishlistConfig( $serviceOptions );
+	}
 
 	/**
 	 * @covers ::toWikitext
@@ -23,14 +78,17 @@ class WishTest extends MediaWikiIntegrationTestCase {
 	 */
 	public function testToWikitext( array $wishData, string $expectedWikitext ): void {
 		$wish = $this->getTestWish( $wishData );
+		$templateTitleValue = $this->getMockBuilder( TitleValue::class )
+			->disableOriginalConstructor()
+			->getMock();
+		$templateTitleValue->method( 'getText' )
+			->willReturn( 'Community Wishlist/Wish' );
+		$templateTitleValue->method( 'getNamespace' )
+			->willReturn( NS_TEMPLATE );
+
 		$this->assertSame(
 			$expectedWikitext,
-			$wish->toWikitext(
-				$this->getServiceContainer()->getTitleParser()->parseTitle(
-					$this->getServiceContainer()->getMainConfig()->get( 'CommunityRequestsWishTemplate' )[ 'page' ]
-				),
-				$this->getServiceContainer()->getMainConfig()
-			)->getText()
+			$wish->toWikitext( $templateTitleValue, $this->config )->getText()
 		);
 	}
 
@@ -77,7 +135,7 @@ END
 	 */
 	public function testToArray( array $wishData, array $expected ): void {
 		$wish = $this->getTestWish( $wishData );
-		$this->assertSame( $expected, $wish->toArray( $this->getServiceContainer()->getMainConfig() ) );
+		$this->assertSame( $expected, $wish->toArray( $this->config ) );
 	}
 
 	/**
@@ -123,7 +181,7 @@ END
 			'en',
 			$this->mockRegisteredUltimateAuthority()->getUser(),
 			$wikitextParams,
-			$this->getServiceContainer()->getMainConfig()
+			$this->config
 		);
 		$this->assertSame( $expected[ 'title' ], $wish->getTitle() );
 		$this->assertSame( $expected[ 'status' ], $wish->getStatus() );
@@ -191,11 +249,10 @@ END
 	 * @covers ::getProjectsFromCsv
 	 */
 	public function testGetProjectsFromCsv(): void {
-		$config = $this->getServiceContainer()->getMainConfig();
-		$this->assertSame( [], Wish::getProjectsFromCsv( '', $config ) );
+		$this->assertSame( [], Wish::getProjectsFromCsv( '', $this->config ) );
 		$this->assertSame(
 			[ 0, 2, 11 ],
-			Wish::getProjectsFromCsv( 'wikipedia,  commons ,, bogus,metawiki', $config )
+			Wish::getProjectsFromCsv( 'wikipedia,  commons ,, bogus,metawiki', $this->config )
 		);
 	}
 
@@ -208,27 +265,6 @@ END
 			[ 123, 456, 789 ],
 			Wish::getPhabTasksFromCsv( '  T123,456, ,T789,,' )
 		);
-	}
-
-	/**
-	 * @covers ::getIdFromWikitextVal
-	 */
-	public function testGetIdFromWikitextVal(): void {
-		$statusConfig = $this->getServiceContainer()->getMainConfig()->get( 'CommunityRequestsStatuses' );
-		$this->assertSame( 0, Wish::getIdFromWikitextVal( 'draft', $statusConfig ) );
-		$this->assertSame( 1, Wish::getIdFromWikitextVal( '  submitted ', $statusConfig ) );
-		$this->assertSame( 0, Wish::getIdFromWikitextVal( 'bogus', $statusConfig ) );
-		$this->expectException( ConfigException::class );
-		unset( $statusConfig[ 'draft' ] );
-		Wish::getIdFromWikitextVal( 'invalid', $statusConfig );
-
-		$typeConfig = $this->getServiceContainer()->getMainConfig()->get( 'CommunityRequestsWishTypes' );
-		$this->assertSame( 0, Wish::getIdFromWikitextVal( 'feature', $typeConfig ) );
-		$this->assertSame( 1, Wish::getIdFromWikitextVal( '  bug ', $typeConfig ) );
-		$this->assertSame( 3, Wish::getIdFromWikitextVal( 'bogus', $typeConfig ) );
-		$this->expectException( ConfigException::class );
-		unset( $typeConfig[ 'unknown' ] );
-		Wish::getIdFromWikitextVal( 'invalid', $typeConfig );
 	}
 
 	private function getTestWish( array $wishData ): Wish {

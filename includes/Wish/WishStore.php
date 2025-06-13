@@ -4,10 +4,10 @@ declare( strict_types = 1 );
 namespace MediaWiki\Extension\CommunityRequests\Wish;
 
 use InvalidArgumentException;
-use MediaWiki\Config\Config;
 use MediaWiki\Content\WikitextContent;
 use MediaWiki\DAO\WikiAwareEntity;
 use MediaWiki\Extension\CommunityRequests\IdGenerator\IdGenerator;
+use MediaWiki\Extension\CommunityRequests\WishlistConfig;
 use MediaWiki\Languages\LanguageFallback;
 use MediaWiki\Page\PageIdentity;
 use MediaWiki\Page\PageIdentityValue;
@@ -34,18 +34,6 @@ use Wikimedia\Rdbms\SelectQueryBuilder;
  * @note "Wish" is the user-facing term, while "request" is used in storage.
  */
 class WishStore {
-
-	private ActorNormalization $actorNormalization;
-	private IConnectionProvider $dbProvider;
-	private UserFactory $userFactory;
-	private LanguageFallback $languageFallback;
-	private RevisionStore $revisionStore;
-	private ParserFactory $parserFactory;
-	private TitleParser $titleParser;
-	private TitleFormatter $titleFormatter;
-	private IdGenerator $idGenerator;
-	private string $wishPagePrefix;
-	private string $wishTemplate;
 
 	public const ORDER_BY_CREATION = 'cr_created';
 	public const ORDER_BY_UPDATED = 'cr_updated';
@@ -76,28 +64,17 @@ class WishStore {
 	];
 
 	public function __construct(
-		ActorNormalization $actorNormalization,
-		IConnectionProvider $dbProvider,
-		UserFactory $userFactory,
-		LanguageFallback $languageFallback,
-		RevisionStore $revisionStore,
-		ParserFactory $parserFactory,
-		TitleParser $titleParser,
-		TitleFormatter $titleFormatter,
-		IdGenerator $idGenerator,
-		Config $config
+		private readonly ActorNormalization $actorNormalization,
+		private readonly IConnectionProvider $dbProvider,
+		private readonly UserFactory $userFactory,
+		private readonly LanguageFallback $languageFallback,
+		private readonly RevisionStore $revisionStore,
+		private readonly ParserFactory $parserFactory,
+		private readonly TitleParser $titleParser,
+		private readonly TitleFormatter $titleFormatter,
+		private readonly IdGenerator $idGenerator,
+		private readonly WishlistConfig $config
 	) {
-		$this->actorNormalization = $actorNormalization;
-		$this->dbProvider = $dbProvider;
-		$this->userFactory = $userFactory;
-		$this->languageFallback = $languageFallback;
-		$this->revisionStore = $revisionStore;
-		$this->parserFactory = $parserFactory;
-		$this->titleParser = $titleParser;
-		$this->titleFormatter = $titleFormatter;
-		$this->idGenerator = $idGenerator;
-		$this->wishPagePrefix = $config->get( 'CommunityRequestsWishPagePrefix' );
-		$this->wishTemplate = $config->get( 'CommunityRequestsWishTemplate' )[ 'page' ];
 	}
 
 	/**
@@ -344,7 +321,7 @@ class WishStore {
 			return null;
 		}
 		$configTitle = $this->titleFormatter->getPrefixedDBkey(
-			$this->titleParser->parseTitle( $this->wishTemplate, NS_TEMPLATE )
+			$this->titleParser->parseTitle( $this->config->getWishTemplatePage(), NS_TEMPLATE )
 		);
 		/** @var WikitextContent $content */
 		$content = $this->revisionStore
@@ -564,7 +541,7 @@ class WishStore {
 	 * @throws InvalidArgumentException
 	 */
 	public function isWishPage( $identity ): bool {
-		$pagePrefix = $this->titleParser->parseTitle( $this->wishPagePrefix );
+		$pagePrefix = $this->titleParser->parseTitle( $this->config->getWishPagePrefix() );
 		if ( is_string( $identity ) ) {
 			$identity = $this->titleParser->parseTitle( $identity );
 		} elseif ( !$identity instanceof PageIdentity ) {

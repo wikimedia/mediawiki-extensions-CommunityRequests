@@ -3,8 +3,9 @@ declare( strict_types = 1 );
 
 namespace MediaWiki\Extension\CommunityRequests\Test\Unit;
 
-use MediaWiki\Config\HashConfig;
+use MediaWiki\Config\ServiceOptions;
 use MediaWiki\Extension\CommunityRequests\HookHandler\CommunityRequestsHooks;
+use MediaWiki\Extension\CommunityRequests\WishlistConfig;
 use MediaWiki\Parser\Parser;
 use MediaWiki\Parser\ParserOutput;
 use MediaWikiUnitTestCase;
@@ -41,7 +42,18 @@ class CommunityRequestsHooksTest extends MediaWikiUnitTestCase {
 			$parserOutput->expects( $this->never() )->method( 'addModules' );
 		}
 
-		$config = new HashConfig( [ 'CommunityRequestsEnable' => $enabled ] );
+		$serviceOptions = new ServiceOptions( WishlistConfig::CONSTRUCTOR_OPTIONS, [
+			WishlistConfig::CONFIG_ENABLED => $enabled,
+			WishlistConfig::CONFIG_HOMEPAGE => '',
+			WishlistConfig::CONFIG_WISH_CATEGORY => '',
+			WishlistConfig::CONFIG_WISH_PAGE_PREFIX => '',
+			WishlistConfig::CONFIG_WISH_INDEX_PAGE => '',
+			WishlistConfig::CONFIG_WISH_TEMPLATE => [],
+			WishlistConfig::CONFIG_WISH_TYPES => [],
+			WishlistConfig::CONFIG_PROJECTS => [],
+			WishlistConfig::CONFIG_STATUSES => [],
+		] );
+		$config = new WishlistConfig( $serviceOptions );
 		$text = '';
 		( new CommunityRequestsHooks( $config ) )->onParserAfterParse( $parser, $text, null );
 	}

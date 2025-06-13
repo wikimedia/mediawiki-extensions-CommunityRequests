@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 namespace MediaWiki\Extension\CommunityRequests\Test\Unit;
 
 use MediaWiki\Extension\CommunityRequests\Wish\WishStore;
+use MediaWiki\Extension\CommunityRequests\WishlistConfig;
 use MediaWiki\Title\Title;
 use MediaWikiIntegrationTestCase;
 
@@ -14,10 +15,12 @@ use MediaWikiIntegrationTestCase;
  */
 class WishHookHandlerTest extends MediaWikiIntegrationTestCase {
 
+	private WishlistConfig $config;
 	private WishStore $wishStore;
 
 	protected function setUp(): void {
 		parent::setUp();
+		$this->config = $this->getServiceContainer()->get( 'CommunityRequests.WishlistConfig' );
 		$this->wishStore = $this->getServiceContainer()->get( 'CommunityRequests.WishStore' );
 	}
 
@@ -38,18 +41,19 @@ class WishHookHandlerTest extends MediaWikiIntegrationTestCase {
 	created="2023-10-01T12:00:00Z"
 ></wish>
 END;
-		$prefix = $this->getServiceContainer()->getMainConfig()->get( 'CommunityRequestsWishPagePrefix' );
-		$statuses = $this->getServiceContainer()->getMainConfig()->get( 'CommunityRequestsStatuses' );
-		$types = $this->getServiceContainer()->getMainConfig()->get( 'CommunityRequestsWishTypes' );
-
 		$user = $this->getTestUser()->getUser();
-		$ret = $this->insertPage( Title::newFromText( $prefix . '123' ), $wikitext, NS_MAIN, $user );
+		$ret = $this->insertPage(
+			Title::newFromText( $this->config->getWishPagePrefix() . '123' ),
+			$wikitext,
+			NS_MAIN,
+			$user
+		);
 
 		$wish = $this->wishStore->getWish( $ret[ 'title' ] );
 		$this->assertSame( $ret[ 'id' ], $wish->getPage()->getId() );
 		$this->assertSame( 'Test Wish', $wish->getTitle() );
-		$this->assertSame( $statuses[ 'submitted' ][ 'id' ], $wish->getStatus() );
-		$this->assertSame( $types[ 'change' ][ 'id' ], $wish->getType() );
+		$this->assertSame( $this->config->getStatusIdFromWikitextVal( 'submitted' ), $wish->getStatus() );
+		$this->assertSame( $this->config->getWishTypeIdFromWikitextVal( 'change' ), $wish->getType() );
 		$this->assertSame( $user->getName(), $wish->getProposer()->getName() );
 		$this->assertSame( '2023-10-01T12:00:00Z', $wish->getCreated() );
 	}

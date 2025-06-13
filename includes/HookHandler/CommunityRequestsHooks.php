@@ -3,7 +3,7 @@ declare( strict_types = 1 );
 
 namespace MediaWiki\Extension\CommunityRequests\HookHandler;
 
-use MediaWiki\Config\Config;
+use MediaWiki\Extension\CommunityRequests\WishlistConfig;
 use MediaWiki\Hook\GetDoubleUnderscoreIDsHook;
 use MediaWiki\Hook\LoginFormValidErrorMessagesHook;
 
@@ -12,17 +12,12 @@ class CommunityRequestsHooks implements GetDoubleUnderscoreIDsHook, LoginFormVal
 	public const MAGIC_MACHINETRANSLATION = 'machinetranslation';
 	public const ERROR_TRACKING_CATEGORY = 'communityrequests-error-category';
 
-	protected Config $config;
-	protected bool $enabled;
-
-	public function __construct( Config $config ) {
-		$this->config = $config;
-		$this->enabled = $this->config->get( 'CommunityRequestsEnable' );
+	public function __construct( protected WishlistConfig $config ) {
 	}
 
 	/** @inheritDoc */
 	public function onGetDoubleUnderscoreIDs( &$doubleUnderscoreIDs ) {
-		if ( !$this->enabled ) {
+		if ( !$this->config->isEnabled() ) {
 			return;
 		}
 		$doubleUnderscoreIDs[] = self::MAGIC_MACHINETRANSLATION;
@@ -30,7 +25,7 @@ class CommunityRequestsHooks implements GetDoubleUnderscoreIDsHook, LoginFormVal
 
 	/** @inheritDoc */
 	public function onParserAfterParse( $parser, &$text, $stripState ) {
-		if ( !$this->enabled ) {
+		if ( !$this->config->isEnabled() ) {
 			return;
 		}
 		if ( $parser->getOutput()->getPageProperty( self::MAGIC_MACHINETRANSLATION ) !== null ) {
@@ -40,7 +35,7 @@ class CommunityRequestsHooks implements GetDoubleUnderscoreIDsHook, LoginFormVal
 
 	/** @inheritDoc */
 	public function onLoginFormValidErrorMessages( array &$messages ) {
-		if ( !$this->enabled ) {
+		if ( !$this->config->isEnabled() ) {
 			return;
 		}
 		$messages[] = 'communityrequests-please-log-in';

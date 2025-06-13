@@ -7,19 +7,18 @@ use MediaWiki\Api\ApiMain;
 use MediaWiki\Api\ApiUsageException;
 use MediaWiki\Content\WikitextContent;
 use MediaWiki\Context\DerivativeContext;
+use MediaWiki\Extension\CommunityRequests\WishlistConfig;
 use MediaWiki\HookContainer\HookContainer;
 use MediaWiki\Html\Html;
 use MediaWiki\HTMLForm\HTMLForm;
 use MediaWiki\MediaWikiServices;
 use MediaWiki\Message\Message;
-use MediaWiki\Page\WikiPageFactory;
 use MediaWiki\Registration\ExtensionRegistry;
 use MediaWiki\Request\DerivativeRequest;
 use MediaWiki\ResourceLoader as RL;
 use MediaWiki\SpecialPage\FormSpecialPage;
 use MediaWiki\Status\Status;
 use MediaWiki\Title\Title;
-use MediaWiki\Title\TitleFormatter;
 use MediaWiki\Title\TitleParser;
 
 /**
@@ -33,26 +32,18 @@ class SpecialWishlistIntake extends FormSpecialPage {
 	protected const EDIT_SUMMARY_PUBLISH = 'communityrequests-publish-wish-summary';
 	protected const EDIT_SUMMARY_SAVE = 'communityrequests-save-wish-summary';
 
-	protected WishStore $wishStore;
-	protected WikiPageFactory $wikiPageFactory;
-	protected Title $pageTitle;
-	protected TitleParser $titleParser;
-	protected TitleFormatter $titleFormatter;
-	protected HookContainer $hookContainer;
+	private Title $pageTitle;
 	protected ?int $wishId = null;
 
 	/** @inheritDoc */
 	public function __construct(
-		WishStore $wishStore,
-		WikiPageFactory $wikiPageFactory,
-		TitleParser $titleParser,
-		HookContainer $hookContainer
+		protected WishlistConfig $config,
+		protected WishStore $wishStore,
+		protected $wikiPageFactory,
+		protected TitleParser $titleParser,
+		protected HookContainer $hookContainer
 	) {
 		parent::__construct( 'WishlistIntake' );
-		$this->wishStore = $wishStore;
-		$this->wikiPageFactory = $wikiPageFactory;
-		$this->titleParser = $titleParser;
-		$this->hookContainer = $hookContainer;
 	}
 
 	/** @inheritDoc */
@@ -127,7 +118,7 @@ class SpecialWishlistIntake extends FormSpecialPage {
 		$this->getOutput()->addJsConfigVars( [
 			'intakeWishId' => $wishId,
 			'intakeWishData' => [
-				...$wish->toArray( $this->getConfig() ),
+				...$wish->toArray( $this->config ),
 				'description' => $wikitextData[ $wishTemplate[ 'params' ][ 'description' ] ],
 				'audience' => $wikitextData[ $wishTemplate[ 'params' ][ 'audience' ] ],
 			]
@@ -236,7 +227,7 @@ class SpecialWishlistIntake extends FormSpecialPage {
 			$this->getContentLanguage()->getCode(),
 			$this->getUser(),
 			$data,
-			$this->getConfig()
+			$this->config
 		);
 
 		$wishTemplate = $this->titleParser->parseTitle(
@@ -262,7 +253,7 @@ class SpecialWishlistIntake extends FormSpecialPage {
 		}
 
 		$status = $this->save(
-			$wish->toWikitext( $wishTemplate, $this->getConfig() ),
+			$wish->toWikitext( $wishTemplate, $this->config ),
 			$summary,
 			$data[ 'wpEditToken' ],
 			// FIXME: use Wish::WISHLIST_TAG once we have ApiWishEdit

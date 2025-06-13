@@ -1,9 +1,11 @@
 <?php
 
+use MediaWiki\Config\ServiceOptions;
 use MediaWiki\Extension\CommunityRequests\IdGenerator\IdGenerator;
 use MediaWiki\Extension\CommunityRequests\IdGenerator\SqlIdGenerator;
 use MediaWiki\Extension\CommunityRequests\IdGenerator\UpsertSqlIdGenerator;
 use MediaWiki\Extension\CommunityRequests\Wish\WishStore;
+use MediaWiki\Extension\CommunityRequests\WishlistConfig;
 use MediaWiki\MainConfigNames;
 use MediaWiki\MediaWikiServices;
 
@@ -17,6 +19,12 @@ return [
 		}
 		return new SqlIdGenerator( $connectionProvider );
 	},
+	'CommunityRequests.WishlistConfig' => static function ( MediaWikiServices $services ): WishlistConfig {
+		return new WishlistConfig( new ServiceOptions(
+			WishlistConfig::CONSTRUCTOR_OPTIONS,
+			$services->getMainConfig()
+		) );
+	},
 	'CommunityRequests.WishStore' => static function ( MediaWikiServices $services ): WishStore {
 		return new WishStore(
 			$services->getActorNormalization(),
@@ -28,7 +36,7 @@ return [
 			$services->getTitleParser(),
 			$services->getTitleFormatter(),
 			$services->get( 'CommunityRequests.IdGenerator' ),
-			$services->getMainConfig()
+			$services->get( 'CommunityRequests.WishlistConfig' )
 		);
-	},
+	}
 ];

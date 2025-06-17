@@ -9,7 +9,8 @@ use MediaWiki\Extension\CommunityRequests\Wish\Wish;
 
 /**
  * Service that abstracts retrieving configuration values, with methods to
- * transform between string values used in wikitext and the IDs used in the database.
+ * transform between string values used in wikitext, IDs used in the database,
+ * and labels used in the UI.
  *
  * @newable
  */
@@ -112,7 +113,7 @@ class WishlistConfig {
 		return $this->statuses;
 	}
 
-	// IDs from wikitext values
+	// IDs and labels from wikitext values
 
 	/**
 	 * Get the ID of a wish type from its wikitext value.
@@ -122,6 +123,17 @@ class WishlistConfig {
 	 */
 	public function getWishTypeIdFromWikitextVal( string $type ): int {
 		return $this->getIdFromWikitextVal( $type, $this->wishTypes );
+	}
+
+	/**
+	 * Get the label of a wish type from its wikitext value.
+	 *
+	 * @param string $type
+	 * @return ?string The label of the wish type, or null if not found.
+	 */
+	public function getWishTypeLabelFromWikitextVal( string $type ): ?string {
+		$type = trim( $type );
+		return $this->wishTypes[ $type ][ 'label' ] ?? null;
 	}
 
 	/**
@@ -139,6 +151,20 @@ class WishlistConfig {
 	}
 
 	/**
+	 * Get the label of a project from its wikitext value.
+	 *
+	 * @param string $project
+	 * @return ?string The label of the project, or null if not found.
+	 */
+	public function getProjectLabelFromWikitextVal( string $project ): ?string {
+		if ( $project === Wish::TEMPLATE_VALUE_PROJECTS_ALL ) {
+			return 'communityrequests-project-all-projects';
+		}
+		$project = trim( $project );
+		return $this->projects[ $project ][ 'label' ] ?? null;
+	}
+
+	/**
 	 * Get the ID of a status from its wikitext value.
 	 *
 	 * @param string $status
@@ -146,6 +172,17 @@ class WishlistConfig {
 	 */
 	public function getStatusIdFromWikitextVal( string $status ): int {
 		return $this->getIdFromWikitextVal( $status, $this->statuses );
+	}
+
+	/**
+	 * Get the label of a status from its wikitext value.
+	 *
+	 * @param string $status
+	 * @return ?string The label of the status, or null if not found.
+	 */
+	public function getStatusLabelFromWikitextVal( string $status ): ?string {
+		$status = trim( $status );
+		return $this->statuses[ $status ][ 'label' ] ?? null;
 	}
 
 	/**

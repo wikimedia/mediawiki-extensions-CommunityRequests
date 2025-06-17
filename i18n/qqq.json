@@ -75,9 +75,9 @@
 	"communityrequests-wish-audience-heading": "Heading for the 'affected users' section of wish pages. Similar to {{msg-mw|communityrequests-audience-label}} which is used on the form field for the same content.",
 	"communityrequests-wish-phabricator-heading": "Heading for the 'Phabricator tasks' section of wish pages. Similar to {{msg-mw|communityrequests-phabricator-label}} which is used on the form field for the same content.",
 	"communityrequests-wish-other-details-heading": "Heading for the 'other details' section of wish pages, containing dates, author, etc.",
-	"communityrequests-wish-created": "Label for a wish's date and time of creation.",
-	"communityrequests-wish-updated": "Label for a wish's date and time of last update.",
-	"communityrequests-wish-proposer": "Label for a wish's proposer (linked username and talk page link).",
+	"communityrequests-wish-created": "Label for a wish's date and time of creation.\n\nParameters:\n* $1 — Date and time of creation, formatted in the user's preferred date format.",
+	"communityrequests-wish-updated": "Label for a wish's date and time of last update.\n\nParameters:\n* $1 — Date and time of last update, formatted in the user's preferred date format.",
+	"communityrequests-wish-proposer": "Label for a wish's proposer (linked username and talk page link).\n\nParameters:\n* $1 — The proposer's username, formatted with {{msg-mw|signature}}.",
 	"communityrequests-wishes-type-header": "Table column header for the 'type' column.",
 	"communityrequests-wishes-projects-header": "Table column header for the 'projects' column.",
 	"communityrequests-wishes-date-header": "Table column header for the 'date' column.",
@@ -110,5 +110,7 @@
 	"communityrequests-publish-wish-summary": "Edit summary for new wishes made using [[Special:WishlistIntake]].\n\nParameters:\n* $1 — The title of the wish that was published.",
 	"communityrequests-save-wish-summary": "Edit summary for existing wishes that were edited using [[Special:WishlistIntake]].\n\nParameters:\n* $1 — The title of the wish that was saved.",
 	"communityrequests-error-category": "{{tracking category name}}\nName of [[mw:Help:Tracking categories|tracking category]] to list wishes and focus areas that contain errors.",
-	"communityrequests-error-category-desc": "Description on [[Special:TrackingCategories]] for the {{msg-mw|communityrequests-error-category}} tracking category."
+	"communityrequests-error-category-desc": "Description on [[Special:TrackingCategories]] for the {{msg-mw|communityrequests-error-category}} tracking category.",
+	"communityrequests-wish-category": "{{tracking category name}}\nName of [[mw:Help:Tracking categories|tracking category]] to list all wishes.",
+	"communityrequests-wish-category-desc": "Description on [[Special:TrackingCategories]] for the {{msg-mw|communityrequests-wish-category}} tracking category."
 }

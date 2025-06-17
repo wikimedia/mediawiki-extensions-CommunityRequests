@@ -1,0 +1,48 @@
+@import 'mediawiki.skin.variables.less';
+
+// Styles here are render-blocking.
+// Only add styles that are essential for the initial rendering of the page.
+
+// Viewing a wish
+.ext-communityrequests-wish {
+	&--edit {
+		.cdx-mixin-css-icon( @cdx-icon-edit, @param-is-button-icon: true );
+	}
+
+	&--speech-bubbles {
+		.cdx-mixin-css-icon( @cdx-icon-speech-bubbles, @param-is-button-icon: true );
+	}
+
+	&--heading.mw-heading {
+		display: flex;
+		justify-content: space-between;
+	}
+
+	.ext-communityrequests-wish--status {
+		font-family: @font-family-base;
+		font-size: @font-size-small;
+	}
+}
+
+// Codex styles
+.cdx-info-chip {
+	background-color: @background-color-notice-subtle;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: @spacing-25;
+	box-sizing: border-box;
+	max-width: 100%;
+	border: 1px solid @border-color-notice;
+	border-radius: @border-radius-pill;
+	padding: 0 calc((@font-size-medium - 2px) * .5);
+	line-height: @line-height-small;
+
+	&__text {
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		color: @color-base;
+		font-size: @font-size-small;
+	}
+}

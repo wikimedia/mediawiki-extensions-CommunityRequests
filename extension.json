@@ -20,7 +20,8 @@
 		}
 	},
 	"TrackingCategories": [
-		"communityrequests-error-category"
+		"communityrequests-error-category",
+		"communityrequests-wish-category"
 	],
 	"AutoloadNamespaces": {
 		"MediaWiki\\Extension\\CommunityRequests\\": "includes/"
@@ -58,10 +59,12 @@
 		},
 		"wish": {
 			"class": "MediaWiki\\Extension\\CommunityRequests\\HookHandler\\WishHookHandler",
-			"services": [ "CommunityRequests.WishlistConfig", "CommunityRequests.WishStore", "UserFactory" ]
-		},
-		"schema": {
-			"class": "MediaWiki\\Extension\\CommunityRequests\\HookHandler\\SchemaHooks"
+			"services": [
+				"CommunityRequests.WishlistConfig",
+				"CommunityRequests.WishStore",
+				"UserFactory",
+				"LinkRenderer"
+			]
 		},
 		"focusarea": {
 			"class": "MediaWiki\\Extension\\CommunityRequests\\HookHandler\\FocusAreaHookHandler",
@@ -70,6 +73,10 @@
 				"CommunityRequests.FocusAreaStore",
 				"CommunityRequests.Logger"
 			]
+		},
+		"schema": {
+			"class": "MediaWiki\\Extension\\CommunityRequests\\HookHandler\\SchemaHooks",
+			"factory": "MediaWiki\\Extension\\CommunityRequests\\HookHandler\\SchemaHooks::newFromGlobalState"
 		}
 	},
 	"SpecialPages": {
@@ -90,6 +97,17 @@
 		"remoteExtPath": "CommunityRequsts/modules"
 	},
 	"ResourceModules": {
+		"ext.communityrequests.styles": {
+			"class": "MediaWiki\\ResourceLoader\\CodexModule",
+			"codexStyleOnly": true,
+			"codexComponents": [
+				"CdxButton",
+				"CdxIcon",
+				"CdxInfoChip",
+				"CdxMessage"
+			],
+			"styles": "common/styles.less"
+		},
 		"ext.communityrequests.intake": {
 			"class": "MediaWiki\\ResourceLoader\\CodexModule",
 			"codexComponents": [
@@ -369,12 +387,12 @@
 			"value": {
 				"draft": {
 					"id": 0,
-					"label": "communityrequests-status-draft",
-					"default": true
+					"label": "communityrequests-status-draft"
 				},
 				"submitted": {
 					"id": 1,
-					"label": "communityrequests-status-submitted"
+					"label": "communityrequests-status-submitted",
+					"default": true
 				},
 				"open": {
 					"id": 2,

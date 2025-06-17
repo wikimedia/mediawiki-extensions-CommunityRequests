@@ -8,27 +8,35 @@ class ViewWishPage extends Page {
 	}
 
 	get statusChip() {
-		return $( '.wishlist-intake-titleandstatus .cdx-info-chip' );
+		return $( '.ext-communityrequests-wish--status' );
 	}
 
 	get wishTitle() {
-		return $( '.wishlist-intake-titleandstatus' );
+		return $( '.ext-communityrequests-wish--title' );
 	}
 
 	get description() {
-		return $( '#Description' ).parentElement().nextElement();
+		return $( '.ext-communityrequests-wish--description' );
 	}
 
 	get wishType() {
-		return $( '#Type_of_wish' ).parentElement().nextElement();
+		return $( '.ext-communityrequests-wish--wish-type' );
 	}
 
 	get projects() {
-		return $( '#Related_projects' ).parentElement().nextElement();
+		return $( '.ext-communityrequests-wish--projects' );
 	}
 
 	get audience() {
-		return $( '#Affected_users' ).parentElement().nextElement();
+		return $( '.ext-communityrequests-wish--audience' );
+	}
+
+	get phabTasks() {
+		return $( '.ext-communityrequests-wish--phab-tasks' );
+	}
+
+	get proposer() {
+		return $( '.ext-communityrequests-wish--proposer' );
 	}
 }
 

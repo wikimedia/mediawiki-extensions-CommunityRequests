@@ -110,12 +110,30 @@ class WishlistConfigTest extends MediaWikiUnitTestCase {
 	}
 
 	/**
+	 * @covers ::getWishTypeLabelFromWikitextVal
+	 */
+	public function testGetWishTypeLabelFromWikitextVal(): void {
+		$this->assertSame( 'type-feature', $this->config->getWishTypeLabelFromWikitextVal( 'feature' ) );
+		$this->assertSame( 'type-bug', $this->config->getWishTypeLabelFromWikitextVal( 'bug' ) );
+		$this->assertNull( $this->config->getWishTypeLabelFromWikitextVal( 'bogus' ) );
+	}
+
+	/**
 	 * @covers ::getProjectIdFromWikitextVal
 	 */
 	public function testGetProjectIdFromWikitextVal(): void {
 		$this->assertSame( 0, $this->config->getProjectIdFromWikitextVal( 'wikipedia' ) );
 		$this->assertSame( 1, $this->config->getProjectIdFromWikitextVal( 'wikisource' ) );
 		$this->assertNull( $this->config->getProjectIdFromWikitextVal( 'bogus' ) );
+	}
+
+	/**
+	 * @covers ::getProjectLabelFromWikitextVal
+	 */
+	public function testGetProjectLabelFromWikitextVal(): void {
+		$this->assertSame( 'project-wikipedia', $this->config->getProjectLabelFromWikitextVal( 'wikipedia' ) );
+		$this->assertSame( 'project-wikisource', $this->config->getProjectLabelFromWikitextVal( 'wikisource' ) );
+		$this->assertNull( $this->config->getProjectLabelFromWikitextVal( 'bogus' ) );
 	}
 
 	/**
@@ -126,6 +144,16 @@ class WishlistConfigTest extends MediaWikiUnitTestCase {
 		$this->assertSame( 1, $this->config->getStatusIdFromWikitextVal( 'closed' ) );
 		$this->assertSame( 2, $this->config->getStatusIdFromWikitextVal( 'unknown' ) );
 		$this->assertSame( 2, $this->config->getStatusIdFromWikitextVal( 'bogus' ) );
+	}
+
+	/**
+	 * @covers ::getStatusLabelFromWikitextVal
+	 */
+	public function testGetStatusLabelFromWikitextVal(): void {
+		$this->assertSame( 'status-open', $this->config->getStatusLabelFromWikitextVal( 'open' ) );
+		$this->assertSame( 'status-closed', $this->config->getStatusLabelFromWikitextVal( 'closed' ) );
+		$this->assertSame( 'status-unknown', $this->config->getStatusLabelFromWikitextVal( 'unknown' ) );
+		$this->assertNull( $this->config->getStatusLabelFromWikitextVal( 'bogus' ) );
 	}
 
 	/**

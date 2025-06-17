@@ -1,20 +1,13 @@
 'use strict';
+
 const UserPreferences = require( '../userpreferences.js' );
 const IntakePage = require( '../pageobjects/wishlistintake.page.js' );
 const ViewWishPage = require( '../pageobjects/viewwish.page.js' );
 const LoginPage = require( 'wdio-mediawiki/LoginPage.js' );
-const Util = require( 'wdio-mediawiki/Util.js' );
 const Api = require( 'wdio-mediawiki/Api.js' );
-const wgConfig = {
-	CommunityRequestsWishPagePrefix: 'Community Wishlist/Wishes/'
-};
+const { config } = require( '../../../extension.json' );
 
 describe( 'WishlistIntake wish submission', () => {
-	let title;
-
-	before( () => {
-		title = Util.getTestString( 'Selenium test wish' );
-	} );
 
 	it( 'should prompt logged out users to login', async () => {
 		await IntakePage.open();
@@ -57,7 +50,7 @@ describe( 'WishlistIntake wish submission', () => {
 	} );
 
 	it( 'should hide errors if all required fields are filled in on submission', async () => {
-		await IntakePage.titleInput.setValue( title );
+		await IntakePage.titleInput.setValue( 'This is a test wish' );
 		await IntakePage.descriptionInput.click();
 		await IntakePage.descriptionInput.setValue( 'This is a test description.\n'.repeat( 10 ) );
 		await IntakePage.firstWishTypeInput.click();
@@ -72,14 +65,15 @@ describe( 'WishlistIntake wish submission', () => {
 		await expect( IntakePage.audienceError ).not.toBeDisplayed();
 	} );
 
-	// FIXME: restore test after <community-request> parser tag is implemented.
-	it.skip( 'should show all the data entered in the form', async () => {
-		await expect( ViewWishPage.successMessage ).toBeDisplayed( { timeout: 8000 } );
-		await expect(
-			await browser.execute( () => mw.config.get( 'wgTitle' ) )
-		).toBe( wgConfig.CommunityRequestsWishPagePrefix + title );
+	it( 'should show all the data entered in the form', async () => {
+		await expect( ViewWishPage.successMessage ).toBeDisplayed( { timeout: 30 } );
+		const pageTitle = await browser.execute( () => mw.config.get( 'wgTitle' ) );
+		await expect( pageTitle ).toMatch(
+			// eslint-disable-next-line security/detect-non-literal-regexp
+			new RegExp( `^${ config.CommunityRequestsWishPagePrefix.value }\\d+$` )
+		);
 
-		await expect( ( await ViewWishPage.wishTitle.getText() ).trim() ).toBe( title );
+		await expect( ( await ViewWishPage.wishTitle.getText() ).trim() ).toBe( 'This is a test wish' );
 		await expect( await ViewWishPage.statusChip.getText() ).toBe( 'Submitted' );
 		await expect( await ViewWishPage.description.getText() ).toContain(
 			'This is a test description.'
@@ -89,11 +83,13 @@ describe( 'WishlistIntake wish submission', () => {
 		await expect( ( await ViewWishPage.audience.getText() ).trim() ).toBe(
 			'This is a test audience'
 		);
-	} );
+		await expect( await ViewWishPage.phabTasks.getText() ).toBe( 'T123, T456' );
+		await expect( await ViewWishPage.proposer.getText() ).toBe(
+			`Author: ${ browser.config.mwUser } (talk)`
+		);
 
-	after( async () => {
 		const bot = await Api.bot();
-		bot.delete( wgConfig.CommunityRequestsWishPagePrefix + title, 'Test cleanup' ).catch( ( e ) => {
+		await bot.delete( pageTitle, 'Test cleanup' ).catch( ( e ) => {
 			console.error( e );
 		} );
 	} );

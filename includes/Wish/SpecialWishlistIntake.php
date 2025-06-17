@@ -20,6 +20,7 @@ use MediaWiki\SpecialPage\FormSpecialPage;
 use MediaWiki\Status\Status;
 use MediaWiki\Title\Title;
 use MediaWiki\Title\TitleParser;
+use MediaWiki\Title\TitleValue;
 use MediaWiki\User\UserFactory;
 
 /**
@@ -99,9 +100,7 @@ class SpecialWishlistIntake extends FormSpecialPage {
 	 * @return bool False if there was an error.
 	 */
 	private function loadExistingWish( int $wishId ): bool {
-		$this->pageTitle = Title::newFromText(
-			$this->config->getWishPagePrefix() . $wishId
-		);
+		$this->pageTitle = Title::newFromText( $this->config->getWishPagePrefix() . $wishId );
 		$wish = $this->wishStore->getWish( $this->pageTitle );
 
 		if ( !$wish ) {
@@ -205,10 +204,25 @@ class SpecialWishlistIntake extends FormSpecialPage {
 
 	/** @inheritDoc */
 	protected function alterForm( HTMLForm $form, string $module = 'ext.communityrequests.intake' ) {
+		// Loading state and fallback for no-JS users. (To be removed once we have Codex PHP.)
+		$loadingText = Html::element( 'p', [], $this->msg( 'communityrequests-form-loading' )->text() );
+		$homepage = $this->titleParser->parseTitle( $this->config->getHomepage() );
+		$discussionPage = new TitleValue( $homepage->getNamespace() + 1, $homepage->getDBkey() );
+		$loadingText2 = Html::rawElement( 'p', [],
+			$this->msg( 'communityrequests-form-loading-1' ) . "\n" .
+			$this->msg(
+				'communityrequests-form-loading-2',
+				$this->getLinkRenderer()->makeLink( $discussionPage )
+			)->plain()
+		);
+		$container = Html::rawElement( 'div', [
+			'class' => 'ext-communityrequests-intake',
+		], $loadingText . $loadingText2 );
+
 		$form->setId( 'ext-communityrequests-intake-form' )
 			->suppressDefaultSubmit()
 			// Add div that the Vue app will be mounted to. This needs to be inside the server-generated <form> tag.
-			->addHeaderHtml( Html::element( 'div', [ 'class' => 'ext-communityrequests-intake' ] ) );
+			->addHeaderHtml( $container );
 	}
 
 	/** @inheritDoc */

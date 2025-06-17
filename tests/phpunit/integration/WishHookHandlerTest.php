@@ -29,19 +29,19 @@ class WishHookHandlerTest extends MediaWikiIntegrationTestCase {
 	 *
 	 * @covers ::renderWish
 	 * @covers ::onLinksUpdateComplete
-	 * @covers ::onBeforePageDisplay
 	 */
-	public function testCreateWishFromWikiPage() {
+	public function testCreateWishFromWikiPage(): void {
+		$user = $this->getTestUser()->getUser();
 		$wikitext = <<<END
 <wish
 	title="Test Wish"
 	status="submitted"
 	type="change"
-	description="This is a [[test]] {{wish}}."
+	projects="commons"
 	created="2023-10-01T12:00:00Z"
-></wish>
+	proposer="{$user->getName()}"
+>This is a [[test]] {{wish}}.</wish>
 END;
-		$user = $this->getTestUser()->getUser();
 		$ret = $this->insertPage(
 			Title::newFromText( $this->config->getWishPagePrefix() . '123' ),
 			$wikitext,
@@ -54,7 +54,49 @@ END;
 		$this->assertSame( 'Test Wish', $wish->getTitle() );
 		$this->assertSame( $this->config->getStatusIdFromWikitextVal( 'submitted' ), $wish->getStatus() );
 		$this->assertSame( $this->config->getWishTypeIdFromWikitextVal( 'change' ), $wish->getType() );
+		$this->assertSame( [ $this->config->getProjectIdFromWikitextVal( 'commons' ) ], $wish->getProjects() );
 		$this->assertSame( $user->getName(), $wish->getProposer()->getName() );
 		$this->assertSame( '2023-10-01T12:00:00Z', $wish->getCreated() );
 	}
+
+	/**
+	 * @dataProvider provideTestTrackingCategories
+	 * @covers ::renderWish
+	 */
+	public function testTrackingCategories( string $wikitext, bool $shouldBeInCategory ): void {
+		$userName = $this->getTestUser()->getUser()->getName();
+		$ret = $this->insertPage(
+			Title::newFromText( $this->config->getWishPagePrefix() . '123' ),
+			str_replace( '$1', $userName, $wikitext ),
+			NS_MAIN,
+			$this->getTestUser()->getUser()
+		);
+		$categories = array_keys( $ret[ 'title' ]->getParentCategories() );
+		$this->assertContains( 'Category:Community_Wishlist/Wishes', $categories );
+		if ( $shouldBeInCategory ) {
+			$this->assertContains( 'Category:Pages_with_Community_Wishlist_errors', $categories );
+		} else {
+			$this->assertNotContains( 'Category:Pages_with_Community_Wishlist_errors', $categories );
+		}
+	}
+
+	// phpcs:disable Generic.Files.LineLength.TooLong
+	public static function provideTestTrackingCategories(): array {
+		return [
+			'valid wish' => [
+				'<wish title="Valid Wish" status="submitted" type="change" projects="commons" created="2023-10-01T12:00:00Z" proposer="$1">A valid wish</wish>',
+				false,
+			],
+			'missing title' => [
+				'<wish status="submitted" type="change" projects="commons" created="2023-10-01T12:00:00Z" proposer="$1">Missing title</wish>',
+				true,
+			],
+			'unknown status' => [
+				'<wish title="Invalid Status Wish" status="bogus" type="change" projects="commons" created="2023-10-01T12:00:00Z" proposer="$1">Unknown status</wish>',
+				true,
+			],
+		];
+	}
+
+	// phpcs:enable Generic.Files.LineLength.TooLong
 }

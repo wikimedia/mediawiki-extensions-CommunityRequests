@@ -75,9 +75,9 @@
 	"communityrequests-wish-audience-heading": "Affected users",
 	"communityrequests-wish-phabricator-heading": "Phabricator tasks",
 	"communityrequests-wish-other-details-heading": "Other details",
-	"communityrequests-wish-created": "Created",
-	"communityrequests-wish-updated": "Last updated",
-	"communityrequests-wish-proposer": "Author",
+	"communityrequests-wish-created": "Created: $1",
+	"communityrequests-wish-updated": "Last updated: $1",
+	"communityrequests-wish-proposer": "Author: $1",
 	"communityrequests-wishes-type-header": "Type",
 	"communityrequests-wishes-projects-header": "Projects",
 	"communityrequests-wishes-date-header": "Date (UTC)",
@@ -110,5 +110,7 @@
 	"communityrequests-publish-wish-summary": "Publishing the wish \"$1\"",
 	"communityrequests-save-wish-summary": "Updating the wish \"$1\"",
 	"communityrequests-error-category": "Pages with Community Wishlist errors",
-	"communityrequests-error-category-desc": "Pages in this category are Community Wishlist wishes or focus areas that contain errors."
+	"communityrequests-error-category-desc": "Pages in this category are Community Wishlist wishes or focus areas that contain errors.",
+	"communityrequests-wish-category": "Community Wishlist/Wishes",
+	"communityrequests-wish-category-desc": "Pages in this category are Community Wishlist wishes."
 }

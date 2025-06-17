@@ -8,7 +8,7 @@ if ( Util.isNewWish() || Util.isWishEdit() ) {
 	const Vue = require( 'vue' );
 	const vm = Vue.createMwApp( IntakeForm, mw.config.get( 'intakeWishData' ) );
 	vm.mount( '.ext-communityrequests-intake' );
-} else if ( Util.isWishView() ) {
+} else if ( Util.isWishView() && mw.config.get( 'intakePostEdit' ) ) {
 	showPostEditBanner();
 }
 

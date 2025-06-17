@@ -9,7 +9,8 @@
 	"communityrequests-wish-loading-error": "Beim Parsing des Wunsch-Quelltextes ist ein Fehler aufgetreten. Er könnte ungültigen Wikitext enthalten. Bitte [$1 aktualisieren] und erneut versuchen, den [[$2|Quelltext-Editor]] benutzen, oder auf der [[$3|Talk-Seite]] um Hilfe bitten.",
 	"communityrequests-edit-with-form": "Mit Formular bearbeiten",
 	"communityrequests-wishlistintake": "Aufnahme in die Community-Wunschliste",
-	"communityrequests-form-subtitle": "Willkommen bei der neuen Community-Wunschliste. Bitte fülle das untenstehende Formular aus, um deinen Wunsch zu übermitteln.",
+	"communityrequests-form-subtitle": "Willkommen bei der Community-Wunschliste. Bitte fülle das untenstehende Formular aus, um deinen Wunsch zu übermitteln.",
+	"communityrequests-wish-not-found": "Der Wunsch [[$1]] wurde nicht gefunden oder nicht richtig gespeichert.",
 	"communityrequests-form-error": "Es ist etwas schiefgegangen. Bitte versuche erneut zu speichern oder bitte um Hilfe auf der [[$1|Diskussionsseite]].",
 	"communityrequests-description": "Beschreibe dein Problem",
 	"communityrequests-description-description": "Erläutere ausführlich den Wunsch oder das Problem, das du ansprichst",
@@ -106,5 +107,9 @@
 	"communityrequests-translation-switch": "Automatisch übersetzen mit [https://www.mediawiki.org/wiki/Special:MyLanguage/MinT dem maschinellen Übersetzungstool von Wikimedia].",
 	"communityrequests-translation-progress": "$1 von $2 {{PLURAL:$2|Textteil|Textteilen}} übersetzt.",
 	"communityrequests-translation-errors": "Es ist ein Fehler aufgetreten:",
-	"communityrequests-disabled": "Diese Funktion der Community-Wunschliste ist derzeit deaktiviert."
+	"communityrequests-disabled": "Diese Funktion der Community-Wunschliste ist derzeit deaktiviert.",
+	"communityrequests-publish-wish-summary": "Den Wunsch „$1“ veröffentlichen",
+	"communityrequests-save-wish-summary": "Aktualisierung des Wunsches „$1“",
+	"communityrequests-error-category": "Seiten mit Community-Wunschliste-Fehlern",
+	"communityrequests-error-category-desc": "Seiten in dieser Kategorie sind Wünsche der Community-Wunschliste oder Schwerpunktbereiche, die Fehler enthalten."
 }

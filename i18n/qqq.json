@@ -7,7 +7,7 @@
 	"communityrequests-desc": "{{desc|name=CommunityRequests|url=https://www.mediawiki.org/wiki/Special:MyLanguage/Extension:CommunityRequests}}",
 	"communityrequests-wish-loading-error": "Error message shown when loading the form.",
 	"communityrequests-edit-with-form": "Edit tab text.",
-	"communityrequests-wishlistintake": "Title of Special:WishlistIntake page.",
+	"communityrequests-wishlistintake": "{{doc-special|WishlistIntake}}",
 	"communityrequests-form-subtitle": "Introductory text at the top of the form.",
 	"communityrequests-form-error": "General error message.",
 	"communityrequests-description": "Form field label.",

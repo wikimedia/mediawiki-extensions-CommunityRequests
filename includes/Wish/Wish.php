@@ -18,31 +18,32 @@ use MediaWiki\Utils\MWTimestamp;
  */
 class Wish {
 
+	public const WISHLIST_CHANGE_TAG = 'community-wishlist';
+
 	// Constants used for parsing and constructing the template invocation.
-	public const WISHLIST_TAG = 'community-wishlist';
-	public const TEMPLATE_PARAM_STATUS = 'status';
-	public const TEMPLATE_PARAM_TYPE = 'type';
-	public const TEMPLATE_PARAM_TITLE = 'title';
-	public const TEMPLATE_PARAM_FOCUS_AREA = 'focusArea';
-	public const TEMPLATE_PARAM_DESCRIPTION = 'description';
-	public const TEMPLATE_PARAM_AUDIENCE = 'audience';
-	public const TEMPLATE_PARAM_PROJECTS = 'projects';
-	public const TEMPLATE_PARAM_OTHER_PROJECT = 'otherProject';
-	public const TEMPLATE_PARAM_PHAB_TASKS = 'phabTasks';
-	public const TEMPLATE_PARAM_PROPOSER = 'proposer';
-	public const TEMPLATE_PARAM_CREATED = 'created';
-	public const TEMPLATE_PARAMS = [
-		self::TEMPLATE_PARAM_STATUS,
-		self::TEMPLATE_PARAM_TYPE,
-		self::TEMPLATE_PARAM_TITLE,
-		self::TEMPLATE_PARAM_FOCUS_AREA,
-		self::TEMPLATE_PARAM_DESCRIPTION,
-		self::TEMPLATE_PARAM_AUDIENCE,
-		self::TEMPLATE_PARAM_PROJECTS,
-		self::TEMPLATE_PARAM_OTHER_PROJECT,
-		self::TEMPLATE_PARAM_PHAB_TASKS,
-		self::TEMPLATE_PARAM_PROPOSER,
-		self::TEMPLATE_PARAM_CREATED,
+	public const TAG_ATTR_STATUS = 'status';
+	public const TAG_ATTR_TYPE = 'type';
+	public const TAG_ATTR_TITLE = 'title';
+	public const TAG_ATTR_FOCUS_AREA = 'focusarea';
+	public const TAG_ATTR_DESCRIPTION = 'description';
+	public const TAG_ATTR_AUDIENCE = 'audience';
+	public const TAG_ATTR_PROJECTS = 'projects';
+	public const TAG_ATTR_OTHER_PROJECT = 'otherproject';
+	public const TAG_ATTR_PHAB_TASKS = 'phabtasks';
+	public const TAG_ATTR_PROPOSER = 'proposer';
+	public const TAG_ATTR_CREATED = 'created';
+	public const TAG_ATTRS = [
+		self::TAG_ATTR_STATUS,
+		self::TAG_ATTR_TYPE,
+		self::TAG_ATTR_TITLE,
+		self::TAG_ATTR_FOCUS_AREA,
+		self::TAG_ATTR_DESCRIPTION,
+		self::TAG_ATTR_AUDIENCE,
+		self::TAG_ATTR_PROJECTS,
+		self::TAG_ATTR_OTHER_PROJECT,
+		self::TAG_ATTR_PHAB_TASKS,
+		self::TAG_ATTR_PROPOSER,
+		self::TAG_ATTR_CREATED,
 	];
 	public const TEMPLATE_VALUE_PROJECTS_ALL = 'all';
 	public const TEMPLATE_ARRAY_DELIMITER = ',';
@@ -303,29 +304,29 @@ class Wish {
 	 * @return WikitextContent
 	 */
 	public function toWikitext( TitleValue $template, WishlistConfig $config ): WikitextContent {
-		$templateConfig = $config->getWishTemplate();
 		$templateCall = $template->getNamespace() === NS_TEMPLATE ?
 			$template->getText() :
-			':' . $templateConfig[ 'page' ];
+			':' . $config->getWishTemplatePage();
 
 		$wikitext = "{{" . $templateCall . "\n";
 
-		foreach ( self::TEMPLATE_PARAMS as $paramId ) {
-			$param = $templateConfig[ 'params' ][ $paramId ];
+		foreach ( self::TAG_ATTRS as $attr ) {
+			$param = $config->getWishTemplateParams()[ $attr ];
 
 			// Match ID values to their wikitext representations, as defined by site configuration.
-			$value = match ( $paramId ) {
-				self::TEMPLATE_PARAM_PROJECTS => array_map(
+			$value = match ( $attr ) {
+				self::TAG_ATTR_PROJECTS => array_map(
 					static fn ( $id ) => $config->getProjectWikitextValFromId( $id ),
 					$this->projects
 				),
-				self::TEMPLATE_PARAM_PHAB_TASKS => array_map( static fn ( $id ) => "T$id", $this->phabTasks ),
-				self::TEMPLATE_PARAM_STATUS => $config->getStatusWikitextValFromId( $this->status ),
-				self::TEMPLATE_PARAM_TYPE => $config->getWishTypeWikitextValFromId( $this->type ),
-				self::TEMPLATE_PARAM_FOCUS_AREA => $this->focusAreaId,
-				self::TEMPLATE_PARAM_CREATED => MWTimestamp::convert( TS_ISO_8601, $this->created ),
-				self::TEMPLATE_PARAM_PROPOSER => $this->proposer ? $this->proposer->getName() : '',
-				default => $this->{ $paramId } ?: '',
+				self::TAG_ATTR_OTHER_PROJECT => $this->otherProject ?? '',
+				self::TAG_ATTR_PHAB_TASKS => array_map( static fn ( $id ) => "T$id", $this->phabTasks ),
+				self::TAG_ATTR_STATUS => $config->getStatusWikitextValFromId( $this->status ),
+				self::TAG_ATTR_TYPE => $config->getWishTypeWikitextValFromId( $this->type ),
+				self::TAG_ATTR_FOCUS_AREA => $this->focusAreaId,
+				self::TAG_ATTR_CREATED => MWTimestamp::convert( TS_ISO_8601, $this->created ),
+				self::TAG_ATTR_PROPOSER => $this->proposer ? $this->proposer->getName() : '',
+				default => $this->{ $attr },
 			};
 
 			if ( is_array( $value ) ) {
@@ -352,7 +353,7 @@ class Wish {
 	 * @param PageIdentity $pageTitle
 	 * @param string $lang
 	 * @param ?UserIdentity $proposer
-	 * @param array $params
+	 * @param array $params Keys are the TAG_ATTR_* constants.
 	 * @param WishlistConfig $config
 	 * @return Wish
 	 */
@@ -364,16 +365,16 @@ class Wish {
 		WishlistConfig $config
 	): self {
 		$fields = [
-			'type' => $config->getWishTypeIdFromWikitextVal( $params[ self::TEMPLATE_PARAM_TYPE ] ?? '' ),
-			'status' => $config->getStatusIdFromWikitextVal( $params[ self::TEMPLATE_PARAM_STATUS ] ?? '' ),
-			'title' => $params[ self::TEMPLATE_PARAM_TITLE ] ?? '',
-			'focusAreaId' => $params[ self::TEMPLATE_PARAM_FOCUS_AREA ] ?? null,
-			'created' => $params[ self::TEMPLATE_PARAM_CREATED ] ?? null,
-			'projects' => self::getProjectsFromCsv( $params[ self::TEMPLATE_PARAM_PROJECTS ] ?? '', $config ),
-			'otherProject' => $params[ self::TEMPLATE_PARAM_OTHER_PROJECT ] ?? null,
-			'audience' => $params[ self::TEMPLATE_PARAM_AUDIENCE ] ?? '',
-			'description' => $params[ self::TEMPLATE_PARAM_DESCRIPTION ] ?? '',
-			'phabTasks' => self::getPhabTasksFromCsv( $params[ self::TEMPLATE_PARAM_PHAB_TASKS ] ?? '' ),
+			'type' => $config->getWishTypeIdFromWikitextVal( $params[ self::TAG_ATTR_TYPE ] ?? '' ),
+			'status' => $config->getStatusIdFromWikitextVal( $params[ self::TAG_ATTR_STATUS ] ?? '' ),
+			'title' => $params[ self::TAG_ATTR_TITLE ] ?? '',
+			'focusAreaId' => $params[ self::TAG_ATTR_FOCUS_AREA ] ?? null,
+			'created' => $params[ self::TAG_ATTR_CREATED ] ?? null,
+			'projects' => self::getProjectsFromCsv( $params[ self::TAG_ATTR_PROJECTS ] ?? '', $config ),
+			'otherProject' => $params[ self::TAG_ATTR_OTHER_PROJECT ] ?? null,
+			'audience' => $params[ self::TAG_ATTR_AUDIENCE ] ?? '',
+			'description' => $params[ self::TAG_ATTR_DESCRIPTION ] ?? '',
+			'phabTasks' => self::getPhabTasksFromCsv( $params[ self::TAG_ATTR_PHAB_TASKS ] ?? '' ),
 			'baseLang' => $lang,
 		];
 

@@ -45,9 +45,9 @@ describe( 'SpecialWishlistIntake', () => {
 		expect( formData.get( 'description' ) ).toBe( 'Test Description' );
 		expect( formData.get( 'type' ) ).toBe( 'bug' );
 		expect( formData.get( 'projects' ) ).toBe( 'commons,wikisource' );
-		expect( formData.get( 'otherProject' ) ).toBe( 'Other Project' );
+		expect( formData.get( 'otherproject' ) ).toBe( 'Other Project' );
 		expect( formData.get( 'audience' ) ).toBe( 'Test Audience' );
-		expect( formData.get( 'phabTasks' ) ).toBe( 'T123,T456' );
+		expect( formData.get( 'phabtasks' ) ).toBe( 'T123,T456' );
 		// Only shown for staff
 		expect( formData.get( 'status' ) ).toBeNull();
 	} );

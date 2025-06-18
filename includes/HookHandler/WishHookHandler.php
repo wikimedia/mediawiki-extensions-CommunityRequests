@@ -149,14 +149,14 @@ class WishHookHandler extends CommunityRequestsHooks implements
 	/** @inheritDoc */
 	public function onListDefinedTags( &$tags ) {
 		if ( $this->config->isEnabled() ) {
-			$tags[] = Wish::WISHLIST_TAG;
+			$tags[] = Wish::WISHLIST_CHANGE_TAG;
 		}
 	}
 
 	/** @inheritDoc */
 	public function onChangeTagsListActive( &$tags ) {
 		if ( $this->config->isEnabled() ) {
-			$tags[] = Wish::WISHLIST_TAG;
+			$tags[] = Wish::WISHLIST_CHANGE_TAG;
 		}
 	}
 }

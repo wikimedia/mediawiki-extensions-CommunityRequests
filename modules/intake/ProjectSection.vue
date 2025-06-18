@@ -47,7 +47,7 @@
 				<cdx-text-input
 					:model-value="otherProject"
 					:aria-label="$i18n( 'communityrequests-project-other-label' ).text()"
-					name="otherProject"
+					name="otherproject"
 					@input="$emit( 'update:other-project', $event.target.value )"
 				>
 				</cdx-text-input>

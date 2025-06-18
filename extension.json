@@ -233,12 +233,12 @@
 					"status": "status",
 					"type": "type",
 					"title": "title",
-					"focusArea": "focusarea",
+					"focusarea": "focusarea",
 					"description": "description",
 					"audience": "audience",
 					"projects": "projects",
-					"otherProject": "otherproject",
-					"phabTasks": "tasks",
+					"otherproject": "otherproject",
+					"phabtasks": "tasks",
 					"proposer": "proposer",
 					"created": "created"
 				}

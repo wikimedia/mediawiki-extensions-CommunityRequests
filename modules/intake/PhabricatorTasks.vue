@@ -16,7 +16,7 @@
 		<input
 			:value="normalizeTaskIds( tasks )"
 			type="hidden"
-			name="phabTasks" />
+			name="phabtasks" />
 	</cdx-field>
 </template>
 

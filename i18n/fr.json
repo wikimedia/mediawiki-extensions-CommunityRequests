@@ -13,6 +13,7 @@
 	"communityrequests-edit-with-form": "Modifier avec le formulaire",
 	"communityrequests-wishlistintake": "Entrée de la liste de souhaits de la communauté",
 	"communityrequests-form-subtitle": "Bienvenue sur la liste de souhaits de la communauté. Veuillez remplir le formulaire ci-dessous pour soumettre votre souhait.",
+	"communityrequests-wish-not-found": "Le souhait [[$1]] n’a pas été trouvé ou n’a pas été correctement enregistré.",
 	"communityrequests-form-error": "Un problème s'est produit. Essayez de sauvegarder à nouveau ou demandez de l'aide sur la [[$1|page de discussion]].",
 	"communityrequests-description": "Décrivez votre problème",
 	"communityrequests-description-description": "Expliquez en détail le souhait ou le problème que vous abordez",
@@ -109,5 +110,9 @@
 	"communityrequests-translation-switch": "Traduisez-le automatiquement en utilisant [https://www.mediawiki.org/wiki/Special:MyLanguage/MinT l'outil de traduction automatique de Wikimédia].",
 	"communityrequests-translation-progress": "Traduit $1 sur $2 {{PLURAL:$2|partie|parties}} de texte.",
 	"communityrequests-translation-errors": "Une erreur s’est produite:",
-	"communityrequests-disabled": "Cette fonctionnalité de la liste de souhaits de la communauté est actuellement désactivée."
+	"communityrequests-disabled": "Cette fonctionnalité de la liste de souhaits de la communauté est actuellement désactivée.",
+	"communityrequests-publish-wish-summary": "Publication du souhait « $1 »",
+	"communityrequests-save-wish-summary": "Mise à jour du souhait « $1 »",
+	"communityrequests-error-category": "Pages avec des erreurs de liste de souhaits de la communauté",
+	"communityrequests-error-category-desc": "Les pages dans cette catégorie sont des souhaits de la liste de souhaits de la communauté ou des domaines d’action qui contiennent des erreurs."
 }

@@ -8,7 +8,8 @@
 	"communityrequests-wish-loading-error": "Un error ha occurrite durante le processamento del texto fonte del desiro. Per favor [$1 refresca] e tenta lo de novo, usa le [[$2|editor de codice fonte]], o demanda adjuta sur le [[$3|pagina de discussion]].",
 	"communityrequests-edit-with-form": "Modificar con formulario",
 	"communityrequests-wishlistintake": "Entrata in le lista de desiros del communitate",
-	"communityrequests-form-subtitle": "Benvenite al nove Lista de desiros del communitate. Per favor completa le formulario infra pro submitter tu desiro.",
+	"communityrequests-form-subtitle": "Benvenite al Lista de desiros del communitate. Per favor completa le formulario infra pro submitter tu desiro.",
+	"communityrequests-wish-not-found": "Le desiro [[$1]] non ha essite trovate o non ha essite correctemente salveguardate.",
 	"communityrequests-form-error": "Un problema ha occurrite. Per favor tenta salveguardar de novo, o demanda adjuta sur le [[$1|pagina de discussion]].",
 	"communityrequests-description": "Describe tu problema",
 	"communityrequests-description-description": "Explica in detalio le desiro o problema que tu aborda.",
@@ -105,5 +106,9 @@
 	"communityrequests-translation-switch": "Traduce lo automaticamente con le [https://www.mediawiki.org/wiki/Special:MyLanguage/MinT utensile de traduction machinal de Wikimedia].",
 	"communityrequests-translation-progress": "$1 de $2 parte{{PLURAL:$2||s}} de texto traducite.",
 	"communityrequests-translation-errors": "Un error ha occurrite:",
-	"communityrequests-disabled": "Iste functionalitate del Lista de desiros del communitate es actualmente disactivate."
+	"communityrequests-disabled": "Iste functionalitate del Lista de desiros del communitate es actualmente disactivate.",
+	"communityrequests-publish-wish-summary": "Publication del desiro “$1”",
+	"communityrequests-save-wish-summary": "Actualisation del desiro “$1”",
+	"communityrequests-error-category": "Paginas con errores del Lista de desiros del communitate",
+	"communityrequests-error-category-desc": "Le paginas in iste categoria es desiros o areas de concentration del Lista de desiros del communitate que contine errores."
 }

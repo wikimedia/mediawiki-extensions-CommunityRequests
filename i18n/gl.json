@@ -8,7 +8,8 @@
 	"communityrequests-wish-loading-error": "Produciuse un erro ao analizar o texto fonte da petición. Se cadra contén texto wiki non válido. [$1 Recarga] e inténtao de novo, utiliza o [[$2|editor de fonte]] ou pide axuda na [[$3|páxina de conversa]].",
 	"communityrequests-edit-with-form": "Editar con formulario",
 	"communityrequests-wishlistintake": "Admisión da lista de desexos da comunidade",
-	"communityrequests-form-subtitle": "Recibe a benvida á nova lista de desexos da comunidade. Enche o seguinte formulario para enviar a túa petición.",
+	"communityrequests-form-subtitle": "Recibe a benvida á lista de desexos da comunidade. Enche o seguinte formulario para enviar a túa petición.",
+	"communityrequests-wish-not-found": "Non se atopou o desexo \"[[$1]]\" ou ben non se gardou correctamente.",
 	"communityrequests-form-error": "Algo saíu mal. Intenta gardar de novo ou pide axuda na [[$1|páxina de conversa]].",
 	"communityrequests-description": "Describe o teu problema",
 	"communityrequests-description-description": "Explica con detalle a petición ou problema que queres abordar.",
@@ -105,5 +106,9 @@
 	"communityrequests-translation-switch": "Tradúceo automaticamente usando a [https://www.mediawiki.org/wiki/Special:MyLanguage/MinT ferramenta de tradución automática da Wikimedia].",
 	"communityrequests-translation-progress": "{{PLURAL:$1|Traducida|Traducidas}} $1 de $2 {{PLURAL:$2|parte|partes}} do texto.",
 	"communityrequests-translation-errors": "Produciuse un erro:",
-	"communityrequests-disabled": "Esta funcionalidade da lista de desexos da comunidade está desactivada nestes intres."
+	"communityrequests-disabled": "Esta funcionalidade da lista de desexos da comunidade está desactivada nestes intres.",
+	"communityrequests-publish-wish-summary": "Publicando o desexo \"$1\"",
+	"communityrequests-save-wish-summary": "Actualizando o desexo \"$1\"",
+	"communityrequests-error-category": "Páxinas con erros na lista de desexos da comunidade",
+	"communityrequests-error-category-desc": "As páxinas desta categoría son desexos ou áreas de enfoque da lista de desexos da comunidade que conteñen erros."
 }

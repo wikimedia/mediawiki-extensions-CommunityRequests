@@ -96,16 +96,6 @@ class WishlistConfigTest extends MediaWikiUnitTestCase {
 	}
 
 	/**
-	 * @covers ::getStatusIdFromWikitextVal
-	 */
-	public function testGetStatusIdFromWikitextVal(): void {
-		$this->assertSame( 0, $this->config->getStatusIdFromWikitextVal( 'open' ) );
-		$this->assertSame( 1, $this->config->getStatusIdFromWikitextVal( 'closed' ) );
-		$this->assertSame( 2, $this->config->getStatusIdFromWikitextVal( 'unknown' ) );
-		$this->assertSame( 2, $this->config->getStatusIdFromWikitextVal( 'bogus' ) );
-	}
-
-	/**
 	 * @covers ::getWishTypeIdFromWikitextVal
 	 */
 	public function testGetWishTypeIdFromWikitextVal(): void {
@@ -123,5 +113,25 @@ class WishlistConfigTest extends MediaWikiUnitTestCase {
 		$this->assertSame( 0, $this->config->getProjectIdFromWikitextVal( 'wikipedia' ) );
 		$this->assertSame( 1, $this->config->getProjectIdFromWikitextVal( 'wikisource' ) );
 		$this->assertNull( $this->config->getProjectIdFromWikitextVal( 'bogus' ) );
+	}
+
+	/**
+	 * @covers ::getStatusIdFromWikitextVal
+	 */
+	public function testGetStatusIdFromWikitextVal(): void {
+		$this->assertSame( 0, $this->config->getStatusIdFromWikitextVal( 'open' ) );
+		$this->assertSame( 1, $this->config->getStatusIdFromWikitextVal( 'closed' ) );
+		$this->assertSame( 2, $this->config->getStatusIdFromWikitextVal( 'unknown' ) );
+		$this->assertSame( 2, $this->config->getStatusIdFromWikitextVal( 'bogus' ) );
+	}
+
+	/**
+	 * @covers ::getProjectsWikitextValsFromIds
+	 */
+	public function testGetProjectsWikitextValsFromIds(): void {
+		$this->assertSame( [ 'all' ], $this->config->getProjectsWikitextValsFromIds( [ 0, 1 ] ) );
+		$this->assertSame( [ 'wikipedia' ], $this->config->getProjectsWikitextValsFromIds( [ 0 ] ) );
+		$this->expectException( ConfigException::class );
+		$this->config->getProjectsWikitextValsFromIds( [ 2 ] );
 	}
 }

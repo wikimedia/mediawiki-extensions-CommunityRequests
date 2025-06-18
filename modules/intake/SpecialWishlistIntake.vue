@@ -50,6 +50,11 @@
 			type="hidden"
 			name="proposer"
 		>
+		<input
+			:value="baseRevId"
+			type="hidden"
+			name="baserevid"
+		>
 
 		<footer class="ext-communityrequests-intake__footer">
 			<hr>
@@ -122,6 +127,7 @@ module.exports = exports = defineComponent( {
 	},
 	props: {
 		audience: { type: String, default: '' },
+		baseRevId: { type: Number, default: 0 },
 		created: { type: String, default: '' },
 		description: { type: String, default: '' },
 		otherProject: { type: String, default: '' },

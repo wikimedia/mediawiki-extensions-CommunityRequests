@@ -123,7 +123,8 @@ class SpecialWishlistIntake extends FormSpecialPage {
 				...$wish->toArray( $this->config ),
 				'description' => $wikitextData[ $templateParams[ 'description' ] ],
 				'audience' => $wikitextData[ $templateParams[ 'audience' ] ],
-			]
+				'baseRevId' => $wikitextData[ 'baseRevId' ],
+			],
 		] );
 
 		$this->wishId = $wishId;
@@ -256,6 +257,7 @@ class SpecialWishlistIntake extends FormSpecialPage {
 			$wish->toWikitext( $wishTemplate, $this->config ),
 			$summary,
 			$data[ 'wpEditToken' ],
+			(int)$data[ 'baserevid' ] ?: null,
 			// FIXME: use Wish::WISHLIST_TAG once we have ApiWishEdit
 			// ApiEditPage doesn't allow for software-defined tags.
 			[]
@@ -281,17 +283,25 @@ class SpecialWishlistIntake extends FormSpecialPage {
 	 * @param WikitextContent $content
 	 * @param string $summary
 	 * @param string $token
+	 * @param ?int $baseRevId
 	 * @param string[] $tags
 	 * @return Status
 	 * @todo move to ApiWishEdit
 	 */
-	private function save( WikitextContent $content, string $summary, string $token, array $tags ): Status {
+	private function save(
+		WikitextContent $content,
+		string $summary,
+		string $token,
+		?int $baseRevId = null,
+		array $tags = []
+	): Status {
 		$apiParams = [
 			'action' => 'edit',
 			'title' => $this->pageTitle->getPrefixedDBkey(),
 			'text' => $content->getText(),
 			'summary' => $summary,
 			'token' => $token,
+			'baserevid' => $baseRevId,
 			'tags' => implode( '|', $tags ),
 			'errorformat' => 'html',
 			'notminor' => true,

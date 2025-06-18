@@ -309,6 +309,7 @@ class WishStore {
 	 *
 	 * @param Wish $wish The wish to get data from.
 	 * @return ?array<string, string> The parsed data from the wikitext, or null if not found.
+	 *   This includes a 'baseRevId' key with the latest revision ID of the wish page.
 	 */
 	public function getDataFromWikitext( Wish $wish ): ?array {
 		if ( !$wish->getPage()->getId() ) {
@@ -317,10 +318,10 @@ class WishStore {
 		$configTitle = $this->titleFormatter->getPrefixedDBkey(
 			$this->titleParser->parseTitle( $this->config->getWishTemplatePage(), NS_TEMPLATE )
 		);
+		$revRecord = $this->revisionStore
+			->getRevisionByPageId( $wish->getPage()->getId() );
 		/** @var WikitextContent $content */
-		$content = $this->revisionStore
-			->getRevisionByPageId( $wish->getPage()->getId() )
-			->getMainContentRaw();
+		$content = $revRecord->getMainContentRaw();
 		'@phan-var WikitextContent $content';
 		$wikitext = $content->getText();
 		$parser = $this->parserFactory->getInstance();
@@ -338,9 +339,12 @@ class WishStore {
 				);
 				if ( $configTitle === $this->titleFormatter->getPrefixedDBkey( $title ) ) {
 					$args = $frame->newChild( $child->getChildrenOfType( 'part' ) )->getNamedArguments();
-					return array_map( function ( $value ) use ( $parser, $frame ) {
+					$args = array_map( function ( $value ) use ( $parser, $frame ) {
 						return $this->normalizeParsedValue( $parser, $frame, $value );
 					}, $args );
+					// Include baseRevId
+					$args[ 'baseRevId' ] = $revRecord->getId();
+					return $args;
 				}
 			}
 		}

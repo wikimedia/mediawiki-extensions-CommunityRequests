@@ -71,11 +71,11 @@
 				$i18n( 'communityrequests-project-show-all' ).text()
 			}}
 		</cdx-button>
-		<!-- eslint-disable-next-line vue/html-self-closing -->
 		<input
 			:value="projects"
 			type="hidden"
-			name="projects" />
+			name="projects"
+		>
 	</cdx-field>
 </template>
 

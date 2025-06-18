@@ -14,14 +14,16 @@ const getWrapper = ( props = {} ) => {
 };
 
 const defaultProps = {
-	title: 'Test Title',
-	description: 'Test Description',
-	type: 'bug',
-	projects: [ 'commons', 'wikisource' ],
-	otherProject: 'Other Project',
 	audience: 'Test Audience',
+	created: '2023-10-01T12:00:00Z',
+	description: 'Test Description',
+	otherProject: 'Other Project',
 	phabTasks: [ 'T123', 'T456' ],
-	status: 'submitted'
+	projects: [ 'commons', 'wikisource' ],
+	proposer: 'MusikAnimal',
+	status: 'submitted',
+	title: 'Test Title',
+	type: 'bug'
 };
 
 describe( 'SpecialWishlistIntake', () => {
@@ -41,23 +43,26 @@ describe( 'SpecialWishlistIntake', () => {
 		const formData = new FormData(
 			document.querySelector( '#ext-communityrequests-intake-form' )
 		);
-		expect( formData.get( 'wishtitle' ) ).toBe( 'Test Title' );
-		expect( formData.get( 'description' ) ).toBe( 'Test Description' );
-		expect( formData.get( 'type' ) ).toBe( 'bug' );
-		expect( formData.get( 'projects' ) ).toBe( 'commons,wikisource' );
-		expect( formData.get( 'otherproject' ) ).toBe( 'Other Project' );
+		// Status should be hidden for non-staff users
+		expect( wrapper.find( '.ext-communityrequests-intake__status' ).exists() )
+			.toBe( false );
+
 		expect( formData.get( 'audience' ) ).toBe( 'Test Audience' );
+		expect( formData.get( 'created' ) ).toBe( '2023-10-01T12:00:00Z' );
+		expect( formData.get( 'description' ) ).toBe( 'Test Description' );
+		expect( formData.get( 'otherproject' ) ).toBe( 'Other Project' );
 		expect( formData.get( 'phabtasks' ) ).toBe( 'T123,T456' );
-		// Only shown for staff
-		expect( formData.get( 'status' ) ).toBeNull();
+		expect( formData.get( 'projects' ) ).toBe( 'commons,wikisource' );
+		expect( formData.get( 'proposer' ) ).toBe( 'MusikAnimal' );
+		expect( formData.get( 'status' ) ).toBe( 'submitted' );
+		expect( formData.get( 'type' ) ).toBe( 'bug' );
+		expect( formData.get( 'wishtitle' ) ).toBe( 'Test Title' );
 	} );
 
 	it( 'should show the status field for staff', () => {
 		mockMwConfigGet( { wgUserName: 'ExampleUser-WMF' } );
 		wrapper = getWrapper( defaultProps );
-		const formData = new FormData(
-			document.querySelector( '#ext-communityrequests-intake-form' )
-		);
-		expect( formData.get( 'status' ) ).toBe( 'submitted' );
+		expect( wrapper.find( '.ext-communityrequests-intake__status' ).exists() )
+			.toBe( true );
 	} );
 } );

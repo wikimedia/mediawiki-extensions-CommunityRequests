@@ -10,6 +10,10 @@
 			v-model:status="wish.status"
 			@update:status="formChanged = true"
 		></status-section>
+		<input
+			:value="status"
+			type="hidden"
+			name="status">
 		<description-section
 			v-model:title="wish.title"
 			v-model:description="wish.description"
@@ -36,6 +40,16 @@
 		<phabricator-tasks
 			v-model:tasks="wish.phabTasks"
 		></phabricator-tasks>
+		<input
+			:value="created"
+			type="hidden"
+			name="created"
+		>
+		<input
+			:value="proposer"
+			type="hidden"
+			name="proposer"
+		>
 
 		<footer class="ext-communityrequests-intake__footer">
 			<hr>
@@ -108,6 +122,7 @@ module.exports = exports = defineComponent( {
 	},
 	props: {
 		audience: { type: String, default: '' },
+		created: { type: String, default: '' },
 		description: { type: String, default: '' },
 		otherProject: { type: String, default: '' },
 		phabTasks: { type: Array, default: () => [] },

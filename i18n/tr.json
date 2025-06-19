@@ -8,7 +8,8 @@
 	"communityrequests-wish-loading-error": "Dilek kaynak metni ayrıştırılırken bir hata oluştu. Geçersiz vikimetin içeriyor olabilir. Lütfen [$1 yenileyin] ve tekrar deneyin, [[$2|kaynak düzenleyici]]yi kullanın ya da [[$3|tartışma sayfası]]nda yardım isteyin.",
 	"communityrequests-edit-with-form": "Formla düzenle",
 	"communityrequests-wishlistintake": "Topluluk İstek Listesi alımı",
-	"communityrequests-form-subtitle": "Yeni Topluluk Dilek Listesine hoş geldiniz. Lütfen dileğinizi göndermek için aşağıdaki formu doldurun.",
+	"communityrequests-form-subtitle": "Topluluk Dilek Listesine hoş geldiniz. Lütfen dileğinizi göndermek için aşağıdaki formu doldurun.",
+	"communityrequests-wish-not-found": "[[$1]] dileği bulunamadı ya da düzgün bir şekilde saklanmadı.",
 	"communityrequests-form-error": "Bir şeyler ters gitti. Lütfen tekrar saklamayı deneyin ya da [[$1|tartışma sayfasında]] yardım isteyin.",
 	"communityrequests-description": "Sorununuzu açıklayın",
 	"communityrequests-description-description": "Değindiğiniz dileği ya da sorunu ayrıntılı bir şekilde açıklayın.",
@@ -105,5 +106,9 @@
 	"communityrequests-translation-switch": "[https://www.mediawiki.org/wiki/Special:MyLanguage/MinT Wikimedia'nın makine çeviri aracını] kullanarak otomatik olarak çevirin.",
 	"communityrequests-translation-progress": "Metnin $2 {{PLURAL:$2|bölümünden}} $1 {{PLURAL:$1|bölümü}} çevrildi.",
 	"communityrequests-translation-errors": "Bir hata oluştu:",
-	"communityrequests-disabled": "Topluluk İstek Listesi'nin bu işlevi şu anda devre dışıdır."
+	"communityrequests-disabled": "Topluluk İstek Listesi'nin bu işlevi şu anda devre dışıdır.",
+	"communityrequests-publish-wish-summary": "\"$1\" dileği yayımlanıyor",
+	"communityrequests-save-wish-summary": "\"$1\" dileği güncelleniyor",
+	"communityrequests-error-category": "Topluluk Dilek Listesi hataları olan sayfalar",
+	"communityrequests-error-category-desc": "Bu kategorideki sayfalar hata içeren Topluluk Dilek Listesi istekleri ya da odak alanlarıdır."
 }

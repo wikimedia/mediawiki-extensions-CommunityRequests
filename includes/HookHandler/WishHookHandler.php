@@ -2,8 +2,6 @@
 
 namespace MediaWiki\Extension\CommunityRequests\HookHandler;
 
-use MediaWiki\ChangeTags\Hook\ChangeTagsListActiveHook;
-use MediaWiki\ChangeTags\Hook\ListDefinedTagsHook;
 use MediaWiki\Extension\CommunityRequests\Wish\Wish;
 use MediaWiki\Extension\CommunityRequests\Wish\WishStore;
 use MediaWiki\Extension\CommunityRequests\WishlistConfig;
@@ -26,9 +24,7 @@ use MediaWiki\User\UserFactory;
  * Hook handlers for the <wish> tag.
  */
 class WishHookHandler extends CommunityRequestsHooks implements
-	ChangeTagsListActiveHook,
 	LinksUpdateCompleteHook,
-	ListDefinedTagsHook,
 	PageDeleteCompleteHook,
 	ParserFirstCallInitHook,
 	BeforePageDisplayHook
@@ -107,7 +103,7 @@ class WishHookHandler extends CommunityRequestsHooks implements
 			return;
 		}
 
-		$proposer = $this->userFactory->newFromName( $data[ 'proposer' ] ?? '' );
+		$proposer = $this->userFactory->newFromName( $data[ Wish::TAG_ATTR_PROPOSER ] ?? '' );
 		if ( !$proposer ) {
 			$proposer = $linksUpdate->getRevisionRecord()->getUser();
 		}
@@ -139,7 +135,7 @@ class WishHookHandler extends CommunityRequestsHooks implements
 				'class' => 'cdx-info-chip__text',
 			], $parser->msg( $statusLabel )->text() )
 		);
-		$titleSpan = Html::rawElement( 'span', [
+		$titleSpan = Html::element( 'span', [
 			'class' => 'ext-communityrequests-wish--title',
 		], $args[ Wish::TAG_ATTR_TITLE ] );
 		$headingDiv = Html::rawElement( 'div', [
@@ -161,7 +157,7 @@ class WishHookHandler extends CommunityRequestsHooks implements
 		$descHeading = Html::element( 'div', [
 			'class' => 'mw-heading mw-heading3',
 		], $parser->msg( 'communityrequests-wish-description-heading' )->text() );
-		$desc = $this->getParagraph( 'description', $parser->recursiveTagParse( $input ) );
+		$desc = $this->getParagraph( 'description', $parser->recursiveTagParse( $input ), true );
 
 		// Focus area.
 		$focusAreaHeading = Html::element( 'div', [
@@ -169,7 +165,7 @@ class WishHookHandler extends CommunityRequestsHooks implements
 		], $parser->msg( 'communityrequests-wish-focus-area-heading' )->text() );
 		// TODO: Fetch focus area title.
 		$focusArea = $this->getParagraph( 'focus-area',
-			$parser->msg( 'communityrequests-focus-area-unassigned' )
+			$parser->msg( 'communityrequests-focus-area-unassigned' )->text()
 		);
 
 		// Wish type.
@@ -221,7 +217,7 @@ class WishHookHandler extends CommunityRequestsHooks implements
 				$task
 			);
 		}, explode( Wish::TEMPLATE_ARRAY_DELIMITER, $args[ Wish::TAG_ATTR_PHAB_TASKS ] ?? '' ) );
-		$tasks = $this->getParagraph( 'phab-tasks', $language->commaList( array_filter( $tasks ) ) );
+		$tasks = $this->getParagraph( 'phab-tasks', $language->commaList( array_filter( $tasks ) ), true );
 
 		// Other details.
 		$detailsHeading = Html::element( 'div', [
@@ -260,8 +256,8 @@ class WishHookHandler extends CommunityRequestsHooks implements
 		}
 	}
 
-	private function getParagraph( string $field, string $text ): string {
-		return Html::rawElement( 'p', [
+	private function getParagraph( string $field, string $text, bool $raw = false ): string {
+		return Html::{ $raw ? 'rawElement' : 'element' }( 'p', [
 			'class' => "ext-communityrequests-wish--$field",
 		], $text );
 	}
@@ -325,22 +321,6 @@ class WishHookHandler extends CommunityRequestsHooks implements
 		$wish = $this->wishStore->getWish( $page );
 		if ( $wish ) {
 			$this->wishStore->delete( $wish );
-		}
-	}
-
-	// Change tags
-
-	/** @inheritDoc */
-	public function onListDefinedTags( &$tags ) {
-		if ( $this->config->isEnabled() ) {
-			$tags[] = Wish::WISHLIST_CHANGE_TAG;
-		}
-	}
-
-	/** @inheritDoc */
-	public function onChangeTagsListActive( &$tags ) {
-		if ( $this->config->isEnabled() ) {
-			$tags[] = Wish::WISHLIST_CHANGE_TAG;
 		}
 	}
 }

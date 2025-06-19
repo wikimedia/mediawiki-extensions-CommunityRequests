@@ -30,6 +30,10 @@ use Wikimedia\Rdbms\SelectQueryBuilder;
  */
 class WishStore {
 
+	public const AUDIENCE_MAX_CHARS = 300;
+	public const TITLE_MAX_CHARS = 100;
+	public const TITLE_MAX_BYTES = 255;
+
 	public const ORDER_BY_CREATION = 'cr_created';
 	public const ORDER_BY_UPDATED = 'cr_updated';
 	public const ORDER_BY_VOTE_COUNT = 'cr_vote_count';
@@ -148,7 +152,7 @@ class WishStore {
 	private function saveTranslations( Wish $wish, IDatabase $dbw ): void {
 		$data = [ 'crt_wish' => $wish->getPage()->getId(), 'crt_lang' => $wish->getLanguage() ];
 		$dataSet = [
-			'crt_title' => $wish->getTitle(),
+			'crt_title' => mb_strcut( $wish->getTitle(), 0, self::TITLE_MAX_BYTES, 'UTF-8' ),
 			'crt_other_project' => $wish->getOtherProject() ?: null,
 		];
 		$dbw->newInsertQueryBuilder()
@@ -516,6 +520,26 @@ class WishStore {
 			$this->titleFormatter->getPrefixedDBkey( $identity ),
 			$this->titleFormatter->getPrefixedDBkey( $pagePrefix )
 		);
+	}
+
+	/**
+	 * Extract the wish ID from a user input string.
+	 *
+	 * This method accepts the full page title,
+	 * a prefixed ID (e.g., "W123"), or just the ID itself.
+	 *
+	 * @param string|int|null $input
+	 * @return ?int
+	 */
+	public function getWishIdFromInput( string|int|null $input ): ?int {
+		if ( $input === null ) {
+			return null;
+		}
+		if ( is_int( $input ) ) {
+			return $input;
+		}
+		$wishId = ltrim( $input, $this->config->getWishPagePrefix() );
+		return (int)preg_replace( '/[^0-9]/', '', $wishId ) ?: null;
 	}
 
 	/**

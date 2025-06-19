@@ -22,6 +22,7 @@
 <script>
 const { CdxField, CdxTextInput } = require( '../codex.js' );
 const { defineComponent, ref, watch, Ref } = require( 'vue' );
+const audienceMaxChars = mw.config.get( 'intakeAudienceMaxChars' );
 
 module.exports = exports = defineComponent( {
 	name: 'AudienceSection',
@@ -47,7 +48,7 @@ module.exports = exports = defineComponent( {
 		watch( () => props.status, ( newStatus ) => {
 			if ( newStatus === 'error' ) {
 				messages.value = {
-					error: mw.msg( 'communityrequests-audience-error', 5, 300 )
+					error: mw.msg( 'communityrequests-audience-error', 5, audienceMaxChars )
 				};
 			} else {
 				messages.value = {};

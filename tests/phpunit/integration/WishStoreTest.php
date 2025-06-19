@@ -298,4 +298,35 @@ END;
 		$this->assertTrue( $this->wishStore->isWishPage( 'Community Wishlist/Wishes/W123' ) );
 		$this->assertTrue( $this->wishStore->isWishPage( Title::newFromText( 'Community Wishlist/Wishes/W123/fr' ) ) );
 	}
+
+	/**
+	 * @covers ::getWishIdFromInput
+	 */
+	public function testGetWishIdFromInput(): void {
+		$this->assertSame( 123, $this->wishStore->getWishIdFromInput( 123 ) );
+		$this->assertSame( 123, $this->wishStore->getWishIdFromInput( '123' ) );
+		$this->assertSame( 123, $this->wishStore->getWishIdFromInput( 'W123' ) );
+		$this->assertSame( 123, $this->wishStore->getWishIdFromInput( 'Community Wishlist/Wishes/W123' ) );
+		$this->assertSame( 123, $this->wishStore->getWishIdFromInput( 'Community Wishlist/Wishes/W123/fr' ) );
+		$this->assertNull( $this->wishStore->getWishIdFromInput( 'Not a wish page' ) );
+	}
+
+	/**
+	 * @covers ::saveTranslations
+	 */
+	public function testTitleOverMaxBytes(): void {
+		$title = $this->getExistingTestPage( 'Community Wishlist/Wishes/W123' );
+		$wish = new Wish(
+			$title,
+			'en',
+			$this->getTestUser()->getUser(),
+			[
+				'title' => str_repeat( 'a', 500 ),
+				'created' => '2025-01-01T00:00:00Z',
+			]
+		);
+		$this->wishStore->save( $wish );
+		$wish = $this->wishStore->getWish( $title );
+		$this->assertSame( str_repeat( 'a', 255 ), $wish->getTitle() );
+	}
 }

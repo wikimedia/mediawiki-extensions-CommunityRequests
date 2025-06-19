@@ -112,5 +112,20 @@
 	"communityrequests-error-category": "Pages with Community Wishlist errors",
 	"communityrequests-error-category-desc": "Pages in this category are Community Wishlist wishes or focus areas that contain errors.",
 	"communityrequests-wish-category": "Community Wishlist/Wishes",
-	"communityrequests-wish-category-desc": "Pages in this category are Community Wishlist wishes."
+	"communityrequests-wish-category-desc": "Pages in this category are Community Wishlist wishes.",
+	"apihelp-wishedit-summary": "Create or update a wish in the Community Wishlist.",
+	"apihelp-wishedit-param-wish": "The wish to create or update. This can be either the full page title, a prefixed wish ID (e.g. \"W123\"), or the wish ID as an integer.",
+	"apihelp-wishedit-param-status": "The status of the wish.",
+	"apihelp-wishedit-param-focusarea": "The focus area the wish belongs to. This can be either the full page title, a prefixed focus area ID (e.g. \"FA123\"), or the focus area ID as an integer.",
+	"apihelp-wishedit-param-title": "The title of the wish.",
+	"apihelp-wishedit-param-description": "The description of the wish. May contain wikitext.",
+	"apihelp-wishedit-param-type": "The type of the wish.",
+	"apihelp-wishedit-param-projects": "Projects the wish is related to.",
+	"apihelp-wishedit-param-otherproject": "Free-form project name, if the wish is not related to any of the listed projects.",
+	"apihelp-wishedit-param-audience": "The primary group of users who are benefited by the wish (e.g. \"new users\" or \"administrators\").",
+	"apihelp-wishedit-param-phabtasks": "A list of Phabricator task IDs (e.g. \"T1234\").",
+	"apihelp-wishedit-param-proposer": "The user who proposed the wish.",
+	"apihelp-wishedit-param-created": "The date and time that the wish was created.",
+	"apierror-wishedit-notawish": "The page you are trying to edit is not a valid wish.",
+	"tag-community-wishlist": "[[Special:MyLanguage/Community Wishlist|Community Wishlist]]"
 }

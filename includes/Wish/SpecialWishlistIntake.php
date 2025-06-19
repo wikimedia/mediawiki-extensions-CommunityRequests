@@ -4,8 +4,6 @@ declare( strict_types = 1 );
 namespace MediaWiki\Extension\CommunityRequests\Wish;
 
 use MediaWiki\Api\ApiMain;
-use MediaWiki\Api\ApiUsageException;
-use MediaWiki\Content\WikitextContent;
 use MediaWiki\Context\DerivativeContext;
 use MediaWiki\Extension\CommunityRequests\WishlistConfig;
 use MediaWiki\HookContainer\HookContainer;
@@ -31,8 +29,6 @@ class SpecialWishlistIntake extends FormSpecialPage {
 	public const SESSION_KEY = 'communityrequests-intake';
 	public const SESSION_VALUE_WISH_CREATED = 'created';
 	public const SESSION_VALUE_WISH_UPDATED = 'updated';
-	protected const EDIT_SUMMARY_PUBLISH = 'communityrequests-publish-wish-summary';
-	protected const EDIT_SUMMARY_SAVE = 'communityrequests-save-wish-summary';
 
 	private Title $pageTitle;
 	protected ?int $wishId = null;
@@ -69,14 +65,9 @@ class SpecialWishlistIntake extends FormSpecialPage {
 
 		$this->requireNamedUser( 'communityrequests-please-log-in' );
 
-		// Permit the full page title to be passed instead of just the ID.
-		$wishId = ltrim( $wishId ?? '', $this->config->getWishPagePrefix() );
-
-		// Extract the integer from the $wishId, which may be a string like "W123".
-		$wishId = preg_replace( '/[^0-9]/', '', $wishId ) ?: null;
-
+		$wishId = $this->wishStore->getWishIdFromInput( $wishId );
 		if ( $wishId ) {
-			$ret = $this->loadExistingWish( (int)$wishId );
+			$ret = $this->loadExistingWish( $wishId );
 			if ( !$ret ) {
 				return;
 			}
@@ -90,7 +81,12 @@ class SpecialWishlistIntake extends FormSpecialPage {
 
 		$this->getOutput()->setSubtitle( $this->msg( 'communityrequests-form-subtitle' ) );
 
-		parent::execute( $wishId );
+		$this->getOutput()->addJsConfigVars( [
+			'intakeTitleMaxChars' => WishStore::TITLE_MAX_CHARS,
+			'intakeAudienceMaxChars' => WishStore::AUDIENCE_MAX_CHARS,
+		] );
+
+		parent::execute( (string)$wishId );
 	}
 
 	/**
@@ -231,107 +227,29 @@ class SpecialWishlistIntake extends FormSpecialPage {
 		$data = $form->getRequest()->getPostValues();
 		$data[ 'title' ] = $data[ 'wishtitle' ];
 
-		if ( $this->wishId === null ) {
-			// If this is a new wish, generate a new ID and page title.
-			$id = $this->wishStore->getNewId();
-			$this->pageTitle = Title::newFromText(
-				$this->config->getWishPagePrefix() . $id
-			);
-		}
-
-		$wish = Wish::newFromWikitextParams(
-			$this->pageTitle,
-			$this->getContentLanguage()->getCode(),
-			$this->userFactory->newFromName( $data[ 'proposer' ] ),
-			$data,
-			$this->config
-		);
-
-		$wishTemplate = $this->titleParser->parseTitle( $this->config->getWishTemplatePage() );
-
-		// Generate edit summary.
-		$summary = $this->msg(
-			$this->wishId === null ? self::EDIT_SUMMARY_PUBLISH : self::EDIT_SUMMARY_SAVE,
-			$data[ 'title' ]
-		)->text();
-
-		// If there are Phabricator tasks, add them to the edit summary.
-		if ( count( $wish->getPhabTasks() ) > 0 ) {
-			$taskLinks = array_map(
-				static fn ( int $taskId ) => "[[phab:T{$taskId}|T{$taskId}]]",
-				$wish->getPhabTasks()
-			);
-			$summary .= ' ' .
-				$this->msg( 'parentheses-start' )->text() .
-				$this->getLanguage()->commaList( $taskLinks ) .
-				$this->msg( 'parentheses-end' )->text();
-		}
-
-		$status = $this->save(
-			$wish->toWikitext( $wishTemplate, $this->config ),
-			$summary,
-			$data[ 'wpEditToken' ],
-			(int)$data[ 'baserevid' ] ?: null,
-			// FIXME: use Wish::WISHLIST_TAG once we have ApiWishEdit
-			// ApiEditPage doesn't allow for software-defined tags.
-			[]
-		);
-
-		if ( $status->isOK() ) {
-			// Set session variables to show post-edit messages.
-			$this->getRequest()->getSession()->set(
-				self::SESSION_KEY,
-				$this->wishId === null ? self::SESSION_VALUE_WISH_CREATED : self::SESSION_VALUE_WISH_UPDATED
-			);
-			// Redirect to wish page.
-			$this->getOutput()->redirect( $this->pageTitle->getFullURL() );
-		}
-
-		return $status;
-	}
-
-	/**
-	 * Save the wish content to the wiki page.
-	 * WishHookHandler will handle updating the CommunityRequests tables.
-	 *
-	 * @param WikitextContent $content
-	 * @param string $summary
-	 * @param string $token
-	 * @param ?int $baseRevId
-	 * @param string[] $tags
-	 * @return Status
-	 * @todo move to ApiWishEdit
-	 */
-	private function save(
-		WikitextContent $content,
-		string $summary,
-		string $token,
-		?int $baseRevId = null,
-		array $tags = []
-	): Status {
-		$apiParams = [
-			'action' => 'edit',
-			'title' => $this->pageTitle->getPrefixedDBkey(),
-			'text' => $content->getText(),
-			'summary' => $summary,
-			'token' => $token,
-			'baserevid' => $baseRevId,
-			'tags' => implode( '|', $tags ),
-			'errorformat' => 'html',
-			'notminor' => true,
-		];
+		// API wants pipe-separated arrays, not CSV.
+		$data[ 'projects' ] = str_replace( ',', '|', $data[ 'projects' ] );
+		$data[ 'phabtasks' ] = str_replace( ',', '|', $data[ 'phabtasks' ] );
 
 		$context = new DerivativeContext( $this->getContext() );
-		$context->setRequest( new DerivativeRequest( $this->getRequest(), $apiParams ) );
+		$context->setRequest( new DerivativeRequest( $this->getRequest(), [
+			'action' => 'wishedit',
+			'wish' => $this->wishId,
+			'token' => $data[ 'wpEditToken' ],
+			...$data,
+		] ) );
 		$api = new ApiMain( $context, true );
+		$api->execute();
 
-		// FIXME: make use of EditFilterMergedContent hook to impose our own edit checks
-		//   (Status will show up in SpecialFormPage) Such as a missing proposer or invalid creation date.
-		try {
-			$api->execute();
-		} catch ( ApiUsageException $e ) {
-			return Status::wrap( $e->getStatusValue() );
-		}
+		$this->pageTitle = Title::newFromText( $api->getResult()->getResultData()[ 'wishedit' ][ 'wish' ] );
+
+		// Set session variables to show post-edit messages.
+		$this->getRequest()->getSession()->set(
+			self::SESSION_KEY,
+			$this->wishId === null ? self::SESSION_VALUE_WISH_CREATED : self::SESSION_VALUE_WISH_UPDATED
+		);
+		// Redirect to wish page.
+		$this->getOutput()->redirect( $this->pageTitle->getFullURL() );
 
 		return Status::newGood( $api->getResult() );
 	}

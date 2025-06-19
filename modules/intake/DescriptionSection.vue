@@ -49,6 +49,7 @@ const { computed, defineComponent, onMounted, ComputedRef } = require( 'vue' );
 const { CdxField, CdxTextInput } = require( '../codex.js' );
 const DescriptionField = require( './DescriptionField.js' );
 const { CommunityRequestsHomepage } = require( '../common/config.json' );
+const titleMaxChars = mw.config.get( 'intakeTitleMaxChars' );
 
 // This must live here outside the Vue component to prevent Vue from interfering with VE.
 let descriptionField;
@@ -78,7 +79,7 @@ module.exports = exports = defineComponent( {
 		 */
 		const titleMessage = computed(
 			() => props.titleStatus === 'error' ?
-				{ error: mw.msg( 'communityrequests-title-error', 5, 100 ) } :
+				{ error: mw.msg( 'communityrequests-title-error', 5, titleMaxChars ) } :
 				{}
 		);
 		/**

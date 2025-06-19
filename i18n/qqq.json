@@ -112,5 +112,20 @@
 	"communityrequests-error-category": "{{tracking category name}}\nName of [[mw:Help:Tracking categories|tracking category]] to list wishes and focus areas that contain errors.",
 	"communityrequests-error-category-desc": "Description on [[Special:TrackingCategories]] for the {{msg-mw|communityrequests-error-category}} tracking category.",
 	"communityrequests-wish-category": "{{tracking category name}}\nName of [[mw:Help:Tracking categories|tracking category]] to list all wishes.",
-	"communityrequests-wish-category-desc": "Description on [[Special:TrackingCategories]] for the {{msg-mw|communityrequests-wish-category}} tracking category."
+	"communityrequests-wish-category-desc": "Description on [[Special:TrackingCategories]] for the {{msg-mw|communityrequests-wish-category}} tracking category.",
+	"apihelp-wishedit-summary": "{{doc-apihelp-summary|wishedit}}",
+	"apihelp-wishedit-param-wish": "{{doc-apihelp-param|wishedit|wish}}",
+	"apihelp-wishedit-param-status": "{{doc-apihelp-param|wishedit|status}}",
+	"apihelp-wishedit-param-focusarea": "{{doc-apihelp-param|wishedit|focusarea}}",
+	"apihelp-wishedit-param-title": "{{doc-apihelp-param|wishedit|title}}",
+	"apihelp-wishedit-param-description": "{{doc-apihelp-param|wishedit|description}}",
+	"apihelp-wishedit-param-type": "{{doc-apihelp-param|wishedit|type}}",
+	"apihelp-wishedit-param-projects": "{{doc-apihelp-param|wishedit|projects}}",
+	"apihelp-wishedit-param-otherproject": "{{doc-apihelp-param|wishedit|otherproject}}",
+	"apihelp-wishedit-param-audience": "{{doc-apihelp-param|wishedit|audience}}",
+	"apihelp-wishedit-param-phabtasks": "{{doc-apihelp-param|wishedit|phabtasks}}",
+	"apihelp-wishedit-param-proposer": "{{doc-apihelp-param|wishedit|proposer}}",
+	"apihelp-wishedit-param-created": "{{doc-apihelp-param|wishedit|created}}",
+	"apierror-wishedit-notawish": "{{doc-apierror}}",
+	"tag-community-wishlist": "Short description of the community-wishlist tag.\n\nShown on lists of changes (history, recentchanges, etc.) for each edit made using Community Wishlist software."
 }

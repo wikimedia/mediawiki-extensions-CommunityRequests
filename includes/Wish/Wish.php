@@ -18,8 +18,6 @@ use MediaWiki\Utils\MWTimestamp;
  */
 class Wish {
 
-	public const WISHLIST_CHANGE_TAG = 'community-wishlist';
-
 	// Constants used for parsing and constructing the template invocation.
 	public const TAG_ATTR_STATUS = 'status';
 	public const TAG_ATTR_TYPE = 'type';
@@ -64,8 +62,8 @@ class Wish {
 	private array $phabTasks;
 	private ?string $otherProject;
 	// Not stored in the database, but used for constructing the wikitext.
-	private string $audience;
-	private string $description;
+	private ?string $audience;
+	private ?string $description;
 
 	/**
 	 * @param PageIdentity $pageTitle The title of the wish page. If given a translation subpage,
@@ -87,8 +85,8 @@ class Wish {
 	 *   - 'otherProject' (?string): The 'other project' associated with the wish.
 	 *   - 'phabTasks' (array<int>): IDs of Phabricator tasks associated with the wish.
 	 *   - 'baseLang' (string): The base language of the wish (fetched if not provided)
-	 *   - 'audience' (string): The group(s) of users the wish would benefit.
-	 *   - 'description' (string): The description of the wish.
+	 *   - 'audience' (?string): The group(s) of users the wish would benefit.
+	 *   - 'description' (?string): The description of the wish.
 	 */
 	public function __construct(
 		PageIdentity $pageTitle,
@@ -267,14 +265,34 @@ class Wish {
 	}
 
 	/**
+	 * Get the audience of the wish, i.e. the group(s) of users the wish would benefit.
+	 *
+	 * @return ?string
+	 */
+	public function getAudience(): ?string {
+		return $this->audience;
+	}
+
+	/**
+	 * Get the description of the wish.
+	 *
+	 * @return ?string
+	 */
+	public function getDescription(): ?string {
+		return $this->description;
+	}
+
+	/**
 	 * Get wish data as an associative array, ready for consumption by the
 	 * ext.communityrequests.intake module.
 	 *
 	 * @param WishlistConfig $config
+	 * @param bool $lowerCaseKeyNames Whether to convert the keys to lower case.
+	 *   This needs to be true for ApiWishEdit.
 	 * @return array
 	 */
-	public function toArray( WishlistConfig $config ): array {
-		return [
+	public function toArray( WishlistConfig $config, bool $lowerCaseKeyNames = false ): array {
+		$ret = [
 			'status' => $config->getStatusWikitextValFromId( $this->status ),
 			'type' => $config->getWishTypeWikitextValFromId( $this->type ),
 			'title' => $this->title,
@@ -288,6 +306,11 @@ class Wish {
 			'proposer' => $this->proposer?->getName(),
 			'created' => $this->created,
 		];
+		if ( $lowerCaseKeyNames ) {
+			// Convert keys to lower case for API compatibility.
+			$ret = array_change_key_case( $ret, CASE_LOWER );
+		}
+		return $ret;
 	}
 
 	/**

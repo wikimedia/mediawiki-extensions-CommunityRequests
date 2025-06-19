@@ -3,14 +3,28 @@ declare( strict_types = 1 );
 
 namespace MediaWiki\Extension\CommunityRequests\HookHandler;
 
+use MediaWiki\ChangeTags\Hook\ChangeTagsListActiveHook;
+use MediaWiki\ChangeTags\Hook\ListDefinedTagsHook;
+use MediaWiki\Context\RequestContext;
+use MediaWiki\Extension\CommunityRequests\Wish\SpecialWishlistIntake;
 use MediaWiki\Extension\CommunityRequests\WishlistConfig;
 use MediaWiki\Hook\GetDoubleUnderscoreIDsHook;
 use MediaWiki\Hook\LoginFormValidErrorMessagesHook;
+use MediaWiki\Hook\RecentChange_saveHook;
+use MediaWiki\RecentChanges\RecentChange;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 
-class CommunityRequestsHooks implements GetDoubleUnderscoreIDsHook, LoginFormValidErrorMessagesHook {
+// phpcs:disable MediaWiki.NamingConventions.LowerCamelFunctionsName.FunctionName
+class CommunityRequestsHooks implements
+	ChangeTagsListActiveHook,
+	ListDefinedTagsHook,
+	GetDoubleUnderscoreIDsHook,
+	LoginFormValidErrorMessagesHook,
+	RecentChange_saveHook
+{
 
+	public const WISHLIST_CHANGE_TAG = 'community-wishlist';
 	public const MAGIC_MACHINETRANSLATION = 'machinetranslation';
 	public const ERROR_TRACKING_CATEGORY = 'communityrequests-error-category';
 
@@ -44,5 +58,32 @@ class CommunityRequestsHooks implements GetDoubleUnderscoreIDsHook, LoginFormVal
 			return;
 		}
 		$messages[] = 'communityrequests-please-log-in';
+	}
+
+	/** @inheritDoc */
+	public function onListDefinedTags( &$tags ) {
+		if ( $this->config->isEnabled() ) {
+			$tags[] = self::WISHLIST_CHANGE_TAG;
+		}
+	}
+
+	/** @inheritDoc */
+	public function onChangeTagsListActive( &$tags ) {
+		if ( $this->config->isEnabled() ) {
+			$tags[] = self::WISHLIST_CHANGE_TAG;
+		}
+	}
+
+	/**
+	 * Adds the self::WISHLIST_CHANGE_TAG tag to recent changes
+	 * if the request was made using SpecialWishlistIntake.
+	 *
+	 * @param RecentChange $rc
+	 */
+	public function onRecentChange_Save( $rc ) {
+		$request = RequestContext::getMain()->getRequest();
+		if ( $request->getSession()->get( SpecialWishlistIntake::SESSION_KEY ) ) {
+			$rc->addTags( self::WISHLIST_CHANGE_TAG );
+		}
 	}
 }

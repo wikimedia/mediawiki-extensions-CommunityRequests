@@ -211,6 +211,7 @@ END
 		);
 		$this->assertSame( $expected[ 'title' ], $wish->getTitle() );
 		$this->assertSame( $expected[ 'status' ], $wish->getStatus() );
+		$this->assertSame( $expected[ 'description' ], $wish->getDescription() );
 		$this->assertSame( $expected[ 'type' ], $wish->getType() );
 		$this->assertSame( $expected[ 'projects' ], $wish->getProjects() );
 		$this->assertSame( $expected[ 'otherProject' ], $wish->getOtherProject() );
@@ -259,7 +260,7 @@ END
 				[
 					'title' => 'Fix all the bugs ever created',
 					'status' => 6,
-					'description' => 'Make [[search]] results more relevant and faster.',
+					'description' => 'Fix everything.',
 					'type' => 1,
 					'projects' => [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ],
 					'otherProject' => null,

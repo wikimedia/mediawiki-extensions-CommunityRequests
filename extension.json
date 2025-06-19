@@ -50,6 +50,7 @@
 		"LoadExtensionSchemaUpdates": "schema",
 		"LoginFormValidErrorMessages": "main",
 		"ParserAfterParse": "main",
+		"RecentChange_save": "main",
 		"BeforePageDisplay": "wish",
 		"ParserFirstCallInit": [ "wish", "focusarea" ],
 		"LinksUpdateComplete": [ "wish", "focusarea" ],
@@ -92,6 +93,17 @@
 				"TitleParser",
 				"HookContainer",
 				"UserFactory"
+			]
+		}
+	},
+	"APIModules": {
+		"wishedit": {
+			"class": "MediaWiki\\Extension\\CommunityRequests\\Api\\ApiWishEdit",
+			"services": [
+				"CommunityRequests.WishlistConfig",
+				"CommunityRequests.WishStore",
+				"UserFactory",
+				"TitleParser"
 			]
 		}
 	},

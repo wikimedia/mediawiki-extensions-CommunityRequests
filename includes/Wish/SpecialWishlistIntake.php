@@ -20,6 +20,7 @@ use MediaWiki\SpecialPage\FormSpecialPage;
 use MediaWiki\Status\Status;
 use MediaWiki\Title\Title;
 use MediaWiki\Title\TitleParser;
+use MediaWiki\User\UserFactory;
 
 /**
  * JS-only Special page for submitting a new community request.
@@ -41,7 +42,8 @@ class SpecialWishlistIntake extends FormSpecialPage {
 		protected WishStore $wishStore,
 		protected $wikiPageFactory,
 		protected TitleParser $titleParser,
-		protected HookContainer $hookContainer
+		protected HookContainer $hookContainer,
+		protected UserFactory $userFactory
 	) {
 		parent::__construct( 'WishlistIntake' );
 	}
@@ -53,12 +55,12 @@ class SpecialWishlistIntake extends FormSpecialPage {
 
 	/** @inheritDoc */
 	public function isListed(): bool {
-		return parent::isListed() && $this->getConfig()->get( 'CommunityRequestsEnable' );
+		return parent::isListed() && $this->config->isEnabled();
 	}
 
 	/** @inheritDoc */
 	public function execute( $wishId ): void {
-		if ( !$this->getConfig()->get( 'CommunityRequestsEnable' ) ) {
+		if ( !$this->config->isEnabled() ) {
 			$this->setHeaders();
 			$this->getOutput()->addWikiMsg( 'communityrequests-disabled' );
 			return;
@@ -67,7 +69,7 @@ class SpecialWishlistIntake extends FormSpecialPage {
 		$this->requireNamedUser( 'communityrequests-please-log-in' );
 
 		// Permit the full page title to be passed instead of just the ID.
-		$wishId = ltrim( $wishId ?? '', $this->getConfig()->get( 'CommunityRequestsWishPagePrefix' ) );
+		$wishId = ltrim( $wishId ?? '', $this->config->getWishPagePrefix() );
 
 		// Extract the integer from the $wishId, which may be a string like "W123".
 		$wishId = preg_replace( '/[^0-9]/', '', $wishId ) ?: null;
@@ -98,7 +100,7 @@ class SpecialWishlistIntake extends FormSpecialPage {
 	 */
 	private function loadExistingWish( int $wishId ): bool {
 		$this->pageTitle = Title::newFromText(
-			$this->getConfig()->get( 'CommunityRequestsWishPagePrefix' ) . $wishId
+			$this->config->getWishPagePrefix() . $wishId
 		);
 		$wish = $this->wishStore->getWish( $this->pageTitle );
 
@@ -107,20 +109,20 @@ class SpecialWishlistIntake extends FormSpecialPage {
 				'communityrequests-wishlistintake',
 				'communityrequests-wish-not-found',
 				[ $this->pageTitle->getPrefixedText() ],
-				$this->getConfig()->get( 'CommunityRequestsHomepage' )
+				$this->config->getHomepage()
 			);
 			return false;
 		}
 
 		$wikitextData = $this->wishStore->getDataFromWikitext( $wish );
 		'@phan-var array $wikitextData';
-		$wishTemplate = $this->getConfig()->get( 'CommunityRequestsWishTemplate' );
+		$templateParams = $this->config->getWishTemplateParams();
 		$this->getOutput()->addJsConfigVars( [
 			'intakeWishId' => $wishId,
 			'intakeWishData' => [
 				...$wish->toArray( $this->config ),
-				'description' => $wikitextData[ $wishTemplate[ 'params' ][ 'description' ] ],
-				'audience' => $wikitextData[ $wishTemplate[ 'params' ][ 'audience' ] ],
+				'description' => $wikitextData[ $templateParams[ 'description' ] ],
+				'audience' => $wikitextData[ $templateParams[ 'audience' ] ],
 			]
 		] );
 
@@ -218,21 +220,19 @@ class SpecialWishlistIntake extends FormSpecialPage {
 			// If this is a new wish, generate a new ID and page title.
 			$id = $this->wishStore->getNewId();
 			$this->pageTitle = Title::newFromText(
-				$this->getConfig()->get( 'CommunityRequestsWishPagePrefix' ) . $id
+				$this->config->getWishPagePrefix() . $id
 			);
 		}
 
 		$wish = Wish::newFromWikitextParams(
 			$this->pageTitle,
 			$this->getContentLanguage()->getCode(),
-			$this->getUser(),
+			$this->userFactory->newFromName( $data[ 'proposer' ] ),
 			$data,
 			$this->config
 		);
 
-		$wishTemplate = $this->titleParser->parseTitle(
-			$this->getConfig()->get( 'CommunityRequestsWishTemplate' )[ 'page' ]
-		);
+		$wishTemplate = $this->titleParser->parseTitle( $this->config->getWishTemplatePage() );
 
 		// Generate edit summary.
 		$summary = $this->msg(

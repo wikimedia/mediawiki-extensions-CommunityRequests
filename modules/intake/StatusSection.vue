@@ -12,11 +12,6 @@
 			<!-- TODO: i18n, WikimediaMessages override -->
 			Only staff can change the status of a wish.
 		</template>
-		<!-- eslint-disable-next-line vue/html-self-closing -->
-		<input
-			:value="status"
-			type="hidden"
-			name="status" />
 	</cdx-field>
 </template>
 

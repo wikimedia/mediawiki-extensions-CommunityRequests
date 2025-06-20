@@ -12,11 +12,11 @@
 		<template #description>
 			{{ $i18n( 'communityrequests-phabricator-desc' ).text() }}
 		</template>
-		<!-- eslint-disable-next-line vue/html-self-closing -->
 		<input
 			:value="normalizeTaskIds( tasks )"
 			type="hidden"
-			name="phabtasks" />
+			name="phabtasks"
+		>
 	</cdx-field>
 </template>
 

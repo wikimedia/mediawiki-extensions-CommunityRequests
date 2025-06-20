@@ -5,6 +5,7 @@ namespace MediaWiki\Extension\CommunityRequests;
 
 use MediaWiki\Config\ConfigException;
 use MediaWiki\Config\ServiceOptions;
+use MediaWiki\Extension\CommunityRequests\Wish\Wish;
 
 /**
  * Service that abstracts retrieving configuration values, with methods to
@@ -88,7 +89,7 @@ class WishlistConfig {
 	}
 
 	public function getWishTemplateParams(): array {
-		return $this->wishTemplate['params'];
+		return $this->wishTemplate[ 'params' ];
 	}
 
 	public function getWishTypes(): array {
@@ -186,6 +187,28 @@ class WishlistConfig {
 	 */
 	public function getProjectWikitextValFromId( int $id ): string {
 		return $this->getWikitextValFromId( $id, $this->projects );
+	}
+
+	/**
+	 * Get the wikitext values from a list of project IDs.
+	 *
+	 * @param int[] $ids
+	 * @return string[]
+	 * @throws ConfigException If any ID is not found in the configuration.
+	 */
+	public function getProjectsWikitextValsFromIds( array $ids ): array {
+		$allProjectIds = array_map(
+			static fn ( $p ) => (int)$p[ 'id' ],
+			$this->projects
+		);
+		$isAllProjects = array_diff( $allProjectIds, $ids ) === [];
+		if ( $isAllProjects ) {
+			return [ Wish::TEMPLATE_VALUE_PROJECTS_ALL ];
+		}
+		return array_map(
+			fn ( $id ) => $this->getProjectWikitextValFromId( $id ),
+			$ids
+		);
 	}
 
 	/**

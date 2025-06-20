@@ -282,10 +282,7 @@ class Wish {
 			'focusArea' => null,
 			'description' => $this->description,
 			'audience' => $this->audience,
-			'projects' => array_map(
-				static fn ( $id ) => $config->getProjectWikitextValFromId( $id ),
-				$this->projects
-			),
+			'projects' => $config->getProjectsWikitextValsFromIds( $this->projects ),
 			'otherProject' => (string)$this->otherProject,
 			'phabTasks' => array_map( static fn ( $t ) => "T$t", $this->phabTasks ),
 			'proposer' => $this->proposer?->getName(),
@@ -315,10 +312,7 @@ class Wish {
 
 			// Match ID values to their wikitext representations, as defined by site configuration.
 			$value = match ( $attr ) {
-				self::TAG_ATTR_PROJECTS => array_map(
-					static fn ( $id ) => $config->getProjectWikitextValFromId( $id ),
-					$this->projects
-				),
+				self::TAG_ATTR_PROJECTS => $config->getProjectsWikitextValsFromIds( $this->projects ),
 				self::TAG_ATTR_OTHER_PROJECT => $this->otherProject ?? '',
 				self::TAG_ATTR_PHAB_TASKS => array_map( static fn ( $id ) => "T$id", $this->phabTasks ),
 				self::TAG_ATTR_STATUS => $config->getStatusWikitextValFromId( $this->status ),

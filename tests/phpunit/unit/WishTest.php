@@ -168,6 +168,31 @@ END
 					'created' => '2023-10-01T12:00:00Z',
 				],
 			],
+			[
+				[
+					'baseLang' => 'en',
+					'created' => '2023-10-01T12:00:00Z',
+					'otherProject' => null,
+					'phabTasks' => [],
+					'projects' => [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ],
+					'status' => 6,
+					'title' => 'Fix all the bugs ever created',
+					'type' => 1,
+				],
+				[
+					'status' => 'archived',
+					'type' => 'bug',
+					'title' => 'Fix all the bugs ever created',
+					'focusArea' => null,
+					'description' => '',
+					'audience' => '',
+					'projects' => [ 'all' ],
+					'otherProject' => '',
+					'phabTasks' => [],
+					'proposer' => 'Petr',
+					'created' => '2023-10-01T12:00:00Z',
+				],
+			]
 		];
 	}
 
@@ -253,6 +278,10 @@ END
 		$this->assertSame(
 			[ 0, 2, 11 ],
 			Wish::getProjectsFromCsv( 'wikipedia,  commons ,, bogus,metawiki', $this->config )
+		);
+		$this->assertSame(
+			[ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ],
+			Wish::getProjectsFromCsv( 'all', $this->config )
 		);
 	}
 

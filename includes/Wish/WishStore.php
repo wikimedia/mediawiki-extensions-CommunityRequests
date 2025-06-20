@@ -21,7 +21,6 @@ use MediaWiki\Title\TitleFormatter;
 use MediaWiki\Title\TitleParser;
 use MediaWiki\User\ActorNormalization;
 use MediaWiki\User\UserFactory;
-use MediaWiki\Utils\MWTimestamp;
 use Wikimedia\Rdbms\IConnectionProvider;
 use Wikimedia\Rdbms\IDatabase;
 use Wikimedia\Rdbms\IReadableDatabase;
@@ -89,7 +88,6 @@ class WishStore {
 			throw new InvalidArgumentException( 'Wish page has not been added to the database yet!' );
 		}
 
-		$isUpdate = $wish->getPage()->exists();
 		$dbw = $this->dbProvider->getPrimaryDatabase();
 		$dbw->startAtomic( __METHOD__ );
 
@@ -97,20 +95,18 @@ class WishStore {
 		$proposer = $wish->getProposer() ? $this->actorNormalization->findActorId( $wish->getProposer(), $dbw ) : null;
 		$created = $wish->getCreated();
 
-		if ( $isUpdate && ( !$proposer || !$created ) ) {
-			// Fetch proposer and creation date from the wishes table, or from the initial revision.
+		if ( !$proposer || !$created ) {
+			// Fetch proposer and creation date from the wishes table.
 			$proposerCreated = $dbw->newSelectQueryBuilder()
 				->caller( __METHOD__ )
-				->table( 'revision' )
 				->from( 'communityrequests_wishes' )
 				->fields( [ 'cr_actor', 'cr_created' ] )
 				->where( [ 'cr_page' => $wish->getPage()->getId() ] )
 				->forUpdate()
-				->fetchResultSet()
 				->fetchRow();
 			if ( $proposerCreated ) {
-				$proposer ??= $proposerCreated[ 'cr_actor' ];
-				$created ??= $proposerCreated[ 'cr_created' ];
+				$proposer ??= $proposerCreated->cr_actor;
+				$created ??= $proposerCreated->cr_created;
 			}
 		}
 		if ( !$proposer ) {
@@ -119,8 +115,6 @@ class WishStore {
 		if ( !$created ) {
 			throw new InvalidArgumentException( 'Wishes must have a created date!' );
 		}
-
-		$now = wfTimestampNow();
 
 		$data = [
 			'cr_page' => $wish->getPage()->getId(),
@@ -131,8 +125,8 @@ class WishStore {
 			'cr_type' => $wish->getType(),
 			'cr_status' => $wish->getStatus(),
 			'cr_focus_area' => $wish->getFocusAreaId(),
-			'cr_created' => MWTimestamp::convert( TS_MW, $isUpdate ? $created : $now ),
-			'cr_updated' => MWTimestamp::convert( TS_MW, $isUpdate ? $now : $created ),
+			'cr_created' => $dbw->timestamp( $created ),
+			'cr_updated' => $dbw->timestamp( $wish->getUpdated() ?: wfTimestampNow() ),
 		];
 		$dbw->newInsertQueryBuilder()
 			->insert( 'communityrequests_wishes' )

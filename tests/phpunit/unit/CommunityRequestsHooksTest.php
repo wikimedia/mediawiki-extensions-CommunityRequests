@@ -47,6 +47,7 @@ class CommunityRequestsHooksTest extends MediaWikiUnitTestCase {
 			WishlistConfig::CONFIG_HOMEPAGE => '',
 			WishlistConfig::CONFIG_WISH_CATEGORY => '',
 			WishlistConfig::CONFIG_WISH_PAGE_PREFIX => '',
+			WishlistConfig::CONFIG_FOCUS_AREA_PAGE_PREFIX => '',
 			WishlistConfig::CONFIG_WISH_INDEX_PAGE => '',
 			WishlistConfig::CONFIG_WISH_TEMPLATE => [],
 			WishlistConfig::CONFIG_WISH_TYPES => [],

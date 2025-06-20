@@ -19,6 +19,7 @@ class WishlistConfig {
 	public const CONFIG_HOMEPAGE = 'CommunityRequestsHomepage';
 	public const CONFIG_WISH_CATEGORY = 'CommunityRequestsWishCategory';
 	public const CONFIG_WISH_PAGE_PREFIX = 'CommunityRequestsWishPagePrefix';
+	public const CONFIG_FOCUS_AREA_PAGE_PREFIX = 'CommunityRequestsFocusAreaPagePrefix';
 	public const CONFIG_WISH_INDEX_PAGE = 'CommunityRequestsWishIndexPage';
 	public const CONFIG_WISH_TEMPLATE = 'CommunityRequestsWishTemplate';
 	public const CONFIG_WISH_TYPES = 'CommunityRequestsWishTypes';
@@ -29,6 +30,7 @@ class WishlistConfig {
 		self::CONFIG_HOMEPAGE,
 		self::CONFIG_WISH_CATEGORY,
 		self::CONFIG_WISH_PAGE_PREFIX,
+		self::CONFIG_FOCUS_AREA_PAGE_PREFIX,
 		self::CONFIG_WISH_INDEX_PAGE,
 		self::CONFIG_WISH_TEMPLATE,
 		self::CONFIG_WISH_TYPES,
@@ -40,6 +42,7 @@ class WishlistConfig {
 	private string $homepage;
 	private string $wishCategory;
 	private string $wishPagePrefix;
+	private string $focusAreaPagePrefix;
 	private string $wishIndexPage;
 	private array $wishTemplate;
 	private array $wishTypes;
@@ -51,6 +54,7 @@ class WishlistConfig {
 		$this->homepage = $config->get( self::CONFIG_HOMEPAGE );
 		$this->wishCategory = $config->get( self::CONFIG_WISH_CATEGORY );
 		$this->wishPagePrefix = $config->get( self::CONFIG_WISH_PAGE_PREFIX );
+		$this->focusAreaPagePrefix = $config->get( self::CONFIG_FOCUS_AREA_PAGE_PREFIX );
 		$this->wishIndexPage = $config->get( self::CONFIG_WISH_INDEX_PAGE );
 		$this->wishTemplate = $config->get( self::CONFIG_WISH_TEMPLATE );
 		$this->wishTypes = $config->get( self::CONFIG_WISH_TYPES );
@@ -74,6 +78,10 @@ class WishlistConfig {
 
 	public function getWishPagePrefix(): string {
 		return $this->wishPagePrefix;
+	}
+
+	public function getFocusAreaPagePrefix(): string {
+		return $this->focusAreaPagePrefix;
 	}
 
 	public function getWishIndexPage(): string {

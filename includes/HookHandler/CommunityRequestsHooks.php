@@ -6,13 +6,18 @@ namespace MediaWiki\Extension\CommunityRequests\HookHandler;
 use MediaWiki\Extension\CommunityRequests\WishlistConfig;
 use MediaWiki\Hook\GetDoubleUnderscoreIDsHook;
 use MediaWiki\Hook\LoginFormValidErrorMessagesHook;
+use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 
 class CommunityRequestsHooks implements GetDoubleUnderscoreIDsHook, LoginFormValidErrorMessagesHook {
 
 	public const MAGIC_MACHINETRANSLATION = 'machinetranslation';
 	public const ERROR_TRACKING_CATEGORY = 'communityrequests-error-category';
 
-	public function __construct( protected WishlistConfig $config ) {
+	public function __construct( protected WishlistConfig $config, protected ?LoggerInterface $logger = null ) {
+		if ( $this->logger === null ) {
+			$this->logger = new NullLogger();
+		}
 	}
 
 	/** @inheritDoc */

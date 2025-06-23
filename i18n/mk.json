@@ -8,7 +8,8 @@
 	"communityrequests-wish-loading-error": "Се јави грешка при расчленувањето на изворниот текст на желбите. Може да содржи неважечки викитекст. [$1 Превчитајте] и обидете се повторно, послужете се со [[$2|изворниот уредник]] или побарајте помош на [[$3|разговорната страница]].",
 	"communityrequests-edit-with-form": "Уреди со образец",
 	"communityrequests-wishlistintake": "Внесување на барања на заедницата",
-	"communityrequests-form-subtitle": "Добрео дојдовте на новите Желби на заедницата. Пополнете го образецот подолу за да ја поднесете вашата желба.",
+	"communityrequests-form-subtitle": "Добрео дојдовте на Желбите на заедницата. Пополнете го образецот подолу за да ја поднесете вашата желба.",
+	"communityrequests-wish-not-found": "Желбата [[$1]] не е пронајдена или не била правилно зачувана.",
 	"communityrequests-form-error": "Нешто не е во ред. Обидете се да зачувате повторно, или пак побарајте помош на [[$1|разговорната страница]].",
 	"communityrequests-description": "Опишете го проблемот",
 	"communityrequests-description-description": "Подробно објаснете ја желбата или проблемот што сакате да се реши.",
@@ -105,5 +106,9 @@
 	"communityrequests-translation-switch": "Преведете ја автоматски со [https://www.mediawiki.org/wiki/Special:MyLanguage/MinT Алатката за машински превод на Викимедија].",
 	"communityrequests-translation-progress": "{{PLURAL:$1|Преведен|Преведени}} $1 од $2 {{PLURAL:$2|дел|делови}} на текстот.",
 	"communityrequests-translation-errors": "Се појави грешка:",
-	"communityrequests-disabled": "Оваа функција на Барањата на заедницата моментално е оневозможена."
+	"communityrequests-disabled": "Оваа функција на Барањата на заедницата моментално е оневозможена.",
+	"communityrequests-publish-wish-summary": "Објавување на желбата „$1“",
+	"communityrequests-save-wish-summary": "Поднова на желбата „$1“",
+	"communityrequests-error-category": "Страници со грешки во Желби на заедницата",
+	"communityrequests-error-category-desc": "Страниците во оваа категорија се желби од Желби на заедницата или полиња на задршка што содржат грешки."
 }

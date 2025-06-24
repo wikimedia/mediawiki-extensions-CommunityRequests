@@ -1,14 +1,16 @@
 {
 	"@metadata": {
 		"authors": [
-			"Meno25"
+			"Meno25",
+			"Mohammed Qays"
 		]
 	},
 	"communityrequests-desc": "نظام لإدارة الاقتراحات والطلبات الفنية لمجتمع الويكي.",
 	"communityrequests-wish-loading-error": "كان ثمة خطأ أثناء الإعراب البرمجي للنص المصدر للأمنية. يجوز أنه يحتوي على نص ويكي غير صالح. يرجى [$1 تحديث] الصفحة والمحاولة مرة أخرى أو استخدام [[$2|محرر النص المصدر]] أو طلب المساعدة على [[$3|صفحة النقاش]].",
 	"communityrequests-edit-with-form": "عدّل مستخدمًا النموذج",
 	"communityrequests-wishlistintake": "قائمة رغبات المجتمع",
-	"communityrequests-form-subtitle": "مرحبًا بكم في قائمة أمنيات المجتمع الجديدة. يرجى ملء النموذج التالي كي ترسلوا أمنياتكم.",
+	"communityrequests-form-subtitle": "أهلاً بكم في قائمة أمنيات المجتمع. يُرجى تعبئة النموذج أدناه لإرسال أمنياتكم.",
+	"communityrequests-wish-not-found": "لم يتم العثور على الرغبة [[$1]] أو لم يتم حفظها بشكل صحيح.",
 	"communityrequests-form-error": "خطأ ما قد حدث. يرجى محاولة الحفظ مرة أخرى أو طلب المساعدة على [[$1|صفحة النقاش]].",
 	"communityrequests-description": "قدموا وصفًا لمشكلتكم",
 	"communityrequests-description-description": "صفوا لنا بالتفصيل الأمنية أو المشكلة التي تتناولونها هنا",
@@ -105,5 +107,9 @@
 	"communityrequests-translation-switch": "ترجمها تلقائيا باستخدام [https://www.mediawiki.org/wiki/Special:MyLanguage/MinT أداة الترجمة الآلية الخاصة بويكيميديا].",
 	"communityrequests-translation-progress": "تمت ترجمة $1 من $2 {{PLURAL:$2|جزء|أجزاء}} من النص.",
 	"communityrequests-translation-errors": "حدث خطأ:",
-	"communityrequests-disabled": "تم تعطيل هذه الوظيفة الخاصة بقائمة أمنيات المجتمع حاليًا."
+	"communityrequests-disabled": "تم تعطيل هذه الوظيفة الخاصة بقائمة أمنيات المجتمع حاليًا.",
+	"communityrequests-publish-wish-summary": "نشر الرغبة \"$1\"",
+	"communityrequests-save-wish-summary": "تحديث الرغبة \"$1\"",
+	"communityrequests-error-category": "الصفحات التي تحتوي على أخطاء في قائمة أمنيات المجتمع",
+	"communityrequests-error-category-desc": "الصفحات الموجودة في هذه الفئة هي رغبات قائمة أمنيات المجتمع أو مجالات التركيز التي تحتوي على أخطاء."
 }

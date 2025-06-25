@@ -2,7 +2,8 @@
 	"@metadata": {
 		"authors": [
 			"Cookai1205",
-			"沈澄心"
+			"沈澄心",
+			"人间百态"
 		]
 	},
 	"communityrequests-desc": "管理wiki社区的技术建议和请求的系统。",
@@ -54,7 +55,7 @@
 	"communityrequests-status-open": "开放",
 	"communityrequests-status-in-progress": "进行中",
 	"communityrequests-status-delivered": "完成",
-	"communityrequests-status-blocked": "受阻碍",
+	"communityrequests-status-blocked": "窒碍难行",
 	"communityrequests-status-archived": "已存档",
 	"communityrequests-status-unknown": "未知",
 	"communityrequests-edit-wish": "编辑愿望",

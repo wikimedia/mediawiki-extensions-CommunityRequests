@@ -191,7 +191,7 @@ class WishHookHandler extends CommunityRequestsHooks implements
 				return null;
 			}
 			return $parser->msg( $label )->text();
-		}, array_filter( explode( Wish::TEMPLATE_ARRAY_DELIMITER, $args[ Wish::TAG_ATTR_PROJECTS ] ) ) );
+		}, array_filter( explode( Wish::TEMPLATE_ARRAY_DELIMITER, $args[ Wish::TAG_ATTR_PROJECTS ] ?? '' ) ) );
 		$projects = $this->getParagraph( 'projects', $language->commaList( array_filter( $projectLabels ) ) );
 		if ( isset( $args[ Wish::TAG_ATTR_OTHER_PROJECT ] ) ) {
 			$projects .= $this->getParagraph( 'other-project', $args[ Wish::TAG_ATTR_OTHER_PROJECT ] );

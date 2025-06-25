@@ -23,6 +23,9 @@
 		"communityrequests-error-category",
 		"communityrequests-wish-category"
 	],
+	"AutoloadClasses": {
+		"MediaWiki\\Extension\\CommunityRequests\\Maintenance\\NukeWishes": "maintenance/nukeWishes.php"
+	},
 	"AutoloadNamespaces": {
 		"MediaWiki\\Extension\\CommunityRequests\\": "includes/"
 	},

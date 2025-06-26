@@ -15,6 +15,7 @@ const getWrapper = ( props = {} ) => {
 
 const defaultProps = {
 	audience: 'Test Audience',
+	baseLang: 'en',
 	baseRevId: 12345,
 	created: '2023-10-01T12:00:00Z',
 	description: 'Test Description',
@@ -50,6 +51,7 @@ describe( 'SpecialWishlistIntake', () => {
 
 		expect( formData.get( 'audience' ) ).toBe( 'Test Audience' );
 		expect( formData.get( 'baserevid' ) ).toBe( '12345' );
+		expect( formData.get( 'baselang' ) ).toBe( 'en' );
 		expect( formData.get( 'created' ) ).toBe( '2023-10-01T12:00:00Z' );
 		expect( formData.get( 'description' ) ).toBe( 'Test Description' );
 		expect( formData.get( 'otherproject' ) ).toBe( 'Other Project' );

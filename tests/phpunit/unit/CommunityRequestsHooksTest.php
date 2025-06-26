@@ -3,9 +3,12 @@ declare( strict_types = 1 );
 
 namespace MediaWiki\Extension\CommunityRequests\Test\Unit;
 
+use MediaWiki\Config\HashConfig;
 use MediaWiki\Config\ServiceOptions;
 use MediaWiki\Extension\CommunityRequests\HookHandler\CommunityRequestsHooks;
+use MediaWiki\Extension\CommunityRequests\Wish\WishStore;
 use MediaWiki\Extension\CommunityRequests\WishlistConfig;
+use MediaWiki\MainConfigNames;
 use MediaWiki\Parser\Parser;
 use MediaWiki\Parser\ParserOutput;
 use MediaWiki\Tests\Unit\MockServiceDependenciesTrait;
@@ -48,16 +51,19 @@ class CommunityRequestsHooksTest extends MediaWikiUnitTestCase {
 		}
 
 		$serviceOptions = new ServiceOptions( WishlistConfig::CONSTRUCTOR_OPTIONS, [
-			WishlistConfig::CONFIG_ENABLED => $enabled,
-			WishlistConfig::CONFIG_HOMEPAGE => '',
-			WishlistConfig::CONFIG_WISH_CATEGORY => '',
-			WishlistConfig::CONFIG_WISH_PAGE_PREFIX => '',
-			WishlistConfig::CONFIG_FOCUS_AREA_PAGE_PREFIX => '',
-			WishlistConfig::CONFIG_WISH_INDEX_PAGE => '',
-			WishlistConfig::CONFIG_WISH_TEMPLATE => [],
-			WishlistConfig::CONFIG_WISH_TYPES => [],
-			WishlistConfig::CONFIG_PROJECTS => [],
-			WishlistConfig::CONFIG_STATUSES => [],
+			WishlistConfig::ENABLED => $enabled,
+			WishlistConfig::HOMEPAGE => '',
+			WishlistConfig::WISH_CATEGORY => '',
+			WishlistConfig::WISH_PAGE_PREFIX => '',
+			WishlistConfig::WISH_INDEX_PAGE => '',
+			WishlistConfig::WISH_TEMPLATE => [],
+			WishlistConfig::WISH_TYPES => [],
+			WishlistConfig::FOCUS_AREA_CATEGORY => '',
+			WishlistConfig::FOCUS_AREA_PAGE_PREFIX => '',
+			WishlistConfig::FOCUS_AREA_INDEX_PAGE => '',
+			WishlistConfig::FOCUS_AREA_TEMPLATE => [],
+			WishlistConfig::PROJECTS => [],
+			WishlistConfig::STATUSES => [],
 		] );
 		$config = new WishlistConfig(
 			$serviceOptions,
@@ -65,7 +71,10 @@ class CommunityRequestsHooksTest extends MediaWikiUnitTestCase {
 			$this->newServiceInstance( TitleFormatter::class, [] )
 		);
 		$text = '';
-		( new CommunityRequestsHooks( $config ) )->onParserAfterParse( $parser, $text, null );
+		$wishStoreMock = $this->createMock( WishStore::class );
+		$mainConfig = new HashConfig( [ MainConfigNames::PageLanguageUseDB => true ] );
+		( new CommunityRequestsHooks( $config, $wishStoreMock, $mainConfig ) )
+			->onParserAfterParse( $parser, $text, null );
 	}
 
 	public static function provideOnParserAfterParse(): array {

@@ -73,7 +73,7 @@ class NukeWishes extends Maintenance {
 			}
 
 			$page = PageIdentityValue::localIdentity( (int)$row->page_id, (int)$row->page_namespace, $row->page_title );
-			$wish = $wishStore->getWish( $page );
+			$wish = $wishStore->get( $page );
 
 			$this->output( "Deleting wish page: {$page->getDBkey()}\n" );
 

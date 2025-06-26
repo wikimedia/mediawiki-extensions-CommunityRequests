@@ -47,7 +47,7 @@ class SpecialWishlistIntakeTest extends SpecialPageTestBase {
 					'id' => 1,
 					'label' => 'communityrequests-status-accepted'
 				]
-			]
+			],
 		] );
 
 		$actual = SpecialWishlistIntake::addResourceLoaderMessages( [ 'messages' => [] ] );

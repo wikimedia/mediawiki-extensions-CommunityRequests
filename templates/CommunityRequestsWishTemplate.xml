@@ -61,7 +61,7 @@
       <origin>3519</origin>
       <model>wikitext</model>
       <format>text/x-wiki</format>
-      <text bytes="550" sha1="9tlhfdn3ipdgkfhqtfgxaz2elii20cu" xml:space="preserve">{{#tag:wish
+      <text bytes="696" sha1="5shhhyexcql8fo7ni3xhrt1op87i0pf" xml:space="preserve">{{#tag:wish
 | {{{description|&lt;noinclude&gt;This is a test wish description.&lt;/noinclude&gt;}}}
 | type = {{{type|&lt;noinclude&gt;feature&lt;/noinclude&gt;}}}
 | status = {{{status|&lt;noinclude&gt;in-progress&lt;/noinclude&gt;}}}
@@ -69,12 +69,13 @@
 | title = {{{title|&lt;noinclude&gt;Wish title&lt;/noinclude&gt;}}}
 | projects = {{{projects|&lt;noinclude&gt;wikipedia,commons&lt;/noinclude&gt;}}}
 | otherproject = {{{otherproject|}}}
-| audience = {{{audience|New editors}}}
-| phabtasks = {{{tasks|T123,T456}}}
-| proposer = {{{proposer|Admin}}}
-| created = {{{created|2025-06-16T23:07:56Z}}}
+| audience = {{{audience|&lt;noinclude&gt;New editors&lt;/noinclude&gt;}}}
+| phabtasks = {{{tasks|&lt;noinclude&gt;T123,T456&lt;/noinclude&gt;}}}
+| proposer = {{{proposer|&lt;noinclude&gt;Admin&lt;/noinclude&gt;}}}
+| created = {{{created|&lt;noinclude&gt;2025-06-16T23:07:56Z&lt;/noinclude&gt;}}}
+| baselang = {{{baselang|&lt;noinclude&gt;en&lt;/noinclude&gt;}}}
 }}</text>
-      <sha1>9tlhfdn3ipdgkfhqtfgxaz2elii20cu</sha1>
+      <sha1>5shhhyexcql8fo7ni3xhrt1op87i0pf</sha1>
     </revision>
   </page>
 </mediawiki>

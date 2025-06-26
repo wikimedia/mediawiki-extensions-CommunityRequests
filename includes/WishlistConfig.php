@@ -7,7 +7,7 @@ use MediaWiki\Config\ConfigException;
 use MediaWiki\Config\ServiceOptions;
 use MediaWiki\Extension\CommunityRequests\Wish\Wish;
 use MediaWiki\Language\LanguageCode;
-use MediaWiki\Page\PageIdentity;
+use MediaWiki\Page\PageReference;
 use MediaWiki\Title\TitleFormatter;
 use MediaWiki\Title\TitleParser;
 
@@ -20,36 +20,45 @@ use MediaWiki\Title\TitleParser;
  */
 class WishlistConfig {
 
-	public const CONFIG_ENABLED = 'CommunityRequestsEnable';
-	public const CONFIG_HOMEPAGE = 'CommunityRequestsHomepage';
-	public const CONFIG_WISH_CATEGORY = 'CommunityRequestsWishCategory';
-	public const CONFIG_WISH_PAGE_PREFIX = 'CommunityRequestsWishPagePrefix';
-	public const CONFIG_FOCUS_AREA_PAGE_PREFIX = 'CommunityRequestsFocusAreaPagePrefix';
-	public const CONFIG_WISH_INDEX_PAGE = 'CommunityRequestsWishIndexPage';
-	public const CONFIG_WISH_TEMPLATE = 'CommunityRequestsWishTemplate';
-	public const CONFIG_WISH_TYPES = 'CommunityRequestsWishTypes';
-	public const CONFIG_PROJECTS = 'CommunityRequestsProjects';
-	public const CONFIG_STATUSES = 'CommunityRequestsStatuses';
+	public const ENABLED = 'CommunityRequestsEnable';
+	public const HOMEPAGE = 'CommunityRequestsHomepage';
+	public const WISH_CATEGORY = 'CommunityRequestsWishCategory';
+	public const WISH_PAGE_PREFIX = 'CommunityRequestsWishPagePrefix';
+	public const WISH_INDEX_PAGE = 'CommunityRequestsWishIndexPage';
+	public const WISH_TEMPLATE = 'CommunityRequestsWishTemplate';
+	public const WISH_TYPES = 'CommunityRequestsWishTypes';
+	public const FOCUS_AREA_CATEGORY = 'CommunityRequestsFocusAreaCategory';
+	public const FOCUS_AREA_PAGE_PREFIX = 'CommunityRequestsFocusAreaPagePrefix';
+	public const FOCUS_AREA_INDEX_PAGE = 'CommunityRequestsFocusAreaIndexPage';
+	public const FOCUS_AREA_TEMPLATE = 'CommunityRequestsFocusAreaTemplate';
+	public const PROJECTS = 'CommunityRequestsProjects';
+	public const STATUSES = 'CommunityRequestsStatuses';
 	public const CONSTRUCTOR_OPTIONS = [
-		self::CONFIG_ENABLED,
-		self::CONFIG_HOMEPAGE,
-		self::CONFIG_WISH_CATEGORY,
-		self::CONFIG_WISH_PAGE_PREFIX,
-		self::CONFIG_FOCUS_AREA_PAGE_PREFIX,
-		self::CONFIG_WISH_INDEX_PAGE,
-		self::CONFIG_WISH_TEMPLATE,
-		self::CONFIG_WISH_TYPES,
-		self::CONFIG_PROJECTS,
-		self::CONFIG_STATUSES
+		self::ENABLED,
+		self::HOMEPAGE,
+		self::WISH_CATEGORY,
+		self::WISH_PAGE_PREFIX,
+		self::WISH_INDEX_PAGE,
+		self::WISH_TEMPLATE,
+		self::WISH_TYPES,
+		self::FOCUS_AREA_CATEGORY,
+		self::FOCUS_AREA_PAGE_PREFIX,
+		self::FOCUS_AREA_INDEX_PAGE,
+		self::FOCUS_AREA_TEMPLATE,
+		self::PROJECTS,
+		self::STATUSES
 	];
 
 	private bool $enabled;
 	private string $homepage;
 	private string $wishCategory;
+	private string $focusAreaCategory;
 	private string $wishPagePrefix;
 	private string $focusAreaPagePrefix;
 	private string $wishIndexPage;
+	private string $focusAreaIndexPage;
 	private array $wishTemplate;
+	private array $focusAreaTemplate;
 	private array $wishTypes;
 	private array $projects;
 	private array $statuses;
@@ -59,16 +68,19 @@ class WishlistConfig {
 		private readonly TitleParser $titleParser,
 		private readonly TitleFormatter $titleFormatter
 	) {
-		$this->enabled = $config->get( self::CONFIG_ENABLED );
-		$this->homepage = $config->get( self::CONFIG_HOMEPAGE );
-		$this->wishCategory = $config->get( self::CONFIG_WISH_CATEGORY );
-		$this->wishPagePrefix = $config->get( self::CONFIG_WISH_PAGE_PREFIX );
-		$this->focusAreaPagePrefix = $config->get( self::CONFIG_FOCUS_AREA_PAGE_PREFIX );
-		$this->wishIndexPage = $config->get( self::CONFIG_WISH_INDEX_PAGE );
-		$this->wishTemplate = $config->get( self::CONFIG_WISH_TEMPLATE );
-		$this->wishTypes = $config->get( self::CONFIG_WISH_TYPES );
-		$this->projects = $config->get( self::CONFIG_PROJECTS );
-		$this->statuses = $config->get( self::CONFIG_STATUSES );
+		$this->enabled = $config->get( self::ENABLED );
+		$this->homepage = $config->get( self::HOMEPAGE );
+		$this->wishCategory = $config->get( self::WISH_CATEGORY );
+		$this->wishPagePrefix = $config->get( self::WISH_PAGE_PREFIX );
+		$this->wishIndexPage = $config->get( self::WISH_INDEX_PAGE );
+		$this->wishTemplate = $config->get( self::WISH_TEMPLATE );
+		$this->wishTypes = $config->get( self::WISH_TYPES );
+		$this->focusAreaCategory = $config->get( self::FOCUS_AREA_CATEGORY );
+		$this->focusAreaPagePrefix = $config->get( self::FOCUS_AREA_PAGE_PREFIX );
+		$this->focusAreaIndexPage = $config->get( self::FOCUS_AREA_INDEX_PAGE );
+		$this->focusAreaTemplate = $config->get( self::FOCUS_AREA_TEMPLATE );
+		$this->projects = $config->get( self::PROJECTS );
+		$this->statuses = $config->get( self::STATUSES );
 	}
 
 	// Getters
@@ -109,6 +121,26 @@ class WishlistConfig {
 		return $this->wishTypes;
 	}
 
+	public function getFocusAreaCategory(): string {
+		return $this->focusAreaCategory;
+	}
+
+	public function getFocusAreaIndexPage(): string {
+		return $this->focusAreaIndexPage;
+	}
+
+	public function getFocusAreaTemplate(): array {
+		return $this->focusAreaTemplate;
+	}
+
+	public function getFocusAreaTemplatePage(): string {
+		return $this->focusAreaTemplate[ 'page' ];
+	}
+
+	public function getFocusAreaTemplateParams(): array {
+		return $this->focusAreaTemplate[ 'params' ];
+	}
+
 	public function getFocusAreaPagePrefix(): string {
 		return $this->focusAreaPagePrefix;
 	}
@@ -124,37 +156,37 @@ class WishlistConfig {
 	// Helpers
 
 	/**
-	 * Check if the given PageIdentity could be a wish page based on its title.
+	 * Check if the given PageReference could be a wish page based on its title.
 	 *
-	 * @param ?PageIdentity $identity
+	 * @param ?PageReference $identity
 	 * @return bool
 	 */
-	public function isWishPage( ?PageIdentity $identity ): bool {
+	public function isWishPage( ?PageReference $identity ): bool {
 		return $this->titleStartsWith( $identity, $this->wishPagePrefix );
 	}
 
 	/**
-	 * Check if the given PageIdentity could be a focus area page based on its title.
+	 * Check if the given PageReference could be a focus area page based on its title.
 	 *
-	 * @param ?PageIdentity $identity
+	 * @param ?PageReference $identity
 	 * @return bool
 	 */
-	public function isFocusAreaPage( ?PageIdentity $identity ): bool {
+	public function isFocusAreaPage( ?PageReference $identity ): bool {
 		return $this->titleStartsWith( $identity, $this->focusAreaPagePrefix );
 	}
 
 	/**
-	 * Check if the given PageIdentity could be a wish or focus area page based on its title.
+	 * Check if the given PageReference could be a wish or focus area page based on its title.
 	 *
-	 * @param ?PageIdentity $identity
+	 * @param ?PageReference $identity
 	 * @return bool
 	 */
-	public function isWishOrFocusAreaPage( ?PageIdentity $identity ): bool {
+	public function isWishOrFocusAreaPage( ?PageReference $identity ): bool {
 		return $this->isWishPage( $identity ) || $this->isFocusAreaPage( $identity );
 	}
 
-	private function titleStartsWith( ?PageIdentity $identity, string $prefix ): bool {
-		if ( !$identity ) {
+	private function titleStartsWith( ?PageReference $identity, string $prefix ): bool {
+		if ( $identity === null ) {
 			return false;
 		}
 		$pagePrefix = $this->titleParser->parseTitle( $prefix );
@@ -163,8 +195,11 @@ class WishlistConfig {
 		$pagePrefixStr = $this->titleFormatter->getPrefixedDBkey( $pagePrefix );
 		$remaining = substr( $identityStr, strlen( $pagePrefixStr ) );
 
-		if ( str_starts_with( $identityStr, $pagePrefixStr ) && is_numeric( $remaining ) ) {
+		$hasPrefix = str_starts_with( $identityStr, $pagePrefixStr );
+		if ( $hasPrefix && is_numeric( $remaining ) ) {
 			return true;
+		} elseif ( !$hasPrefix ) {
+			return false;
 		}
 
 		// Remove each numeric character from the beginning of $remaining

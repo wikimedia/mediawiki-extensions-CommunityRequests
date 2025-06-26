@@ -32,6 +32,9 @@
 	"TestAutoloadNamespaces": {
 		"MediaWiki\\Extension\\CommunityRequests\\Tests\\": "tests/phpunit/"
 	},
+	"TestAutoloadClasses": {
+		"MediaWiki\\Extension\\CommunityRequests\\Tests\\CommunityRequestsIntegrationTestCase": "tests/phpunit/integration/CommunityRequestsIntegrationTestCase.php"
+	},
 	"ServiceWiringFiles": [
 		"includes/ServiceWiring.php"
 	],
@@ -54,12 +57,17 @@
 		"BeforePageDisplay": "wish",
 		"ParserFirstCallInit": [ "wish", "focusarea" ],
 		"LinksUpdateComplete": [ "wish", "focusarea" ],
-		"PageDeleteComplete": [ "wish", "focusarea" ]
+		"PageDeleteComplete": "main",
+		"RevisionDataUpdates": "main"
 	},
 	"HookHandlers": {
 		"main": {
 			"class": "MediaWiki\\Extension\\CommunityRequests\\HookHandler\\CommunityRequestsHooks",
-			"services": [ "CommunityRequests.WishlistConfig" ]
+			"services": [
+				"CommunityRequests.WishlistConfig",
+				"CommunityRequests.WishStore",
+				"MainConfig"
+			]
 		},
 		"wish": {
 			"class": "MediaWiki\\Extension\\CommunityRequests\\HookHandler\\WishHookHandler",
@@ -67,7 +75,8 @@
 				"CommunityRequests.WishlistConfig",
 				"CommunityRequests.WishStore",
 				"UserFactory",
-				"LinkRenderer"
+				"LinkRenderer",
+				"MainConfig"
 			]
 		},
 		"focusarea": {
@@ -75,6 +84,7 @@
 			"services": [
 				"CommunityRequests.WishlistConfig",
 				"CommunityRequests.FocusAreaStore",
+				"MainConfig",
 				"CommunityRequests.Logger"
 			]
 		},
@@ -102,7 +112,15 @@
 			"services": [
 				"CommunityRequests.WishlistConfig",
 				"CommunityRequests.WishStore",
-				"UserFactory",
+				"TitleParser",
+				"UserFactory"
+			]
+		},
+		"focusareaedit": {
+			"class": "MediaWiki\\Extension\\CommunityRequests\\Api\\ApiFocusAreaEdit",
+			"services": [
+				"CommunityRequests.WishlistConfig",
+				"CommunityRequests.FocusAreaStore",
 				"TitleParser"
 			]
 		}
@@ -304,10 +322,6 @@
 			"description": "The title of the page to use as the index for all wishes.",
 			"value": "Community Wishlist/Wishes"
 		},
-		"CommunityRequestsFocusAreaPagePrefix": {
-			"description": "Prefixed page title (including the namespace) of focus areas. The focus area ID will be appended to this.",
-			"value": "Community Wishlist/Focus areas/FA"
-		},
 		"CommunityRequestsWishTemplate": {
 			"description": "Configuration for the template that displays and stores wishes.",
 			"value": {
@@ -323,7 +337,8 @@
 					"otherproject": "otherproject",
 					"phabtasks": "tasks",
 					"proposer": "proposer",
-					"created": "created"
+					"created": "created",
+					"baselang": "baselang"
 				}
 			}
 		},
@@ -346,6 +361,35 @@
 					"default": true,
 					"id": 3,
 					"label": "communityrequests-wishtype-unknown"
+				}
+			}
+		},
+		"CommunityRequestsFocusAreaCategory": {
+			"description": "The category to put all focus areas in.",
+			"value": "Category:Community Wishlist/Focus areas"
+		},
+		"CommunityRequestsFocusAreaPagePrefix": {
+			"description": "Prefixed page title (including the namespace) of focus areas. The focus area ID will be appended to this.",
+			"value": "Community Wishlist/Focus areas/FA"
+		},
+		"CommunityRequestsFocusAreaIndexPage": {
+			"description": "The title of the page to use as the index for all focus areas.",
+			"value": "Community Wishlist/Focus areas"
+		},
+		"CommunityRequestsFocusAreaTemplate": {
+			"description": "Configuration for the template that displays and stores focus areas.",
+			"value": {
+				"page": "Template:Community Wishlist/Focus area",
+				"params": {
+					"title": "title",
+					"description": "description",
+					"shortdescription": "short_description",
+					"status": "status",
+					"owners": "owners",
+					"volunteers": "volunteers",
+					"created": "created",
+					"updated": "updated",
+					"baselang": "baselang"
 				}
 			}
 		},

@@ -1,18 +1,17 @@
 <?php
+declare( strict_types = 1 );
 
 namespace MediaWiki\Extension\CommunityRequests\HookHandler;
 
+use MediaWiki\Config\Config;
 use MediaWiki\Extension\CommunityRequests\FocusArea\FocusArea;
 use MediaWiki\Extension\CommunityRequests\FocusArea\FocusAreaStore;
 use MediaWiki\Extension\CommunityRequests\WishlistConfig;
 use MediaWiki\Hook\LinksUpdateCompleteHook;
 use MediaWiki\Hook\ParserFirstCallInitHook;
-use MediaWiki\Logging\ManualLogEntry;
-use MediaWiki\Page\ProperPageIdentity;
+use MediaWiki\Html\Html;
 use MediaWiki\Parser\Parser;
 use MediaWiki\Parser\PPFrame;
-use MediaWiki\Permissions\Authority;
-use MediaWiki\Revision\RevisionRecord;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -22,17 +21,15 @@ class FocusAreaHookHandler extends CommunityRequestsHooks implements
 	ParserFirstCallInitHook,
 	LinksUpdateCompleteHook
 {
-	private const EXT_DATA_FOCUS_AREA_KEY = 'CommunityRequests-focus-area';
-	private FocusAreaStore $focusAreaStore;
+	public const FOCUS_AREA_TRACKING_CATEGORY = 'communityrequests-focus-area-category';
 
-	/**
-	 * @param WishlistConfig $config
-	 * @param FocusAreaStore $focusAreaStore
-	 * @param LoggerInterface $logger
-	 */
-	public function __construct( WishlistConfig $config, FocusAreaStore $focusAreaStore, LoggerInterface $logger ) {
-		parent::__construct( $config, $logger );
-		$this->focusAreaStore = $focusAreaStore;
+	public function __construct(
+		protected WishlistConfig $config,
+		FocusAreaStore $store,
+		Config $mainConfig,
+		LoggerInterface $logger
+	) {
+		parent::__construct( $config, $store, $mainConfig, $logger );
 	}
 
 	/** @inheritDoc */
@@ -40,11 +37,12 @@ class FocusAreaHookHandler extends CommunityRequestsHooks implements
 		if ( !$this->config->isEnabled() ) {
 			return;
 		}
-
-		$parser->setHook( 'focus-area', [ $this, 'renderFocusArea' ] );
+		$parser->setHook( 'focus-area', $this->renderFocusArea( ... ) );
 	}
 
 	/**
+	 * Render the <focus-area> tag.
+	 *
 	 * @param string $input
 	 * @param array $args
 	 * @param Parser $parser
@@ -52,69 +50,57 @@ class FocusAreaHookHandler extends CommunityRequestsHooks implements
 	 * @return string
 	 */
 	public function renderFocusArea( $input, array $args, Parser $parser, PPFrame $frame ): string {
-		if ( !$this->config->isEnabled() ) {
+		if ( !$this->config->isEnabled() || !$this->config->isFocusAreaPage( $parser->getPage() ) ) {
 			return '';
 		}
 
-		$data = [
-			'shortDescription' => $args['shortdescription'] ?? '',
-			'title' => $args['title'] ?? '',
-			'status' => $args['status'] ?? '',
+		$this->addTrackingCategory( $parser, self::FOCUS_AREA_TRACKING_CATEGORY );
+
+		// Add tracking category for missing critical data.
+		$requiredFields = [
+			FocusArea::TAG_ATTR_CREATED,
+			FocusArea::TAG_ATTR_TITLE,
+			FocusArea::TAG_ATTR_BASE_LANG,
 		];
+		$missingFields = array_diff( $requiredFields, array_keys( $args ) );
+		if ( $missingFields ) {
+			$this->addTrackingCategory( $parser, self::ERROR_TRACKING_CATEGORY );
+			return Html::element( 'span', [ 'class' => 'error' ],
+				'Missing required field(s): ' . implode( ', ', $missingFields ) );
+		}
 
-		$this->logger->debug( __METHOD__ . ": Rendering focus area. {0}", [ json_encode( $data ) ] );
-		$parser->getOutput()->setExtensionData( self::EXT_DATA_FOCUS_AREA_KEY, $data );
+		// These need to be set here because we need them for display in ::renderFocusAreaInternal().
+		$args[ 'updated' ] = $parser->getRevisionTimestamp();
+		$args[ FocusArea::TAG_ATTR_CREATED ] ??= $args[ 'updated' ];
 
+		$this->logger->debug( __METHOD__ . ": Rendering focus area. {0}", [ json_encode( $args ) ] );
+		$parser->getOutput()->setExtensionData( self::EXT_DATA_KEY, $args );
+
+		return $this->renderFocusAreaInternal( $input ?: '', $args, $parser );
+	}
+
+	private function renderFocusAreaInternal( string $input, array $args, Parser $parser ): string {
+		// TODO: Implement!
 		return '';
 	}
 
 	/** @inheritDoc */
 	public function onLinksUpdateComplete( $linksUpdate, $ticket ) {
-		if ( !$this->config->isEnabled() ) {
+		if ( !$this->config->isEnabled() || !$this->config->isFocusAreaPage( $linksUpdate->getTitle() ) ) {
 			return;
 		}
 
-		$data = $linksUpdate->getParserOutput()->getExtensionData( self::EXT_DATA_FOCUS_AREA_KEY );
-		$page = $linksUpdate->getTitle();
-		$language = $page->getPageLanguage()->getCode();
-
-		// only save focus area data if being used on within the config prefix
-		if ( !$this->config->isFocusAreaPage( $page ) ) {
-			$this->logger->debug( __METHOD__ . ": Not a focus area page." );
+		$data = $linksUpdate->getParserOutput()->getExtensionData( self::EXT_DATA_KEY );
+		if ( !$data ) {
 			return;
 		}
 
-		$data['status'] = $this->config->getStatusIdFromWikitextVal( $data['status'] ?? '' );
-
-		// TODO: handle subpage created by Translate extension with language code equal to the base page
-		// language code in a follow-up task
-		try {
-			$focusArea = new FocusArea( $page, $language, $data );
-			$this->focusAreaStore->save( $focusArea );
-		} catch ( \InvalidArgumentException $e ) {
-			$this->logger->error( __METHOD__ . ": {0}", [ $e->getMessage() ] );
-		}
-	}
-
-	/** @inheritDoc */
-	public function onPageDeleteComplete(
-		ProperPageIdentity $page,
-		Authority $deleter,
-		string $reason,
-		int $pageID,
-		RevisionRecord $deletedRev,
-		ManualLogEntry $logEntry,
-		int $archivedRevisionCount
-	) {
-		if ( !$this->config->isEnabled() ) {
-			return;
-		}
-
-		if ( !$this->config->isFocusAreaPage( $page ) ) {
-			$this->logger->debug( __METHOD__ . ": Not a focus area page." );
-			return;
-		}
-
-		// TODO: implement deletion logic in follow-up task
+		$focusArea = FocusArea::newFromWikitextParams(
+			$this->getCanonicalWishlistPage( $linksUpdate->getTitle() ),
+			$linksUpdate->getTitle()->getPageLanguage()->getCode(),
+			$data,
+			$this->config
+		);
+		$this->store->save( $focusArea );
 	}
 }

@@ -3,44 +3,111 @@ declare( strict_types = 1 );
 
 namespace MediaWiki\Extension\CommunityRequests\FocusArea;
 
-use MediaWiki\Extension\CommunityRequests\WishlistConfig;
-use MediaWiki\Page\PageIdentity;
-use Wikimedia\Rdbms\IConnectionProvider;
+use InvalidArgumentException;
+use MediaWiki\DAO\WikiAwareEntity;
+use MediaWiki\Extension\CommunityRequests\AbstractWishlistEntity;
+use MediaWiki\Extension\CommunityRequests\AbstractWishlistStore;
+use MediaWiki\Extension\CommunityRequests\IdGenerator\IdGenerator;
+use MediaWiki\Page\PageIdentityValue;
 use Wikimedia\Rdbms\IDatabase;
+use Wikimedia\Rdbms\IReadableDatabase;
+use Wikimedia\Rdbms\IResultWrapper;
 
-class FocusAreaStore {
+class FocusAreaStore extends AbstractWishlistStore {
 
-	public const FOCUS_AREA_FIELDS = [
-		'crfa_page',
-		'crfa_base_lang',
-		'crfa_status',
-		'crfa_vote_count',
-		'crfa_created',
-		'crfa_updated',
-		'crfat_title',
-		'crfat_short_description',
-		'crfat_title',
-		'crfat_lang',
-	];
-
-	public function __construct(
-		private readonly IConnectionProvider $connectionProvider,
-		protected WishlistConfig $config
-	) {
+	/** @inheritDoc */
+	public static function entityClass(): string {
+		return FocusArea::class;
 	}
 
-	/**
-	 * Save a focus area and translation to the database.
-	 *
-	 * @param FocusArea $focusArea
-	 */
-	public function save( FocusArea $focusArea ): void {
-		$dbw = $this->connectionProvider->getPrimaryDatabase();
+	// Schema
+
+	/** @inheritDoc */
+	public static function tableName(): string {
+		return 'communityrequests_focus_areas';
+	}
+
+	/** @inheritDoc */
+	public static function fields(): array {
+		return [
+			'page_namespace',
+			'page_title',
+			'crfa_page',
+			'crfa_base_lang',
+			'crfa_status',
+			'crfa_vote_count',
+			'crfa_created',
+			'crfa_updated',
+			'crfat_title',
+			'crfat_short_description',
+			'crfat_title',
+			'crfat_lang',
+		];
+	}
+
+	/** @inheritDoc */
+	protected static function pageField(): string {
+		return 'crfa_page';
+	}
+
+	/** @inheritDoc */
+	public static function createdField(): string {
+		return 'crfa_created';
+	}
+
+	/** @inheritDoc */
+	public static function updatedField(): string {
+		return 'crfa_updated';
+	}
+
+	/** @inheritDoc */
+	public static function voteCountField(): string {
+		return 'crfa_vote_count';
+	}
+
+	/** @inheritDoc */
+	public static function baseLangField(): string {
+		return 'crfa_base_lang';
+	}
+
+	/** @inheritDoc */
+	public static function titleField(): string {
+		return 'crfat_title';
+	}
+
+	/** @inheritDoc */
+	protected static function translationsTableName(): string {
+		return 'communityrequests_focus_areas_translations';
+	}
+
+	/** @inheritDoc */
+	protected static function translationForeignKey(): string {
+		return 'crfat_focus_area';
+	}
+
+	/** @inheritDoc */
+	protected static function translationLangField(): string {
+		return 'crfat_lang';
+	}
+
+	// Saving focus areas.
+
+	/** @inheritDoc */
+	public function save( AbstractWishlistEntity $entity ): void {
+		if ( !$entity instanceof FocusArea ) {
+			throw new InvalidArgumentException( '$entity must be a FocusArea instance.' );
+		}
+		if ( !$entity->getPage()->getId() ) {
+			throw new InvalidArgumentException( 'Focus area page has not been added to the database yet!' );
+		}
+		$focusArea = $entity;
+
+		$dbw = $this->dbProvider->getPrimaryDatabase();
 		$dbw->startAtomic( __METHOD__ );
 
 		$data = [
 			'crfa_page' => $focusArea->getPage()->getId(),
-			'crfa_base_lang' => $focusArea->getBaseLanguage(),
+			'crfa_base_lang' => $focusArea->getBaseLang(),
 			'crfa_created' => $dbw->timestamp( $focusArea->getCreated() ?: wfTimestampNow() ),
 		];
 		$dataSet = [
@@ -57,7 +124,7 @@ class FocusAreaStore {
 			->caller( __METHOD__ )
 			->execute();
 
-		$this->saveTranslation( $focusArea, $dbw );
+		$this->saveTranslations( $focusArea, $dbw );
 
 		$dbw->endAtomic( __METHOD__ );
 	}
@@ -65,68 +132,68 @@ class FocusAreaStore {
 	/**
 	 * Save a translation for a focus area to the database.
 	 *
-	 * @param FocusArea $focusArea
+	 * @param AbstractWishlistEntity $entity
 	 * @param IDatabase $dbw
+	 * @param array $dataSet
 	 */
-	private function saveTranslation( FocusArea $focusArea, IDatabase $dbw ): void {
-		$data = [
-			'crfat_focus_area' => $focusArea->getPage()->getId(),
-			'crfat_lang' => $focusArea->getLanguage()
-		];
-
-		$dataSet = [
-			'crfat_title' => $focusArea->getTitle(),
-			'crfat_short_description' => $focusArea->getShortDescription()
-		];
-
-		$dbw->newInsertQueryBuilder()
-			->insert( 'communityrequests_focus_areas_translations' )
-			->rows( [ array_merge( $data, $dataSet ) ] )
-			->set( $dataSet )
-			->onDuplicateKeyUpdate()
-			->uniqueIndexFields( [ 'crfat_focus_area', 'crfat_lang' ] )
-			->caller( __METHOD__ )
-			->execute();
+	protected function saveTranslations(
+		AbstractWishlistEntity $entity,
+		IDatabase $dbw,
+		array $dataSet = []
+	): void {
+		if ( !$entity instanceof FocusArea ) {
+			throw new InvalidArgumentException( '$entity must be a FocusArea instance.' );
+		}
+		parent::saveTranslations( $entity, $dbw, [
+			'crfat_short_description' => $entity->getShortDescription(),
+		] );
 	}
 
-	/**
-	 * Get a focus area by its page identity and language.
-	 *
-	 * @param PageIdentity $page
-	 * @param string $language
-	 * @return FocusArea|null
-	 */
-	public function getFocusArea( PageIdentity $page, string $language ): ?FocusArea {
-		$dbr = $this->connectionProvider->getReplicaDatabase();
+	/** @inheritDoc */
+	protected function getEntitiesFromLangFallbacks(
+		IReadableDatabase $dbr,
+		IResultWrapper $resultWrapper,
+		?string $lang = null
+	): array {
+		[ $rows, ] = parent::getEntitiesFromLangFallbacksInternal( $resultWrapper, $lang );
 
-		$focusArea = $dbr->newSelectQueryBuilder()
-			->fields( self::FOCUS_AREA_FIELDS )
-			->table( 'communityrequests_focus_areas' )
-			->join( 'communityrequests_focus_areas_translations', null, [
-				'crfa_page = crfat_focus_area',
-			] )
-			->where( [
-				'crfa_page' => $page->getId(),
-				'crfat_lang' => $language,
-			] )
-			->caller( __METHOD__ )
-			->fetchRow();
-
-		if ( !$focusArea ) {
-			return null;
+		$focusAreas = [];
+		foreach ( $rows as $row ) {
+			$focusAreas[] = new FocusArea(
+				new PageIdentityValue(
+					(int)$row->crfa_page,
+					(int)$row->page_namespace,
+					$row->page_title,
+					WikiAwareEntity::LOCAL
+				),
+				$row->crfat_lang,
+				[
+					'status' => (int)$row->crfa_status,
+					'title' => $row->crfat_title,
+					'shortDescription' => $row->crfat_short_description,
+					'voteCount' => (int)$row->crfa_vote_count,
+					'created' => $row->crfa_created,
+					'updated' => $row->crfa_updated,
+					'baseLang' => $row->crfa_base_lang,
+				]
+			);
 		}
 
-		return new FocusArea(
-			$page,
-			$language,
-			[
-				'baseLang' => $focusArea->crfa_base_lang,
-				'shortDescription' => $focusArea->crfat_short_description,
-				'title' => $focusArea->crfat_title,
-				'created' => $focusArea->crfa_created,
-				'updated' => $focusArea->crfa_updated,
-				'status' => $focusArea->crfa_status
-			]
-		);
+		return $focusAreas;
+	}
+
+	/** @inheritDoc */
+	public function getNewId(): int {
+		return $this->idGenerator->getNewId( IdGenerator::TYPE_FOCUS_AREA );
+	}
+
+	/** @inheritDoc */
+	protected function getTemplatePage(): string {
+		return $this->config->getFocusAreaTemplatePage();
+	}
+
+	/** @inheritDoc */
+	protected function getPagePrefix(): string {
+		return $this->config->getFocusAreaPagePrefix();
 	}
 }

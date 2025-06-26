@@ -5,85 +5,61 @@ namespace MediaWiki\Extension\CommunityRequests\Api;
 
 use MediaWiki\Api\ApiBase;
 use MediaWiki\Api\ApiMain;
-use MediaWiki\Content\WikitextContent;
-use MediaWiki\Context\DerivativeContext;
-use MediaWiki\Extension\CommunityRequests\Wish\SpecialWishlistIntake;
+use MediaWiki\Extension\CommunityRequests\AbstractWishlistEntity;
+use MediaWiki\Extension\CommunityRequests\AbstractWishlistStore;
 use MediaWiki\Extension\CommunityRequests\Wish\Wish;
 use MediaWiki\Extension\CommunityRequests\Wish\WishStore;
 use MediaWiki\Extension\CommunityRequests\WishlistConfig;
 use MediaWiki\ParamValidator\TypeDef\UserDef;
-use MediaWiki\Request\DerivativeRequest;
-use MediaWiki\Status\Status;
 use MediaWiki\Title\Title;
 use MediaWiki\Title\TitleParser;
 use MediaWiki\User\UserFactory;
+use RuntimeException;
 use Wikimedia\ParamValidator\ParamValidator;
 use Wikimedia\ParamValidator\TypeDef\StringDef;
 
-class ApiWishEdit extends ApiBase {
-
-	protected const EDIT_SUMMARY_PUBLISH = 'communityrequests-publish-wish-summary';
-	protected const EDIT_SUMMARY_SAVE = 'communityrequests-save-wish-summary';
+class ApiWishEdit extends ApiWishlistEntityBase {
 
 	public function __construct(
 		ApiMain $main,
 		string $name,
-		private readonly WishlistConfig $config,
-		private readonly WishStore $wishStore,
-		private readonly UserFactory $userFactory,
-		private readonly TitleParser $titleParser
+		WishlistConfig $config,
+		AbstractWishlistStore $store,
+		TitleParser $titleParser,
+		protected readonly UserFactory $userFactory,
 	) {
-		parent::__construct( $main, $name );
+		parent::__construct( $main, $name, $config, $store, $titleParser );
 	}
 
 	/** @inheritDoc */
-	public function execute() {
-		if ( !$this->config->isEnabled() ) {
-			$this->dieWithError( 'communityrequests-disabled' );
-		}
-		$params = $this->extractRequestParams();
-
-		if ( isset( $params[ 'wish' ] ) ) {
-			$title = Title::newFromText(
-				$this->config->getWishPagePrefix() .
-				$this->wishStore->getWishIdFromInput( $params[ 'wish' ] )
-			);
-		} else {
-			// If this is a new wish, generate a new ID and page title.
-			$id = $this->wishStore->getNewId();
-			$title = Title::newFromText( $this->config->getWishPagePrefix() . $id );
-		}
-		if ( !$title ) {
-			$this->dieWithError( [ 'apierror-invalidtitle', wfEscapeWikiText( $params[ 'wish' ] ) ] );
-		} elseif ( !$title->canExist() ) {
-			$this->dieWithError( 'apierror-pagecannotexist' );
-		} elseif ( !$this->config->isWishPage( $title ) ) {
+	protected function executeWishlistEntity(): void {
+		if ( !$this->config->isWishPage( $this->title ) ) {
 			$this->dieWithError( 'apierror-wishedit-notawish' );
 		}
 
-		$this->getErrorFormatter()->setContextTitle( $title );
-
 		$wish = Wish::newFromWikitextParams(
-			$title,
+			$this->title,
 			// Edits are only made to the base language page.
-			$title->getPageLanguage()->getCode(),
-			$this->userFactory->newFromName( $params[ 'proposer' ] ),
+			$this->params[ 'baselang' ],
 			[
-				...$params,
-				'projects' => implode( ',', $params[ 'projects' ] ),
-				'phabtasks' => implode( ',', $params[ 'phabtasks' ] ),
+				...$this->params,
+				'projects' => implode( ',', $this->params[ 'projects' ] ),
+				'phabtasks' => implode( ',', $this->params[ 'phabtasks' ] ?? [] ),
 			],
-			$this->config
+			$this->config,
+			$this->userFactory->newFromName( $this->params[ 'proposer' ] ),
 		);
-
 		$wishTemplate = $this->titleParser->parseTitle( $this->config->getWishTemplatePage() );
 		$saveStatus = $this->save(
-			Title::newFromPageIdentity( $wish->getPage() ),
 			$wish->toWikitext( $wishTemplate, $this->config ),
-			$this->getEditSummary( $wish, $params ),
-			$params[ 'token' ],
-			$params[ 'baserevid' ] ?? null
+			$this->getEditSummary( $wish, $this->params ),
+			$this->params[ 'token' ],
+			$this->params[ 'baserevid' ] ?? null
 		);
+
+		if ( $saveStatus->isOK() === false ) {
+			$this->dieWithError( $saveStatus->getMessages()[0] );
+		}
 
 		$resultData = $saveStatus->getValue()->getResultData()[ 'edit' ];
 		// ApiEditPage adds the 'title' key to the result data, but we want to use 'wish'.
@@ -99,19 +75,19 @@ class ApiWishEdit extends ApiBase {
 		$this->getResult()->addValue( null, $this->getModuleName(), $ret );
 	}
 
-	public function getEditSummary( Wish $wish, array $params ): string {
-		$isNew = $this->getRequest()->getSession()->get( SpecialWishlistIntake::SESSION_KEY )
-			=== SpecialWishlistIntake::SESSION_VALUE_WISH_CREATED;
-		$summary = $this->msg(
-			$isNew ? self::EDIT_SUMMARY_PUBLISH : self::EDIT_SUMMARY_SAVE,
-			$params[ 'title' ]
-		)->text();
+	/** @inheritDoc */
+	public function getEditSummary( AbstractWishlistEntity $entity, array $params ): string {
+		if ( !$entity instanceof Wish ) {
+			throw new RuntimeException( 'Expected a Wish object but got a ' . get_class( $entity ) );
+		}
+
+		$summary = trim( $params[ 'wish' ] ?? '' ) ? $this->editSummaryPublish() : $this->editSummarySave();
 
 		// If there are Phabricator tasks, add them to the edit summary.
-		if ( count( $wish->getPhabTasks() ) > 0 ) {
+		if ( count( $entity->getPhabTasks() ) > 0 ) {
 			$taskLinks = array_map(
 				static fn ( int $taskId ) => "[[phab:T{$taskId}|T{$taskId}]]",
-				$wish->getPhabTasks()
+				$entity->getPhabTasks()
 			);
 			$summary .= ' ' .
 				$this->msg( 'parentheses-start' )->text() .
@@ -121,46 +97,32 @@ class ApiWishEdit extends ApiBase {
 		return $summary;
 	}
 
-	/**
-	 * Save the wish content to the wish page.
-	 * WishHookHandler will handle updating the CommunityRequests tables.
-	 *
-	 * @param Title $wishPage
-	 * @param WikitextContent $content
-	 * @param string $summary
-	 * @param string $token
-	 * @param ?int $baseRevId
-	 * @param string[] $tags
-	 * @return Status
-	 */
-	private function save(
-		Title $wishPage,
-		WikitextContent $content,
-		string $summary,
-		string $token,
-		?int $baseRevId = null,
-		array $tags = []
-	): Status {
-		$apiParams = [
-			'action' => 'edit',
-			'title' => $wishPage->getPrefixedDBkey(),
-			'text' => $content->getText(),
-			'summary' => $summary,
-			'token' => $token,
-			'baserevid' => $baseRevId,
-			'tags' => implode( '|', $tags ),
-			'errorformat' => 'html',
-			'notminor' => true,
-		];
+	/** @inheritDoc */
+	protected function editSummaryPublish(): string {
+		return $this->msg( 'communityrequests-publish-wish-summary' )
+			->inContentLanguage()
+			->text();
+	}
 
-		$context = new DerivativeContext( $this->getContext() );
-		$context->setRequest( new DerivativeRequest( $this->getRequest(), $apiParams ) );
-		$api = new ApiMain( $context, true );
+	/** @inheritDoc */
+	protected function editSummarySave(): string {
+		return $this->msg( 'communityrequests-save-wish-summary' )
+			->inContentLanguage()
+			->text();
+	}
 
-		// FIXME: make use of EditFilterMergedContent hook to impose our own edit checks
-		//   (Status will show up in SpecialFormPage) Such as a missing proposer or invalid creation date.
-		$api->execute();
-		return Status::newGood( $api->getResult() );
+	/** @inheritDoc */
+	protected function getWishlistEntityTitle( array $params ): Title {
+		if ( isset( $params[ 'wish' ] ) ) {
+			return Title::newFromText(
+				$this->config->getWishPagePrefix() .
+				$this->store->getIdFromInput( $params[ 'wish' ] )
+			);
+		} else {
+			// If this is a new wish, generate a new ID and page title.
+			$id = $this->store->getNewId();
+			return Title::newFromText( $this->config->getWishPagePrefix() . $id );
+		}
 	}
 
 	/** @inheritDoc */
@@ -208,7 +170,6 @@ class ApiWishEdit extends ApiBase {
 				// TODO: maybe make our own TypeDef for Phab tasks?
 				ParamValidator::PARAM_TYPE => 'string',
 				ParamValidator::PARAM_ISMULTI => true,
-				ParamValidator::PARAM_DEFAULT => [],
 			],
 			'proposer' => [
 				ParamValidator::PARAM_TYPE => 'user',
@@ -219,25 +180,14 @@ class ApiWishEdit extends ApiBase {
 				ParamValidator::PARAM_TYPE => 'timestamp',
 				ParamValidator::PARAM_REQUIRED => true,
 			],
+			'baselang' => [
+				ParamValidator::PARAM_TYPE => 'string',
+				ParamValidator::PARAM_REQUIRED => true,
+			],
 			'baserevid' => [
 				ParamValidator::PARAM_TYPE => 'integer',
 				ApiBase::PARAM_HELP_MSG => 'apihelp-edit-param-baserevid',
 			],
 		];
-	}
-
-	/** @inheritDoc */
-	public function needsToken() {
-		return 'csrf';
-	}
-
-	/** @inheritDoc */
-	public function isInternal() {
-		return true;
-	}
-
-	/** @inheritDoc */
-	public function isWriteMode() {
-		return true;
 	}
 }

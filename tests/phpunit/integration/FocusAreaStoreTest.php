@@ -3,60 +3,73 @@ declare( strict_types = 1 );
 
 namespace MediaWiki\Extension\CommunityRequests\Tests\Integration;
 
+use InvalidArgumentException;
 use MediaWiki\Extension\CommunityRequests\FocusArea\FocusArea;
 use MediaWiki\Extension\CommunityRequests\FocusArea\FocusAreaStore;
+use MediaWiki\Extension\CommunityRequests\Tests\CommunityRequestsIntegrationTestCase;
 use MediaWiki\Title\Title;
-use MediaWikiIntegrationTestCase;
+use Wikimedia\Timestamp\ConvertibleTimestamp;
 
 /**
  * @group CommunityRequests
  * @group Database
  * @coversDefaultClass \MediaWiki\Extension\CommunityRequests\FocusArea\FocusAreaStore
  */
-class FocusAreaStoreTest extends MediaWikiIntegrationTestCase {
-	private FocusAreaStore $focusAreaStore;
+class FocusAreaStoreTest extends CommunityRequestsIntegrationTestCase {
 
-	protected function setUp(): void {
-		parent::setUp();
-		$this->overrideConfigValues( [
-			'CommunityRequestsFocusAreaPagePrefix' => 'Community Wishlist/FocusAreas/FA',
-		] );
-		$this->focusAreaStore = $this->getServiceContainer()->get( 'CommunityRequests.FocusAreaStore' );
+	protected function getStore(): FocusAreaStore {
+		return $this->getServiceContainer()->get( 'CommunityRequests.FocusAreaStore' );
 	}
 
 	/**
-	 * @covers ::getFocusArea
+	 * @covers ::save
+	 * @covers ::get
 	 */
-	public function testSaveFocusArea(): void {
-		$focusArea = $this->getTestFocusArea();
-		$this->focusAreaStore->save( $focusArea );
-
-		// Verify that the focus area was saved correctly
-		$savedFocusArea = $this->focusAreaStore->getFocusArea( $focusArea->getPage(), $focusArea->getLanguage() );
-		$this->assertEquals( $focusArea, $savedFocusArea );
-	}
-
-	private function getTestFocusArea( ?string $title = null ): FocusArea {
-		if ( $title !== null ) {
-			$title = Title::newFromText( $title );
-		} else {
-			$title = Title::newFromText( $this->getConfVar( 'CommunityRequestsFocusAreaPagePrefix' ) . '1234' );
-		}
-
-		$title = $this->insertPage(
-			$title,
-			'Page content for Test Focus Area',
-		)[ 'title' ];
-
-		return new FocusArea(
-			$title,
+	public function testSaveAndGetFocusArea(): void {
+		ConvertibleTimestamp::setFakeTime( '2025-01-23T00:00:00Z' );
+		$page = $this->getExistingTestPage( 'Community Wishlist/Focus areas/FA123' );
+		$focusArea = new FocusArea(
+			$page,
 			'en',
 			[
 				'shortDescription' => 'Test focus area',
+				'status' => 'blocked',
 				'title' => 'Test Focus Area',
-				'created' => '20250101000000',
-				'updated' => '20250101000000',
+				'created' => '2025-01-01T00:00:00Z',
 			]
 		);
+		$this->store->save( $focusArea );
+		$retrievedFocusArea = $this->store->get( $focusArea->getPage(), 'en' );
+		$this->assertInstanceOf( FocusArea::class, $retrievedFocusArea );
+		$this->assertSame( $page->getId(), $retrievedFocusArea->getPage()->getId() );
+		$this->assertSame( '2025-01-01T00:00:00Z', $retrievedFocusArea->getCreated() );
+		$this->assertSame( '2025-01-23T00:00:00Z', $retrievedFocusArea->getUpdated() );
+	}
+
+	/**
+	 * @covers ::save
+	 */
+	public function testSaveWishWithNoPage(): void {
+		$fauxPage = Title::newFromText( 'Community Wishlist/Wishes/W111' );
+		$wish = new FocusArea(
+			$fauxPage,
+			'en',
+			[]
+		);
+		$this->expectException( InvalidArgumentException::class );
+		$this->store->save( $wish );
+	}
+
+	/**
+	 * @covers ::save
+	 */
+	public function testSaveWithNoCreationDate(): void {
+		$wish = new FocusArea(
+			Title::newFromText( 'Community Wishlist/Wishes/W123' ),
+			'en',
+			[ 'created' => null ]
+		);
+		$this->expectException( InvalidArgumentException::class );
+		$this->store->save( $wish );
 	}
 }

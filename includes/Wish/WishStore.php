@@ -4,12 +4,12 @@ declare( strict_types = 1 );
 namespace MediaWiki\Extension\CommunityRequests\Wish;
 
 use InvalidArgumentException;
-use MediaWiki\Content\WikitextContent;
 use MediaWiki\DAO\WikiAwareEntity;
+use MediaWiki\Extension\CommunityRequests\AbstractWishlistEntity;
+use MediaWiki\Extension\CommunityRequests\AbstractWishlistStore;
 use MediaWiki\Extension\CommunityRequests\IdGenerator\IdGenerator;
 use MediaWiki\Extension\CommunityRequests\WishlistConfig;
 use MediaWiki\Languages\LanguageFallback;
-use MediaWiki\Page\PageIdentity;
 use MediaWiki\Page\PageIdentityValue;
 use MediaWiki\Parser\ParserFactory;
 use MediaWiki\Revision\RevisionStore;
@@ -21,72 +21,128 @@ use Wikimedia\Rdbms\IConnectionProvider;
 use Wikimedia\Rdbms\IDatabase;
 use Wikimedia\Rdbms\IReadableDatabase;
 use Wikimedia\Rdbms\IResultWrapper;
-use Wikimedia\Rdbms\SelectQueryBuilder;
 
 /**
  * WishStore is responsible for all database operations related to wishes.
  *
  * @note "Wish" is the user-facing term, while "request" is used in storage.
  */
-class WishStore {
+class WishStore extends AbstractWishlistStore {
 
 	public const AUDIENCE_MAX_CHARS = 300;
-	public const TITLE_MAX_CHARS = 100;
-	public const TITLE_MAX_BYTES = 255;
-
-	public const ORDER_BY_CREATION = 'cr_created';
-	public const ORDER_BY_UPDATED = 'cr_updated';
-	public const ORDER_BY_VOTE_COUNT = 'cr_vote_count';
-	public const SORT_ASC = SelectQueryBuilder::SORT_ASC;
-	public const SORT_DESC = SelectQueryBuilder::SORT_DESC;
-
-	/**
-	 * Fields needed to construct a Wish object.
-	 *
-	 * @var array<string>
-	 */
-	private const WISH_FIELDS = [
-		'page_namespace',
-		'page_title',
-		'cr_page',
-		'cr_type',
-		'cr_status',
-		'cr_focus_area',
-		'cr_actor',
-		'cr_vote_count',
-		'cr_base_lang',
-		'cr_created',
-		'cr_updated',
-		'crt_title',
-		'crt_other_project',
-		'crt_lang',
-	];
 
 	public function __construct(
 		private readonly ActorNormalization $actorNormalization,
-		private readonly IConnectionProvider $dbProvider,
+		protected IConnectionProvider $dbProvider,
 		private readonly UserFactory $userFactory,
-		private readonly LanguageFallback $languageFallback,
-		private readonly RevisionStore $revisionStore,
-		private readonly ParserFactory $parserFactory,
-		private readonly TitleParser $titleParser,
-		private readonly TitleFormatter $titleFormatter,
-		private readonly IdGenerator $idGenerator,
-		private readonly WishlistConfig $config
+		protected LanguageFallback $languageFallback,
+		protected RevisionStore $revisionStore,
+		protected ParserFactory $parserFactory,
+		protected TitleParser $titleParser,
+		protected TitleFormatter $titleFormatter,
+		protected IdGenerator $idGenerator,
+		protected WishlistConfig $config,
 	) {
+		parent::__construct(
+			$dbProvider,
+			$languageFallback,
+			$revisionStore,
+			$parserFactory,
+			$titleParser,
+			$titleFormatter,
+			$idGenerator,
+			$config,
+		);
 	}
 
-	/**
-	 * Save a single wish to the database.
-	 *
-	 * @param Wish $wish The wish to save.
-	 * @throws InvalidArgumentException If the wish page has not been added to the database yet,
-	 *   or we're creating a new wish without a proposer.
-	 */
-	public function save( Wish $wish ): void {
-		if ( !$wish->getPage()->getId() ) {
+	/** @inheritDoc */
+	public static function entityClass(): string {
+		return Wish::class;
+	}
+
+	// Schema
+
+	/** @inheritDoc */
+	protected static function tableName(): string {
+		return 'communityrequests_wishes';
+	}
+
+	/** @inheritDoc */
+	public static function fields(): array {
+		return [
+			'page_namespace',
+			'page_title',
+			'cr_page',
+			'cr_type',
+			'cr_status',
+			'cr_focus_area',
+			'cr_actor',
+			'cr_vote_count',
+			'cr_base_lang',
+			'cr_created',
+			'cr_updated',
+			'crt_title',
+			'crt_other_project',
+			'crt_lang',
+		];
+	}
+
+	/** @inheritDoc */
+	public static function pageField(): string {
+		return 'cr_page';
+	}
+
+	/** @inheritDoc */
+	public static function createdField(): string {
+		return 'cr_created';
+	}
+
+	/** @inheritDoc */
+	public static function updatedField(): string {
+		return 'cr_updated';
+	}
+
+	/** @inheritDoc */
+	public static function voteCountField(): string {
+		return 'cr_vote_count';
+	}
+
+	/** @inheritDoc */
+	protected static function baseLangField(): string {
+		return 'cr_base_lang';
+	}
+
+	/** @inheritDoc */
+	public static function titleField(): string {
+		return 'crt_title';
+	}
+
+	/** @inheritDoc */
+	protected static function translationsTableName(): string {
+		return 'communityrequests_wishes_translations';
+	}
+
+	/** @inheritDoc */
+	protected static function translationForeignKey(): string {
+		return 'crt_wish';
+	}
+
+	/** @inheritDoc */
+	protected static function translationLangField(): string {
+		return 'crt_lang';
+	}
+
+	// Saving wishes.
+
+	/** @inheritDoc */
+	public function save( AbstractWishlistEntity $entity ): void {
+		if ( !$entity instanceof Wish ) {
+			throw new InvalidArgumentException( '$entity must be a Wish instance.' );
+		}
+		if ( !$entity->getPage()->getId() ) {
 			throw new InvalidArgumentException( 'Wish page has not been added to the database yet!' );
 		}
+		$wish = $entity;
 
 		$dbw = $this->dbProvider->getPrimaryDatabase();
 		$dbw->startAtomic( __METHOD__ );
@@ -99,8 +155,8 @@ class WishStore {
 			// Fetch proposer and creation date from the wishes table.
 			$proposerCreated = $dbw->newSelectQueryBuilder()
 				->caller( __METHOD__ )
-				->from( 'communityrequests_wishes' )
-				->fields( [ 'cr_actor', 'cr_created' ] )
+				->from( self::tableName() )
+				->fields( [ 'cr_actor', self::createdField() ] )
 				->where( [ 'cr_page' => $wish->getPage()->getId() ] )
 				->forUpdate()
 				->fetchRow();
@@ -118,7 +174,7 @@ class WishStore {
 
 		$data = [
 			'cr_page' => $wish->getPage()->getId(),
-			'cr_base_lang' => $wish->getBaseLanguage(),
+			'cr_base_lang' => $wish->getBaseLang(),
 		];
 		$dataSet = [
 			'cr_actor' => $proposer,
@@ -129,7 +185,7 @@ class WishStore {
 			'cr_updated' => $dbw->timestamp( $wish->getUpdated() ?: wfTimestampNow() ),
 		];
 		$dbw->newInsertQueryBuilder()
-			->insert( 'communityrequests_wishes' )
+			->insert( self::tableName() )
 			->rows( [ array_merge( $data, $dataSet ) ] )
 			->set( $dataSet )
 			->onDuplicateKeyUpdate()
@@ -143,26 +199,18 @@ class WishStore {
 		$dbw->endAtomic( __METHOD__ );
 	}
 
-	/**
-	 * Save the translations for a wish.
-	 *
-	 * @param Wish $wish The wish to save.
-	 * @param IDatabase $dbw The database connection.
-	 */
-	private function saveTranslations( Wish $wish, IDatabase $dbw ): void {
-		$data = [ 'crt_wish' => $wish->getPage()->getId(), 'crt_lang' => $wish->getLanguage() ];
-		$dataSet = [
-			'crt_title' => mb_strcut( $wish->getTitle(), 0, self::TITLE_MAX_BYTES, 'UTF-8' ),
-			'crt_other_project' => $wish->getOtherProject() ?: null,
-		];
-		$dbw->newInsertQueryBuilder()
-			->insert( 'communityrequests_wishes_translations' )
-			->rows( [ array_merge( $data, $dataSet ) ] )
-			->set( $dataSet )
-			->onDuplicateKeyUpdate()
-			->uniqueIndexFields( [ 'crt_wish', 'crt_lang' ] )
-			->caller( __METHOD__ )
-			->execute();
+	/** @inheritDoc */
+	protected function saveTranslations(
+		AbstractWishlistEntity $entity,
+		IDatabase $dbw,
+		array $dataSet = [],
+	): void {
+		if ( !$entity instanceof Wish ) {
+			throw new InvalidArgumentException( '$entity must be a Wish instance.' );
+		}
+		parent::saveTranslations( $entity, $dbw, [
+			'crt_other_project' => $entity->getOtherProject() ?: null,
+		] );
 	}
 
 	/**
@@ -231,159 +279,20 @@ class WishStore {
 		}
 	}
 
-	/**
-	 * Get a single Wish given a PageIdentity.
-	 *
-	 * @param PageIdentity $pageTitle The title of the wish.
-	 * @param ?string $langCode Requested language code. If null, the base language is used.
-	 * @return ?Wish null if the wish does not exist.
-	 */
-	public function getWish( PageIdentity $pageTitle, ?string $langCode = null ): ?Wish {
-		if ( !$this->config->isWishPage( $pageTitle ) ) {
-			return null;
-		}
-
-		$dbr = $this->dbProvider->getReplicaDatabase();
-		$data = $dbr->newSelectQueryBuilder()
-			->caller( __METHOD__ )
-			->table( 'communityrequests_wishes' )
-			->join( 'page', null, [ 'cr_page = page_id' ] )
-			->join( 'communityrequests_wishes_translations', null, 'crt_wish = cr_page' )
-			->fields( self::WISH_FIELDS )
-			->where( [ 'cr_page' => $pageTitle->getId() ] )
-			->fetchResultSet();
-		if ( !$data->count() ) {
-			return null;
-		}
-
-		return $this->getWishesFromLangFallbacks( $dbr, $data, $langCode )[0] ?? null;
-	}
-
-	/**
-	 * Get a sorted list of wishes for the given language.
-	 *
-	 * @param string $langCode Requested language code.
-	 * @param string $orderBy Use WishStore::ORDER_BY_* constants.
-	 * @param string $direction Use WishStore::SORT_ASC or WishStore::SORT_DESC.
-	 * @param ?int $limit Limit the number of results.
-	 * @return array<Wish>
-	 */
-	public function getWishes(
-		string $langCode,
-		string $orderBy = self::ORDER_BY_CREATION,
-		string $direction = self::SORT_DESC,
-		?int $limit = 50
-	): array {
-		$dbr = $this->dbProvider->getReplicaDatabase();
-		$langs = array_unique( [
-			$langCode,
-			...$this->languageFallback->getAll( $langCode ),
-		] );
-		$wishesSelect = $dbr->newSelectQueryBuilder()
-			->caller( __METHOD__ )
-			->table( 'communityrequests_wishes' )
-			->join( 'page', null, [ 'cr_page = page_id' ] )
-			->join( 'communityrequests_wishes_translations', null, 'crt_wish = cr_page' )
-			->fields( self::WISH_FIELDS )
-			->where( $dbr->makeList( [
-				'crt_lang' => $langs,
-				'crt_lang = cr_base_lang',
-			], $dbr::LIST_OR ) )
-			->orderBy( $orderBy, $direction );
-		if ( $limit !== null ) {
-			// Leave room for the fallback languages.
-			$wishesSelect->limit( $limit * count( $langs ) );
-		}
-
-		$wishes = $this->getWishesFromLangFallbacks( $dbr, $wishesSelect->fetchResultSet(), $langCode );
-
-		if ( $limit !== null ) {
-			$wishes = array_slice( $wishes, 0, $limit );
-		}
-
-		return $wishes;
-	}
-
-	/**
-	 * Parse wish data from the template invocation on a wish page.
-	 *
-	 * @param Wish $wish The wish to get data from.
-	 * @return ?array<string, string> The parsed data from the wikitext, or null if not found.
-	 *   This includes a 'baseRevId' key with the latest revision ID of the wish page.
-	 */
-	public function getDataFromWikitext( Wish $wish ): ?array {
-		if ( !$wish->getPage()->getId() ) {
-			return null;
-		}
-		$configTitle = $this->titleFormatter->getPrefixedDBkey(
-			$this->titleParser->parseTitle( $this->config->getWishTemplatePage(), NS_TEMPLATE )
-		);
-		$revRecord = $this->revisionStore
-			->getRevisionByPageId( $wish->getPage()->getId() );
-		/** @var WikitextContent $content */
-		$content = $revRecord->getMainContentRaw();
-		'@phan-var WikitextContent $content';
-		$wikitext = $content->getText();
-		$args = ( new TemplateArgumentExtractor( $this->parserFactory, $this->titleParser ) )
-			->getArgs(
-				$this->titleParser->parseTitle( $this->config->getWishTemplatePage(), NS_TEMPLATE ),
-				$wikitext
-			);
-		if ( $args !== null ) {
-			// Include baseRevId
-			$args[ 'baseRevId' ] = $revRecord->getId();
-		}
-		return $args;
-	}
-
-	/**
-	 * Create a list of Wish objects from the given result set, grouping by page ID and using
-	 * the first row with a matching language in the user's language and/or fallback chain,
-	 * or finally the base language if no match is found.
-	 *
-	 * This method is also responsible for fetching associated projects and Phab task IDs.
-	 *
-	 * @param IReadableDatabase $dbr The database connection.
-	 * @param IResultWrapper $resultWrapper The DB result wrapper.
-	 * @param ?string $langCode The requested language code. Null to use the base language.
-	 * @return array<Wish>
-	 */
-	private function getWishesFromLangFallbacks(
+	/** @inheritDoc */
+	protected function getEntitiesFromLangFallbacks(
 		IReadableDatabase $dbr,
 		IResultWrapper $resultWrapper,
-		?string $langCode = null
+		?string $lang = null
 	): array {
-		$fallbackLangs = $langCode === null ? [] : array_unique( [
-			$langCode,
-			...$this->languageFallback->getAll( $langCode ),
-		] );
-
-		$wishes = [];
-
-		// Group the result set by wish page ID and language.
-		$wishDataByPage = [];
-		foreach ( $resultWrapper as $wishData ) {
-			$wishDataByPage[ $wishData->cr_page ][ $wishData->crt_lang ] = $wishData;
-		}
+		[ $rows, $wishesByPage ] = parent::getEntitiesFromLangFallbacksInternal( $resultWrapper, $lang );
 
 		// Fetch projects for all wishes in one go, and then the same for Phab tasks.
-		$projectsByPage = $this->getProjectsForWishes( $dbr, array_keys( $wishDataByPage ) );
-		$phabTasksByPage = $this->getPhabTasksForWishes( $dbr, array_keys( $wishDataByPage ) );
+		$projectsByPage = $this->getProjectsForWishes( $dbr, array_keys( $wishesByPage ) );
+		$phabTasksByPage = $this->getPhabTasksForWishes( $dbr, array_keys( $wishesByPage ) );
 
-		foreach ( $wishDataByPage as $wishDataByLang ) {
-			// All rows in $wishData have the same cr_base_lang
-			$baseLang = reset( $wishDataByLang )->cr_base_lang;
-			// This will be overridden if a user-preferred language is found.
-			$row = $wishDataByLang[ $baseLang ];
-
-			// Find the first row with a matching language.
-			foreach ( $fallbackLangs as $lang ) {
-				if ( isset( $wishDataByLang[ $lang ] ) ) {
-					$row = $wishDataByLang[ $lang ];
-					break;
-				}
-			}
-
+		$wishes = [];
+		foreach ( $rows as $row ) {
 			$wishes[] = new Wish(
 				new PageIdentityValue(
 					(int)$row->cr_page,
@@ -397,13 +306,13 @@ class WishStore {
 					'type' => (int)$row->cr_type,
 					'status' => (int)$row->cr_status,
 					'focusAreaId' => (int)$row->cr_focus_area,
-					'voteCount' => (int)$row->cr_vote_count,
-					'created' => $row->cr_created,
-					'updated' => $row->cr_updated,
 					'title' => $row->crt_title,
 					'projects' => $projectsByPage[ $row->cr_page ] ?? [],
 					'otherProject' => $row->crt_other_project,
 					'phabTasks' => $phabTasksByPage[ $row->cr_page ] ?? [],
+					'voteCount' => (int)$row->cr_vote_count,
+					'created' => $row->cr_created,
+					'updated' => $row->cr_updated,
 					'baseLang' => $row->cr_base_lang,
 				]
 			);
@@ -460,73 +369,26 @@ class WishStore {
 		return $phabTasksByWish;
 	}
 
-	/**
-	 * Delete a wish and all its associated data.
-	 * Called from WishHookHandler::onPageDeleteComplete().
-	 *
-	 * @param Wish $wish
-	 */
-	public function delete( Wish $wish ): void {
-		$dbw = $this->dbProvider->getPrimaryDatabase();
-		$dbw->startAtomic( __METHOD__ );
-
-		// First delete translations.
-		$delTranslations = $dbw->newDeleteQueryBuilder()
-			->deleteFrom( 'communityrequests_wishes_translations' )
-			->where( [ 'crt_wish' => $wish->getPage()->getId() ] );
-
-		// Delete only for the given language, if not the base language.
-		if ( $wish->getLanguage() !== $wish->getBaseLanguage() ) {
-			$delTranslations->andWhere( [ 'crt_lang' => $wish->getLanguage() ] );
-		}
-
-		$delTranslations->caller( __METHOD__ )
-			->execute();
-
-		// Delete everything else if we're dealing with the base language.
-		if ( $wish->getLanguage() === $wish->getBaseLanguage() ) {
-			foreach ( [
-				'communityrequests_wishes' => 'cr_page',
-				'communityrequests_projects' => 'crp_wish',
-				'communityrequests_phab_tasks' => 'crpt_wish'
-			] as $table => $foreignKey ) {
-				$dbw->newDeleteQueryBuilder()
-					->deleteFrom( $table )
-					->where( [ $foreignKey => $wish->getPage()->getId() ] )
-					->caller( __METHOD__ )
-					->execute();
-			}
-		}
-
-		$dbw->endAtomic( __METHOD__ );
+	/** @inheritDoc */
+	public function delete( AbstractWishlistEntity $entity, array $assocData = [] ): IDatabase {
+		return parent::delete( $entity, [
+			'communityrequests_projects' => 'crp_wish',
+			'communityrequests_phab_tasks' => 'crpt_wish'
+		] );
 	}
 
-	/**
-	 * Extract the wish ID from a user input string.
-	 *
-	 * This method accepts the full page title,
-	 * a prefixed ID (e.g., "W123"), or just the ID itself.
-	 *
-	 * @param string|int|null $input
-	 * @return ?int
-	 */
-	public function getWishIdFromInput( string|int|null $input ): ?int {
-		if ( $input === null ) {
-			return null;
-		}
-		if ( is_int( $input ) ) {
-			return $input;
-		}
-		$wishId = ltrim( $input, $this->config->getWishPagePrefix() );
-		return (int)preg_replace( '/[^0-9]/', '', $wishId ) ?: null;
-	}
-
-	/**
-	 * Get a new wish ID using the IdGenerator.
-	 *
-	 * @return int The new wish ID.
-	 */
+	/** @inheritDoc */
 	public function getNewId(): int {
 		return $this->idGenerator->getNewId( IdGenerator::TYPE_WISH );
+	}
+
+	/** @inheritDoc */
+	protected function getTemplatePage(): string {
+		return $this->config->getWishTemplatePage();
+	}
+
+	/** @inheritDoc */
+	protected function getPagePrefix(): string {
+		return $this->config->getWishPagePrefix();
 	}
 }

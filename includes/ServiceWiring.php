@@ -1,4 +1,5 @@
 <?php
+declare( strict_types = 1 );
 
 use MediaWiki\Config\ServiceOptions;
 use MediaWiki\Extension\CommunityRequests\FocusArea\FocusAreaStore;
@@ -14,10 +15,15 @@ use Psr\Log\LoggerInterface;
 
 /** @phpcs-require-sorted-array */
 return [
-	'CommunityRequests.FocusAreaStore' => static function (
-	MediaWikiServices $services ): FocusAreaStore {
+	'CommunityRequests.FocusAreaStore' => static function ( MediaWikiServices $services ): FocusAreaStore {
 		return new FocusAreaStore(
 			$services->getConnectionProvider(),
+			$services->getLanguageFallback(),
+			$services->getRevisionStore(),
+			$services->getParserFactory(),
+			$services->getTitleParser(),
+			$services->getTitleFormatter(),
+			$services->get( 'CommunityRequests.IdGenerator' ),
 			$services->get( 'CommunityRequests.WishlistConfig' ),
 		);
 	},
@@ -29,7 +35,7 @@ return [
 		}
 		return new SqlIdGenerator( $connectionProvider );
 	},
-	'CommunityRequests.Logger' => static function ( MediaWikiServices $services ): LoggerInterface {
+	'CommunityRequests.Logger' => static function (): LoggerInterface {
 		return LoggerFactory::getInstance( 'communityrequests' );
 	},
 	'CommunityRequests.WishlistConfig' => static function ( MediaWikiServices $services ): WishlistConfig {

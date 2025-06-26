@@ -54,6 +54,7 @@ class ApiWishEditTest extends ApiTestCase {
 		$this->assertTrue(
 			preg_match( '/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z/', $ret[ 'wishedit' ][ 'updated' ] ) === 1
 		);
+		$this->assertSame( $expected[ 'wishedit' ][ 'baselang' ], $ret[ 'wishedit' ][ 'baselang' ] );
 	}
 
 	public static function provideTestExecute(): array {
@@ -71,6 +72,7 @@ class ApiWishEditTest extends ApiTestCase {
 					'phabtasks' => 'T123|T456|T789',
 					'proposer' => 'TestUser',
 					'created' => '2023-10-01T12:00:00Z',
+					'baselang' => 'en',
 				],
 				[
 					'warnings' => [
@@ -99,6 +101,7 @@ class ApiWishEditTest extends ApiTestCase {
 					'phabtasks' => 'T123|T456|T789',
 					// No proposer
 					'created' => '2023-10-01T12:00:00Z',
+					'baselang' => 'en',
 				],
 				'The "proposer" parameter must be set.'
 			],
@@ -115,6 +118,7 @@ class ApiWishEditTest extends ApiTestCase {
 					'phabtasks' => 'T123|T456|T789',
 					'proposer' => 'TestUser',
 					'created' => '2023-10-01T12:00:00Z',
+					'baselang' => 'en',
 				],
 				[
 					'wishedit' => [
@@ -138,6 +142,7 @@ class ApiWishEditTest extends ApiTestCase {
 					// No tasks
 					'proposer' => 'TestUser',
 					'created' => '2023-10-01T12:00:00Z',
+					'baselang' => 'en',
 				],
 				[
 					'wishedit' => [

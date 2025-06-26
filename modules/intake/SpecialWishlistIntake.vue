@@ -55,6 +55,11 @@
 			type="hidden"
 			name="baserevid"
 		>
+		<input
+			:value="baseLang"
+			type="hidden"
+			name="baselang"
+		>
 
 		<footer class="ext-communityrequests-intake__footer">
 			<hr>
@@ -127,6 +132,7 @@ module.exports = exports = defineComponent( {
 	},
 	props: {
 		audience: { type: String, default: '' },
+		baseLang: { type: String, default: mw.config.get( 'wgUserLanguage' ) },
 		baseRevId: { type: Number, default: 0 },
 		created: { type: String, default: '' },
 		description: { type: String, default: '' },

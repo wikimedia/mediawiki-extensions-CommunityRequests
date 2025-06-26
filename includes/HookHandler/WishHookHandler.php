@@ -1,7 +1,9 @@
 <?php
+declare( strict_types = 1 );
 
 namespace MediaWiki\Extension\CommunityRequests\HookHandler;
 
+use MediaWiki\Config\Config;
 use MediaWiki\Extension\CommunityRequests\Wish\Wish;
 use MediaWiki\Extension\CommunityRequests\Wish\WishStore;
 use MediaWiki\Extension\CommunityRequests\WishlistConfig;
@@ -9,13 +11,8 @@ use MediaWiki\Hook\LinksUpdateCompleteHook;
 use MediaWiki\Hook\ParserFirstCallInitHook;
 use MediaWiki\Html\Html;
 use MediaWiki\Linker\LinkRenderer;
-use MediaWiki\Logging\ManualLogEntry;
 use MediaWiki\Output\Hook\BeforePageDisplayHook;
-use MediaWiki\Page\Hook\PageDeleteCompleteHook;
-use MediaWiki\Page\ProperPageIdentity;
 use MediaWiki\Parser\Parser;
-use MediaWiki\Permissions\Authority;
-use MediaWiki\Revision\RevisionRecord;
 use MediaWiki\Title\Title;
 use MediaWiki\Title\TitleValue;
 use MediaWiki\User\UserFactory;
@@ -24,22 +21,21 @@ use MediaWiki\User\UserFactory;
  * Hook handlers for the <wish> tag.
  */
 class WishHookHandler extends CommunityRequestsHooks implements
-	LinksUpdateCompleteHook,
-	PageDeleteCompleteHook,
 	ParserFirstCallInitHook,
+	LinksUpdateCompleteHook,
 	BeforePageDisplayHook
 {
-	public const EXT_DATA_WISH_KEY = 'ext-communityrequests-wish';
 	public const SESSION_KEY = 'communityrequests-intake';
 	public const WISH_TRACKING_CATEGORY = 'communityrequests-wish-category';
 
 	public function __construct(
 		protected WishlistConfig $config,
-		private readonly WishStore $wishStore,
+		WishStore $store,
 		private readonly UserFactory $userFactory,
-		private readonly LinkRenderer $linkRenderer
+		private readonly LinkRenderer $linkRenderer,
+		Config $mainConfig
 	) {
-		parent::__construct( $config );
+		parent::__construct( $config, $store, $mainConfig );
 	}
 
 	/** @inheritDoc */
@@ -47,10 +43,10 @@ class WishHookHandler extends CommunityRequestsHooks implements
 		if ( !$this->config->isEnabled() ) {
 			return;
 		}
-		$parser->setHook( 'wish', [ $this, 'renderWish' ] );
+		$parser->setHook( 'wish', $this->renderWish( ... ) );
 	}
 
-	// Editing wishes
+	// Creating and editing wishes
 
 	/**
 	 * Render the <wish> tag.
@@ -61,7 +57,7 @@ class WishHookHandler extends CommunityRequestsHooks implements
 	 * @return string
 	 */
 	public function renderWish( $input, array $args, Parser $parser ): string {
-		if ( !$this->config->isEnabled() ) {
+		if ( !$this->config->isEnabled() || !$this->config->isWishPage( $parser->getPage() ) ) {
 			return '';
 		}
 
@@ -71,51 +67,45 @@ class WishHookHandler extends CommunityRequestsHooks implements
 		$requiredFields = [
 			Wish::TAG_ATTR_CREATED,
 			Wish::TAG_ATTR_TITLE,
-			Wish::TAG_ATTR_PROPOSER
+			Wish::TAG_ATTR_PROPOSER,
+			Wish::TAG_ATTR_BASE_LANG,
 		];
-		foreach ( $requiredFields as $field ) {
-			if ( !isset( $args[ $field ] ) || trim( $args[ $field ] ) === '' ) {
-				$this->addTrackingCategory( $parser, self::ERROR_TRACKING_CATEGORY );
-				return '';
-			}
+		$missingFields = array_diff( $requiredFields, array_keys( $args ) );
+		if ( $missingFields ) {
+			$this->addTrackingCategory( $parser, self::ERROR_TRACKING_CATEGORY );
+			return Html::element( 'span', [ 'class' => 'error' ],
+				'Missing required field(s): ' . implode( ', ', $missingFields ) );
 		}
 
-		// 'lang' and 'updated' are not actual tag attributes, but needed to construct
-		// the wish object. We set them here while we have access to the Parser instance.
-		$args[ 'lang' ] = $parser->getContentLanguage()->getCode();
+		// These need to be set here because we need them for display in ::renderWishInternal().
 		$args[ 'updated' ] = $parser->getRevisionTimestamp();
 		$args[ Wish::TAG_ATTR_CREATED ] ??= $args[ 'updated' ];
 
 		// Cache the wish data for storage after the links update.
-		$parser->getOutput()->setExtensionData( self::EXT_DATA_WISH_KEY, $args );
+		$parser->getOutput()->setExtensionData( self::EXT_DATA_KEY, $args );
 
-		// @phan-suppress-next-line SecurityCheck-XSS
 		return $this->renderWishInternal( $input ?: '', $args, $parser );
 	}
 
 	/** @inheritDoc */
 	public function onLinksUpdateComplete( $linksUpdate, $ticket ) {
-		if ( !$this->config->isEnabled() ) {
+		if ( !$this->config->isEnabled() || !$this->config->isWishPage( $linksUpdate->getTitle() ) ) {
 			return;
 		}
-		$data = $linksUpdate->getParserOutput()->getExtensionData( self::EXT_DATA_WISH_KEY );
+		$data = $linksUpdate->getParserOutput()->getExtensionData( self::EXT_DATA_KEY );
 		if ( !$data ) {
 			return;
 		}
 
-		$proposer = $this->userFactory->newFromName( $data[ Wish::TAG_ATTR_PROPOSER ] ?? '' );
-		if ( !$proposer ) {
-			$proposer = $linksUpdate->getRevisionRecord()->getUser();
-		}
-
 		$wish = Wish::newFromWikitextParams(
-			$linksUpdate->getTitle(),
-			$data[ 'lang' ],
-			$proposer,
+			$this->getCanonicalWishlistPage( $linksUpdate->getTitle() ),
+			$linksUpdate->getTitle()->getPageLanguage()->getCode(),
 			$data,
-			$this->config
+			$this->config,
+			$this->userFactory->newFromName( $data[ Wish::TAG_ATTR_PROPOSER ] ?? '' ),
 		);
-		$this->wishStore->save( $wish );
+
+		$this->store->save( $wish );
 	}
 
 	// Viewing wishes
@@ -249,13 +239,6 @@ class WishHookHandler extends CommunityRequestsHooks implements
 		);
 	}
 
-	private function addTrackingCategory( Parser $parser, string $category ): void {
-		// @phan-suppress-next-line PhanTypeMismatchArgumentSuperType
-		if ( $this->config->isWishPage( $parser->getPage() ) ) {
-			$parser->addTrackingCategory( $category );
-		}
-	}
-
 	private function getParagraph( string $field, string $text, bool $raw = false ): string {
 		return Html::{ $raw ? 'rawElement' : 'element' }( 'p', [
 			'class' => "ext-communityrequests-wish--$field",
@@ -301,26 +284,5 @@ class WishHookHandler extends CommunityRequestsHooks implements
 		}
 
 		$out->addModuleStyles( 'ext.communityrequests.styles' );
-	}
-
-	// Deleting wishes
-
-	/** @inheritDoc */
-	public function onPageDeleteComplete(
-		ProperPageIdentity $page,
-		Authority $deleter,
-		string $reason,
-		int $pageID,
-		RevisionRecord $deletedRev,
-		ManualLogEntry $logEntry,
-		int $archivedRevisionCount
-	) {
-		if ( !$this->config->isEnabled() ) {
-			return;
-		}
-		$wish = $this->wishStore->getWish( $page );
-		if ( $wish ) {
-			$this->wishStore->delete( $wish );
-		}
 	}
 }

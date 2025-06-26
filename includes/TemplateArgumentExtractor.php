@@ -1,6 +1,6 @@
 <?php
 
-namespace MediaWiki\Extension\CommunityRequests\Wish;
+namespace MediaWiki\Extension\CommunityRequests;
 
 use MediaWiki\Linker\LinkTarget;
 use MediaWiki\Parser\Parser;

@@ -19,7 +19,8 @@ use WikiImporterFactory;
  */
 class SchemaHooks implements LoadExtensionSchemaUpdatesHook {
 
-	public const UPDATER_ROW_WISH_TEMPLATE = 'create communityrequests-wish-template';
+	public const CACHE_VERSION = 2;
+	public const UPDATER_ROW_WISH_TEMPLATE = 'create communityrequests-wish-template' . self::CACHE_VERSION;
 
 	public function __construct(
 		private WikiImporterFactory $importerFactory

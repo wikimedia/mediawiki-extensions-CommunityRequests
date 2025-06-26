@@ -1,27 +1,21 @@
 <?php
 declare( strict_types = 1 );
 
-namespace MediaWiki\Extension\CommunityRequests\Test\Unit;
+namespace MediaWiki\Extension\CommunityRequests\Test\Integration;
 
+use MediaWiki\Extension\CommunityRequests\Tests\CommunityRequestsIntegrationTestCase;
 use MediaWiki\Extension\CommunityRequests\Wish\WishStore;
-use MediaWiki\Extension\CommunityRequests\WishlistConfig;
 use MediaWiki\Title\Title;
-use MediaWikiIntegrationTestCase;
 
 /**
  * @group CommunityRequests
  * @group Database
  * @coversDefaultClass \MediaWiki\Extension\CommunityRequests\HookHandler\WishHookHandler
  */
-class WishHookHandlerTest extends MediaWikiIntegrationTestCase {
+class WishHookHandlerTest extends CommunityRequestsIntegrationTestCase {
 
-	private WishlistConfig $config;
-	private WishStore $wishStore;
-
-	protected function setUp(): void {
-		parent::setUp();
-		$this->config = $this->getServiceContainer()->get( 'CommunityRequests.WishlistConfig' );
-		$this->wishStore = $this->getServiceContainer()->get( 'CommunityRequests.WishStore' );
+	protected function getStore(): WishStore {
+		return $this->getServiceContainer()->get( 'CommunityRequests.WishStore' );
 	}
 
 	/**
@@ -35,11 +29,12 @@ class WishHookHandlerTest extends MediaWikiIntegrationTestCase {
 		$wikitext = <<<END
 <wish
 	title="Test Wish"
-	status="submitted"
+	status="open"
 	type="change"
 	projects="commons"
 	created="2023-10-01T12:00:00Z"
 	proposer="{$user->getName()}"
+	baselang="en"
 >This is a [[test]] {{wish}}.</wish>
 END;
 		$ret = $this->insertPage(
@@ -49,10 +44,10 @@ END;
 			$user
 		);
 
-		$wish = $this->wishStore->getWish( $ret[ 'title' ] );
+		$wish = $this->store->get( $ret[ 'title' ] );
 		$this->assertSame( $ret[ 'id' ], $wish->getPage()->getId() );
 		$this->assertSame( 'Test Wish', $wish->getTitle() );
-		$this->assertSame( $this->config->getStatusIdFromWikitextVal( 'submitted' ), $wish->getStatus() );
+		$this->assertSame( $this->config->getStatusIdFromWikitextVal( 'open' ), $wish->getStatus() );
 		$this->assertSame( $this->config->getWishTypeIdFromWikitextVal( 'change' ), $wish->getType() );
 		$this->assertSame( [ $this->config->getProjectIdFromWikitextVal( 'commons' ) ], $wish->getProjects() );
 		$this->assertSame( $user->getName(), $wish->getProposer()->getName() );
@@ -84,19 +79,28 @@ END;
 	public static function provideTestTrackingCategories(): array {
 		return [
 			'valid wish' => [
-				'<wish title="Valid Wish" status="submitted" type="change" projects="commons" created="2023-10-01T12:00:00Z" proposer="$1">A valid wish</wish>',
+				'<wish title="Valid Wish" status="submitted" type="change" projects="commons" created="2023-10-01T12:00:00Z" proposer="$1" baselang="en">A valid wish</wish>',
 				false,
 			],
 			'missing title' => [
-				'<wish status="submitted" type="change" projects="commons" created="2023-10-01T12:00:00Z" proposer="$1">Missing title</wish>',
+				'<wish status="submitted" type="change" projects="commons" created="2023-10-01T12:00:00Z" proposer="$1" baselang="en">Missing title</wish>',
 				true,
 			],
 			'unknown status' => [
-				'<wish title="Invalid Status Wish" status="bogus" type="change" projects="commons" created="2023-10-01T12:00:00Z" proposer="$1">Unknown status</wish>',
+				'<wish title="Invalid Status Wish" status="bogus" type="change" projects="commons" created="2023-10-01T12:00:00Z" proposer="$1" baselang="en">Unknown status</wish>',
 				true,
 			],
 		];
 	}
 
 	// phpcs:enable Generic.Files.LineLength.TooLong
+
+	/**
+	 * @covers ::renderWish
+	 * @covers ::onLinksUpdateComplete
+	 */
+	public function testChangePageLanguage(): void {
+		$wish = $this->insertTestWish( 'Community Wishlist/Wishes/W123', 'fr', '20220123000000' );
+		$this->assertSame( 'fr', Title::newFromPageIdentity( $wish->getPage() )->getPageLanguage()->getCode() );
+	}
 }

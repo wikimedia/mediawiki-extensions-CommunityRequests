@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 namespace MediaWiki\Extension\CommunityRequests\Wish;
 
 use MediaWiki\Api\ApiMain;
+use MediaWiki\Api\ApiUsageException;
 use MediaWiki\Context\DerivativeContext;
 use MediaWiki\Extension\CommunityRequests\WishlistConfig;
 use MediaWiki\HookContainer\HookContainer;
@@ -27,8 +28,8 @@ use MediaWiki\User\UserFactory;
 class SpecialWishlistIntake extends FormSpecialPage {
 
 	public const SESSION_KEY = 'communityrequests-intake';
-	public const SESSION_VALUE_WISH_CREATED = 'created';
-	public const SESSION_VALUE_WISH_UPDATED = 'updated';
+	public const SESSION_VALUE_CREATED = 'created';
+	public const SESSION_VALUE_UPDATED = 'updated';
 
 	private Title $pageTitle;
 	protected ?int $wishId = null;
@@ -65,7 +66,7 @@ class SpecialWishlistIntake extends FormSpecialPage {
 
 		$this->requireNamedUser( 'communityrequests-please-log-in' );
 
-		$wishId = $this->wishStore->getWishIdFromInput( $wishId );
+		$wishId = $this->wishStore->getIdFromInput( $wishId );
 		if ( $wishId ) {
 			$ret = $this->loadExistingWish( $wishId );
 			if ( !$ret ) {
@@ -97,7 +98,7 @@ class SpecialWishlistIntake extends FormSpecialPage {
 	 */
 	private function loadExistingWish( int $wishId ): bool {
 		$this->pageTitle = Title::newFromText( $this->config->getWishPagePrefix() . $wishId );
-		$wish = $this->wishStore->getWish( $this->pageTitle );
+		$wish = $this->wishStore->get( $this->pageTitle );
 
 		if ( !$wish ) {
 			$this->getOutput()->showErrorPage(
@@ -239,14 +240,18 @@ class SpecialWishlistIntake extends FormSpecialPage {
 			...$data,
 		] ) );
 		$api = new ApiMain( $context, true );
-		$api->execute();
+		try {
+			$api->execute();
+		} catch ( ApiUsageException $e ) {
+			return $e->getStatusValue();
+		}
 
 		$this->pageTitle = Title::newFromText( $api->getResult()->getResultData()[ 'wishedit' ][ 'wish' ] );
 
 		// Set session variables to show post-edit messages.
 		$this->getRequest()->getSession()->set(
 			self::SESSION_KEY,
-			$this->wishId === null ? self::SESSION_VALUE_WISH_CREATED : self::SESSION_VALUE_WISH_UPDATED
+			$this->wishId === null ? self::SESSION_VALUE_CREATED : self::SESSION_VALUE_UPDATED
 		);
 		// Redirect to wish page.
 		$this->getOutput()->redirect( $this->pageTitle->getFullURL() );

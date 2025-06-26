@@ -2,11 +2,11 @@
 
 namespace MediaWiki\Extension\CommunityRequests\Tests\Integration;
 
-use MediaWiki\Extension\CommunityRequests\Wish\TemplateArgumentExtractor;
+use MediaWiki\Extension\CommunityRequests\TemplateArgumentExtractor;
 use MediaWikiIntegrationTestCase;
 
 /**
- * @covers \MediaWiki\Extension\CommunityRequests\Wish\TemplateArgumentExtractor
+ * @covers \MediaWiki\Extension\CommunityRequests\TemplateArgumentExtractor
  */
 class TemplateArgumentExtractorTest extends MediaWikiIntegrationTestCase {
 	public static function provideGetArgs() {

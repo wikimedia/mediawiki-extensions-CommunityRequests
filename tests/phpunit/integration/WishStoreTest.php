@@ -4,19 +4,10 @@ declare( strict_types = 1 );
 namespace MediaWiki\Extension\CommunityRequests\Tests\Integration;
 
 use InvalidArgumentException;
-use MediaWiki\Context\RequestContext;
+use MediaWiki\Extension\CommunityRequests\Tests\CommunityRequestsIntegrationTestCase;
 use MediaWiki\Extension\CommunityRequests\Wish\Wish;
 use MediaWiki\Extension\CommunityRequests\Wish\WishStore;
-use MediaWiki\Extension\Translate\PageTranslation\TranslatablePageMarker;
-use MediaWiki\Extension\Translate\PageTranslation\TranslatablePageSettings;
-use MediaWiki\MainConfigNames;
-use MediaWiki\Specials\SpecialPageLanguage;
 use MediaWiki\Title\Title;
-use MediaWikiIntegrationTestCase;
-use MessageLocalizer;
-use MockTitleTrait;
-use Wikimedia\ObjectCache\EmptyBagOStuff;
-use Wikimedia\Rdbms\IDBAccessObject;
 use Wikimedia\Timestamp\ConvertibleTimestamp;
 
 /**
@@ -24,34 +15,15 @@ use Wikimedia\Timestamp\ConvertibleTimestamp;
  * @group Database
  * @coversDefaultClass \MediaWiki\Extension\CommunityRequests\Wish\WishStore
  */
-class WishStoreTest extends MediaWikiIntegrationTestCase {
+class WishStoreTest extends CommunityRequestsIntegrationTestCase {
 
-	use MockTitleTrait;
-
-	private WishStore $wishStore;
-	private bool $translateInstalled;
-
-	protected function setUp(): void {
-		parent::setUp();
-		$this->wishStore = $this->getServiceContainer()->get( 'CommunityRequests.WishStore' );
-		$this->translateInstalled = $this->getServiceContainer()
-			->getExtensionRegistry()
-			->isLoaded( 'Translate' );
-		$this->overrideConfigValues( [
-			MainConfigNames::NamespacesWithSubpages => [ NS_MAIN => true ],
-			'EnablePageTranslation' => true,
-		] );
-		$this->setService( 'LocalServerObjectCache', new EmptyBagOStuff() );
-	}
-
-	protected function tearDown(): void {
-		$this->resetServices();
-		parent::tearDown();
+	protected function getStore(): WishStore {
+		return $this->getServiceContainer()->get( 'CommunityRequests.WishStore' );
 	}
 
 	/**
 	 * @covers ::save
-	 * @covers ::getWish
+	 * @covers ::get
 	 */
 	public function testSaveAndGetWish(): void {
 		ConvertibleTimestamp::setFakeTime( '2025-01-23T00:00:00Z' );
@@ -66,8 +38,8 @@ class WishStoreTest extends MediaWikiIntegrationTestCase {
 				'created' => '2025-01-01T00:00:00Z',
 			]
 		);
-		$this->wishStore->save( $wish );
-		$retrievedWish = $this->wishStore->getWish( $wish->getPage(), 'en' );
+		$this->store->save( $wish );
+		$retrievedWish = $this->store->get( $wish->getPage(), 'en' );
 		$this->assertInstanceOf( Wish::class, $retrievedWish );
 		$this->assertSame( $page->getId(), $retrievedWish->getPage()->getId() );
 		$this->assertArrayEquals( [ 1, 2, 3 ], $retrievedWish->getProjects() );
@@ -88,7 +60,7 @@ class WishStoreTest extends MediaWikiIntegrationTestCase {
 			[]
 		);
 		$this->expectException( InvalidArgumentException::class );
-		$this->wishStore->save( $wish );
+		$this->store->save( $wish );
 	}
 
 	/**
@@ -102,12 +74,12 @@ class WishStoreTest extends MediaWikiIntegrationTestCase {
 			[]
 		);
 		$this->expectException( InvalidArgumentException::class );
-		$this->wishStore->save( $wish );
+		$this->store->save( $wish );
 	}
 
 	/**
 	 * @covers ::save
-	 * @covers ::getWish
+	 * @covers ::get
 	 */
 	public function testSaveThenResaveWithNoProposerOrCreationDate(): void {
 		$user = $this->getTestUser()->getUser();
@@ -115,17 +87,17 @@ class WishStoreTest extends MediaWikiIntegrationTestCase {
 		$page = $this->getExistingTestPage( 'Community Wishlist/Wishes/W123' );
 		ConvertibleTimestamp::setFakeTime( '2025-01-23T12:59:00Z' );
 		$wish1 = new Wish( $page, 'en', $user, [ 'created' => '2025-01-23T00:00:00Z' ] );
-		$this->wishStore->save( $wish1 );
+		$this->store->save( $wish1 );
 		// Sanity checks.
-		$retrievedWish1 = $this->wishStore->getWish( $page, 'en' );
+		$retrievedWish1 = $this->store->get( $page, 'en' );
 		$this->assertSame( $user->getId(), $retrievedWish1->getProposer()->getId() );
 		$this->assertSame( '2025-01-23T00:00:00Z', $retrievedWish1->getCreated() );
 		$this->assertSame( '2025-01-23T12:59:00Z', $retrievedWish1->getUpdated() );
 		// Now resave without a proposer or creation date, and with a different current (fake) time.
 		ConvertibleTimestamp::setFakeTime( '2025-02-01T00:00:00Z' );
 		$wish2 = new Wish( $page, 'en', null, [] );
-		$this->wishStore->save( $wish2 );
-		$retrievedWish2 = $this->wishStore->getWish( $page, 'en' );
+		$this->store->save( $wish2 );
+		$retrievedWish2 = $this->store->get( $page, 'en' );
 		// Proposer should still be set to the original user.
 		$this->assertSame( $user->getId(), $retrievedWish2->getProposer()->getId() );
 		// Creation datestamp should be the old fake time, when $page was created.
@@ -145,19 +117,17 @@ class WishStoreTest extends MediaWikiIntegrationTestCase {
 			[ 'created' => null ]
 		);
 		$this->expectException( InvalidArgumentException::class );
-		$this->wishStore->save( $wish );
+		$this->store->save( $wish );
 	}
 
 	/**
-	 * @covers ::getWishes
+	 * @covers ::getAll
 	 */
-	public function testGetWishes(): void {
-		$wish1 = $this->getTestWish( 'Community Wishlist/Wishes/W1', 'en', '2222-01-23T00:00:00Z' );
-		$wish2 = $this->getTestWish( 'Community Wishlist/Wishes/W2', 'en', '3333-01-23T00:00:00Z' );
-		$this->wishStore->save( $wish1 );
-		$this->wishStore->save( $wish2 );
+	public function testGetAll(): void {
+		$wish1 = $this->insertTestWish( 'Community Wishlist/Wishes/W1', 'en', '2222-01-23T00:00:00Z' );
+		$wish2 = $this->insertTestWish( 'Community Wishlist/Wishes/W2', 'en', '3333-01-23T00:00:00Z' );
 
-		$wishes = $this->wishStore->getWishes( 'en' );
+		$wishes = $this->store->getAll( 'en', WishStore::createdField() );
 		$this->assertCount( 2, $wishes );
 		$this->assertContainsOnlyInstancesOf( Wish::class, $wishes );
 		$this->assertSame( $wish2->getPage()->getId(), $wishes[0]->getPage()->getId() );
@@ -165,39 +135,60 @@ class WishStoreTest extends MediaWikiIntegrationTestCase {
 	}
 
 	/**
-	 * @covers ::getWishes
+	 * @covers ::getAll
 	 * @covers ::delete
 	 */
 	public function testGetWishesLangFallbacks(): void {
 		$this->markTestSkippedIfExtensionNotLoaded( 'Translate' );
-		$wish1en = $this->getTestWish( 'Community Wishlist/Wishes/W1', 'en', '2222-01-23T00:00:00Z' );
-		$wish1bs = $this->getTestWish( 'Community Wishlist/Wishes/W1/bs', 'bs', '2222-12-30T00:00:00Z' );
-		$wish2hr = $this->getTestWish( 'Community Wishlist/Wishes/W2', 'hr', '4444-01-23T00:00:00' );
-		$wish3de = $this->getTestWish( 'Community Wishlist/Wishes/W3', 'de', '3333-01-23T00:00:00' );
-		$wish3fr = $this->getTestWish( 'Community Wishlist/Wishes/W3/fr', 'fr', '3333-01-23T00:00:00' );
-		$this->wishStore->save( $wish1en );
-		$this->wishStore->save( $wish1bs );
-		$this->wishStore->save( $wish2hr );
-		$this->wishStore->save( $wish3de );
-		$this->wishStore->save( $wish3fr );
+		$this->insertTestWish(
+			'Community Wishlist/Wishes/W1',
+			'en',
+			'2222-01-23T00:00:00Z'
+		);
+		$this->insertTestWish(
+			'Community Wishlist/Wishes/W1',
+			'bs',
+			'2222-12-30T00:00:00Z',
+			CommunityRequestsIntegrationTestCase::EDIT_AS_TRANSLATION_SUBPAGE
+		);
+		$this->insertTestWish(
+			'Community Wishlist/Wishes/W2',
+			'hr',
+			'4444-01-23T00:00:00Z'
+		);
+		$this->insertTestWish(
+			'Community Wishlist/Wishes/W3',
+			'de',
+			'3333-01-23T00:00:00Z'
+		);
+		$this->insertTestWish(
+			'Community Wishlist/Wishes/W3',
+			'fr',
+			'3333-01-23T00:00:00',
+			CommunityRequestsIntegrationTestCase::EDIT_AS_TRANSLATION_SUBPAGE
+		);
 
 		// 'sh' should return W2, W3/de, W1/bs
-		$wishes = $this->wishStore->getWishes( 'sh' );
+		$wishes = $this->store->getAll( 'sh', WishStore::createdField() );
 		$this->assertCount( 3, $wishes );
-		$this->assertEquals( 'Community_Wishlist/Wishes/W2', $wishes[0]->getPage()->getDBkey() );
-		$this->assertEquals( 'translation-hr-Community Wishlist/Wishes/W2', $wishes[0]->getTitle() );
-		$this->assertEquals( 'Community_Wishlist/Wishes/W3', $wishes[1]->getPage()->getDBkey() );
-		$this->assertEquals( 'translation-de-Community Wishlist/Wishes/W3', $wishes[1]->getTitle() );
-		$this->assertEquals( 'Community_Wishlist/Wishes/W1', $wishes[2]->getPage()->getDBkey() );
-		$this->assertEquals( 'translation-bs-Community Wishlist/Wishes/W1/bs', $wishes[2]->getTitle() );
+		$this->assertSame( 'Community_Wishlist/Wishes/W2', $wishes[0]->getPage()->getDBkey() );
+		$this->assertSame( 'hr', $wishes[0]->getLang() );
+		$this->assertSame( 'Community_Wishlist/Wishes/W3', $wishes[1]->getPage()->getDBkey() );
+		$this->assertSame( 'de', $wishes[1]->getLang() );
+		$this->assertSame( 'Community_Wishlist/Wishes/W1', $wishes[2]->getPage()->getDBkey() );
+		$this->assertSame( 'bs', $wishes[2]->getLang() );
 
-		$this->wishStore->delete( $wish1bs );
+		// This simulates action=delete on W1/bs.
+		$this->deletePage( 'Community Wishlist/Wishes/W1/bs' );
 
 		// With the deletion of W1/bs, 'sh' should return W2, W3/de, W1/en
-		$wishes = $this->wishStore->getWishes( 'sh' );
+		$wishes = $this->store->getAll( 'sh', WishStore::createdField() );
 		$this->assertCount( 3, $wishes );
-		$this->assertEquals( 'Community_Wishlist/Wishes/W1', $wishes[2]->getPage()->getDBkey() );
-		$this->assertEquals( 'translation-en-Community Wishlist/Wishes/W1', $wishes[2]->getTitle() );
+		$this->assertSame( 'Community_Wishlist/Wishes/W2', $wishes[0]->getPage()->getDBkey() );
+		$this->assertSame( 'Community_Wishlist/Wishes/W3', $wishes[1]->getPage()->getDBkey() );
+		$this->assertSame( 'de', $wishes[1]->getLang() );
+		$this->assertSame( 'Community_Wishlist/Wishes/W1', $wishes[2]->getPage()->getDBkey() );
+		$this->assertSame( 'en', $wishes[2]->getLang() );
 	}
 
 	/**
@@ -224,8 +215,8 @@ END;
 			$this->getTestUser()->getUser()
 		);
 
-		$actual = $this->wishStore->getDataFromWikitext( $wish );
-		$this->assertEquals(
+		$actual = $this->store->getDataFromWikitext( $wish );
+		$this->assertSame(
 			"<translate>[[<tvar name=\"1\">Foo</tvar>|Bar]] {{baz}}</translate>\n\n== Section ==\nExample text",
 			$actual['description']
 		);
@@ -236,70 +227,16 @@ END;
 		$this->assertArrayHasKey( 'created', $actual );
 	}
 
-	private function getTestWish(
-		?string $title = 'Community Wishlist/Wishes/W123',
-		string $langCode = 'en',
-		string $created = '22220123000000'
-	): Wish {
-		$title = Title::newFromText( $title );
-		$shouldChangeLanguage = $this->translateInstalled && $langCode !== 'en';
-		$shouldMarkForTranslation = $this->translateInstalled && !str_ends_with( $title->getDBkey(), "/$langCode" );
-
-		/** @var Title $title */
-		$title = $this->insertPage(
-			$title,
-			$shouldMarkForTranslation ? '<translate>test</translate>' : 'Test'
-		)[ 'title' ];
-
-		if ( $shouldChangeLanguage ) {
-			// TODO: WishStore should change the language upon creation of the wish via a hook
-			$context = RequestContext::getMain();
-			$context->setUser( $this->getTestUser()->getUser() );
-			SpecialPageLanguage::changePageLanguage( $context, $title, $langCode );
-		}
-
-		if ( $shouldMarkForTranslation ) {
-			/** @var TranslatablePageMarker $transPageMarker */
-			$transPageMarker = $this->getServiceContainer()->get( 'Translate:TranslatablePageMarker' );
-
-			$operation = $transPageMarker->getMarkOperation(
-				$title->toPageRecord( IDBAccessObject::READ_LATEST ), null, false
-			);
-			$transPageMarker->markForTranslation(
-				$operation,
-				new TranslatablePageSettings( [], false, '', [], false, false, true ),
-				$this->getMockBuilder( MessageLocalizer::class )->getMock(),
-				$this->getTestUser()->getUser()
-			);
-		}
-
-		if ( $shouldChangeLanguage || $shouldMarkForTranslation ) {
-			$this->getServiceContainer()->getMainWANObjectCache()->clearProcessCache();
-		}
-
-		return new Wish(
-			$title,
-			$langCode,
-			$this->getTestUser()->getUser(),
-			[
-				'created' => $created,
-				'title' => "translation-$langCode-$title",
-				'projects' => [ 1, 2, 3 ],
-				'phabTasks' => [ 123, 456 ],
-			]
-		);
-	}
-
 	/**
-	 * @covers ::getWishIdFromInput
+	 * @covers ::getIdFromInput
 	 */
-	public function testGetWishIdFromInput(): void {
-		$this->assertSame( 123, $this->wishStore->getWishIdFromInput( 123 ) );
-		$this->assertSame( 123, $this->wishStore->getWishIdFromInput( '123' ) );
-		$this->assertSame( 123, $this->wishStore->getWishIdFromInput( 'W123' ) );
-		$this->assertSame( 123, $this->wishStore->getWishIdFromInput( 'Community Wishlist/Wishes/W123' ) );
-		$this->assertSame( 123, $this->wishStore->getWishIdFromInput( 'Community Wishlist/Wishes/W123/fr' ) );
-		$this->assertNull( $this->wishStore->getWishIdFromInput( 'Not a wish page' ) );
+	public function testGetIdFromInput(): void {
+		$this->assertSame( 123, $this->store->getIdFromInput( 123 ) );
+		$this->assertSame( 123, $this->store->getIdFromInput( '123' ) );
+		$this->assertSame( 123, $this->store->getIdFromInput( 'W123' ) );
+		$this->assertSame( 123, $this->store->getIdFromInput( 'Community Wishlist/Wishes/W123' ) );
+		$this->assertSame( 123, $this->store->getIdFromInput( 'Community Wishlist/Wishes/W123/fr' ) );
+		$this->assertNull( $this->store->getIdFromInput( 'Not a wish page' ) );
 	}
 
 	/**
@@ -316,8 +253,8 @@ END;
 				'created' => '2025-01-01T00:00:00Z',
 			]
 		);
-		$this->wishStore->save( $wish );
-		$wish = $this->wishStore->getWish( $title );
+		$this->store->save( $wish );
+		$wish = $this->store->get( $title );
 		$this->assertSame( str_repeat( 'a', 255 ), $wish->getTitle() );
 	}
 }

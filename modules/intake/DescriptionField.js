@@ -199,14 +199,14 @@ class DescriptionField {
 			]
 		} );
 
-		// Listener for edit mode switch.
-		this.target.getToolbar().on( 'switchEditor', this.switchEditor.bind( this ) );
-
 		// Add initial content.
 		await this.setSurface( this.content, mode );
+		// Listener for edit mode switch.
+		this.target.getToolbar().on( 'switchEditor', this.switchEditor.bind( this ) );
 		// Add the target to the document and hide the textarea.
 		this.$veWrapper.append( this.target.$element );
 		this.$textarea.hide();
+
 		this.setPending( false );
 	}
 

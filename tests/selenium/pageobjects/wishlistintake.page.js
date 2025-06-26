@@ -20,6 +20,10 @@ class WishlistIntakePage extends Page {
 		return $( '.ext-communityrequests-intake__ve-surface' );
 	}
 
+	get descriptionEditable() {
+		return this.descriptionInput.$( 'div[contenteditable="true"]' );
+	}
+
 	get descriptionError() {
 		return $( '.ext-communityrequests-intake__description .cdx-message--error' );
 	}

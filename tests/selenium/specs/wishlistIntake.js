@@ -51,8 +51,8 @@ describe( 'WishlistIntake wish submission', () => {
 
 	it( 'should hide errors if all required fields are filled in on submission', async () => {
 		await IntakePage.titleInput.setValue( 'This is a test wish' );
-		await IntakePage.descriptionInput.click();
-		await IntakePage.descriptionInput.setValue( 'This is a test description.\n'.repeat( 10 ) );
+		await IntakePage.descriptionEditable.waitForClickable();
+		await IntakePage.descriptionEditable.setValue( 'This is a test description.\n'.repeat( 10 ) );
 		await IntakePage.firstWishTypeInput.click();
 		await IntakePage.audienceInput.setValue( 'This is a test audience' );
 		await IntakePage.phabricatorTasksInput.setValue( 'T123,T456' );
@@ -89,7 +89,7 @@ describe( 'WishlistIntake wish submission', () => {
 		);
 		await expect( await ViewWishPage.phabTasks.getText() ).toBe( 'T123, T456' );
 		await expect( await ViewWishPage.proposer.getText() ).toBe(
-			`Author: ${ browser.config.mwUser } (talk)`
+			`Author: ${ browser.options.capabilities[ 'mw:user' ] } (talk)`
 		);
 
 		const bot = await Api.bot();

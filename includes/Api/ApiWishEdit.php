@@ -57,7 +57,7 @@ class ApiWishEdit extends ApiBase {
 			$this->dieWithError( [ 'apierror-invalidtitle', wfEscapeWikiText( $params[ 'wish' ] ) ] );
 		} elseif ( !$title->canExist() ) {
 			$this->dieWithError( 'apierror-pagecannotexist' );
-		} elseif ( !$this->wishStore->isWishPage( $title ) ) {
+		} elseif ( !$this->config->isWishPage( $title ) ) {
 			$this->dieWithError( 'apierror-wishedit-notawish' );
 		}
 

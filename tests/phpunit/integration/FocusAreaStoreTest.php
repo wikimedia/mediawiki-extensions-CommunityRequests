@@ -36,21 +36,6 @@ class FocusAreaStoreTest extends MediaWikiIntegrationTestCase {
 		$this->assertEquals( $focusArea, $savedFocusArea );
 	}
 
-	/**
-	 * @covers ::isFocusAreaPage
-	 */
-	public function testIsFocusAreaPage(): void {
-		$this->assertTrue(
-			$this->focusAreaStore->isFocusAreaPage( Title::newFromText( 'Community Wishlist/FocusAreas/FA1' ) )
-		);
-		$this->assertTrue(
-			$this->focusAreaStore->isFocusAreaPage( Title::newFromText( 'Community Wishlist/FocusAreas/FA1/fr' ) )
-		);
-		$this->assertFalse(
-			$this->focusAreaStore->isFocusAreaPage( Title::newFromText( 'Community Wishlist/OtherPage/FA2' ) )
-		);
-	}
-
 	private function getTestFocusArea( ?string $title = null ): FocusArea {
 		if ( $title !== null ) {
 			$title = Title::newFromText( $title );

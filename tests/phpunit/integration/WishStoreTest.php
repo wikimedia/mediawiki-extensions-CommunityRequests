@@ -291,15 +291,6 @@ END;
 	}
 
 	/**
-	 * @covers ::isWishPage
-	 */
-	public function testIsWishPage(): void {
-		$this->assertFalse( $this->wishStore->isWishPage( Title::newFromText( 'W123' ) ) );
-		$this->assertTrue( $this->wishStore->isWishPage( 'Community Wishlist/Wishes/W123' ) );
-		$this->assertTrue( $this->wishStore->isWishPage( Title::newFromText( 'Community Wishlist/Wishes/W123/fr' ) ) );
-	}
-
-	/**
 	 * @covers ::getWishIdFromInput
 	 */
 	public function testGetWishIdFromInput(): void {

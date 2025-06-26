@@ -6,6 +6,10 @@ namespace MediaWiki\Extension\CommunityRequests;
 use MediaWiki\Config\ConfigException;
 use MediaWiki\Config\ServiceOptions;
 use MediaWiki\Extension\CommunityRequests\Wish\Wish;
+use MediaWiki\Language\LanguageCode;
+use MediaWiki\Page\PageIdentity;
+use MediaWiki\Title\TitleFormatter;
+use MediaWiki\Title\TitleParser;
 
 /**
  * Service that abstracts retrieving configuration values, with methods to
@@ -50,7 +54,11 @@ class WishlistConfig {
 	private array $projects;
 	private array $statuses;
 
-	public function __construct( ServiceOptions $config ) {
+	public function __construct(
+		ServiceOptions $config,
+		private readonly TitleParser $titleParser,
+		private readonly TitleFormatter $titleFormatter
+	) {
 		$this->enabled = $config->get( self::CONFIG_ENABLED );
 		$this->homepage = $config->get( self::CONFIG_HOMEPAGE );
 		$this->wishCategory = $config->get( self::CONFIG_WISH_CATEGORY );
@@ -81,10 +89,6 @@ class WishlistConfig {
 		return $this->wishPagePrefix;
 	}
 
-	public function getFocusAreaPagePrefix(): string {
-		return $this->focusAreaPagePrefix;
-	}
-
 	public function getWishIndexPage(): string {
 		return $this->wishIndexPage;
 	}
@@ -105,12 +109,72 @@ class WishlistConfig {
 		return $this->wishTypes;
 	}
 
+	public function getFocusAreaPagePrefix(): string {
+		return $this->focusAreaPagePrefix;
+	}
+
 	public function getProjects(): array {
 		return $this->projects;
 	}
 
 	public function getStatuses(): array {
 		return $this->statuses;
+	}
+
+	// Helpers
+
+	/**
+	 * Check if the given PageIdentity could be a wish page based on its title.
+	 *
+	 * @param ?PageIdentity $identity
+	 * @return bool
+	 */
+	public function isWishPage( ?PageIdentity $identity ): bool {
+		return $this->titleStartsWith( $identity, $this->wishPagePrefix );
+	}
+
+	/**
+	 * Check if the given PageIdentity could be a focus area page based on its title.
+	 *
+	 * @param ?PageIdentity $identity
+	 * @return bool
+	 */
+	public function isFocusAreaPage( ?PageIdentity $identity ): bool {
+		return $this->titleStartsWith( $identity, $this->focusAreaPagePrefix );
+	}
+
+	/**
+	 * Check if the given PageIdentity could be a wish or focus area page based on its title.
+	 *
+	 * @param ?PageIdentity $identity
+	 * @return bool
+	 */
+	public function isWishOrFocusAreaPage( ?PageIdentity $identity ): bool {
+		return $this->isWishPage( $identity ) || $this->isFocusAreaPage( $identity );
+	}
+
+	private function titleStartsWith( ?PageIdentity $identity, string $prefix ): bool {
+		if ( !$identity ) {
+			return false;
+		}
+		$pagePrefix = $this->titleParser->parseTitle( $prefix );
+
+		$identityStr = $this->titleFormatter->getPrefixedDBkey( $identity );
+		$pagePrefixStr = $this->titleFormatter->getPrefixedDBkey( $pagePrefix );
+		$remaining = substr( $identityStr, strlen( $pagePrefixStr ) );
+
+		if ( str_starts_with( $identityStr, $pagePrefixStr ) && is_numeric( $remaining ) ) {
+			return true;
+		}
+
+		// Remove each numeric character from the beginning of $remaining
+		$remaining = ltrim( $remaining, '0123456789' );
+
+		// Remove leading slash.
+		$remaining = ltrim( $remaining, '/' );
+
+		// Check if the $remaining is probably a valid language code.
+		return LanguageCode::isWellFormedLanguageTag( $remaining );
 	}
 
 	// IDs and labels from wikitext values

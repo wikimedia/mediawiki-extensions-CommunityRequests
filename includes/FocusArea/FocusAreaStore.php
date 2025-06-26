@@ -5,8 +5,6 @@ namespace MediaWiki\Extension\CommunityRequests\FocusArea;
 
 use MediaWiki\Extension\CommunityRequests\WishlistConfig;
 use MediaWiki\Page\PageIdentity;
-use MediaWiki\Title\TitleFormatter;
-use MediaWiki\Title\TitleParser;
 use Wikimedia\Rdbms\IConnectionProvider;
 use Wikimedia\Rdbms\IDatabase;
 
@@ -23,30 +21,12 @@ class FocusAreaStore {
 		'crfat_short_description',
 		'crfat_title',
 		'crfat_lang',
-
 	];
 
-	private IConnectionProvider $connectionProvider;
-	private TitleParser $titleParser;
-	private TitleFormatter $titleFormatter;
-	private string $focusAreaPagePrefix;
-
-	/**
-	 * @param IConnectionProvider $connectionProvider
-	 * @param WishlistConfig $config
-	 * @param TitleParser $titleParser
-	 * @param TitleFormatter $titleFormatter
-	 */
 	public function __construct(
-		IConnectionProvider $connectionProvider,
-		WishlistConfig $config,
-		TitleParser $titleParser,
-		TitleFormatter $titleFormatter
+		private readonly IConnectionProvider $connectionProvider,
+		protected WishlistConfig $config
 	) {
-		$this->connectionProvider = $connectionProvider;
-		$this->focusAreaPagePrefix = $config->getFocusAreaPagePrefix();
-		$this->titleParser = $titleParser;
-		$this->titleFormatter = $titleFormatter;
 	}
 
 	/**
@@ -147,21 +127,6 @@ class FocusAreaStore {
 				'updated' => $focusArea->crfa_updated,
 				'status' => $focusArea->crfa_status
 			]
-		);
-	}
-
-	/**
-	 * Check if a page is a focus area page based on the configured prefix.
-	 *
-	 * @param PageIdentity $identity
-	 * @return bool
-	 */
-	public function isFocusAreaPage( PageIdentity $identity ): bool {
-		$pagePrefix = $this->titleParser->parseTitle( $this->focusAreaPagePrefix );
-
-		return str_starts_with(
-			$this->titleFormatter->getPrefixedDBkey( $identity ),
-			$this->titleFormatter->getPrefixedDBkey( $pagePrefix )
 		);
 	}
 }

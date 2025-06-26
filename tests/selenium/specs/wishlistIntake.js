@@ -63,10 +63,12 @@ describe( 'WishlistIntake wish submission', () => {
 		await expect( IntakePage.typeError ).not.toBeDisplayed();
 		await expect( IntakePage.projectsError ).not.toBeDisplayed();
 		await expect( IntakePage.audienceError ).not.toBeDisplayed();
+		// Follow redirect to the new wish page
+		await browser.waitUntil( () => ViewWishPage.successMessage.isDisplayed(), { timeout: 30 } );
 	} );
 
 	it( 'should show all the data entered in the form', async () => {
-		await expect( ViewWishPage.successMessage ).toBeDisplayed( { timeout: 30 } );
+		await expect( ViewWishPage.successMessage ).toBeDisplayed();
 		const pageTitle = await browser.execute( () => mw.config.get( 'wgTitle' ) );
 		await expect( pageTitle ).toMatch(
 			// eslint-disable-next-line security/detect-non-literal-regexp

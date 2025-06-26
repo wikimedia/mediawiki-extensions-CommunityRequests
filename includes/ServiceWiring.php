@@ -19,8 +19,6 @@ return [
 		return new FocusAreaStore(
 			$services->getConnectionProvider(),
 			$services->get( 'CommunityRequests.WishlistConfig' ),
-			$services->getTitleParser(),
-			$services->getTitleFormatter(),
 		);
 	},
 	'CommunityRequests.IdGenerator' => static function ( MediaWikiServices $services ): IdGenerator {
@@ -35,10 +33,14 @@ return [
 		return LoggerFactory::getInstance( 'communityrequests' );
 	},
 	'CommunityRequests.WishlistConfig' => static function ( MediaWikiServices $services ): WishlistConfig {
-		return new WishlistConfig( new ServiceOptions(
-			WishlistConfig::CONSTRUCTOR_OPTIONS,
-			$services->getMainConfig()
-		) );
+		return new WishlistConfig(
+			new ServiceOptions(
+				WishlistConfig::CONSTRUCTOR_OPTIONS,
+				$services->getMainConfig()
+			),
+			$services->getTitleParser(),
+			$services->getTitleFormatter(),
+		);
 	},
 	'CommunityRequests.WishStore' => static function ( MediaWikiServices $services ): WishStore {
 		return new WishStore(
@@ -51,7 +53,7 @@ return [
 			$services->getTitleParser(),
 			$services->getTitleFormatter(),
 			$services->get( 'CommunityRequests.IdGenerator' ),
-			$services->get( 'CommunityRequests.WishlistConfig' )
+			$services->get( 'CommunityRequests.WishlistConfig' ),
 		);
 	}
 ];

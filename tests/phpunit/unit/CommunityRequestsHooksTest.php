@@ -8,6 +8,9 @@ use MediaWiki\Extension\CommunityRequests\HookHandler\CommunityRequestsHooks;
 use MediaWiki\Extension\CommunityRequests\WishlistConfig;
 use MediaWiki\Parser\Parser;
 use MediaWiki\Parser\ParserOutput;
+use MediaWiki\Tests\Unit\MockServiceDependenciesTrait;
+use MediaWiki\Title\TitleFormatter;
+use MediaWiki\Title\TitleParser;
 use MediaWikiUnitTestCase;
 
 /**
@@ -15,6 +18,8 @@ use MediaWikiUnitTestCase;
  * @coversDefaultClass \MediaWiki\Extension\CommunityRequests\HookHandler\CommunityRequestsHooks
  */
 class CommunityRequestsHooksTest extends MediaWikiUnitTestCase {
+
+	use MockServiceDependenciesTrait;
 
 	/**
 	 * @covers ::onParserAfterParse
@@ -54,7 +59,11 @@ class CommunityRequestsHooksTest extends MediaWikiUnitTestCase {
 			WishlistConfig::CONFIG_PROJECTS => [],
 			WishlistConfig::CONFIG_STATUSES => [],
 		] );
-		$config = new WishlistConfig( $serviceOptions );
+		$config = new WishlistConfig(
+			$serviceOptions,
+			$this->newServiceInstance( TitleParser::class, [ 'localInterwikis' => [] ] ),
+			$this->newServiceInstance( TitleFormatter::class, [] )
+		);
 		$text = '';
 		( new CommunityRequestsHooks( $config ) )->onParserAfterParse( $parser, $text, null );
 	}

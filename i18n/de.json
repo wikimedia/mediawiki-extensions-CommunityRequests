@@ -76,9 +76,9 @@
 	"communityrequests-wish-audience-heading": "Betroffene Nutzer",
 	"communityrequests-wish-phabricator-heading": "Phabricator-Tasks",
 	"communityrequests-wish-other-details-heading": "Weitere Details",
-	"communityrequests-wish-created": "Erstellt",
-	"communityrequests-wish-updated": "Letzte Aktualisierung",
-	"communityrequests-wish-proposer": "Autor",
+	"communityrequests-wish-created": "Erstellt: $1",
+	"communityrequests-wish-updated": "Letzte Aktualisierung: $1",
+	"communityrequests-wish-proposer": "Autor: $1",
 	"communityrequests-wishes-type-header": "Typ",
 	"communityrequests-wishes-projects-header": "Projekte",
 	"communityrequests-wishes-date-header": "Datum (UTC)",
@@ -111,5 +111,7 @@
 	"communityrequests-publish-wish-summary": "Den Wunsch „$1“ veröffentlichen",
 	"communityrequests-save-wish-summary": "Aktualisierung des Wunsches „$1“",
 	"communityrequests-error-category": "Seiten mit Community-Wunschliste-Fehlern",
-	"communityrequests-error-category-desc": "Seiten in dieser Kategorie sind Wünsche der Community-Wunschliste oder Schwerpunktbereiche, die Fehler enthalten."
+	"communityrequests-error-category-desc": "Seiten in dieser Kategorie sind Wünsche der Community-Wunschliste oder Schwerpunktbereiche, die Fehler enthalten.",
+	"communityrequests-wish-category": "Community-Wunschliste/Wünsche",
+	"communityrequests-wish-category-desc": "Seiten in dieser Kategorie sind Wünsche der Community-Wunschliste."
 }

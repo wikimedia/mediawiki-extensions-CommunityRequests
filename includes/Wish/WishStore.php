@@ -11,11 +11,7 @@ use MediaWiki\Extension\CommunityRequests\WishlistConfig;
 use MediaWiki\Languages\LanguageFallback;
 use MediaWiki\Page\PageIdentity;
 use MediaWiki\Page\PageIdentityValue;
-use MediaWiki\Parser\Parser;
 use MediaWiki\Parser\ParserFactory;
-use MediaWiki\Parser\ParserOptions;
-use MediaWiki\Parser\PPFrame;
-use MediaWiki\Parser\PPNode;
 use MediaWiki\Revision\RevisionStore;
 use MediaWiki\Title\TitleFormatter;
 use MediaWiki\Title\TitleParser;
@@ -324,46 +320,16 @@ class WishStore {
 		$content = $revRecord->getMainContentRaw();
 		'@phan-var WikitextContent $content';
 		$wikitext = $content->getText();
-		$parser = $this->parserFactory->getInstance();
-		$parser->startExternalParse(
-			null, ParserOptions::newFromAnon(), Parser::OT_PLAIN
-		);
-		$root = $parser->preprocessToDom( $wikitext );
-
-		for ( $child = $root->getFirstChild(); $child; $child = $child->getNextSibling() ) {
-			if ( $child->getName() === 'template' ) {
-				$frame = $parser->getPreprocessor()->newFrame();
-				$title = $this->titleParser->parseTitle(
-					$this->normalizeParsedValue( $parser, $frame, $child->getChildrenOfType( 'title' ) ),
-					NS_TEMPLATE
-				);
-				if ( $configTitle === $this->titleFormatter->getPrefixedDBkey( $title ) ) {
-					$args = $frame->newChild( $child->getChildrenOfType( 'part' ) )->getNamedArguments();
-					$args = array_map( function ( $value ) use ( $parser, $frame ) {
-						return $this->normalizeParsedValue( $parser, $frame, $value );
-					}, $args );
-					// Include baseRevId
-					$args[ 'baseRevId' ] = $revRecord->getId();
-					return $args;
-				}
-			}
+		$args = ( new TemplateArgumentExtractor( $this->parserFactory, $this->titleParser ) )
+			->getArgs(
+				$this->titleParser->parseTitle( $this->config->getWishTemplatePage(), NS_TEMPLATE ),
+				$wikitext
+			);
+		if ( $args !== null ) {
+			// Include baseRevId
+			$args[ 'baseRevId' ] = $revRecord->getId();
 		}
-
-		return null;
-	}
-
-	/**
-	 * Normalize a parsed value from the wikitext, removing strip markers and trailing newlines.
-	 *
-	 * @param Parser $parser The parser instance.
-	 * @param PPFrame $frame The parser frame.
-	 * @param PPNode|string $node The node to normalize.
-	 * @return string The normalized value.
-	 */
-	private function normalizeParsedValue( Parser $parser, PPFrame $frame, $node ): string {
-		return rtrim( $parser->getStripState()->unstripBoth(
-			$frame->expand( $node, PPFrame::RECOVER_ORIG )
-		), "\n" );
+		return $args;
 	}
 
 	/**

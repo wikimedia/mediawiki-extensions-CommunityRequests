@@ -76,9 +76,9 @@
 	"communityrequests-wish-audience-heading": "المستخدمين المُتأثرين",
 	"communityrequests-wish-phabricator-heading": "مهام فبريكاتور",
 	"communityrequests-wish-other-details-heading": "تفاصيل أخرى",
-	"communityrequests-wish-created": "إنشاء",
-	"communityrequests-wish-updated": "آخر تحديث",
-	"communityrequests-wish-proposer": "المؤلف",
+	"communityrequests-wish-created": "تم الإنشاء: $1",
+	"communityrequests-wish-updated": "آخر تحديث: $1",
+	"communityrequests-wish-proposer": "المؤلف: $1",
 	"communityrequests-wishes-type-header": "النوع",
 	"communityrequests-wishes-projects-header": "المشاريع",
 	"communityrequests-wishes-date-header": "التاريخ (UTC)",
@@ -111,5 +111,7 @@
 	"communityrequests-publish-wish-summary": "نشر الرغبة \"$1\"",
 	"communityrequests-save-wish-summary": "تحديث الرغبة \"$1\"",
 	"communityrequests-error-category": "الصفحات التي تحتوي على أخطاء في قائمة أمنيات المجتمع",
-	"communityrequests-error-category-desc": "الصفحات الموجودة في هذه الفئة هي رغبات قائمة أمنيات المجتمع أو مجالات التركيز التي تحتوي على أخطاء."
+	"communityrequests-error-category-desc": "الصفحات الموجودة في هذه الفئة هي رغبات قائمة أمنيات المجتمع أو مجالات التركيز التي تحتوي على أخطاء.",
+	"communityrequests-wish-category": "قائمة أمنيات/رغبات المجتمع",
+	"communityrequests-wish-category-desc": "الصفحات الموجودة في هذه الفئة هي رغبات قائمة الرغبات المجتمعية."
 }

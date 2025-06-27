@@ -75,9 +75,9 @@
 	"communityrequests-wish-audience-heading": "Usuarios afectados",
 	"communityrequests-wish-phabricator-heading": "Tarefas de Phabricator",
 	"communityrequests-wish-other-details-heading": "Outros detalles",
-	"communityrequests-wish-created": "Creada o",
-	"communityrequests-wish-updated": "Última actualización",
-	"communityrequests-wish-proposer": "Autoría",
+	"communityrequests-wish-created": "Creada o $1",
+	"communityrequests-wish-updated": "Última actualización: $1",
+	"communityrequests-wish-proposer": "Autoría: $1",
 	"communityrequests-wishes-type-header": "Tipo",
 	"communityrequests-wishes-projects-header": "Proxectos",
 	"communityrequests-wishes-date-header": "Data (UTC)",
@@ -110,5 +110,7 @@
 	"communityrequests-publish-wish-summary": "Publicando o desexo \"$1\"",
 	"communityrequests-save-wish-summary": "Actualizando o desexo \"$1\"",
 	"communityrequests-error-category": "Páxinas con erros na lista de desexos da comunidade",
-	"communityrequests-error-category-desc": "As páxinas desta categoría son desexos ou áreas de enfoque da lista de desexos da comunidade que conteñen erros."
+	"communityrequests-error-category-desc": "As páxinas desta categoría son desexos ou áreas de enfoque da lista de desexos da comunidade que conteñen erros.",
+	"communityrequests-wish-category": "Lista de desexos da comunidade",
+	"communityrequests-wish-category-desc": "As páxinas desta categoría son desexos da lista de desexos da comunidade."
 }

@@ -75,9 +75,9 @@
 	"communityrequests-wish-audience-heading": "Etkilenen kullanıcılar",
 	"communityrequests-wish-phabricator-heading": "Phabricator görevleri",
 	"communityrequests-wish-other-details-heading": "Diğer ayrıntılar",
-	"communityrequests-wish-created": "Oluşturulma",
-	"communityrequests-wish-updated": "Son güncelleme",
-	"communityrequests-wish-proposer": "Yazar",
+	"communityrequests-wish-created": "Oluşturulma: $1",
+	"communityrequests-wish-updated": "Son güncelleme: $1",
+	"communityrequests-wish-proposer": "Yazar: $1",
 	"communityrequests-wishes-type-header": "Tür",
 	"communityrequests-wishes-projects-header": "Projeler",
 	"communityrequests-wishes-date-header": "Tarih (UTC)",
@@ -110,5 +110,7 @@
 	"communityrequests-publish-wish-summary": "\"$1\" dileği yayımlanıyor",
 	"communityrequests-save-wish-summary": "\"$1\" dileği güncelleniyor",
 	"communityrequests-error-category": "Topluluk Dilek Listesi hataları olan sayfalar",
-	"communityrequests-error-category-desc": "Bu kategorideki sayfalar hata içeren Topluluk Dilek Listesi istekleri ya da odak alanlarıdır."
+	"communityrequests-error-category-desc": "Bu kategorideki sayfalar hata içeren Topluluk Dilek Listesi istekleri ya da odak alanlarıdır.",
+	"communityrequests-wish-category": "Topluluk Dilek Listesi/Dilekler",
+	"communityrequests-wish-category-desc": "Bu kategorideki sayfalar Topluluk Dilek Listesi dilekleridir."
 }

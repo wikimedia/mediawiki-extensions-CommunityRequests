@@ -19,8 +19,9 @@
 	"communityrequests-status-draft": "Нацрт",
 	"communityrequests-status-blocked": "Блокирано",
 	"communityrequests-wish-other-details-heading": "Други детаљи",
-	"communityrequests-wish-created": "Направљено",
-	"communityrequests-wish-proposer": "Аутор",
+	"communityrequests-wish-created": "Направљено: $1",
+	"communityrequests-wish-updated": "Последња промена: $1",
+	"communityrequests-wish-proposer": "Аутор: $1",
 	"communityrequests-wishes-type-header": "Тип",
 	"communityrequests-wishes-projects-header": "Пројекти",
 	"communityrequests-wishes-date-header": "Датум (UTC)",
@@ -28,5 +29,6 @@
 	"communityrequests-form-loading-1": "Ако се образац не учита, омогућите JavaScript.",
 	"communityrequests-focus-area-owners-label": "Власници:",
 	"communityrequests-translation-translatable": "Ова страница садржи текст који није на $1.",
-	"communityrequests-translation-errors": "Дошло је до грешке:"
+	"communityrequests-translation-errors": "Дошло је до грешке:",
+	"communityrequests-wish-category": "Жеље заједнице"
 }

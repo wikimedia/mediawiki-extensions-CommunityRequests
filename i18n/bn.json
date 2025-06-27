@@ -70,9 +70,9 @@
 	"communityrequests-wish-audience-heading": "প্রভাবিত ব্যবহারকারী",
 	"communityrequests-wish-phabricator-heading": "ফ্যাব্রিকেটর কাজ",
 	"communityrequests-wish-other-details-heading": "অন্যান্য বিবরণ",
-	"communityrequests-wish-created": "তৈরি করা হয়েছে",
-	"communityrequests-wish-updated": "সর্বশেষ হালনাগাদ",
-	"communityrequests-wish-proposer": "লেখক",
+	"communityrequests-wish-created": "তৈরি করা হয়েছে: $1",
+	"communityrequests-wish-updated": "সর্বশেষ হালনাগাদ: $1",
+	"communityrequests-wish-proposer": "লেখক: $1",
 	"communityrequests-wishes-type-header": "ধরন",
 	"communityrequests-wishes-projects-header": "প্রকল্প",
 	"communityrequests-wishes-date-header": "তারিখ (ইউটিসি)",
@@ -91,5 +91,6 @@
 	"communityrequests-focus-area-volunteers": "সম্প্রদায়ের সদস্য",
 	"communityrequests-focus-area-voting": "ভোটদান",
 	"communityrequests-translation-translatable": "এই পাতায় এমন পাঠ্য রয়েছে যা $1-এ নেই।",
-	"communityrequests-translation-switch": "এটি [https://www.mediawiki.org/wiki/Special:MyLanguage/MinT উইকিমিডিয়ার মেশিন অনুবাদ সরঞ্জাম] ব্যবহার করে স্বয়ংক্রিয়ভাবে অনুবাদ করুন।"
+	"communityrequests-translation-switch": "এটি [https://www.mediawiki.org/wiki/Special:MyLanguage/MinT উইকিমিডিয়ার মেশিন অনুবাদ সরঞ্জাম] ব্যবহার করে স্বয়ংক্রিয়ভাবে অনুবাদ করুন।",
+	"communityrequests-wish-category": "সম্প্রদায়ের ইচ্ছা তালিকা/ইচ্ছা"
 }

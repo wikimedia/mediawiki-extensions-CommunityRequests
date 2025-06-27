@@ -11,6 +11,8 @@
 	"communityrequests-status-in-progress": "प्रगति में",
 	"communityrequests-status-blocked": "अवरोधित",
 	"communityrequests-status-unknown": "अज्ञात",
+	"communityrequests-wish-updated": "अंतिम अद्यतन: $1",
+	"communityrequests-wish-proposer": "लेखक: $1",
 	"communityrequests-wishes-type-header": "प्रकार",
 	"communityrequests-wishes-status-header": "स्थिति"
 }

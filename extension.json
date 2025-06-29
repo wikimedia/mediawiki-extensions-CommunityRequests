@@ -246,6 +246,41 @@
 				"communityrequests-translation-progress",
 				"communityrequests-translation-errors"
 			]
+		},
+		"ext.communityrequests.voting": {
+			"packageFiles": [
+				"voting/init.js",
+				"common/Util.js",
+				"voting/Button.vue",
+				{
+					"name": "common/config.json",
+					"config": [
+						"CommunityRequestsWishSupportTemplate"
+					]
+				},
+				{
+					"name": "voting/icons.json",
+					"callback": "MediaWiki\\ResourceLoader\\CodexModule::getIcons",
+					"callbackParam": [
+						"cdxIconCheck"
+					]
+				}
+			],
+			"dependencies": [
+				"vue",
+				"@wikimedia/codex",
+				"mediawiki.language.names",
+				"mediawiki.storage"
+			],
+			"messages": [
+				"cancel",
+				"communityrequests-optional-comment",
+				"communityrequests-support",
+				"communityrequests-support-focus-area",
+				"communityrequests-support-focus-area-confirmed",
+				"communityrequests-support-focus-area-dialog-title",
+				"communityrequests-supported"
+			]
 		}
 	},
 	"config": {
@@ -430,6 +465,10 @@
 					"label": "communityrequests-status-archived"
 				}
 			}
+		},
+		"CommunityRequestsWishSupportTemplate": {
+			"description": "",
+			"value": "Template:Community Wishlist/Support"
 		}
 	},
 	"attributes": {

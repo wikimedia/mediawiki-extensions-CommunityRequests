@@ -112,5 +112,20 @@
 	"communityrequests-error-category": "Topluluk Dilek Listesi hataları olan sayfalar",
 	"communityrequests-error-category-desc": "Bu kategorideki sayfalar hata içeren Topluluk Dilek Listesi istekleri ya da odak alanlarıdır.",
 	"communityrequests-wish-category": "Topluluk Dilek Listesi/Dilekler",
-	"communityrequests-wish-category-desc": "Bu kategorideki sayfalar Topluluk Dilek Listesi dilekleridir."
+	"communityrequests-wish-category-desc": "Bu kategorideki sayfalar Topluluk Dilek Listesi dilekleridir.",
+	"apihelp-wishedit-summary": "Topluluk Dilek Listesinde bir dilek oluşturun ya da dileğinizi güncelleyin.",
+	"apihelp-wishedit-param-wish": "Oluşturulması ya da güncellenmesi istenen dilek. Bu, tam sayfa başlığı, ön ekli bir dilek kimliği (ör. \"D123\") ya da tam sayı olarak dilek kimliği olabilir.",
+	"apihelp-wishedit-param-status": "Dileğin durumu.",
+	"apihelp-wishedit-param-focusarea": "Dileğin ait olduğu odak alanı. Bu, tam sayfa başlığı, ön ekli bir odak alanı kimliği (ör. \"OA123\") ya da tam sayı olarak odak alanı kimliği olabilir.",
+	"apihelp-wishedit-param-title": "Dileğin başlığı.",
+	"apihelp-wishedit-param-description": "Dileğin tanımı. Vikimetin içerebilir.",
+	"apihelp-wishedit-param-type": "Dileğin türü.",
+	"apihelp-wishedit-param-projects": "Dileğin ilgili olduğu projeler.",
+	"apihelp-wishedit-param-otherproject": "Serbest biçimli proje adı, eğer dilek listelenen projelerden hiçbiriyle ilgili değilse.",
+	"apihelp-wishedit-param-audience": "Dileğin gerçekleşmesinden faydalanacak olan birincil kullanıcı grubu (ör. \"yeni kullanıcılar\" ya da \"yöneticiler\").",
+	"apihelp-wishedit-param-phabtasks": "Phabricator görev kimliklerinin listesi (ör. \"T1234\").",
+	"apihelp-wishedit-param-proposer": "Dileği öneren kullanıcı.",
+	"apihelp-wishedit-param-created": "Dileğin oluşturulduğu tarih ve saat.",
+	"apierror-wishedit-notawish": "Düzenlemeye çalıştığınız sayfa geçerli bir dilek değil.",
+	"tag-community-wishlist": "[[Special:MyLanguage/Community Wishlist|Topluluk Dilek Listesi]]"
 }

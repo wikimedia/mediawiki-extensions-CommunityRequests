@@ -4,6 +4,7 @@
 			"Volvox"
 		]
 	},
+	"communityrequests-wish-not-found": "De Wonsch [[$1]] gouf net fonnt oder e gouf net richteg gespäichert.",
 	"communityrequests-description": "Beschreift Äre Problem",
 	"communityrequests-wishtype-unknown-label": "Ech si mir net sécher oder ech weess et net",
 	"communityrequests-wishtype-unknown-label-short": "Onbekannt",
@@ -45,5 +46,22 @@
 	"communityrequests-focus-area-owners": "Besëtzer",
 	"communityrequests-focus-area-volunteers": "Membere vun der Communautéit",
 	"communityrequests-focus-area-no-votes": "Nach keng Ënnerstëtzer.",
-	"communityrequests-translation-errors": "Et ass e Feeler geschitt:"
+	"communityrequests-translation-errors": "Et ass e Feeler geschitt:",
+	"communityrequests-publish-wish-summary": "De Wonsch „$1“ verëffentlecht",
+	"communityrequests-save-wish-summary": "De Wonsch „$1“ aktualiséiert",
+	"apihelp-wishedit-summary": "E Wonsch an der Communautéitswonschlëscht uleeën oder aktualiséieren.",
+	"apihelp-wishedit-param-wish": "De Wonsch fir unzeleeën oder z'aktualiséieren. Dat kann entweeder de volle Säitentitel sinn, eng Wonsch-ID mat Prefix (z.&nbsp;B. „W123“) oder d'Wonsch-ID als ganz Zuel.",
+	"apihelp-wishedit-param-status": "De Status vum Wonsch.",
+	"apihelp-wishedit-param-focusarea": "De Fokusberäisch, zu deem de Wonsch gehéiert. Dat kann entweeder de volle Säitentitel sinn, eng Fokusberäich-ID mat Prefix (z.&nbsp;B. „FA123“) oder d'Fokusberäich-ID als ganz Zuel.",
+	"apihelp-wishedit-param-title": "Den Titel vum Wonsch.",
+	"apihelp-wishedit-param-description": "D'Beschreiwung vum Wonsch. Däerf Wikitext enthalen.",
+	"apihelp-wishedit-param-type": "Den Typ vum Wonsch.",
+	"apihelp-wishedit-param-projects": "Projeten, mat deenen de Wonsch zesummenhänkt.",
+	"apihelp-wishedit-param-otherproject": "Fräi formuléierte Projetsnumm, falls de Wonsch mat kengem vun den opgelëschte Projeten zesummenhänkt.",
+	"apihelp-wishedit-param-audience": "D'Haaptgrupp vu Benotzer, déi vum Wonsch profitéieren (z.&nbsp;B. „nei Benotzer“ oder „Administrateuren“).",
+	"apihelp-wishedit-param-phabtasks": "Eng Lëscht vun de Phabricator-Aufgaben-IDen (z.&nbsp;B. „T1234“).",
+	"apihelp-wishedit-param-proposer": "De Benotzer, deen de Wonsch virgeschloen huet.",
+	"apihelp-wishedit-param-created": "Den Datum an d'Auerzäit, wou de Wonsch ugeluecht gouf.",
+	"apierror-wishedit-notawish": "D'Säit, déi Dir ännere wëllt, ass kee gültege Wonsch.",
+	"tag-community-wishlist": "[[Special:MyLanguage/Community Wishlist|Communautéitswonschlëscht]]"
 }

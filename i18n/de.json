@@ -113,5 +113,20 @@
 	"communityrequests-error-category": "Seiten mit Community-Wunschliste-Fehlern",
 	"communityrequests-error-category-desc": "Seiten in dieser Kategorie sind Wünsche der Community-Wunschliste oder Schwerpunktbereiche, die Fehler enthalten.",
 	"communityrequests-wish-category": "Community-Wunschliste/Wünsche",
-	"communityrequests-wish-category-desc": "Seiten in dieser Kategorie sind Wünsche der Community-Wunschliste."
+	"communityrequests-wish-category-desc": "Seiten in dieser Kategorie sind Wünsche der Community-Wunschliste.",
+	"apihelp-wishedit-summary": "Erstellen oder aktualisieren eines Wunsches in der Community-Wunschliste.",
+	"apihelp-wishedit-param-wish": "Der zu erstellende oder zu aktualisierende Wunsch. Dies kann entweder der vollständige Seitentitel, eine vorangestellte Wunsch-ID (z. B. „W123“) oder die Wunsch-ID als Ganzzahl sein.",
+	"apihelp-wishedit-param-status": "Der Status des Wunsches.",
+	"apihelp-wishedit-param-focusarea": "Der Fokusbereich, zu dem der Wunsch gehört. Dies kann entweder der vollständige Seitentitel, eine vorangestellte Fokusbereichs-ID (z. B. „FA123“) oder die Fokusbereichs-ID als Ganzzahl sein.",
+	"apihelp-wishedit-param-title": "Der Titel des Wunsches.",
+	"apihelp-wishedit-param-description": "Die Beschreibung des Wunsches. Kann Wikitext enthalten.",
+	"apihelp-wishedit-param-type": "Die Art des Wunsches.",
+	"apihelp-wishedit-param-projects": "Projekte, auf die sich der Wunsch bezieht.",
+	"apihelp-wishedit-param-otherproject": "Frei formulierter Projektname, wenn der Wunsch nicht mit einem der aufgeführten Projekte in Zusammenhang steht.",
+	"apihelp-wishedit-param-audience": "Die primäre Benutzergruppe, die von dem Wunsch profitiert (z. B. „neue Benutzer“ oder „Administratoren“).",
+	"apihelp-wishedit-param-phabtasks": "Eine Liste von Phabricator-Aufgaben-IDs (z. B. „T1234“).",
+	"apihelp-wishedit-param-proposer": "Der Benutzer, der den Wunsch geäußert hat.",
+	"apihelp-wishedit-param-created": "Das Datum und die Uhrzeit, zu der der Wunsch erstellt wurde.",
+	"apierror-wishedit-notawish": "Die Seite, die du bearbeiten möchtest, ist kein gültiger Wunsch.",
+	"tag-community-wishlist": "[[Special:MyLanguage/Community Wishlist|Community-Wunschliste]]"
 }

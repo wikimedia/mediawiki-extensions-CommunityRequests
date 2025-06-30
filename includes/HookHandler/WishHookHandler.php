@@ -250,8 +250,8 @@ class WishHookHandler extends CommunityRequestsHooks implements
 	}
 
 	private function addTrackingCategory( Parser $parser, string $category ): void {
-		// @phan-suppress-next-line PhanTypeMismatchArgumentNullable
-		if ( $parser->getPage() && $this->wishStore->isWishPage( $parser->getPage() ) ) {
+		// @phan-suppress-next-line PhanTypeMismatchArgumentSuperType
+		if ( $this->config->isWishPage( $parser->getPage() ) ) {
 			$parser->addTrackingCategory( $category );
 		}
 	}
@@ -289,7 +289,7 @@ class WishHookHandler extends CommunityRequestsHooks implements
 
 	/** @inheritDoc */
 	public function onBeforePageDisplay( $out, $skin ): void {
-		if ( !$this->config->isEnabled() || !$this->wishStore->isWishPage( $out->getTitle() ) ) {
+		if ( !$this->config->isEnabled() || !$this->config->isWishPage( $out->getTitle() ) ) {
 			return;
 		}
 

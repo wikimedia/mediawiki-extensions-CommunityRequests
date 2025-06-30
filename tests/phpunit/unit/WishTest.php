@@ -6,7 +6,10 @@ namespace MediaWiki\Extension\CommunityRequests\Tests\Unit;
 use MediaWiki\Config\ServiceOptions;
 use MediaWiki\Extension\CommunityRequests\Wish\Wish;
 use MediaWiki\Extension\CommunityRequests\WishlistConfig;
+use MediaWiki\Tests\Unit\MockServiceDependenciesTrait;
 use MediaWiki\Tests\Unit\Permissions\MockAuthorityTrait;
+use MediaWiki\Title\TitleFormatter;
+use MediaWiki\Title\TitleParser;
 use MediaWiki\Title\TitleValue;
 use MediaWikiUnitTestCase;
 use MockTitleTrait;
@@ -18,6 +21,7 @@ use MockTitleTrait;
 class WishTest extends MediaWikiUnitTestCase {
 	use MockTitleTrait;
 	use MockAuthorityTrait;
+	use MockServiceDependenciesTrait;
 
 	protected WishlistConfig $config;
 
@@ -70,7 +74,11 @@ class WishTest extends MediaWikiUnitTestCase {
 				'archived' => [ 'id' => 6 ],
 			],
 		] );
-		$this->config = new WishlistConfig( $serviceOptions );
+		$this->config = new WishlistConfig(
+			$serviceOptions,
+			$this->newServiceInstance( TitleParser::class, [ 'localInterwikis' => [] ] ),
+			$this->newServiceInstance( TitleFormatter::class, [] )
+		);
 	}
 
 	/**

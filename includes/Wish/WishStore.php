@@ -239,7 +239,7 @@ class WishStore {
 	 * @return ?Wish null if the wish does not exist.
 	 */
 	public function getWish( PageIdentity $pageTitle, ?string $langCode = null ): ?Wish {
-		if ( !$this->isWishPage( $pageTitle ) ) {
+		if ( !$this->config->isWishPage( $pageTitle ) ) {
 			return null;
 		}
 
@@ -499,27 +499,6 @@ class WishStore {
 		}
 
 		$dbw->endAtomic( __METHOD__ );
-	}
-
-	/**
-	 * Check if the given PageIdentity could be a wish page based on its title.
-	 *
-	 * @param PageIdentity|string $identity
-	 * @return bool
-	 * @throws InvalidArgumentException
-	 */
-	public function isWishPage( $identity ): bool {
-		$pagePrefix = $this->titleParser->parseTitle( $this->config->getWishPagePrefix() );
-		if ( is_string( $identity ) ) {
-			$identity = $this->titleParser->parseTitle( $identity );
-		} elseif ( !$identity instanceof PageIdentity ) {
-			throw new InvalidArgumentException( 'Expected a PageIdentity or string.' );
-		}
-
-		return str_starts_with(
-			$this->titleFormatter->getPrefixedDBkey( $identity ),
-			$this->titleFormatter->getPrefixedDBkey( $pagePrefix )
-		);
 	}
 
 	/**

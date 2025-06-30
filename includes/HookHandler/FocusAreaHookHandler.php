@@ -79,7 +79,7 @@ class FocusAreaHookHandler extends CommunityRequestsHooks implements
 		$language = $page->getPageLanguage()->getCode();
 
 		// only save focus area data if being used on within the config prefix
-		if ( !$this->focusAreaStore->isFocusAreaPage( $page ) ) {
+		if ( !$this->config->isFocusAreaPage( $page ) ) {
 			$this->logger->debug( __METHOD__ . ": Not a focus area page." );
 			return;
 		}
@@ -110,7 +110,7 @@ class FocusAreaHookHandler extends CommunityRequestsHooks implements
 			return;
 		}
 
-		if ( !$this->focusAreaStore->isFocusAreaPage( $page ) ) {
+		if ( !$this->config->isFocusAreaPage( $page ) ) {
 			$this->logger->debug( __METHOD__ . ": Not a focus area page." );
 			return;
 		}

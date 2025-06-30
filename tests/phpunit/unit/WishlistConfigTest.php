@@ -6,7 +6,11 @@ namespace MediaWiki\Extension\CommunityRequests\Tests\Unit;
 use MediaWiki\Config\ConfigException;
 use MediaWiki\Config\ServiceOptions;
 use MediaWiki\Extension\CommunityRequests\WishlistConfig;
+use MediaWiki\Tests\Unit\MockServiceDependenciesTrait;
+use MediaWiki\Title\TitleFormatter;
+use MediaWiki\Title\TitleParser;
 use MediaWikiUnitTestCase;
+use MockTitleTrait;
 
 /**
  * @group CommunityRequests
@@ -14,57 +18,64 @@ use MediaWikiUnitTestCase;
  */
 class WishlistConfigTest extends MediaWikiUnitTestCase {
 
+	use MockServiceDependenciesTrait;
+	use MockTitleTrait;
+
 	protected WishlistConfig $config;
 
 	protected function setUp(): void {
 		parent::setUp();
-		$this->config = new WishlistConfig( new ServiceOptions( WishlistConfig::CONSTRUCTOR_OPTIONS, [
-			WishlistConfig::CONFIG_ENABLED => true,
-			WishlistConfig::CONFIG_HOMEPAGE => 'Community Wishlist',
-			WishlistConfig::CONFIG_WISH_CATEGORY => 'Category:Wishes',
-			WishlistConfig::CONFIG_WISH_PAGE_PREFIX => 'Community Wishlist/W',
-			WishlistConfig::CONFIG_FOCUS_AREA_PAGE_PREFIX => 'Community Wishlist/FA',
-			WishlistConfig::CONFIG_WISH_INDEX_PAGE => 'Community Wishlist/Wishes',
-			WishlistConfig::CONFIG_WISH_TEMPLATE => [
-				'page' => 'Template:Wish',
-				'params' => [ 'title' => 'Title', 'description' => 'Desc' ]
-			],
-			WishlistConfig::CONFIG_WISH_TYPES => [
-				'feature' => [
-					'id' => 0,
-					'label' => 'type-feature',
+		$this->config = new WishlistConfig(
+			new ServiceOptions( WishlistConfig::CONSTRUCTOR_OPTIONS, [
+				WishlistConfig::CONFIG_ENABLED => true,
+				WishlistConfig::CONFIG_HOMEPAGE => 'Community Wishlist',
+				WishlistConfig::CONFIG_WISH_CATEGORY => 'Category:Wishes',
+				WishlistConfig::CONFIG_WISH_PAGE_PREFIX => 'Community Wishlist/W',
+				WishlistConfig::CONFIG_FOCUS_AREA_PAGE_PREFIX => 'Community Wishlist/FA',
+				WishlistConfig::CONFIG_WISH_INDEX_PAGE => 'Community Wishlist/Wishes',
+				WishlistConfig::CONFIG_WISH_TEMPLATE => [
+					'page' => 'Template:Wish',
+					'params' => [ 'title' => 'Title', 'description' => 'Desc' ]
 				],
-				'bug' => [
-					'id' => 1,
-					'label' => 'type-bug',
+				WishlistConfig::CONFIG_WISH_TYPES => [
+					'feature' => [
+						'id' => 0,
+						'label' => 'type-feature',
+					],
+					'bug' => [
+						'id' => 1,
+						'label' => 'type-bug',
+					],
 				],
-			],
-			WishlistConfig::CONFIG_PROJECTS => [
-				'wikipedia' => [
-					'id' => 0,
-					'label' => 'project-wikipedia',
+				WishlistConfig::CONFIG_PROJECTS => [
+					'wikipedia' => [
+						'id' => 0,
+						'label' => 'project-wikipedia',
+					],
+					'wikisource' => [
+						'id' => 1,
+						'label' => 'project-wikisource',
+					],
 				],
-				'wikisource' => [
-					'id' => 1,
-					'label' => 'project-wikisource',
-				],
-			],
-			WishlistConfig::CONFIG_STATUSES => [
-				'open' => [
-					'id' => 0,
-					'label' => 'status-open',
-				],
-				'closed' => [
-					'id' => 1,
-					'label' => 'status-closed',
-				],
-				'unknown' => [
-					'id' => 2,
-					'label' => 'status-unknown',
-					'default' => true
+				WishlistConfig::CONFIG_STATUSES => [
+					'open' => [
+						'id' => 0,
+						'label' => 'status-open',
+					],
+					'closed' => [
+						'id' => 1,
+						'label' => 'status-closed',
+					],
+					'unknown' => [
+						'id' => 2,
+						'label' => 'status-unknown',
+						'default' => true
+					]
 				]
-			]
-		] ) );
+			] ),
+			$this->newServiceInstance( TitleParser::class, [ 'localInterwikis' => [] ] ),
+			$this->newServiceInstance( TitleFormatter::class, [] )
+		);
 	}
 
 	/**
@@ -84,7 +95,6 @@ class WishlistConfigTest extends MediaWikiUnitTestCase {
 		$this->assertSame( 'Community Wishlist', $this->config->getHomepage() );
 		$this->assertSame( 'Category:Wishes', $this->config->getWishCategory() );
 		$this->assertSame( 'Community Wishlist/W', $this->config->getWishPagePrefix() );
-		$this->assertSame( 'Community Wishlist/FA', $this->config->getFocusAreaPagePrefix() );
 		$this->assertSame( 'Community Wishlist/Wishes', $this->config->getWishIndexPage() );
 		$this->assertSame( 'Template:Wish', $this->config->getWishTemplate()[ 'page' ] );
 		$this->assertSame(
@@ -93,9 +103,33 @@ class WishlistConfigTest extends MediaWikiUnitTestCase {
 		);
 		$this->assertSame( 'Template:Wish', $this->config->getWishTemplatePage() );
 		$this->assertSame( [ 'title' => 'Title', 'description' => 'Desc' ], $this->config->getWishTemplateParams() );
-		$this->assertSame( [ 'open', 'closed', 'unknown' ], array_keys( $this->config->getStatuses() ) );
 		$this->assertSame( [ 'feature', 'bug' ], array_keys( $this->config->getWishTypes() ) );
+		$this->assertSame( 'Community Wishlist/FA', $this->config->getFocusAreaPagePrefix() );
+		$this->assertSame( [ 'open', 'closed', 'unknown' ], array_keys( $this->config->getStatuses() ) );
 		$this->assertSame( [ 'wikipedia', 'wikisource' ], array_keys( $this->config->getProjects() ) );
+	}
+
+	/**
+	 * @covers ::isWishOrFocusAreaPage
+	 * @covers ::isWishPage
+	 * @covers ::isFocusAreaPage
+	 */
+	public function testIsWishOrFocusAreaPage(): void {
+		$this->assertTrue( $this->config->isWishOrFocusAreaPage( $this->makeMockTitle( 'Community Wishlist/W123' ) ) );
+		$this->assertTrue( $this->config->isWishOrFocusAreaPage( $this->makeMockTitle( 'Community Wishlist/FA123' ) ) );
+
+		$this->assertFalse( $this->config->isWishPage( $this->makeMockTitle( 'W123' ) ) );
+		$this->assertTrue( $this->config->isWishPage( $this->makeMockTitle( 'Community Wishlist/W123' ) ) );
+		$this->assertTrue( $this->config->isWishPage( $this->makeMockTitle( 'Community Wishlist/W123/fr' ) ) );
+		$this->assertFalse( $this->config->isWishPage( $this->makeMockTitle( 'Community Wishlist/WWWWW123' ) ) );
+		$this->assertFalse( $this->config->isWishPage( $this->makeMockTitle( 'Community Wishlist/W123/b-o-g-u-s' ) ) );
+
+		$this->assertFalse( $this->config->isFocusAreaPage( $this->makeMockTitle( 'FA123' ) ) );
+		$this->assertTrue( $this->config->isFocusAreaPage( $this->makeMockTitle( 'Community Wishlist/FA123' ) ) );
+		$this->assertTrue( $this->config->isFocusAreaPage( $this->makeMockTitle( 'Community Wishlist/FA123/fr' ) ) );
+		$this->assertFalse(
+			$this->config->isFocusAreaPage( $this->makeMockTitle( 'Community Wishlist/FA123/unrelated-subpage' ) )
+		);
 	}
 
 	/**

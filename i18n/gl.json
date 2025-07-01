@@ -112,5 +112,20 @@
 	"communityrequests-error-category": "Páxinas con erros na lista de desexos da comunidade",
 	"communityrequests-error-category-desc": "As páxinas desta categoría son desexos ou áreas de enfoque da lista de desexos da comunidade que conteñen erros.",
 	"communityrequests-wish-category": "Lista de desexos da comunidade",
-	"communityrequests-wish-category-desc": "As páxinas desta categoría son desexos da lista de desexos da comunidade."
+	"communityrequests-wish-category-desc": "As páxinas desta categoría son desexos da lista de desexos da comunidade.",
+	"apihelp-wishedit-summary": "Crea ou actualiza un desexo na lista de desexos da comunitade.",
+	"apihelp-wishedit-param-wish": "O desexo a crear ou actualizar. Isto pode ser o título completo da páxina, un identificador de desexo co prefixo (por exemplo, \"W123\") ou o identificador do desexo como un enteiro.",
+	"apihelp-wishedit-param-status": "O estado do desexo.",
+	"apihelp-wishedit-param-focusarea": "A área de enfoque á que pertence o desexo. Isto pode ser o título completo da páxina, un identificador de área de enfoque co prefixo (por exemplo, \"FA123\") ou o identificador da área de enfoque como un enteiro.",
+	"apihelp-wishedit-param-title": "O título do desexo.",
+	"apihelp-wishedit-param-description": "A descrición do desexo. Pode conter texto wiki.",
+	"apihelp-wishedit-param-type": "O tipo de desexo.",
+	"apihelp-wishedit-param-projects": "Proxectos cos que está relacionado o desexo.",
+	"apihelp-wishedit-param-otherproject": "Nome do proxecto libre, se o desexo non está relacionado con ningún dos proxectos da lista.",
+	"apihelp-wishedit-param-audience": "O grupo primario de usuarios que se benefician do desexo (por exemplo, \"usuarios principiantes\" ou \"administración\").",
+	"apihelp-wishedit-param-phabtasks": "Unha lista de identificadores de tarefas de Phabricator (por exemplo, \"T1234\").",
+	"apihelp-wishedit-param-proposer": "O usuario que propuxo o desexo.",
+	"apihelp-wishedit-param-created": "A data e hora de creación do desexo.",
+	"apierror-wishedit-notawish": "A páxina que intentas editar non é un desexo válido.",
+	"tag-community-wishlist": "[[Special:MyLanguage/Community Wishlist|Lista de desexos da comunidade]]"
 }

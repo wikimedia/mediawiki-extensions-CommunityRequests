@@ -2,6 +2,7 @@
 	"@metadata": {
 		"authors": [
 			"Cookai1205",
+			"GuoPC",
 			"人间百态",
 			"沈澄心"
 		]
@@ -67,9 +68,9 @@
 	"communityrequests-wish-audience-heading": "受影响用户",
 	"communityrequests-wish-phabricator-heading": "Phabricator工单",
 	"communityrequests-wish-other-details-heading": "其他信息",
-	"communityrequests-wish-created": "创建",
-	"communityrequests-wish-updated": "更新",
-	"communityrequests-wish-proposer": "作者",
+	"communityrequests-wish-created": "创建时间：$1",
+	"communityrequests-wish-updated": "最后更新：$1",
+	"communityrequests-wish-proposer": "作者：$1",
 	"communityrequests-wishes-type-header": "类型",
 	"communityrequests-wishes-projects-header": "项目",
 	"communityrequests-wishes-date-header": "日期（UTC）",

@@ -116,6 +116,7 @@
 	"communityrequests-save-wish-summary": "Mise à jour du souhait « $1 »",
 	"communityrequests-error-category": "Pages avec des erreurs de liste de souhaits de la communauté",
 	"communityrequests-error-category-desc": "Les pages dans cette catégorie sont des souhaits de la liste de souhaits de la communauté ou des domaines d’action qui contiennent des erreurs.",
+	"communityrequests-wish-category": "Liste de souhaits de la communauté/Souhaits",
 	"communityrequests-wish-category-desc": "Les pages de cette catégorie sont des souhaits de la liste de souhaits de la communauté.",
 	"apihelp-wishedit-summary": "Créez ou mettez à jour un souhait dans la liste de souhaits de la communauté.",
 	"apihelp-wishedit-param-wish": "Le souhait à créer ou à mettre à jour. Il peut s'agir du titre complet de la page, d'un identifiant de souhait préfixé (par exemple « W123 ») ou d'un identifiant de souhait sous forme de nombre entier.",
@@ -130,5 +131,6 @@
 	"apihelp-wishedit-param-phabtasks": "Une liste d'ID de tâches Phabricator (par exemple « T1234 »).",
 	"apihelp-wishedit-param-proposer": "L'utilisateur qui a proposé le souhait.",
 	"apihelp-wishedit-param-created": "La date et l'heure à laquelle le souhait a été créé.",
-	"apierror-wishedit-notawish": "La page que vous essayez de modifier n'est pas un souhait valide."
+	"apierror-wishedit-notawish": "La page que vous essayez de modifier n'est pas un souhait valide.",
+	"tag-community-wishlist": "[[Special:MyLanguage/Community Wishlist|Liste de souhaits de la communauté]]"
 }

@@ -64,6 +64,10 @@ class CommunityRequestsHooksTest extends MediaWikiUnitTestCase {
 			WishlistConfig::FOCUS_AREA_TEMPLATE => [],
 			WishlistConfig::PROJECTS => [],
 			WishlistConfig::STATUSES => [],
+			WishlistConfig::SUPPORT_TEMPLATE => '',
+			WishlistConfig::VOTES_PAGE_SUFFIX => '',
+			WishlistConfig::WISH_VOTING_ENABLED => true,
+			WishlistConfig::FOCUS_AREA_VOTING_ENABLED => true,
 		] );
 		$config = new WishlistConfig(
 			$serviceOptions,
@@ -71,7 +75,7 @@ class CommunityRequestsHooksTest extends MediaWikiUnitTestCase {
 			$this->newServiceInstance( TitleFormatter::class, [] )
 		);
 		$text = '';
-		$wishStoreMock = $this->createMock( WishStore::class );
+		$wishStoreMock = $this->newServiceInstance( WishStore::class, [] );
 		$mainConfig = new HashConfig( [ MainConfigNames::PageLanguageUseDB => true ] );
 		( new CommunityRequestsHooks( $config, $wishStoreMock, $mainConfig ) )
 			->onParserAfterParse( $parser, $text, null );

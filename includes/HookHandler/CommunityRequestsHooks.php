@@ -11,7 +11,6 @@ use MediaWiki\Deferred\DeferrableUpdate;
 use MediaWiki\Deferred\MWCallableUpdate;
 use MediaWiki\Extension\CommunityRequests\AbstractWishlistEntity;
 use MediaWiki\Extension\CommunityRequests\AbstractWishlistStore;
-use MediaWiki\Extension\CommunityRequests\Wish\SpecialWishlistIntake;
 use MediaWiki\Extension\CommunityRequests\WishlistConfig;
 use MediaWiki\Extension\Translate\MessageLoading\MessageHandle;
 use MediaWiki\Extension\Translate\PageTranslation\TranslatablePage;
@@ -20,8 +19,10 @@ use MediaWiki\Hook\GetDoubleUnderscoreIDsHook;
 use MediaWiki\Hook\LoginFormValidErrorMessagesHook;
 use MediaWiki\Hook\ParserAfterParseHook;
 use MediaWiki\Hook\RecentChange_saveHook;
+use MediaWiki\Html\Html;
 use MediaWiki\Logging\ManualLogEntry;
 use MediaWiki\MainConfigNames;
+use MediaWiki\Output\Hook\BeforePageDisplayHook;
 use MediaWiki\Page\PageIdentity;
 use MediaWiki\Page\ProperPageIdentity;
 use MediaWiki\Parser\Parser;
@@ -45,15 +46,18 @@ class CommunityRequestsHooks implements
 	LoginFormValidErrorMessagesHook,
 	RecentChange_saveHook,
 	RevisionDataUpdatesHook,
-	ParserAfterParseHook
+	ParserAfterParseHook,
+	BeforePageDisplayHook
 {
 
 	public const WISHLIST_CHANGE_TAG = 'community-wishlist';
 	public const MAGIC_MACHINETRANSLATION = 'machinetranslation';
 	public const ERROR_TRACKING_CATEGORY = 'communityrequests-error-category';
+	public const SESSION_KEY = 'communityrequests-intake';
 	protected const EXT_DATA_KEY = 'CommunityRequests-ext-data';
 	protected bool $translateInstalled;
 	protected bool $pageLanguageUseDB;
+	private string $entityType;
 
 	public function __construct(
 		protected WishlistConfig $config,
@@ -62,6 +66,7 @@ class CommunityRequestsHooks implements
 		protected ?LoggerInterface $logger = null
 	) {
 		$this->pageLanguageUseDB = $mainConfig->get( MainConfigNames::PageLanguageUseDB );
+		$this->entityType = strtolower( substr( strrchr( $this->store->entityClass(), '\\' ), 1 ) );
 		if ( $this->logger === null ) {
 			$this->logger = new NullLogger();
 		}
@@ -119,7 +124,7 @@ class CommunityRequestsHooks implements
 	 */
 	public function onRecentChange_Save( $rc ) {
 		$request = RequestContext::getMain()->getRequest();
-		if ( $request->getSession()->get( SpecialWishlistIntake::SESSION_KEY ) ) {
+		if ( $request->getSession()->get( self::SESSION_KEY ) ) {
 			$rc->addTags( self::WISHLIST_CHANGE_TAG );
 		}
 	}
@@ -223,5 +228,110 @@ class CommunityRequestsHooks implements
 		if ( $entity ) {
 			$this->store->delete( $entity );
 		}
+	}
+
+	/** @inheritDoc */
+	public function onBeforePageDisplay( $out, $skin ): void {
+		if ( !$this->config->isEnabled() || !$this->config->isWishOrFocusAreaPage( $out->getTitle() ) ) {
+			return;
+		}
+
+		if ( $out->getRequest()->getSession()->get( self::SESSION_KEY ) ) {
+			$postEditVal = $out->getRequest()->getSession()->get( self::SESSION_KEY );
+			$out->getRequest()->getSession()->remove( self::SESSION_KEY );
+			$out->addJsConfigVars( 'intakePostEdit', $postEditVal );
+			$out->addModules( 'ext.communityrequests.intake' );
+		}
+
+		$out->addModuleStyles( 'ext.communityrequests.styles' );
+	}
+
+	// HTML helpers for rendering wish or focus area pages.
+
+	protected function getParagraph( string $field, string $text ): string {
+		return Html::element(
+			'p',
+			[ 'class' => "ext-communityrequests-{$this->entityType}--$field" ],
+			$text
+		);
+	}
+
+	protected function getParagraphRaw( string $field, string $html ): string {
+		return Html::rawElement(
+			'p',
+			[ 'class' => "ext-communityrequests-{$this->entityType}--$field" ],
+			$html
+		);
+	}
+
+	protected function getListItem( string $field, Parser $parser, string $param ): string {
+		return Html::rawElement(
+			'li',
+			[ 'class' => "ext-communityrequests-{$this->entityType}--$field" ],
+			// Messages used here include:
+			// * communityrequests-wish-created
+			// * communityrequests-wish-updated
+			// * communityrequests-wish-proposer
+			$parser->msg( "communityrequests-wish-$field", $param )->parse()
+		);
+	}
+
+	protected function getFakeButton( Parser $parser, Title $title, string $msgKey, string $icon ): string {
+		return Html::rawElement( 'a',
+			[
+				'href' => $title->getLocalURL(),
+				'class' => [
+					'cdx-button', 'cdx-button--fake-button', 'cdx-button--fake-button--enabled',
+					'cdx-button--action-default', 'cdx-button--weight-normal', 'cdx-button--enabled'
+				],
+				'role' => 'button',
+			],
+			Html::element( 'span',
+				[
+					'class' => [ 'cdx-button__icon', "ext-communityrequests-{$this->entityType}--$icon" ],
+					'aria-hidden' => 'true',
+				],
+			) . $parser->msg( $msgKey )->escaped()
+		);
+	}
+
+	protected function getVotingSection( Parser $parser, bool $votingEnabled, string $msgKey = 'wish' ): string {
+		$out = Html::element( 'div', [
+			'class' => 'mw-heading mw-heading2',
+		], $parser->msg( "communityrequests-$msgKey-voting" )->text() );
+
+		// TODO: Vote counting doesn't work yet (T388220)
+		$out .= $this->getParagraphRaw( 'voting-desc',
+			$parser->msg( "communityrequests-$msgKey-voting-info", 0, 0 )->parse() . ' ' . (
+				$votingEnabled ?
+					$parser->msg( "communityrequests-$msgKey-voting-info-open" )->escaped() :
+					$parser->msg( "communityrequests-$msgKey-voting-info-closed" )->escaped()
+			)
+		);
+
+		if ( $votingEnabled ) {
+			// TODO: add an cwaction=vote page for no-JS users, or something.
+			$out .= Html::element( 'button',
+				[
+					'class' => [
+						'cdx-button', 'cdx-button--action-progressive', 'cdx-button--weight-primary',
+						'ext-communityrequests-voting-btn'
+					],
+					'type' => 'button',
+				],
+				$parser->msg( "communityrequests-support-$msgKey" )->text()
+			);
+		}
+
+		// Transclude the /Votes subpage if it exists.
+		// @phan-suppress-next-line PhanTypeMismatchArgumentNullable
+		$voteSubpagePath = Title::newFromPageReference( $parser->getPage() )->getPrefixedDBkey() .
+			$this->config->getVotesPageSuffix();
+		$voteSubpageTitle = Title::newFromText( $voteSubpagePath );
+		if ( $voteSubpageTitle->exists() ) {
+			$out .= $parser->recursiveTagParse( '{{:' . $voteSubpagePath . '}}' );
+		}
+
+		return $out;
 	}
 }

@@ -383,12 +383,25 @@ class WishStore extends AbstractWishlistStore {
 	}
 
 	/** @inheritDoc */
-	protected function getTemplatePage(): string {
+	public function getWikitextFields(): array {
+		return [
+			Wish::TAG_ATTR_DESCRIPTION,
+			Wish::TAG_ATTR_AUDIENCE,
+		];
+	}
+
+	/** @inheritDoc */
+	public function getTemplatePage(): string {
 		return $this->config->getWishTemplatePage();
 	}
 
 	/** @inheritDoc */
-	protected function getPagePrefix(): string {
+	public function getTemplateParams(): array {
+		return $this->config->getWishTemplateParams();
+	}
+
+	/** @inheritDoc */
+	public function getPagePrefix(): string {
 		return $this->config->getWishPagePrefix();
 	}
 }

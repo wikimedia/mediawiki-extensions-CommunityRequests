@@ -6,49 +6,72 @@
 		@change="formChanged = true"
 	>
 		<status-section
-			v-if="isWishlistManager"
-			v-model:status="wish.status"
+			v-model:status="focusArea.status"
 			@update:status="formChanged = true"
 		></status-section>
 		<input
-			:value="wish.status"
+			:value="focusArea.status"
 			type="hidden"
 			name="status">
 		<description-section
-			v-model:title="wish.title"
-			v-model:description="wish.description"
+			v-model:title="focusArea.title"
+			v-model:description="focusArea.description"
 			:title-status="titleStatus"
 			:description-status="descriptionStatus"
 			@update:description="formChanged = true"
 			@update:pre-submit-promise="addPreSubmitFn"
 		></description-section>
-		<wish-type-section
-			:type="wish.type"
-			:status="typeStatus"
-			@update:type="$event => ( wish.type = $event )"
-		></wish-type-section>
-		<project-section
-			v-model:projects="wish.projects"
-			v-model:other-project="wish.otherProject"
-			:status="projectStatus"
-			:status-type="projectStatusType"
-		></project-section>
-		<audience-section
-			v-model:audience="wish.audience"
-			:status="audienceStatus"
-		></audience-section>
-		<phabricator-tasks
-			v-model:tasks="wish.phabTasks"
-		></phabricator-tasks>
+		<cdx-field
+			class="ext-communityrequests-intake__short-description"
+		>
+			<cdx-text-area
+				v-model="focusArea.shortDescription"
+				name="shortdescription"
+			></cdx-text-area>
+			<template #label>
+				{{ $i18n( 'communityrequests-focus-area-short-description' ).text() }}
+			</template>
+			<template #description>
+				<!-- eslint-disable-next-line vue/no-v-html -->
+				<span v-html="shortDescriptionHelpText"></span>
+			</template>
+		</cdx-field>
+		<cdx-field
+			class="ext-communityrequests-intake__owners"
+			:optional="true"
+		>
+			<cdx-text-area
+				v-model="focusArea.owners"
+				name="owners"
+				:placeholder="$i18n( 'communityrequests-focus-area-owners-placeholder' ).text()"
+			></cdx-text-area>
+			<template #label>
+				{{ $i18n( 'communityrequests-focus-area-owners' ).text() }}
+			</template>
+			<template #description>
+				{{ $i18n( 'communityrequests-focus-area-owners-description' ).text() }}
+			</template>
+		</cdx-field>
+		<cdx-field
+			class="ext-communityrequests-intake__volunteers"
+			:optional="true"
+		>
+			<cdx-text-area
+				v-model="focusArea.volunteers"
+				name="volunteers"
+				:placeholder="$i18n( 'communityrequests-focus-area-volunteers-placeholder' ).text()"
+			></cdx-text-area>
+			<template #label>
+				{{ $i18n( 'communityrequests-focus-area-volunteers' ).text() }}
+			</template>
+			<template #description>
+				{{ $i18n( 'communityrequests-focus-area-volunteers-description' ).text() }}
+			</template>
+		</cdx-field>
 		<input
 			:value="created"
 			type="hidden"
 			name="created"
-		>
-		<input
-			:value="proposer"
-			type="hidden"
-			name="proposer"
 		>
 		<input
 			:value="baseRevId"
@@ -63,11 +86,11 @@
 
 		<footer-section
 			:exists="exists"
+			:publish-msg="$i18n( 'publishpage' ).text()"
+			:save-msg="$i18n( 'savechanges' ).text()"
 			:return-to="returnTo"
 			:form-error="formError"
 			:form-error-msg="formErrorMsg"
-			:publish-msg="$i18n( 'communityrequests-publish' ).text()"
-			:save-msg="$i18n( 'communityrequests-save' ).text()"
 			@submit="handleSubmit"
 		></footer-section>
 	</cdx-field>
@@ -76,15 +99,15 @@
 <script>
 /* eslint-disable vue/no-unused-properties */
 const { computed, defineComponent, nextTick, onMounted, reactive, ref, ComputedRef, Ref } = require( 'vue' );
-const { CdxField } = require( '../codex.js' );
-const { CommunityRequestsHomepage, CommunityRequestsStatuses } = require( '../common/config.json' );
+const { CdxField, CdxTextArea } = require( '../codex.js' );
+const {
+	CommunityRequestsHomepage,
+	CommunityRequestsFocusAreaIndexPage,
+	CommunityRequestsStatuses
+} = require( '../common/config.json' );
 const Util = require( '../common/Util.js' );
 const StatusSection = require( './StatusSection.vue' );
-const WishTypeSection = require( './WishTypeSection.vue' );
-const ProjectSection = require( './ProjectSection.vue' );
 const DescriptionSection = require( './DescriptionSection.vue' );
-const AudienceSection = require( './AudienceSection.vue' );
-const PhabricatorTasks = require( './PhabricatorTasks.vue' );
 const FooterSection = require( './FooterSection.vue' );
 
 const api = new mw.Api();
@@ -97,61 +120,37 @@ const titleMaxChars = mw.config.get( 'intakeTitleMaxChars' );
 const preSubmitFns = [];
 
 module.exports = exports = defineComponent( {
-	name: 'SpecialWishlistIntake',
+	name: 'SpecialEditFocusArea',
 	components: {
-		AudienceSection,
 		CdxField,
-		DescriptionSection,
-		FooterSection,
-		PhabricatorTasks,
-		ProjectSection,
+		CdxTextArea,
 		StatusSection,
-		WishTypeSection
+		DescriptionSection,
+		FooterSection
 	},
 	props: {
-		audience: { type: String, default: '' },
 		baseLang: { type: String, default: mw.config.get( 'wgUserLanguage' ) },
 		baseRevId: { type: Number, default: 0 },
 		created: { type: String, default: '' },
 		description: { type: String, default: '' },
-		otherProject: { type: String, default: '' },
-		phabTasks: { type: Array, default: () => [] },
-		projects: { type: Array, default: () => [] },
-		proposer: { type: String, default: mw.config.get( 'wgUserName' ) },
+		shortDescription: { type: String, default: '' },
+		owners: { type: String, default: '' },
+		volunteers: { type: String, default: '' },
 		status: {
 			type: String,
 			default: defaultStatusKey || Object.keys( CommunityRequestsStatuses )[ 0 ]
 		},
-		title: { type: String, default: '' },
-		type: { type: String, default: '' }
+		title: { type: String, default: '' }
 	},
 	setup( props ) {
 		// Reactive properties
 
 		/**
-		 * Reactive object representing the wish being edited or created.
+		 * Reactive object representing the focus area being edited or created.
 		 *
 		 * @type {Ref<Object>}
 		 */
-		const wish = reactive( Object.assign( {}, props ) );
-		/**
-		 * Status of the type field.
-		 *
-		 * @type {Ref<string>}
-		 */
-		const typeStatus = ref( 'default' );
-		/**
-		 * Status of the project field.
-		 *
-		 * @type {Ref<string>}
-		 */
-		const projectStatus = ref( 'default' );
-		/**
-		 * The type of error status for the project field.
-		 *
-		 * @type {Ref<string>}
-		 */
-		const projectStatusType = ref( 'default' );
+		const focusArea = reactive( Object.assign( {}, props ) );
 		/**
 		 * Status of the title field.
 		 *
@@ -164,12 +163,6 @@ module.exports = exports = defineComponent( {
 		 * @type {Ref<string>}
 		 */
 		const descriptionStatus = ref( 'default' );
-		/**
-		 * Status of the audience field.
-		 *
-		 * @type {Ref<string>}
-		 */
-		const audienceStatus = ref( 'default' );
 		/**
 		 * Whether the form has been changed since it was loaded.
 		 *
@@ -201,6 +194,16 @@ module.exports = exports = defineComponent( {
 			'communityrequests-form-error',
 			`Talk:${ CommunityRequestsHomepage }`
 		).parse() );
+		/**
+		 * Help text for the short description field.
+		 *
+		 * @type {ComputedRef<string>}
+		 */
+		const shortDescriptionHelpText = computed( () => mw.message(
+			'communityrequests-focus-area-short-description-description',
+			CommunityRequestsFocusAreaIndexPage,
+			CommunityRequestsHomepage
+		).parse() );
 
 		// Non-reactive properties
 
@@ -222,8 +225,8 @@ module.exports = exports = defineComponent( {
 		 * @type {string}
 		 */
 		const returnTo = mw.util.getUrl( exists ?
-			Util.getWishPageTitleFromId( mw.config.get( 'intakeId' ) ) :
-			CommunityRequestsHomepage
+			Util.getFocusAreaPageTitleFromId( mw.config.get( 'intakeId' ) ) :
+			CommunityRequestsFocusAreaIndexPage
 		);
 		/**
 		 * The <form> element.
@@ -242,30 +245,13 @@ module.exports = exports = defineComponent( {
 		function validateForm() {
 			formError.value = false;
 			// Remove translate tags before checking title length.
-			const title = wish.title
+			const title = focusArea.title
 				.replace( /<\/?translate>/g, '' )
 				.replace( /<!--T:[0-9]+-->/g, '' );
 			titleStatus.value = ( title.length < 5 || title.length > titleMaxChars ) ? 'error' : 'default';
-			descriptionStatus.value = ( wish.description.length < 50 ) ? 'error' : 'default';
-			typeStatus.value = wish.type === '' ? 'error' : 'default';
-			// No project selected, other project is empty
-			if ( wish.projects.length === 0 && !wish.otherProject ) {
-				projectStatus.value = 'error';
-				projectStatusType.value = 'noSelection';
-				// Other project has content > 3, but no other project is entered
-			} else if ( wish.otherProject.length < 3 && wish.projects.length < 1 ) {
-				projectStatus.value = 'error';
-				projectStatusType.value = 'invalidOther';
-			} else {
-				projectStatus.value = 'default';
-				projectStatusType.value = 'default';
-			}
-			audienceStatus.value = ( wish.audience.length < 5 || wish.audience.length > 300 ) ? 'error' : 'default';
-			return typeStatus.value !== 'error' &&
-				titleStatus.value !== 'error' &&
-				descriptionStatus.value !== 'error' &&
-				audienceStatus.value !== 'error' &&
-				projectStatus.value !== 'error';
+			descriptionStatus.value = ( focusArea.description.length < 50 ) ? 'error' : 'default';
+			return titleStatus.value !== 'error' &&
+				descriptionStatus.value !== 'error';
 		}
 		/**
 		 * Add a function to be called before the form is submitted.
@@ -306,7 +292,7 @@ module.exports = exports = defineComponent( {
 		 */
 		function handleError( errObj, error ) {
 			Util.logError( 'edit failed', errObj );
-			formError.value = api.getErrorMessage( error ).html();
+			formErrorMsg.value = api.getErrorMessage( error ).html();
 			formDisabled.value = false;
 		}
 
@@ -321,17 +307,14 @@ module.exports = exports = defineComponent( {
 		} );
 
 		return {
-			wish,
-			typeStatus,
-			projectStatus,
-			projectStatusType,
+			focusArea,
 			titleStatus,
 			descriptionStatus,
-			audienceStatus,
 			formChanged,
 			formDisabled,
 			formError,
 			formErrorMsg,
+			shortDescriptionHelpText,
 			isWishlistManager,
 			exists,
 			returnTo,
@@ -344,30 +327,4 @@ module.exports = exports = defineComponent( {
 
 <style lang="less">
 @import 'mediawiki.skin.variables.less';
-
-// Force full-width.
-.mw-htmlform-codex {
-	max-width: unset;
-}
-
-.ext-communityrequests-intake {
-	.ext-communityrequests-intake__fieldset .cdx-field:not( .ext-communityrequests-intake__status ),
-	&__footer,
-	&__form-error {
-		margin-top: @spacing-200;
-	}
-
-	&__cancel {
-		margin-left: @spacing-75;
-
-		[ dir='rtl' ] & {
-			margin-left: 0;
-			margin-right: @spacing-75;
-		}
-	}
-
-	.cdx-label:not( .cdx-radio__label, .cdx-checkbox__label ) .cdx-label__label__text {
-		font-weight: @font-weight-bold;
-	}
-}
 </style>

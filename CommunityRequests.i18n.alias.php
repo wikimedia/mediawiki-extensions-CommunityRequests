@@ -10,4 +10,5 @@ $specialPageAliases = [];
 
 $specialPageAliases['en'] = [
 	'WishlistIntake' => [ 'WishlistIntake' ],
+	'EditFocusArea' => [ 'EditFocusArea' ],
 ];

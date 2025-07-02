@@ -388,17 +388,13 @@ abstract class AbstractWishlistStore {
 	/**
 	 * Parse wish data from the template invocation of a wishlist entity page.
 	 *
-	 * @param AbstractWishlistEntity $entity The wish or focus area to get data from.
-	 * @return ?array<string, string> The parsed data from the wikitext, or null if not found.
+	 * @param int $pageId The page ID of the wish or focus area.
+	 * @return ?array The parsed data from the wikitext.
 	 *   This includes a 'baseRevId' key with the latest revision ID of the wish page.
 	 * @throws RuntimeException If the content type is not WikitextContent.
 	 */
-	public function getDataFromWikitext( AbstractWishlistEntity $entity ): ?array {
-		if ( !$entity->getPage()->getId() ) {
-			return null;
-		}
-		$revRecord = $this->revisionStore
-			->getRevisionByPageId( $entity->getPage()->getId() );
+	public function getDataFromWikitext( int $pageId ): ?array {
+		$revRecord = $this->revisionStore->getRevisionByPageId( $pageId );
 		$content = $revRecord->getMainContentRaw();
 		if ( !$content instanceof WikitextContent ) {
 			throw new RuntimeException( 'Invalid content type for AbstractWishlistEntity' );
@@ -417,16 +413,31 @@ abstract class AbstractWishlistStore {
 	}
 
 	/**
+	 * Get the fields that only exist in the wikitext template invocation,
+	 * and should be extracted with ::getDataFromWikitext().
+	 *
+	 * @return string[]
+	 */
+	abstract public function getWikitextFields(): array;
+
+	/**
 	 * Get the template page name for the wishlist entity.
 	 *
 	 * @return string
 	 */
-	abstract protected function getTemplatePage(): string;
+	abstract public function getTemplatePage(): string;
+
+	/**
+	 * Get the parameters for the template invocation of the wishlist entity.
+	 *
+	 * @return array
+	 */
+	abstract public function getTemplateParams(): array;
 
 	/**
 	 * Get the prefix for the wishlist entity page.
 	 *
 	 * @return string
 	 */
-	abstract protected function getPagePrefix(): string;
+	abstract public function getPagePrefix(): string;
 }

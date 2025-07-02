@@ -5,15 +5,20 @@
 		:messages="titleMessage"
 	>
 		<cdx-text-input
-			name="wishtitle"
+			:name="( isWish ? 'wishtitle' : 'focusareatitle' )"
 			:model-value="title"
 			@input="$emit( 'update:title', $event.target.value )"
 		>
 		</cdx-text-input>
 		<template #label>
-			{{ $i18n( 'communityrequests-title' ).text() }}
+			<span v-if="isWish">
+				{{ $i18n( 'communityrequests-title' ).text() }}
+			</span>
+			<span v-else>
+				{{ $i18n( 'communityrequests-focus-area-title' ).text() }}
+			</span>
 		</template>
-		<template #description>
+		<template v-if="isWish" #description>
 			{{ $i18n( 'communityrequests-title-description' ).text() }}
 		</template>
 	</cdx-field>
@@ -36,10 +41,20 @@
 			</textarea>
 		</div>
 		<template #label>
-			{{ $i18n( 'communityrequests-description' ).text() }}
+			<span v-if="isWish">
+				{{ $i18n( 'communityrequests-description' ).text() }}
+			</span>
+			<span v-else>
+				{{ $i18n( 'communityrequests-focus-area-description' ).text() }}
+			</span>
 		</template>
 		<template #description>
-			{{ $i18n( 'communityrequests-description-description' ).text() }}
+			<span v-if="isWish">
+				{{ $i18n( 'communityrequests-description-description' ).text() }}
+			</span>
+			<span v-else>
+				{{ $i18n( 'communityrequests-focus-area-description-description' ).text() }}
+			</span>
 		</template>
 	</cdx-field>
 </template>
@@ -48,6 +63,7 @@
 const { computed, defineComponent, onMounted, ComputedRef } = require( 'vue' );
 const { CdxField, CdxTextInput } = require( '../codex.js' );
 const DescriptionField = require( './DescriptionField.js' );
+const Util = require( '../common/Util.js' );
 const { CommunityRequestsHomepage } = require( '../common/config.json' );
 const titleMaxChars = mw.config.get( 'intakeTitleMaxChars' );
 
@@ -92,6 +108,12 @@ module.exports = exports = defineComponent( {
 				{ error: mw.msg( 'communityrequests-description-error', 50 ) } :
 				{}
 		);
+		/**
+		 * Whether we're editing a wish (as opposed to a focus area).
+		 *
+		 * @type {boolean}
+		 */
+		const isWish = Util.isNewWish() || Util.isWishEdit();
 
 		onMounted( async () => {
 			if ( descriptionField ) {
@@ -112,7 +134,8 @@ module.exports = exports = defineComponent( {
 
 		return {
 			titleMessage,
-			descriptionMessage
+			descriptionMessage,
+			isWish
 		};
 	}
 } );

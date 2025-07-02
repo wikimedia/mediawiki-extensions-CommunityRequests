@@ -8,10 +8,6 @@
 		<template #label>
 			{{ $i18n( 'communityrequests-status' ) }}
 		</template>
-		<template #description>
-			<!-- TODO: i18n, WikimediaMessages override -->
-			Only staff can change the status of a wish.
-		</template>
 	</cdx-field>
 </template>
 

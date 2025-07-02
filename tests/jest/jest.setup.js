@@ -52,8 +52,14 @@ vueConfig.global.directives = {
  */
 function mockMwConfigGet( config = {} ) {
 	const mockConfig = Object.assign( {
+		wgUserGroups: [],
+		wgUserLanguage: 'en',
 		wgUserName: 'ExampleUser',
-		wgCanonicalSpecialPageName: false
+		wgCanonicalSpecialPageName: false,
+		intakeId: null,
+		intakeTitleMaxChars: 255,
+		intakeWishlistManager: false,
+		intakeVeModules: []
 	}, config );
 
 	mw.config.get = jest.fn().mockImplementation( ( key ) => {

@@ -33,6 +33,10 @@ class WishlistConfig {
 	public const FOCUS_AREA_TEMPLATE = 'CommunityRequestsFocusAreaTemplate';
 	public const PROJECTS = 'CommunityRequestsProjects';
 	public const STATUSES = 'CommunityRequestsStatuses';
+	public const SUPPORT_TEMPLATE = 'CommunityRequestsSupportTemplate';
+	public const VOTES_PAGE_SUFFIX = 'CommunityRequestsVotesPageSuffix';
+	public const WISH_VOTING_ENABLED = 'CommunityRequestsWishVotingEnabled';
+	public const FOCUS_AREA_VOTING_ENABLED = 'CommunityRequestsFocusAreaVotingEnabled';
 	public const CONSTRUCTOR_OPTIONS = [
 		self::ENABLED,
 		self::HOMEPAGE,
@@ -46,7 +50,11 @@ class WishlistConfig {
 		self::FOCUS_AREA_INDEX_PAGE,
 		self::FOCUS_AREA_TEMPLATE,
 		self::PROJECTS,
-		self::STATUSES
+		self::STATUSES,
+		self::SUPPORT_TEMPLATE,
+		self::VOTES_PAGE_SUFFIX,
+		self::WISH_VOTING_ENABLED,
+		self::FOCUS_AREA_VOTING_ENABLED,
 	];
 
 	private bool $enabled;
@@ -62,6 +70,10 @@ class WishlistConfig {
 	private array $wishTypes;
 	private array $projects;
 	private array $statuses;
+	private string $supportTemplate;
+	private string $votesPageSuffix;
+	private bool $wishVotingEnabled;
+	private bool $focusAreaVotingEnabled;
 
 	public function __construct(
 		ServiceOptions $config,
@@ -81,6 +93,10 @@ class WishlistConfig {
 		$this->focusAreaTemplate = $config->get( self::FOCUS_AREA_TEMPLATE );
 		$this->projects = $config->get( self::PROJECTS );
 		$this->statuses = $config->get( self::STATUSES );
+		$this->supportTemplate = $config->get( self::SUPPORT_TEMPLATE );
+		$this->votesPageSuffix = $config->get( self::VOTES_PAGE_SUFFIX );
+		$this->wishVotingEnabled = $config->get( self::WISH_VOTING_ENABLED );
+		$this->focusAreaVotingEnabled = $config->get( self::FOCUS_AREA_VOTING_ENABLED );
 	}
 
 	// Getters
@@ -153,7 +169,56 @@ class WishlistConfig {
 		return $this->statuses;
 	}
 
+	public function getSupportTemplate(): string {
+		return $this->supportTemplate;
+	}
+
+	public function getVotesPageSuffix(): string {
+		return $this->votesPageSuffix;
+	}
+
+	public function isWishVotingEnabled(): bool {
+		return $this->wishVotingEnabled;
+	}
+
+	public function isFocusAreaVotingEnabled(): bool {
+		return $this->focusAreaVotingEnabled;
+	}
+
 	// Helpers
+
+	/**
+	 * Get the list of statuses that are eligible for voting.
+	 *
+	 * @return array Full config of statuses, keyed by wikitext value.
+	 */
+	public function getStatusesEligibleForVoting(): array {
+		return array_filter(
+			$this->statuses,
+			static fn ( $status ) => $status[ 'voting' ] ?? true
+		);
+	}
+
+	/**
+	 * Get a list of status IDs that are eligible for voting.
+	 *
+	 * @return int[]
+	 */
+	public function getStatusIdsEligibleForVoting(): array {
+		return array_values( array_map(
+			static fn ( $status ) => (int)$status[ 'id' ],
+			$this->getStatusesEligibleForVoting()
+		) );
+	}
+
+	/**
+	 * Get a list of wikitext values for statuses that are eligible for voting.
+	 *
+	 * @return string[]
+	 */
+	public function getStatusWikitextValsEligibleForVoting(): array {
+		return array_keys( $this->getStatusesEligibleForVoting() );
+	}
 
 	/**
 	 * Check if the given PageReference could be a wish page based on its title.

@@ -1,0 +1,77 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="en">
+  <siteinfo>
+    <sitename>Meta</sitename>
+    <dbname>metawiki</dbname>
+    <base>https://meta.wikimedia.org/wiki/Special:MyLanguage/Main_Page</base>
+    <generator>MediaWiki 1.45.0-alpha</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">Meta</namespace>
+      <namespace key="5" case="first-letter">Meta talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+      <namespace key="200" case="first-letter">Grants</namespace>
+      <namespace key="201" case="first-letter">Grants talk</namespace>
+      <namespace key="202" case="first-letter">Research</namespace>
+      <namespace key="203" case="first-letter">Research talk</namespace>
+      <namespace key="206" case="first-letter">Iberocoop</namespace>
+      <namespace key="207" case="first-letter">Iberocoop talk</namespace>
+      <namespace key="470" case="first-letter">Schema</namespace>
+      <namespace key="471" case="first-letter">Schema talk</namespace>
+      <namespace key="482" case="first-letter">Config</namespace>
+      <namespace key="483" case="first-letter">Config talk</namespace>
+      <namespace key="710" case="first-letter">TimedText</namespace>
+      <namespace key="711" case="first-letter">TimedText talk</namespace>
+      <namespace key="828" case="first-letter">Module</namespace>
+      <namespace key="829" case="first-letter">Module talk</namespace>
+      <namespace key="866" case="first-letter">CNBanner</namespace>
+      <namespace key="867" case="first-letter">CNBanner talk</namespace>
+      <namespace key="1198" case="first-letter">Translations</namespace>
+      <namespace key="1199" case="first-letter">Translations talk</namespace>
+      <namespace key="1728" case="first-letter">Event</namespace>
+      <namespace key="1729" case="first-letter">Event talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Template:Community Wishlist/Focus area</title>
+    <ns>10</ns>
+    <id>2349</id>
+    <revision>
+      <id>3780</id>
+      <timestamp>2025-07-02T08:34:27Z</timestamp>
+      <contributor>
+        <username>Maintenance script</username>
+        <id>1</id>
+      </contributor>
+      <comment>Creating focus area template</comment>
+      <origin>3780</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="507" sha1="caf3szglu43zscnp2x7g286vgt9nd9s" xml:space="preserve">{{#tag:focus-area
+| {{{description|&lt;noinclude&gt;This is a test focus area description.&lt;/noinclude&gt;}}}
+| status = {{{status|&lt;noinclude&gt;in-progress&lt;/noinclude&gt;}}}
+| title = {{{title|&lt;noinclude&gt;Focus area title&lt;/noinclude&gt;}}}
+| shortdescription = {{{short_description|&lt;noinclude&gt;This is a test short description.&lt;/noinclude&gt;}}}
+| owners = {{{owners|}}}
+| volunteers = {{{volunteers|}}}
+| created = {{{created|&lt;noinclude&gt;2025-06-16T23:07:56Z&lt;/noinclude&gt;}}}
+| baselang = {{{baselang|&lt;noinclude&gt;en&lt;/noinclude&gt;}}}
+}}</text>
+      <sha1>caf3szglu43zscnp2x7g286vgt9nd9s</sha1>
+    </revision>
+  </page>
+</mediawiki>

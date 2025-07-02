@@ -1,10 +1,9 @@
 <?php
-declare( strict_types = 1 );
+declare( strict_types=1 );
 
-namespace MediaWiki\Extension\CommunityRequests\Wish;
+namespace MediaWiki\Extension\CommunityRequests\FocusArea;
 
 use MediaWiki\Api\ApiMain;
-use MediaWiki\Api\ApiUsageException;
 use MediaWiki\Context\DerivativeContext;
 use MediaWiki\Extension\CommunityRequests\AbstractWishlistSpecialPage;
 use MediaWiki\Extension\CommunityRequests\HookHandler\CommunityRequestsHooks;
@@ -15,54 +14,32 @@ use MediaWiki\Request\DerivativeRequest;
 use MediaWiki\Status\Status;
 use MediaWiki\Title\Title;
 use MediaWiki\Title\TitleParser;
-use MediaWiki\User\UserFactory;
 
-/**
- * JS-only Special page for submitting a new community request.
- */
-class SpecialWishlistIntake extends AbstractWishlistSpecialPage {
+class SpecialEditFocusArea extends AbstractWishlistSpecialPage {
 
 	/** @inheritDoc */
 	public function __construct(
 		protected WishlistConfig $config,
-		protected WishStore $wishStore,
-		protected TitleParser $titleParser,
-		protected UserFactory $userFactory
+		protected FocusAreaStore $focusAreaStore,
+		protected TitleParser $titleParser
 	) {
 		parent::__construct(
 			$config,
-			$wishStore,
+			$focusAreaStore,
 			$titleParser,
-			'WishlistIntake',
+			'EditFocusArea',
+			'manage-wishlist'
 		);
 	}
 
 	/** @inheritDoc */
 	public function getDescription(): Message {
-		return $this->msg( 'communityrequests-wishlistintake' );
+		return $this->msg( 'communityrequests-editfocusarea' );
 	}
 
 	/** @inheritDoc */
-	public function execute( $entityId ): bool {
-		parent::execute( (string)$entityId );
-
-		$this->getOutput()->setSubtitle( $this->msg( 'communityrequests-form-subtitle' ) );
-
-		$this->getOutput()->addJsConfigVars( [
-			'intakeAudienceMaxChars' => WishStore::AUDIENCE_MAX_CHARS,
-		] );
-
+	public function isRestricted(): bool {
 		return true;
-	}
-
-	/** @inheritDoc */
-	protected function showErrorPage(): void {
-		$this->getOutput()->showErrorPage(
-			'communityrequests-wishlistintake',
-			'communityrequests-wish-not-found',
-			[ $this->pageTitle->getPrefixedText() ],
-			$this->config->getHomepage()
-		);
 	}
 
 	/** @inheritDoc */
@@ -72,37 +49,39 @@ class SpecialWishlistIntake extends AbstractWishlistSpecialPage {
 	}
 
 	/** @inheritDoc */
+	protected function showErrorPage(): void {
+		$this->getOutput()->showErrorPage(
+			'communityrequests-editfocusarea',
+			'communityrequests-focus-area-not-found',
+			[ $this->pageTitle->getPrefixedText() ],
+			$this->config->getHomepage()
+		);
+	}
+
+	/** @inheritDoc */
 	public function onSubmit( array $data, ?HTMLForm $form = null ) {
 		// Grab data directly from POST request. We should use the given $data once ::getFormFields() is implemented.
 		$data = $form->getRequest()->getPostValues();
-		$data[ 'title' ] = $data[ 'wishtitle' ];
-
-		// API wants pipe-separated arrays, not CSV.
-		$data[ 'projects' ] = str_replace( ',', '|', $data[ 'projects' ] );
-		$data[ 'phabtasks' ] = str_replace( ',', '|', $data[ 'phabtasks' ] );
+		$data[ 'title' ] = $data[ 'focusareatitle' ];
 
 		$context = new DerivativeContext( $this->getContext() );
 		$context->setRequest( new DerivativeRequest( $this->getRequest(), [
-			'action' => 'wishedit',
-			'wish' => $this->entityId,
+			'action' => 'focusareaedit',
+			'focusarea' => $this->entityId,
 			'token' => $data[ 'wpEditToken' ],
 			...$data,
 		] ) );
 		$api = new ApiMain( $context, true );
-		try {
-			$api->execute();
-		} catch ( ApiUsageException $e ) {
-			return $e->getStatusValue();
-		}
+		$api->execute();
 
-		$this->pageTitle = Title::newFromText( $api->getResult()->getResultData()[ 'wishedit' ][ 'wish' ] );
+		$this->pageTitle = Title::newFromText( $api->getResult()->getResultData()[ 'focusareaedit' ][ 'focusarea' ] );
 
 		// Set session variables to show post-edit messages.
 		$this->getRequest()->getSession()->set(
 			CommunityRequestsHooks::SESSION_KEY,
 			$this->entityId === null ? self::SESSION_VALUE_CREATED : self::SESSION_VALUE_UPDATED
 		);
-		// Redirect to wish page.
+		// Redirect to focus area page.
 		$this->getOutput()->redirect( $this->pageTitle->getFullURL() );
 
 		return Status::newGood( $api->getResult() );

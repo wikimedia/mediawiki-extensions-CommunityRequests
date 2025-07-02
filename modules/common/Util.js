@@ -1,4 +1,7 @@
-const { CommunityRequestsWishPagePrefix } = require( './config.json' );
+const {
+	CommunityRequestsWishPagePrefix,
+	CommunityRequestsFocusAreaPagePrefix
+} = require( './config.json' );
 
 /**
  * Utility functions for Community Requests.
@@ -51,7 +54,7 @@ class Util {
 	 */
 	static isWishEdit() {
 		return mw.config.get( 'wgCanonicalSpecialPageName' ) === 'WishlistIntake' &&
-			!!mw.config.get( 'intakeWishId' );
+			!!mw.config.get( 'intakeId' );
 	}
 
 	/**
@@ -61,6 +64,57 @@ class Util {
 	 */
 	static isManualWishEdit() {
 		return this.isWishPage() &&
+			(
+				mw.config.get( 'wgAction' ) === 'edit' ||
+				document.documentElement.classList.contains( 've-active' )
+			);
+	}
+
+	/**
+	 * Is the current page a focus area page?
+	 *
+	 * @return {boolean}
+	 */
+	static isFocusAreaPage() {
+		return this.getPageName().startsWith( CommunityRequestsFocusAreaPagePrefix );
+	}
+
+	/**
+	 * Are we currently creating a new focus area?
+	 *
+	 * @return {boolean}
+	 */
+	static isNewFocusArea() {
+		return mw.config.get( 'wgCanonicalSpecialPageName' ) === 'EditFocusArea' &&
+			!this.isFocusAreaEdit();
+	}
+
+	/**
+	 * Are we currently viewing (but not editing) a focus area page?
+	 *
+	 * @return {boolean}
+	 */
+	static isFocusAreaView() {
+		return this.isFocusAreaPage() && mw.config.get( 'wgAction' ) === 'view';
+	}
+
+	/**
+	 * Are we currently editing a focus area page?
+	 *
+	 * @return {boolean}
+	 */
+	static isFocusAreaEdit() {
+		return mw.config.get( 'wgCanonicalSpecialPageName' ) === 'EditFocusArea' &&
+			!!mw.config.get( 'intakeId' );
+	}
+
+	/**
+	 * Are we currently manually editing a focus area page?
+	 *
+	 * @return {boolean}
+	 */
+	static isManualFocusAreaEdit() {
+		return this.isFocusAreaPage() &&
 			(
 				mw.config.get( 'wgAction' ) === 'edit' ||
 				document.documentElement.classList.contains( 've-active' )
@@ -101,13 +155,22 @@ class Util {
 	}
 
 	/**
-	 * Is the user WMF staff?
+	 * Get the full page title of the focus area from the ID.
 	 *
-	 * @todo Replace with proper user right
+	 * @param {number} id
+	 * @return {string}
+	 */
+	static getFocusAreaPageTitleFromId( id ) {
+		return CommunityRequestsFocusAreaPagePrefix + id;
+	}
+
+	/**
+	 * Does the user have the manage-wishlist user right?
+	 *
 	 * @return {boolean}
 	 */
-	static isStaff() {
-		return /\s\(WMF\)$|-WMF$/.test( mw.config.get( 'wgUserName' ) );
+	static isWishlistManager() {
+		return mw.config.get( 'intakeWishlistManager' );
 	}
 
 	/**

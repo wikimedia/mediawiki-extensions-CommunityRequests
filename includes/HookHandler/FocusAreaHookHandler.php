@@ -65,8 +65,11 @@ class FocusAreaHookHandler extends CommunityRequestsHooks implements
 		$missingFields = array_diff( $requiredFields, array_keys( $args ) );
 		if ( $missingFields ) {
 			$this->addTrackingCategory( $parser, self::ERROR_TRACKING_CATEGORY );
-			return Html::element( 'span', [ 'class' => 'error' ],
-				'Missing required field(s): ' . implode( ', ', $missingFields ) );
+			return Html::element(
+				'span',
+				[ 'class' => 'error' ],
+				'Missing required field(s): ' . implode( ', ', $missingFields )
+			);
 		}
 
 		// These need to be set here because we need them for display in ::renderFocusAreaInternal().
@@ -80,8 +83,124 @@ class FocusAreaHookHandler extends CommunityRequestsHooks implements
 	}
 
 	private function renderFocusAreaInternal( string $input, array $args, Parser $parser ): string {
-		// TODO: Implement!
-		return '';
+		$language = $parser->getContentLanguage();
+		$out = '';
+
+		// Title and status.
+		$statusLabel = $this->config->getStatusLabelFromWikitextVal( $args[ FocusArea::TAG_ATTR_STATUS ] ?? '' );
+		if ( $statusLabel === null ) {
+			$statusLabel = 'communityrequests-status-unknown';
+			$this->addTrackingCategory( $parser, self::ERROR_TRACKING_CATEGORY );
+		}
+		$statusChipHtml = Html::rawElement(
+			'span',
+			[ 'class' => 'cdx-info-chip ext-communityrequests-focus-area--status' ],
+			Html::element(
+				'span',
+				[ 'class' => 'cdx-info-chip__text' ],
+				$parser->msg( $statusLabel )->text()
+			)
+		);
+		$titleSpan = Html::element(
+			'span',
+			[ 'class' => 'ext-communityrequests-focus-area--title' ],
+			$args[ FocusArea::TAG_ATTR_TITLE ]
+		);
+		$out .= Html::rawElement(
+			'div',
+			[ 'class' => 'mw-heading mw-heading2 ext-communityrequests-focus-area--heading' ],
+			$titleSpan . $statusChipHtml
+		);
+
+		// Description.
+		$out .= Html::element(
+			'div',
+			[ 'class' => 'mw-heading mw-heading3' ],
+			$parser->msg( 'communityrequests-wish-description-heading' )->text()
+		);
+		$out .= $this->getParagraphRaw( 'description', $parser->recursiveTagParse( $input ) );
+
+		// Other details.
+		$out .= Html::element(
+			'div',
+			[ 'class' => 'mw-heading mw-heading3' ],
+			$parser->msg( 'communityrequests-wish-other-details-heading' )->text()
+		);
+		$user = $parser->getUserIdentity();
+		$out .= Html::rawElement(
+			'ul',
+			[],
+			$this->getListItem(
+				'created',
+				$parser,
+				$language->userTimeAndDate( $args[ FocusArea::TAG_ATTR_CREATED ], $user )
+			) .
+			$this->getListItem(
+				'updated',
+				$parser,
+				$language->userTimeAndDate( $args[ 'updated' ], $user )
+			)
+		);
+
+		// Wishes.
+		$out .= Html::element(
+			'div',
+			[ 'class' => 'mw-heading mw-heading2' ],
+			$parser->msg( 'communityrequests-focus-area-wishes-list' )->text()
+		);
+		$out .= $this->getParagraph(
+			'wishes-desc',
+			$parser->msg( 'communityrequests-focus-area-wishes-description-1' )->text() . ' ' .
+				$parser->msg( 'communityrequests-focus-area-wishes-description-2' )->text() . ' ' .
+				$parser->msg( 'communityrequests-focus-area-wishes-description-3' )->text()
+		);
+
+		// TODO: implement wishes table somewhere else and re-use it here.
+
+		// Teams and affiliates section.
+		if ( isset( $args[ FocusArea::TAG_ATTR_OWNERS ] ) || isset( $args[ FocusArea::TAG_ATTR_VOLUNTEERS ] ) ) {
+			$out .= Html::element(
+				'div',
+				[ 'class' => 'mw-heading mw-heading2' ],
+				$parser->msg( 'communityrequests-focus-area-stakeholders' )->text()
+			);
+
+			if ( isset( $args[ FocusArea::TAG_ATTR_OWNERS ] ) ) {
+				$out .= Html::rawElement(
+					'div',
+					[ 'class' => 'mw-heading mw-heading3' ],
+					$parser->msg( 'communityrequests-focus-area-owners' )->escaped()
+				);
+				$out .= $this->getParagraphRaw(
+					'owners',
+					$parser->recursiveTagParse( trim( $args[ FocusArea::TAG_ATTR_OWNERS ] ) )
+				);
+			}
+
+			if ( isset( $args[ FocusArea::TAG_ATTR_VOLUNTEERS ] ) ) {
+				$out .= Html::rawElement(
+					'div',
+					[ 'class' => 'mw-heading mw-heading3' ],
+					$parser->msg( 'communityrequests-focus-area-volunteers' )->escaped()
+				);
+				$out .= $this->getParagraphRaw(
+					'volunteers',
+					$parser->recursiveTagParse( trim( $args[ FocusArea::TAG_ATTR_VOLUNTEERS ] ) )
+				);
+			}
+		}
+
+		// Voting section.
+		$out .= $this->getVotingSection(
+			$parser,
+			$this->config->isFocusAreaVotingEnabled() && in_array(
+				trim( $args[ FocusArea::TAG_ATTR_STATUS ] ?? '' ),
+				$this->config->getStatusWikitextValsEligibleForVoting()
+			),
+			'focus-area'
+		);
+
+		return Html::rawElement( 'div', [ 'class' => 'ext-communityrequests-focus-area' ], $out );
 	}
 
 	/** @inheritDoc */

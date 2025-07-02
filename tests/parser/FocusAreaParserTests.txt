@@ -1,0 +1,64 @@
+!! options
+version=2
+!! end
+
+!! test
+Empty focus area parser tag
+!! wikitext
+<focus-area/>
+!! html
+!! end
+
+!! test
+Example focus area
+!! options
+title=Community_Wishlist/Focus_areas/FA1
+!! wikitext
+<focus-area
+	title="Test focus area"
+	status="submitted"
+	shortdescription="This is a test focus area."
+	owners="[[Community Tech]]"
+	volunteers="[[User:Admin|Admin]]"
+	created="2023-10-01T12:00:00Z"
+	baselang="en"
+>This is a [[test]] {{focus area}}.</focus-area>
+!! html
+<div class="ext-communityrequests-focus-area"><div class="mw-heading mw-heading2 ext-communityrequests-focus-area--heading"><span class="ext-communityrequests-focus-area--title">Test focus area</span><span class="cdx-info-chip ext-communityrequests-focus-area--status"><span class="cdx-info-chip__text">Submitted</span></span></div><div class="mw-heading mw-heading3">Description</div><p class="ext-communityrequests-focusarea--description">This is a <a href="/index.php?title=Test&amp;action=edit&amp;redlink=1" class="new" title="Test (page does not exist)">test</a> <a href="/index.php?title=Template:Focus_area&amp;action=edit&amp;redlink=1" class="new" title="Template:Focus area (page does not exist)">Template:Focus area</a>.</p><div class="mw-heading mw-heading3">Other details</div><ul><li class="ext-communityrequests-focusarea--created">Created: 12:00, 1 October 2023</li><li class="ext-communityrequests-focusarea--updated">Last updated: 00:02, 1 January 1970</li></ul><div class="mw-heading mw-heading2">Wishes in this focus area</div><p class="ext-communityrequests-focusarea--wishes-desc">Below is a list of wishes that have informed this focus area. More wishes may be added to this table over time. Voting for the focus area is not a guarantee that each wish will be explicitly delivered; rather, the wishes are suggestive of the problem at large. Once a focus area is adopted, the respective team will work alongside communities to prioritize and deliver on the most impactful solutions.</p><div class="mw-heading mw-heading2">Teams and affiliates</div><div class="mw-heading mw-heading3">Owners</div><p class="ext-communityrequests-focusarea--owners"><a href="/index.php?title=Community_Tech&amp;action=edit&amp;redlink=1" class="new" title="Community Tech (page does not exist)">Community Tech</a></p><div class="mw-heading mw-heading3">Community members</div><p class="ext-communityrequests-focusarea--volunteers"><a href="/index.php?title=User:Admin&amp;action=edit&amp;redlink=1" class="new" title="User:Admin (page does not exist)">Admin</a></p><div class="mw-heading mw-heading2">Voting</div><p class="ext-communityrequests-focusarea--voting-desc">This focus area currently has <b>0 supporters</b>. Voting for this focus area is open until it is completed. Show your support using the button below.</p><button class="cdx-button cdx-button--action-progressive cdx-button--weight-primary ext-communityrequests-voting-btn" type="button">Support focus area</button></div>
+!! end
+
+!! test
+Example focus area with draft status
+!! options
+title=Community_Wishlist/Focus_areas/FA2
+!! wikitext
+<focus-area
+	title="Test Wish with Voting Disabled"
+	status="draft"
+	shortdescription="This is a test focus area."
+	owners="[[Main Page|Community Tech]]"
+	volunteers="[[User:Admin|Admin]]"
+	created="2023-10-01T12:00:00Z"
+	baselang="en"
+>This is a focus area without voting.</focus-area>
+!! html
+<div class="ext-communityrequests-focus-area"><div class="mw-heading mw-heading2 ext-communityrequests-focus-area--heading"><span class="ext-communityrequests-focus-area--title">Test Wish with Voting Disabled</span><span class="cdx-info-chip ext-communityrequests-focus-area--status"><span class="cdx-info-chip__text">Draft</span></span></div><div class="mw-heading mw-heading3">Description</div><p class="ext-communityrequests-focusarea--description">This is a focus area without voting.</p><div class="mw-heading mw-heading3">Other details</div><ul><li class="ext-communityrequests-focusarea--created">Created: 12:00, 1 October 2023</li><li class="ext-communityrequests-focusarea--updated">Last updated: 00:02, 1 January 1970</li></ul><div class="mw-heading mw-heading2">Wishes in this focus area</div><p class="ext-communityrequests-focusarea--wishes-desc">Below is a list of wishes that have informed this focus area. More wishes may be added to this table over time. Voting for the focus area is not a guarantee that each wish will be explicitly delivered; rather, the wishes are suggestive of the problem at large. Once a focus area is adopted, the respective team will work alongside communities to prioritize and deliver on the most impactful solutions.</p><div class="mw-heading mw-heading2">Teams and affiliates</div><div class="mw-heading mw-heading3">Owners</div><p class="ext-communityrequests-focusarea--owners"><a href="/index.php?title=Main_Page&amp;action=edit&amp;redlink=1" class="new" title="Main Page (page does not exist)">Community Tech</a></p><div class="mw-heading mw-heading3">Community members</div><p class="ext-communityrequests-focusarea--volunteers"><a href="/index.php?title=User:Admin&amp;action=edit&amp;redlink=1" class="new" title="User:Admin (page does not exist)">Admin</a></p><div class="mw-heading mw-heading2">Voting</div><p class="ext-communityrequests-focusarea--voting-desc">This focus area currently has <b>0 supporters</b>. Voting for this focus area is currently closed.</p></div>
+!! end
+
+!! test
+Missing created timestamp
+!! options
+title=Community_Wishlist/Focus_areas/FA3
+!! wikitext
+<focus-area
+	title="Focus area without created timestamp"
+	status="submitted"
+	shortdescription="This is a test focus area."
+	owners="[[Main Page|Community Tech]]"
+	volunteers="[[User:Admin|Admin]]"
+	baselang="en"
+>This is a wish without a proposer or created timestamp.</focus-area>
+!! html
+<p><span class="error">Missing required field(s): created</span>
+</p>
+!! end

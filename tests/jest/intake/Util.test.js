@@ -9,7 +9,7 @@ const testCases = [
 			wgPageName: 'Special:WishlistIntake',
 			wgCanonicalSpecialPageName: 'WishlistIntake',
 			paramValue: null,
-			intakeWishId: null
+			intakeId: null
 		},
 		expectations: {
 			isNewWish: true,
@@ -42,7 +42,7 @@ const testCases = [
 			wgPageName: 'Special:WishlistIntake/W123',
 			wgCanonicalSpecialPageName: 'WishlistIntake',
 			paramValue: '1',
-			intakeWishId: 123
+			intakeId: 123
 		},
 		expectations: {
 			isNewWish: false,

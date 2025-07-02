@@ -32,7 +32,7 @@ class ViewWishPage extends Page {
 	}
 
 	get phabTasks() {
-		return $( '.ext-communityrequests-wish--phab-tasks' );
+		return $( '.ext-communityrequests-wish--phabtasks' );
 	}
 
 	get proposer() {

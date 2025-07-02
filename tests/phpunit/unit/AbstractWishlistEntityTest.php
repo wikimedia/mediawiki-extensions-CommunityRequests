@@ -85,6 +85,10 @@ class AbstractWishlistEntityTest extends MediaWikiUnitTestCase {
 				'submitted' => [ 'id' => 1 ],
 				'archived' => [ 'id' => 6 ],
 			],
+			WishlistConfig::SUPPORT_TEMPLATE => '',
+			WishlistConfig::VOTES_PAGE_SUFFIX => '',
+			WishlistConfig::WISH_VOTING_ENABLED => true,
+			WishlistConfig::FOCUS_AREA_VOTING_ENABLED => true,
 		] );
 		$this->config = new WishlistConfig(
 			$serviceOptions,

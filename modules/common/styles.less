@@ -3,8 +3,9 @@
 // Styles here are render-blocking.
 // Only add styles that are essential for the initial rendering of the page.
 
-// Viewing a wish
-.ext-communityrequests-wish {
+// Viewing a wish or focus area.
+.ext-communityrequests-wish,
+.ext-communityrequests-focus-area {
 	&--edit {
 		.cdx-mixin-css-icon( @cdx-icon-edit, @param-is-button-icon: true );
 	}
@@ -18,7 +19,8 @@
 		justify-content: space-between;
 	}
 
-	.ext-communityrequests-wish--status {
+	.ext-communityrequests-wish--status,
+	.ext-communityrequests-focus-area--status {
 		font-family: @font-family-base;
 		font-size: @font-size-small;
 	}

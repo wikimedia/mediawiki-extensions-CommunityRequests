@@ -1,5 +1,8 @@
 <template>
-	<cdx-field class="ext-communityrequests-intake__tasks">
+	<cdx-field
+		class="ext-communityrequests-intake__tasks"
+		:optional="true"
+	>
 		<cdx-chip-input
 			v-model:input-chips="taskList"
 			:chip-aria-description="$i18n( 'communityrequests-phabricator-chip-desc' ).text()"

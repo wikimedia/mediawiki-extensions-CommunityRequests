@@ -215,7 +215,7 @@ END;
 			$this->getTestUser()->getUser()
 		);
 
-		$actual = $this->store->getDataFromWikitext( $wish );
+		$actual = $this->store->getDataFromWikitext( $wish->getPage()->getId() );
 		$this->assertSame(
 			"<translate>[[<tvar name=\"1\">Foo</tvar>|Bar]] {{baz}}</translate>\n\n== Section ==\nExample text",
 			$actual['description']

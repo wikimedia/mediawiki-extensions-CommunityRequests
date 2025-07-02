@@ -71,13 +71,18 @@ class WishlistConfigTest extends MediaWikiUnitTestCase {
 					'closed' => [
 						'id' => 1,
 						'label' => 'status-closed',
+						'voting' => false,
 					],
 					'unknown' => [
 						'id' => 2,
 						'label' => 'status-unknown',
 						'default' => true
 					]
-				]
+				],
+				WishlistConfig::SUPPORT_TEMPLATE => 'Template:Community Wishlist/Support',
+				WishlistConfig::VOTES_PAGE_SUFFIX => '/Votes',
+				WishlistConfig::WISH_VOTING_ENABLED => true,
+				WishlistConfig::FOCUS_AREA_VOTING_ENABLED => true,
 			] ),
 			$this->newServiceInstance( TitleParser::class, [ 'localInterwikis' => [] ] ),
 			$this->newServiceInstance( TitleFormatter::class, [] )
@@ -129,6 +134,42 @@ class WishlistConfigTest extends MediaWikiUnitTestCase {
 		$this->assertSame( [ 'open', 'closed', 'unknown' ], array_keys( $this->config->getStatuses() ) );
 		$this->assertSame( [ 'open', 'closed', 'unknown' ], array_keys( $this->config->getStatuses() ) );
 		$this->assertSame( [ 'wikipedia', 'wikisource' ], array_keys( $this->config->getProjects() ) );
+		$this->assertSame( 'Template:Community Wishlist/Support', $this->config->getSupportTemplate() );
+		$this->assertSame( '/Votes', $this->config->getVotesPageSuffix() );
+		$this->assertTrue( $this->config->isWishVotingEnabled() );
+		$this->assertTrue( $this->config->isFocusAreaVotingEnabled() );
+	}
+
+	/**
+	 * @covers ::getStatusesEligibleForVoting
+	 */
+	public function testGetStatusesEligibleForVoting(): void {
+		$expected = [
+			'open' => [
+				'id' => 0,
+				'label' => 'status-open',
+			],
+			'unknown' => [
+				'id' => 2,
+				'label' => 'status-unknown',
+				'default' => true
+			]
+		];
+		$this->assertSame( $expected, $this->config->getStatusesEligibleForVoting() );
+	}
+
+	/**
+	 * @covers ::getStatusIdsEligibleForVoting
+	 */
+	public function testGetStatusIdsEligibleForVoting(): void {
+		$this->assertSame( [ 0, 2 ], $this->config->getStatusIdsEligibleForVoting() );
+	}
+
+	/**
+	 * @covers ::getStatusWikitextValsEligibleForVoting
+	 */
+	public function testGetStatusWikitextValsEligibleForVoting(): void {
+		$this->assertSame( [ 'open', 'unknown' ], $this->config->getStatusWikitextValsEligibleForVoting() );
 	}
 
 	/**

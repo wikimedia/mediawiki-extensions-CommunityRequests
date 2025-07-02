@@ -32,7 +32,7 @@ describe( 'SpecialWishlistIntake', () => {
 	let wrapper;
 
 	beforeEach( () => {
-		mockMwConfigGet( { intakeVeModules: [] } );
+		mockMwConfigGet( { wgCanonicalSpecialPageName: 'WishlistIntake' } );
 		document.body.innerHTML = '';
 	} );
 
@@ -48,7 +48,6 @@ describe( 'SpecialWishlistIntake', () => {
 		// Status should be hidden for non-staff users
 		expect( wrapper.find( '.ext-communityrequests-intake__status' ).exists() )
 			.toBe( false );
-
 		expect( formData.get( 'audience' ) ).toBe( 'Test Audience' );
 		expect( formData.get( 'baserevid' ) ).toBe( '12345' );
 		expect( formData.get( 'baselang' ) ).toBe( 'en' );
@@ -64,7 +63,7 @@ describe( 'SpecialWishlistIntake', () => {
 	} );
 
 	it( 'should show the status field for staff', () => {
-		mockMwConfigGet( { wgUserName: 'ExampleUser-WMF' } );
+		mockMwConfigGet( { intakeWishlistManager: true } );
 		wrapper = getWrapper( defaultProps );
 		expect( wrapper.find( '.ext-communityrequests-intake__status' ).exists() )
 			.toBe( true );

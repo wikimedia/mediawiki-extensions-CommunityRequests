@@ -21,6 +21,7 @@ class SchemaHooks implements LoadExtensionSchemaUpdatesHook {
 
 	public const CACHE_VERSION = 2;
 	public const UPDATER_ROW_WISH_TEMPLATE = 'create communityrequests-wish-template' . self::CACHE_VERSION;
+	public const UPDATER_ROW_FOCUS_AREA_TEMPLATE = 'create communityrequests-focus-area-template' . self::CACHE_VERSION;
 
 	public function __construct(
 		private WikiImporterFactory $importerFactory
@@ -69,11 +70,12 @@ class SchemaHooks implements LoadExtensionSchemaUpdatesHook {
 			"$sqlDir/$engine/tables-generated.sql" );
 
 		$updater->addExtensionUpdate( [ [ $this, 'addWishTemplate' ] ] );
+		$updater->addExtensionUpdate( [ [ $this, 'addFocusAreaTemplate' ] ] );
 	}
 
 	/**
 	 * Updater callback to add the wish template to the wiki after schema updates.
-	 * This does NOT used the $wgCommunityRequestsWishTemplate since (a) extension
+	 * This does NOT use the $wgCommunityRequestsWishTemplate since (a) extension
 	 * configuration is not available at this point, and (b) the XML file itself
 	 * hardcodes the template name.
 	 *
@@ -81,12 +83,37 @@ class SchemaHooks implements LoadExtensionSchemaUpdatesHook {
 	 * @return bool Returns true on success, false on failure.
 	 */
 	public function addWishTemplate( DatabaseUpdater $updater ): bool {
-		$templateTitle = Title::newFromText( 'Template:Community Wishlist/Wish' );
-		if ( $templateTitle->exists() || $updater->updateRowExists( self::UPDATER_ROW_WISH_TEMPLATE ) ) {
+		return $this->addTemplate(
+			$updater,
+			'Wish',
+			self::UPDATER_ROW_WISH_TEMPLATE
+		);
+	}
+
+	/**
+	 * Updater callback to add the focus area template to the wiki after schema updates.
+	 * Similar to the wish template, this does not go by configuration.
+	 * Sysadmins who want to use a different template should move the page after its created,
+	 * and update the configuration accordingly.
+	 *
+	 * @param DatabaseUpdater $updater
+	 * @return bool Returns true on success, false on failure.
+	 */
+	public function addFocusAreaTemplate( DatabaseUpdater $updater ): bool {
+		return $this->addTemplate(
+			$updater,
+			'FocusArea',
+			self::UPDATER_ROW_FOCUS_AREA_TEMPLATE
+		);
+	}
+
+	private function addTemplate( DatabaseUpdater $updater, string $entityName, string $updaterRow ): bool {
+		$templateTitle = Title::newFromText( "Template:Community Wishlist/$entityName" );
+		if ( $templateTitle->exists() || $updater->updateRowExists( $updaterRow ) ) {
 			return false;
 		}
 
-		$xmlFilePath = __DIR__ . '/../../templates/CommunityRequestsWishTemplate.xml';
+		$xmlFilePath = __DIR__ . "/../../templates/CommunityRequests{$entityName}Template.xml";
 		$source = ImportStreamSource::newFromFile( $xmlFilePath );
 		if ( !$source->isOK() ) {
 			throw new RuntimeException( 'Failed to create ImportStreamSource from file: ' . $xmlFilePath );
@@ -100,7 +127,7 @@ class SchemaHooks implements LoadExtensionSchemaUpdatesHook {
 		$importer->setUsernamePrefix( 'm', true );
 
 		$importer->doImport();
-		$updater->insertUpdateRow( self::UPDATER_ROW_WISH_TEMPLATE );
+		$updater->insertUpdateRow( $updaterRow );
 
 		return true;
 	}

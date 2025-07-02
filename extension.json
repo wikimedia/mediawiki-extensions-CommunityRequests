@@ -54,7 +54,7 @@
 		"LoginFormValidErrorMessages": "main",
 		"ParserAfterParse": "main",
 		"RecentChange_save": "main",
-		"BeforePageDisplay": "wish",
+		"BeforePageDisplay": "main",
 		"ParserFirstCallInit": [ "wish", "focusarea" ],
 		"LinksUpdateComplete": [ "wish", "focusarea" ],
 		"PageDeleteComplete": "main",
@@ -99,10 +99,16 @@
 			"services": [
 				"CommunityRequests.WishlistConfig",
 				"CommunityRequests.WishStore",
-				"WikiPageFactory",
 				"TitleParser",
-				"HookContainer",
 				"UserFactory"
+			]
+		},
+		"EditFocusArea": {
+			"class": "MediaWiki\\Extension\\CommunityRequests\\FocusArea\\SpecialEditFocusArea",
+			"services": [
+				"CommunityRequests.WishlistConfig",
+				"CommunityRequests.FocusAreaStore",
+				"TitleParser"
 			]
 		}
 	},
@@ -123,6 +129,20 @@
 				"CommunityRequests.FocusAreaStore",
 				"TitleParser"
 			]
+		}
+	},
+	"AvailableRights": [
+		"manage-wishlist"
+	],
+	"GroupPermissions": {
+		"sysop": {
+			"manage-wishlist": true
+		},
+		"staff": {
+			"manage-wishlist": true
+		},
+		"community-wishlist-manager": {
+			"manage-wishlist": true
 		}
 	},
 	"ResourceFileModulePaths": {
@@ -154,14 +174,17 @@
 				"CdxMessage",
 				"CdxRadio",
 				"CdxSelect",
+				"CdxTextArea",
 				"CdxTextInput"
 			],
 			"packageFiles": [
 				"intake/init.js",
 				"intake/SpecialWishlistIntake.vue",
+				"intake/SpecialEditFocusArea.vue",
 				"intake/AudienceSection.vue",
 				"intake/DescriptionField.js",
 				"intake/DescriptionSection.vue",
+				"intake/FooterSection.vue",
 				"intake/PhabricatorTasks.vue",
 				"intake/ProjectSection.vue",
 				"intake/StatusSection.vue",
@@ -180,6 +203,7 @@
 					"name": "common/config.json",
 					"config": [
 						"CommunityRequestsEnable",
+						"CommunityRequestsFocusAreaIndexPage",
 						"CommunityRequestsHomepage",
 						"CommunityRequestsWishCategory",
 						"CommunityRequestsWishPagePrefix",
@@ -204,9 +228,20 @@
 			],
 			"messages": [
 				"communityrequests-title",
+				"communityrequests-focus-area-title",
 				"communityrequests-title-description",
 				"communityrequests-description",
+				"communityrequests-focus-area-description",
 				"communityrequests-description-description",
+				"communityrequests-focus-area-description-description",
+				"communityrequests-focus-area-short-description",
+				"communityrequests-focus-area-short-description-description",
+				"communityrequests-focus-area-owners",
+				"communityrequests-focus-area-owners-description",
+				"communityrequests-focus-area-owners-placeholder",
+				"communityrequests-focus-area-volunteers",
+				"communityrequests-focus-area-volunteers-description",
+				"communityrequests-focus-area-volunteers-placeholder",
 				"communityrequests-wishtype-label",
 				"communityrequests-wishtype-description",
 				"communityrequests-project-intro",
@@ -221,8 +256,10 @@
 				"communityrequests-phabricator-label",
 				"communityrequests-phabricator-desc",
 				"wikimedia-copyrightwarning",
-				"communityrequests-save",
 				"communityrequests-publish",
+				"communityrequests-save",
+				"publishpage",
+				"savechanges",
 				"cancel",
 				"communityrequests-wish-loading-error",
 				"communityrequests-form-error",
@@ -273,7 +310,7 @@
 				{
 					"name": "common/config.json",
 					"config": [
-						"CommunityRequestsWishSupportTemplate"
+						"CommunityRequestsSupportTemplate"
 					]
 				},
 				{
@@ -388,7 +425,6 @@
 					"owners": "owners",
 					"volunteers": "volunteers",
 					"created": "created",
-					"updated": "updated",
 					"baselang": "baselang"
 				}
 			}
@@ -481,7 +517,8 @@
 			"value": {
 				"draft": {
 					"id": 0,
-					"label": "communityrequests-status-draft"
+					"label": "communityrequests-status-draft",
+					"voting": false
 				},
 				"submitted": {
 					"id": 1,
@@ -498,7 +535,8 @@
 				},
 				"delivered": {
 					"id": 4,
-					"label": "communityrequests-status-delivered"
+					"label": "communityrequests-status-delivered",
+					"voting": false
 				},
 				"blocked": {
 					"id": 5,
@@ -506,13 +544,26 @@
 				},
 				"archived": {
 					"id": 6,
-					"label": "communityrequests-status-archived"
+					"label": "communityrequests-status-archived",
+					"voting": false
 				}
 			}
 		},
-		"CommunityRequestsWishSupportTemplate": {
+		"CommunityRequestsSupportTemplate": {
 			"description": "",
 			"value": "Template:Community Wishlist/Support"
+		},
+		"CommunityRequestsVotesPageSuffix": {
+			"description": "The subpage where votes of wishes and focus areas are stored. The value is appended to the wish or focus area page title.",
+			"value": "/Votes"
+		},
+		"CommunityRequestsWishVotingEnabled": {
+			"description": "Whether to enable voting for wishes.",
+			"value": true
+		},
+		"CommunityRequestsFocusAreaVotingEnabled": {
+			"description": "Whether to enable voting for focus areas.",
+			"value": true
 		}
 	},
 	"attributes": {

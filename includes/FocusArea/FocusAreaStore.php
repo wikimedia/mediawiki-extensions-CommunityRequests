@@ -188,12 +188,26 @@ class FocusAreaStore extends AbstractWishlistStore {
 	}
 
 	/** @inheritDoc */
-	protected function getTemplatePage(): string {
+	public function getWikitextFields(): array {
+		return [
+			FocusArea::TAG_ATTR_DESCRIPTION,
+			FocusArea::TAG_ATTR_OWNERS,
+			FocusArea::TAG_ATTR_VOLUNTEERS,
+		];
+	}
+
+	/** @inheritDoc */
+	public function getTemplatePage(): string {
 		return $this->config->getFocusAreaTemplatePage();
 	}
 
 	/** @inheritDoc */
-	protected function getPagePrefix(): string {
+	public function getTemplateParams(): array {
+		return $this->config->getFocusAreaTemplateParams();
+	}
+
+	/** @inheritDoc */
+	public function getPagePrefix(): string {
 		return $this->config->getFocusAreaPagePrefix();
 	}
 }

@@ -48,7 +48,7 @@ const { defineComponent, computed, onBeforeMount, ref } = require( 'vue' );
 const { CdxButton, CdxDialog, CdxField, CdxIcon, CdxTextArea, CdxMessage } = require( '@wikimedia/codex' );
 const { cdxIconCheck } = require( './icons.json' );
 const Util = require( '../common/Util.js' );
-const { CommunityRequestsWishSupportTemplate } = require( '../common/config.json' );
+const { CommunityRequestsSupportTemplate } = require( '../common/config.json' );
 
 module.exports = exports = defineComponent( {
 	name: 'VotingButton',
@@ -148,7 +148,7 @@ module.exports = exports = defineComponent( {
 				return Promise.resolve();
 			}
 			// @todo Construct support template wikitext somewhere else.
-			const newVote = '{{' + CommunityRequestsWishSupportTemplate +
+			const newVote = '{{' + CommunityRequestsSupportTemplate +
 				' |username=' + mw.config.get( 'wgUserName' ) +
 				' |timestamp=' + ( new Date() ).toISOString() +
 				' |comment=' + comment.replace( '|', '{{!}}' ) +

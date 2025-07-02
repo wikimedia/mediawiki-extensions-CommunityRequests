@@ -3,13 +3,20 @@
 const Util = require( '../common/Util.js' );
 const { CommunityRequestsWishIndexPage } = require( '../common/config.json' );
 
+let form;
+
 if ( Util.isNewWish() || Util.isWishEdit() ) {
-	const IntakeForm = require( './SpecialWishlistIntake.vue' );
-	const Vue = require( 'vue' );
-	const vm = Vue.createMwApp( IntakeForm, mw.config.get( 'intakeWishData' ) );
-	vm.mount( '.ext-communityrequests-intake' );
+	form = require( './SpecialWishlistIntake.vue' );
+} else if ( Util.isNewFocusArea() || Util.isFocusAreaEdit() ) {
+	form = require( './SpecialEditFocusArea.vue' );
 } else if ( Util.isWishView() && mw.config.get( 'intakePostEdit' ) ) {
 	showPostEditBanner();
+}
+
+if ( form ) {
+	const Vue = require( 'vue' );
+	const vm = Vue.createMwApp( form, mw.config.get( 'intakeData' ) );
+	vm.mount( '.ext-communityrequests-intake' );
 }
 
 /**

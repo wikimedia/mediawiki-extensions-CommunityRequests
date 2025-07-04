@@ -1,4 +1,5 @@
 <?php
+declare( strict_types = 1 );
 
 namespace MediaWiki\Extension\CommunityRequests\FocusArea;
 
@@ -10,6 +11,7 @@ class FocusAreaTemplateRenderer extends AbstractTemplateRenderer {
 
 	protected string $entityType = 'focus-area';
 
+	/** @inheritDoc */
 	protected function getArgAliases(): array {
 		return array_flip( $this->config->getFocusAreaTemplateParams() );
 	}

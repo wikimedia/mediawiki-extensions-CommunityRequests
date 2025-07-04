@@ -124,6 +124,9 @@ class WishStoreTest extends CommunityRequestsIntegrationTestCase {
 	 * @covers ::getAll
 	 */
 	public function testGetAll(): void {
+		$wishes = $this->store->getAll( 'en', WishStore::createdField() );
+		$this->assertSame( [], $wishes );
+
 		$wish1 = $this->insertTestWish( 'Community Wishlist/Wishes/W1', 'en', '2222-01-23T00:00:00Z' );
 		$wish2 = $this->insertTestWish( 'Community Wishlist/Wishes/W2', 'en', '3333-01-23T00:00:00Z' );
 

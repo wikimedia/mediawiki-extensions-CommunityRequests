@@ -164,13 +164,15 @@ abstract class AbstractWishlistStore {
 	 * @param string $orderBy Use AbstractWishlistStore::*field() static methods.
 	 * @param string $direction Use AbstractWishlistStore::SORT_ASC or AbstractWishlistStore::SORT_DESC.
 	 * @param int $limit Limit the number of results.
+	 * @param ?array $offset As produced by ApiBase::parseContinueParamOrDie().
 	 * @return array
 	 */
 	public function getAll(
 		string $lang,
 		string $orderBy,
 		string $direction = self::SORT_DESC,
-		int $limit = 50
+		int $limit = 50,
+		?array $offset = null
 	): array {
 		$dbr = $this->dbProvider->getReplicaDatabase();
 		$langs = array_unique( [
@@ -179,6 +181,14 @@ abstract class AbstractWishlistStore {
 		] );
 		$translationLangField = static::translationLangField();
 		$baseLangField = static::baseLangField();
+
+		$orderPrecedence = match ( $orderBy ) {
+			static::createdField() => [ static::createdField(), static::voteCountField(), static::titleField() ],
+			static::updatedField() => [ static::updatedField(), static::voteCountField(), static::titleField() ],
+			static::titleField() => [ static::titleField(), static::createdField(), static::voteCountField() ],
+			default => [ static::voteCountField(), static::createdField(), static::titleField() ],
+		};
+
 		$select = $dbr->newSelectQueryBuilder()
 			->caller( __METHOD__ )
 			->table( static::tableName() )
@@ -192,9 +202,18 @@ abstract class AbstractWishlistStore {
 				static::translationLangField() => $langs,
 				"$translationLangField = $baseLangField",
 			], $dbr::LIST_OR ) )
-			->orderBy( $orderBy, $direction )
+			->orderBy( $orderPrecedence, $direction )
 			// Leave room for the fallback languages.
 			->limit( $limit * count( $langs ) );
+
+		if ( $offset ) {
+			$op = $direction === static::SORT_DESC ? '<=' : '>=';
+			$select->andWhere( $dbr->buildComparison( $op, [
+				static::titleField() => $offset[0],
+				$orderBy === static::createdField() ? 'cr_created' : 'cr_updated' => $offset[1],
+				static::pageField() => $offset[2],
+			] ) );
+		}
 
 		$entities = $this->getEntitiesFromLangFallbacks( $dbr, $select->fetchResultSet(), $lang );
 		return array_slice( $entities, 0, $limit );

@@ -1,9 +1,11 @@
 <?php
+declare( strict_types = 1 );
 
 namespace MediaWiki\Extension\CommunityRequests;
 
 use MediaWiki\Html\Html;
 use MediaWiki\Linker\LinkRenderer;
+use MediaWiki\Message\Message;
 use MediaWiki\Parser\Parser;
 use MediaWiki\Parser\PPFrame;
 use MediaWiki\Parser\PPNode;
@@ -32,11 +34,11 @@ abstract class AbstractTemplateRenderer {
 	 * @param (string|PPNode)[] $parts The parser function arguments in unexpanded form
 	 */
 	public function __construct(
-		protected WishlistConfig $config,
-		protected LoggerInterface $logger,
-		protected LinkRenderer $linkRenderer,
-		protected Parser $parser,
-		protected PPFrame $frame,
+		protected readonly WishlistConfig $config,
+		protected readonly LoggerInterface $logger,
+		protected readonly LinkRenderer $linkRenderer,
+		protected readonly Parser $parser,
+		protected readonly PPFrame $frame,
 		protected array $parts
 	) {
 	}
@@ -53,9 +55,9 @@ abstract class AbstractTemplateRenderer {
 	 *
 	 * @param string $msg
 	 * @param mixed ...$params
-	 * @return \MediaWiki\Message\Message
+	 * @return Message
 	 */
-	protected function msg( string $msg, ...$params ) {
+	protected function msg( string $msg, ...$params ): Message {
 		return $this->parser->msg( $msg, ...$params );
 	}
 
@@ -63,7 +65,7 @@ abstract class AbstractTemplateRenderer {
 	 * Get the associative array of template arguments indexed by the names
 	 * given in the source.
 	 *
-	 * @return string[]
+	 * @return (string|int)[]
 	 */
 	protected function getUnmappedArgs(): array {
 		if ( $this->args === null ) {
@@ -84,6 +86,7 @@ abstract class AbstractTemplateRenderer {
 		$aliases = $this->getArgAliases();
 		$mappedArgs = [];
 		foreach ( $this->getUnmappedArgs() as $name => $value ) {
+			$name = (string)$name;
 			if ( isset( $aliases[ strtolower( $name ) ] ) ) {
 				$name = $aliases[ strtolower( $name ) ];
 			}

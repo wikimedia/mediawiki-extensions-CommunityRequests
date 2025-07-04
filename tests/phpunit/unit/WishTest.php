@@ -92,6 +92,7 @@ END
 				[
 					'baseLang' => 'en',
 					'created' => '2023-10-01T12:00:00Z',
+					'updated' => '2023-10-02T12:00:00Z',
 					'otherProject' => 'Offline wikis',
 					'phabTasks' => [ 123, 456 ],
 					'projects' => [ 0, 6, 7 ],
@@ -110,7 +111,9 @@ END
 					'otherProject' => 'Offline wikis',
 					'phabTasks' => [ 'T123', 'T456' ],
 					'proposer' => 'Petr',
+					'voteCount' => 0,
 					'created' => '2023-10-01T12:00:00Z',
+					'updated' => '2023-10-02T12:00:00Z',
 					'baseLang' => 'en',
 				],
 			],
@@ -136,7 +139,9 @@ END
 					'otherProject' => '',
 					'phabTasks' => [],
 					'proposer' => 'Petr',
+					'voteCount' => 0,
 					'created' => '2023-10-01T12:00:00Z',
+					'updated' => null,
 					'baseLang' => 'en',
 				],
 			]

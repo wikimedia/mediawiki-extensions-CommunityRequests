@@ -163,7 +163,9 @@ class Wish extends AbstractWishlistEntity {
 			'otherProject' => (string)$this->otherProject,
 			'phabTasks' => array_map( static fn ( $t ) => "T$t", $this->phabTasks ),
 			'proposer' => $this->proposer?->getName(),
+			'voteCount' => $this->voteCount,
 			'created' => $this->created,
+			'updated' => $this->updated,
 			'baseLang' => $this->baseLang,
 		];
 		if ( $lowerCaseKeyNames ) {

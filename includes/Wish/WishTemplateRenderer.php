@@ -1,4 +1,5 @@
 <?php
+declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CommunityRequests\Wish;
 
@@ -54,6 +55,7 @@ class WishTemplateRenderer extends AbstractTemplateRenderer {
 		return $this->renderWishInternal( $args );
 	}
 
+	/** @inheritDoc */
 	protected function getArgAliases(): array {
 		return array_flip( $this->config->getWishTemplateParams() );
 	}

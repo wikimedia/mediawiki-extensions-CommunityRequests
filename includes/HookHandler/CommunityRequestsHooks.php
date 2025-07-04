@@ -44,7 +44,6 @@ use MediaWiki\Revision\SlotRecord;
 use MediaWiki\Storage\Hook\RevisionDataUpdatesHook;
 use MediaWiki\Title\Title;
 use Psr\Log\LoggerInterface;
-use Psr\Log\NullLogger;
 use RuntimeException;
 
 // phpcs:disable MediaWiki.NamingConventions.LowerCamelFunctionsName.FunctionName
@@ -72,18 +71,15 @@ class CommunityRequestsHooks implements
 	private array $stores;
 
 	public function __construct(
-		protected WishlistConfig $config,
+		protected readonly WishlistConfig $config,
 		WishStore $wishStore,
 		FocusAreaStore $focusAreaStore,
-		private EntityFactory $entityFactory,
+		private readonly EntityFactory $entityFactory,
 		LinkRenderer $linkRenderer,
-		Config $mainConfig,
-		private ?LoggerInterface $logger = null
+		private readonly LoggerInterface $logger,
+		Config $mainConfig
 	) {
 		$this->pageLanguageUseDB = $mainConfig->get( MainConfigNames::PageLanguageUseDB );
-		if ( $this->logger === null ) {
-			$this->logger = new NullLogger();
-		}
 		try {
 			$this->translateInstalled = ExtensionRegistry::getInstance()->isLoaded( 'Translate' );
 		} catch ( RuntimeException ) {

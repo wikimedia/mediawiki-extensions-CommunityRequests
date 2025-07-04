@@ -69,6 +69,7 @@
 				"CommunityRequests.FocusAreaStore",
 				"CommunityRequests.EntityFactory",
 				"LinkRenderer",
+				"CommunityRequests.Logger",
 				"MainConfig"
 			]
 		},
@@ -93,6 +94,15 @@
 				"CommunityRequests.WishlistConfig",
 				"CommunityRequests.FocusAreaStore",
 				"TitleParser"
+			]
+		}
+	},
+	"APIListModules": {
+		"communityrequests-wishes": {
+			"class": "MediaWiki\\Extension\\CommunityRequests\\Api\\ApiQueryWishes",
+			"services": [
+				"CommunityRequests.WishlistConfig",
+				"CommunityRequests.WishStore"
 			]
 		}
 	},

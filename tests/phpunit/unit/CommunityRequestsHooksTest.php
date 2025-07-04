@@ -18,6 +18,7 @@ use MediaWiki\Tests\Unit\MockServiceDependenciesTrait;
 use MediaWiki\Title\TitleFormatter;
 use MediaWiki\Title\TitleParser;
 use MediaWikiUnitTestCase;
+use Psr\Log\NullLogger;
 
 /**
  * @group CommunityRequests
@@ -85,6 +86,7 @@ class CommunityRequestsHooksTest extends MediaWikiUnitTestCase {
 			$this->createNoOpMock( FocusAreaStore::class ),
 			$this->createNoOpMock( EntityFactory::class ),
 			$this->createNoOpMock( LinkRenderer::class ),
+			new NullLogger(),
 			$mainConfig
 		);
 		$handler->onParserAfterParse( $parser, $text, null );

@@ -1,4 +1,5 @@
 <?php
+declare( strict_types = 1 );
 
 namespace MediaWiki\Extension\CommunityRequests;
 
@@ -13,7 +14,7 @@ class TemplateArgumentExtractor {
 	private const MAX_DEPTH = 30;
 
 	public function __construct(
-		private ParserFactory $parserFactory,
+		private readonly ParserFactory $parserFactory,
 	) {
 	}
 
@@ -25,7 +26,7 @@ class TemplateArgumentExtractor {
 	 * @param string $text The text to search
 	 * @return string[]|null
 	 */
-	public function getFuncArgs( string $func, string $subFunc, string $text ) {
+	public function getFuncArgs( string $func, string $subFunc, string $text ): ?array {
 		$parser = $this->parserFactory->getInstance();
 		$parser->startExternalParse(
 			null, ParserOptions::newFromAnon(), Parser::OT_PLAIN

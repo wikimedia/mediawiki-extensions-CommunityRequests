@@ -1,4 +1,5 @@
 <?php
+declare( strict_types = 1 );
 
 namespace MediaWiki\Extension\CommunityRequests;
 
@@ -16,9 +17,9 @@ use Psr\Log\LoggerInterface;
 class TemplateRendererFactory {
 
 	public function __construct(
-		private WishlistConfig $config,
-		private LoggerInterface $logger,
-		private LinkRenderer $linkRenderer,
+		private readonly WishlistConfig $config,
+		private readonly LoggerInterface $logger,
+		private readonly LinkRenderer $linkRenderer,
 	) {
 	}
 
@@ -30,7 +31,7 @@ class TemplateRendererFactory {
 	 * @param array $args
 	 * @return array|string
 	 */
-	public function render( Parser $parser, PPFrame $frame, array $args ) {
+	public function render( Parser $parser, PPFrame $frame, array $args ): array|string {
 		$entityType = trim( $frame->expand( $args[0] ) );
 		$renderer = $this->maybeGetInstance( $parser, $frame, $args, $entityType );
 		if ( $renderer ) {
@@ -57,7 +58,12 @@ class TemplateRendererFactory {
 	 * @param string $entityType
 	 * @return AbstractTemplateRenderer|null
 	 */
-	protected function maybeGetInstance( Parser $parser, PPFrame $frame, array $args, $entityType ) {
+	protected function maybeGetInstance(
+		Parser $parser,
+		PPFrame $frame,
+		array $args,
+		string $entityType
+	): ?AbstractTemplateRenderer {
 		return match ( $entityType ) {
 			'wish' => new WishTemplateRenderer(
 				$this->config,

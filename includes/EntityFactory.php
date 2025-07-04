@@ -1,4 +1,5 @@
 <?php
+declare( strict_types = 1 );
 
 namespace MediaWiki\Extension\CommunityRequests;
 
@@ -9,8 +10,8 @@ use MediaWiki\User\UserFactory;
 
 class EntityFactory {
 	public function __construct(
-		private WishlistConfig $config,
-		private UserFactory $userFactory,
+		private readonly WishlistConfig $config,
+		private readonly UserFactory $userFactory,
 	) {
 	}
 
@@ -28,7 +29,7 @@ class EntityFactory {
 		array $data,
 		PageIdentity $baseTitle,
 		string $lang
-	) {
+	): AbstractWishlistEntity {
 		return match ( $data['entityType'] ?? '' ) {
 			'wish' => Wish::newFromWikitextParams(
 				$baseTitle,

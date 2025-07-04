@@ -324,6 +324,9 @@ class WishStore extends AbstractWishlistStore {
 	 * @return array<int> The IDs of the projects associated with the wishes, keyed by wish ID.
 	 */
 	private function getProjectsForWishes( IReadableDatabase $dbr, array $pageIds ): array {
+		if ( !count( $pageIds ) ) {
+			return [];
+		}
 		$projects = $dbr->newSelectQueryBuilder()
 			->caller( __METHOD__ )
 			->table( 'communityrequests_projects' )
@@ -348,6 +351,9 @@ class WishStore extends AbstractWishlistStore {
 	 * @return array<int> The IDs of the tasks associated with the wishes, keyed by wish ID.
 	 */
 	private function getPhabTasksForWishes( IReadableDatabase $dbr, array $pageIds ): array {
+		if ( !count( $pageIds ) ) {
+			return [];
+		}
 		$phabTasks = $dbr->newSelectQueryBuilder()
 			->caller( __METHOD__ )
 			->table( 'communityrequests_phab_tasks' )

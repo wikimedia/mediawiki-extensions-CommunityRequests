@@ -113,5 +113,20 @@
 	"communityrequests-error-category": "الصفحات التي تحتوي على أخطاء في قائمة أمنيات المجتمع",
 	"communityrequests-error-category-desc": "الصفحات الموجودة في هذه الفئة هي رغبات قائمة أمنيات المجتمع أو مجالات التركيز التي تحتوي على أخطاء.",
 	"communityrequests-wish-category": "قائمة أمنيات/رغبات المجتمع",
-	"communityrequests-wish-category-desc": "الصفحات الموجودة في هذه الفئة هي رغبات قائمة الرغبات المجتمعية."
+	"communityrequests-wish-category-desc": "الصفحات الموجودة في هذه الفئة هي رغبات قائمة الرغبات المجتمعية.",
+	"apihelp-wishedit-summary": "إنشاء أو تحديث أمنية في قائمة أمنيات المجتمع.",
+	"apihelp-wishedit-param-wish": "الرغبة في الإنشاء أو التحديث. يمكن أن تكون عنوان الصفحة كاملاً، أو مُعرّف رغبة مُسبق (مثل \"W123\")، أو مُعرّف الرغبة كعدد صحيح.",
+	"apihelp-wishedit-param-status": "حالة الرغبة.",
+	"apihelp-wishedit-param-focusarea": "مجال التركيز الذي تنتمي إليه الرغبة. يمكن أن يكون عنوان الصفحة بالكامل، أو مُعرّف مجال التركيز مُسبقًا (مثل \"FA123\")، أو مُعرّف مجال التركيز كعدد صحيح.",
+	"apihelp-wishedit-param-title": "عنوان الامنية.",
+	"apihelp-wishedit-param-description": "وصف الرغبة. قد يحتوي على نص ويكي.",
+	"apihelp-wishedit-param-type": "نوع الرغبة.",
+	"apihelp-wishedit-param-projects": "المشاريع التي تتعلق بها الرغبة.",
+	"apihelp-wishedit-param-otherproject": "اسم المشروع حر، إذا كانت الرغبة لا تتعلق بأي من المشاريع المدرجة.",
+	"apihelp-wishedit-param-audience": "المجموعة الأساسية من المستخدمين الذين يستفيدون من هذه الرغبة (على سبيل المثال \"المستخدمين الجدد\" أو \"المسؤولين\").",
+	"apihelp-wishedit-param-phabtasks": "قائمة معرفات مهام Phabricator (على سبيل المثال \"T1234\").",
+	"apihelp-wishedit-param-proposer": "المستخدم الذي اقترح الرغبة.",
+	"apihelp-wishedit-param-created": "التاريخ والوقت الذي تم فيه إنشاء الرغبة.",
+	"apierror-wishedit-notawish": "الصفحة التي تحاول تحريرها ليست رغبة صالحة.",
+	"tag-community-wishlist": "[[Special:MyLanguage/Community Wishlist|قائمة أمنيات المجتمع]]"
 }

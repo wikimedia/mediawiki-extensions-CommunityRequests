@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"Amire80"
+			"Amire80",
+			"YaronSh"
 		]
 	},
 	"communityrequests-desc": "מערכת לניהול הצעות ובקשות טכניות של קהילת ויקי.",
@@ -74,9 +75,9 @@
 	"communityrequests-wish-audience-heading": "משתמשים מושפעים",
 	"communityrequests-wish-phabricator-heading": "משימות פבריקטור",
 	"communityrequests-wish-other-details-heading": "פרטים נוספים",
-	"communityrequests-wish-created": "נוצרה",
-	"communityrequests-wish-updated": "עודכנה לאחרונה",
-	"communityrequests-wish-proposer": "מאת",
+	"communityrequests-wish-created": "נוצרה: $1",
+	"communityrequests-wish-updated": "עודכנה לאחרונה: $1",
+	"communityrequests-wish-proposer": "מאת: $1",
 	"communityrequests-wishes-type-header": "סוג",
 	"communityrequests-wishes-projects-header": "מיזמים",
 	"communityrequests-wishes-date-header": "תאריך (UTC)",

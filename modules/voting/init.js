@@ -1,5 +1,5 @@
 'use strict';
-const buttonRoot = document.getElementById( 'voting-button' );
+const buttonRoot = document.querySelector( '.ext-communityrequests-voting-btn' );
 if ( buttonRoot ) {
 	const Vue = require( 'vue' );
 	const VotingButton = require( './Button.vue' );

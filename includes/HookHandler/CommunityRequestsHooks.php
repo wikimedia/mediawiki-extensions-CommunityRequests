@@ -241,6 +241,12 @@ class CommunityRequestsHooks implements
 			$out->getRequest()->getSession()->remove( self::SESSION_KEY );
 			$out->addJsConfigVars( 'intakePostEdit', $postEditVal );
 			$out->addModules( 'ext.communityrequests.intake' );
+		} elseif (
+			( $this->config->isWishVotingEnabled() && $this->config->isWishPage( $out->getTitle() ) ) ||
+			( $this->config->isFocusAreaVotingEnabled() && $this->config->isFocusAreaPage( $out->getTitle() ) )
+		) {
+			// If the page is a wish, add the voting module.
+			$out->addModules( 'ext.communityrequests.voting' );
 		}
 
 		$out->addModuleStyles( 'ext.communityrequests.styles' );
@@ -277,7 +283,8 @@ class CommunityRequestsHooks implements
 	}
 
 	protected function getFakeButton( Parser $parser, Title $title, string $msgKey, string $icon ): string {
-		return Html::rawElement( 'a',
+		return Html::rawElement(
+			'a',
 			[
 				'href' => $title->getLocalURL(),
 				'class' => [
@@ -296,9 +303,11 @@ class CommunityRequestsHooks implements
 	}
 
 	protected function getVotingSection( Parser $parser, bool $votingEnabled, string $msgKey = 'wish' ): string {
-		$out = Html::element( 'div', [
-			'class' => 'mw-heading mw-heading2',
-		], $parser->msg( "communityrequests-$msgKey-voting" )->text() );
+		$out = Html::element(
+			'div',
+			[ 'class' => 'mw-heading mw-heading2' ],
+			$parser->msg( "communityrequests-$msgKey-voting" )->text()
+		);
 
 		// TODO: Vote counting doesn't work yet (T388220)
 		$out .= $this->getParagraphRaw( 'voting-desc',
@@ -311,16 +320,21 @@ class CommunityRequestsHooks implements
 
 		if ( $votingEnabled ) {
 			// TODO: add an cwaction=vote page for no-JS users, or something.
-			$out .= Html::element( 'button',
+			$votingButton = Html::element(
+				'button',
 				[
-					'class' => [
-						'cdx-button', 'cdx-button--action-progressive', 'cdx-button--weight-primary',
-						'ext-communityrequests-voting-btn'
-					],
+					'class' => [ 'cdx-button', 'cdx-button--action-progressive', 'cdx-button--weight-primary' ],
 					'type' => 'button',
+					'disabled' => 'disabled',
 				],
 				$parser->msg( "communityrequests-support-$msgKey" )->text()
 			);
+			$votingSection = Html::rawElement(
+				'div',
+				[ 'class' => 'ext-communityrequests-voting-btn' ],
+				$votingButton
+			);
+			$out .= $votingSection;
 		}
 
 		// Transclude the /Votes subpage if it exists.

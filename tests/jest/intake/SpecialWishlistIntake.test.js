@@ -59,7 +59,7 @@ describe( 'SpecialWishlistIntake', () => {
 		expect( formData.get( 'proposer' ) ).toBe( 'MusikAnimal' );
 		expect( formData.get( 'status' ) ).toBe( 'submitted' );
 		expect( formData.get( 'type' ) ).toBe( 'bug' );
-		expect( formData.get( 'wishtitle' ) ).toBe( 'Test Title' );
+		expect( formData.get( 'entitytitle' ) ).toBe( 'Test Title' );
 	} );
 
 	it( 'should show the status field for staff', () => {

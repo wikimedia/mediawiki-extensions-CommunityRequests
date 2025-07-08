@@ -49,7 +49,7 @@ describe( 'SpecialEditFocusArea', () => {
 		expect( formData.get( 'owners' ) ).toBe( '* Community Tech\n* Editing' );
 		expect( formData.get( 'volunteers' ) ).toBe( '* User1\n* User2' );
 		expect( formData.get( 'status' ) ).toBe( 'draft' );
-		expect( formData.get( 'focusareatitle' ) ).toBe( 'Test Title' );
+		expect( formData.get( 'entitytitle' ) ).toBe( 'Test Title' );
 		expect( formData.get( 'baselang' ) ).toBe( 'en' );
 	} );
 } );

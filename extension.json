@@ -227,8 +227,7 @@
 				"mediawiki.storage"
 			],
 			"messages": [
-				"communityrequests-title",
-				"communityrequests-focus-area-title",
+				"communityrequests-title-label",
 				"communityrequests-title-description",
 				"communityrequests-description",
 				"communityrequests-focus-area-description",

@@ -5,21 +5,16 @@
 		:messages="titleMessage"
 	>
 		<cdx-text-input
-			:name="( isWish ? 'wishtitle' : 'focusareatitle' )"
+			name="entitytitle"
 			:model-value="title"
 			@input="$emit( 'update:title', $event.target.value )"
 		>
 		</cdx-text-input>
 		<template #label>
-			<span v-if="isWish">
-				{{ $i18n( 'communityrequests-title' ).text() }}
-			</span>
-			<span v-else>
-				{{ $i18n( 'communityrequests-focus-area-title' ).text() }}
-			</span>
+			{{ $i18n( 'communityrequests-title-label' ).text() }}
 		</template>
-		<template v-if="isWish" #description>
-			{{ $i18n( 'communityrequests-title-description' ).text() }}
+		<template v-if="titleHelpText" #description>
+			{{ titleHelpText }}
 		</template>
 	</cdx-field>
 	<cdx-field
@@ -41,20 +36,10 @@
 			</textarea>
 		</div>
 		<template #label>
-			<span v-if="isWish">
-				{{ $i18n( 'communityrequests-description' ).text() }}
-			</span>
-			<span v-else>
-				{{ $i18n( 'communityrequests-focus-area-description' ).text() }}
-			</span>
+			{{ descriptionLabel }}
 		</template>
 		<template #description>
-			<span v-if="isWish">
-				{{ $i18n( 'communityrequests-description-description' ).text() }}
-			</span>
-			<span v-else>
-				{{ $i18n( 'communityrequests-focus-area-description-description' ).text() }}
-			</span>
+			{{ descriptionHelpText }}
 		</template>
 	</cdx-field>
 </template>
@@ -63,7 +48,6 @@
 const { computed, defineComponent, onMounted, ComputedRef } = require( 'vue' );
 const { CdxField, CdxTextInput } = require( '../codex.js' );
 const DescriptionField = require( './DescriptionField.js' );
-const Util = require( '../common/Util.js' );
 const { CommunityRequestsHomepage } = require( '../common/config.json' );
 const titleMaxChars = mw.config.get( 'intakeTitleMaxChars' );
 
@@ -80,7 +64,10 @@ module.exports = exports = defineComponent( {
 		title: { type: String, default: '' },
 		description: { type: String, default: '' },
 		titleStatus: { type: String, default: 'default' },
-		descriptionStatus: { type: String, default: 'default' }
+		titleHelpText: { type: String, default: '' },
+		descriptionStatus: { type: String, default: 'default' },
+		descriptionLabel: { type: String, required: true },
+		descriptionHelpText: { type: String, required: true }
 	},
 	emits: [
 		'update:title',
@@ -108,12 +95,6 @@ module.exports = exports = defineComponent( {
 				{ error: mw.msg( 'communityrequests-description-error', 50 ) } :
 				{}
 		);
-		/**
-		 * Whether we're editing a wish (as opposed to a focus area).
-		 *
-		 * @type {boolean}
-		 */
-		const isWish = Util.isNewWish() || Util.isWishEdit();
 
 		onMounted( async () => {
 			if ( descriptionField ) {
@@ -134,8 +115,7 @@ module.exports = exports = defineComponent( {
 
 		return {
 			titleMessage,
-			descriptionMessage,
-			isWish
+			descriptionMessage
 		};
 	}
 } );

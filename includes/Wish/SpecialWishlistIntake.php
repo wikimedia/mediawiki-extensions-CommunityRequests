@@ -75,7 +75,7 @@ class SpecialWishlistIntake extends AbstractWishlistSpecialPage {
 	public function onSubmit( array $data, ?HTMLForm $form = null ) {
 		// Grab data directly from POST request. We should use the given $data once ::getFormFields() is implemented.
 		$data = $form->getRequest()->getPostValues();
-		$data[ 'title' ] = $data[ 'wishtitle' ];
+		$data[ 'title' ] = $data[ 'entitytitle' ];
 
 		// API wants pipe-separated arrays, not CSV.
 		$data[ 'projects' ] = str_replace( ',', '|', $data[ 'projects' ] );

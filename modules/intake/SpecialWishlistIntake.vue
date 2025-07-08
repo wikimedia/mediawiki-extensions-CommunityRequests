@@ -18,7 +18,10 @@
 			v-model:title="wish.title"
 			v-model:description="wish.description"
 			:title-status="titleStatus"
+			:title-help-text="$i18n( 'communityrequests-title-description' ).text()"
 			:description-status="descriptionStatus"
+			:description-label="$i18n( 'communityrequests-description' ).text()"
+			:description-help-text="$i18n( 'communityrequests-description-description' ).text()"
 			@update:description="formChanged = true"
 			@update:pre-submit-promise="addPreSubmitFn"
 		></description-section>

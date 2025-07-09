@@ -401,6 +401,7 @@ class WishStore extends AbstractWishlistStore {
 		return $this->config->getWishPagePrefix();
 	}
 
+	/** @inheritDoc */
 	public function entityType(): string {
 		return 'wish';
 	}

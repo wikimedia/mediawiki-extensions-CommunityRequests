@@ -3,30 +3,35 @@ declare( strict_types = 1 );
 
 namespace MediaWiki\Extension\CommunityRequests\Tests\Maintenance;
 
-use MediaWiki\Extension\CommunityRequests\Maintenance\NukeWishes;
+use MediaWiki\Extension\CommunityRequests\Maintenance\NukeWishlist;
 use MediaWiki\Tests\Maintenance\MaintenanceBaseTestCase;
 use MediaWiki\Title\Title;
 
 /**
- * @coversDefaultClass \MediaWiki\Extension\CommunityRequests\Maintenance\NukeWishes
+ * @coversDefaultClass \MediaWiki\Extension\CommunityRequests\Maintenance\NukeWishlist
  * @group Database
  */
-class NukeWishesTest extends MaintenanceBaseTestCase {
+class NukeWishlistTest extends MaintenanceBaseTestCase {
 	/** @inheritDoc */
 	protected function getMaintenanceClass() {
-		return NukeWishes::class;
+		return NukeWishlist::class;
 	}
 
 	/**
 	 * @covers ::execute
 	 */
-	public function testExecuteForNoWishesOrPages(): void {
+	public function testExecuteWithNoEntitiesOrPages(): void {
 		$this->newSelectQueryBuilder()
 			->select( 'COUNT(*)' )
 			->from( 'communityrequests_wishes' )
 			->assertFieldValue( 0 );
+		$this->newSelectQueryBuilder()
+			->select( 'COUNT(*)' )
+			->from( 'communityrequests_focus_areas' )
+			->assertFieldValue( 0 );
 		$this->maintenance->execute();
-		$this->expectOutputRegex( "/0 wishes and their related data have been deleted.\n$/" );
+		$this->expectOutputString( "0 wish page(s) and their related data have been deleted.\n" );
+		$this->expectOutputString( "0 focus-area page(s) and their related data have been deleted.\n" );
 	}
 
 	/**
@@ -40,22 +45,22 @@ class NukeWishesTest extends MaintenanceBaseTestCase {
 			->from( 'communityrequests_wishes' )
 			->assertFieldValue( 0 );
 		$this->maintenance->execute();
-		$this->expectOutputRegex( "/2 wishes and their related data have been deleted.\n$/" );
+		$this->expectOutputString( "2 wish page(s) and their related data have been deleted.\n" );
 	}
 
 	/**
 	 * @covers ::execute
 	 */
 	public function testExecute(): void {
-		$proposer = $this->getTestUser()->getUser();
+		$proposer = $this->getTestUser()->getUser()->getName();
 		$this->insertPage(
 			Title::newFromText( 'Community Wishlist/Wishes/W1' ),
-			"{{#CommunityRequests: wish | title=My first wish | proposer = {$proposer->getName()} " .
+			"{{#CommunityRequests: wish | title=My first wish | proposer = $proposer " .
 				"| created=2025-06-25T12:59:59Z | baselang=en}}"
 		);
 		$this->insertPage(
 			Title::newFromText( 'Community Wishlist/Wishes/W2' ),
-			"{{#CommunityRequests: wish | title=My second wish | proposer={$proposer->getName()} " .
+			"{{#CommunityRequests: wish | title=My second wish | proposer=$proposer " .
 				"| created=2025-06-25T12:59:59Z | baselang=en}}"
 		);
 		$this->newSelectQueryBuilder()
@@ -63,6 +68,6 @@ class NukeWishesTest extends MaintenanceBaseTestCase {
 			->from( 'communityrequests_wishes' )
 			->assertFieldValue( 2 );
 		$this->maintenance->execute();
-		$this->expectOutputRegex( "/2 wishes and their related data have been deleted.\n$/" );
+		$this->expectOutputString( "2 wish page(s) and their related data have been deleted.\n" );
 	}
 }

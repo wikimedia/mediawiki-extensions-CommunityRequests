@@ -24,7 +24,7 @@
 		"communityrequests-wish-category"
 	],
 	"AutoloadClasses": {
-		"MediaWiki\\Extension\\CommunityRequests\\Maintenance\\NukeWishes": "maintenance/nukeWishes.php"
+		"MediaWiki\\Extension\\CommunityRequests\\Maintenance\\NukeWishlist": "maintenance/nukeWishlist.php"
 	},
 	"AutoloadNamespaces": {
 		"MediaWiki\\Extension\\CommunityRequests\\": "includes/"

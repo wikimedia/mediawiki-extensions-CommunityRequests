@@ -15,6 +15,7 @@ use Wikimedia\Rdbms\IResultWrapper;
 
 class FocusAreaStore extends AbstractWishlistStore {
 
+	/** @inheritDoc */
 	public function entityType(): string {
 		return 'focus-area';
 	}

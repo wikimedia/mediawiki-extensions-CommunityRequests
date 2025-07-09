@@ -76,16 +76,16 @@ abstract class CommunityRequestsIntegrationTestCase extends MediaWikiIntegration
 			? '<translate>Test</translate>'
 			: 'Test';
 		$wikitext = <<<END
-<wish
-	title="translation-$langCode-$insertTitle"
-	status="open"
-	type="change"
-	projects="wikipedia,commons"
-	phabTasks="T123,T456"
-	created="$created"
-	proposer="{$this->getTestUser()->getUser()->getName()}"
-	baselang="$baseLang"
->$description</wish>
+{{#CommunityRequests: wish
+|title = translation-$langCode-$insertTitle
+|status = open
+|type = change
+|projects = wikipedia,commons
+|phabTasks = T123,T456
+|created = $created
+|proposer = {$this->getTestUser()->getUser()->getName()}
+|baselang = $baseLang
+|description = $description}}
 END;
 		$ret = $this->insertPage( $insertTitle, $wikitext );
 		$this->runDeferredUpdates();

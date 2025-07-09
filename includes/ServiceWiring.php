@@ -2,6 +2,7 @@
 declare( strict_types = 1 );
 
 use MediaWiki\Config\ServiceOptions;
+use MediaWiki\Extension\CommunityRequests\EntityFactory;
 use MediaWiki\Extension\CommunityRequests\FocusArea\FocusAreaStore;
 use MediaWiki\Extension\CommunityRequests\IdGenerator\IdGenerator;
 use MediaWiki\Extension\CommunityRequests\IdGenerator\SqlIdGenerator;
@@ -15,6 +16,12 @@ use Psr\Log\LoggerInterface;
 
 /** @phpcs-require-sorted-array */
 return [
+	'CommunityRequests.EntityFactory' => static function ( MediaWikiServices $services ): EntityFactory {
+		return new EntityFactory(
+			$services->get( 'CommunityRequests.WishlistConfig' ),
+			$services->getUserFactory()
+		);
+	},
 	'CommunityRequests.FocusAreaStore' => static function ( MediaWikiServices $services ): FocusAreaStore {
 		return new FocusAreaStore(
 			$services->getConnectionProvider(),

@@ -27,9 +27,8 @@ class ApiFocusAreaEdit extends ApiWishlistEntityBase {
 			$this->config
 		);
 
-		$focusAreaTemplate = $this->titleParser->parseTitle( $this->config->getFocusAreaTemplatePage() );
 		$saveStatus = $this->save(
-			$focusArea->toWikitext( $focusAreaTemplate, $this->config ),
+			$focusArea->toWikitext( $this->config ),
 			$this->getEditSummary( $focusArea, $this->params ),
 			$this->params[ 'token' ],
 			$this->params[ 'baserevid' ] ?? null

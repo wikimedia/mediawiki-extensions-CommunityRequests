@@ -96,11 +96,7 @@ class WishlistConfigTest extends MediaWikiUnitTestCase {
 	 * @covers ::getWishPagePrefix
 	 * @covers ::getFocusAreaPagePrefix
 	 * @covers ::getWishIndexPage
-	 * @covers ::getWishTemplate
-	 * @covers ::getWishTemplatePage
 	 * @covers ::getWishTemplateParams
-	 * @covers ::getFocusAreaTemplate
-	 * @covers ::getFocusAreaTemplatePage
 	 * @covers ::getFocusAreaTemplateParams
 	 * @covers ::getStatuses
 	 * @covers ::getWishTypes
@@ -112,21 +108,11 @@ class WishlistConfigTest extends MediaWikiUnitTestCase {
 		$this->assertSame( 'Category:Wishes', $this->config->getWishCategory() );
 		$this->assertSame( 'Community Wishlist/W', $this->config->getWishPagePrefix() );
 		$this->assertSame( 'Community Wishlist/Wishes', $this->config->getWishIndexPage() );
-		$this->assertSame( [
-			'page' => 'Template:Wish',
-			'params' => [ 'title' => 'title', 'description' => 'desc' ],
-		], $this->config->getWishTemplate() );
-		$this->assertSame( 'Template:Wish', $this->config->getWishTemplatePage() );
 		$this->assertSame( [ 'title' => 'title', 'description' => 'desc' ], $this->config->getWishTemplateParams() );
 		$this->assertSame( [ 'feature', 'bug' ], array_keys( $this->config->getWishTypes() ) );
 		$this->assertSame( 'Category:Focus areas', $this->config->getFocusAreaCategory() );
 		$this->assertSame( 'Community Wishlist/FA', $this->config->getFocusAreaPagePrefix() );
 		$this->assertSame( 'Community Wishlist/Focus areas', $this->config->getFocusAreaIndexPage() );
-		$this->assertSame( [
-			'page' => 'Template:Focus area',
-			'params' => [ 'title' => 'title', 'description' => 'desc' ],
-		], $this->config->getFocusAreaTemplate() );
-		$this->assertSame( 'Template:Focus area', $this->config->getFocusAreaTemplatePage() );
 		$this->assertSame(
 			[ 'title' => 'title', 'description' => 'desc' ],
 			$this->config->getFocusAreaTemplateParams()

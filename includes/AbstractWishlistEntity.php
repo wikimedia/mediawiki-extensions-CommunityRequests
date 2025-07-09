@@ -5,7 +5,6 @@ namespace MediaWiki\Extension\CommunityRequests;
 
 use MediaWiki\Content\WikitextContent;
 use MediaWiki\Page\PageIdentity;
-use MediaWiki\Title\TitleValue;
 
 /**
  * Shared properties and methods for Wish and FocusArea.
@@ -162,11 +161,10 @@ abstract class AbstractWishlistEntity {
 	 * to map the entity's properties to the template parameters. It also transforms numeric IDs
 	 * to their wikitext representations to make the wikitext easier to read and edit manually.
 	 *
-	 * @param TitleValue $template
 	 * @param WishlistConfig $config
 	 * @return WikitextContent
 	 */
-	abstract public function toWikitext( TitleValue $template, WishlistConfig $config ): WikitextContent;
+	abstract public function toWikitext( WishlistConfig $config ): WikitextContent;
 
 	/**
 	 * Create a new wishlist entity instance from the given wikitext parameters.

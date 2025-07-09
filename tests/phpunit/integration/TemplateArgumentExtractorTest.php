@@ -12,7 +12,7 @@ class TemplateArgumentExtractorTest extends MediaWikiIntegrationTestCase {
 	public static function provideGetArgs() {
 		return [
 			'simple match' => [
-				'{{tgt|a|b=c}}',
+				'{{#CommunityRequests: wish|a|b=c}}',
 				[
 					1 => 'a',
 					'b' => 'c',
@@ -23,7 +23,7 @@ class TemplateArgumentExtractorTest extends MediaWikiIntegrationTestCase {
 				null,
 			],
 			'conventional space trimming, from named arguments only' => [
-				'{{tgt| a | b = c}}',
+				'{{#CommunityRequests:wish| a | b = c}}',
 				[
 					1 => ' a ',
 					'b' => 'c',
@@ -34,44 +34,44 @@ class TemplateArgumentExtractorTest extends MediaWikiIntegrationTestCase {
 				null,
 			],
 			'nowiki' => [
-				'{{tgt|a = <nowiki>}}</nowiki>}}',
+				'{{#CommunityRequests:wish|a = <nowiki>}}</nowiki>}}',
 				[ 'a' => '<nowiki>}}</nowiki>' ],
 			],
 			'pre' => [
-				'{{tgt|a = <pre>b</pre>}}',
+				'{{#CommunityRequests:wish|a = <pre>b</pre>}}',
 				[ 'a' => '<pre>b</pre>' ],
 			],
 			'revisiontimestamp' => [
-				'{{tgt|a={{REVISIONTIMESTAMP}}}}',
+				'{{#CommunityRequests:wish|a={{REVISIONTIMESTAMP}}}}',
 				[ 'a' => '{{REVISIONTIMESTAMP}}' ],
 			],
 			'distractor' => [
-				'{{not|a=b}}{{tgt|c=d}}',
+				'{{not|a=b}}{{#CommunityRequests:wish|c=d}}',
 				[ 'c' => 'd' ],
 			],
 			'empty args' => [
-				'{{tgt}}',
+				'{{#CommunityRequests:wish}}',
 				[],
 			],
 			'comment in template name' => [
-				'{{tgt <!-- this is the target -->|a=b}}',
+				'{{#CommunityRequests: wish <!-- this is the target -->|a=b}}',
 				[ 'a' => 'b' ],
 			],
 			'comment in argument name' => [
-				'{{tgt|a <!-- comment -->=b}}',
+				'{{#CommunityRequests:wish|a <!-- comment -->=b}}',
 				[ 'a' => 'b' ],
 			],
 			'comment in value' => [
-				'{{tgt|a=b <!-- comment -->}}',
+				'{{#CommunityRequests:wish|a=b <!-- comment -->}}',
 				[ 'a' => 'b <!-- comment -->' ],
 			],
 			'target template at second level' => [
-				'{{not|{{tgt|a=b}}}}',
+				'{{not|{{#CommunityRequests:wish|a=b}}}}',
 				[ 'a' => 'b' ],
 			],
 			'depth exceeded error' => [
 				str_repeat( '{{not|', 15 ) .
-					'{{tgt|a=b}}' .
+					'{{#CommunityRequests:wish|a=b}}' .
 					str_repeat( '}}', 15 ),
 				null,
 			],
@@ -85,13 +85,10 @@ class TemplateArgumentExtractorTest extends MediaWikiIntegrationTestCase {
 	 */
 	public function testGetArgs( $input, $expected ) {
 		$services = $this->getServiceContainer();
-		$titleParser = $services->getTitleParser();
 		$extractor = new TemplateArgumentExtractor(
 			$services->getParserFactory(),
-			$services->getTitleParser()
 		);
-		$targetObject = $titleParser->parseTitle( 'tgt', NS_TEMPLATE );
-		$result = $extractor->getArgs( $targetObject, $input );
+		$result = $extractor->getFuncArgs( 'communityrequests', 'wish', $input );
 		$this->assertEquals( $expected, $result );
 	}
 }

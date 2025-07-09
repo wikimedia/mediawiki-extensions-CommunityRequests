@@ -8,7 +8,6 @@ use MediaWiki\Content\WikitextContent;
 use MediaWiki\Extension\CommunityRequests\AbstractWishlistEntity;
 use MediaWiki\Extension\CommunityRequests\WishlistConfig;
 use MediaWiki\Page\PageIdentity;
-use MediaWiki\Title\TitleValue;
 use MediaWiki\Utils\MWTimestamp;
 
 /**
@@ -111,11 +110,8 @@ class FocusArea extends AbstractWishlistEntity {
 	}
 
 	/** @inheritDoc */
-	public function toWikitext( TitleValue $template, WishlistConfig $config ): WikitextContent {
-		$templateCall = $template->getNamespace() === NS_TEMPLATE ?
-			$template->getText() :
-			':' . $config->getFocusAreaTemplatePage();
-		$wikitext = "{{" . $templateCall . "\n";
+	public function toWikitext( WishlistConfig $config ): WikitextContent {
+		$wikitext = "{{#CommunityRequests: focus-area\n";
 		foreach ( self::TAG_ATTRS as $attr ) {
 			$param = $config->getFocusAreaTemplateParams()[ $attr ];
 			// Match ID values to their wikitext representations, as defined by site configuration.

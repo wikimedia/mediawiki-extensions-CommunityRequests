@@ -47,16 +47,16 @@
 		"CommunityRequestsAlias": "CommunityRequests.i18n.alias.php"
 	},
 	"Hooks": {
-		"ChangeTagsListActive": "wish",
+		"ChangeTagsListActive": "main",
 		"GetDoubleUnderscoreIDs": "main",
-		"ListDefinedTags": "wish",
+		"ListDefinedTags": "main",
 		"LoadExtensionSchemaUpdates": "schema",
 		"LoginFormValidErrorMessages": "main",
 		"ParserAfterParse": "main",
 		"RecentChange_save": "main",
 		"BeforePageDisplay": "main",
-		"ParserFirstCallInit": [ "wish", "focusarea" ],
-		"LinksUpdateComplete": [ "wish", "focusarea" ],
+		"ParserFirstCallInit": "main",
+		"LinksUpdateComplete": "main",
 		"PageDeleteComplete": "main",
 		"RevisionDataUpdates": "main"
 	},
@@ -66,26 +66,10 @@
 			"services": [
 				"CommunityRequests.WishlistConfig",
 				"CommunityRequests.WishStore",
-				"MainConfig"
-			]
-		},
-		"wish": {
-			"class": "MediaWiki\\Extension\\CommunityRequests\\HookHandler\\WishHookHandler",
-			"services": [
-				"CommunityRequests.WishlistConfig",
-				"CommunityRequests.WishStore",
-				"UserFactory",
+				"CommunityRequests.FocusAreaStore",
+				"CommunityRequests.EntityFactory",
 				"LinkRenderer",
 				"MainConfig"
-			]
-		},
-		"focusarea": {
-			"class": "MediaWiki\\Extension\\CommunityRequests\\HookHandler\\FocusAreaHookHandler",
-			"services": [
-				"CommunityRequests.WishlistConfig",
-				"CommunityRequests.FocusAreaStore",
-				"MainConfig",
-				"CommunityRequests.Logger"
 			]
 		},
 		"schema": {
@@ -361,7 +345,6 @@
 		"CommunityRequestsWishTemplate": {
 			"description": "Configuration for the template that displays and stores wishes.",
 			"value": {
-				"page": "Template:Community Wishlist/Wish",
 				"params": {
 					"status": "status",
 					"type": "type",
@@ -415,7 +398,6 @@
 		"CommunityRequestsFocusAreaTemplate": {
 			"description": "Configuration for the template that displays and stores focus areas.",
 			"value": {
-				"page": "Template:Community Wishlist/Focus area",
 				"params": {
 					"title": "title",
 					"description": "description",

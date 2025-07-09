@@ -7,7 +7,6 @@ use MediaWiki\Content\WikitextContent;
 use MediaWiki\Extension\CommunityRequests\AbstractWishlistEntity;
 use MediaWiki\Extension\CommunityRequests\WishlistConfig;
 use MediaWiki\Page\PageIdentity;
-use MediaWiki\Title\TitleValue;
 use MediaWiki\User\UserIdentity;
 use MediaWiki\Utils\MWTimestamp;
 
@@ -175,12 +174,8 @@ class Wish extends AbstractWishlistEntity {
 	}
 
 	/** @inheritDoc */
-	public function toWikitext( TitleValue $template, WishlistConfig $config ): WikitextContent {
-		$templateCall = $template->getNamespace() === NS_TEMPLATE ?
-			$template->getText() :
-			':' . $config->getWishTemplatePage();
-
-		$wikitext = "{{" . $templateCall . "\n";
+	public function toWikitext( WishlistConfig $config ): WikitextContent {
+		$wikitext = "{{#CommunityRequests: wish\n";
 
 		foreach ( self::TAG_ATTRS as $attr ) {
 			$param = $config->getWishTemplateParams()[ $attr ];

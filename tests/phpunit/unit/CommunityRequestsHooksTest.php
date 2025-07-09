@@ -5,9 +5,12 @@ namespace MediaWiki\Extension\CommunityRequests\Test\Unit;
 
 use MediaWiki\Config\HashConfig;
 use MediaWiki\Config\ServiceOptions;
+use MediaWiki\Extension\CommunityRequests\EntityFactory;
+use MediaWiki\Extension\CommunityRequests\FocusArea\FocusAreaStore;
 use MediaWiki\Extension\CommunityRequests\HookHandler\CommunityRequestsHooks;
 use MediaWiki\Extension\CommunityRequests\Wish\WishStore;
 use MediaWiki\Extension\CommunityRequests\WishlistConfig;
+use MediaWiki\Linker\LinkRenderer;
 use MediaWiki\MainConfigNames;
 use MediaWiki\Parser\Parser;
 use MediaWiki\Parser\ParserOutput;
@@ -75,10 +78,16 @@ class CommunityRequestsHooksTest extends MediaWikiUnitTestCase {
 			$this->newServiceInstance( TitleFormatter::class, [] )
 		);
 		$text = '';
-		$wishStoreMock = $this->newServiceInstance( WishStore::class, [] );
 		$mainConfig = new HashConfig( [ MainConfigNames::PageLanguageUseDB => true ] );
-		( new CommunityRequestsHooks( $config, $wishStoreMock, $mainConfig ) )
-			->onParserAfterParse( $parser, $text, null );
+		$handler = new CommunityRequestsHooks(
+			$config,
+			$this->newServiceInstance( WishStore::class, [] ),
+			$this->createNoOpMock( FocusAreaStore::class ),
+			$this->createNoOpMock( EntityFactory::class ),
+			$this->createNoOpMock( LinkRenderer::class ),
+			$mainConfig
+		);
+		$handler->onParserAfterParse( $parser, $text, null );
 	}
 
 	public static function provideOnParserAfterParse(): array {

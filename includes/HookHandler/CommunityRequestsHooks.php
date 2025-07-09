@@ -3,23 +3,32 @@ declare( strict_types = 1 );
 
 namespace MediaWiki\Extension\CommunityRequests\HookHandler;
 
+use InvalidArgumentException;
 use MediaWiki\ChangeTags\Hook\ChangeTagsListActiveHook;
 use MediaWiki\ChangeTags\Hook\ListDefinedTagsHook;
 use MediaWiki\Config\Config;
 use MediaWiki\Context\RequestContext;
 use MediaWiki\Deferred\DeferrableUpdate;
+use MediaWiki\Deferred\LinksUpdate\LinksUpdate;
 use MediaWiki\Deferred\MWCallableUpdate;
+use MediaWiki\Extension\CommunityRequests\AbstractTemplateRenderer;
 use MediaWiki\Extension\CommunityRequests\AbstractWishlistEntity;
 use MediaWiki\Extension\CommunityRequests\AbstractWishlistStore;
+use MediaWiki\Extension\CommunityRequests\EntityFactory;
+use MediaWiki\Extension\CommunityRequests\FocusArea\FocusAreaStore;
+use MediaWiki\Extension\CommunityRequests\TemplateRendererFactory;
+use MediaWiki\Extension\CommunityRequests\Wish\WishStore;
 use MediaWiki\Extension\CommunityRequests\WishlistConfig;
 use MediaWiki\Extension\Translate\MessageLoading\MessageHandle;
 use MediaWiki\Extension\Translate\PageTranslation\TranslatablePage;
 use MediaWiki\Extension\Translate\Utilities\Utilities;
 use MediaWiki\Hook\GetDoubleUnderscoreIDsHook;
+use MediaWiki\Hook\LinksUpdateCompleteHook;
 use MediaWiki\Hook\LoginFormValidErrorMessagesHook;
 use MediaWiki\Hook\ParserAfterParseHook;
+use MediaWiki\Hook\ParserFirstCallInitHook;
 use MediaWiki\Hook\RecentChange_saveHook;
-use MediaWiki\Html\Html;
+use MediaWiki\Linker\LinkRenderer;
 use MediaWiki\Logging\ManualLogEntry;
 use MediaWiki\MainConfigNames;
 use MediaWiki\Output\Hook\BeforePageDisplayHook;
@@ -40,33 +49,38 @@ use RuntimeException;
 
 // phpcs:disable MediaWiki.NamingConventions.LowerCamelFunctionsName.FunctionName
 class CommunityRequestsHooks implements
+	BeforePageDisplayHook,
 	ChangeTagsListActiveHook,
-	ListDefinedTagsHook,
 	GetDoubleUnderscoreIDsHook,
+	LinksUpdateCompleteHook,
+	ListDefinedTagsHook,
 	LoginFormValidErrorMessagesHook,
-	RecentChange_saveHook,
-	RevisionDataUpdatesHook,
 	ParserAfterParseHook,
-	BeforePageDisplayHook
+	ParserFirstCallInitHook,
+	RecentChange_saveHook,
+	RevisionDataUpdatesHook
 {
 
 	public const WISHLIST_CHANGE_TAG = 'community-wishlist';
 	public const MAGIC_MACHINETRANSLATION = 'machinetranslation';
-	public const ERROR_TRACKING_CATEGORY = 'communityrequests-error-category';
 	public const SESSION_KEY = 'communityrequests-intake';
-	protected const EXT_DATA_KEY = 'CommunityRequests-ext-data';
+	protected const EXT_DATA_KEY = AbstractTemplateRenderer::EXT_DATA_KEY;
 	protected bool $translateInstalled;
 	protected bool $pageLanguageUseDB;
-	private string $entityType;
+	private TemplateRendererFactory $templateRendererFactory;
+	/** @var AbstractWishlistStore[] */
+	private array $stores;
 
 	public function __construct(
 		protected WishlistConfig $config,
-		protected AbstractWishlistStore $store,
+		WishStore $wishStore,
+		FocusAreaStore $focusAreaStore,
+		private EntityFactory $entityFactory,
+		LinkRenderer $linkRenderer,
 		Config $mainConfig,
-		protected ?LoggerInterface $logger = null
+		private ?LoggerInterface $logger = null
 	) {
 		$this->pageLanguageUseDB = $mainConfig->get( MainConfigNames::PageLanguageUseDB );
-		$this->entityType = strtolower( substr( strrchr( $this->store->entityClass(), '\\' ), 1 ) );
 		if ( $this->logger === null ) {
 			$this->logger = new NullLogger();
 		}
@@ -76,6 +90,15 @@ class CommunityRequestsHooks implements
 			// Happens in unit tests.
 			$this->translateInstalled = false;
 		}
+		$this->templateRendererFactory = new TemplateRendererFactory(
+			$config,
+			$this->logger,
+			$linkRenderer
+		);
+		$this->stores = [
+			'wish' => $wishStore,
+			'focus-area' => $focusAreaStore
+		];
 	}
 
 	/** @inheritDoc */
@@ -83,6 +106,18 @@ class CommunityRequestsHooks implements
 		if ( $this->config->isEnabled() ) {
 			$doubleUnderscoreIDs[] = self::MAGIC_MACHINETRANSLATION;
 		}
+	}
+
+	/** @inheritDoc */
+	public function onParserFirstCallInit( $parser ) {
+		if ( !$this->config->isEnabled() ) {
+			return;
+		}
+		$parser->setFunctionHook(
+			'communityrequests',
+			$this->templateRendererFactory->render( ... ),
+			Parser::SFH_OBJECT_ARGS
+		);
 	}
 
 	/** @inheritDoc */
@@ -150,18 +185,6 @@ class CommunityRequestsHooks implements
 	}
 
 	/**
-	 * Adds a tracking category to the parser if the page is a wish or focus area page.
-	 *
-	 * @param Parser $parser
-	 * @param string $category
-	 */
-	protected function addTrackingCategory( Parser $parser, string $category ): void {
-		if ( $this->config->isWishOrFocusAreaPage( $parser->getPage() ) ) {
-			$parser->addTrackingCategory( $category );
-		}
-	}
-
-	/**
 	 * Set the page language for a wish or focus area page to the base language on initial creation.
 	 *
 	 * @param Title $title
@@ -178,16 +201,17 @@ class CommunityRequestsHooks implements
 			$this->pageLanguageUseDB
 		) {
 			$updates[] = new MWCallableUpdate( function () use ( $title, $renderedRevision ) {
+				$store = $this->getStoreForTitle( $title );
 				$parserOutput = $renderedRevision->getSlotParserOutput( SlotRecord::MAIN );
 				$data = $parserOutput->getExtensionData( self::EXT_DATA_KEY );
 
 				if ( $data &&
 					$data[ AbstractWishlistEntity::TAG_ATTR_BASE_LANG ] !==
-						Title::newFromText( $title->getText() )->getPageLanguage()->getCode() &&
+					Title::newFromText( $title->getText() )->getPageLanguage()->getCode() &&
 					// @phan-suppress-next-line PhanUndeclaredClassMethod
 					TranslatablePage::isTranslationPage( $title ) === false
 				) {
-					$this->store->setPageLanguage(
+					$store->setPageLanguage(
 						$title->getId(),
 						$data[ AbstractWishlistEntity::TAG_ATTR_BASE_LANG ]
 					);
@@ -221,12 +245,13 @@ class CommunityRequestsHooks implements
 		if ( !$this->config->isEnabled() || !$this->config->isWishOrFocusAreaPage( $page ) ) {
 			return;
 		}
-		$entity = $this->store->get(
+		$store = $this->getStoreForTitle( $page );
+		$entity = $store->get(
 			$this->getCanonicalWishlistPage( $page ),
 			Title::castFromPageIdentity( $page )->getPageLanguage()->getCode()
 		);
 		if ( $entity ) {
-			$this->store->delete( $entity );
+			$store->delete( $entity );
 		}
 	}
 
@@ -252,100 +277,47 @@ class CommunityRequestsHooks implements
 		$out->addModuleStyles( 'ext.communityrequests.styles' );
 	}
 
-	// HTML helpers for rendering wish or focus area pages.
-
-	protected function getParagraph( string $field, string $text ): string {
-		return Html::element(
-			'p',
-			[ 'class' => "ext-communityrequests-{$this->entityType}--$field" ],
-			$text
-		);
-	}
-
-	protected function getParagraphRaw( string $field, string $html ): string {
-		return Html::rawElement(
-			'p',
-			[ 'class' => "ext-communityrequests-{$this->entityType}--$field" ],
-			$html
-		);
-	}
-
-	protected function getListItem( string $field, Parser $parser, string $param ): string {
-		return Html::rawElement(
-			'li',
-			[ 'class' => "ext-communityrequests-{$this->entityType}--$field" ],
-			// Messages used here include:
-			// * communityrequests-wish-created
-			// * communityrequests-wish-updated
-			// * communityrequests-wish-proposer
-			$parser->msg( "communityrequests-wish-$field", $param )->parse()
-		);
-	}
-
-	protected function getFakeButton( Parser $parser, Title $title, string $msgKey, string $icon ): string {
-		return Html::rawElement(
-			'a',
-			[
-				'href' => $title->getLocalURL(),
-				'class' => [
-					'cdx-button', 'cdx-button--fake-button', 'cdx-button--fake-button--enabled',
-					'cdx-button--action-default', 'cdx-button--weight-normal', 'cdx-button--enabled'
-				],
-				'role' => 'button',
-			],
-			Html::element( 'span',
-				[
-					'class' => [ 'cdx-button__icon', "ext-communityrequests-{$this->entityType}--$icon" ],
-					'aria-hidden' => 'true',
-				],
-			) . $parser->msg( $msgKey )->escaped()
-		);
-	}
-
-	protected function getVotingSection( Parser $parser, bool $votingEnabled, string $msgKey = 'wish' ): string {
-		$out = Html::element(
-			'div',
-			[ 'class' => 'mw-heading mw-heading2' ],
-			$parser->msg( "communityrequests-$msgKey-voting" )->text()
-		);
-
-		// TODO: Vote counting doesn't work yet (T388220)
-		$out .= $this->getParagraphRaw( 'voting-desc',
-			$parser->msg( "communityrequests-$msgKey-voting-info", 0, 0 )->parse() . ' ' . (
-				$votingEnabled ?
-					$parser->msg( "communityrequests-$msgKey-voting-info-open" )->escaped() :
-					$parser->msg( "communityrequests-$msgKey-voting-info-closed" )->escaped()
-			)
-		);
-
-		if ( $votingEnabled ) {
-			// TODO: add an cwaction=vote page for no-JS users, or something.
-			$votingButton = Html::element(
-				'button',
-				[
-					'class' => [ 'cdx-button', 'cdx-button--action-progressive', 'cdx-button--weight-primary' ],
-					'type' => 'button',
-					'disabled' => 'disabled',
-				],
-				$parser->msg( "communityrequests-support-$msgKey" )->text()
-			);
-			$votingSection = Html::rawElement(
-				'div',
-				[ 'class' => 'ext-communityrequests-voting-btn' ],
-				$votingButton
-			);
-			$out .= $votingSection;
+	/**
+	 * Using extension data saved in the ParserOutput, update the wish or focus
+	 * area data in the database.
+	 *
+	 * @param LinksUpdate $linksUpdate
+	 * @param mixed $ticket
+	 */
+	public function onLinksUpdateComplete( $linksUpdate, $ticket ) {
+		if ( !$this->config->isEnabled() ) {
+			return;
 		}
-
-		// Transclude the /Votes subpage if it exists.
-		// @phan-suppress-next-line PhanTypeMismatchArgumentNullable
-		$voteSubpagePath = Title::newFromPageReference( $parser->getPage() )->getPrefixedDBkey() .
-			$this->config->getVotesPageSuffix();
-		$voteSubpageTitle = Title::newFromText( $voteSubpagePath );
-		if ( $voteSubpageTitle->exists() ) {
-			$out .= $parser->recursiveTagParse( '{{:' . $voteSubpagePath . '}}' );
+		$data = $linksUpdate->getParserOutput()->getExtensionData( self::EXT_DATA_KEY );
+		if ( !$data ) {
+			return;
 		}
-
-		return $out;
+		$store = $this->stores[ $data['entityType'] ];
+		$title = $linksUpdate->getTitle();
+		$entity = $this->entityFactory->createFromParserData(
+			$data,
+			$this->getCanonicalWishlistPage( $title ),
+			$title->getPageLanguage()->getCode(),
+		);
+		$store->save( $entity );
 	}
+
+	/**
+	 * Get a store for the given page title, or throw an exception if the title
+	 * is not under any of the relevant prefixes.
+	 *
+	 * @param PageIdentity $title
+	 * @return AbstractWishlistStore
+	 * @throws InvalidArgumentException
+	 */
+	private function getStoreForTitle( PageIdentity $title ) {
+		if ( $this->config->isWishPage( $title ) ) {
+			return $this->stores['wish'];
+		} elseif ( $this->config->isFocusAreaPage( $title ) ) {
+			return $this->stores['focus-area'];
+		} else {
+			throw new InvalidArgumentException( 'title is not a wish or focus area' );
+		}
+	}
+
 }

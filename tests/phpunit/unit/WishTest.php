@@ -32,7 +32,7 @@ class WishTest extends AbstractWishlistEntityTest {
 
 		$this->assertSame(
 			$expectedWikitext,
-			$wish->toWikitext( $templateTitleValue, $this->config )->getText()
+			$wish->toWikitext( $this->config )->getText()
 		);
 	}
 
@@ -55,7 +55,7 @@ class WishTest extends AbstractWishlistEntityTest {
 					'baseLang' => 'en',
 				],
 				<<<"END"
-{{Community Wishlist/Wish
+{{#CommunityRequests: wish
 | status = submitted
 | type = change
 | title = Improve search functionality

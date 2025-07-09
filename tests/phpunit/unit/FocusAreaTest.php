@@ -5,7 +5,6 @@ namespace MediaWiki\Extension\CommunityRequests\Tests\Unit;
 
 use MediaWiki\Extension\CommunityRequests\FocusArea\FocusArea;
 use MediaWiki\Tests\Unit\Permissions\MockAuthorityTrait;
-use MediaWiki\Title\TitleValue;
 use MockTitleTrait;
 
 /**
@@ -23,17 +22,10 @@ class FocusAreaTest extends AbstractWishlistEntityTest {
 	 */
 	public function testToWikitext( array $focusAreaData, string $expectedWikitext ): void {
 		$wish = $this->getTestFocusArea( $focusAreaData );
-		$templateTitleValue = $this->getMockBuilder( TitleValue::class )
-			->disableOriginalConstructor()
-			->getMock();
-		$templateTitleValue->method( 'getText' )
-			->willReturn( 'Community Wishlist/Focus area' );
-		$templateTitleValue->method( 'getNamespace' )
-			->willReturn( NS_TEMPLATE );
 
 		$this->assertSame(
 			$expectedWikitext,
-			$wish->toWikitext( $templateTitleValue, $this->config )->getText()
+			$wish->toWikitext( $this->config )->getText()
 		);
 	}
 
@@ -54,7 +46,7 @@ class FocusAreaTest extends AbstractWishlistEntityTest {
 					'baseLang' => 'en',
 				],
 				<<<"END"
-{{Community Wishlist/Focus area
+{{#CommunityRequests: focus-area
 | status = submitted
 | title = Improve search functionality
 | description = Make [[search]] results more relevant and faster.

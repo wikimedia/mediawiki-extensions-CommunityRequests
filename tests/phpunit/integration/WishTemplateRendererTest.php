@@ -10,9 +10,9 @@ use MediaWiki\Title\Title;
 /**
  * @group CommunityRequests
  * @group Database
- * @coversDefaultClass \MediaWiki\Extension\CommunityRequests\HookHandler\WishHookHandler
+ * @coversDefaultClass \MediaWiki\Extension\CommunityRequests\Wish\WishTemplateRenderer
  */
-class WishHookHandlerTest extends CommunityRequestsIntegrationTestCase {
+class WishTemplateRendererTest extends CommunityRequestsIntegrationTestCase {
 
 	protected function getStore(): WishStore {
 		return $this->getServiceContainer()->get( 'CommunityRequests.WishStore' );
@@ -21,21 +21,20 @@ class WishHookHandlerTest extends CommunityRequestsIntegrationTestCase {
 	/**
 	 * Test that a wish can be created from a wiki page.
 	 *
-	 * @covers ::renderWish
-	 * @covers ::onLinksUpdateComplete
+	 * @covers ::render
 	 */
 	public function testCreateWishFromWikiPage(): void {
 		$user = $this->getTestUser()->getUser();
 		$wikitext = <<<END
-<wish
-	title="Test Wish"
-	status="open"
-	type="change"
-	projects="commons"
-	created="2023-10-01T12:00:00Z"
-	proposer="{$user->getName()}"
-	baselang="en"
->This is a [[test]] {{wish}}.</wish>
+{{#CommunityRequests: wish
+|title = Test Wish
+|status = open
+|type = change
+|projects = commons
+|created = 2023-10-01T12:00:00Z
+|proposer = {$user->getName()}
+|baselang = en
+|This is a [[test]] {{wish}}.}}
 END;
 		$ret = $this->insertPage(
 			Title::newFromText( $this->config->getWishPagePrefix() . '123' ),
@@ -56,7 +55,7 @@ END;
 
 	/**
 	 * @dataProvider provideTestTrackingCategories
-	 * @covers ::renderWish
+	 * @covers ::render
 	 */
 	public function testTrackingCategories( string $wikitext, bool $shouldBeInCategory ): void {
 		$userName = $this->getTestUser()->getUser()->getName();
@@ -79,15 +78,15 @@ END;
 	public static function provideTestTrackingCategories(): array {
 		return [
 			'valid wish' => [
-				'<wish title="Valid Wish" status="submitted" type="change" projects="commons" created="2023-10-01T12:00:00Z" proposer="$1" baselang="en">A valid wish</wish>',
+				'{{#CommunityRequests: wish | title=Valid Wish | status=submitted | type=change | projects=commons | created=2023-10-01T12:00:00Z | proposer=$1 | baselang=en | description=A valid wish}}',
 				false,
 			],
 			'missing title' => [
-				'<wish status="submitted" type="change" projects="commons" created="2023-10-01T12:00:00Z" proposer="$1" baselang="en">Missing title</wish>',
+				'{{#CommunityRequests: wish | status=submitted | type=change | projects=commons | created=2023-10-01T12:00:00Z | proposer=$1 | baselang=en |Missing title}}',
 				true,
 			],
 			'unknown status' => [
-				'<wish title="Invalid Status Wish" status="bogus" type="change" projects="commons" created="2023-10-01T12:00:00Z" proposer="$1" baselang="en">Unknown status</wish>',
+				'{{#CommunityRequests: wish | title=Invalid Status Wish | status=bogus | type=change | projects=commons | created=2023-10-01T12:00:00Z | proposer=$1 | baselang=en | description=Unknown status}}',
 				true,
 			],
 		];
@@ -96,8 +95,7 @@ END;
 	// phpcs:enable Generic.Files.LineLength.TooLong
 
 	/**
-	 * @covers ::renderWish
-	 * @covers ::onLinksUpdateComplete
+	 * @covers ::render
 	 */
 	public function testChangePageLanguage(): void {
 		$wish = $this->insertTestWish( 'Community Wishlist/Wishes/W123', 'fr', '20220123000000' );

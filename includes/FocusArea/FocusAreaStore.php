@@ -15,9 +15,8 @@ use Wikimedia\Rdbms\IResultWrapper;
 
 class FocusAreaStore extends AbstractWishlistStore {
 
-	/** @inheritDoc */
-	public static function entityClass(): string {
-		return FocusArea::class;
+	public function entityType(): string {
+		return 'focus-area';
 	}
 
 	// Schema
@@ -194,11 +193,6 @@ class FocusAreaStore extends AbstractWishlistStore {
 			FocusArea::TAG_ATTR_OWNERS,
 			FocusArea::TAG_ATTR_VOLUNTEERS,
 		];
-	}
-
-	/** @inheritDoc */
-	public function getTemplatePage(): string {
-		return $this->config->getFocusAreaTemplatePage();
 	}
 
 	/** @inheritDoc */

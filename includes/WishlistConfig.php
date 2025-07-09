@@ -121,14 +121,6 @@ class WishlistConfig {
 		return $this->wishIndexPage;
 	}
 
-	public function getWishTemplate(): array {
-		return $this->wishTemplate;
-	}
-
-	public function getWishTemplatePage(): string {
-		return $this->wishTemplate[ 'page' ];
-	}
-
 	public function getWishTemplateParams(): array {
 		return $this->wishTemplate[ 'params' ];
 	}

@@ -49,9 +49,8 @@ class ApiWishEdit extends ApiWishlistEntityBase {
 			$this->config,
 			$this->userFactory->newFromName( $this->params[ 'proposer' ] ),
 		);
-		$wishTemplate = $this->titleParser->parseTitle( $this->config->getWishTemplatePage() );
 		$saveStatus = $this->save(
-			$wish->toWikitext( $wishTemplate, $this->config ),
+			$wish->toWikitext( $this->config ),
 			$this->getEditSummary( $wish, $this->params ),
 			$this->params[ 'token' ],
 			$this->params[ 'baserevid' ] ?? null

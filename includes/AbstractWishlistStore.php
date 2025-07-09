@@ -42,11 +42,11 @@ abstract class AbstractWishlistStore {
 	}
 
 	/**
-	 * Get the class name of the wishlist entity (Wish or FocusArea).
+	 * Get the entity type for this store, either "wish" or "focus-area"
 	 *
 	 * @return string
 	 */
-	abstract public static function entityClass(): string;
+	abstract public function entityType(): string;
 
 	/**
 	 * Get the table name for the wishlist entity.
@@ -400,9 +400,10 @@ abstract class AbstractWishlistStore {
 			throw new RuntimeException( 'Invalid content type for AbstractWishlistEntity' );
 		}
 		$wikitext = $content->getText();
-		$args = ( new TemplateArgumentExtractor( $this->parserFactory, $this->titleParser ) )
-			->getArgs(
-				$this->titleParser->parseTitle( $this->getTemplatePage(), NS_TEMPLATE ),
+		$args = ( new TemplateArgumentExtractor( $this->parserFactory ) )
+			->getFuncArgs(
+				'communityrequests',
+				$this->entityType(),
 				$wikitext
 			);
 		if ( $args !== null ) {
@@ -419,13 +420,6 @@ abstract class AbstractWishlistStore {
 	 * @return string[]
 	 */
 	abstract public function getWikitextFields(): array;
-
-	/**
-	 * Get the template page name for the wishlist entity.
-	 *
-	 * @return string
-	 */
-	abstract public function getTemplatePage(): string;
 
 	/**
 	 * Get the parameters for the template invocation of the wishlist entity.

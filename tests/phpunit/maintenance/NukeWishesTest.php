@@ -50,13 +50,13 @@ class NukeWishesTest extends MaintenanceBaseTestCase {
 		$proposer = $this->getTestUser()->getUser();
 		$this->insertPage(
 			Title::newFromText( 'Community Wishlist/Wishes/W1' ),
-			"<wish title=\"My first wish\" proposer=\"{$proposer->getName()}\" " .
-				"created='2025-06-25T12:59:59Z' baselang=\"en\" />"
+			"{{#CommunityRequests: wish | title=My first wish | proposer = {$proposer->getName()} " .
+				"| created=2025-06-25T12:59:59Z | baselang=en}}"
 		);
 		$this->insertPage(
 			Title::newFromText( 'Community Wishlist/Wishes/W2' ),
-			"<wish title=\"My second wish\" proposer=\"{$proposer->getName()}\" " .
-				"created='2025-06-25T12:59:59Z' baselang=\"en\" />"
+			"{{#CommunityRequests: wish | title=My second wish | proposer={$proposer->getName()} " .
+				"| created=2025-06-25T12:59:59Z | baselang=en}}"
 		);
 		$this->newSelectQueryBuilder()
 			->select( 'COUNT(*)' )

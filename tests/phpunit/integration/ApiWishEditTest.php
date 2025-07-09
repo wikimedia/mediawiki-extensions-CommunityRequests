@@ -5,6 +5,7 @@ namespace MediaWiki\Extension\CommunityRequests\Tests\Integration;
 
 use MediaWiki\Api\ApiUsageException;
 use MediaWiki\Tests\Api\ApiTestCase;
+use MediaWiki\User\User;
 
 /**
  * @group CommunityRequests
@@ -19,6 +20,8 @@ class ApiWishEditTest extends ApiTestCase {
 	 * @dataProvider provideTestExecute
 	 */
 	public function testExecute( array $params, array|string $expected ): void {
+		User::createNew( 'TestUser' );
+
 		$params = [
 			'action' => 'wishedit',
 			...$params

@@ -196,7 +196,7 @@ class WishStoreTest extends CommunityRequestsIntegrationTestCase {
 	 */
 	public function testGetDataFromWikitext(): void {
 		$wikitext = <<<END
-{{Community Wishlist/Wish
+{{#CommunityRequests: wish
 |status=2
 |type=1
 |title=<translate>Test</translate>

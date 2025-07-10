@@ -8,6 +8,7 @@
 		"test:lint:styles": "stylelint --cache \"resources/**/*.less\" --allow-empty-input",
 		"test:lint:i18n": "banana-checker i18n/",
 		"test:unit": "jest",
+		"coverage": "npm run test:unit",
 		"selenium-test": "wdio tests/selenium/wdio.conf.js",
 		"doc": "jsdoc -c jsdoc.json"
 	},

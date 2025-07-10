@@ -307,7 +307,8 @@
 				{
 					"name": "common/config.json",
 					"config": [
-						"CommunityRequestsSupportTemplate"
+						"CommunityRequestsSupportTemplate",
+						"CommunityRequestsWishPagePrefix"
 					]
 				},
 				{
@@ -328,9 +329,11 @@
 				"cancel",
 				"communityrequests-optional-comment",
 				"communityrequests-support",
+				"communityrequests-support-dialog-title",
 				"communityrequests-support-focus-area",
 				"communityrequests-support-focus-area-confirmed",
-				"communityrequests-support-focus-area-dialog-title",
+				"communityrequests-support-wish",
+				"communityrequests-support-wish-confirmed",
 				"communityrequests-supported"
 			]
 		}

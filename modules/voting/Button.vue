@@ -5,7 +5,10 @@
 		weight="primary"
 		@click="open = true"
 	>
-		{{ $i18n( 'communityrequests-support-focus-area' ).text() }}
+		{{ isWishPage ?
+			$i18n( 'communityrequests-support-wish' ).text() :
+			$i18n( 'communityrequests-support-focus-area' ).text()
+		}}
 	</cdx-button>
 	<cdx-button
 		v-else
@@ -19,7 +22,10 @@
 		type="success"
 		allow-user-dismiss
 	>
-		{{ $i18n( 'communityrequests-support-focus-area-confirmed' ).text() }}
+		{{ isWishPage ?
+			$i18n( 'communityrequests-support-wish-confirmed' ).text() :
+			$i18n( 'communityrequests-support-focus-area-confirmed' ).text()
+		}}
 	</cdx-message>
 
 	<cdx-dialog
@@ -79,7 +85,7 @@ module.exports = exports = defineComponent( {
 
 		const dialogTitle = computed( () => {
 			const title = mw.msg(
-				'communityrequests-support-focus-area-dialog-title',
+				'communityrequests-support-dialog-title',
 				Util.getPageName()
 			);
 			return title;
@@ -228,6 +234,7 @@ module.exports = exports = defineComponent( {
 			defaultAction,
 			dialogTitle,
 			hasVoted,
+			isWishPage: Util.isWishPage(),
 			onPrimaryAction,
 			open,
 			primaryAction,

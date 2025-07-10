@@ -268,7 +268,7 @@ class CommunityRequestsHooks implements
 			( $this->config->isWishVotingEnabled() && $this->config->isWishPage( $out->getTitle() ) ) ||
 			( $this->config->isFocusAreaVotingEnabled() && $this->config->isFocusAreaPage( $out->getTitle() ) )
 		) {
-			// If the page is a wish, add the voting module.
+			// If the page is a wish or focus area, add the voting module.
 			$out->addModules( 'ext.communityrequests.voting' );
 		}
 

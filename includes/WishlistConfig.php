@@ -8,8 +8,11 @@ use MediaWiki\Config\ServiceOptions;
 use MediaWiki\Extension\CommunityRequests\Wish\Wish;
 use MediaWiki\Language\LanguageCode;
 use MediaWiki\Page\PageReference;
+use MediaWiki\Page\PageReferenceValue;
+use MediaWiki\Title\MalformedTitleException;
 use MediaWiki\Title\TitleFormatter;
 use MediaWiki\Title\TitleParser;
+use TypeError;
 
 /**
  * Service that abstracts retrieving configuration values, with methods to
@@ -137,14 +140,6 @@ class WishlistConfig {
 		return $this->focusAreaIndexPage;
 	}
 
-	public function getFocusAreaTemplate(): array {
-		return $this->focusAreaTemplate;
-	}
-
-	public function getFocusAreaTemplatePage(): string {
-		return $this->focusAreaTemplate[ 'page' ];
-	}
-
 	public function getFocusAreaTemplateParams(): array {
 		return $this->focusAreaTemplate[ 'params' ];
 	}
@@ -266,7 +261,45 @@ class WishlistConfig {
 		$remaining = ltrim( $remaining, '/' );
 
 		// Check if the $remaining is probably a valid language code.
-		return LanguageCode::isWellFormedLanguageTag( $remaining );
+		return LanguageCode::isWellFormedLanguageTag( $remaining ) &&
+			$remaining !== ltrim( $this->votesPageSuffix, '/' );
+	}
+
+	/**
+	 * Get the wish or focus area display ID given a PageReference.
+	 *
+	 * @param ?PageReference $identity
+	 * @return ?string The display ID, e.g. "W1" or "FA1".
+	 */
+	public function getEntityWikitextVal( ?PageReference $identity ): ?string {
+		if ( !$identity || !$this->isWishOrFocusAreaPage( $identity ) ) {
+			return null;
+		}
+		$fullPrefix = $this->isWishPage( $identity ) ? $this->wishPagePrefix : $this->focusAreaPagePrefix;
+		$identityStr = $this->titleFormatter->getPrefixedDBkey( $identity );
+		$slashPos = strrpos( $fullPrefix, '/' );
+		$shortPrefix = $slashPos === false
+			? $fullPrefix : substr( $fullPrefix, $slashPos + 1 );
+		$remaining = substr( $identityStr, strlen( $fullPrefix ) );
+		// Ignore subpages.
+		$remaining = explode( '/', $remaining )[ 0 ];
+		return $shortPrefix . preg_replace( '/^[^0-9]*/', '', $remaining );
+	}
+
+	/**
+	 * Get a PageReference to a focus area page given the wikitext value.
+	 *
+	 * @param string $val The wikitext value, e.g. "FA1".
+	 * @return ?PageReference The PageReference for the focus area, or null if not valid.
+	 */
+	public function getFocusAreaPageRefFromWikitextVal( string $val ): ?PageReference {
+		try {
+			$titleValue = $this->titleParser->parseTitle( $this->focusAreaPagePrefix .
+				trim( preg_replace( '/[^0-9]/', '', $val ) ) );
+		} catch ( MalformedTitleException | TypeError ) {
+			return null;
+		}
+		return PageReferenceValue::localReference( $titleValue->getNamespace(), $titleValue->getDBkey() );
 	}
 
 	// IDs and labels from wikitext values

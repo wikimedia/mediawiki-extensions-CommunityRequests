@@ -7,6 +7,7 @@ use MediaWiki\Content\WikitextContent;
 use MediaWiki\Extension\CommunityRequests\AbstractWishlistEntity;
 use MediaWiki\Extension\CommunityRequests\WishlistConfig;
 use MediaWiki\Page\PageIdentity;
+use MediaWiki\Title\Title;
 use MediaWiki\User\UserIdentity;
 use MediaWiki\Utils\MWTimestamp;
 
@@ -43,7 +44,7 @@ class Wish extends AbstractWishlistEntity {
 
 	// Wish properties.
 	private int $type;
-	private ?int $focusAreaId;
+	private ?PageIdentity $focusArea;
 	private array $projects;
 	private array $phabTasks;
 	private ?string $otherProject;
@@ -57,10 +58,10 @@ class Wish extends AbstractWishlistEntity {
 	 * @param array $fields The fields of the wish, including:
 	 *   - 'type' (int): The type ID of the wish.
 	 *   - 'status' (int): The status ID of the wish.
-	 *   - 'focusAreaId' (?int): The ID of the focus area.
+	 *   - 'focusArea' (?PageIdentity): The focus area page the wish is assigned to, or null if not assigned.
 	 *   - 'title' (string): The title of the wish.
 	 *   - 'description' (?string): The description of the wish.
-	 *   - 'projects' (array<int>): IDs of $CommunityRequestsProjects associated with the wish.
+	 *   - 'projects' (array<int>): IDs of $wgCommunityRequestsProjects associated with the wish.
 	 *   - 'otherProject' (?string): The 'other project' associated with the wish.
 	 *   - 'phabTasks' (array<int>): IDs of Phabricator tasks associated with the wish.
 	 *   - 'audience' (?string): The group(s) of users the wish would benefit.
@@ -79,7 +80,7 @@ class Wish extends AbstractWishlistEntity {
 	) {
 		parent::__construct( $page, $lang, $fields );
 		$this->type = intval( $fields['type'] ?? 0 );
-		$this->focusAreaId = isset( $fields['focusAreaId'] ) ? (int)$fields['focusAreaId'] : null;
+		$this->focusArea = $fields['focusArea'] ?? null;
 		$this->projects = $fields['projects'] ?? [];
 		$this->otherProject = ( $fields['otherProject'] ?? '' ) ?: null;
 		$this->phabTasks = $fields['phabTasks'] ?? [];
@@ -105,12 +106,12 @@ class Wish extends AbstractWishlistEntity {
 	}
 
 	/**
-	 * Get the ID of the focus area ID the wish is assigned to.
+	 * Get the focus area page associated with the wish.
 	 *
-	 * @return ?int
+	 * @return ?PageIdentity
 	 */
-	public function getFocusAreaId(): ?int {
-		return $this->focusAreaId;
+	public function getFocusArea(): ?PageIdentity {
+		return $this->focusArea;
 	}
 
 	/**
@@ -150,13 +151,15 @@ class Wish extends AbstractWishlistEntity {
 	}
 
 	/** @inheritDoc */
-	public function toArray( WishlistConfig $config, bool $lowerCaseKeyNames = false ): array {
+	public function toArray(
+		WishlistConfig $config,
+		bool $lowerCaseKeyNames = false
+	): array {
 		$ret = [
 			'status' => $config->getStatusWikitextValFromId( $this->status ),
 			'type' => $config->getWishTypeWikitextValFromId( $this->type ),
 			'title' => $this->title,
-			// FIXME: Focus area is not yet implemented.
-			'focusArea' => null,
+			'focusArea' => $config->getEntityWikitextVal( $this->getFocusArea() ),
 			'description' => $this->description,
 			'audience' => $this->audience,
 			'projects' => $config->getProjectsWikitextValsFromIds( $this->projects ),
@@ -190,7 +193,7 @@ class Wish extends AbstractWishlistEntity {
 				self::PARAM_PHAB_TASKS => array_map( static fn ( $id ) => "T$id", $this->phabTasks ),
 				self::PARAM_STATUS => $config->getStatusWikitextValFromId( $this->status ),
 				self::PARAM_TYPE => $config->getWishTypeWikitextValFromId( $this->type ),
-				self::PARAM_FOCUS_AREA => $this->focusAreaId,
+				self::PARAM_FOCUS_AREA => $config->getEntityWikitextVal( $this->focusArea ) ?: '',
 				self::PARAM_CREATED => MWTimestamp::convert( TS_ISO_8601, $this->created ),
 				self::PARAM_PROPOSER => $this->proposer ? $this->proposer->getName() : '',
 				self::PARAM_BASE_LANG => $this->baseLang,
@@ -220,11 +223,13 @@ class Wish extends AbstractWishlistEntity {
 		WishlistConfig $config,
 		?UserIdentity $proposer = null
 	): self {
+		$faValue = $config->getFocusAreaPageRefFromWikitextVal( $params[ self::PARAM_FOCUS_AREA ] ?? '' );
 		$fields = [
 			'type' => $config->getWishTypeIdFromWikitextVal( $params[ self::PARAM_TYPE ] ?? '' ),
 			'status' => $config->getStatusIdFromWikitextVal( $params[ self::PARAM_STATUS ] ?? '' ),
 			'title' => $params[ self::PARAM_TITLE ] ?? '',
-			'focusAreaId' => $params[ self::PARAM_FOCUS_AREA ] ?? null,
+			// TODO: It would be better to avoid use of Title here.
+			'focusArea' => $faValue ? Title::newFromPageReference( $faValue ) : null,
 			'description' => $params[ self::PARAM_DESCRIPTION ] ?? '',
 			'projects' => self::getProjectsFromCsv( $params[ self::PARAM_PROJECTS ] ?? '', $config ),
 			'otherProject' => $params[ self::PARAM_OTHER_PROJECT ] ?? null,

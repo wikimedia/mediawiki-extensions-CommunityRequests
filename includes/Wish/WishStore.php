@@ -13,6 +13,7 @@ use MediaWiki\Languages\LanguageFallback;
 use MediaWiki\Page\PageIdentityValue;
 use MediaWiki\Parser\ParserFactory;
 use MediaWiki\Revision\RevisionStore;
+use MediaWiki\Title\Title;
 use MediaWiki\Title\TitleFormatter;
 use MediaWiki\Title\TitleParser;
 use MediaWiki\User\ActorNormalization;
@@ -175,7 +176,7 @@ class WishStore extends AbstractWishlistStore {
 			'cr_actor' => $proposer,
 			'cr_type' => $wish->getType(),
 			'cr_status' => $wish->getStatus(),
-			'cr_focus_area' => $wish->getFocusAreaId(),
+			'cr_focus_area' => $wish->getFocusArea()?->getId(),
 			'cr_created' => $dbw->timestamp( $created ),
 			'cr_updated' => $dbw->timestamp( $wish->getUpdated() ?: wfTimestampNow() ),
 		];
@@ -300,7 +301,8 @@ class WishStore extends AbstractWishlistStore {
 				[
 					'type' => (int)$row->cr_type,
 					'status' => (int)$row->cr_status,
-					'focusAreaId' => (int)$row->cr_focus_area,
+					// TODO: do this in the main query instead of separately.
+					'focusArea' => Title::newFromID( (int)$row->cr_focus_area ),
 					'title' => $row->crt_title,
 					'projects' => $projectsByPage[ $row->cr_page ] ?? [],
 					'otherProject' => $row->crt_other_project,

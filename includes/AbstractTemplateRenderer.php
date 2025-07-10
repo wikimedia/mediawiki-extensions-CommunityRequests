@@ -3,6 +3,7 @@ declare( strict_types = 1 );
 
 namespace MediaWiki\Extension\CommunityRequests;
 
+use MediaWiki\Extension\CommunityRequests\FocusArea\FocusAreaStore;
 use MediaWiki\Html\Html;
 use MediaWiki\Linker\LinkRenderer;
 use MediaWiki\Message\Message;
@@ -27,6 +28,7 @@ abstract class AbstractTemplateRenderer {
 
 	/**
 	 * @param WishlistConfig $config
+	 * @param FocusAreaStore $focusAreaStore
 	 * @param LoggerInterface $logger
 	 * @param LinkRenderer $linkRenderer
 	 * @param Parser $parser
@@ -35,6 +37,7 @@ abstract class AbstractTemplateRenderer {
 	 */
 	public function __construct(
 		protected readonly WishlistConfig $config,
+		protected readonly FocusAreaStore $focusAreaStore,
 		protected readonly LoggerInterface $logger,
 		protected readonly LinkRenderer $linkRenderer,
 		protected readonly Parser $parser,

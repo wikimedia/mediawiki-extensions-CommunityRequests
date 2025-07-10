@@ -81,6 +81,29 @@ class WishStoreTest extends CommunityRequestsIntegrationTestCase {
 	 * @covers ::save
 	 * @covers ::get
 	 */
+	public function testSaveWithFocusArea(): void {
+		$wish = new Wish(
+			$this->getExistingTestPage( 'Community Wishlist/Wishes/W123' ),
+			'en',
+			$this->getTestUser()->getUser(),
+			[
+				'focusArea' => $this->getExistingTestPage( 'Community Wishlist/Focus Areas/FA123' ),
+				'created' => '2025-01-01T00:00:00Z',
+			]
+		);
+		$this->store->save( $wish );
+		/** @var Wish $retrievedWish */
+		$retrievedWish = $this->store->get( $wish->getPage(), 'en' );
+		$this->assertSame(
+			$wish->getFocusArea()->getId(),
+			$retrievedWish->getFocusArea()->getId()
+		);
+	}
+
+	/**
+	 * @covers ::save
+	 * @covers ::get
+	 */
 	public function testSaveThenResaveWithNoProposerOrCreationDate(): void {
 		$user = $this->getTestUser()->getUser();
 		ConvertibleTimestamp::setFakeTime( '2025-01-23T00:00:00Z' );

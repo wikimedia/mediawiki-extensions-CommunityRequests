@@ -119,10 +119,9 @@ class WishTemplateRenderer extends AbstractTemplateRenderer {
 			[ 'class' => 'mw-heading mw-heading3' ],
 			$this->msg( 'communityrequests-wish-focus-area-heading' )->text()
 		);
-		// TODO: Fetch focus area title.
-		$focusArea = $this->getParagraph(
+		$focusArea = $this->getParagraphRaw(
 			'focus-area',
-			$this->msg( 'communityrequests-focus-area-unassigned' )->text()
+			$this->getFocusAreaLink( $args[ Wish::PARAM_FOCUS_AREA ] ?? null )
 		);
 
 		// Wish type.
@@ -235,4 +234,33 @@ class WishTemplateRenderer extends AbstractTemplateRenderer {
 		);
 	}
 
+	/**
+	 * Get a link to the specified focus area or a suitable placeholder
+	 *
+	 * @param string|null $focusAreaArg The focus area input parameter
+	 * @return string HTML
+	 */
+	private function getFocusAreaLink( ?string $focusAreaArg ): string {
+		if ( $focusAreaArg ) {
+			$id = $this->focusAreaStore->getIdFromInput( $focusAreaArg );
+			$pageIdentity = Title::newFromText(
+				$this->focusAreaStore->getPagePrefix() . $id
+			);
+			$entity = $this->focusAreaStore->get(
+				$pageIdentity,
+				$this->parser->getContentLanguage()->getCode()
+			);
+			if ( $entity ) {
+				return $this->linkRenderer->makeKnownLink(
+					$pageIdentity,
+					$entity->getTitle()
+				);
+			} else {
+				// Not found -- just show plain text
+				return htmlspecialchars( $focusAreaArg, ENT_NOQUOTES );
+			}
+		} else {
+			return $this->msg( 'communityrequests-focus-area-unassigned' )->escaped();
+		}
+	}
 }

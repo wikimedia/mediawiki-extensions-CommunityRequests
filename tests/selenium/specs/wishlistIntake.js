@@ -64,7 +64,9 @@ describe( 'WishlistIntake wish submission', () => {
 		await expect( IntakePage.projectsError ).not.toBeDisplayed();
 		await expect( IntakePage.audienceError ).not.toBeDisplayed();
 		// Follow redirect to the new wish page
-		await browser.waitUntil( () => ViewWishPage.successMessage.isDisplayed(), { timeout: 30000 } );
+		await browser.waitUntil(
+			() => ViewWishPage.successMessage.isDisplayed(), { timeout: 30000 }
+		);
 	} );
 
 	it( 'should show all the data entered in the form', async () => {

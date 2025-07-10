@@ -3,6 +3,7 @@ declare( strict_types = 1 );
 
 namespace MediaWiki\Extension\CommunityRequests;
 
+use MediaWiki\Extension\CommunityRequests\FocusArea\FocusAreaStore;
 use MediaWiki\Extension\CommunityRequests\FocusArea\FocusAreaTemplateRenderer;
 use MediaWiki\Extension\CommunityRequests\Wish\WishTemplateRenderer;
 use MediaWiki\Html\Html;
@@ -18,6 +19,7 @@ class TemplateRendererFactory {
 
 	public function __construct(
 		private readonly WishlistConfig $config,
+		private readonly FocusAreaStore $focusAreaStore,
 		private readonly LoggerInterface $logger,
 		private readonly LinkRenderer $linkRenderer,
 	) {
@@ -67,6 +69,7 @@ class TemplateRendererFactory {
 		return match ( $entityType ) {
 			'wish' => new WishTemplateRenderer(
 				$this->config,
+				$this->focusAreaStore,
 				$this->logger,
 				$this->linkRenderer,
 				$parser,
@@ -75,6 +78,7 @@ class TemplateRendererFactory {
 			),
 			'focus-area' => new FocusAreaTemplateRenderer(
 				$this->config,
+				$this->focusAreaStore,
 				$this->logger,
 				$this->linkRenderer,
 				$parser,

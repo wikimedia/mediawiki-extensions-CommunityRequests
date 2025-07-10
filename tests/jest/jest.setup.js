@@ -51,11 +51,12 @@ vueConfig.global.directives = {
  * @param {Object} [config] Will be merged with the defaults.
  */
 function mockMwConfigGet( config = {} ) {
-	const mockConfig = Object.assign( {
+	const mockConfig = Object.assign( {}, {
 		wgUserGroups: [],
 		wgUserLanguage: 'en',
 		wgUserName: 'ExampleUser',
 		wgCanonicalSpecialPageName: false,
+		intakeFocusAreas: {},
 		intakeId: null,
 		intakeTitleMaxChars: 255,
 		intakeWishlistManager: false,

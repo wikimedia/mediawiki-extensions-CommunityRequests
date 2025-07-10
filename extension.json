@@ -33,7 +33,8 @@
 		"MediaWiki\\Extension\\CommunityRequests\\Tests\\": "tests/phpunit/"
 	},
 	"TestAutoloadClasses": {
-		"MediaWiki\\Extension\\CommunityRequests\\Tests\\CommunityRequestsIntegrationTestCase": "tests/phpunit/integration/CommunityRequestsIntegrationTestCase.php"
+		"MediaWiki\\Extension\\CommunityRequests\\Tests\\CommunityRequestsIntegrationTestCase": "tests/phpunit/integration/CommunityRequestsIntegrationTestCase.php",
+		"MediaWiki\\Extension\\CommunityRequests\\Tests\\Unit\\AbstractWishlistEntityTest": "tests/phpunit/unit/AbstractWishlistEntityTest.php"
 	},
 	"ServiceWiringFiles": [
 		"includes/ServiceWiring.php"
@@ -84,6 +85,7 @@
 			"services": [
 				"CommunityRequests.WishlistConfig",
 				"CommunityRequests.WishStore",
+				"CommunityRequests.FocusAreaStore",
 				"TitleParser",
 				"UserFactory"
 			]
@@ -178,6 +180,7 @@
 				"intake/AudienceSection.vue",
 				"intake/DescriptionField.js",
 				"intake/DescriptionSection.vue",
+				"intake/FocusAreaSection.vue",
 				"intake/FooterSection.vue",
 				"intake/PhabricatorTasks.vue",
 				"intake/ProjectSection.vue",
@@ -265,7 +268,8 @@
 				"communityrequests-close",
 				"communityrequests-create-success",
 				"communityrequests-edit-success",
-				"communityrequests-view-all-wishes"
+				"communityrequests-view-all-wishes",
+				"communityrequests-intake-focus-area"
 			],
 			"factory": "\\MediaWiki\\Extension\\CommunityRequests\\Wish\\SpecialWishlistIntake::addResourceLoaderMessages"
 		},

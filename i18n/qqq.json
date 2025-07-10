@@ -14,6 +14,7 @@
 	"communityrequests-wish-not-found": "Error message shown when a wish is not found.\n\nParameters:\n* $1 — the page title of the wish that was not found",
 	"communityrequests-focus-area-not-found": "Error message shown when a focus area is not found.\n\nParameters:\n* $1 — the page title of the focus area that was not found",
 	"communityrequests-form-error": "General error message.",
+	"communityrequests-intake-focus-area": "Label for the focus area field in the Special:WishlistIntake form.",
 	"communityrequests-description": "Form field label.",
 	"communityrequests-description-description": "Form field description.",
 	"communityrequests-title-label": "Form field label for the wish or focus area title.\n{{Identical|Title}}",

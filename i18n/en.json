@@ -13,6 +13,7 @@
 	"communityrequests-wish-not-found": "The wish [[$1]] was not found or was not properly saved.",
 	"communityrequests-focus-area-not-found": "The focus area [[$1]] was not found or was not properly saved.",
 	"communityrequests-form-error": "Something went wrong. Please try saving again, or ask for help on the [[$1|talk page]].",
+	"communityrequests-intake-focus-area": "Focus area",
 	"communityrequests-description": "Describe your problem",
 	"communityrequests-description-description": "Explain in detail the wish or problem you are addressing.",
 	"communityrequests-title-label": "Title",

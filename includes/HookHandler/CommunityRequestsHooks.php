@@ -88,6 +88,7 @@ class CommunityRequestsHooks implements
 		}
 		$this->templateRendererFactory = new TemplateRendererFactory(
 			$config,
+			$focusAreaStore,
 			$this->logger,
 			$linkRenderer
 		);

@@ -175,6 +175,7 @@ class WishlistConfigTest extends MediaWikiUnitTestCase {
 		$this->assertFalse( $this->config->isWishPage( $this->makeMockTitle( 'Community Wishlist/Wish', [
 			'namespace' => NS_TEMPLATE
 		] ) ) );
+		$this->assertFalse( $this->config->isWishPage( $this->makeMockTitle( 'Community Wishlist/W123/Votes' ) ) );
 
 		$this->assertFalse( $this->config->isFocusAreaPage( $this->makeMockTitle( 'FA123' ) ) );
 		$this->assertTrue( $this->config->isFocusAreaPage( $this->makeMockTitle( 'Community Wishlist/FA123' ) ) );
@@ -250,5 +251,25 @@ class WishlistConfigTest extends MediaWikiUnitTestCase {
 		$this->assertSame( [ 'wikipedia' ], $this->config->getProjectsWikitextValsFromIds( [ 0 ] ) );
 		$this->expectException( ConfigException::class );
 		$this->config->getProjectsWikitextValsFromIds( [ 2 ] );
+	}
+
+	/**
+	 * @covers ::getEntityWikitextVal
+	 */
+	public function testGetEntityWikitextVal(): void {
+		$this->assertSame( 'FA123',
+			$this->config->getEntityWikitextVal( $this->makeMockTitle( 'Community Wishlist/FA123' ) )
+		);
+		$this->assertSame(
+			'W123',
+			$this->config->getEntityWikitextVal( $this->makeMockTitle( 'Community Wishlist/W123/fr' ) )
+		);
+		$this->assertNull(
+			$this->config->getEntityWikitextVal( $this->makeMockTitle( 'Community Wishlist/W123/b-o-g-u-s' ) )
+		);
+		$this->assertNull(
+			$this->config->getEntityWikitextVal( $this->makeMockTitle( 'Community Wishlist/W123/Votes' ) )
+		);
+		$this->assertNull( $this->config->getEntityWikitextVal( $this->makeMockTitle( 'Bogus' ) ) );
 	}
 }

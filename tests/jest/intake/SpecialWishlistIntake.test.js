@@ -19,6 +19,7 @@ const defaultProps = {
 	baseRevId: 12345,
 	created: '2023-10-01T12:00:00Z',
 	description: 'Test Description',
+	focusArea: 'FA1',
 	otherProject: 'Other Project',
 	phabTasks: [ 'T123', 'T456' ],
 	projects: [ 'commons', 'wikisource' ],
@@ -32,7 +33,13 @@ describe( 'SpecialWishlistIntake', () => {
 	let wrapper;
 
 	beforeEach( () => {
-		mockMwConfigGet( { wgCanonicalSpecialPageName: 'WishlistIntake' } );
+		mockMwConfigGet( {
+			wgCanonicalSpecialPageName: 'WishlistIntake',
+			intakeFocusAreas: {
+				FA1: 'Focus Area 1',
+				FA2: 'Focus Area 2'
+			}
+		} );
 		document.body.innerHTML = '';
 	} );
 
@@ -53,6 +60,7 @@ describe( 'SpecialWishlistIntake', () => {
 		expect( formData.get( 'baselang' ) ).toBe( 'en' );
 		expect( formData.get( 'created' ) ).toBe( '2023-10-01T12:00:00Z' );
 		expect( formData.get( 'description' ) ).toBe( 'Test Description' );
+		expect( formData.get( 'focusarea' ) ).toBe( 'FA1' );
 		expect( formData.get( 'otherproject' ) ).toBe( 'Other Project' );
 		expect( formData.get( 'phabtasks' ) ).toBe( 'T123,T456' );
 		expect( formData.get( 'projects' ) ).toBe( 'commons,wikisource' );
@@ -62,10 +70,12 @@ describe( 'SpecialWishlistIntake', () => {
 		expect( formData.get( 'entitytitle' ) ).toBe( 'Test Title' );
 	} );
 
-	it( 'should show the status field for staff', () => {
+	it( 'should show the status and focus area fields for staff', () => {
 		mockMwConfigGet( { intakeWishlistManager: true } );
 		wrapper = getWrapper( defaultProps );
 		expect( wrapper.find( '.ext-communityrequests-intake__status' ).exists() )
+			.toBe( true );
+		expect( wrapper.find( '.ext-communityrequests-intake__focus-area' ).exists() )
 			.toBe( true );
 	} );
 } );

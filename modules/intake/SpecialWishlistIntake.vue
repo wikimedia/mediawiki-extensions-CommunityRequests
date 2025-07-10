@@ -14,6 +14,15 @@
 			:value="wish.status"
 			type="hidden"
 			name="status">
+		<focus-area-section
+			v-if="isWishlistManager"
+			v-model:focus-area="wish.focusArea"
+			@update:focus-area="formChanged = true"
+		></focus-area-section>
+		<input
+			:value="wish.focusArea"
+			type="hidden"
+			name="focusarea">
 		<description-section
 			v-model:title="wish.title"
 			v-model:description="wish.description"
@@ -83,6 +92,7 @@ const { CdxField } = require( '../codex.js' );
 const { CommunityRequestsHomepage, CommunityRequestsStatuses } = require( '../common/config.json' );
 const Util = require( '../common/Util.js' );
 const StatusSection = require( './StatusSection.vue' );
+const FocusAreaSection = require( './FocusAreaSection.vue' );
 const WishTypeSection = require( './WishTypeSection.vue' );
 const ProjectSection = require( './ProjectSection.vue' );
 const DescriptionSection = require( './DescriptionSection.vue' );
@@ -105,6 +115,7 @@ module.exports = exports = defineComponent( {
 		AudienceSection,
 		CdxField,
 		DescriptionSection,
+		FocusAreaSection,
 		FooterSection,
 		PhabricatorTasks,
 		ProjectSection,
@@ -117,6 +128,7 @@ module.exports = exports = defineComponent( {
 		baseRevId: { type: Number, default: 0 },
 		created: { type: String, default: '' },
 		description: { type: String, default: '' },
+		focusArea: { type: String, default: null },
 		otherProject: { type: String, default: '' },
 		phabTasks: { type: Array, default: () => [] },
 		projects: { type: Array, default: () => [] },

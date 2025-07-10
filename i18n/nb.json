@@ -11,7 +11,6 @@
 	"communityrequests-form-error": "Noe gikk galt. Prøv å lagre på nytt, eller be om hjelp på [[$1|diskusjonssiden]].",
 	"communityrequests-description": "Beskriv problemet ditt",
 	"communityrequests-description-description": "Forklar detaljert hva ønsket går ut på eller hva problemet består i.",
-	"communityrequests-title": "Ønskets tittel",
 	"communityrequests-title-error": "Skriv inn en gyldig verdi for dette feltet (mellom $1 og $2 {{PLURAL:$2|tegn}}).",
 	"communityrequests-title-description": "Sørg for at tittelen inneholder en kort beskrivelse av ønsket eller problemet.",
 	"communityrequests-description-error": "Skriv inn en gyldig verdi for dette feltet ($1 eller flere {{PLURAL:$1|tegn}}).",

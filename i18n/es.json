@@ -8,7 +8,6 @@
 	"communityrequests-form-error": "Algo salió mal. Intenta guardar nuevamente o solicita ayuda en la [[$1|página de discusión]].",
 	"communityrequests-description": "Describe tu problema",
 	"communityrequests-description-description": "Explica en detalle el deseo o problema que estás abordando.",
-	"communityrequests-title": "Título del deseo",
 	"communityrequests-title-error": "Introduce un valor para este campo (entre $1 y $2 {{PLURAL:$2|caracter|caracteres}}).",
 	"communityrequests-title-description": "Asegúrate de que tu título contiene una breve descripción del deseo o problema.",
 	"communityrequests-description-error": "Introduce un valor para este campo ($1 o más {{PLURAL:$1|caracter|caracteres}}).",

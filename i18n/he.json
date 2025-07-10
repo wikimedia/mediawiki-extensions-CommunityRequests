@@ -13,7 +13,6 @@
 	"communityrequests-form-error": "משהו השתבש. נא לנסות לשמור שוב או לבקש עזרה ב[[$1|דף השיחה]].",
 	"communityrequests-description": "נא לתאר את הבעיה שלך",
 	"communityrequests-description-description": "נא להסביר בפירוט את המשאלה או את הבעיה {{GENDER:|שאתה מתייחס|שאת מתייחסת}} אליה.",
-	"communityrequests-title": "כותרת המשאלה",
 	"communityrequests-title-error": "נא להזין ערך עבור השדה הזה (בין $1 ל־$2 {{PLURAL:$2|תווים}}).",
 	"communityrequests-title-description": "נא לוודא שהכותרת שלך מכילה תיאור קצר של המשאלה או הבעיה.",
 	"communityrequests-description-error": "נא להזין ערך עבור השדה הזה ({{PLURAL:$1|תו אחד|$1 תווים}} או יותר).",

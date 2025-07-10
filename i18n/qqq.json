@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"Amire80"
+			"Amire80",
+			"McDutchie"
 		]
 	},
 	"communityrequests-desc": "{{desc|name=CommunityRequests|url=https://www.mediawiki.org/wiki/Special:MyLanguage/Extension:CommunityRequests}}",
@@ -54,7 +55,7 @@
 	"communityrequests-save": "Form submission button label for existing wishes.",
 	"communityrequests-support-focus-area": "Button label for the voting button on focus area pages.",
 	"communityrequests-support-focus-area-dialog-title": "Title of voting dialog window.",
-	"communityrequests-support-wish": "Button label for the voting button on wish pages.",
+	"communityrequests-support-wish": "Button label for the voting button on wish pages. '''<span style=\"color: red\">“Support” is a verb,</span> referring to supporting this wish.'''",
 	"communityrequests-support-wish-dialog-title": "Title of voting dialog window.",
 	"communityrequests-optional-comment": "Form field label in the voting dialog window.",
 	"communityrequests-support": "Primary button label in the voting dialog window. It describes an action: \"Express support for a wish, vote for a wish\".",

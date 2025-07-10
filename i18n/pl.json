@@ -13,7 +13,6 @@
 	"communityrequests-form-error": "Coś poszło nie tak. Spróbuj zapisać ponownie lub poproś o pomoc na [[$1|stronie dyskusji]].",
 	"communityrequests-description": "Opisz swój problem",
 	"communityrequests-description-description": "Opisz szczegółowo życzenie lub problem, które zgłaszasz.",
-	"communityrequests-title": "Tytuł życzenia",
 	"communityrequests-title-error": "Prosimy o wprowadzenie wartości w tym polu (o długości między $1 a $2 {{PLURAL:$2|znakiem|znakami}}).",
 	"communityrequests-title-description": "Upewnij się, że tytuł zawiera krótki opis życzenia lub problemu",
 	"communityrequests-description-error": "Prosimy o wprowadzenie wartości w tym polu (o długości co najmniej $1 {{PLURAL:$1|znaku|znaków}}).",

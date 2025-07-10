@@ -13,7 +13,6 @@
 	"communityrequests-form-error": "مشکلی پیش آمد. لطفاً ذخیره‌سازی مجدد را بیازمایید، یا در [[$1|صفحهٔ بحث]] از دیگران راهنمایی بخواهید.",
 	"communityrequests-description": "مشکل خود را شرح دهید",
 	"communityrequests-description-description": "خواسته یا مشکلی که به آن اشاره دارید را با جزئیات شرح دهید.",
-	"communityrequests-title": "عنوان خواسته",
 	"communityrequests-title-error": "لطفاً در این جعبه مقداری وارد کنید (بین $1 و $2 {{PLURAL:$2|نویسه}}).",
 	"communityrequests-title-description": "لطفاً مطمئن شوید که عنوانی که وارد کرده‌اید حاوی توصیفی مختصر پیرامون خواسته یا مشکل مورد نظر است.",
 	"communityrequests-description-error": "لطفاً در این جعبه مقداری وارد کنید ($1 {{PLURAL:$1|نویسه}} یا بیشتر).",

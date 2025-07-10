@@ -12,7 +12,6 @@
 	"communityrequests-form-error": "Nəsə xəta baş verdi. Zəhmət olmasa, yenidən yadda saxlamağa cəhd edin və ya [[$1|müzakirə səhifəsində]] kömək istəyin.",
 	"communityrequests-description": "Probleminizi təsvir edin",
 	"communityrequests-description-description": "Müraciət etdiyiniz istək və ya problemi ətraflı izah edin.",
-	"communityrequests-title": "İstək başlığı",
 	"communityrequests-title-error": "Zəhmət olmasa, bu sahə üçün dəyər daxil edin ($1 və $2 {{PLURAL:$2|simvol}} arasında).",
 	"communityrequests-title-description": "Başlığınızın istək və ya problemin qısa təsvirini ehtiva etdiyinə əmin olun.",
 	"communityrequests-description-error": "Zəhmət olmasa, bu sahə üçün dəyər daxil edin ($1 və ya daha çox {{PLURAL:$1|simvol}} arasında).",

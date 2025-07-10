@@ -10,7 +10,6 @@
 	"communityrequests-form-error": "Something went wrong. Please try saving again, or ask for help on the [[$1|talk page]].",
 	"communityrequests-description": "আপনার সমস্যা বর্ণনা করুন",
 	"communityrequests-description-description": "আপনি যে ইচ্ছা বা সমস্যার কথা বলছেন তা বিস্তারিতভাবে ব্যাখ্যা করুন।",
-	"communityrequests-title": "ইচ্ছার শিরোনাম",
 	"communityrequests-title-error": "অনুগ্রহ করে এই ঘরের জন্য একটি মান লিখুন ($1 ও $2 {{PLURAL:$2|অক্ষরের}} মধ্যে)।",
 	"communityrequests-title-description": "আপনার শিরোনামে ইচ্ছা বা সমস্যার সংক্ষিপ্ত বিবরণ রয়েছে তা নিশ্চিত করুন।",
 	"communityrequests-description-error": "অনুগ্রহ করে এই ঘরের জন্য একটি মান লিখুন ($1 বা তার বেশি {{PLURAL:$1|অক্ষর}})।",

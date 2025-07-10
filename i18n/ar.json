@@ -2,7 +2,8 @@
 	"@metadata": {
 		"authors": [
 			"Meno25",
-			"Mohammed Qays"
+			"Mohammed Qays",
+			"زيزو كي كي عبدالعزيز سعيد"
 		]
 	},
 	"communityrequests-desc": "نظام لإدارة الاقتراحات والطلبات الفنية لمجتمع الويكي.",
@@ -14,7 +15,6 @@
 	"communityrequests-form-error": "خطأ ما قد حدث. يرجى محاولة الحفظ مرة أخرى أو طلب المساعدة على [[$1|صفحة النقاش]].",
 	"communityrequests-description": "قدموا وصفًا لمشكلتكم",
 	"communityrequests-description-description": "صفوا لنا بالتفصيل الأمنية أو المشكلة التي تتناولونها هنا",
-	"communityrequests-title": "عنوان الأمنية",
 	"communityrequests-title-error": "يرجى إدخال قيمة في هذه الخانة (بين $1 و$2 {{PLURAL:$2|محرف|محارف}}).",
 	"communityrequests-title-description": "احرصوا على أن يكون العنوان المختار يحتوي على بيان قصير بالأمنية أو المشكلة.",
 	"communityrequests-description-error": "الرجاء إدخال قيمة لهذا الحقل ( $1 أو أكثر {{PLURAL:$1| حرف|أحرف}}).",
@@ -79,6 +79,7 @@
 	"communityrequests-wish-created": "تم الإنشاء: $1",
 	"communityrequests-wish-updated": "آخر تحديث: $1",
 	"communityrequests-wish-proposer": "المؤلف: $1",
+	"communityrequests-wish-voting": "جميع الغة ترجمة العربية السعودية",
 	"communityrequests-wishes-type-header": "النوع",
 	"communityrequests-wishes-projects-header": "المشاريع",
 	"communityrequests-wishes-date-header": "التاريخ (UTC)",
@@ -89,6 +90,7 @@
 	"communityrequests-form-loading-1": "إن لم يحمّل النموذج، يرجى التأكد من تمكين جافا سكريبت.",
 	"communityrequests-form-loading-2": "لو كنتم لا زلتم تعانون من مشاكل، يرجى طلب المساعدة على $1.",
 	"communityrequests-please-log-in": "يرجى تسجيل الدخول لرفع طلب أمنية.",
+	"communityrequests-focus-area-description": "جميع الغة ترجمة العربية",
 	"communityrequests-focus-area-supported": "بدعم من:",
 	"communityrequests-focus-area-supported-val": "$1 {{PLURAL:$2|شخص|أشخاص}}",
 	"communityrequests-focus-area-owners-label": "المالك:",

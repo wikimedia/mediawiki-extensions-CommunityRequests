@@ -12,7 +12,6 @@
 	"communityrequests-form-error": "May naglain. Palihog tilawi liwat nga magtipig, ukon magpangayo sang bulig sa [[ $1 |talk page]].",
 	"communityrequests-description": "Ilaragway ang imo problema",
 	"communityrequests-description-description": "Ipaathag sing detalyado ang handom ukon problema nga imo ginasabat.",
-	"communityrequests-title": "Titulo sang handom",
 	"communityrequests-title-error": "Palihog magsulod sang balor para sa sini nga field (sa tunga sang $1 kag $2 {{PLURAL:$2| karakter|mga karakter}}).",
 	"communityrequests-title-description": "Siguraduhon nga ang imo titulo nagaunod sang malip-ot nga paglaragway sang handum ukon problema.",
 	"communityrequests-description-error": "Palihog magsulod sang balor para sa sini nga field ( $1 ukon kapin pa {{PLURAL:$1| karakter|mga karakter}}).",

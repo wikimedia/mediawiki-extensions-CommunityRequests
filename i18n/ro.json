@@ -6,7 +6,6 @@
 		]
 	},
 	"communityrequests-description-description": "Explicați în detaliu dorința sau problema pe care o abordați.",
-	"communityrequests-title": "Titlul dorinței",
 	"communityrequests-title-error": "Vă rugăm să introduceți o valoare pentru acest câmp (între $1 și $2 {{PLURAL:$2| caracter|caractere}}).",
 	"communityrequests-wishtype-bug-label": "Raport de eroare",
 	"communityrequests-wishtype-unknown-label": "Nu sunt sigur sau nu știu",

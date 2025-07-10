@@ -13,7 +13,6 @@
 	"communityrequests-form-error": "Нешто не е во ред. Обидете се да зачувате повторно, или пак побарајте помош на [[$1|разговорната страница]].",
 	"communityrequests-description": "Опишете го проблемот",
 	"communityrequests-description-description": "Подробно објаснете ја желбата или проблемот што сакате да се реши.",
-	"communityrequests-title": "Наслов на желбата",
 	"communityrequests-title-error": "Внесете вредност за ова поле (помеѓу $1 и $2 {{PLURAL:$2|знак|знаци}}).",
 	"communityrequests-title-description": "Насловот треба да содржи краток опис на желбата или проблемот.",
 	"communityrequests-description-error": "Внесете вредност за ова поле ($1 или повеќе {{PLURAL:$1|знак|знаци}}).",

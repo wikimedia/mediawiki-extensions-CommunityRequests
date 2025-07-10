@@ -13,7 +13,6 @@
 	"communityrequests-form-error": "Er is iets fout gegaan. Probeer opnieuw op te slaan of vraag op de [[$1|overlegpagina]] om hulp.",
 	"communityrequests-description": "Beschrijf uw probleem",
 	"communityrequests-description-description": "Leg gedetailleerd uit welke wens of welk probleem u aankaart.",
-	"communityrequests-title": "Titel van de wens",
 	"communityrequests-title-error": "Voer een waarde in voor dit veld (tussen $1 en $2 teken{{PLURAL:$2||s}}).",
 	"communityrequests-title-description": "Zorg ervoor dat uw titel een korte beschrijving van de wens of het probleem bevat.",
 	"communityrequests-description-error": "Voer een waarde in voor dit veld ($1 of meer teken{{PLURAL:$1||s}}).",

@@ -9,7 +9,6 @@
 	"communityrequests-form-subtitle": "Üdvözlünk a közösségi kívánságlistán! Töltsd ki az alábbi űrlapot a kívánságod beküldéséhez.",
 	"communityrequests-description": "Írd le a problémádat",
 	"communityrequests-description-description": "Írd le részletesen a kívánságodat vagy problémádat.",
-	"communityrequests-title": "Kívánság címe",
 	"communityrequests-title-error": "Írj be egy értéket ebbe a mezőbe ($1–$2 {{PLURAL:$2|karakter}}).",
 	"communityrequests-title-description": "Győződj meg róla, hogy a cím tartalmazza a kívánság vagy probléma rövid leírását.",
 	"communityrequests-description-error": "Írj be egy értéket ebbe a mezőbe (legalább $1 {{PLURAL:$1|karakter}}).",

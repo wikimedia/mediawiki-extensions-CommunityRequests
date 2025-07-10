@@ -8,7 +8,6 @@
 	"communityrequests-form-error": "Něco se nepovedlo. Zkuste prosím uložit znovu nebo požádejte o pomoc v [[$1|diskusi]].",
 	"communityrequests-description": "Popište svůj problém",
 	"communityrequests-description-description": "Detailně vysvětlete své přání nebo problém, který řešíte.",
-	"communityrequests-title": "Název přání",
 	"communityrequests-title-error": "Zadejte hodnotu tohoto pole (mezi $1 a $2 {{PLURAL:$2|znakem|znaky}}).",
 	"communityrequests-title-description": "Ujistěte se, že váš název obsahuje stručný popis přání nebo problému.",
 	"communityrequests-description-error": "Zadejte hodnotu tohoto pole ($1 nebo více {{PLURAL:$1|znaků}}).",

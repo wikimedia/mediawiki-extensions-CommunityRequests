@@ -10,7 +10,6 @@
 	"communityrequests-form-error": "Terjadi kesalahan. Silahkan coba simpan lagi, atau minta bantuan di [[$1|halaman pembicaraan]].",
 	"communityrequests-description": "Jelaskan masalah Anda",
 	"communityrequests-description-description": "Jelaskan secara rinci keinginan atau permasalahan yang sedang Anda alami.",
-	"communityrequests-title": "Judul permohonan",
 	"communityrequests-title-error": "Harap isi bidang ini (sebanyak $1 hingga $2 karakter).",
 	"communityrequests-title-description": "Pastikan judul Anda berisi deskripsi singkat perihal keinginan atau permasalahan terkait.",
 	"communityrequests-description-error": "Harap isi bidang ini (sebanyak $1 atau lebih karakter).",

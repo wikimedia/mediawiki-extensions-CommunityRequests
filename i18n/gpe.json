@@ -8,7 +8,6 @@
 	"communityrequests-form-error": "Something went wrong. Please try saving again, or ask for help on the [[$1|talk page]].",
 	"communityrequests-description": "Make you describe your problem",
 	"communityrequests-description-description": "Explain in detail de wish/problem you dey address",
-	"communityrequests-title": "Wish title",
 	"communityrequests-title-error": "Please make you enter value give dis field (between $1 den $2 {{PLURAL:$2|character|characters}}).",
 	"communityrequests-title-description": "Make you make sure your title dey contain brief description of de wish/problem",
 	"communityrequests-description-error": "Please make you enter value give dis field ($1 anaa more {{PLURAL:$1|character|characters}}).",

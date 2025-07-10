@@ -94,7 +94,7 @@ class CommunityRequestsHooks implements
 		);
 		$this->stores = [
 			'wish' => $wishStore,
-			'focus-area' => $focusAreaStore
+			'focus-area' => $focusAreaStore,
 		];
 	}
 

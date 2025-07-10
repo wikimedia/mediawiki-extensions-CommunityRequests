@@ -26,6 +26,7 @@ class ApiQueryWishesTest extends ApiTestCase {
 
 	/**
 	 * @covers ::execute
+	 * @covers \MediaWiki\Extension\CommunityRequests\AbstractWishlistStore::getAll
 	 */
 	public function testExecuteSortByCreated(): void {
 		$queryKey = 'communityrequests-wishes';
@@ -181,7 +182,7 @@ class ApiQueryWishesTest extends ApiTestCase {
 		$this->assertCount( 2, $ret[ 'query' ][ 'communityrequests-wishes' ] );
 		$this->assertSame( 'Test Wish 3', $ret[ 'query' ][ 'communityrequests-wishes' ][ 0 ][ 'title' ] );
 		$this->assertSame( 'Test Wish 2', $ret[ 'query' ][ 'communityrequests-wishes' ][ 1 ][ 'title' ] );
-		$this->assertSame( 'Test Wish 1|20231001000000|1', $ret[ 'continue' ][ 'crwcontinue' ] );
+		$this->assertSame( 'Test Wish 1|20231001000000|0', $ret[ 'continue' ][ 'crwcontinue' ] );
 
 		[ $ret ] = $this->doApiRequest( [
 			'action' => 'query',
@@ -195,6 +196,21 @@ class ApiQueryWishesTest extends ApiTestCase {
 		$this->assertCount( 1, $ret[ 'query' ][ 'communityrequests-wishes' ] );
 		$this->assertSame( 'Test Wish 1', $ret[ 'query' ][ 'communityrequests-wishes' ][ 0 ][ 'title' ] );
 		$this->assertArrayNotHasKey( 'continue', $ret );
+	}
+
+	/**
+	 * @covers ::execute
+	 */
+	public function testExecuteWithCount(): void {
+		$this->createTestWish();
+		$this->createTestWish();
+
+		[ $ret ] = $this->doApiRequest( [
+			'action' => 'query',
+			'list' => 'communityrequests-wishes',
+			'crwcount' => 1,
+		] );
+		$this->assertSame( 2, $ret[ 'query' ][ 'communityrequests-wishes-metadata' ][ 'count' ] );
 	}
 
 	private function createTestWish( $params = [] ): array {

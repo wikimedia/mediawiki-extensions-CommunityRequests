@@ -7,9 +7,11 @@ use InvalidArgumentException;
 use MediaWiki\Api\ApiBase;
 use MediaWiki\Api\ApiQuery;
 use MediaWiki\Api\ApiQueryBase;
+use MediaWiki\Extension\CommunityRequests\FocusArea\FocusAreaStore;
 use MediaWiki\Extension\CommunityRequests\Wish\Wish;
 use MediaWiki\Extension\CommunityRequests\Wish\WishStore;
 use MediaWiki\Extension\CommunityRequests\WishlistConfig;
+use MediaWiki\Title\Title;
 use Wikimedia\ParamValidator\ParamValidator;
 use Wikimedia\ParamValidator\TypeDef\IntegerDef;
 
@@ -20,6 +22,7 @@ class ApiQueryWishes extends ApiQueryBase {
 		string $moduleName,
 		private readonly WishlistConfig $config,
 		private readonly WishStore $store,
+		private readonly FocusAreaStore $focusAreaStore,
 	) {
 		parent::__construct( $queryModule, $moduleName, 'crw' );
 	}
@@ -61,7 +64,7 @@ class ApiQueryWishes extends ApiQueryBase {
 				// We have more results, so set the continue parameter.
 				$this->setContinueEnumParameter(
 					'continue',
-					"{$wish->getTitle()}|$timestamp|{$wish->getPage()->getId()}",
+					"{$wish->getTitle()}|$timestamp|{$wish->getVoteCount()}",
 				);
 				break;
 			}
@@ -82,13 +85,44 @@ class ApiQueryWishes extends ApiQueryBase {
 			// Only return requested properties.
 			$wishData = array_intersect_key( $wishData, array_flip( $params[ 'prop' ] ) );
 
-			// Always include the wish ID.
+			// Always include the wish ID and pagetitle.
 			$wishData = [
 				'id' => $wish->getPage()->getId(),
 				...$wishData,
 			];
 
+			// Add wish page title and namespace.
+			ApiQueryBase::addTitleInfo(
+				$wishData,
+				Title::newFromPageIdentity( $wish->getPage() ),
+				$this->getModulePrefix()
+			);
+
+			// Add focus area page title and namespace, if applicable.
+			if ( $wish->getFocusArea() ) {
+				ApiQueryBase::addTitleInfo(
+					$wishData,
+					Title::newFromPageIdentity( $wish->getFocusArea() ),
+					'crfa'
+				);
+				// TODO: Include this in the WishStore::getAll() query.
+				$focusArea = $this->focusAreaStore->get(
+					$wish->getFocusArea(),
+						$params[ 'lang' ] ?? $this->getLanguage()->getCode()
+				);
+				$wishData['focusareatitle'] = $focusArea->getTitle();
+			}
+
 			$result->addValue( [ 'query', $this->getModuleName() ], null, $wishData );
+		}
+
+		// If the count parameter is set, include the total number of wishes.
+		if ( $params[ 'count' ] ) {
+			$result->addValue(
+				[ 'query', "{$this->getModuleName()}-metadata" ],
+				'count',
+				$this->store->getCount()
+			);
 		}
 
 		$result->addIndexedTagName( [ 'query', $this->getModuleName() ], 'wishes' );
@@ -151,7 +185,7 @@ class ApiQueryWishes extends ApiQueryBase {
 				],
 			],
 			'dir' => [
-				ParamValidator::PARAM_DEFAULT => 'ascending',
+				ParamValidator::PARAM_DEFAULT => 'descending',
 				ParamValidator::PARAM_TYPE => [
 					'ascending',
 					'descending',
@@ -163,6 +197,10 @@ class ApiQueryWishes extends ApiQueryBase {
 				IntegerDef::PARAM_MIN => 1,
 				IntegerDef::PARAM_MAX => ApiBase::LIMIT_BIG1,
 				IntegerDef::PARAM_MAX2 => ApiBase::LIMIT_BIG2,
+			],
+			'count' => [
+				ParamValidator::PARAM_TYPE => 'boolean',
+				ParamValidator::PARAM_DEFAULT => false,
 			],
 			'continue' => [
 				ApiBase::PARAM_HELP_MSG => 'api-help-param-continue',

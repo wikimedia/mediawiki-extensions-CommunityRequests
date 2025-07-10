@@ -104,7 +104,8 @@
 			"class": "MediaWiki\\Extension\\CommunityRequests\\Api\\ApiQueryWishes",
 			"services": [
 				"CommunityRequests.WishlistConfig",
-				"CommunityRequests.WishStore"
+				"CommunityRequests.WishStore",
+				"CommunityRequests.FocusAreaStore"
 			]
 		}
 	},
@@ -335,6 +336,48 @@
 				"communityrequests-support-wish",
 				"communityrequests-support-wish-confirmed",
 				"communityrequests-supported"
+			]
+		},
+		"ext.communityrequests.wish-index": {
+			"class": "MediaWiki\\ResourceLoader\\CodexModule",
+			"codexComponents": [
+				"CdxInfoChip",
+				"CdxMessage",
+				"CdxTable"
+			],
+			"packageFiles": [
+				"wish-index/init.js",
+				"wish-index/WishIndexTable.vue",
+				{
+					"name": "common/config.json",
+					"config": [
+					]
+				}
+			],
+			"dependencies": [
+				"vue",
+				"mediawiki.api",
+				"mediawiki.Title",
+				"mediawiki.DateFormatter"
+			],
+			"messages": [
+				"communityrequests-wishes-status-header",
+				"communityrequests-wishes-type-header",
+				"communityrequests-wishes-title-header",
+				"communityrequests-wishes-focusarea-header",
+				"communityrequests-focus-area-unassigned",
+				"communityrequests-wishes-projects-header",
+				"communityrequests-wishes-votecount-header",
+				"communityrequests-wishes-created-header",
+				"communityrequests-wishes-updated-header",
+				"communityrequests-status-draft",
+				"communityrequests-status-submitted",
+				"communityrequests-status-open",
+				"communityrequests-status-in-progress",
+				"communityrequests-status-delivered",
+				"communityrequests-status-blocked",
+				"communityrequests-status-archived",
+				"communityrequests-status-unknown"
 			]
 		}
 	},

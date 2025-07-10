@@ -158,11 +158,25 @@ abstract class AbstractWishlistStore {
 	}
 
 	/**
+	 * Get a count of the wishlist entities in the database.
+	 *
+	 * @return int
+	 */
+	public function getCount(): int {
+		$dbr = $this->dbProvider->getReplicaDatabase();
+		return (int)$dbr->newSelectQueryBuilder()
+			->caller( __METHOD__ )
+			->select( 'COUNT(*)' )
+			->from( static::tableName() )
+			->fetchField();
+	}
+
+	/**
 	 * Get a sorted list of wishlist entities in the given language.
 	 *
 	 * @param string $lang Requested language code.
 	 * @param string $orderBy Use AbstractWishlistStore::*field() static methods.
-	 * @param string $direction Use AbstractWishlistStore::SORT_ASC or AbstractWishlistStore::SORT_DESC.
+	 * @param string $sort Use AbstractWishlistStore::SORT_ASC or AbstractWishlistStore::SORT_DESC.
 	 * @param int $limit Limit the number of results.
 	 * @param ?array $offset As produced by ApiBase::parseContinueParamOrDie().
 	 * @return array
@@ -170,7 +184,7 @@ abstract class AbstractWishlistStore {
 	public function getAll(
 		string $lang,
 		string $orderBy,
-		string $direction = self::SORT_DESC,
+		string $sort = self::SORT_DESC,
 		int $limit = 50,
 		?array $offset = null
 	): array {
@@ -179,14 +193,12 @@ abstract class AbstractWishlistStore {
 			$lang,
 			...$this->languageFallback->getAll( $lang ),
 		] );
-		$translationLangField = static::translationLangField();
-		$baseLangField = static::baseLangField();
 
 		$orderPrecedence = match ( $orderBy ) {
-			static::createdField() => [ static::createdField(), static::voteCountField(), static::titleField() ],
-			static::updatedField() => [ static::updatedField(), static::voteCountField(), static::titleField() ],
-			static::titleField() => [ static::titleField(), static::createdField(), static::voteCountField() ],
-			default => [ static::voteCountField(), static::createdField(), static::titleField() ],
+			static::createdField() => [ static::createdField(), static::titleField(), static::voteCountField() ],
+			static::updatedField() => [ static::updatedField(), static::titleField(), static::voteCountField() ],
+			static::voteCountField() => [ static::voteCountField(), static::titleField(), static::createdField() ],
+			default => [ static::titleField(), static::createdField(), static::voteCountField() ],
 		};
 
 		$select = $dbr->newSelectQueryBuilder()
@@ -198,24 +210,35 @@ abstract class AbstractWishlistStore {
 				null,
 				static::translationForeignKey() . ' = ' . static::pageField() )
 			->fields( static::fields() )
+			// FIXME: uses filesort; We probably need an index for
 			->where( $dbr->makeList( [
 				static::translationLangField() => $langs,
-				"$translationLangField = $baseLangField",
+				static::translationLangField() . '=' . static::baseLangField()
 			], $dbr::LIST_OR ) )
 			->orderBy(
 				$orderPrecedence,
-				$direction === static::SORT_DESC ? static::SORT_DESC : static::SORT_ASC
+				$sort === static::SORT_DESC ? static::SORT_DESC : static::SORT_ASC
 			)
 			// Leave room for the fallback languages.
-			->limit( $limit * count( $langs ) );
+			->limit( $limit * ( count( $langs ) + 1 ) );
 
 		if ( $offset ) {
-			$op = $direction === static::SORT_DESC ? '<=' : '>=';
-			$select->andWhere( $dbr->buildComparison( $op, [
-				static::titleField() => $offset[0],
-				$orderBy === static::createdField() ? 'cr_created' : 'cr_updated' => $offset[1],
-				static::pageField() => $offset[2],
-			] ) );
+			$conds = [];
+			foreach ( $orderPrecedence as $field ) {
+				$conds[ $field ] = match ( $field ) {
+					// Timestamp
+					static::createdField() => $offset[1],
+					static::updatedField() => $offset[1],
+					// Integer
+					static::voteCountField() => $offset[2],
+					// String (title)
+					default => $offset[0],
+				};
+			}
+
+			$select->andWhere(
+				$dbr->buildComparison( $sort === static::SORT_DESC ? '<=' : '>=', $conds )
+			);
 		}
 
 		$entities = $this->getEntitiesFromLangFallbacks( $dbr, $select->fetchResultSet(), $lang );

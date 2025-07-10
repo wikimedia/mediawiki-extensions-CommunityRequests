@@ -193,6 +193,20 @@ class WishlistConfigTest extends MediaWikiUnitTestCase {
 	}
 
 	/**
+	 * @covers ::isWishIndexPage
+	 */
+	public function testIsWishIndexPage(): void {
+		$this->assertTrue( $this->config->isWishIndexPage( $this->makeMockTitle( 'Community Wishlist/Wishes' ) ) );
+		$this->assertTrue( $this->config->isWishIndexPage( $this->makeMockTitle( 'Community Wishlist/Wishes/fr' ) ) );
+		$this->assertFalse(
+			$this->config->isWishIndexPage( $this->makeMockTitle( 'Community Wishlist/Wishes/b-o-g-u-s' ) )
+		);
+		$this->assertFalse(
+			$this->config->isWishIndexPage( $this->makeMockTitle( 'Community Wishlist/Wishes/W123' ) )
+		);
+	}
+
+	/**
 	 * @covers ::getWishTypeIdFromWikitextVal
 	 */
 	public function testGetWishTypeIdFromWikitextVal(): void {

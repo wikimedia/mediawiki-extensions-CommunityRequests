@@ -17,6 +17,7 @@ use Psr\Log\LoggerInterface;
  * The base class for wish/focus area parser function implementations
  */
 abstract class AbstractTemplateRenderer {
+	public const TRACKING_CATEGORY = 'communityrequests-category';
 	public const ERROR_TRACKING_CATEGORY = 'communityrequests-error-category';
 	public const EXT_DATA_KEY = 'CommunityRequests-ext-data';
 

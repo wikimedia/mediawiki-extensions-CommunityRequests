@@ -6,6 +6,7 @@ namespace MediaWiki\Extension\CommunityRequests;
 use MediaWiki\Extension\CommunityRequests\FocusArea\FocusAreaStore;
 use MediaWiki\Extension\CommunityRequests\FocusArea\FocusAreaTemplateRenderer;
 use MediaWiki\Extension\CommunityRequests\Vote\VoteTemplateRenderer;
+use MediaWiki\Extension\CommunityRequests\Wish\WishIndexTemplateRenderer;
 use MediaWiki\Extension\CommunityRequests\Wish\WishTemplateRenderer;
 use MediaWiki\Html\Html;
 use MediaWiki\Linker\LinkRenderer;
@@ -67,34 +68,20 @@ class TemplateRendererFactory {
 		array $args,
 		string $entityType
 	): ?AbstractTemplateRenderer {
+		$constructorArgs = [
+			$this->config,
+			$this->focusAreaStore,
+			$this->logger,
+			$this->linkRenderer,
+			$parser,
+			$frame,
+			$args
+		];
 		return match ( $entityType ) {
-			'wish' => new WishTemplateRenderer(
-				$this->config,
-				$this->focusAreaStore,
-				$this->logger,
-				$this->linkRenderer,
-				$parser,
-				$frame,
-				$args
-			),
-			'focus-area' => new FocusAreaTemplateRenderer(
-				$this->config,
-				$this->focusAreaStore,
-				$this->logger,
-				$this->linkRenderer,
-				$parser,
-				$frame,
-				$args
-			),
-			'vote' => new VoteTemplateRenderer(
-				$this->config,
-				$this->focusAreaStore,
-				$this->logger,
-				$this->linkRenderer,
-				$parser,
-				$frame,
-				$args
-			),
+			'wish' => new WishTemplateRenderer( ...$constructorArgs ),
+			'wish-index' => new WishIndexTemplateRenderer( ...$constructorArgs ),
+			'focus-area' => new FocusAreaTemplateRenderer( ...$constructorArgs ),
+			'vote' => new VoteTemplateRenderer( ...$constructorArgs ),
 			default => null,
 		};
 	}

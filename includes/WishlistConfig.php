@@ -263,6 +263,34 @@ class WishlistConfig {
 		return str_ends_with( $identityStr, $pageSuffixStr );
 	}
 
+	/**
+	 * Check if the given PageReference is the wish index page.
+	 *
+	 * @param ?PageReference $identity
+	 * @return bool
+	 */
+	public function isWishIndexPage( ?PageReference $identity ): bool {
+		if ( $identity === null ) {
+			return false;
+		}
+		$indexStr = $this->titleFormatter->getPrefixedDBkey(
+			$this->titleParser->parseTitle( $this->wishIndexPage )
+		);
+		$identityStr = $this->titleFormatter->getPrefixedDBkey( $identity );
+		if ( $identityStr === $indexStr ) {
+			return true;
+		}
+		// Check if the identity starts with the index page, followed by a slash and a language code.
+		if ( str_starts_with( $identityStr, $indexStr ) ) {
+			$remaining = substr( $identityStr, strlen( $indexStr ) );
+			// Remove leading slash.
+			$remaining = ltrim( $remaining, '/' );
+			// Check if the remaining part is probably a language code.
+			return LanguageCode::isWellFormedLanguageTag( $remaining );
+		}
+		return false;
+	}
+
 	private function titleStartsWith( ?PageReference $identity, string $prefix ): bool {
 		if ( $identity === null ) {
 			return false;

@@ -56,6 +56,11 @@ class WishStore extends AbstractWishlistStore {
 		);
 	}
 
+	/** @inheritDoc */
+	public function entityType(): string {
+		return 'wish';
+	}
+
 	// Schema
 
 	/** @inheritDoc */
@@ -407,10 +412,5 @@ class WishStore extends AbstractWishlistStore {
 	/** @inheritDoc */
 	public function getPagePrefix(): string {
 		return $this->config->getWishPagePrefix();
-	}
-
-	/** @inheritDoc */
-	public function entityType(): string {
-		return 'wish';
 	}
 }

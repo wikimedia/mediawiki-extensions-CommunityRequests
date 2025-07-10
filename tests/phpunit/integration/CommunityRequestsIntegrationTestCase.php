@@ -59,7 +59,7 @@ abstract class CommunityRequestsIntegrationTestCase extends MediaWikiIntegration
 	protected function insertTestWish(
 		string $page,
 		string $langCode,
-		string $created,
+		string $created = '2025-01-01T00:00:00Z',
 		bool $shouldMarkForTranslation = self::EDIT_MARK_FOR_TRANSLATION
 	): ?AbstractWishlistEntity {
 		$wishTitle = Title::newFromText( $page );

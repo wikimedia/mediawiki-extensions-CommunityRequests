@@ -218,6 +218,31 @@ class WishStoreTest extends CommunityRequestsIntegrationTestCase {
 	}
 
 	/**
+	 * @covers ::getAll
+	 */
+	public function testGetWishesLimitEmulation(): void {
+		$this->insertTestWish( 'Community Wishlist/Wishes/W1', 'hr' );
+		$this->insertTestWish(
+			'Community Wishlist/Wishes/W1',
+			'en',
+			'2222-01-23T00:00:00Z',
+			CommunityRequestsIntegrationTestCase::EDIT_AS_TRANSLATION_SUBPAGE
+		);
+		$this->insertTestWish( 'Community Wishlist/Wishes/W2', 'hr' );
+
+		$wishes = $this->getStore()->getAll(
+			'en',
+			WishStore::createdField(),
+			WishStore::SORT_DESC,
+			2
+		);
+		$this->assertCount( 2, $wishes );
+		$this->assertSame( 'Community_Wishlist/Wishes/W1', $wishes[0]->getPage()->getDBkey() );
+		$this->assertSame( 'en', $wishes[0]->getLang() );
+		$this->assertSame( 'Community_Wishlist/Wishes/W2', $wishes[1]->getPage()->getDBkey() );
+	}
+
+	/**
 	 * @covers ::getDataFromWikitext
 	 */
 	public function testGetDataFromWikitext(): void {

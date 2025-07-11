@@ -63,7 +63,6 @@ class Wish extends AbstractWishlistEntity {
 	 *   - 'description' (?string): The description of the wish.
 	 *   - 'projects' (array<int>): IDs of $wgCommunityRequestsProjects associated with the wish.
 	 *   - 'otherProject' (?string): The 'other project' associated with the wish.
-	 *   - 'phabTasks' (array<int>): IDs of Phabricator tasks associated with the wish.
 	 *   - 'audience' (?string): The group(s) of users the wish would benefit.
 	 *   - 'phabTasks' (array<int>): IDs of Phabricator tasks associated with the wish.
 	 *   - 'voteCount' (int): The number of votes for the wish.

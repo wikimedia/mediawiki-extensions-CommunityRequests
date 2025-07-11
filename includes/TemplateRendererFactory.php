@@ -5,6 +5,7 @@ namespace MediaWiki\Extension\CommunityRequests;
 
 use MediaWiki\Extension\CommunityRequests\FocusArea\FocusAreaStore;
 use MediaWiki\Extension\CommunityRequests\FocusArea\FocusAreaTemplateRenderer;
+use MediaWiki\Extension\CommunityRequests\Vote\VoteTemplateRenderer;
 use MediaWiki\Extension\CommunityRequests\Wish\WishTemplateRenderer;
 use MediaWiki\Html\Html;
 use MediaWiki\Linker\LinkRenderer;
@@ -77,6 +78,15 @@ class TemplateRendererFactory {
 				$args
 			),
 			'focus-area' => new FocusAreaTemplateRenderer(
+				$this->config,
+				$this->focusAreaStore,
+				$this->logger,
+				$this->linkRenderer,
+				$parser,
+				$frame,
+				$args
+			),
+			'vote' => new VoteTemplateRenderer(
 				$this->config,
 				$this->focusAreaStore,
 				$this->logger,

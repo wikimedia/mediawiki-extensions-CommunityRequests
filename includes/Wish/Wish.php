@@ -236,6 +236,7 @@ class Wish extends AbstractWishlistEntity {
 			'phabTasks' => self::getPhabTasksFromCsv( $params[ self::PARAM_PHAB_TASKS ] ?? '' ),
 			'created' => $params[ self::PARAM_CREATED ] ?? null,
 			'baseLang' => $params[ self::PARAM_BASE_LANG ] ?? $lang,
+			'voteCount' => $params[ self::PARAM_VOTE_COUNT ] ?? null,
 		];
 
 		return new self( $pageTitle, $lang, $proposer, $fields );

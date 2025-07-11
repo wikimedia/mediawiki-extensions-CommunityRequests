@@ -36,14 +36,16 @@ class FocusAreaStoreTest extends CommunityRequestsIntegrationTestCase {
 				'status' => 'blocked',
 				'title' => 'Test Focus Area',
 				'created' => '2025-01-01T00:00:00Z',
+				'voteCount' => 42,
 			]
 		);
-		$this->store->save( $focusArea );
-		$retrievedFocusArea = $this->store->get( $focusArea->getPage(), 'en' );
+		$this->getStore()->save( $focusArea );
+		$retrievedFocusArea = $this->getStore()->get( $focusArea->getPage(), 'en' );
 		$this->assertInstanceOf( FocusArea::class, $retrievedFocusArea );
 		$this->assertSame( $page->getId(), $retrievedFocusArea->getPage()->getId() );
 		$this->assertSame( '2025-01-01T00:00:00Z', $retrievedFocusArea->getCreated() );
 		$this->assertSame( '2025-01-23T00:00:00Z', $retrievedFocusArea->getUpdated() );
+		$this->assertSame( 42, $retrievedFocusArea->getVoteCount() );
 	}
 
 	/**
@@ -57,7 +59,7 @@ class FocusAreaStoreTest extends CommunityRequestsIntegrationTestCase {
 			[]
 		);
 		$this->expectException( InvalidArgumentException::class );
-		$this->store->save( $wish );
+		$this->getStore()->save( $wish );
 	}
 
 	/**
@@ -70,6 +72,6 @@ class FocusAreaStoreTest extends CommunityRequestsIntegrationTestCase {
 			[ 'created' => null ]
 		);
 		$this->expectException( InvalidArgumentException::class );
-		$this->store->save( $wish );
+		$this->getStore()->save( $wish );
 	}
 }

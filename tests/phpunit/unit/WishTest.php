@@ -99,6 +99,7 @@ END
 					'status' => 1,
 					'title' => 'Improve search functionality',
 					'type' => 2,
+					'voteCount' => 3,
 				],
 				[
 					'status' => 'submitted',
@@ -115,6 +116,7 @@ END
 					'created' => '2023-10-01T12:00:00Z',
 					'updated' => '2023-10-02T12:00:00Z',
 					'baseLang' => 'en',
+					'voteCount' => 3,
 				],
 			],
 			[
@@ -127,6 +129,7 @@ END
 					'status' => 6,
 					'title' => 'Fix all the bugs ever created',
 					'type' => 1,
+					'voteCount' => 1,
 				],
 				[
 					'status' => 'archived',
@@ -143,6 +146,7 @@ END
 					'created' => '2023-10-01T12:00:00Z',
 					'updated' => null,
 					'baseLang' => 'en',
+					'voteCount' => 1,
 				],
 			]
 		];

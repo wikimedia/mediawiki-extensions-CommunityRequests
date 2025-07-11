@@ -38,7 +38,6 @@ abstract class CommunityRequestsIntegrationTestCase extends MediaWikiIntegration
 			MainConfigNames::PageLanguageUseDB => $this->pageLanguageUseDB,
 		] );
 		$this->setService( 'LocalServerObjectCache', new EmptyBagOStuff() );
-		$this->store = $this->getStore();
 	}
 
 	abstract protected function getStore(): AbstractWishlistStore;
@@ -113,6 +112,43 @@ END;
 			$this->getServiceContainer()->getMainWANObjectCache()->clearProcessCache();
 		}
 
-		return $this->store->get( $wishTitle, $langCode );
+		return $this->getStore()->get( $wishTitle, $langCode );
+	}
+
+	/**
+	 * Inserts a test focus area into the wiki.
+	 * @todo Add option to mark for translation
+	 *
+	 * @param string $page
+	 * @param string $langCode
+	 * @param string $created
+	 * @return ?AbstractWishlistEntity
+	 */
+	protected function insertTestFocusArea(
+		string $page,
+		string $langCode,
+		string $created,
+		string $status = 'open'
+	): ?AbstractWishlistEntity {
+		$focusAreaTitle = Title::newFromText( $page );
+		$wikitext = <<<END
+{{#CommunityRequests: focus-area
+|status = $status
+|title = $focusAreaTitle
+|description =  Focus area description
+|short_description = Short description
+|owners = tbd
+|volunteers = tbd
+|created = 2025-07-14T20:08:17Z
+|baselang = $langCode
+}}
+END;
+
+		$ret = $this->insertPage( $focusAreaTitle, $wikitext );
+		$this->runDeferredUpdates();
+
+		$this->assertGreaterThan( 0, $ret[ 'id' ] );
+
+		return $this->getStore()->get( $focusAreaTitle, $langCode );
 	}
 }

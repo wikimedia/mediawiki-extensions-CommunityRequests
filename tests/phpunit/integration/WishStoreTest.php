@@ -38,8 +38,8 @@ class WishStoreTest extends CommunityRequestsIntegrationTestCase {
 				'created' => '2025-01-01T00:00:00Z',
 			]
 		);
-		$this->store->save( $wish );
-		$retrievedWish = $this->store->get( $wish->getPage(), 'en' );
+		$this->getStore()->save( $wish );
+		$retrievedWish = $this->getStore()->get( $wish->getPage(), 'en' );
 		$this->assertInstanceOf( Wish::class, $retrievedWish );
 		$this->assertSame( $page->getId(), $retrievedWish->getPage()->getId() );
 		$this->assertArrayEquals( [ 1, 2, 3 ], $retrievedWish->getProjects() );
@@ -60,7 +60,7 @@ class WishStoreTest extends CommunityRequestsIntegrationTestCase {
 			[]
 		);
 		$this->expectException( InvalidArgumentException::class );
-		$this->store->save( $wish );
+		$this->getStore()->save( $wish );
 	}
 
 	/**
@@ -74,7 +74,7 @@ class WishStoreTest extends CommunityRequestsIntegrationTestCase {
 			[]
 		);
 		$this->expectException( InvalidArgumentException::class );
-		$this->store->save( $wish );
+		$this->getStore()->save( $wish );
 	}
 
 	/**
@@ -91,9 +91,9 @@ class WishStoreTest extends CommunityRequestsIntegrationTestCase {
 				'created' => '2025-01-01T00:00:00Z',
 			]
 		);
-		$this->store->save( $wish );
+		$this->getStore()->save( $wish );
 		/** @var Wish $retrievedWish */
-		$retrievedWish = $this->store->get( $wish->getPage(), 'en' );
+		$retrievedWish = $this->getStore()->get( $wish->getPage(), 'en' );
 		$this->assertSame(
 			$wish->getFocusArea()->getId(),
 			$retrievedWish->getFocusArea()->getId()
@@ -110,17 +110,17 @@ class WishStoreTest extends CommunityRequestsIntegrationTestCase {
 		$page = $this->getExistingTestPage( 'Community Wishlist/Wishes/W123' );
 		ConvertibleTimestamp::setFakeTime( '2025-01-23T12:59:00Z' );
 		$wish1 = new Wish( $page, 'en', $user, [ 'created' => '2025-01-23T00:00:00Z' ] );
-		$this->store->save( $wish1 );
+		$this->getStore()->save( $wish1 );
 		// Sanity checks.
-		$retrievedWish1 = $this->store->get( $page, 'en' );
+		$retrievedWish1 = $this->getStore()->get( $page, 'en' );
 		$this->assertSame( $user->getId(), $retrievedWish1->getProposer()->getId() );
 		$this->assertSame( '2025-01-23T00:00:00Z', $retrievedWish1->getCreated() );
 		$this->assertSame( '2025-01-23T12:59:00Z', $retrievedWish1->getUpdated() );
 		// Now resave without a proposer or creation date, and with a different current (fake) time.
 		ConvertibleTimestamp::setFakeTime( '2025-02-01T00:00:00Z' );
 		$wish2 = new Wish( $page, 'en', null, [] );
-		$this->store->save( $wish2 );
-		$retrievedWish2 = $this->store->get( $page, 'en' );
+		$this->getStore()->save( $wish2 );
+		$retrievedWish2 = $this->getStore()->get( $page, 'en' );
 		// Proposer should still be set to the original user.
 		$this->assertSame( $user->getId(), $retrievedWish2->getProposer()->getId() );
 		// Creation datestamp should be the old fake time, when $page was created.
@@ -140,20 +140,20 @@ class WishStoreTest extends CommunityRequestsIntegrationTestCase {
 			[ 'created' => null ]
 		);
 		$this->expectException( InvalidArgumentException::class );
-		$this->store->save( $wish );
+		$this->getStore()->save( $wish );
 	}
 
 	/**
 	 * @covers ::getAll
 	 */
 	public function testGetAll(): void {
-		$wishes = $this->store->getAll( 'en', WishStore::createdField() );
+		$wishes = $this->getStore()->getAll( 'en', WishStore::createdField() );
 		$this->assertSame( [], $wishes );
 
 		$wish1 = $this->insertTestWish( 'Community Wishlist/Wishes/W1', 'en', '2222-01-23T00:00:00Z' );
 		$wish2 = $this->insertTestWish( 'Community Wishlist/Wishes/W2', 'en', '3333-01-23T00:00:00Z' );
 
-		$wishes = $this->store->getAll( 'en', WishStore::createdField() );
+		$wishes = $this->getStore()->getAll( 'en', WishStore::createdField() );
 		$this->assertCount( 2, $wishes );
 		$this->assertContainsOnlyInstancesOf( Wish::class, $wishes );
 		$this->assertSame( $wish2->getPage()->getId(), $wishes[0]->getPage()->getId() );
@@ -195,7 +195,7 @@ class WishStoreTest extends CommunityRequestsIntegrationTestCase {
 		);
 
 		// 'sh' should return W2, W3/de, W1/bs
-		$wishes = $this->store->getAll( 'sh', WishStore::createdField() );
+		$wishes = $this->getStore()->getAll( 'sh', WishStore::createdField() );
 		$this->assertCount( 3, $wishes );
 		$this->assertSame( 'Community_Wishlist/Wishes/W2', $wishes[0]->getPage()->getDBkey() );
 		$this->assertSame( 'hr', $wishes[0]->getLang() );
@@ -208,7 +208,7 @@ class WishStoreTest extends CommunityRequestsIntegrationTestCase {
 		$this->deletePage( 'Community Wishlist/Wishes/W1/bs' );
 
 		// With the deletion of W1/bs, 'sh' should return W2, W3/de, W1/en
-		$wishes = $this->store->getAll( 'sh', WishStore::createdField() );
+		$wishes = $this->getStore()->getAll( 'sh', WishStore::createdField() );
 		$this->assertCount( 3, $wishes );
 		$this->assertSame( 'Community_Wishlist/Wishes/W2', $wishes[0]->getPage()->getDBkey() );
 		$this->assertSame( 'Community_Wishlist/Wishes/W3', $wishes[1]->getPage()->getDBkey() );
@@ -241,7 +241,7 @@ END;
 			$this->getTestUser()->getUser()
 		);
 
-		$actual = $this->store->getDataFromWikitext( $wish->getPage()->getId() );
+		$actual = $this->getStore()->getDataFromWikitext( $wish->getPage()->getId() );
 		$this->assertSame(
 			"<translate>[[<tvar name=\"1\">Foo</tvar>|Bar]] {{baz}}</translate>\n\n== Section ==\nExample text",
 			$actual['description']
@@ -257,12 +257,12 @@ END;
 	 * @covers ::getIdFromInput
 	 */
 	public function testGetIdFromInput(): void {
-		$this->assertSame( 123, $this->store->getIdFromInput( 123 ) );
-		$this->assertSame( 123, $this->store->getIdFromInput( '123' ) );
-		$this->assertSame( 123, $this->store->getIdFromInput( 'W123' ) );
-		$this->assertSame( 123, $this->store->getIdFromInput( 'Community Wishlist/Wishes/W123' ) );
-		$this->assertSame( 123, $this->store->getIdFromInput( 'Community Wishlist/Wishes/W123/fr' ) );
-		$this->assertNull( $this->store->getIdFromInput( 'Not a wish page' ) );
+		$this->assertSame( 123, $this->getStore()->getIdFromInput( 123 ) );
+		$this->assertSame( 123, $this->getStore()->getIdFromInput( '123' ) );
+		$this->assertSame( 123, $this->getStore()->getIdFromInput( 'W123' ) );
+		$this->assertSame( 123, $this->getStore()->getIdFromInput( 'Community Wishlist/Wishes/W123' ) );
+		$this->assertSame( 123, $this->getStore()->getIdFromInput( 'Community Wishlist/Wishes/W123/fr' ) );
+		$this->assertNull( $this->getStore()->getIdFromInput( 'Not a wish page' ) );
 	}
 
 	/**
@@ -279,8 +279,8 @@ END;
 				'created' => '2025-01-01T00:00:00Z',
 			]
 		);
-		$this->store->save( $wish );
-		$wish = $this->store->get( $title );
+		$this->getStore()->save( $wish );
+		$wish = $this->getStore()->get( $title );
 		$this->assertSame( str_repeat( 'a', 255 ), $wish->getTitle() );
 	}
 }

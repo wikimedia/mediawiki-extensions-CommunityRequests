@@ -115,6 +115,11 @@ class FocusAreaStore extends AbstractWishlistStore {
 			'crfa_status' => $focusArea->getStatus(),
 		];
 
+		// Set votes only if not null, otherwise leave unchanged.
+		if ( $focusArea->getVoteCount() !== null ) {
+			$dataSet['crfa_vote_count'] = $focusArea->getVoteCount();
+		}
+
 		$dbw->newInsertQueryBuilder()
 			->insert( 'communityrequests_focus_areas' )
 			->rows( [ array_merge( $data, $dataSet ) ] )

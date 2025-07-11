@@ -180,6 +180,12 @@ class WishStore extends AbstractWishlistStore {
 			'cr_created' => $dbw->timestamp( $created ),
 			'cr_updated' => $dbw->timestamp( $wish->getUpdated() ?: wfTimestampNow() ),
 		];
+
+		// Set votes only if not null, otherwise leave unchanged.
+		if ( $wish->getVoteCount() !== null ) {
+			$dataSet['cr_vote_count'] = $wish->getVoteCount();
+		}
+
 		$dbw->newInsertQueryBuilder()
 			->insert( self::tableName() )
 			->rows( [ array_merge( $data, $dataSet ) ] )

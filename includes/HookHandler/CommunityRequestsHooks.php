@@ -168,10 +168,11 @@ class CommunityRequestsHooks implements
 	 * @return PageIdentity
 	 */
 	public function getCanonicalWishlistPage( PageIdentity $identity ): PageIdentity {
-		// Use the base non-translated page (if Translate is installed).
-		if ( $this->translateInstalled &&
+		// Use the base non-translated page (if Translate is installed) or if $identity is a Vote page.
+		if ( ( $this->translateInstalled &&
 			// @phan-suppress-next-line PhanUndeclaredClassMethod
-			Utilities::isTranslationPage( new MessageHandle( Title::castFromPageIdentity( $identity ) ) )
+			Utilities::isTranslationPage( new MessageHandle( Title::castFromPageIdentity( $identity ) ) ) ) ||
+			$this->config->isVotePage( $identity )
 		) {
 			$basePage = Title::newFromPageIdentity( $identity )->getBaseTitle();
 			if ( $basePage->exists() ) {
@@ -296,6 +297,7 @@ class CommunityRequestsHooks implements
 			$this->getCanonicalWishlistPage( $title ),
 			$title->getPageLanguage()->getCode(),
 		);
+
 		$store->save( $entity );
 	}
 

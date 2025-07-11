@@ -39,7 +39,7 @@ END;
 			$this->getTestUser()->getUser()
 		);
 
-		$focusArea = $this->store->get( $ret[ 'title' ] );
+		$focusArea = $this->getStore()->get( $ret[ 'title' ] );
 		$this->assertSame( $ret[ 'id' ], $focusArea->getPage()->getId() );
 		$this->assertSame( $this->config->getStatusIdFromWikitextVal( 'open' ), $focusArea->getStatus() );
 		$this->assertSame( 'Test Focus Area', $focusArea->getTitle() );

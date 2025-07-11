@@ -552,6 +552,16 @@
 			"description": "The subpage where votes of wishes and focus areas are stored. The value is appended to the wish or focus area page title.",
 			"value": "/Votes"
 		},
+		"CommunityRequestsVoteTemplate": {
+			"description": "Configuration for the parser function that displays and count votes.",
+			"value": {
+				"params": {
+					"username": "username",
+					"timestamp": "timestamp",
+					"comment": "comment"
+				}
+			}
+		},
 		"CommunityRequestsWishVotingEnabled": {
 			"description": "Whether to enable voting for wishes.",
 			"value": true

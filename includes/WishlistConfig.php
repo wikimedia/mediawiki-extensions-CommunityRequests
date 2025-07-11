@@ -38,6 +38,7 @@ class WishlistConfig {
 	public const STATUSES = 'CommunityRequestsStatuses';
 	public const SUPPORT_TEMPLATE = 'CommunityRequestsSupportTemplate';
 	public const VOTES_PAGE_SUFFIX = 'CommunityRequestsVotesPageSuffix';
+	public const VOTE_TEMPLATE = 'CommunityRequestsVoteTemplate';
 	public const WISH_VOTING_ENABLED = 'CommunityRequestsWishVotingEnabled';
 	public const FOCUS_AREA_VOTING_ENABLED = 'CommunityRequestsFocusAreaVotingEnabled';
 	public const CONSTRUCTOR_OPTIONS = [
@@ -56,6 +57,7 @@ class WishlistConfig {
 		self::STATUSES,
 		self::SUPPORT_TEMPLATE,
 		self::VOTES_PAGE_SUFFIX,
+		self::VOTE_TEMPLATE,
 		self::WISH_VOTING_ENABLED,
 		self::FOCUS_AREA_VOTING_ENABLED,
 	];
@@ -70,6 +72,7 @@ class WishlistConfig {
 	private string $focusAreaIndexPage;
 	private array $wishTemplate;
 	private array $focusAreaTemplate;
+	private array $voteTemplate;
 	private array $wishTypes;
 	private array $projects;
 	private array $statuses;
@@ -98,6 +101,7 @@ class WishlistConfig {
 		$this->statuses = $config->get( self::STATUSES );
 		$this->supportTemplate = $config->get( self::SUPPORT_TEMPLATE );
 		$this->votesPageSuffix = $config->get( self::VOTES_PAGE_SUFFIX );
+		$this->voteTemplate = $config->get( self::VOTE_TEMPLATE );
 		$this->wishVotingEnabled = $config->get( self::WISH_VOTING_ENABLED );
 		$this->focusAreaVotingEnabled = $config->get( self::FOCUS_AREA_VOTING_ENABLED );
 	}
@@ -162,6 +166,10 @@ class WishlistConfig {
 
 	public function getVotesPageSuffix(): string {
 		return $this->votesPageSuffix;
+	}
+
+	public function getVoteTemplateParams(): array {
+		return $this->voteTemplate[ 'params' ];
 	}
 
 	public function isWishVotingEnabled(): bool {
@@ -235,6 +243,24 @@ class WishlistConfig {
 	 */
 	public function isWishOrFocusAreaPage( ?PageReference $identity ): bool {
 		return $this->isWishPage( $identity ) || $this->isFocusAreaPage( $identity );
+	}
+
+	/**
+	 * Check if the given PageReference could be a votes page based on its title.
+	 *
+	 * @param ?PageReference $identity
+	 * @return bool
+	 */
+	public function isVotePage( ?PageReference $identity ): bool {
+		if ( $identity === null ) {
+			return false;
+		}
+
+		$identityStr = $this->titleFormatter->getPrefixedDBkey( $identity );
+		$pageSuffix = $this->titleParser->parseTitle( $this->votesPageSuffix );
+		$pageSuffixStr = $this->titleFormatter->getPrefixedDBkey( $pageSuffix );
+
+		return str_ends_with( $identityStr, $pageSuffixStr );
 	}
 
 	private function titleStartsWith( ?PageReference $identity, string $prefix ): bool {

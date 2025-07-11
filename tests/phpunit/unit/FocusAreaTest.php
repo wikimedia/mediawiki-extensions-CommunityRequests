@@ -82,6 +82,7 @@ END
 					'title' => 'Improve search functionality',
 					'created' => '2023-10-01T12:00:00Z',
 					'baseLang' => 'en',
+					'voteCount' => 42,
 				],
 				[
 					'status' => 'submitted',
@@ -92,6 +93,7 @@ END
 					'volunteers' => '',
 					'created' => '2023-10-01T12:00:00Z',
 					'baseLang' => 'en',
+					'voteCount' => 42,
 				],
 			]
 		];

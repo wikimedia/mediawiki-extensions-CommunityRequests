@@ -81,6 +81,13 @@ class WishlistConfigTest extends MediaWikiUnitTestCase {
 				],
 				WishlistConfig::SUPPORT_TEMPLATE => 'Template:Community Wishlist/Support',
 				WishlistConfig::VOTES_PAGE_SUFFIX => '/Votes',
+				WishlistConfig::VOTE_TEMPLATE => [
+					'params' => [
+						'username' => 'username',
+						'timestamp' => 'timestamp',
+						'comment' => 'comment',
+					]
+				],
 				WishlistConfig::WISH_VOTING_ENABLED => true,
 				WishlistConfig::FOCUS_AREA_VOTING_ENABLED => true,
 			] ),

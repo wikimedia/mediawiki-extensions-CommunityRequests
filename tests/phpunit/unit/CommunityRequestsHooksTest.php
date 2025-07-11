@@ -70,6 +70,7 @@ class CommunityRequestsHooksTest extends MediaWikiUnitTestCase {
 			WishlistConfig::STATUSES => [],
 			WishlistConfig::SUPPORT_TEMPLATE => '',
 			WishlistConfig::VOTES_PAGE_SUFFIX => '',
+			WishlistConfig::VOTE_TEMPLATE => [],
 			WishlistConfig::WISH_VOTING_ENABLED => true,
 			WishlistConfig::FOCUS_AREA_VOTING_ENABLED => true,
 		] );

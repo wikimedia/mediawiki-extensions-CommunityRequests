@@ -101,6 +101,7 @@ class FocusArea extends AbstractWishlistEntity {
 			'volunteers' => $this->volunteers,
 			'created' => $this->created,
 			'baseLang' => $this->baseLang,
+			'voteCount' => $this->voteCount,
 		];
 		if ( $lowerCaseKeyNames ) {
 			// Convert keys to lower case for API compatibility.
@@ -149,6 +150,7 @@ class FocusArea extends AbstractWishlistEntity {
 			'volunteers' => $params[ self::PARAM_VOLUNTEERS ] ?? '',
 			'created' => $params[ self::PARAM_CREATED ] ?? null,
 			'baseLang' => $lang,
+			'voteCount' => $params[ self::PARAM_VOTE_COUNT] ?? null,
 		];
 		return new self( $pageTitle, $lang, $fields );
 	}

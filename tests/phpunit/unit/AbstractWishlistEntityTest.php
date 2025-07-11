@@ -87,6 +87,13 @@ class AbstractWishlistEntityTest extends MediaWikiUnitTestCase {
 			],
 			WishlistConfig::SUPPORT_TEMPLATE => '',
 			WishlistConfig::VOTES_PAGE_SUFFIX => '',
+			WishlistConfig::VOTE_TEMPLATE => [
+				'params' => [
+					'username' => 'username',
+					'timestamp' => 'timestamp',
+					'comment' => 'comment',
+				]
+			],
 			WishlistConfig::WISH_VOTING_ENABLED => true,
 			WishlistConfig::FOCUS_AREA_VOTING_ENABLED => true,
 		] );

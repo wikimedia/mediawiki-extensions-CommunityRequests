@@ -17,12 +17,13 @@ abstract class AbstractWishlistEntity {
 	public const PARAM_DESCRIPTION = 'description';
 	public const PARAM_CREATED = 'created';
 	public const PARAM_BASE_LANG = 'baselang';
+	public const PARAM_VOTE_COUNT = 'votecount';
 
 	protected string $baseLang;
 	protected string $title;
 	protected int $status;
 	protected ?string $description;
-	protected int $voteCount;
+	protected ?int $voteCount;
 	protected ?string $created;
 	protected ?string $updated;
 
@@ -47,7 +48,7 @@ abstract class AbstractWishlistEntity {
 		$this->status = intval( $fields['status'] ?? 0 );
 		// Description is not stored in the database and can be null.
 		$this->description = $fields['description'] ?? null;
-		$this->voteCount = intval( $fields['voteCount'] ?? 0 );
+		$this->voteCount = isset( $fields['voteCount'] ) ? intval( $fields['voteCount'] ) : null;
 		// We use `?? null` in case the field is not set, and `?: null` to handle blank values.
 		$this->created = wfTimestampOrNull( TS_ISO_8601, ( $fields['created'] ?? null ) ?: null );
 		$this->updated = wfTimestampOrNull( TS_ISO_8601, ( $fields['updated'] ?? null ) ?: null );
@@ -120,9 +121,9 @@ abstract class AbstractWishlistEntity {
 	/**
 	 * Get the number of votes for the wish or focus area.
 	 *
-	 * @return int
+	 * @return ?int
 	 */
-	public function getVoteCount(): int {
+	public function getVoteCount(): ?int {
 		return $this->voteCount;
 	}
 

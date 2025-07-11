@@ -43,7 +43,7 @@ END;
 			$user
 		);
 
-		$wish = $this->store->get( $ret[ 'title' ] );
+		$wish = $this->getStore()->get( $ret[ 'title' ] );
 		$this->assertSame( $ret[ 'id' ], $wish->getPage()->getId() );
 		$this->assertSame( 'Test Wish', $wish->getTitle() );
 		$this->assertSame( $this->config->getStatusIdFromWikitextVal( 'open' ), $wish->getStatus() );

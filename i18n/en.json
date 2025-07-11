@@ -168,7 +168,7 @@
 	"apihelp-focusareaedit-param-baselang": "The base language of the focus area from which translations are made.",
 	"apihelp-query+communityrequests-wishes-summary": "Get a list of wishes from the Community Wishlist.",
 	"apihelp-query+communityrequests-wishes-param-lang": "The language code to filter wishes by.",
-	"apihelp-query+communityrequests-wishes-param-prop": "Wish wish properties to get.",
+	"apihelp-query+communityrequests-wishes-param-prop": "The wish properties to get.",
 	"apihelp-query+communityrequests-wishes-param-sort": "The wish property to sort by.",
 	"apihelp-query+communityrequests-wishes-param-dir": "The direction to sort by.",
 	"apihelp-query+communityrequests-wishes-param-limit": "The maximum number of wishes to return.",

@@ -33,9 +33,9 @@ class FocusAreaTemplateRenderer extends AbstractTemplateRenderer {
 
 		// Add tracking category for missing critical data.
 		$requiredFields = [
-			FocusArea::TAG_ATTR_CREATED,
-			FocusArea::TAG_ATTR_TITLE,
-			FocusArea::TAG_ATTR_BASE_LANG,
+			FocusArea::PARAM_CREATED,
+			FocusArea::PARAM_TITLE,
+			FocusArea::PARAM_BASE_LANG,
 		];
 		$missingFields = array_diff( $requiredFields, array_keys( $args ) );
 		if ( $missingFields ) {
@@ -49,7 +49,7 @@ class FocusAreaTemplateRenderer extends AbstractTemplateRenderer {
 
 		// These need to be set here because we need them for display in ::renderFocusAreaInternal().
 		$args[ 'updated' ] = $this->parser->getRevisionTimestamp();
-		$args[ FocusArea::TAG_ATTR_CREATED ] ??= $args[ 'updated' ];
+		$args[ FocusArea::PARAM_CREATED ] ??= $args[ 'updated' ];
 
 		$args[ 'entityType' ] = 'focus-area';
 
@@ -64,7 +64,7 @@ class FocusAreaTemplateRenderer extends AbstractTemplateRenderer {
 		$out = '';
 
 		// Title and status.
-		$statusLabel = $this->config->getStatusLabelFromWikitextVal( $args[ FocusArea::TAG_ATTR_STATUS ] ?? '' );
+		$statusLabel = $this->config->getStatusLabelFromWikitextVal( $args[ FocusArea::PARAM_STATUS ] ?? '' );
 		if ( $statusLabel === null ) {
 			$statusLabel = 'communityrequests-status-unknown';
 			$this->addTrackingCategory( self::ERROR_TRACKING_CATEGORY );
@@ -81,7 +81,7 @@ class FocusAreaTemplateRenderer extends AbstractTemplateRenderer {
 		$titleSpan = Html::element(
 			'span',
 			[ 'class' => 'ext-communityrequests-focus-area--title' ],
-			$args[ FocusArea::TAG_ATTR_TITLE ]
+			$args[ FocusArea::PARAM_TITLE ]
 		);
 		$out .= Html::rawElement(
 			'div',
@@ -112,7 +112,7 @@ class FocusAreaTemplateRenderer extends AbstractTemplateRenderer {
 			[],
 			$this->getListItem(
 				'created',
-				$language->userTimeAndDate( $args[ FocusArea::TAG_ATTR_CREATED ], $user )
+				$language->userTimeAndDate( $args[ FocusArea::PARAM_CREATED ], $user )
 			) .
 			$this->getListItem(
 				'updated',
@@ -136,14 +136,14 @@ class FocusAreaTemplateRenderer extends AbstractTemplateRenderer {
 		// TODO: implement wishes table somewhere else and re-use it here.
 
 		// Teams and affiliates section.
-		if ( isset( $args[ FocusArea::TAG_ATTR_OWNERS ] ) || isset( $args[ FocusArea::TAG_ATTR_VOLUNTEERS ] ) ) {
+		if ( isset( $args[ FocusArea::PARAM_OWNERS ] ) || isset( $args[ FocusArea::PARAM_VOLUNTEERS ] ) ) {
 			$out .= Html::element(
 				'div',
 				[ 'class' => 'mw-heading mw-heading2' ],
 				$this->msg( 'communityrequests-focus-area-stakeholders' )->text()
 			);
 
-			if ( isset( $args[ FocusArea::TAG_ATTR_OWNERS ] ) ) {
+			if ( isset( $args[ FocusArea::PARAM_OWNERS ] ) ) {
 				$out .= Html::rawElement(
 					'div',
 					[ 'class' => 'mw-heading mw-heading3' ],
@@ -151,11 +151,11 @@ class FocusAreaTemplateRenderer extends AbstractTemplateRenderer {
 				);
 				$out .= $this->getParagraphRaw(
 					'owners',
-					$this->parser->recursiveTagParse( trim( $args[ FocusArea::TAG_ATTR_OWNERS ] ) )
+					$this->parser->recursiveTagParse( trim( $args[ FocusArea::PARAM_OWNERS ] ) )
 				);
 			}
 
-			if ( isset( $args[ FocusArea::TAG_ATTR_VOLUNTEERS ] ) ) {
+			if ( isset( $args[ FocusArea::PARAM_VOLUNTEERS ] ) ) {
 				$out .= Html::rawElement(
 					'div',
 					[ 'class' => 'mw-heading mw-heading3' ],
@@ -163,7 +163,7 @@ class FocusAreaTemplateRenderer extends AbstractTemplateRenderer {
 				);
 				$out .= $this->getParagraphRaw(
 					'volunteers',
-					$this->parser->recursiveTagParse( trim( $args[ FocusArea::TAG_ATTR_VOLUNTEERS ] ) )
+					$this->parser->recursiveTagParse( trim( $args[ FocusArea::PARAM_VOLUNTEERS ] ) )
 				);
 			}
 		}
@@ -171,7 +171,7 @@ class FocusAreaTemplateRenderer extends AbstractTemplateRenderer {
 		// Voting section.
 		$out .= $this->getVotingSection(
 			$this->config->isFocusAreaVotingEnabled() && in_array(
-				trim( $args[ FocusArea::TAG_ATTR_STATUS ] ?? '' ),
+				trim( $args[ FocusArea::PARAM_STATUS ] ?? '' ),
 				$this->config->getStatusWikitextValsEligibleForVoting()
 			),
 			'focus-area'

@@ -16,18 +16,18 @@ use MediaWiki\Utils\MWTimestamp;
 class FocusArea extends AbstractWishlistEntity {
 
 	// Constants used for parsing and constructing the template invocation.
-	public const TAG_ATTR_SHORT_DESCRIPTION = 'shortdescription';
-	public const TAG_ATTR_OWNERS = 'owners';
-	public const TAG_ATTR_VOLUNTEERS = 'volunteers';
-	public const TAG_ATTRS = [
-		self::TAG_ATTR_STATUS,
-		self::TAG_ATTR_TITLE,
-		self::TAG_ATTR_DESCRIPTION,
-		self::TAG_ATTR_SHORT_DESCRIPTION,
-		self::TAG_ATTR_OWNERS,
-		self::TAG_ATTR_VOLUNTEERS,
-		self::TAG_ATTR_CREATED,
-		self::TAG_ATTR_BASE_LANG,
+	public const PARAM_SHORT_DESCRIPTION = 'shortdescription';
+	public const PARAM_OWNERS = 'owners';
+	public const PARAM_VOLUNTEERS = 'volunteers';
+	public const PARAMS = [
+		self::PARAM_STATUS,
+		self::PARAM_TITLE,
+		self::PARAM_DESCRIPTION,
+		self::PARAM_SHORT_DESCRIPTION,
+		self::PARAM_OWNERS,
+		self::PARAM_VOLUNTEERS,
+		self::PARAM_CREATED,
+		self::PARAM_BASE_LANG,
 	];
 
 	// Focus area properties.
@@ -112,19 +112,22 @@ class FocusArea extends AbstractWishlistEntity {
 	/** @inheritDoc */
 	public function toWikitext( WishlistConfig $config ): WikitextContent {
 		$wikitext = "{{#CommunityRequests: focus-area\n";
-		foreach ( self::TAG_ATTRS as $attr ) {
-			$param = $config->getFocusAreaTemplateParams()[ $attr ];
+		foreach ( self::PARAMS as $param ) {
+			// TODO: Remove all vestiges of ze templates.
+			$displayParam = $config->getFocusAreaTemplateParams()[ $param ];
+
 			// Match ID values to their wikitext representations, as defined by site configuration.
-			$value = match ( $attr ) {
-				self::TAG_ATTR_STATUS => $config->getStatusWikitextValFromId( $this->status ),
-				self::TAG_ATTR_SHORT_DESCRIPTION => $this->shortDescription,
-				self::TAG_ATTR_CREATED => MWTimestamp::convert( TS_ISO_8601, $this->created ),
-				self::TAG_ATTR_BASE_LANG => $this->baseLang,
-				default => $this->{ $attr },
+			$value = match ( $param ) {
+				self::PARAM_STATUS => $config->getStatusWikitextValFromId( $this->status ),
+				self::PARAM_SHORT_DESCRIPTION => $this->shortDescription,
+				self::PARAM_CREATED => MWTimestamp::convert( TS_ISO_8601, $this->created ),
+				self::PARAM_BASE_LANG => $this->baseLang,
+				default => $this->{ $param },
 			};
+
 			// Append wikitext.
 			$value = trim( (string)$value );
-			$wikitext .= "| $param = $value\n";
+			$wikitext .= "| $displayParam = $value\n";
 		}
 		$wikitext .= "}}\n";
 		return new WikitextContent( $wikitext );
@@ -138,13 +141,13 @@ class FocusArea extends AbstractWishlistEntity {
 		WishlistConfig $config
 	): self {
 		$fields = [
-			'status' => $config->getStatusIdFromWikitextVal( $params[ self::TAG_ATTR_STATUS ] ?? '' ),
-			'title' => $params[ self::TAG_ATTR_TITLE ] ?? '',
-			'description' => $params[ self::TAG_ATTR_DESCRIPTION ] ?? null,
-			'shortDescription' => $params[ self::TAG_ATTR_SHORT_DESCRIPTION ] ?? '',
-			'owners' => $params[ self::TAG_ATTR_OWNERS ] ?? '',
-			'volunteers' => $params[ self::TAG_ATTR_VOLUNTEERS ] ?? '',
-			'created' => $params[ self::TAG_ATTR_CREATED ] ?? null,
+			'status' => $config->getStatusIdFromWikitextVal( $params[ self::PARAM_STATUS ] ?? '' ),
+			'title' => $params[ self::PARAM_TITLE ] ?? '',
+			'description' => $params[ self::PARAM_DESCRIPTION ] ?? null,
+			'shortDescription' => $params[ self::PARAM_SHORT_DESCRIPTION ] ?? '',
+			'owners' => $params[ self::PARAM_OWNERS ] ?? '',
+			'volunteers' => $params[ self::PARAM_VOLUNTEERS ] ?? '',
+			'created' => $params[ self::PARAM_CREATED ] ?? null,
 			'baseLang' => $lang,
 		];
 		return new self( $pageTitle, $lang, $fields );

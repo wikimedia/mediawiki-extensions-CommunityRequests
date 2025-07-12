@@ -202,14 +202,14 @@ class CommunityRequestsHooks implements
 				$data = $parserOutput->getExtensionData( self::EXT_DATA_KEY );
 
 				if ( $data &&
-					$data[ AbstractWishlistEntity::TAG_ATTR_BASE_LANG ] !==
+					$data[ AbstractWishlistEntity::PARAM_BASE_LANG ] !==
 					Title::newFromText( $title->getText() )->getPageLanguage()->getCode() &&
 					// @phan-suppress-next-line PhanUndeclaredClassMethod
 					TranslatablePage::isTranslationPage( $title ) === false
 				) {
 					$store->setPageLanguage(
 						$title->getId(),
-						$data[ AbstractWishlistEntity::TAG_ATTR_BASE_LANG ]
+						$data[ AbstractWishlistEntity::PARAM_BASE_LANG ]
 					);
 				}
 			}, __METHOD__ );

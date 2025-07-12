@@ -12,11 +12,11 @@ use MediaWiki\Page\PageIdentity;
 abstract class AbstractWishlistEntity {
 
 	// Constants used for parsing and constructing the template invocation.
-	public const TAG_ATTR_STATUS = 'status';
-	public const TAG_ATTR_TITLE = 'title';
-	public const TAG_ATTR_DESCRIPTION = 'description';
-	public const TAG_ATTR_CREATED = 'created';
-	public const TAG_ATTR_BASE_LANG = 'baselang';
+	public const PARAM_STATUS = 'status';
+	public const PARAM_TITLE = 'title';
+	public const PARAM_DESCRIPTION = 'description';
+	public const PARAM_CREATED = 'created';
+	public const PARAM_BASE_LANG = 'baselang';
 
 	protected string $baseLang;
 	protected string $title;
@@ -157,7 +157,7 @@ abstract class AbstractWishlistEntity {
 
 	/**
 	 * Convert the wishlist entity to WikitextContent, ready for storage in the database.
-	 * This uses the self::TAG_ATTR_ constants and $wgCommunityRequestsWishTemplate['params']
+	 * This uses the self::PARAM_* constants and $wgCommunityRequestsWishTemplate['params']
 	 * to map the entity's properties to the template parameters. It also transforms numeric IDs
 	 * to their wikitext representations to make the wikitext easier to read and edit manually.
 	 *
@@ -176,7 +176,7 @@ abstract class AbstractWishlistEntity {
 	 *
 	 * @param PageIdentity $pageTitle
 	 * @param string $lang
-	 * @param array $params Keys are the TAG_ATTR_* constants.
+	 * @param array $params Keys are the PARAM_* constants.
 	 * @param WishlistConfig $config
 	 * @return AbstractWishlistEntity
 	 */

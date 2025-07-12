@@ -36,7 +36,7 @@ class EntityFactory {
 				$lang,
 				$data,
 				$this->config,
-				$this->userFactory->newFromName( $data[ Wish::TAG_ATTR_PROPOSER ] ?? '' ),
+				$this->userFactory->newFromName( $data[ Wish::PARAM_PROPOSER ] ?? '' ),
 			),
 			'focus-area' => FocusArea::newFromWikitextParams(
 				$baseTitle,

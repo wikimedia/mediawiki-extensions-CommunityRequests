@@ -190,9 +190,9 @@ class FocusAreaStore extends AbstractWishlistStore {
 	/** @inheritDoc */
 	public function getWikitextFields(): array {
 		return [
-			FocusArea::TAG_ATTR_DESCRIPTION,
-			FocusArea::TAG_ATTR_OWNERS,
-			FocusArea::TAG_ATTR_VOLUNTEERS,
+			FocusArea::PARAM_DESCRIPTION,
+			FocusArea::PARAM_OWNERS,
+			FocusArea::PARAM_VOLUNTEERS,
 		];
 	}
 

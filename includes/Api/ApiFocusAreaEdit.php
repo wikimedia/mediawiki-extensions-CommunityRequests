@@ -99,7 +99,7 @@ class ApiFocusAreaEdit extends ApiWishlistEntityBase {
 
 	/** @inheritDoc */
 	public function getAllowedParams() {
-		// NOTE: Keys should match the Wish::TAG_ATTR_* constants where possible.
+		// NOTE: Keys should match the FocusArea::PARAM_* constants where possible.
 		return [
 			'focusarea' => [ ParamValidator::PARAM_TYPE => 'string' ],
 			'status' => [

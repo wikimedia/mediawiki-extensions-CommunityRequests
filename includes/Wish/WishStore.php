@@ -386,8 +386,8 @@ class WishStore extends AbstractWishlistStore {
 	/** @inheritDoc */
 	public function getWikitextFields(): array {
 		return [
-			Wish::TAG_ATTR_DESCRIPTION,
-			Wish::TAG_ATTR_AUDIENCE,
+			Wish::PARAM_DESCRIPTION,
+			Wish::PARAM_AUDIENCE,
 		];
 	}
 

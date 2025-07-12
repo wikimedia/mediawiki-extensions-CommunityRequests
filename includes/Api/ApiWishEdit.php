@@ -126,7 +126,7 @@ class ApiWishEdit extends ApiWishlistEntityBase {
 
 	/** @inheritDoc */
 	public function getAllowedParams() {
-		// NOTE: Keys should match the Wish::TAG_ATTR_* constants where possible.
+		// NOTE: Keys should match the Wish::PARAM_* constants where possible.
 		return [
 			'wish' => [ ParamValidator::PARAM_TYPE => 'string' ],
 			'status' => [

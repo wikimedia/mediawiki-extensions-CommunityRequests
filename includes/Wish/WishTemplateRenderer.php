@@ -31,10 +31,10 @@ class WishTemplateRenderer extends AbstractTemplateRenderer {
 
 		// Add tracking category for missing critical data.
 		$requiredFields = [
-			Wish::TAG_ATTR_CREATED,
-			Wish::TAG_ATTR_TITLE,
-			Wish::TAG_ATTR_PROPOSER,
-			Wish::TAG_ATTR_BASE_LANG,
+			Wish::PARAM_CREATED,
+			Wish::PARAM_TITLE,
+			Wish::PARAM_PROPOSER,
+			Wish::PARAM_BASE_LANG,
 		];
 		$missingFields = array_diff( $requiredFields, array_keys( $args ) );
 		if ( $missingFields ) {
@@ -45,7 +45,7 @@ class WishTemplateRenderer extends AbstractTemplateRenderer {
 
 		// These need to be set here because we need them for display in ::renderWishInternal().
 		$args[ 'updated' ] = $this->parser->getRevisionTimestamp();
-		$args[ Wish::TAG_ATTR_CREATED ] ??= $args[ 'updated' ];
+		$args[ Wish::PARAM_CREATED ] ??= $args[ 'updated' ];
 
 		$args[ 'entityType' ] = 'wish';
 
@@ -64,7 +64,7 @@ class WishTemplateRenderer extends AbstractTemplateRenderer {
 		$language = $this->parser->getContentLanguage();
 
 		// Title and status.
-		$statusLabel = $this->config->getStatusLabelFromWikitextVal( $args[ Wish::TAG_ATTR_STATUS ] ?? '' );
+		$statusLabel = $this->config->getStatusLabelFromWikitextVal( $args[ Wish::PARAM_STATUS ] ?? '' );
 		if ( $statusLabel === null ) {
 			$statusLabel = 'communityrequests-status-unknown';
 			$this->addTrackingCategory( self::ERROR_TRACKING_CATEGORY );
@@ -81,7 +81,7 @@ class WishTemplateRenderer extends AbstractTemplateRenderer {
 		$titleSpan = Html::element(
 			'span',
 			[ 'class' => 'ext-communityrequests-wish--title' ],
-			$args[ Wish::TAG_ATTR_TITLE ]
+			$args[ Wish::PARAM_TITLE ]
 		);
 		$headingHtml = Html::rawElement(
 			'div',
@@ -134,7 +134,7 @@ class WishTemplateRenderer extends AbstractTemplateRenderer {
 		$wishType = $this->getParagraph(
 			'wish-type',
 			$this->msg(
-				$this->config->getWishTypeLabelFromWikitextVal( $args[ Wish::TAG_ATTR_TYPE ] ?? '' ) . '-label'
+				$this->config->getWishTypeLabelFromWikitextVal( $args[ Wish::PARAM_TYPE ] ?? '' ) . '-label'
 			)->text()
 		);
 
@@ -151,11 +151,11 @@ class WishTemplateRenderer extends AbstractTemplateRenderer {
 				return null;
 			}
 			return $this->msg( $label )->text();
-		}, array_filter( explode( Wish::TEMPLATE_ARRAY_DELIMITER, $args[ Wish::TAG_ATTR_PROJECTS ] ?? '' ) ) );
+		}, array_filter( explode( Wish::TEMPLATE_ARRAY_DELIMITER, $args[ Wish::PARAM_PROJECTS ] ?? '' ) ) );
 		// @phan-suppress-next-line SecurityCheck-DoubleEscaped
 		$projects = $this->getParagraph( 'projects', $language->commaList( array_filter( $projectLabels ) ) );
-		if ( isset( $args[ Wish::TAG_ATTR_OTHER_PROJECT ] ) ) {
-			$projects .= $this->getParagraph( 'other-project', $args[ Wish::TAG_ATTR_OTHER_PROJECT ] );
+		if ( isset( $args[ Wish::PARAM_OTHER_PROJECT ] ) ) {
+			$projects .= $this->getParagraph( 'other-project', $args[ Wish::PARAM_OTHER_PROJECT ] );
 		}
 
 		// Audience.
@@ -164,7 +164,7 @@ class WishTemplateRenderer extends AbstractTemplateRenderer {
 			[ 'class' => 'mw-heading mw-heading3' ],
 			$this->msg( 'communityrequests-wish-audience-heading' )->text()
 		);
-		$audience = $this->getParagraph( 'audience', $args[ Wish::TAG_ATTR_AUDIENCE ] ?? '' );
+		$audience = $this->getParagraph( 'audience', $args[ Wish::PARAM_AUDIENCE ] ?? '' );
 
 		// Phabricator tasks.
 		$tasksHeading = Html::element(
@@ -185,7 +185,7 @@ class WishTemplateRenderer extends AbstractTemplateRenderer {
 				new TitleValue( NS_MAIN, $task, '', 'phab' ),
 				$task
 			);
-		}, explode( Wish::TEMPLATE_ARRAY_DELIMITER, $args[ Wish::TAG_ATTR_PHAB_TASKS ] ?? '' ) );
+		}, explode( Wish::TEMPLATE_ARRAY_DELIMITER, $args[ Wish::PARAM_PHAB_TASKS ] ?? '' ) );
 		$tasksHtml = $this->getParagraphRaw(
 			'phabtasks',
 			$language->commaList( array_filter( $tasks ) )
@@ -197,14 +197,14 @@ class WishTemplateRenderer extends AbstractTemplateRenderer {
 			[ 'class' => 'mw-heading mw-heading3' ],
 			$this->msg( 'communityrequests-wish-other-details-heading' )->text()
 		);
-		$proposerVal = $args[ Wish::TAG_ATTR_PROPOSER ] ?? '';
+		$proposerVal = $args[ Wish::PARAM_PROPOSER ] ?? '';
 		$user = $this->parser->getUserIdentity();
 		$detailsHtml = Html::rawElement(
 			'ul',
 			[],
 			$this->getListItem(
 				'created',
-				$language->userTimeAndDate( $args[ Wish::TAG_ATTR_CREATED ], $user )
+				$language->userTimeAndDate( $args[ Wish::PARAM_CREATED ], $user )
 			) .
 			$this->getListItem(
 				'updated',
@@ -228,7 +228,7 @@ class WishTemplateRenderer extends AbstractTemplateRenderer {
 			$detailsHeading . $detailsHtml .
 			$this->getVotingSection(
 				$this->config->isWishVotingEnabled() && in_array(
-					trim( $args[ Wish::TAG_ATTR_STATUS ] ?? '' ),
+					trim( $args[ Wish::PARAM_STATUS ] ?? '' ),
 					$this->config->getStatusWikitextValsEligibleForVoting()
 				)
 			)

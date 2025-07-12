@@ -29,7 +29,7 @@ class ApiFocusAreaEdit extends ApiWishlistEntityBase {
 
 		$saveStatus = $this->save(
 			$focusArea->toWikitext( $this->config ),
-			$this->getEditSummary( $focusArea, $this->params ),
+			$this->getEditSummary( $focusArea ),
 			$this->params[ 'token' ],
 			$this->params[ 'baserevid' ] ?? null
 		);
@@ -50,30 +50,30 @@ class ApiFocusAreaEdit extends ApiWishlistEntityBase {
 	}
 
 	/** @inheritDoc */
-	public function getEditSummary( AbstractWishlistEntity $entity, array $params ): string {
-		return trim( $params[ 'focusarea' ] ?? '' ) ? $this->editSummaryPublish() : $this->editSummarySave();
+	public function getEditSummary( AbstractWishlistEntity $entity ): string {
+		return trim( $this->params[ 'focusarea' ] ?? '' ) ? $this->editSummarySave() : $this->editSummaryPublish();
 	}
 
 	/** @inheritDoc */
 	protected function editSummaryPublish(): string {
-		return $this->msg( 'communityrequests-publish-focus-area-summary' )
+		return $this->msg( 'communityrequests-publish-focus-area-summary', $this->params['title'] )
 			->inContentLanguage()
 			->text();
 	}
 
 	/** @inheritDoc */
 	protected function editSummarySave(): string {
-		return $this->msg( 'communityrequests-save-focus-area-summary' )
+		return $this->msg( 'communityrequests-save-focus-area-summary', $this->params['title'] )
 			->inContentLanguage()
 			->text();
 	}
 
 	/** @inheritDoc */
-	protected function getWishlistEntityTitle( array $params ): Title {
-		if ( isset( $params[ 'focusarea' ] ) ) {
+	protected function getWishlistEntityTitle(): Title {
+		if ( isset( $this->params[ 'focusarea' ] ) ) {
 			return Title::newFromText(
 				$this->config->getFocusAreaPagePrefix() .
-				$this->store->getIdFromInput( $params[ 'focusarea' ] )
+				$this->store->getIdFromInput( $this->params[ 'focusarea' ] )
 			);
 		} else {
 			// If this is a new focus area, generate a new ID and page title.

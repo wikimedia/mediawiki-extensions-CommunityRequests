@@ -5,6 +5,7 @@ namespace MediaWiki\Extension\CommunityRequests\Tests\Integration;
 
 use MediaWiki\Api\ApiUsageException;
 use MediaWiki\Tests\Api\ApiTestCase;
+use MediaWiki\Title\Title;
 use MediaWiki\User\User;
 
 /**
@@ -19,30 +20,44 @@ class ApiWishEditTest extends ApiTestCase {
 	 * @covers ::getEditSummary
 	 * @dataProvider provideTestExecute
 	 */
-	public function testExecute( array $params, array|string $expected ): void {
+	public function testExecute(
+		array $params,
+		array|string $expected,
+		string $expectedSummary = '',
+		?string $expectedUpdateSummary = null
+	): void {
+		// Ensure we have a user to work with.
 		User::createNew( 'TestUser' );
 
-		$params = [
-			'action' => 'wishedit',
-			...$params
-		];
+		$params[ 'action' ] = 'wishedit';
 
+		// If $expected is a string, we expect an error message to match it.
 		if ( is_string( $expected ) ) {
 			$this->expectException( ApiUsageException::class );
 			$this->expectExceptionMessage( $expected );
+			$this->expectApiErrorCode( 'missingparam' );
 		}
+
+		// Make the request.
 		[ $ret ] = $this->doApiRequestWithToken( $params );
 
+		// If we were asserting an error, we're done.
+		if ( is_string( $expected ) ) {
+			return;
+		}
+
+		// Assert warnings if applicable.
 		if ( isset( $expected[ 'warnings' ] ) ) {
 			$this->assertArrayEquals( $expected[ 'warnings' ], $ret[ 'warnings' ] );
 		} else {
 			$this->assertArrayNotHasKey( 'warnings', $ret );
 		}
-		$expected[ 'wishedit' ] = [
-			...$params,
-			...$expected[ 'wishedit' ] ?? [],
-		];
 
+		// To reduce duplication in the test cases, expect back what was given in $params.
+		$expected[ 'wishedit' ] ??= [];
+		$expected[ 'wishedit' ] += $params;
+
+		// Main body of the response.
 		$this->assertSame( $expected[ 'wishedit' ][ 'title' ], $ret[ 'wishedit' ][ 'title' ] );
 		$this->assertSame( $expected[ 'wishedit' ][ 'status' ], $ret[ 'wishedit' ][ 'status' ] );
 		$this->assertSame( $expected[ 'wishedit' ][ 'type' ], $ret[ 'wishedit' ][ 'type' ] );
@@ -58,6 +73,23 @@ class ApiWishEditTest extends ApiTestCase {
 			preg_match( '/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z/', $ret[ 'wishedit' ][ 'updated' ] ) === 1
 		);
 		$this->assertSame( $expected[ 'wishedit' ][ 'baselang' ], $ret[ 'wishedit' ][ 'baselang' ] );
+
+		// Fetch the revision.
+		$revLookup = $this->getServiceContainer()->getRevisionLookup();
+		$revision = $revLookup->getRevisionByTitle(
+			Title::newFromText( $ret[ 'wishedit' ][ 'wish' ] )->toPageIdentity()
+		);
+		$this->assertSame( $expectedSummary, $revision->getComment()->text );
+
+		// Make an additional edit and assert the edit summary, if applicable.
+		if ( $expectedUpdateSummary !== null ) {
+			$params[ 'wish' ] = $ret[ 'wishedit' ][ 'wish' ];
+			$params[ 'description' ] = 'Updated description';
+			[ $ret ] = $this->doApiRequestWithToken( $params );
+			$this->assertSame( 'Updated description', $ret[ 'wishedit' ][ 'description' ] );
+			$revision = $revLookup->getNextRevision( $revision );
+			$this->assertSame( $expectedUpdateSummary, $revision->getComment()->text );
+		}
 	}
 
 	public static function provideTestExecute(): array {
@@ -89,7 +121,9 @@ class ApiWishEditTest extends ApiTestCase {
 						'phabtasks' => [ 'T123', 'T456', 'T789' ],
 						'new' => true,
 					]
-				]
+				],
+				'Publishing the wish "Test Wish" ([[phab:T123|T123]], [[phab:T456|T456]], [[phab:T789|T789]])',
+				'Updating the wish "Test Wish" ([[phab:T123|T123]], [[phab:T456|T456]], [[phab:T789|T789]])'
 			],
 			'missing proposer' => [
 				[
@@ -130,7 +164,8 @@ class ApiWishEditTest extends ApiTestCase {
 						'phabtasks' => [ 'T123', 'T456', 'T789' ],
 						'new' => true,
 					]
-				]
+				],
+				'Publishing the wish "Test Wish" ([[phab:T123|T123]], [[phab:T456|T456]], [[phab:T789|T789]])'
 			],
 			'no tasks' => [
 				[
@@ -155,7 +190,8 @@ class ApiWishEditTest extends ApiTestCase {
 						'phabtasks' => [],
 						'new' => true,
 					]
-				]
+				],
+				'Publishing the wish "Test Wish"'
 			],
 		];
 	}

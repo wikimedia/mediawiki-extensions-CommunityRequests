@@ -51,7 +51,7 @@ class ApiWishEdit extends ApiWishlistEntityBase {
 		);
 		$saveStatus = $this->save(
 			$wish->toWikitext( $this->config ),
-			$this->getEditSummary( $wish, $this->params ),
+			$this->getEditSummary( $wish ),
 			$this->params[ 'token' ],
 			$this->params[ 'baserevid' ] ?? null
 		);
@@ -75,12 +75,12 @@ class ApiWishEdit extends ApiWishlistEntityBase {
 	}
 
 	/** @inheritDoc */
-	public function getEditSummary( AbstractWishlistEntity $entity, array $params ): string {
+	public function getEditSummary( AbstractWishlistEntity $entity ): string {
 		if ( !$entity instanceof Wish ) {
 			throw new RuntimeException( 'Expected a Wish object but got a ' . get_class( $entity ) );
 		}
 
-		$summary = trim( $params[ 'wish' ] ?? '' ) ? $this->editSummaryPublish() : $this->editSummarySave();
+		$summary = trim( $this->params[ 'wish' ] ?? '' ) ? $this->editSummarySave() : $this->editSummaryPublish();
 
 		// If there are Phabricator tasks, add them to the edit summary.
 		if ( count( $entity->getPhabTasks() ) > 0 ) {
@@ -98,24 +98,24 @@ class ApiWishEdit extends ApiWishlistEntityBase {
 
 	/** @inheritDoc */
 	protected function editSummaryPublish(): string {
-		return $this->msg( 'communityrequests-publish-wish-summary' )
+		return $this->msg( 'communityrequests-publish-wish-summary', $this->params['title'] )
 			->inContentLanguage()
 			->text();
 	}
 
 	/** @inheritDoc */
 	protected function editSummarySave(): string {
-		return $this->msg( 'communityrequests-save-wish-summary' )
+		return $this->msg( 'communityrequests-save-wish-summary', $this->params['title'] )
 			->inContentLanguage()
 			->text();
 	}
 
 	/** @inheritDoc */
-	protected function getWishlistEntityTitle( array $params ): Title {
-		if ( isset( $params[ 'wish' ] ) ) {
+	protected function getWishlistEntityTitle(): Title {
+		if ( isset( $this->params[ 'wish' ] ) ) {
 			return Title::newFromText(
 				$this->config->getWishPagePrefix() .
-				$this->store->getIdFromInput( $params[ 'wish' ] )
+				$this->store->getIdFromInput( $this->params[ 'wish' ] )
 			);
 		} else {
 			// If this is a new wish, generate a new ID and page title.

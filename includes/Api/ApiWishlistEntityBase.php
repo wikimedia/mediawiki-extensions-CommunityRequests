@@ -43,7 +43,7 @@ abstract class ApiWishlistEntityBase extends ApiBase {
 		}
 
 		$this->params = $this->extractRequestParams();
-		$title = $this->getWishlistEntityTitle( $this->params );
+		$title = $this->getWishlistEntityTitle();
 
 		if ( !$title ) {
 			$this->dieWithError( [ 'apierror-invalidtitle', wfEscapeWikiText( $this->params[ 'wish' ] ) ] );
@@ -108,19 +108,17 @@ abstract class ApiWishlistEntityBase extends ApiBase {
 	/**
 	 * Get the title of the wishlist entity based on the provided parameters.
 	 *
-	 * @param array $params
 	 * @return ?Title
 	 */
-	abstract protected function getWishlistEntityTitle( array $params ): ?Title;
+	abstract protected function getWishlistEntityTitle(): ?Title;
 
 	/**
 	 * Get the edit summary for a wishlist item.
 	 *
 	 * @param AbstractWishlistEntity $entity
-	 * @param array $params
 	 * @return string
 	 */
-	abstract public function getEditSummary( AbstractWishlistEntity $entity, array $params ): string;
+	abstract public function getEditSummary( AbstractWishlistEntity $entity ): string;
 
 	/**
 	 * The edit summary to use when publishing a wishlist item.

@@ -4,7 +4,15 @@
 			"Ykhwong"
 		]
 	},
+	"communityrequests-title-label": "제목",
 	"communityrequests-wishtype-unknown-label-short": "알 수 없음",
+	"communityrequests-phabricator-label": "파브리케이터 작업",
+	"communityrequests-support-wish-dialog-title": "\"$1\" 지원",
 	"communityrequests-status": "상태",
-	"communityrequests-translation-translatable": "이 문서에는 $1로 되어 있지 않은 문구가 포함되어 있습니다."
+	"communityrequests-wish-voting": "투표",
+	"communityrequests-focus-area-description": "설명",
+	"communityrequests-focus-area-short-description": "짧은 설명",
+	"communityrequests-translation-translatable": "이 문서에는 $1로 되어 있지 않은 문구가 포함되어 있습니다.",
+	"apihelp-query+communityrequests-wishes-paramvalue-sort-updated": "마지막 갱신일로 정렬",
+	"action-manage-wishlist": "제한 없이 공동체 위시리스트를 관리할"
 }

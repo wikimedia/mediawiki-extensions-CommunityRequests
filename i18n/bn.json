@@ -10,6 +10,7 @@
 	"communityrequests-form-error": "Something went wrong. Please try saving again, or ask for help on the [[$1|talk page]].",
 	"communityrequests-description": "আপনার সমস্যা বর্ণনা করুন",
 	"communityrequests-description-description": "আপনি যে ইচ্ছা বা সমস্যার কথা বলছেন তা বিস্তারিতভাবে ব্যাখ্যা করুন।",
+	"communityrequests-title-label": "শিরোনাম",
 	"communityrequests-title-error": "অনুগ্রহ করে এই ঘরের জন্য একটি মান লিখুন ($1 ও $2 {{PLURAL:$2|অক্ষরের}} মধ্যে)।",
 	"communityrequests-title-description": "আপনার শিরোনামে ইচ্ছা বা সমস্যার সংক্ষিপ্ত বিবরণ রয়েছে তা নিশ্চিত করুন।",
 	"communityrequests-description-error": "অনুগ্রহ করে এই ঘরের জন্য একটি মান লিখুন ($1 বা তার বেশি {{PLURAL:$1|অক্ষর}})।",
@@ -37,7 +38,7 @@
 	"communityrequests-audience-label": "প্রাথমিকভাবে প্রভাবিত ব্যবহারকারীগণ",
 	"communityrequests-audience-description": "কোন ব্যবহারকারী গোষ্ঠী এবং পরিস্থিতিকে এটি সবচেয়ে বেশি প্রভাবিত করবে তা বর্ণনা করুন",
 	"communityrequests-audience-error": "অনুগ্রহ করে এই ঘরের জন্য একটি মান লিখুন ($1 ও $2 {{PLURAL:$2|অক্ষরের}} মধ্যে)।",
-	"communityrequests-phabricator-label": "ফ্যাব্রিকেটর কার্য (ঐচ্ছিক)",
+	"communityrequests-phabricator-label": "ফ্যাব্রিকেটর কার্য",
 	"communityrequests-phabricator-desc": "ফ্যাব্রিকেটর কার্যের আইডি বা ইউআরএল লিখুন।",
 	"communityrequests-phabricator-chip-desc": "ফ্যাব্রিকেটর কার্য আইডিগুলির একটি তালিকা।",
 	"communityrequests-create-success": "আপনার ইচ্ছা জমা দেওয়া হয়েছে।",
@@ -72,6 +73,8 @@
 	"communityrequests-wish-created": "তৈরি করা হয়েছে: $1",
 	"communityrequests-wish-updated": "সর্বশেষ হালনাগাদ: $1",
 	"communityrequests-wish-proposer": "লেখক: $1",
+	"communityrequests-wish-voting": "ভোটদান",
+	"communityrequests-wish-voting-info-closed": "এই ইচ্ছার জন্য ভোটদান বর্তমানে বন্ধ আছে।",
 	"communityrequests-wishes-type-header": "ধরন",
 	"communityrequests-wishes-projects-header": "প্রকল্প",
 	"communityrequests-wishes-date-header": "তারিখ (ইউটিসি)",
@@ -82,6 +85,7 @@
 	"communityrequests-form-loading-1": "যদি ফরমটি লোড না হয়, তাহলে দয়া করে নিশ্চিত করুন যে আপনার জাভাস্ক্রিপ্ট সক্রিয় আছে।",
 	"communityrequests-form-loading-2": "আপনার যদি এখনও সমস্যা হয়, তাহলে দয়া করে $1 পাতায় সাহায্যের জন্য অনুরোধ করুন।",
 	"communityrequests-please-log-in": "একটি ইচ্ছা জমা দিতে দয়া করে প্রবেশ করুন।",
+	"communityrequests-focus-area-description": "বিবরণ",
 	"communityrequests-focus-area-supported": "সমর্থন করেছেন:",
 	"communityrequests-focus-area-supported-val": "$1 জন {{PLURAL:$2|ব্যক্তি}}",
 	"communityrequests-focus-area-owners-label": "মালিক:",
@@ -91,5 +95,6 @@
 	"communityrequests-focus-area-voting": "ভোটদান",
 	"communityrequests-translation-translatable": "এই পাতায় এমন পাঠ্য রয়েছে যা $1-এ নেই।",
 	"communityrequests-translation-switch": "এটি [https://www.mediawiki.org/wiki/Special:MyLanguage/MinT উইকিমিডিয়ার মেশিন অনুবাদ সরঞ্জাম] ব্যবহার করে স্বয়ংক্রিয়ভাবে অনুবাদ করুন।",
-	"communityrequests-wish-category": "সম্প্রদায়ের ইচ্ছা তালিকা/ইচ্ছা"
+	"communityrequests-wish-category": "সম্প্রদায়ের ইচ্ছা তালিকা/ইচ্ছা",
+	"action-manage-wishlist": "কোনও সীমাবদ্ধতা ছাড়াই সম্প্রদায়ের ইচ্ছাতালিকা পরিচালনা করার"
 }

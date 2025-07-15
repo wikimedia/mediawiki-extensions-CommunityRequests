@@ -6,6 +6,7 @@
 	},
 	"communityrequests-wish-not-found": "De Wonsch [[$1]] gouf net fonnt oder e gouf net richteg gespäichert.",
 	"communityrequests-description": "Beschreift Äre Problem",
+	"communityrequests-title-label": "Titel",
 	"communityrequests-wishtype-unknown-label": "Ech si mir net sécher oder ech weess et net",
 	"communityrequests-wishtype-unknown-label-short": "Onbekannt",
 	"communityrequests-project-all-projects": "All Projeten",
@@ -71,5 +72,6 @@
 	"apihelp-wishedit-param-proposer": "De Benotzer, deen de Wonsch virgeschloen huet.",
 	"apihelp-wishedit-param-created": "Den Datum an d'Auerzäit, wou de Wonsch ugeluecht gouf.",
 	"apierror-wishedit-notawish": "D'Säit, déi Dir ännere wëllt, ass kee gültege Wonsch.",
+	"apihelp-query+communityrequests-wishes-paramvalue-prop-status": "Status vum Wonsch",
 	"tag-community-wishlist": "[[Special:MyLanguage/Community Wishlist|Communautéitswonschlëscht]]"
 }

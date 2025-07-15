@@ -8,6 +8,7 @@
 	"communityrequests-wishtype-bug-label": "Laporan pepijat",
 	"communityrequests-wishtype-change-label": "Perubahan sistem",
 	"communityrequests-wishtype-unknown-label": "Saya tidak pasti atau saya tidak tahu",
+	"communityrequests-wishtype-unknown-label-short": "Tidak diketahui",
 	"communityrequests-project-all-projects": "Semua projek",
 	"communityrequests-view-all-wishes": "Lihat semua hajat.",
 	"communityrequests-close": "Tutup",
@@ -15,6 +16,7 @@
 	"communityrequests-save": "Simpan perubahan",
 	"communityrequests-support": "Sokong",
 	"communityrequests-supported": "Sudah disokong",
+	"communityrequests-status": "Status",
 	"communityrequests-status-draft": "Draf",
 	"communityrequests-status-submitted": "Diserahkan",
 	"communityrequests-status-open": "Terbuka",
@@ -48,5 +50,9 @@
 	"communityrequests-focus-area-volunteers": "Ahli komuniti",
 	"communityrequests-focus-area-no-votes": "Tiada penyokong lagi.",
 	"communityrequests-translation-translatable": "Laman ini mengandungi teks yang bukan dalam $1.",
-	"communityrequests-translation-errors": "Ralat berlaku:"
+	"communityrequests-translation-errors": "Ralat berlaku:",
+	"apihelp-wishedit-param-status": "Status hajat.",
+	"apihelp-query+communityrequests-wishes-paramvalue-prop-status": "Status hajat",
+	"apihelp-query+communityrequests-wishes-paramvalue-prop-type": "Jenis hajat",
+	"apihelp-query+communityrequests-wishes-paramvalue-prop-title": "Tajuk hajat"
 }

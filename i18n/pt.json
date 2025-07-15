@@ -1,0 +1,29 @@
+{
+	"@metadata": {
+		"authors": [
+			"Mansil alfalb"
+		]
+	},
+	"communityrequests-focus-area-not-found": "A área de foco [[ $1 ]] não foi encontrada ou não foi guardada corretamente.",
+	"communityrequests-intake-focus-area": "Área de foco",
+	"communityrequests-title-label": "Título",
+	"communityrequests-phabricator-label": "Tarefas do Phabricator",
+	"communityrequests-support-wish": "Desejo de apoio",
+	"communityrequests-support-wish-dialog-title": "Apoiar \"$1\"",
+	"communityrequests-wish-created": "Criado: $1",
+	"communityrequests-wish-updated": "Última atualização: $1",
+	"communityrequests-wish-proposer": "Autor: $1",
+	"communityrequests-wish-voting": "Votação",
+	"communityrequests-wish-voting-info-closed": "A votação para este desejo está atualmente encerrada.",
+	"communityrequests-wish-voting-not-logged-in": "Por favor, inicie a sessão para apoiar este desejo",
+	"communityrequests-wish-voters-heading": "Apoiantes deste desejo",
+	"communityrequests-wish-no-votes": "Ainda sem apoiantes.",
+	"communityrequests-focus-area-description": "Descrição",
+	"communityrequests-focus-area-short-description": "Descrição breve",
+	"communityrequests-focus-area-volunteers-description": "Se houver voluntários que não fazem parte da organização, mas quer mencioná-los, liste-os aqui. São permitidas hiperligações e outros textos wiki simples.",
+	"communityrequests-focus-area-voting-info-closed": "A votação para esta área de focos está atualmente encerrada.",
+	"communityrequests-wish-category": "Lista de Desejos/Desejos da comunidade",
+	"apihelp-wishedit-param-type": "O tipo de desejo.",
+	"action-manage-wishlist": "gerir a Lista de Desejos da Comunidade sem restrições",
+	"group-community-wishlist-manager": "Gestor da Lista de Desejos da Comunidade"
+}

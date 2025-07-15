@@ -1,0 +1,11 @@
+{
+	"@metadata": {
+		"authors": [
+			"Hugo.arg"
+		]
+	},
+	"communityrequests-title-label": "Pavadinimas",
+	"communityrequests-phabricator-label": "Phabricator užduotys",
+	"communityrequests-wish-voting": "Balsavimas",
+	"communityrequests-focus-area-description": "Aprašymas"
+}

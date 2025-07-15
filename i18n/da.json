@@ -1,0 +1,19 @@
+{
+	"@metadata": {
+		"authors": [
+			"Naitsa"
+		]
+	},
+	"communityrequests-wish-voting-info": "Dette ønske har i øjeblikket '''$1 {{PLURAL:$2|støtter|støtter}}'''.",
+	"communityrequests-wish-voting-not-logged-in": "Log venligst ind for at støtte dette ønske",
+	"communityrequests-wish-no-votes": "Ingen støtter endnu.",
+	"apihelp-query+communityrequests-wishes-param-prop": "De ønskede egenskaber at hente.",
+	"apihelp-query+communityrequests-wishes-paramvalue-prop-status": "Status på ønsket",
+	"apihelp-query+communityrequests-wishes-paramvalue-prop-title": "Titel på ønsket.",
+	"apihelp-query+communityrequests-wishes-paramvalue-prop-description": "Beskrivelse af ønsket",
+	"apihelp-query+communityrequests-wishes-paramvalue-prop-projects": "Projekter som ønsket er relateret til",
+	"apihelp-query+communityrequests-wishes-paramvalue-prop-created": "Dato og tidspunkt, hvor ønsket blev oprettet",
+	"apihelp-query+communityrequests-wishes-paramvalue-sort-created": "Sortér efter oprettelsesdato",
+	"apihelp-query+communityrequests-wishes-paramvalue-sort-votecount": "Sortér efter antal støtter",
+	"apihelp-query+communityrequests-wishes-paramvalue-sort-title": "Sortér efter titel"
+}

@@ -4,6 +4,7 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CommunityRequests\FocusArea;
 
 use MediaWiki\Api\ApiMain;
+use MediaWiki\Api\ApiUsageException;
 use MediaWiki\Context\DerivativeContext;
 use MediaWiki\Extension\CommunityRequests\AbstractWishlistSpecialPage;
 use MediaWiki\Extension\CommunityRequests\HookHandler\CommunityRequestsHooks;
@@ -72,7 +73,11 @@ class SpecialEditFocusArea extends AbstractWishlistSpecialPage {
 			...$data,
 		] ) );
 		$api = new ApiMain( $context, true );
-		$api->execute();
+		try {
+			$api->execute();
+		} catch ( ApiUsageException $e ) {
+			return $e->getStatusValue();
+		}
 
 		$this->pageTitle = Title::newFromText( $api->getResult()->getResultData()[ 'focusareaedit' ][ 'focusarea' ] );
 

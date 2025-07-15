@@ -1,7 +1,10 @@
 'use strict';
 
 const Util = require( '../common/Util.js' );
-const { CommunityRequestsWishIndexPage } = require( '../common/config.json' );
+const {
+	CommunityRequestsWishIndexPage,
+	CommunityRequestsFocusAreaIndexPage
+} = require( '../common/config.json' );
 
 let form;
 
@@ -9,7 +12,7 @@ if ( Util.isNewWish() || Util.isWishEdit() ) {
 	form = require( './SpecialWishlistIntake.vue' );
 } else if ( Util.isNewFocusArea() || Util.isFocusAreaEdit() ) {
 	form = require( './SpecialEditFocusArea.vue' );
-} else if ( Util.isWishView() && mw.config.get( 'intakePostEdit' ) ) {
+} else if ( ( Util.isWishView() || Util.isFocusAreaView() ) && mw.config.get( 'intakePostEdit' ) ) {
 	showPostEditBanner();
 }
 
@@ -42,19 +45,26 @@ function showPostEditBanner() {
 	// Message icon.
 	const messageIcon = document.createElement( 'span' );
 	messageIcon.className = 'cdx-message__icon';
-	// View wishes link.
-	const viewWishesLink = document.createElement( 'a' );
-	viewWishesLink.href = mw.util.getUrl( CommunityRequestsWishIndexPage );
-	viewWishesLink.textContent = mw.msg( 'communityrequests-view-all-wishes' );
+	// View all link.
+	const viewAllLink = document.createElement( 'a' );
+	viewAllLink.href = mw.util.getUrl(
+		Util.isWishView() ? CommunityRequestsWishIndexPage : CommunityRequestsFocusAreaIndexPage
+	);
+	viewAllLink.textContent = mw.msg(
+		Util.isWishView() ? 'communityrequests-view-all-wishes' : 'communityrequests-view-all-focus-areas'
+	);
 	// Message content.
 	const messageContent = document.createElement( 'div' );
 	messageContent.className = 'cdx-message__content';
+	const messageContentEntity = Util.isFocusAreaView() ? 'focus-area-' : '';
 	const messageContentMsg = mw.config.get( 'intakePostEdit' ) === 'created' ?
-		'communityrequests-create-success' :
-		'communityrequests-edit-success';
+		`communityrequests-${ messageContentEntity }create-success` :
+		`communityrequests-${ messageContentEntity }edit-success`;
 	// Messages that can be used here:
 	// * communityrequests-create-success
 	// * communityrequests-edit-success
+	// * communityrequests-focus-area-create-success
+	// * communityrequests-focus-area-edit-success
 	messageContent.textContent = mw.msg( messageContentMsg ) + ' ';
 	// Message container.
 	const messageContainer = document.createElement( 'div' );
@@ -62,7 +72,7 @@ function showPostEditBanner() {
 	messageContainer.ariaLive = 'polite';
 	// Append elements.
 	closeButton.appendChild( closeImg );
-	messageContent.appendChild( viewWishesLink );
+	messageContent.appendChild( viewAllLink );
 	messageContainer.appendChild( messageIcon );
 	messageContainer.appendChild( messageContent );
 	messageContainer.appendChild( closeButton );

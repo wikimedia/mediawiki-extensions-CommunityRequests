@@ -263,16 +263,20 @@ class CommunityRequestsHooks implements
 			return;
 		}
 
+		// Post-edit success message.
+		// TODO: Possibly replace with the leaner mediawiki.codex.messagebox.styles module.
+		//   Though this would mean the message can't be dismissable.
 		if ( $out->getRequest()->getSession()->get( self::SESSION_KEY ) ) {
 			$postEditVal = $out->getRequest()->getSession()->get( self::SESSION_KEY );
 			$out->getRequest()->getSession()->remove( self::SESSION_KEY );
 			$out->addJsConfigVars( 'intakePostEdit', $postEditVal );
 			$out->addModules( 'ext.communityrequests.intake' );
-		} elseif (
+		}
+		// If the page is a wish or focus area, add the voting module.
+		if (
 			( $this->config->isWishVotingEnabled() && $this->config->isWishPage( $out->getTitle() ) ) ||
 			( $this->config->isFocusAreaVotingEnabled() && $this->config->isFocusAreaPage( $out->getTitle() ) )
 		) {
-			// If the page is a wish or focus area, add the voting module.
 			$out->addModules( 'ext.communityrequests.voting' );
 		}
 

@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"Amire80"
+			"Amire80",
+			"McDutchie"
 		]
 	},
 	"communityrequests-desc": "{{desc|name=CommunityRequests|url=https://www.mediawiki.org/wiki/Special:MyLanguage/Extension:CommunityRequests}}",
@@ -98,7 +99,7 @@
 	"communityrequests-focus-area-voting": "Section heading on the focus area page.",
 	"communityrequests-focus-area-voting-info": "Descriptive text in the voting section of the focus area page.",
 	"communityrequests-focus-area-voting-not-logged-in": "Warning shown instead of the voting button when a user is not logged in and so cannot vote.",
-	"communityrequests-focus-area-voters-heading": "Section heading shown above the votes list.",
+	"communityrequests-focus-area-voters-heading": "Section heading shown above the votes list on a focus area page.",
 	"communityrequests-focus-area-no-votes": "Text shown when there are no votes for a focus area.",
 	"communityrequests-translation-translatable": "Banner message shown when untranslated text is found in a page.\n\nParameter:\n\n* $1 — The localized name of the current interface language.",
 	"communityrequests-translation-switch": "Label for the toggle switch to enable/disable the machine translation.",

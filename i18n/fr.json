@@ -4,7 +4,10 @@
 			"E4Esau",
 			"Goombiis",
 			"SleaY",
-			"Mahabarata"
+			"Mahabarata",
+			"Bananax47",
+			"Derugon",
+			"JLTRY"
 		]
 	},
 	"communityrequests-desc": "Un système de gestion des suggestions et des demandes techniques d'une communauté wiki.",
@@ -69,7 +72,7 @@
 	"communityrequests-edit-wish": "Modifier le souhait",
 	"communityrequests-discuss-wish": "Discutez de ce souhait",
 	"communityrequests-wish-description-heading": "Description",
-	"communityrequests-wish-focus-area-heading": "Domaine assigné",
+	"communityrequests-wish-focus-area-heading": "Domaine d’action assigné",
 	"communityrequests-wish-type-heading": "Type de souhait",
 	"communityrequests-wish-related-heading": "Projets associés",
 	"communityrequests-wish-audience-heading": "Utilisateurs impactés",

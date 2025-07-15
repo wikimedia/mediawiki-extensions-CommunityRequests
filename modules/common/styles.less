@@ -37,6 +37,20 @@
 	margin-right: @spacing-25;
 }
 
+.ext-communityrequests-focus-area-index {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	grid-column-gap: @spacing-100;
+	gap: @spacing-100;
+	/* Single column on mobile. */
+	@media screen and ( max-width: @max-width-breakpoint-mobile ) {
+		& {
+			grid-template-columns: none;
+		}
+	}
+}
+
+
 // Codex styles
 .cdx-info-chip {
 	background-color: @background-color-notice-subtle;

@@ -152,6 +152,7 @@
 			"codexStyleOnly": true,
 			"codexComponents": [
 				"CdxButton",
+				"CdxCard",
 				"CdxIcon",
 				"CdxInfoChip",
 				"CdxMessage"

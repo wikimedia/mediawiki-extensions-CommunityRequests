@@ -232,34 +232,4 @@ class WishTemplateRenderer extends AbstractTemplateRenderer {
 			)
 		);
 	}
-
-	/**
-	 * Get a link to the specified focus area or a suitable placeholder
-	 *
-	 * @param string|null $focusAreaArg The focus area input parameter
-	 * @return string HTML
-	 */
-	private function getFocusAreaLink( ?string $focusAreaArg ): string {
-		if ( $focusAreaArg ) {
-			$id = $this->focusAreaStore->getIdFromInput( $focusAreaArg );
-			$pageIdentity = Title::newFromText(
-				$this->focusAreaStore->getPagePrefix() . $id
-			);
-			$entity = $this->focusAreaStore->get(
-				$pageIdentity,
-				$this->parser->getTargetLanguage()->getCode()
-			);
-			if ( $entity ) {
-				return $this->linkRenderer->makeKnownLink(
-					$pageIdentity,
-					$entity->getTitle()
-				);
-			} else {
-				// Not found -- just show plain text
-				return htmlspecialchars( $focusAreaArg, ENT_NOQUOTES );
-			}
-		} else {
-			return $this->msg( 'communityrequests-focus-area-unassigned' )->escaped();
-		}
-	}
 }

@@ -262,4 +262,35 @@ abstract class AbstractTemplateRenderer {
 			)->text()
 		);
 	}
+
+	/**
+	 * Get a link to the specified focus area or a suitable placeholder
+	 *
+	 * @param string|null $focusAreaArg The focus area input parameter
+	 * @param string|null $label The label for the link parameter
+	 * @return string HTML
+	 */
+	protected function getFocusAreaLink( ?string $focusAreaArg, ?string $label = null ): string {
+		if ( $focusAreaArg ) {
+			$id = $this->focusAreaStore->getIdFromInput( $focusAreaArg );
+			$pageIdentity = Title::newFromText(
+				$this->focusAreaStore->getPagePrefix() . $id
+			);
+			$entity = $this->focusAreaStore->get(
+				$pageIdentity,
+				$this->parser->getContentLanguage()->getCode()
+			);
+			if ( $entity ) {
+				return $this->linkRenderer->makeKnownLink(
+					$pageIdentity,
+					$label ?: $entity->getTitle()
+				);
+			} else {
+				// Not found -- just show plain text
+				return htmlspecialchars( $focusAreaArg, ENT_NOQUOTES );
+			}
+		} else {
+			return $this->msg( 'communityrequests-focus-area-unassigned' )->escaped();
+		}
+	}
 }

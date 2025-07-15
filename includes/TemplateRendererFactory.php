@@ -3,6 +3,7 @@ declare( strict_types = 1 );
 
 namespace MediaWiki\Extension\CommunityRequests;
 
+use MediaWiki\Extension\CommunityRequests\FocusArea\FocusAreaIndexTemplateRenderer;
 use MediaWiki\Extension\CommunityRequests\FocusArea\FocusAreaStore;
 use MediaWiki\Extension\CommunityRequests\FocusArea\FocusAreaTemplateRenderer;
 use MediaWiki\Extension\CommunityRequests\Vote\VoteTemplateRenderer;
@@ -81,6 +82,7 @@ class TemplateRendererFactory {
 			'wish' => new WishTemplateRenderer( ...$constructorArgs ),
 			'wish-index' => new WishIndexTemplateRenderer( ...$constructorArgs ),
 			'focus-area' => new FocusAreaTemplateRenderer( ...$constructorArgs ),
+			'focus-area-index' => new FocusAreaIndexTemplateRenderer( ...$constructorArgs ),
 			'vote' => new VoteTemplateRenderer( ...$constructorArgs ),
 			default => null,
 		};

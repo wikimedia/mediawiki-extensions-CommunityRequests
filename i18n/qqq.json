@@ -164,6 +164,8 @@
 	"apihelp-wishedit-param-created": "{{doc-apihelp-param|wishedit|created}}",
 	"apihelp-wishedit-param-baselang": "{{doc-apihelp-param|wishedit|baselang}}",
 	"apierror-wishedit-notawish": "{{doc-apierror}}",
+	"apierror-focusareaedit-notafocusarea": "{{doc-apierror}}",
+	"apierror-focusareaedit-nopermission": "{{doc-apierror}}",
 	"apihelp-focusareaedit-summary": "{{doc-apihelp-summary|focusareaedit}}",
 	"apihelp-focusareaedit-param-focusarea": "{{doc-apihelp-param|focusareaedit|focusarea}}",
 	"apihelp-focusareaedit-param-status": "{{doc-apihelp-param|focusareaedit|status}}",

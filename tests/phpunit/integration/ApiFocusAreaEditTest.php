@@ -6,7 +6,6 @@ namespace MediaWiki\Extension\CommunityRequests\Tests\Integration;
 use MediaWiki\Api\ApiUsageException;
 use MediaWiki\Tests\Api\ApiTestCase;
 use MediaWiki\Title\Title;
-use MediaWiki\User\User;
 
 /**
  * @group CommunityRequests
@@ -26,9 +25,6 @@ class ApiFocusAreaEditTest extends ApiTestCase {
 		string $expectedSummary = '',
 		?string $expectedUpdateSummary = null
 	): void {
-		// Ensure we have a user to work with.
-		User::createNew( 'TestUser' );
-
 		$params[ 'action' ] = 'focusareaedit';
 
 		// If $expected is a string, we expect an error message to match it.
@@ -38,7 +34,7 @@ class ApiFocusAreaEditTest extends ApiTestCase {
 		}
 
 		// Make the request.
-		[ $ret ] = $this->doApiRequestWithToken( $params );
+		[ $ret ] = $this->doApiRequestWithToken( $params, null, $this->getTestSysop()->getUser() );
 
 		// If we were asserting an error, we're done.
 		if ( is_string( $expected ) ) {
@@ -130,5 +126,27 @@ class ApiFocusAreaEditTest extends ApiTestCase {
 				'The "title" parameter must be set.'
 			],
 		];
+	}
+
+	/**
+	 * @covers ::execute
+	 */
+	public function testExecuteNoPermission(): void {
+		$this->expectException( ApiUsageException::class );
+		$this->expectExceptionMessage(
+			'You do not have permission to create or edit focus areas in the Community Wishlist.'
+		);
+		$this->expectApiErrorCode( 'focusareaedit-nopermission' );
+		$this->doApiRequestWithToken( [
+			'action' => 'focusareaedit',
+			'status' => 'draft',
+			'title' => 'My test focus area',
+			'description' => '[[Test]] {{description}}',
+			'shortdescription' => 'Short [[desc]]',
+			'owners' => "* Community Tech\n* Editing",
+			'volunteers' => "* [[User:Volunteer1]]\n* [[User:Volunteer2]]",
+			'created' => '2023-10-01T12:00:00Z',
+			'baselang' => 'en',
+		], null, $this->getTestUser()->getUser() );
 	}
 }

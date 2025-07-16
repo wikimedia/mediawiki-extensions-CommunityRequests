@@ -18,6 +18,9 @@ class ApiFocusAreaEdit extends ApiWishlistEntityBase {
 		if ( !$this->config->isFocusAreaPage( $this->title ) ) {
 			$this->dieWithError( 'apierror-focusareaedit-notafocusarea' );
 		}
+		if ( !$this->getPermissionManager()->userHasRight( $this->getUser(), 'manage-wishlist' ) ) {
+			$this->dieWithError( 'apierror-focusareaedit-nopermission' );
+		}
 
 		$focusArea = FocusArea::newFromWikitextParams(
 			$this->title,

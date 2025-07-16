@@ -309,8 +309,8 @@
 				{
 					"name": "common/config.json",
 					"config": [
-						"CommunityRequestsSupportTemplate",
-						"CommunityRequestsWishPagePrefix"
+						"CommunityRequestsWishPagePrefix",
+						"CommunityRequestsVotesPageSuffix"
 					]
 				},
 				{

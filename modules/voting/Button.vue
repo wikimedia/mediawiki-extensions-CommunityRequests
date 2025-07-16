@@ -54,7 +54,7 @@ const { defineComponent, computed, onBeforeMount, ref } = require( 'vue' );
 const { CdxButton, CdxDialog, CdxField, CdxIcon, CdxTextArea, CdxMessage } = require( '@wikimedia/codex' );
 const { cdxIconCheck } = require( './icons.json' );
 const Util = require( '../common/Util.js' );
-const { CommunityRequestsSupportTemplate } = require( '../common/config.json' );
+const { CommunityRequestsVotesPageSuffix } = require( '../common/config.json' );
 
 module.exports = exports = defineComponent( {
 	name: 'VotingButton',
@@ -68,7 +68,7 @@ module.exports = exports = defineComponent( {
 	},
 	setup() {
 		const api = new mw.Api();
-		const votesPageName = getBasePageName() + '/Votes';
+		const votesPageName = getBasePageName() + CommunityRequestsVotesPageSuffix;
 		let comment = ref( '' );
 		let open = ref( false );
 		let hasVoted = ref( false );
@@ -153,11 +153,11 @@ module.exports = exports = defineComponent( {
 				// @todo If already voted, change the timestamp and comment of the existing vote.
 				return Promise.resolve();
 			}
-			// @todo Construct support template wikitext somewhere else.
-			const newVote = '{{' + CommunityRequestsSupportTemplate +
+
+			const newVote = '{{#CommunityRequests: vote' +
 				' |username=' + mw.config.get( 'wgUserName' ) +
 				' |timestamp=' + ( new Date() ).toISOString() +
-				' |comment=' + comment.replace( '|', '{{!}}' ) +
+				' |comment=' + comment.replace( /\|/g, '{{!}}' ) +
 				' }}';
 			votes = votes.trim() + '\n' + newVote;
 			// Save the votes page.

@@ -202,7 +202,10 @@ abstract class AbstractWishlistStore {
 				static::translationLangField() => $langs,
 				"$translationLangField = $baseLangField",
 			], $dbr::LIST_OR ) )
-			->orderBy( $orderPrecedence, $direction )
+			->orderBy(
+				$orderPrecedence,
+				$direction === static::SORT_DESC ? static::SORT_DESC : static::SORT_ASC
+			)
 			// Leave room for the fallback languages.
 			->limit( $limit * count( $langs ) );
 

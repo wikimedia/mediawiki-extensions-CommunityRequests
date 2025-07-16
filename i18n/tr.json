@@ -13,6 +13,7 @@
 	"communityrequests-wish-not-found": "[[$1]] dileği bulunamadı ya da düzgün bir şekilde saklanmadı.",
 	"communityrequests-focus-area-not-found": "[[$1]] odak alanı bulunamadı ya da düzgün bir şekilde saklanmadı.",
 	"communityrequests-form-error": "Bir şeyler ters gitti. Lütfen tekrar saklamayı deneyin ya da [[$1|tartışma sayfasında]] yardım isteyin.",
+	"communityrequests-intake-focus-area": "Odak alanı",
 	"communityrequests-description": "Sorununuzu açıklayın",
 	"communityrequests-description-description": "Değindiğiniz dileği ya da sorunu ayrıntılı bir şekilde açıklayın.",
 	"communityrequests-title-label": "Başlık",

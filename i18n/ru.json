@@ -43,7 +43,7 @@
 	"communityrequests-audience-label": "Пользователи, которых это затронет в первую очередь",
 	"communityrequests-audience-description": "Опишите, какая группа пользователей и в каких ситуациях ощутит наибольшее влияние",
 	"communityrequests-audience-error": "Введите значение для этого поля (от $1 до $2 {{PLURAL:$2|символа|символов}}).",
-	"communityrequests-phabricator-label": "Задачи Фабрикатора (необязательно)",
+	"communityrequests-phabricator-label": "Задачи Фабрикатора",
 	"communityrequests-phabricator-desc": "Введите идентификаторы или URL-адреса задач Phabricator.",
 	"communityrequests-phabricator-chip-desc": "Список идентификаторов задач Phabricator.",
 	"communityrequests-create-success": "Ваше пожелание было отправлено.",

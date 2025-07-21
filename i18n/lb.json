@@ -73,5 +73,18 @@
 	"apihelp-wishedit-param-created": "Den Datum an d'Auerzäit, wou de Wonsch ugeluecht gouf.",
 	"apierror-wishedit-notawish": "D'Säit, déi Dir ännere wëllt, ass kee gültege Wonsch.",
 	"apihelp-query+communityrequests-wishes-paramvalue-prop-status": "Status vum Wonsch",
+	"apihelp-query+communityrequests-wishes-paramvalue-prop-type": "Den Typ vum Wonsch",
+	"apihelp-query+communityrequests-wishes-paramvalue-prop-title": "Titel vum Wonsch",
+	"apihelp-query+communityrequests-wishes-paramvalue-prop-focusarea": "Fokusberäich, zu deem de Wonsch gehéiert",
+	"apihelp-query+communityrequests-wishes-paramvalue-prop-description": "Beschreiwung vum Wonsch",
+	"apihelp-query+communityrequests-wishes-paramvalue-prop-projects": "Projeten, op déi sech de Wonsch bezitt",
+	"apihelp-query+communityrequests-wishes-paramvalue-prop-proposer": "Benotzer, deen de Wonsch virgeschloen huet",
+	"apihelp-query+communityrequests-wishes-paramvalue-prop-votecount": "Zuel vu Benotzer, déi de Wonsch ënnerstëtzt hunn",
+	"apihelp-query+communityrequests-wishes-paramvalue-prop-created": "Datum an Auerzäit, wou de Wonsch ugeluecht gouf",
+	"apihelp-query+communityrequests-wishes-paramvalue-prop-updated": "Datum an Auerzäit, wou de Wonsch fir d'lescht aktualiséiert gouf",
+	"apihelp-query+communityrequests-wishes-paramvalue-sort-created": "Nom Datum vum Uleeën sortéieren",
+	"apihelp-query+communityrequests-wishes-paramvalue-sort-updated": "Nom Datum vun der leschter Aktualiséierung sortéieren",
+	"apihelp-query+communityrequests-wishes-paramvalue-sort-votecount": "No der Zuel vun Ënnerstëtzer sortéieren",
+	"apihelp-query+communityrequests-wishes-paramvalue-sort-title": "Nom Titel sortéieren",
 	"tag-community-wishlist": "[[Special:MyLanguage/Community Wishlist|Communautéitswonschlëscht]]"
 }

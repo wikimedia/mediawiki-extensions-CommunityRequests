@@ -270,7 +270,8 @@
 				"communityrequests-create-success",
 				"communityrequests-edit-success",
 				"communityrequests-view-all-wishes",
-				"communityrequests-intake-focus-area"
+				"communityrequests-intake-focus-area",
+				"communityrequests-focus-area-unassigned"
 			],
 			"factory": "\\MediaWiki\\Extension\\CommunityRequests\\Wish\\SpecialWishlistIntake::addResourceLoaderMessages"
 		},

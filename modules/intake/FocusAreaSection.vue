@@ -43,10 +43,17 @@ module.exports = exports = defineComponent( {
 		 *
 		 * @type {Ref<Array>}
 		 */
-		const focusAreaOptions = ref( wikitextVals.map( ( id ) => ( {
-			label: focusAreaData[ id ],
-			value: id
-		} ) ) );
+		const focusAreaOptions = ref(
+			[ {
+				label: mw.msg( 'communityrequests-focus-area-unassigned' ),
+				value: null
+			} ].concat(
+				wikitextVals.map( ( id ) => ( {
+					label: focusAreaData[ id ],
+					value: id
+				} ) )
+			)
+		);
 
 		return {
 			focusAreaValue,

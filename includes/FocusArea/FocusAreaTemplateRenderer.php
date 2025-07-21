@@ -136,14 +136,16 @@ class FocusAreaTemplateRenderer extends AbstractTemplateRenderer {
 		// TODO: implement wishes table somewhere else and re-use it here.
 
 		// Teams and affiliates section.
-		if ( isset( $args[ FocusArea::PARAM_OWNERS ] ) || isset( $args[ FocusArea::PARAM_VOLUNTEERS ] ) ) {
+		$owners = $args[ FocusArea::PARAM_OWNERS ] ?? '';
+		$volunteers = $args[ FocusArea::PARAM_VOLUNTEERS ] ?? '';
+		if ( $owners || $volunteers ) {
 			$out .= Html::element(
 				'div',
 				[ 'class' => 'mw-heading mw-heading2' ],
 				$this->msg( 'communityrequests-focus-area-stakeholders' )->text()
 			);
 
-			if ( isset( $args[ FocusArea::PARAM_OWNERS ] ) ) {
+			if ( $owners ) {
 				$out .= Html::rawElement(
 					'div',
 					[ 'class' => 'mw-heading mw-heading3' ],
@@ -151,11 +153,11 @@ class FocusAreaTemplateRenderer extends AbstractTemplateRenderer {
 				);
 				$out .= $this->getParagraphRaw(
 					'owners',
-					$this->parser->recursiveTagParse( trim( $args[ FocusArea::PARAM_OWNERS ] ) )
+					$this->parser->recursiveTagParse( trim( $owners ) )
 				);
 			}
 
-			if ( isset( $args[ FocusArea::PARAM_VOLUNTEERS ] ) ) {
+			if ( $volunteers ) {
 				$out .= Html::rawElement(
 					'div',
 					[ 'class' => 'mw-heading mw-heading3' ],
@@ -163,7 +165,7 @@ class FocusAreaTemplateRenderer extends AbstractTemplateRenderer {
 				);
 				$out .= $this->getParagraphRaw(
 					'volunteers',
-					$this->parser->recursiveTagParse( trim( $args[ FocusArea::PARAM_VOLUNTEERS ] ) )
+					$this->parser->recursiveTagParse( trim( $volunteers ) )
 				);
 			}
 		}

@@ -403,8 +403,10 @@ abstract class AbstractWishlistStore {
 		if ( is_int( $input ) ) {
 			return $input;
 		}
-		$id = ltrim( $input, $this->getPagePrefix() );
-		return (int)preg_replace( '/[^0-9]/', '', $id ) ?: null;
+		if ( str_starts_with( $input, $this->getPagePrefix() ) ) {
+			$input = substr( $input, strlen( $this->getPagePrefix() ) );
+		}
+		return (int)preg_replace( '/[^0-9]/', '', $input ) ?: null;
 	}
 
 	/**

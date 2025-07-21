@@ -263,6 +263,8 @@ END;
 		$this->assertSame( 123, $this->getStore()->getIdFromInput( 'Community Wishlist/Wishes/W123' ) );
 		$this->assertSame( 123, $this->getStore()->getIdFromInput( 'Community Wishlist/Wishes/W123/fr' ) );
 		$this->assertNull( $this->getStore()->getIdFromInput( 'Not a wish page' ) );
+		$this->overrideConfigValue( 'CommunityRequestsWishPagePrefix', '2025 Community Wishlist/Wishes/W' );
+		$this->assertSame( 503, $this->getStore()->getIdFromInput( '2025 Community Wishlist/Wishes/W503' ) );
 	}
 
 	/**

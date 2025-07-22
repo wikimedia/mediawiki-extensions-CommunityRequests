@@ -101,8 +101,8 @@
 	"communityrequests-focus-area-voting-not-logged-in": "Meld u aan om dit aandachtsgebied te steunen",
 	"communityrequests-focus-area-voters-heading": "Voorstanders van dit gebied",
 	"communityrequests-focus-area-no-votes": "Er zijn nog geen voorstanders.",
-	"communityrequests-translation-translatable": "Deze pagina bevat tekst die niet in $1 geschreven is.",
-	"communityrequests-translation-switch": "Vertaal het automatisch met behulp van [https://www.mediawiki.org/wiki/Special:MyLanguage/MinT Wikimedia's machinevertaalhulpmiddel].",
+	"communityrequests-translation-translatable": "Deze pagina bevat tekst die niet in het $1 geschreven is.",
+	"communityrequests-translation-switch": "Vertaal het automatisch met de [https://www.mediawiki.org/wiki/Special:MyLanguage/MinT machinevertaler van Wikimedia].",
 	"communityrequests-translation-progress": "{{PLURAL:$2|Het tekstdeel is {{PLURAL:$1|0=nog niet}} vertaald|$1 van de $2 tekstdelen {{PLURAL:$1|is|zijn}} vertaald}}.",
 	"communityrequests-translation-errors": "Er is een fout opgetreden:"
 }

@@ -98,7 +98,7 @@
 	"communityrequests-focus-area-view-wishes": "Voir les souhaits dans ce domaine",
 	"communityrequests-focus-area-wishes-list": "Souhaits dans ce domaine d'action",
 	"communityrequests-focus-area-th-wish": "Souhait",
-	"communityrequests-focus-area-stakeholders": "Equipes et affiliés",
+	"communityrequests-focus-area-stakeholders": "Équipes et affiliés",
 	"communityrequests-focus-area-owners": "Propriétaires",
 	"communityrequests-focus-area-volunteers": "Membres de la communauté",
 	"communityrequests-focus-area-voting": "Vote",
@@ -108,6 +108,6 @@
 	"communityrequests-focus-area-no-votes": "Pas de partisans encore.",
 	"communityrequests-translation-translatable": "Cette page contient du texte qui n'est pas en $1.",
 	"communityrequests-translation-switch": "Traduisez-le automatiquement en utilisant [https://www.mediawiki.org/wiki/Special:MyLanguage/MinT l'outil de traduction automatique de Wikimédia].",
-	"communityrequests-translation-progress": "Traduit $1 sur $2 {{PLURAL:$2|partie|parties}} de texte.",
-	"communityrequests-translation-errors": "Une erreur s’est produite:"
+	"communityrequests-translation-progress": "$1 sur $2 {{PLURAL:$2|partie|parties}} du texte traduites.",
+	"communityrequests-translation-errors": "Une erreur s’est produite :"
 }

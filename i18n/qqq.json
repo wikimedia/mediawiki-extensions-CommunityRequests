@@ -208,6 +208,8 @@
 	"tag-community-wishlist": "Short description of the community-wishlist tag.\n\nShown on lists of changes (history, recentchanges, etc.) for each edit made using Community Wishlist software.",
 	"right-manage-wishlist": "{{doc-right|manage-wishlist}}",
 	"action-manage-wishlist": "{{doc-action|manage-wishlist}}",
+	"right-manually-edit-wishlist": "{{doc-right|manually-edit-wishlist}}",
+	"action-manually-edit-wishlist": "{{doc-action|manually-edit-wishlist}}",
 	"group-community-wishlist-manager": "{{doc-group|community-wishlist-manager}}",
 	"group-community-wishlist-manager-member": "{{doc-group|community-wishlist-manager|member}}",
 	"grouppage-community-wishlist-manager": "{{doc-group|community-wishlist-manager|page}}"

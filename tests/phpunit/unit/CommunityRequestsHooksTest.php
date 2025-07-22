@@ -14,10 +14,18 @@ use MediaWiki\Linker\LinkRenderer;
 use MediaWiki\MainConfigNames;
 use MediaWiki\Parser\Parser;
 use MediaWiki\Parser\ParserOutput;
+use MediaWiki\Permissions\PermissionManager;
+use MediaWiki\Skin\SkinTemplate;
+use MediaWiki\SpecialPage\SpecialPage;
+use MediaWiki\SpecialPage\SpecialPageFactory;
+use MediaWiki\Tests\Unit\FakeQqxMessageLocalizer;
 use MediaWiki\Tests\Unit\MockServiceDependenciesTrait;
+use MediaWiki\Tests\Unit\Permissions\MockAuthorityTrait;
 use MediaWiki\Title\TitleFormatter;
 use MediaWiki\Title\TitleParser;
+use MediaWiki\User\User;
 use MediaWikiUnitTestCase;
+use MockTitleTrait;
 use Psr\Log\NullLogger;
 
 /**
@@ -26,6 +34,9 @@ use Psr\Log\NullLogger;
  */
 class CommunityRequestsHooksTest extends MediaWikiUnitTestCase {
 
+	use MockServiceDependenciesTrait;
+	use MockAuthorityTrait;
+	use MockTitleTrait;
 	use MockServiceDependenciesTrait;
 
 	/**
@@ -54,8 +65,144 @@ class CommunityRequestsHooksTest extends MediaWikiUnitTestCase {
 			$parserOutput->expects( $this->never() )->method( 'addModules' );
 		}
 
+		$text = '';
+		$handler = $this->getHandler( [ WishlistConfig::ENABLED => $enabled ] );
+		$handler->onParserAfterParse( $parser, $text, null );
+	}
+
+	public static function provideOnParserAfterParse(): array {
+		return [
+			[ 'enabled' => false, 'magic_word_prop' => false, 'module_added' => false ],
+			[ 'enabled' => false, 'magic_word_prop' => false, 'module_added' => true ],
+			[ 'enabled' => false, 'magic_word_prop' => true, 'module_added' => false ],
+			[ 'enabled' => false, 'magic_word_prop' => true, 'module_added' => true ],
+			[ 'enabled' => true, 'magic_word_prop' => false, 'module_added' => false ],
+			[ 'enabled' => true, 'magic_word_prop' => false, 'module_added' => true ],
+			[ 'enabled' => true, 'magic_word_prop' => true, 'module_added' => false ],
+			[ 'enabled' => true, 'magic_word_prop' => true, 'module_added' => true ],
+		];
+	}
+
+	/**
+	 * @covers ::onSkinTemplateNavigation__Universal
+	 * @dataProvider provideEditWithFormTab
+	 */
+	public function testEditWithFormTab(
+		array $opts = [],
+		array $expectedTabs = []
+	): void {
+		$opts = array_merge(
+			[
+				'title' => $this->makeMockTitle( 'Community Wishlist/Wishes/W123' ),
+				'isRegistered' => true,
+				'canEdit' => true,
+				'canManuallyEdit' => false,
+				'canManage' => false,
+				'tabs' => [
+					'view' => [],
+					've-edit' => [],
+					'edit' => [],
+					'history' => [],
+				],
+			],
+			$opts
+		);
+		$user = $this->createNoOpMock( User::class, [ 'isRegistered' ] );
+		$user->method( 'isRegistered' )->willReturn( $opts['isRegistered'] );
+		$skinTemplate = $this->createNoOpMock( SkinTemplate::class, [ 'getUser', 'getTitle', 'msg' ] );
+		$skinTemplate->expects( $this->any() )
+			->method( 'getUser' )
+			->willReturn( $user );
+		$skinTemplate->expects( $this->atLeastOnce() )
+			->method( 'getTitle' )
+			->willReturn( $opts['title'] );
+		$skinTemplate->expects( $this->atMost( 1 ) )
+			->method( 'msg' )
+			->willReturnCallback( [ new FakeQqxMessageLocalizer(), 'msg' ] );
+		$permissionManager = $this->createNoOpMock( PermissionManager::class, [ 'quickUserCan', 'userHasRight' ] );
+		$permissionManager->expects( $this->atMost( 1 ) )
+			->method( 'quickUserCan' )
+			->with( 'edit', $user, $opts['title'] )
+			->willReturn( $opts['canEdit'] );
+		$permissionManager->expects( $this->any() )
+			->method( 'userHasRight' )
+			->willReturnMap( [
+				[ $user, 'manage-wishlist', $opts['canManage'] ],
+				[ $user, 'manually-edit-wishlist', $opts['canManuallyEdit'] ],
+			] );
+		$specialWishlistIntake = $this->createNoOpMock( SpecialPage::class, [ 'getPageTitle' ] );
+		$specialWishlistIntake->expects( $this->any() )
+			->method( 'getPageTitle' )
+			->willReturn( $this->makeMockTitle( 'WishlistIntake', [ 'namespace' => NS_SPECIAL ] ) );
+		$specialEditFocusArea = $this->createNoOpMock( SpecialPage::class, [ 'getPageTitle' ] );
+		$specialEditFocusArea->expects( $this->any() )
+			->method( 'getPageTitle' )
+			->willReturn( $this->makeMockTitle( 'EditFocusArea', [ 'namespace' => NS_SPECIAL ] ) );
+		$specialPageFactory = $this->createNoOpMock( SpecialPageFactory::class, [ 'getPage' ] );
+		$specialPageFactory->expects( $this->atMost( 1 ) )
+			->method( 'getPage' )
+			->willReturnMap( [
+				[ 'WishlistIntake', $specialWishlistIntake ],
+				[ 'EditFocusArea', $specialEditFocusArea ],
+			] );
+		$handler = $this->getHandler(
+			[
+				WishlistConfig::WISH_PAGE_PREFIX => 'Community Wishlist/Wishes/W',
+				WishlistConfig::FOCUS_AREA_PAGE_PREFIX => 'Community Wishlist/Focus areas/FA',
+			],
+			$permissionManager,
+			$specialPageFactory
+		);
+
+		$links = [ 'views' => $opts['tabs'] ];
+		$handler->onSkinTemplateNavigation__Universal( $skinTemplate, $links );
+
+		$this->assertSame( $expectedTabs, array_keys( $links['views'] ) );
+	}
+
+	public function provideEditWithFormTab(): array {
+		return [
+			[
+				[],
+				[ 'view', 'wishlist-edit', 'history' ],
+			],
+			[
+				[ 'canEdit' => false ],
+				[ 'view', 've-edit', 'edit', 'history' ],
+			],
+			[
+				[ 'title' => $this->makeMockTitle( 'Community Wishlist/Focus areas/FA123' ) ],
+				[ 'view', 'history' ],
+			],
+			[
+				[
+					'title' => $this->makeMockTitle( 'Community Wishlist/Focus areas/FA123' ),
+					'canManage' => true,
+				],
+				[ 'view', 'wishlist-edit', 'history' ],
+			],
+			[
+				[ 'title' => $this->makeMockTitle( 'Not a wish or FA' ) ],
+				[ 'view', 've-edit', 'edit', 'history' ],
+			],
+			[
+				[ 'tabs' => [ 'view' => [] ] ],
+				[ 'view', 'wishlist-edit' ],
+			],
+			[
+				[ 'tabs' => [ 'foo' => [], 'bar' => [] ] ],
+				[ 'foo', 'bar', 'wishlist-edit' ],
+			]
+		];
+	}
+
+	private function getHandler(
+		array $serviceOptions = [],
+		?PermissionManager $permissionManager = null,
+		?SpecialPageFactory $specialPageFactory = null
+	): CommunityRequestsHooks {
 		$serviceOptions = new ServiceOptions( WishlistConfig::CONSTRUCTOR_OPTIONS, [
-			WishlistConfig::ENABLED => $enabled,
+			WishlistConfig::ENABLED => true,
 			WishlistConfig::HOMEPAGE => '',
 			WishlistConfig::WISH_CATEGORY => '',
 			WishlistConfig::WISH_PAGE_PREFIX => '',
@@ -73,36 +220,24 @@ class CommunityRequestsHooksTest extends MediaWikiUnitTestCase {
 			WishlistConfig::VOTE_TEMPLATE => [],
 			WishlistConfig::WISH_VOTING_ENABLED => true,
 			WishlistConfig::FOCUS_AREA_VOTING_ENABLED => true,
+			...$serviceOptions
 		] );
 		$config = new WishlistConfig(
 			$serviceOptions,
 			$this->newServiceInstance( TitleParser::class, [ 'localInterwikis' => [] ] ),
 			$this->newServiceInstance( TitleFormatter::class, [] )
 		);
-		$text = '';
 		$mainConfig = new HashConfig( [ MainConfigNames::PageLanguageUseDB => true ] );
-		$handler = new CommunityRequestsHooks(
+		return new CommunityRequestsHooks(
 			$config,
 			$this->newServiceInstance( WishStore::class, [] ),
 			$this->createNoOpMock( FocusAreaStore::class ),
 			$this->createNoOpMock( EntityFactory::class ),
 			$this->createNoOpMock( LinkRenderer::class ),
+			$permissionManager ?: $this->createNoOpMock( PermissionManager::class ),
+			$specialPageFactory ?: $this->createNoOpMock( SpecialPageFactory::class ),
 			new NullLogger(),
 			$mainConfig
 		);
-		$handler->onParserAfterParse( $parser, $text, null );
-	}
-
-	public static function provideOnParserAfterParse(): array {
-		return [
-			[ 'enabled' => false, 'magic_word_prop' => false, 'module_added' => false ],
-			[ 'enabled' => false, 'magic_word_prop' => false, 'module_added' => true ],
-			[ 'enabled' => false, 'magic_word_prop' => true, 'module_added' => false ],
-			[ 'enabled' => false, 'magic_word_prop' => true, 'module_added' => true ],
-			[ 'enabled' => true, 'magic_word_prop' => false, 'module_added' => false ],
-			[ 'enabled' => true, 'magic_word_prop' => false, 'module_added' => true ],
-			[ 'enabled' => true, 'magic_word_prop' => true, 'module_added' => false ],
-			[ 'enabled' => true, 'magic_word_prop' => true, 'module_added' => true ],
-		];
 	}
 }

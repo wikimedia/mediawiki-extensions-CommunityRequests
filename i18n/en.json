@@ -207,6 +207,8 @@
 	"tag-community-wishlist": "[[Special:MyLanguage/Community Wishlist|Community Wishlist]]",
 	"right-manage-wishlist": "Manage the Community Wishlist without restrictions",
 	"action-manage-wishlist": "manage the Community Wishlist without restrictions",
+	"right-manually-edit-wishlist": "Manually edit Community Wishlist wishes and focus areas without a form",
+	"action-manually-edit-wishlist": "manually edit Community Wishlist wishes and focus areas without a form",
 	"group-community-wishlist-manager": "Community Wishlist manager",
 	"group-community-wishlist-manager-member": "Community Wishlist manager",
 	"grouppage-community-wishlist-manager": "mw:Special:MyLanguage/Help:Extension:CommunityRequests/Community Wishlist manager"

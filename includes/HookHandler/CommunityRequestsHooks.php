@@ -28,6 +28,7 @@ use MediaWiki\Hook\LoginFormValidErrorMessagesHook;
 use MediaWiki\Hook\ParserAfterParseHook;
 use MediaWiki\Hook\ParserFirstCallInitHook;
 use MediaWiki\Hook\RecentChange_saveHook;
+use MediaWiki\Hook\SkinTemplateNavigation__UniversalHook;
 use MediaWiki\Linker\LinkRenderer;
 use MediaWiki\Logging\ManualLogEntry;
 use MediaWiki\MainConfigNames;
@@ -36,11 +37,14 @@ use MediaWiki\Page\PageIdentity;
 use MediaWiki\Page\ProperPageIdentity;
 use MediaWiki\Parser\Parser;
 use MediaWiki\Permissions\Authority;
+use MediaWiki\Permissions\PermissionManager;
 use MediaWiki\RecentChanges\RecentChange;
 use MediaWiki\Registration\ExtensionRegistry;
 use MediaWiki\Revision\RenderedRevision;
 use MediaWiki\Revision\RevisionRecord;
 use MediaWiki\Revision\SlotRecord;
+use MediaWiki\Skin\SkinTemplate;
+use MediaWiki\SpecialPage\SpecialPageFactory;
 use MediaWiki\Storage\Hook\RevisionDataUpdatesHook;
 use MediaWiki\Title\Title;
 use Psr\Log\LoggerInterface;
@@ -57,7 +61,8 @@ class CommunityRequestsHooks implements
 	ParserAfterParseHook,
 	ParserFirstCallInitHook,
 	RecentChange_saveHook,
-	RevisionDataUpdatesHook
+	RevisionDataUpdatesHook,
+	SkinTemplateNavigation__UniversalHook
 {
 
 	public const WISHLIST_CHANGE_TAG = 'community-wishlist';
@@ -76,6 +81,8 @@ class CommunityRequestsHooks implements
 		FocusAreaStore $focusAreaStore,
 		private readonly EntityFactory $entityFactory,
 		LinkRenderer $linkRenderer,
+		private readonly PermissionManager $permissionManager,
+		private readonly SpecialPageFactory $specialPageFactory,
 		private readonly LoggerInterface $logger,
 		Config $mainConfig
 	) {
@@ -328,4 +335,61 @@ class CommunityRequestsHooks implements
 		}
 	}
 
+	/**
+	 * Add an "Edit with form" tab to the navigation of wish and focus area pages.
+	 *
+	 * Unless the user has the 'manually-edit-wishlist' right, existing edit tabs are hidden.
+	 *
+	 * @param SkinTemplate $sktemplate
+	 * @param array &$links
+	 */
+	public function onSkinTemplateNavigation__Universal( $sktemplate, &$links ): void {
+		if ( !$this->config->isEnabled() || !$this->config->isWishOrFocusAreaPage( $sktemplate->getTitle() ) ) {
+			return;
+		}
+
+		// Check edit permission first, to short-circuit and avoid additional DB queries.
+		if ( !$this->permissionManager->quickUserCan( 'edit', $sktemplate->getUser(), $sktemplate->getTitle() ) ) {
+			return;
+		}
+
+		$tabs = $links['views'];
+
+		// Remove existing "Edit" tabs unless the user has the 'manually-edit-wishlist' right.
+		if ( !$this->permissionManager->userHasRight( $sktemplate->getUser(), 'manually-edit-wishlist' ) ) {
+			unset( $tabs['edit'], $tabs['ve-edit'] );
+		}
+
+		// Focus areas can only be edited by users with the 'manage-wishlist' right.
+		if ( $this->config->isFocusAreaPage( $sktemplate->getTitle() ) &&
+			!$this->permissionManager->userHasRight( $sktemplate->getUser(), 'manage-wishlist' )
+		) {
+			$links['views'] = $tabs;
+			return;
+		}
+
+		$wishlistEditTab = [
+			'text' => $sktemplate->msg( 'communityrequests-edit-with-form' )->text(),
+			'icon' => 'edit',
+			'href' => $this->specialPageFactory->getPage(
+				$this->config->isWishPage( $sktemplate->getTitle() ) ? 'WishlistIntake' : 'EditFocusArea'
+			)?->getPageTitle( $this->config->getEntityWikitextVal( $sktemplate->getTitle() ) )
+				->getLocalURL()
+		];
+
+		// Attempt to insert before the "View history" tab.
+		$newTabs = [];
+		foreach ( $tabs as $key => $val ) {
+			if ( $key === 'history' ) {
+				$newTabs['wishlist-edit'] = $wishlistEditTab;
+			}
+			$newTabs[$key] = $val;
+		}
+		// If no "View history" tab was found, append to the end.
+		if ( !isset( $newTabs['wishlist-edit'] ) ) {
+			$newTabs['wishlist-edit'] = $wishlistEditTab;
+		}
+
+		$links['views'] = $newTabs;
+	}
 }

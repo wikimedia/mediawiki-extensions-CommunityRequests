@@ -59,7 +59,8 @@
 		"ParserFirstCallInit": "main",
 		"LinksUpdateComplete": "main",
 		"PageDeleteComplete": "main",
-		"RevisionDataUpdates": "main"
+		"RevisionDataUpdates": "main",
+		"SkinTemplateNavigation::Universal": "main"
 	},
 	"HookHandlers": {
 		"main": {
@@ -70,6 +71,8 @@
 				"CommunityRequests.FocusAreaStore",
 				"CommunityRequests.EntityFactory",
 				"LinkRenderer",
+				"PermissionManager",
+				"SpecialPageFactory",
 				"CommunityRequests.Logger",
 				"MainConfig"
 			]
@@ -129,17 +132,21 @@
 		}
 	},
 	"AvailableRights": [
-		"manage-wishlist"
+		"manage-wishlist",
+		"manually-edit-wishlist"
 	],
 	"GroupPermissions": {
 		"sysop": {
-			"manage-wishlist": true
+			"manage-wishlist": true,
+			"manually-edit-wishlist": true
 		},
 		"staff": {
-			"manage-wishlist": true
+			"manage-wishlist": true,
+			"manually-edit-wishlist": true
 		},
 		"community-wishlist-manager": {
-			"manage-wishlist": true
+			"manage-wishlist": true,
+			"manually-edit-wishlist": true
 		}
 	},
 	"ResourceFileModulePaths": {

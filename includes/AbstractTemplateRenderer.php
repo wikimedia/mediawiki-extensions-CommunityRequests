@@ -108,7 +108,7 @@ abstract class AbstractTemplateRenderer {
 
 	// HTML helpers for rendering wish or focus area pages.
 
-	protected function getParagraph( string $field, string $text ): string {
+	protected function getDiv( string $field, string $text ): string {
 		return Html::element(
 			'p',
 			[ 'class' => "ext-communityrequests-{$this->entityType}--$field" ],
@@ -116,11 +116,11 @@ abstract class AbstractTemplateRenderer {
 		);
 	}
 
-	protected function getParagraphRaw( string $field, string $html ): string {
+	protected function getDivRaw( string $field, string $html ): string {
 		return Html::rawElement(
-			'p',
+			'div',
 			[ 'class' => "ext-communityrequests-{$this->entityType}--$field" ],
-			$html
+			"\n$html\n"
 		);
 	}
 
@@ -164,7 +164,7 @@ abstract class AbstractTemplateRenderer {
 		);
 
 		// TODO: Vote counting doesn't work yet (T388220)
-		$out .= $this->getParagraphRaw( 'voting-desc',
+		$out .= $this->getDivRaw( 'voting-desc',
 			$this->msg( "communityrequests-$msgKey-voting-info", 0, 0 )->parse() . ' ' . (
 			$votingEnabled ?
 				$this->msg( "communityrequests-$msgKey-voting-info-open" )->escaped() :

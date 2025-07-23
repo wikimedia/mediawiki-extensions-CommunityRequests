@@ -108,7 +108,7 @@ class WishTemplateRenderer extends AbstractTemplateRenderer {
 			[ 'class' => 'mw-heading mw-heading3' ],
 			$this->msg( 'communityrequests-wish-description-heading' )->text()
 		);
-		$descHtml = $this->getParagraphRaw(
+		$descHtml = $this->getDivRaw(
 			'description',
 			$this->parser->recursiveTagParse( $args[ 'description' ] ?? '' )
 		);
@@ -119,7 +119,7 @@ class WishTemplateRenderer extends AbstractTemplateRenderer {
 			[ 'class' => 'mw-heading mw-heading3' ],
 			$this->msg( 'communityrequests-wish-focus-area-heading' )->text()
 		);
-		$focusArea = $this->getParagraphRaw(
+		$focusArea = $this->getDivRaw(
 			'focus-area',
 			$this->getFocusAreaLink( $args[ Wish::PARAM_FOCUS_AREA ] ?? null )
 		);
@@ -130,7 +130,7 @@ class WishTemplateRenderer extends AbstractTemplateRenderer {
 			[ 'class' => 'mw-heading mw-heading3' ],
 			$this->msg( 'communityrequests-wish-type-heading' )->text()
 		);
-		$wishType = $this->getParagraph(
+		$wishType = $this->getDiv(
 			'wish-type',
 			$this->msg(
 				$this->config->getWishTypeLabelFromWikitextVal( $args[ Wish::PARAM_TYPE ] ?? '' ) . '-label'
@@ -152,9 +152,9 @@ class WishTemplateRenderer extends AbstractTemplateRenderer {
 			return $this->msg( $label )->text();
 		}, array_filter( explode( Wish::TEMPLATE_ARRAY_DELIMITER, $args[ Wish::PARAM_PROJECTS ] ?? '' ) ) );
 		// @phan-suppress-next-line SecurityCheck-DoubleEscaped
-		$projects = $this->getParagraph( 'projects', $language->commaList( array_filter( $projectLabels ) ) );
+		$projects = $this->getDiv( 'projects', $language->commaList( array_filter( $projectLabels ) ) );
 		if ( isset( $args[ Wish::PARAM_OTHER_PROJECT ] ) ) {
-			$projects .= $this->getParagraph( 'other-project', $args[ Wish::PARAM_OTHER_PROJECT ] );
+			$projects .= $this->getDiv( 'other-project', $args[ Wish::PARAM_OTHER_PROJECT ] );
 		}
 
 		// Audience.
@@ -163,7 +163,7 @@ class WishTemplateRenderer extends AbstractTemplateRenderer {
 			[ 'class' => 'mw-heading mw-heading3' ],
 			$this->msg( 'communityrequests-wish-audience-heading' )->text()
 		);
-		$audience = $this->getParagraph( 'audience', $args[ Wish::PARAM_AUDIENCE ] ?? '' );
+		$audience = $this->getDiv( 'audience', $args[ Wish::PARAM_AUDIENCE ] ?? '' );
 
 		// Phabricator tasks.
 		$tasksHeading = Html::element(
@@ -185,7 +185,7 @@ class WishTemplateRenderer extends AbstractTemplateRenderer {
 				$task
 			);
 		}, explode( Wish::TEMPLATE_ARRAY_DELIMITER, $args[ Wish::PARAM_PHAB_TASKS ] ?? '' ) );
-		$tasksHtml = $this->getParagraphRaw(
+		$tasksHtml = $this->getDivRaw(
 			'phabtasks',
 			$language->commaList( array_filter( $tasks ) )
 		);

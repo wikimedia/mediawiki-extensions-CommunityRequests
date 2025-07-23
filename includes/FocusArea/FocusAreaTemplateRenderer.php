@@ -95,7 +95,7 @@ class FocusAreaTemplateRenderer extends AbstractTemplateRenderer {
 			[ 'class' => 'mw-heading mw-heading3' ],
 			$this->parser->msg( 'communityrequests-wish-description-heading' )->text()
 		);
-		$out .= $this->getParagraphRaw(
+		$out .= $this->getDivRaw(
 			'description',
 			$this->parser->recursiveTagParse( $args[ 'description' ] )
 		);
@@ -126,7 +126,7 @@ class FocusAreaTemplateRenderer extends AbstractTemplateRenderer {
 			[ 'class' => 'mw-heading mw-heading2' ],
 			$this->msg( 'communityrequests-focus-area-wishes-list' )->text()
 		);
-		$out .= $this->getParagraph(
+		$out .= $this->getDiv(
 			'wishes-desc',
 			$this->msg( 'communityrequests-focus-area-wishes-description-1' )->text() . ' ' .
 			$this->msg( 'communityrequests-focus-area-wishes-description-2' )->text() . ' ' .
@@ -151,7 +151,7 @@ class FocusAreaTemplateRenderer extends AbstractTemplateRenderer {
 					[ 'class' => 'mw-heading mw-heading3' ],
 					$this->msg( 'communityrequests-focus-area-owners' )->escaped()
 				);
-				$out .= $this->getParagraphRaw(
+				$out .= $this->getDivRaw(
 					'owners',
 					$this->parser->recursiveTagParse( trim( $owners ) )
 				);
@@ -163,7 +163,7 @@ class FocusAreaTemplateRenderer extends AbstractTemplateRenderer {
 					[ 'class' => 'mw-heading mw-heading3' ],
 					$this->msg( 'communityrequests-focus-area-volunteers' )->escaped()
 				);
-				$out .= $this->getParagraphRaw(
+				$out .= $this->getDivRaw(
 					'volunteers',
 					$this->parser->recursiveTagParse( trim( $volunteers ) )
 				);

@@ -213,4 +213,18 @@ abstract class AbstractTemplateRenderer {
 			$this->parser->addTrackingCategory( $category );
 		}
 	}
+
+	/**
+	 * Format a date for display in the target language.
+	 *
+	 * @param string $date The date to format, in ISO 8601 format
+	 * @return string
+	 */
+	protected function formatDate( string $date ): string {
+		return $this->parser->getTargetLanguage()->timeanddate(
+			$date,
+			true,
+			$this->parser->getOptions()->getDateFormat()
+		);
+	}
 }

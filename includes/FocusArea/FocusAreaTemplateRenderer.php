@@ -106,17 +106,16 @@ class FocusAreaTemplateRenderer extends AbstractTemplateRenderer {
 			[ 'class' => 'mw-heading mw-heading3' ],
 			$this->parser->msg( 'communityrequests-wish-other-details-heading' )->text()
 		);
-		$user = $this->parser->getUserIdentity();
 		$out .= Html::rawElement(
 			'ul',
 			[],
 			$this->getListItem(
 				'created',
-				$language->userTimeAndDate( $args[ FocusArea::PARAM_CREATED ], $user )
+				$this->formatDate( $args[ FocusArea::PARAM_CREATED ] )
 			) .
 			$this->getListItem(
 				'updated',
-				$language->userTimeAndDate( $args[ 'updated' ], $user )
+				$this->formatDate( $args[ 'updated' ] )
 			)
 		);
 

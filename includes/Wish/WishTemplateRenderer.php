@@ -61,7 +61,7 @@ class WishTemplateRenderer extends AbstractTemplateRenderer {
 	}
 
 	private function renderWishInternal( array $args ): string {
-		$language = $this->parser->getContentLanguage();
+		$language = $this->parser->getTargetLanguage();
 
 		// Title and status.
 		$statusLabel = $this->config->getStatusLabelFromWikitextVal( $args[ Wish::PARAM_STATUS ] ?? '' );
@@ -197,17 +197,17 @@ class WishTemplateRenderer extends AbstractTemplateRenderer {
 			$this->msg( 'communityrequests-wish-other-details-heading' )->text()
 		);
 		$proposerVal = $args[ Wish::PARAM_PROPOSER ] ?? '';
-		$user = $this->parser->getUserIdentity();
+
 		$detailsHtml = Html::rawElement(
 			'ul',
 			[],
 			$this->getListItem(
 				'created',
-				$language->userTimeAndDate( $args[ Wish::PARAM_CREATED ], $user )
+				$this->formatDate( $args[ Wish::PARAM_CREATED ] )
 			) .
 			$this->getListItem(
 				'updated',
-				$language->userTimeAndDate( $args[ 'updated' ], $user )
+				$this->formatDate( $args[ 'updated' ] )
 			) .
 			$this->getListItem(
 				'proposer',

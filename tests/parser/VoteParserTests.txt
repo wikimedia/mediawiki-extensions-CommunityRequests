@@ -1,0 +1,34 @@
+!! options
+version=2
+!! end
+
+!! test
+Empty vote parser tag
+!! wikitext
+{{#CommunityRequests: vote}}
+!! html
+!! end
+
+!! test
+With missing arugments
+!! wikitext
+{{#CommunityRequests: vote
+|username = TestUser
+|timestamp =
+}}
+!! html
+!! end
+
+!! test
+Example vote
+!! options
+title=Community_Wishlist/Wishes/W1/Votes
+!! wikitext
+{{#CommunityRequests: vote
+|username = TestUser
+|timestamp = 2023-07-01T12:00:00Z
+|comment = This is a test comment
+}}
+!! html
+<div class="ext-communityrequests-vote-entry"><span class="ext-communityrequests-vote-entry--support"></span><b>Support</b> This is a test comment <a href="/index.php?title=User:TestUser&amp;action=edit&amp;redlink=1" class="new" title="User:TestUser (page does not exist)">TestUser</a> (<a href="/index.php?title=User_talk:TestUser&amp;action=edit&amp;redlink=1" class="new" title="User talk:TestUser (page does not exist)">talk</a>) 12:00, 1 July 2023</div>
+!! end

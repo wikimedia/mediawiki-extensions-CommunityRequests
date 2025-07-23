@@ -172,7 +172,7 @@ class CommunityRequestsHooks implements
 		if ( ( $this->translateInstalled &&
 			// @phan-suppress-next-line PhanUndeclaredClassMethod
 			Utilities::isTranslationPage( new MessageHandle( Title::castFromPageIdentity( $identity ) ) ) ) ||
-			$this->config->isVotePage( $identity )
+			$this->config->isVotesPage( $identity )
 		) {
 			$basePage = Title::newFromPageIdentity( $identity )->getBaseTitle();
 			if ( $basePage->exists() ) {
@@ -259,7 +259,12 @@ class CommunityRequestsHooks implements
 
 	/** @inheritDoc */
 	public function onBeforePageDisplay( $out, $skin ): void {
-		if ( !$this->config->isEnabled() || !$this->config->isWishOrFocusAreaPage( $out->getTitle() ) ) {
+		if ( !$this->config->isEnabled() ||
+			!(
+				$this->config->isWishOrFocusAreaPage( $out->getTitle() ) ||
+				$this->config->isVotesPage( $out->getTitle() )
+			)
+		) {
 			return;
 		}
 

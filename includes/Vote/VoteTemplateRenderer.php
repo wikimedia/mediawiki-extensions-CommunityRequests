@@ -4,19 +4,21 @@ namespace MediaWiki\Extension\CommunityRequests\Vote;
 
 use MediaWiki\Extension\CommunityRequests\AbstractTemplateRenderer;
 use MediaWiki\Extension\CommunityRequests\AbstractWishlistEntity;
+use MediaWiki\Html\Html;
 use MediaWiki\Page\PageReference;
-use MediaWiki\Title\Title;
 
 class VoteTemplateRenderer extends AbstractTemplateRenderer {
 
 	protected string $entityType = 'vote';
 
 	protected function getArgAliases(): array {
-		return array_flip( $this->config->getFocusAreaTemplateParams() );
+		return [];
 	}
 
 	public function render(): string {
-		if ( !$this->config->isEnabled() || !$this->config->isVotePage( $this->parser->getPage() ) ) {
+		if ( !$this->config->isWishOrFocusAreaPage( $this->parser->getPage() ) &&
+			!$this->config->isVotesPage( $this->parser->getPage() )
+		) {
 			return '';
 		}
 
@@ -29,14 +31,31 @@ class VoteTemplateRenderer extends AbstractTemplateRenderer {
 			return '';
 		}
 
+		$missingFields = $this->validateArguments( $args, [ 'username', 'timestamp' ] );
+		if ( $missingFields ) {
+			return $this->getMissingFieldsErrorMessage( $missingFields );
+		}
+
 		$extensionData = $this->parser->getOutput()->getExtensionData( self::EXT_DATA_KEY );
+
 		$args[AbstractWishlistEntity::PARAM_VOTE_COUNT]
 			= ( $extensionData[AbstractWishlistEntity::PARAM_VOTE_COUNT] ?? 0 ) + 1;
 
 		$this->logger->debug( __METHOD__ . ": Rendering vote. {0}", [ json_encode( $args ) ] );
 		$this->parser->getOutput()->setExtensionData( self::EXT_DATA_KEY, $args );
 
-		return '';
+		return $this->renderVoteInternal( $args[ 'username'], $args['timestamp'], $args['comment'] );
+	}
+
+	private function renderVoteInternal( string $username, string $timestamp, string $comment ): string {
+		$space = $this->msg( 'word-separator' )->text();
+		$out = Html::element( 'span', [ 'class' => 'ext-communityrequests-vote-entry--support' ] ) .
+			Html::element( 'b', [], $this->msg( 'communityrequests-support-label' )->text() ) .
+			$space . $this->parser->recursiveTagParse( $comment ) .
+			$space . $this->msg( 'signature', $username, $username )->parse() .
+			$space . $this->formatDate( $timestamp );
+
+		return Html::rawElement( 'div', [ 'class' => 'ext-communityrequests-vote-entry' ], $out );
 	}
 
 	private function getEntityType( ?PageReference $identity ): ?string {
@@ -44,14 +63,15 @@ class VoteTemplateRenderer extends AbstractTemplateRenderer {
 			return null;
 		}
 
-		$basePage = Title::newFromPageReference( $identity )->getBaseTitle();
-		if ( $basePage->exists() ) {
-			$identity = $basePage->toPageIdentity();
+		if ( $this->config->isVotesPage( $identity ) ) {
+			$entity = $this->config->getEntityPageRefFromVotesPage( $identity );
+		} else {
+			$entity = $identity;
 		}
 
-		if ( $this->config->isWishPage( $identity ) ) {
+		if ( $this->config->isWishPage( $entity ) ) {
 			return 'wish';
-		} elseif ( $this->config->isFocusAreaPage( $identity ) ) {
+		} elseif ( $this->config->isFocusAreaPage( $entity ) ) {
 			return 'focus-area';
 		}
 

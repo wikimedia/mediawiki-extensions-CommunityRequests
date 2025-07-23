@@ -207,6 +207,23 @@ class WishlistConfigTest extends MediaWikiUnitTestCase {
 	}
 
 	/**
+	 * @covers ::getEntityPageRefFromVotesPage
+	 */
+	public function testGetEntityPageRefFromVotesPage(): void {
+		$this->assertSame(
+			$this->makeMockTitle( 'Community Wishlist/W123' )->getDBkey(),
+			$this->config->getEntityPageRefFromVotesPage(
+				$this->makeMockTitle( 'Community Wishlist/W123/Votes' )
+			)->getDBkey()
+		);
+		$this->assertNull(
+			$this->config->getEntityPageRefFromVotesPage(
+				$this->makeMockTitle( 'Community Wishlist/W123/b-o-g-u-s' )
+			)
+		);
+	}
+
+	/**
 	 * @covers ::getWishTypeIdFromWikitextVal
 	 */
 	public function testGetWishTypeIdFromWikitextVal(): void {

@@ -221,10 +221,45 @@ abstract class AbstractTemplateRenderer {
 	 * @return string
 	 */
 	protected function formatDate( string $date ): string {
-		return $this->parser->getTargetLanguage()->timeanddate(
+		return htmlspecialchars( $this->parser->getTargetLanguage()->timeanddate(
 			$date,
 			true,
 			$this->parser->getOptions()->getDateFormat()
+		) );
+	}
+
+	/**
+	 * Validates the arguments against the required fields.
+	 *
+	 * @param array $args
+	 * @param string[] $requiredFields
+	 * @return string[]
+	 */
+	protected function validateArguments( array $args, array $requiredFields ): array {
+		$missingFields = array_filter(
+			$requiredFields,
+			static fn ( string $field ) => !( $args[$field] ?? '' )
+		);
+
+		if ( $missingFields ) {
+			// Add tracking category for missing critical data.
+			$this->addTrackingCategory( self::ERROR_TRACKING_CATEGORY );
+		}
+
+		return $missingFields;
+	}
+
+	/**
+	 * Returns an error message for missing fields.
+	 *
+	 * @param string[] $missingFields
+	 * @return string HTML
+	 */
+	protected function getMissingFieldsErrorMessage( array $missingFields ): string {
+		return Html::element( 'p', [ 'class' => 'error' ],
+			$this->msg( 'communityrequests-error-required-fields',
+				$this->parser->getTargetLanguage()->commaList( $missingFields ), count( $missingFields )
+			)->text()
 		);
 	}
 }

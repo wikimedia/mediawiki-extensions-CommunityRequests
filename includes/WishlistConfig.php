@@ -251,7 +251,7 @@ class WishlistConfig {
 	 * @param ?PageReference $identity
 	 * @return bool
 	 */
-	public function isVotePage( ?PageReference $identity ): bool {
+	public function isVotesPage( ?PageReference $identity ): bool {
 		if ( $identity === null ) {
 			return false;
 		}
@@ -261,6 +261,33 @@ class WishlistConfig {
 		$pageSuffixStr = $this->titleFormatter->getPrefixedDBkey( $pageSuffix );
 
 		return str_ends_with( $identityStr, $pageSuffixStr );
+	}
+
+	/**
+	 * Get the entity page reference from a votes page reference.
+	 *
+	 * @param ?PageReference $identity
+	 * @return ?PageReference
+	 */
+	public function getEntityPageRefFromVotesPage( ?PageReference $identity ): ?PageReference {
+		if ( $identity === null ) {
+			return null;
+		}
+
+		$identityStr = $this->titleFormatter->getPrefixedDBkey( $identity );
+		$votesPageSuffixStr = $this->titleFormatter->getPrefixedDBkey(
+			$this->titleParser->parseTitle( $this->votesPageSuffix )
+		);
+
+		if ( !str_ends_with( $identityStr, $votesPageSuffixStr ) ) {
+			return null;
+		}
+
+		// Remove the votes page suffix.
+		$entityPageStr = $this->titleParser->parseTitle(
+			substr( $identityStr, 0, -strlen( $votesPageSuffixStr ) )
+		);
+		return PageReferenceValue::localReference( $entityPageStr->getNamespace(), $entityPageStr->getDBkey() );
 	}
 
 	/**

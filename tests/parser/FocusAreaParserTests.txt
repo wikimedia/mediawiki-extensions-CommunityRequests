@@ -87,6 +87,5 @@ title=Community_Wishlist/Focus_areas/FA3
 |description=This is a wish without a proposer or created timestamp.
 }}
 !! html
-<p><span class="error">Missing required field(s): created</span>
-</p>
+<p class="error">Missing required field: created</p>
 !! end

@@ -91,6 +91,5 @@ title=Community_Wishlist/Wishes/W3
 |baselang = en
 |description = This is a wish without a proposer or created timestamp.}}
 !! html
-<p><span class="error">Missing required field(s): created, proposer</span>
-</p>
+<p class="error">Missing required fields: created, proposer</p>
 !! end

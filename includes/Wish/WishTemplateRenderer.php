@@ -29,18 +29,16 @@ class WishTemplateRenderer extends AbstractTemplateRenderer {
 
 		$args = $this->getArgs();
 
-		// Add tracking category for missing critical data.
 		$requiredFields = [
 			Wish::PARAM_CREATED,
 			Wish::PARAM_TITLE,
 			Wish::PARAM_PROPOSER,
 			Wish::PARAM_BASE_LANG,
 		];
-		$missingFields = array_diff( $requiredFields, array_keys( $args ) );
+
+		$missingFields = $this->validateArguments( $args, $requiredFields );
 		if ( $missingFields ) {
-			$this->addTrackingCategory( self::ERROR_TRACKING_CATEGORY );
-			return Html::element( 'span', [ 'class' => 'error' ],
-				'Missing required field(s): ' . implode( ', ', $missingFields ) );
+			return $this->getMissingFieldsErrorMessage( $missingFields );
 		}
 
 		// These need to be set here because we need them for display in ::renderWishInternal().

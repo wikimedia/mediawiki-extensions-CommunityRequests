@@ -22,25 +22,20 @@ class EntityFactory {
 	 *
 	 * @param array $data An associative array of parameters
 	 * @param PageIdentity $baseTitle The base title of the wish or focus area
-	 * @param string $lang The language code
 	 * @return AbstractWishlistEntity
 	 */
-	public function createFromParserData(
-		array $data,
-		PageIdentity $baseTitle,
-		string $lang
-	): AbstractWishlistEntity {
+	public function createFromParserData( array $data, PageIdentity $baseTitle ): AbstractWishlistEntity {
 		return match ( $data['entityType'] ?? '' ) {
 			'wish' => Wish::newFromWikitextParams(
 				$baseTitle,
-				$lang,
+				$data['lang'],
 				$data,
 				$this->config,
 				$this->userFactory->newFromName( $data[ Wish::PARAM_PROPOSER ] ?? '' ),
 			),
 			'focus-area' => FocusArea::newFromWikitextParams(
 				$baseTitle,
-				$lang,
+				$data['lang'],
 				$data,
 				$this->config
 			)

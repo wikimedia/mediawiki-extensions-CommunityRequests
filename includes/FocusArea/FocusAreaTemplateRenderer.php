@@ -22,12 +22,12 @@ class FocusAreaTemplateRenderer extends AbstractTemplateRenderer {
 	 * @return string HTML
 	 */
 	public function render(): string {
-		$args = $this->getArgs();
-		$args[ 'description' ] ??= '';
 		if ( !$this->config->isEnabled()
 			|| !$this->config->isFocusAreaPage( $this->parser->getPage() ) ) {
 			return '';
 		}
+		$args = $this->getArgs();
+		$args[ 'description' ] ??= '';
 
 		$this->addTrackingCategory( self::FOCUS_AREA_TRACKING_CATEGORY );
 
@@ -52,6 +52,7 @@ class FocusAreaTemplateRenderer extends AbstractTemplateRenderer {
 		$args[ FocusArea::PARAM_CREATED ] ??= $args[ 'updated' ];
 
 		$args[ 'entityType' ] = 'focus-area';
+		$args[ 'lang' ] = $this->parser->getTargetLanguage()->getCode();
 
 		$this->logger->debug( __METHOD__ . ": Rendering focus area. {0}", [ json_encode( $args ) ] );
 		$this->parser->getOutput()->setExtensionData( self::EXT_DATA_KEY, $args );

@@ -204,8 +204,7 @@ class CommunityRequestsHooks implements
 				$data = $parserOutput->getExtensionData( self::EXT_DATA_KEY );
 
 				if ( $data &&
-					$data[ AbstractWishlistEntity::PARAM_BASE_LANG ] !==
-					Title::newFromText( $title->getText() )->getPageLanguage()->getCode() &&
+					$data[ AbstractWishlistEntity::PARAM_BASE_LANG ] !== $title->getPageLanguage()->getCode() &&
 					// @phan-suppress-next-line PhanUndeclaredClassMethod
 					TranslatablePage::isTranslationPage( $title ) === false
 				) {
@@ -213,6 +212,11 @@ class CommunityRequestsHooks implements
 						$title->getId(),
 						$data[ AbstractWishlistEntity::PARAM_BASE_LANG ]
 					);
+					// Keep track of the language change in the extension data to guard
+					// against race conditions. This will be used later instead of fetching
+					// page language from the Title object.
+					$data[ 'lang' ] = $data[ AbstractWishlistEntity::PARAM_BASE_LANG ];
+					$parserOutput->setExtensionData( self::EXT_DATA_KEY, $data );
 				}
 			}, __METHOD__ );
 		}
@@ -292,11 +296,7 @@ class CommunityRequestsHooks implements
 		}
 		$store = $this->stores[ $data['entityType'] ];
 		$title = $linksUpdate->getTitle();
-		$entity = $this->entityFactory->createFromParserData(
-			$data,
-			$this->getCanonicalWishlistPage( $title ),
-			$title->getPageLanguage()->getCode(),
-		);
+		$entity = $this->entityFactory->createFromParserData( $data, $this->getCanonicalWishlistPage( $title ) );
 
 		$store->save( $entity );
 	}

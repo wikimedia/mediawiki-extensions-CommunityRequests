@@ -48,6 +48,7 @@ class WishTemplateRenderer extends AbstractTemplateRenderer {
 		$args[ Wish::PARAM_CREATED ] ??= $args[ 'updated' ];
 
 		$args[ 'entityType' ] = 'wish';
+		$args[ 'lang' ] = $this->parser->getTargetLanguage()->getCode();
 
 		// Cache the wish data for storage after the links update.
 		$this->parser->getOutput()->setExtensionData( self::EXT_DATA_KEY, $args );
@@ -248,7 +249,7 @@ class WishTemplateRenderer extends AbstractTemplateRenderer {
 			);
 			$entity = $this->focusAreaStore->get(
 				$pageIdentity,
-				$this->parser->getContentLanguage()->getCode()
+				$this->parser->getTargetLanguage()->getCode()
 			);
 			if ( $entity ) {
 				return $this->linkRenderer->makeKnownLink(

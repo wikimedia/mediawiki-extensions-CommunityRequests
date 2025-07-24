@@ -16,13 +16,13 @@ class VoteTemplateRenderer extends AbstractTemplateRenderer {
 	}
 
 	public function render(): string {
-		if ( !$this->config->isEnabled()
-			|| !$this->config->isVotePage( $this->parser->getPage() ) ) {
+		if ( !$this->config->isEnabled() || !$this->config->isVotePage( $this->parser->getPage() ) ) {
 			return '';
 		}
 
 		$args = $this->getArgs();
 		$args['entityType'] = $this->getEntityType( $this->parser->getPage() );
+		$args['lang'] = $this->parser->getTargetLanguage()->getCode();
 
 		if ( !$args['entityType'] ) {
 			$this->logger->debug( __METHOD__ . ": Not a wish or focus area page found. {0}", [ json_encode( $args ) ] );

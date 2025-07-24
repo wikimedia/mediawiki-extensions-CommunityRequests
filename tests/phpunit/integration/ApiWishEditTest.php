@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 namespace MediaWiki\Extension\CommunityRequests\Tests\Integration;
 
 use MediaWiki\Api\ApiUsageException;
+use MediaWiki\MainConfigNames;
 use MediaWiki\Tests\Api\ApiTestCase;
 use MediaWiki\Title\Title;
 use MediaWiki\User\User;
@@ -15,9 +16,15 @@ use MediaWiki\User\User;
  */
 class ApiWishEditTest extends ApiTestCase {
 
+	protected function setUp(): void {
+		parent::setUp();
+		$this->overrideConfigValue( MainConfigNames::PageLanguageUseDB, true );
+	}
+
 	/**
 	 * @covers ::execute
 	 * @covers ::getEditSummary
+	 * @covers \MediaWiki\Extension\CommunityRequests\HookHandler\CommunityRequestsHooks::onRevisionDataUpdates
 	 * @dataProvider provideTestExecute
 	 */
 	public function testExecute(
@@ -76,10 +83,20 @@ class ApiWishEditTest extends ApiTestCase {
 
 		// Fetch the revision.
 		$revLookup = $this->getServiceContainer()->getRevisionLookup();
-		$revision = $revLookup->getRevisionByTitle(
-			Title::newFromText( $ret[ 'wishedit' ][ 'wish' ] )->toPageIdentity()
-		);
+		$revTitle = Title::newFromText( $ret[ 'wishedit' ][ 'wish' ] );
+		$revision = $revLookup->getRevisionByTitle( $revTitle->toPageIdentity() );
 		$this->assertSame( $expectedSummary, $revision->getComment()->text );
+
+		// If the baselang is not the site language, we expect translations to be stored in that language.
+		if ( $ret[ 'wishedit' ][ 'baselang' ] !== $this->getConfVar( MainConfigNames::LanguageCode ) ) {
+			$this->runDeferredUpdates();
+			$translationLang = $this->getDb()->newSelectQueryBuilder()
+				->select( 'crt_lang' )
+				->from( 'communityrequests_wishes_translations' )
+				->where( [ 'crt_wish' => $revTitle->getId() ] )
+				->fetchField();
+			$this->assertSame( $expected[ 'wishedit' ][ 'baselang' ], $translationLang );
+		}
 
 		// Make an additional edit and assert the edit summary, if applicable.
 		if ( $expectedUpdateSummary !== null ) {
@@ -193,6 +210,37 @@ class ApiWishEditTest extends ApiTestCase {
 				],
 				'Publishing the wish "Test Wish"'
 			],
+			'new wish not in site language' => [
+				[
+					'status' => 'submitted',
+					'focusarea' => '',
+					'title' => 'Test Wish',
+					'description' => 'This is a test wish.',
+					'type' => 'feature',
+					'projects' => 'commons|wikidata',
+					'otherproject' => '',
+					'audience' => 'Experienced editors',
+					'proposer' => 'TestUser',
+					'created' => '2023-10-01T12:00:00Z',
+					// Baselang is not the site language (en)
+					'baselang' => 'es',
+				],
+				[
+					'wishedit' => [
+						'title' => 'Test Wish',
+						'description' => 'This is a test wish.',
+						'type' => 'feature',
+						'audience' => 'Experienced editors',
+						// Other parameters are as expected
+						'focusarea' => null,
+						'projects' => [ 'commons', 'wikidata' ],
+						'phabtasks' => [],
+						'new' => true,
+						'baselang' => 'es',
+					]
+				],
+				"Publishing the wish \"Test Wish\""
+			]
 		];
 	}
 }

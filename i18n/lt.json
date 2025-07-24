@@ -1,11 +1,14 @@
 {
 	"@metadata": {
 		"authors": [
-			"Hugo.arg"
+			"Hugo.arg",
+			"Tomasdd"
 		]
 	},
 	"communityrequests-title-label": "Pavadinimas",
+	"communityrequests-project-all-projects": "Visi projektai",
 	"communityrequests-phabricator-label": "Phabricator užduotys",
+	"communityrequests-wish-proposer": "Autorius: $1",
 	"communityrequests-wish-voting": "Balsavimas",
 	"communityrequests-focus-area-description": "Aprašymas"
 }

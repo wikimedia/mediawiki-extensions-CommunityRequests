@@ -13,6 +13,8 @@
 	"communityrequests-status-unknown": "अज्ञात",
 	"communityrequests-wish-updated": "अंतिम अद्यतन: $1",
 	"communityrequests-wish-proposer": "लेखक: $1",
+	"communityrequests-wishes-status-header": "स्थिति",
 	"communityrequests-wishes-type-header": "प्रकार",
-	"communityrequests-wishes-status-header": "स्थिति"
+	"communityrequests-wishes-title-header": "शीर्षक",
+	"communityrequests-wishes-created-header": "बनाया गया"
 }

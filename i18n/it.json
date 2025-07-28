@@ -89,6 +89,7 @@
 	"communityrequests-translation-translatable": "Questa pagina contiene testo che non è in $1.",
 	"communityrequests-translation-progress": "{{PLURAL:$1|Tradotta|Tradotte}} $1 di $2 {{PLURAL:$2|parte|parti}} di testo.",
 	"communityrequests-translation-errors": "Si è verificato un errore:",
+	"apierror-focusareaedit-notafocusarea": "La pagina che stai tentando di modificare non è un'area di interesse valida.",
 	"apihelp-query+communityrequests-wishes-paramvalue-sort-created": "Ordina per data di creazione",
 	"apihelp-query+communityrequests-wishes-paramvalue-sort-title": "Ordina per titolo"
 }

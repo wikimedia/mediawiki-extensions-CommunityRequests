@@ -70,8 +70,8 @@ module.exports = exports = defineComponent( {
 		const api = new mw.Api();
 		const votesPageName = getBasePageName() + CommunityRequestsVotesPageSuffix;
 		let comment = ref( '' );
-		let open = ref( false );
-		let hasVoted = ref( false );
+		const open = ref( false );
+		const hasVoted = ref( false );
 		let showVotedMessage = ref( false );
 		let submitting = ref( false );
 
@@ -108,7 +108,7 @@ module.exports = exports = defineComponent( {
 			submitting = true;
 			loadVotes().then( ( votes ) => {
 				addVote( votes ).then( ( editResult ) => {
-					open = false;
+					open.value = false;
 					if ( !editResult ) {
 						return;
 					}
@@ -118,8 +118,8 @@ module.exports = exports = defineComponent( {
 						( new mw.Api() ).post( postArgs ).then( ( purgeRes ) => {
 							mw.storage.session.set( 'wishlist-intake-vote-added', 1 );
 							location.href = mw.util.getUrl( purgeRes.purge[ 0 ].title ) + '#voting';
-							// Also reload, in case they were already at #voting.
-							location.reload();
+							showVotedMessage.value = true;
+							hasVoted.value = true;
 						} );
 					} else {
 						// @todo Handle errors.
@@ -155,9 +155,9 @@ module.exports = exports = defineComponent( {
 			}
 
 			const newVote = '{{#CommunityRequests: vote' +
+				' |comment=' + comment.replace( /\|/g, '{{!}}' ) +
 				' |username=' + mw.config.get( 'wgUserName' ) +
 				' |timestamp=' + ( new Date() ).toISOString() +
-				' |comment=' + comment.replace( /\|/g, '{{!}}' ) +
 				' }}';
 			votes = votes.trim() + '\n' + newVote;
 			// Save the votes page.
@@ -221,7 +221,8 @@ module.exports = exports = defineComponent( {
 		onBeforeMount( () => {
 			loadVotes().then( ( votes ) => {
 				if ( votes && alreadyVoted( votes ) ) {
-					hasVoted = true;
+					hasVoted.value = true;
+
 					// Also check for the session storage param for the post-voting message.
 					showVotedMessage = mw.storage.session.get( 'wishlist-intake-vote-added' ) !== null;
 					mw.storage.session.remove( 'wishlist-intake-vote-added' );

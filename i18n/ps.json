@@ -8,5 +8,11 @@
 	"communityrequests-wish-created": "جوړ شوی: $1",
 	"communityrequests-wish-proposer": "لیکوال: $1",
 	"communityrequests-wish-voting": "رایه ورکول",
+	"communityrequests-wishes-table-caption": "د هيلو لړليک",
+	"communityrequests-wishes-title-header": "سرليک",
+	"communityrequests-wishes-focusarea-header": "تمرکز سيمه",
+	"communityrequests-wishes-votecount-header": "رايې",
+	"communityrequests-wishes-created-header": "جوړ شو",
+	"communityrequests-wishes-updated-header": "هم‌مهاله‌شوی",
 	"communityrequests-wish-category": "ټولنې غوښتنلړ‌/غوښتنې"
 }

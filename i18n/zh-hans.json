@@ -79,6 +79,8 @@
 	"communityrequests-focus-area-unassigned": "未分配",
 	"communityrequests-submit-wish": "提交愿望",
 	"communityrequests-form-loading": "正在加载登记表…",
+	"communityrequests-form-loading-1": "如果表单未加载，请确保您已启用JavaScript。",
+	"communityrequests-form-loading-2": "如果您仍遇到问题，请在$1寻求协助。",
 	"communityrequests-please-log-in": "请登录以提交愿望。",
 	"communityrequests-focus-area-supported": "支持：",
 	"communityrequests-focus-area-supported-val": "$1{{PLURAL:$2|人}}",
@@ -93,6 +95,7 @@
 	"communityrequests-focus-area-voting-not-logged-in": "请登录以支持该重点领域",
 	"communityrequests-focus-area-voters-heading": "本领域的支持者",
 	"communityrequests-focus-area-no-votes": "尚未有支持者。",
+	"communityrequests-translation-translatable": "此页面包含未翻译成$1的文字。",
 	"communityrequests-translation-errors": "发生错误：",
 	"communityrequests-disabled": "社群愿望清单的此功能已禁用。"
 }

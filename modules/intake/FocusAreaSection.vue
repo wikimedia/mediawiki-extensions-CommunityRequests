@@ -22,7 +22,7 @@ module.exports = exports = defineComponent( {
 		CdxSelect
 	},
 	props: {
-		focusArea: { type: String, default: null }
+		focusArea: { type: String, default: '' }
 	},
 	emits: [
 		'update:focus-area'
@@ -46,7 +46,7 @@ module.exports = exports = defineComponent( {
 		const focusAreaOptions = ref(
 			[ {
 				label: mw.msg( 'communityrequests-focus-area-unassigned' ),
-				value: null
+				value: ''
 			} ].concat(
 				wikitextVals.map( ( id ) => ( {
 					label: focusAreaData[ id ],

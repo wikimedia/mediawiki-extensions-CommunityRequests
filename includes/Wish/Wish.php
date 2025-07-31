@@ -158,7 +158,7 @@ class Wish extends AbstractWishlistEntity {
 			'status' => $config->getStatusWikitextValFromId( $this->status ),
 			'type' => $config->getWishTypeWikitextValFromId( $this->type ),
 			'title' => $this->title,
-			'focusArea' => $config->getEntityWikitextVal( $this->getFocusArea() ),
+			'focusArea' => $config->getEntityWikitextVal( $this->getFocusArea() ) ?: '',
 			'description' => $this->description,
 			'audience' => $this->audience,
 			'projects' => $config->getProjectsWikitextValsFromIds( $this->projects ),

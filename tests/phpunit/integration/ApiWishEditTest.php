@@ -133,7 +133,7 @@ class ApiWishEditTest extends ApiTestCase {
 						]
 					],
 					'wishedit' => [
-						'focusarea' => null,
+						'focusarea' => '',
 						'projects' => [ 'commons' ],
 						'phabtasks' => [ 'T123', 'T456', 'T789' ],
 						'new' => true,
@@ -176,7 +176,7 @@ class ApiWishEditTest extends ApiTestCase {
 				],
 				[
 					'wishedit' => [
-						'focusarea' => null,
+						'focusarea' => '',
 						'projects' => [ 'all' ],
 						'phabtasks' => [ 'T123', 'T456', 'T789' ],
 						'new' => true,
@@ -201,7 +201,7 @@ class ApiWishEditTest extends ApiTestCase {
 				],
 				[
 					'wishedit' => [
-						'focusarea' => null,
+						'focusarea' => '',
 						'projects' => [ 'commons', 'wikidata' ],
 						'audience' => 'Experienced editors',
 						'phabtasks' => [],
@@ -232,7 +232,7 @@ class ApiWishEditTest extends ApiTestCase {
 						'type' => 'feature',
 						'audience' => 'Experienced editors',
 						// Other parameters are as expected
-						'focusarea' => null,
+						'focusarea' => '',
 						'projects' => [ 'commons', 'wikidata' ],
 						'phabtasks' => [],
 						'new' => true,

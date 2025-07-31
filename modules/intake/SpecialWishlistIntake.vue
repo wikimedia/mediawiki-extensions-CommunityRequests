@@ -128,7 +128,7 @@ module.exports = exports = defineComponent( {
 		baseRevId: { type: Number, default: 0 },
 		created: { type: String, default: '' },
 		description: { type: String, default: '' },
-		focusArea: { type: String, default: null },
+		focusArea: { type: String, default: '' },
 		otherProject: { type: String, default: '' },
 		phabTasks: { type: Array, default: () => [] },
 		projects: { type: Array, default: () => [] },

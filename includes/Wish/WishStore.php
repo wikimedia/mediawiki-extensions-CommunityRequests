@@ -181,7 +181,7 @@ class WishStore extends AbstractWishlistStore {
 			'cr_actor' => $proposer,
 			'cr_type' => $wish->getType(),
 			'cr_status' => $wish->getStatus(),
-			'cr_focus_area' => $wish->getFocusArea()?->getId(),
+			'cr_focus_area' => $wish->getFocusArea()?->getId() ?: null,
 			'cr_created' => $dbw->timestamp( $created ),
 			'cr_updated' => $dbw->timestamp( $wish->getUpdated() ?: wfTimestampNow() ),
 		];

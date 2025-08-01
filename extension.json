@@ -319,6 +319,7 @@
 			"packageFiles": [
 				"voting/init.js",
 				"common/Util.js",
+				"voting/AuthButton.vue",
 				"voting/Button.vue",
 				{
 					"name": "common/config.json",
@@ -339,10 +340,12 @@
 				"vue",
 				"@wikimedia/codex",
 				"mediawiki.language.names",
-				"mediawiki.storage"
+				"mediawiki.storage",
+				"mediawiki.user"
 			],
 			"messages": [
 				"cancel",
+				"communityrequests-focus-area-voting-not-logged-in",
 				"communityrequests-optional-comment",
 				"communityrequests-support",
 				"communityrequests-support-dialog-title",
@@ -350,6 +353,7 @@
 				"communityrequests-support-focus-area-confirmed",
 				"communityrequests-support-wish",
 				"communityrequests-support-wish-confirmed",
+				"communityrequests-wish-voting-not-logged-in",
 				"communityrequests-supported"
 			]
 		},

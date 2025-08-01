@@ -3,9 +3,28 @@
 // Styles here are render-blocking.
 // Only add styles that are essential for the initial rendering of the page.
 
+// Vector 2022 overrides. This makes the status chip indicator inline with #contentSub.
+.skin-vector-2022 {
+	.vector-body-before-content {
+		float: right;
+	}
+
+	#contentSub::after {
+		clear: both;
+		content: '';
+		display: block;
+	}
+}
+
 // Viewing a wish or focus area.
 .ext-communityrequests-wish,
 .ext-communityrequests-focus-area {
+	&--id {
+		color: @color-subtle;
+		font-size: @font-size-x-large;
+		margin-left: 0.6em;
+	}
+
 	&--edit {
 		.cdx-mixin-css-icon( @cdx-icon-edit, @param-is-button-icon: true );
 	}

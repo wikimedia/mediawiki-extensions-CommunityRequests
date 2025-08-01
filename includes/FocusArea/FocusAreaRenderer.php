@@ -59,22 +59,12 @@ class FocusAreaRenderer extends AbstractRenderer {
 		$out = '';
 
 		// Title and status.
-		$statusChipHtml = $this->getStatusChipHtml();
-		$titleSpan = Html::element(
-			'span',
-			[ 'class' => 'ext-communityrequests-focus-area--title' ],
-			$args[FocusArea::PARAM_TITLE]
-		);
-		$out .= Html::rawElement(
-			'div',
-			[ 'class' => 'mw-heading mw-heading2 ext-communityrequests-focus-area--heading' ],
-			$titleSpan . $statusChipHtml
-		);
+		$this->setDisplayTitleAndIndicator();
 
 		// Description.
 		$out .= Html::element(
 			'div',
-			[ 'class' => 'mw-heading mw-heading3' ],
+			[ 'class' => 'mw-heading mw-heading2' ],
 			$this->parser->msg( 'communityrequests-wish-description-heading' )->text()
 		);
 		$out .= $this->getDivRaw(

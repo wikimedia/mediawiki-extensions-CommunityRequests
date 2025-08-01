@@ -61,22 +61,12 @@ class WishRenderer extends AbstractRenderer {
 		$language = $this->parser->getTargetLanguage();
 
 		// Title and status.
-		$statusChipHtml = $this->getStatusChipHtml();
-		$titleSpan = Html::element(
-			'span',
-			[ 'class' => 'ext-communityrequests-wish--title' ],
-			$args[Wish::PARAM_TITLE]
-		);
-		$headingHtml = Html::rawElement(
-			'div',
-			[ 'class' => 'mw-heading mw-heading2 ext-communityrequests-wish--heading' ],
-			$titleSpan . $statusChipHtml
-		);
+		$this->setDisplayTitleAndIndicator();
 
 		// Description.
 		$descHeading = Html::element(
 			'div',
-			[ 'class' => 'mw-heading mw-heading3' ],
+			[ 'class' => 'mw-heading mw-heading2' ],
 			$this->msg( 'communityrequests-wish-description-heading' )->text()
 		);
 		$descHtml = $this->getDivRaw(
@@ -199,7 +189,6 @@ class WishRenderer extends AbstractRenderer {
 		);
 
 		return Html::rawElement( 'div', [ 'class' => 'ext-communityrequests-wish' ],
-			$headingHtml .
 			$descHeading . $descHtml .
 			$focusAreaHeading . $focusArea .
 			$wishTypeHeading . $wishType .

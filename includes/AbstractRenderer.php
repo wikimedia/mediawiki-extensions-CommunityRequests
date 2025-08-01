@@ -7,12 +7,14 @@ use MediaWiki\EditPage\EditPage;
 use MediaWiki\Extension\CommunityRequests\FocusArea\FocusAreaStore;
 use MediaWiki\Html\Html;
 use MediaWiki\Linker\LinkRenderer;
+use MediaWiki\Parser\CoreTagHooks;
 use MediaWiki\Parser\Parser;
 use MediaWiki\Parser\PPFrame;
 use MediaWiki\Parser\PPNode;
 use MediaWiki\Title\Title;
 use MessageLocalizer;
 use Psr\Log\LoggerInterface;
+use RuntimeException;
 
 /**
  * The base class for wish/focus area parser function implementations
@@ -394,5 +396,37 @@ abstract class AbstractRenderer implements MessageLocalizer {
 	private function isDefaultStatus(): bool {
 		$status = $this->getArg( AbstractWishlistEntity::PARAM_STATUS, '' );
 		return $this->config->getStatuses()[$status]['default'] ?? false;
+	}
+
+	/**
+	 * Set the display title to be the entity title, and add the status chip as an indicator.
+	 *
+	 * @throws RuntimeException if the entity ID cannot be determined
+	 */
+	protected function setDisplayTitleAndIndicator(): void {
+		$titleSpan = Html::element(
+			'span',
+			[ 'class' => "ext-communityrequests-{$this->entityType}--title" ],
+			$this->getArg( AbstractWishlistEntity::PARAM_TITLE, '' )
+		);
+		$pageRef = $this->parser->getPage();
+		if ( !$pageRef ) {
+			throw new RuntimeException( 'Parser page is missing!' );
+		}
+		$entityPageStr = Title::newFromPageReference( $pageRef )->getPrefixedText();
+		$entityIdSpan = Html::element(
+			'span',
+			[ 'class' => "ext-communityrequests-{$this->entityType}--id" ],
+			$this->msg( 'parentheses', $entityPageStr )
+		);
+		$this->parser->getOutput()->setDisplayTitle(
+			$titleSpan . $entityIdSpan
+		);
+		CoreTagHooks::indicator(
+			$this->getStatusChipHtml(),
+			[ 'name' => "{$this->entityType}-status" ],
+			$this->parser,
+			$this->frame
+		);
 	}
 }

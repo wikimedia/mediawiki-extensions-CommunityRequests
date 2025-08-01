@@ -1,6 +1,7 @@
 <template>
 	<cdx-message
 		v-if="translatableNodeCount"
+		class="ext-communityrequests-mint"
 		allow-user-dismiss
 		:icon="cdxIconRobot"
 	>
@@ -279,3 +280,11 @@ module.exports = exports = defineComponent( {
 	}
 } );
 </script>
+
+<style lang="less">
+@import 'mediawiki.skin.variables.less';
+
+.ext-communityrequests-mint {
+	margin-top: @spacing-50;
+}
+</style>

@@ -56,6 +56,7 @@
 	"communityrequests-support": "حمایت",
 	"communityrequests-supported": "از پیش حمایت کرده‌اید",
 	"communityrequests-unsupport-focus-area": "حذف رأی حمایتی",
+	"communityrequests-error-required-fields": "{{PLURAL:$2|خانهٔ|خانه‌های}} الزامی خالی: $1",
 	"communityrequests-status": "وضعیت",
 	"communityrequests-status-draft": "پیش‌نویس",
 	"communityrequests-status-submitted": "ثبت‌شده",
@@ -104,5 +105,6 @@
 	"communityrequests-translation-switch": "با استفاده از [https://www.mediawiki.org/wiki/Special:MyLanguage/MinT Wikimedia's ابزار ترجمهٔ ماشینی] آن را به‌طور خودکار ترجمه کنید.",
 	"communityrequests-translation-progress": "$1 بخش از $2 {{PLURAL:$2|بخش}} متن ترجمه شده است.",
 	"communityrequests-translation-errors": "خطایی رخ داد:",
-	"communityrequests-disabled": "این تابع از فهرست خواسته‌های اجتماع در حال حاضر غیرفعال است."
+	"communityrequests-disabled": "این تابع از فهرست خواسته‌های اجتماع در حال حاضر غیرفعال است.",
+	"communityrequests-support-label": "پشتیبانی"
 }

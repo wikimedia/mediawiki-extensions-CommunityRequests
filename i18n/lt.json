@@ -5,9 +5,15 @@
 			"Tomasdd"
 		]
 	},
+	"communityrequests-edit-with-form": "Redaguoti naudojant formą",
 	"communityrequests-title-label": "Pavadinimas",
 	"communityrequests-project-all-projects": "Visi projektai",
+	"communityrequests-project-show-less": "Rodyti mažiau",
+	"communityrequests-project-show-all": "Rodyti viską",
+	"communityrequests-project-other-label": "Tai kažkas kita",
 	"communityrequests-phabricator-label": "Phabricator užduotys",
+	"communityrequests-create-success": "Jūsų pageidavimas pateiktas.",
+	"communityrequests-edit-success": "Jūsų pageidavimas išsaugotas.",
 	"communityrequests-wish-proposer": "Autorius: $1",
 	"communityrequests-wish-voting": "Balsavimas",
 	"communityrequests-focus-area-description": "Aprašymas"

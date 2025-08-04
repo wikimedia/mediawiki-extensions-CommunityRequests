@@ -62,6 +62,7 @@
 	"communityrequests-translation-errors": "Et ass e Feeler geschitt:",
 	"communityrequests-publish-wish-summary": "De Wonsch „$1“ verëffentlecht",
 	"communityrequests-save-wish-summary": "De Wonsch „$1“ aktualiséiert",
+	"communityrequests-support-label": "Ënnerstëtzen",
 	"apihelp-wishedit-summary": "E Wonsch an der Communautéitswonschlëscht uleeën oder aktualiséieren.",
 	"apihelp-wishedit-param-wish": "De Wonsch fir unzeleeën oder z'aktualiséieren. Dat kann entweeder de volle Säitentitel sinn, eng Wonsch-ID mat Prefix (z.&nbsp;B. „W123“) oder d'Wonsch-ID als ganz Zuel.",
 	"apihelp-wishedit-param-status": "De Status vum Wonsch.",

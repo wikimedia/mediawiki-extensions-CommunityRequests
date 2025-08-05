@@ -16,7 +16,7 @@ title=Community_Wishlist/Wishes/W1
 !! wikitext
 {{#CommunityRequests: wish
 |title = Test Wish
-|status = prioritized 
+|status = prioritized
 |type = change
 |audience = Example audience
 |projects = commons,wikisource
@@ -27,7 +27,7 @@ title=Community_Wishlist/Wishes/W1
 |baselang = en
 |description = This is a [[test]] {{wish}}.}}
 !! html
-<div class="ext-communityrequests-wish"><div class="mw-heading mw-heading2 ext-communityrequests-wish--heading"><span class="ext-communityrequests-wish--title">Test Wish</span><span class="cdx-info-chip ext-communityrequests-wish--status"><span class="cdx-info-chip__text">Prioritized</span></span></div><a href="/wiki/Special:WishlistIntake/Community_Wishlist/Wishes/W1" class="cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--action-default cdx-button--weight-normal cdx-button--enabled" role="button"><span class="cdx-button__icon ext-communityrequests-wish--edit" aria-hidden="true"></span>Edit wish</a>&#160;<a href="/wiki/Talk:Community_Wishlist/Wishes/W1" class="cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--action-default cdx-button--weight-normal cdx-button--enabled" role="button"><span class="cdx-button__icon ext-communityrequests-wish--speech-bubbles" aria-hidden="true"></span>Discuss this wish</a><div class="mw-heading mw-heading3">Description</div><div class="ext-communityrequests-wish--description">
+<div class="ext-communityrequests-wish"><div class="mw-heading mw-heading2 ext-communityrequests-wish--heading"><span class="ext-communityrequests-wish--title">Test Wish</span><span class="cdx-info-chip ext-communityrequests-wish--status"><span class="cdx-info-chip__text">Prioritized</span></span></div><div class="mw-heading mw-heading3">Description</div><div class="ext-communityrequests-wish--description">
 <p>This is a <a href="/index.php?title=Test&amp;action=edit&amp;redlink=1" class="new" title="Test (page does not exist)">test</a> <a href="/index.php?title=Template:Wish&amp;action=edit&amp;redlink=1" class="new" title="Template:Wish (page does not exist)">Template:Wish</a>.
 </p>
 </div><div class="mw-heading mw-heading3">Assigned focus area</div><div class="ext-communityrequests-wish--focus-area">
@@ -57,7 +57,7 @@ title=Community_Wishlist/Wishes/W2
 |baselang = en
 |description = This is a wish without voting.}}
 !! html
-<div class="ext-communityrequests-wish"><div class="mw-heading mw-heading2 ext-communityrequests-wish--heading"><span class="ext-communityrequests-wish--title">Test Wish with Voting Disabled</span><span class="cdx-info-chip ext-communityrequests-wish--status"><span class="cdx-info-chip__text">Declined</span></span></div><a href="/wiki/Special:WishlistIntake/Community_Wishlist/Wishes/W2" class="cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--action-default cdx-button--weight-normal cdx-button--enabled" role="button"><span class="cdx-button__icon ext-communityrequests-wish--edit" aria-hidden="true"></span>Edit wish</a>&#160;<a href="/wiki/Talk:Community_Wishlist/Wishes/W2" class="cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--action-default cdx-button--weight-normal cdx-button--enabled" role="button"><span class="cdx-button__icon ext-communityrequests-wish--speech-bubbles" aria-hidden="true"></span>Discuss this wish</a><div class="mw-heading mw-heading3">Description</div><div class="ext-communityrequests-wish--description">
+<div class="ext-communityrequests-wish"><div class="mw-heading mw-heading2 ext-communityrequests-wish--heading"><span class="ext-communityrequests-wish--title">Test Wish with Voting Disabled</span><span class="cdx-info-chip ext-communityrequests-wish--status"><span class="cdx-info-chip__text">Declined</span></span></div><div class="mw-heading mw-heading3">Description</div><div class="ext-communityrequests-wish--description">
 <p>This is a wish without voting.
 </p>
 </div><div class="mw-heading mw-heading3">Assigned focus area</div><div class="ext-communityrequests-wish--focus-area">
@@ -87,7 +87,7 @@ title=Community_Wishlist/Wishes/W2
 |baselang = en
 |description = This is a wish without voting.}}
 !! html
-<div class="ext-communityrequests-wish"><div class="mw-heading mw-heading2 ext-communityrequests-wish--heading"><span class="ext-communityrequests-wish--title">Test Wish with Voting Disabled</span><span class="cdx-info-chip ext-communityrequests-wish--status cdx-info-chip--success"><span class="cdx-info-chip__text">Done</span></span></div><a href="/wiki/Special:WishlistIntake/Community_Wishlist/Wishes/W2" class="cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--action-default cdx-button--weight-normal cdx-button--enabled" role="button"><span class="cdx-button__icon ext-communityrequests-wish--edit" aria-hidden="true"></span>Edit wish</a>&#160;<a href="/wiki/Talk:Community_Wishlist/Wishes/W2" class="cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--action-default cdx-button--weight-normal cdx-button--enabled" role="button"><span class="cdx-button__icon ext-communityrequests-wish--speech-bubbles" aria-hidden="true"></span>Discuss this wish</a><div class="mw-heading mw-heading3">Description</div><div class="ext-communityrequests-wish--description">
+<div class="ext-communityrequests-wish"><div class="mw-heading mw-heading2 ext-communityrequests-wish--heading"><span class="ext-communityrequests-wish--title">Test Wish with Voting Disabled</span><span class="cdx-info-chip ext-communityrequests-wish--status cdx-info-chip--success"><span class="cdx-info-chip__text">Done</span></span></div><div class="mw-heading mw-heading3">Description</div><div class="ext-communityrequests-wish--description">
 <p>This is a wish without voting.
 </p>
 </div><div class="mw-heading mw-heading3">Assigned focus area</div><div class="ext-communityrequests-wish--focus-area">
@@ -106,7 +106,7 @@ title=Community_Wishlist/Wishes/W3
 !! wikitext
 {{#CommunityRequests: wish
 |title = Wish without proposer
-|status = under-review 
+|status = under-review
 |type = change
 |audience = Example audience
 |projects = commons,wikisource

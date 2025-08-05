@@ -5,7 +5,6 @@ namespace MediaWiki\Extension\CommunityRequests\Wish;
 
 use MediaWiki\Extension\CommunityRequests\AbstractTemplateRenderer;
 use MediaWiki\Html\Html;
-use MediaWiki\Title\Title;
 use MediaWiki\Title\TitleValue;
 
 class WishTemplateRenderer extends AbstractTemplateRenderer {
@@ -73,19 +72,6 @@ class WishTemplateRenderer extends AbstractTemplateRenderer {
 			'div',
 			[ 'class' => 'mw-heading mw-heading2 ext-communityrequests-wish--heading' ],
 			$titleSpan . $statusChipHtml
-		);
-
-		// Edit and discuss buttons.
-		$editWishLinkHtml = $this->getFakeButton(
-			// FIXME: ignores namespace of the wish
-			Title::makeTitle( NS_SPECIAL, 'WishlistIntake/' . $this->parser->getPage()->getDBkey() ),
-			'communityrequests-edit-wish',
-			'edit'
-		);
-		$discussWishLinkHtml = $this->getFakeButton(
-			Title::makeTitle( NS_TALK, $this->parser->getPage()->getDBkey() ),
-			'communityrequests-discuss-wish',
-			'speech-bubbles'
 		);
 
 		// Description.
@@ -203,7 +189,6 @@ class WishTemplateRenderer extends AbstractTemplateRenderer {
 
 		return Html::rawElement( 'div', [ 'class' => 'ext-communityrequests-wish' ],
 			$headingHtml .
-			$editWishLinkHtml . '&nbsp;' . $discussWishLinkHtml .
 			$descHeading . $descHtml .
 			$focusAreaHeading . $focusArea .
 			$wishTypeHeading . $wishType .

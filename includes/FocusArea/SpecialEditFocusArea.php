@@ -3,17 +3,10 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CommunityRequests\FocusArea;
 
-use MediaWiki\Api\ApiMain;
-use MediaWiki\Api\ApiUsageException;
-use MediaWiki\Context\DerivativeContext;
 use MediaWiki\Extension\CommunityRequests\AbstractWishlistSpecialPage;
-use MediaWiki\Extension\CommunityRequests\HookHandler\CommunityRequestsHooks;
 use MediaWiki\Extension\CommunityRequests\WishlistConfig;
 use MediaWiki\HTMLForm\HTMLForm;
 use MediaWiki\Message\Message;
-use MediaWiki\Request\DerivativeRequest;
-use MediaWiki\Status\Status;
-use MediaWiki\Title\Title;
 use MediaWiki\Title\TitleParser;
 
 class SpecialEditFocusArea extends AbstractWishlistSpecialPage {
@@ -65,30 +58,11 @@ class SpecialEditFocusArea extends AbstractWishlistSpecialPage {
 		$data = $form->getRequest()->getPostValues();
 		$data[ 'title' ] = $data[ 'entitytitle' ];
 
-		$context = new DerivativeContext( $this->getContext() );
-		$context->setRequest( new DerivativeRequest( $this->getRequest(), [
-			'action' => 'focusareaedit',
-			'focusarea' => $this->entityId,
-			'token' => $data[ 'wpEditToken' ],
-			...$data,
-		] ) );
-		$api = new ApiMain( $context, true );
-		try {
-			$api->execute();
-		} catch ( ApiUsageException $e ) {
-			return $e->getStatusValue();
-		}
+		return parent::onSubmit( $data, $form );
+	}
 
-		$this->pageTitle = Title::newFromText( $api->getResult()->getResultData()[ 'focusareaedit' ][ 'focusarea' ] );
-
-		// Set session variables to show post-edit messages.
-		$this->getRequest()->getSession()->set(
-			CommunityRequestsHooks::SESSION_KEY,
-			$this->entityId === null ? self::SESSION_VALUE_CREATED : self::SESSION_VALUE_UPDATED
-		);
-		// Redirect to focus area page.
-		$this->getOutput()->redirect( $this->pageTitle->getFullURL() );
-
-		return Status::newGood( $api->getResult() );
+	/** @inheritDoc */
+	protected function getApiPath(): string {
+		return 'focusarea';
 	}
 }

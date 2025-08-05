@@ -3,12 +3,18 @@ declare( strict_types = 1 );
 
 namespace MediaWiki\Extension\CommunityRequests;
 
+use MediaWiki\Api\ApiMain;
+use MediaWiki\Api\ApiUsageException;
+use MediaWiki\Context\DerivativeContext;
+use MediaWiki\Extension\CommunityRequests\HookHandler\CommunityRequestsHooks;
 use MediaWiki\Html\Html;
 use MediaWiki\HTMLForm\HTMLForm;
 use MediaWiki\MediaWikiServices;
 use MediaWiki\Registration\ExtensionRegistry;
+use MediaWiki\Request\DerivativeRequest;
 use MediaWiki\ResourceLoader as RL;
 use MediaWiki\SpecialPage\FormSpecialPage;
+use MediaWiki\Status\Status;
 use MediaWiki\Title\Title;
 use MediaWiki\Title\TitleParser;
 use MediaWiki\Title\TitleValue;
@@ -40,10 +46,15 @@ abstract class AbstractWishlistSpecialPage extends FormSpecialPage {
 			$this->getOutput()->addWikiMsg( 'communityrequests-disabled' );
 			return;
 		}
-
 		$this->requireNamedUser( 'communityrequests-please-log-in' );
 
 		$this->entityId = $this->store->getIdFromInput( $entityId );
+		$this->pageTitle = Title::newFromText( $this->store->getPagePrefix() . $this->entityId );
+
+		if ( !$this->getUser()->probablyCan( 'edit', $this->pageTitle ) ) {
+			$this->getOutput()->redirect( $this->pageTitle->getEditURL() );
+		}
+
 		if ( $this->entityId && !$this->loadExistingEntity( $this->entityId ) ) {
 			return;
 		}
@@ -94,7 +105,6 @@ abstract class AbstractWishlistSpecialPage extends FormSpecialPage {
 	 * @return bool
 	 */
 	protected function loadExistingEntity( int $entityId ): bool {
-		$this->pageTitle = Title::newFromText( $this->store->getPagePrefix() . $entityId );
 		$entity = $this->store->get( $this->pageTitle );
 
 		if ( !$entity ) {
@@ -187,6 +197,47 @@ abstract class AbstractWishlistSpecialPage extends FormSpecialPage {
 		$this->getOutput()->addModules( $modules );
 		return $modules;
 	}
+
+	/** @inheritDoc */
+	public function onSubmit( array $data, ?HTMLForm $form = null ) {
+		$path = $this->getApiPath();
+		$action = $path . 'edit';
+
+		// Set the static CommunityRequestHooks::$allowManualEditing to tell the
+		// GetUserPermissionsErrors hook handler that this edit was made using the special page.
+		CommunityRequestsHooks::$allowManualEditing = true;
+
+		$context = new DerivativeContext( $this->getContext() );
+		$context->setRequest( new DerivativeRequest( $this->getRequest(), [
+			'action' => $action,
+			$path => $this->entityId,
+			'token' => $data[ 'wpEditToken' ],
+			...$data,
+		] ) );
+		$api = new ApiMain( $context, true );
+		try {
+			$api->execute();
+		} catch ( ApiUsageException $e ) {
+			return $e->getStatusValue();
+		}
+
+		$this->pageTitle = Title::newFromText( $api->getResult()->getResultData()[$action][$path] );
+
+		// Set session variables to show post-edit messages.
+		$this->getRequest()->getSession()->set(
+			CommunityRequestsHooks::SESSION_KEY,
+			$this->entityId === null ? self::SESSION_VALUE_CREATED : self::SESSION_VALUE_UPDATED
+		);
+		// Redirect to entity page.
+		$this->getOutput()->redirect( $this->pageTitle->getFullURL() );
+
+		return Status::newGood( $api->getResult() );
+	}
+
+	/**
+	 * @return string Either 'wish' or 'focusarea'
+	 */
+	abstract protected function getApiPath(): string;
 
 	/** @inheritDoc */
 	public function isListed(): bool {

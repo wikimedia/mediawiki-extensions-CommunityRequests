@@ -3,19 +3,12 @@ declare( strict_types = 1 );
 
 namespace MediaWiki\Extension\CommunityRequests\Wish;
 
-use MediaWiki\Api\ApiMain;
-use MediaWiki\Api\ApiUsageException;
-use MediaWiki\Context\DerivativeContext;
 use MediaWiki\Extension\CommunityRequests\AbstractWishlistSpecialPage;
 use MediaWiki\Extension\CommunityRequests\FocusArea\FocusArea;
 use MediaWiki\Extension\CommunityRequests\FocusArea\FocusAreaStore;
-use MediaWiki\Extension\CommunityRequests\HookHandler\CommunityRequestsHooks;
 use MediaWiki\Extension\CommunityRequests\WishlistConfig;
 use MediaWiki\HTMLForm\HTMLForm;
 use MediaWiki\Message\Message;
-use MediaWiki\Request\DerivativeRequest;
-use MediaWiki\Status\Status;
-use MediaWiki\Title\Title;
 use MediaWiki\Title\TitleParser;
 use MediaWiki\User\UserFactory;
 
@@ -102,30 +95,11 @@ class SpecialWishlistIntake extends AbstractWishlistSpecialPage {
 		$data[ 'projects' ] = str_replace( ',', '|', $data[ 'projects' ] );
 		$data[ 'phabtasks' ] = str_replace( ',', '|', $data[ 'phabtasks' ] );
 
-		$context = new DerivativeContext( $this->getContext() );
-		$context->setRequest( new DerivativeRequest( $this->getRequest(), [
-			'action' => 'wishedit',
-			'wish' => $this->entityId,
-			'token' => $data[ 'wpEditToken' ],
-			...$data,
-		] ) );
-		$api = new ApiMain( $context, true );
-		try {
-			$api->execute();
-		} catch ( ApiUsageException $e ) {
-			return $e->getStatusValue();
-		}
+		return parent::onSubmit( $data, $form );
+	}
 
-		$this->pageTitle = Title::newFromText( $api->getResult()->getResultData()[ 'wishedit' ][ 'wish' ] );
-
-		// Set session variables to show post-edit messages.
-		$this->getRequest()->getSession()->set(
-			CommunityRequestsHooks::SESSION_KEY,
-			$this->entityId === null ? self::SESSION_VALUE_CREATED : self::SESSION_VALUE_UPDATED
-		);
-		// Redirect to wish page.
-		$this->getOutput()->redirect( $this->pageTitle->getFullURL() );
-
-		return Status::newGood( $api->getResult() );
+	/** @inheritDoc */
+	protected function getApiPath(): string {
+		return 'wish';
 	}
 }

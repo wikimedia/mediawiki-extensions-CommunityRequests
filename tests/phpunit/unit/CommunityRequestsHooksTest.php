@@ -15,9 +15,11 @@ use MediaWiki\MainConfigNames;
 use MediaWiki\Parser\Parser;
 use MediaWiki\Parser\ParserOutput;
 use MediaWiki\Permissions\PermissionManager;
+use MediaWiki\Session\SessionManager;
 use MediaWiki\Skin\SkinTemplate;
 use MediaWiki\SpecialPage\SpecialPage;
 use MediaWiki\SpecialPage\SpecialPageFactory;
+use MediaWiki\Status\Status;
 use MediaWiki\Tests\Unit\FakeQqxMessageLocalizer;
 use MediaWiki\Tests\Unit\MockServiceDependenciesTrait;
 use MediaWiki\Tests\Unit\Permissions\MockAuthorityTrait;
@@ -130,28 +132,13 @@ class CommunityRequestsHooksTest extends MediaWikiUnitTestCase {
 				[ $user, 'manage-wishlist', $opts['canManage'] ],
 				[ $user, 'manually-edit-wishlist', $opts['canManuallyEdit'] ],
 			] );
-		$specialWishlistIntake = $this->createNoOpMock( SpecialPage::class, [ 'getPageTitle' ] );
-		$specialWishlistIntake->expects( $this->any() )
-			->method( 'getPageTitle' )
-			->willReturn( $this->makeMockTitle( 'WishlistIntake', [ 'namespace' => NS_SPECIAL ] ) );
-		$specialEditFocusArea = $this->createNoOpMock( SpecialPage::class, [ 'getPageTitle' ] );
-		$specialEditFocusArea->expects( $this->any() )
-			->method( 'getPageTitle' )
-			->willReturn( $this->makeMockTitle( 'EditFocusArea', [ 'namespace' => NS_SPECIAL ] ) );
-		$specialPageFactory = $this->createNoOpMock( SpecialPageFactory::class, [ 'getPage' ] );
-		$specialPageFactory->expects( $this->atMost( 1 ) )
-			->method( 'getPage' )
-			->willReturnMap( [
-				[ 'WishlistIntake', $specialWishlistIntake ],
-				[ 'EditFocusArea', $specialEditFocusArea ],
-			] );
 		$handler = $this->getHandler(
 			[
 				WishlistConfig::WISH_PAGE_PREFIX => 'Community Wishlist/Wishes/W',
 				WishlistConfig::FOCUS_AREA_PAGE_PREFIX => 'Community Wishlist/Focus areas/FA',
 			],
 			$permissionManager,
-			$specialPageFactory
+			null,
 		);
 
 		$links = [ 'views' => $opts['tabs'] ];
@@ -196,10 +183,108 @@ class CommunityRequestsHooksTest extends MediaWikiUnitTestCase {
 		];
 	}
 
+	/**
+	 * @covers ::onGetUserPermissionsErrorsExpensive
+	 * @dataProvider provideManuallyEditing
+	 */
+	public function testManuallyEditing(
+		array $opts = [],
+		bool $expectedReturn = true,
+		array $expectedResult = []
+	): void {
+		$opts = array_merge(
+			[
+				'title' => $this->makeMockTitle( 'Community Wishlist/Wishes/W123' ),
+				'action' => 'edit',
+				'canManuallyEdit' => true,
+				'allowManualEditing' => false,
+			],
+			$opts
+		);
+		$user = $this->createNoOpMock( User::class, [ '__toString' ] );
+		$status = $this->createNoOpMock( Status::class, [ 'getMessages' ] );
+		$status->expects( $this->atMost( 1 ) )
+			->method( 'getMessages' )
+			->willReturn( [ 'badaccess-groups' ] );
+		$permissionManager = $this->createNoOpMock(
+			PermissionManager::class,
+			[ 'userHasRight', 'newFatalPermissionDeniedStatus' ]
+		);
+		$permissionManager->expects( $this->atMost( 1 ) )
+			->method( 'userHasRight' )
+			->with( $user, 'manually-edit-wishlist' )
+			->willReturn( $opts['canManuallyEdit'] );
+		$permissionManager->expects( $this->atMost( 1 ) )
+			->method( 'newFatalPermissionDeniedStatus' )
+			->with( 'manually-edit-wishlist' )
+			->willReturn( $status );
+		CommunityRequestsHooks::$allowManualEditing = $opts['allowManualEditing'];
+		$handler = $this->getHandler(
+			[
+				WishlistConfig::WISH_PAGE_PREFIX => 'Community Wishlist/Wishes/W',
+				WishlistConfig::FOCUS_AREA_PAGE_PREFIX => 'Community Wishlist/Focus areas/FA',
+			],
+			$permissionManager
+		);
+
+		$result = [];
+		$ret = $handler->onGetUserPermissionsErrorsExpensive(
+			$opts['title'],
+			$user,
+			$opts['action'],
+			$result
+		);
+		$this->assertSame( $expectedReturn, $ret );
+		if ( !$expectedReturn ) {
+			$this->assertSame( $expectedResult[0][0], $result[0][0] );
+			$this->assertSame( $expectedResult[0][1]->getDBKey(), $result[0][1]->getDBKey() );
+			$this->assertSame( $expectedResult[1], $result[1] );
+		}
+	}
+
+	public function provideManuallyEditing(): array {
+		return [
+			[
+				[ 'canManuallyEdit' => true ],
+				true,
+			],
+			[
+				[ 'canManuallyEdit' => false ],
+				false,
+				[
+					[ 'communityrequests-cant-manually-edit', $this->makeMockTitle( 'Special:WishlistIntake' ) ],
+					'badaccess-groups'
+				]
+			],
+			[
+				[
+					'canManuallyEdit' => false,
+					'allowManualEditing' => true,
+				],
+				true,
+			],
+			[
+				[
+					'title' => $this->makeMockTitle( 'Community Wishlist/Focus areas/FA123' ),
+					'canManuallyEdit' => false,
+				],
+				false,
+				[
+					[ 'communityrequests-cant-manually-edit', $this->makeMockTitle( 'Special:EditFocusArea' ) ],
+					'badaccess-groups'
+				]
+			],
+			[
+				[ 'action' => 'view' ],
+				true,
+			]
+		];
+	}
+
 	private function getHandler(
 		array $serviceOptions = [],
 		?PermissionManager $permissionManager = null,
-		?SpecialPageFactory $specialPageFactory = null
+		?SessionManager $sessionManager = null
 	): CommunityRequestsHooks {
 		$serviceOptions = new ServiceOptions( WishlistConfig::CONSTRUCTOR_OPTIONS, [
 			WishlistConfig::ENABLED => true,
@@ -235,9 +320,28 @@ class CommunityRequestsHooksTest extends MediaWikiUnitTestCase {
 			$this->createNoOpMock( EntityFactory::class ),
 			$this->createNoOpMock( LinkRenderer::class ),
 			$permissionManager ?: $this->createNoOpMock( PermissionManager::class ),
-			$specialPageFactory ?: $this->createNoOpMock( SpecialPageFactory::class ),
+			$this->getSpecialPageFactory(),
 			new NullLogger(),
 			$mainConfig
 		);
+	}
+
+	private function getSpecialPageFactory(): SpecialPageFactory {
+		$specialWishlistIntake = $this->createNoOpMock( SpecialPage::class, [ 'getPageTitle' ] );
+		$specialWishlistIntake->expects( $this->any() )
+			->method( 'getPageTitle' )
+			->willReturn( $this->makeMockTitle( 'WishlistIntake', [ 'namespace' => NS_SPECIAL ] ) );
+		$specialEditFocusArea = $this->createNoOpMock( SpecialPage::class, [ 'getPageTitle' ] );
+		$specialEditFocusArea->expects( $this->any() )
+			->method( 'getPageTitle' )
+			->willReturn( $this->makeMockTitle( 'EditFocusArea', [ 'namespace' => NS_SPECIAL ] ) );
+		$specialPageFactory = $this->createNoOpMock( SpecialPageFactory::class, [ 'getPage' ] );
+		$specialPageFactory->expects( $this->atMost( 1 ) )
+			->method( 'getPage' )
+			->willReturnMap( [
+				[ 'WishlistIntake', $specialWishlistIntake ],
+				[ 'EditFocusArea', $specialEditFocusArea ],
+			] );
+		return $specialPageFactory;
 	}
 }

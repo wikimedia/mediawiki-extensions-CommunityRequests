@@ -38,6 +38,7 @@ use MediaWiki\Page\PageIdentity;
 use MediaWiki\Page\ProperPageIdentity;
 use MediaWiki\Parser\Parser;
 use MediaWiki\Permissions\Authority;
+use MediaWiki\Permissions\Hook\GetUserPermissionsErrorsExpensiveHook;
 use MediaWiki\Permissions\PermissionManager;
 use MediaWiki\RecentChanges\RecentChange;
 use MediaWiki\Registration\ExtensionRegistry;
@@ -48,6 +49,8 @@ use MediaWiki\Skin\SkinTemplate;
 use MediaWiki\SpecialPage\SpecialPageFactory;
 use MediaWiki\Storage\Hook\RevisionDataUpdatesHook;
 use MediaWiki\Title\Title;
+use MediaWiki\User\User;
+use MessageSpecifier;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
 
@@ -64,7 +67,8 @@ class CommunityRequestsHooks implements
 	RecentChange_saveHook,
 	RevisionDataUpdatesHook,
 	SkinTemplateNavigation__UniversalHook,
-	ParserAfterTidyHook
+	ParserAfterTidyHook,
+	GetUserPermissionsErrorsExpensiveHook
 {
 
 	public const WISHLIST_CHANGE_TAG = 'community-wishlist';
@@ -76,6 +80,12 @@ class CommunityRequestsHooks implements
 	private TemplateRendererFactory $templateRendererFactory;
 	/** @var AbstractWishlistStore[] */
 	private array $stores;
+
+	/**
+	 * Whether the user is allowed to manually edit wish and focus area pages.
+	 * This is set to true when the user is editing a wish or focus area using the special pages.
+	 */
+	public static bool $allowManualEditing = false;
 
 	public function __construct(
 		protected readonly WishlistConfig $config,
@@ -419,5 +429,48 @@ class CommunityRequestsHooks implements
 				->parse(),
 			$text
 		);
+	}
+
+	/**
+	 * Prevent manual editing of wish and focus area pages unless the user has the 'manually-edit-wishlist' right.
+	 *
+	 * @param Title $title
+	 * @param User $user
+	 * @param string $action
+	 * @param array|string|MessageSpecifier &$result
+	 * @return bool
+	 */
+	public function onGetUserPermissionsErrorsExpensive( $title, $user, $action, &$result ): bool {
+		if ( !$this->config->isEnabled() || !$this->config->isWishOrFocusAreaPage( $title ) ) {
+			return true;
+		}
+		if ( $action !== 'edit' ) {
+			return true;
+		}
+
+		// If $allowManualEditing is set, it means the user is editing a wish or focus area using the form.
+		if ( self::$allowManualEditing ) {
+			return true;
+		}
+
+		if ( !$this->permissionManager->userHasRight( $user, 'manually-edit-wishlist' ) ) {
+			$result = [
+				// Message instructing users to use the Special page form.
+				[
+					'communityrequests-cant-manually-edit',
+					$this->specialPageFactory->getPage(
+						$this->config->isWishPage( $title ) ? 'WishlistIntake' : 'EditFocusArea'
+					)->getPageTitle( $this->config->getEntityWikitextVal( $title ) ),
+				],
+				// Standard message listing the user groups that are allowed to manually edit.
+				$this->permissionManager->newFatalPermissionDeniedStatus(
+					'manually-edit-wishlist',
+					RequestContext::getMain()
+				)->getMessages()[0]
+			];
+			return false;
+		}
+
+		return true;
 	}
 }

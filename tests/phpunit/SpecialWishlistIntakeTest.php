@@ -16,7 +16,7 @@ class SpecialWishlistIntakeTest extends SpecialPageTestBase {
 	}
 
 	/**
-	 * @covers ::addResourceLoaderMessages
+	 * @covers \MediaWiki\Extension\CommunityRequests\AbstractWishlistSpecialPage::addResourceLoaderMessages
 	 */
 	public function testGetMessages(): void {
 		$this->overrideConfigValues( [

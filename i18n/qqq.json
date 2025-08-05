@@ -220,5 +220,6 @@
 	"action-manually-edit-wishlist": "{{doc-action|manually-edit-wishlist}}",
 	"group-community-wishlist-manager": "{{doc-group|community-wishlist-manager}}",
 	"group-community-wishlist-manager-member": "{{doc-group|community-wishlist-manager|member}}",
-	"grouppage-community-wishlist-manager": "{{doc-group|community-wishlist-manager|page}}"
+	"grouppage-community-wishlist-manager": "{{doc-group|community-wishlist-manager|page}}",
+	"communityrequests-cant-manually-edit": "Error message shown when a user tries to manually edit a wish or focus area, but does not have the right to do so.\n\nParameters:\n* $1 — The title of the Special page which should be used instead."
 }

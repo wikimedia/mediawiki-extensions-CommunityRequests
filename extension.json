@@ -61,7 +61,8 @@
 		"PageDeleteComplete": "main",
 		"RevisionDataUpdates": "main",
 		"SkinTemplateNavigation::Universal": "main",
-		"ParserAfterTidy": "main"
+		"ParserAfterTidy": "main",
+		"getUserPermissionsErrorsExpensive": "main"
 	},
 	"HookHandlers": {
 		"main": {

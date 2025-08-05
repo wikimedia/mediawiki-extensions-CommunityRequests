@@ -69,9 +69,9 @@ module.exports = exports = defineComponent( {
 	setup() {
 		const api = new mw.Api();
 		const votesPageName = getBasePageName() + CommunityRequestsVotesPageSuffix;
-		let comment = ref( '' );
 		const open = ref( false );
 		const hasVoted = ref( false );
+		let comment = '';
 		let showVotedMessage = ref( false );
 		let submitting = ref( false );
 

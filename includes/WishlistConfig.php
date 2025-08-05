@@ -6,7 +6,7 @@ namespace MediaWiki\Extension\CommunityRequests;
 use MediaWiki\Config\ConfigException;
 use MediaWiki\Config\ServiceOptions;
 use MediaWiki\Extension\CommunityRequests\Wish\Wish;
-use MediaWiki\Language\LanguageCode;
+use MediaWiki\Language\LanguageNameUtils;
 use MediaWiki\Page\PageReference;
 use MediaWiki\Page\PageReferenceValue;
 use MediaWiki\Title\MalformedTitleException;
@@ -84,7 +84,8 @@ class WishlistConfig {
 	public function __construct(
 		ServiceOptions $config,
 		private readonly TitleParser $titleParser,
-		private readonly TitleFormatter $titleFormatter
+		private readonly TitleFormatter $titleFormatter,
+		private readonly LanguageNameUtils $languageNameUtils,
 	) {
 		$this->enabled = $config->get( self::ENABLED );
 		$this->homepage = $config->get( self::HOMEPAGE );
@@ -312,8 +313,8 @@ class WishlistConfig {
 			$remaining = substr( $identityStr, strlen( $indexStr ) );
 			// Remove leading slash.
 			$remaining = ltrim( $remaining, '/' );
-			// Check if the remaining part is probably a language code.
-			return LanguageCode::isWellFormedLanguageTag( $remaining );
+			// Check if the remaining part is a language code.
+			return $this->languageNameUtils->isKnownLanguageTag( $remaining );
 		}
 		return false;
 	}
@@ -335,15 +336,19 @@ class WishlistConfig {
 			return false;
 		}
 
+		if ( preg_match( '/[0-9]/', $remaining ) !== 1 ) {
+			return false;
+		}
+
 		// Remove each numeric character from the beginning of $remaining
 		$remaining = ltrim( $remaining, '0123456789' );
 
 		// Remove leading slash.
 		$remaining = ltrim( $remaining, '/' );
 
-		// Check if the $remaining is probably a valid language code.
-		return LanguageCode::isWellFormedLanguageTag( $remaining ) &&
-			$remaining !== ltrim( $this->votesPageSuffix, '/' );
+		// Check if the $remaining is a valid language code.
+		return $remaining !== ltrim( $this->votesPageSuffix, '/' ) &&
+			$this->languageNameUtils->isKnownLanguageTag( $remaining );
 	}
 
 	/**

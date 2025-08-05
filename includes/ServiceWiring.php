@@ -53,6 +53,7 @@ return [
 			),
 			$services->getTitleParser(),
 			$services->getTitleFormatter(),
+			$services->getLanguageNameUtils(),
 		);
 	},
 	'CommunityRequests.WishStore' => static function ( MediaWikiServices $services ): WishStore {

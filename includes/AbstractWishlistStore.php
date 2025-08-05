@@ -210,7 +210,6 @@ abstract class AbstractWishlistStore {
 				null,
 				static::translationForeignKey() . ' = ' . static::pageField() )
 			->fields( static::fields() )
-			// FIXME: uses filesort; We probably need an index for
 			->where( $dbr->makeList( [
 				static::translationLangField() => $langs,
 				static::translationLangField() . '=' . static::baseLangField()

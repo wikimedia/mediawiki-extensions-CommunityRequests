@@ -10,6 +10,7 @@ use MediaWiki\Extension\CommunityRequests\FocusArea\FocusAreaStore;
 use MediaWiki\Extension\CommunityRequests\HookHandler\CommunityRequestsHooks;
 use MediaWiki\Extension\CommunityRequests\Wish\WishStore;
 use MediaWiki\Extension\CommunityRequests\WishlistConfig;
+use MediaWiki\Language\LanguageNameUtils;
 use MediaWiki\Linker\LinkRenderer;
 use MediaWiki\MainConfigNames;
 use MediaWiki\Parser\Parser;
@@ -310,7 +311,8 @@ class CommunityRequestsHooksTest extends MediaWikiUnitTestCase {
 		$config = new WishlistConfig(
 			$serviceOptions,
 			$this->newServiceInstance( TitleParser::class, [ 'localInterwikis' => [] ] ),
-			$this->newServiceInstance( TitleFormatter::class, [] )
+			$this->newServiceInstance( TitleFormatter::class, [] ),
+			$this->newServiceInstance( LanguageNameUtils::class, [] ),
 		);
 		$mainConfig = new HashConfig( [ MainConfigNames::PageLanguageUseDB => true ] );
 		return new CommunityRequestsHooks(

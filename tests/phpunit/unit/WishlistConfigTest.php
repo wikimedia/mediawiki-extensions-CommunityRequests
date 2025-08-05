@@ -6,6 +6,8 @@ namespace MediaWiki\Extension\CommunityRequests\Tests\Unit;
 use MediaWiki\Config\ConfigException;
 use MediaWiki\Config\ServiceOptions;
 use MediaWiki\Extension\CommunityRequests\WishlistConfig;
+use MediaWiki\Language\LanguageNameUtils;
+use MediaWiki\MainConfigNames;
 use MediaWiki\Tests\Unit\MockServiceDependenciesTrait;
 use MediaWiki\Title\TitleFormatter;
 use MediaWiki\Title\TitleParser;
@@ -92,7 +94,14 @@ class WishlistConfigTest extends MediaWikiUnitTestCase {
 				WishlistConfig::FOCUS_AREA_VOTING_ENABLED => true,
 			] ),
 			$this->newServiceInstance( TitleParser::class, [ 'localInterwikis' => [] ] ),
-			$this->newServiceInstance( TitleFormatter::class, [] )
+			$this->newServiceInstance( TitleFormatter::class, [] ),
+			$this->newServiceInstance( LanguageNameUtils::class, [
+				'options' => new ServiceOptions( LanguageNameUtils::CONSTRUCTOR_OPTIONS, [
+					MainConfigNames::ExtraLanguageNames => [],
+					MainConfigNames::UsePigLatinVariant => false,
+					MainConfigNames::UseXssLanguage => false,
+				] )
+			] ),
 		);
 	}
 
@@ -177,8 +186,10 @@ class WishlistConfigTest extends MediaWikiUnitTestCase {
 		$this->assertFalse( $this->config->isWishPage( $this->makeMockTitle( 'W123' ) ) );
 		$this->assertTrue( $this->config->isWishPage( $this->makeMockTitle( 'Community Wishlist/W123' ) ) );
 		$this->assertTrue( $this->config->isWishPage( $this->makeMockTitle( 'Community Wishlist/W123/fr' ) ) );
+		$this->assertFalse( $this->config->isWishPage( $this->makeMockTitle( 'Community Wishlist/Wfr' ) ) );
 		$this->assertFalse( $this->config->isWishPage( $this->makeMockTitle( 'Community Wishlist/WWWWW123' ) ) );
 		$this->assertFalse( $this->config->isWishPage( $this->makeMockTitle( 'Community Wishlist/W123/b-o-g-u-s' ) ) );
+		$this->assertFalse( $this->config->isWishPage( $this->makeMockTitle( 'Community Wishlist/W123/fr-fake' ) ) );
 		$this->assertFalse( $this->config->isWishPage( $this->makeMockTitle( 'Community Wishlist/Wish', [
 			'namespace' => NS_TEMPLATE
 		] ) ) );
@@ -198,6 +209,9 @@ class WishlistConfigTest extends MediaWikiUnitTestCase {
 	public function testIsWishIndexPage(): void {
 		$this->assertTrue( $this->config->isWishIndexPage( $this->makeMockTitle( 'Community Wishlist/Wishes' ) ) );
 		$this->assertTrue( $this->config->isWishIndexPage( $this->makeMockTitle( 'Community Wishlist/Wishes/fr' ) ) );
+		$this->assertFalse(
+			$this->config->isWishIndexPage( $this->makeMockTitle( 'Community Wishlist/Wishes/fr-fake' ) )
+		);
 		$this->assertFalse(
 			$this->config->isWishIndexPage( $this->makeMockTitle( 'Community Wishlist/Wishes/b-o-g-u-s' ) )
 		);

@@ -5,6 +5,7 @@ namespace MediaWiki\Extension\CommunityRequests\Tests\Unit;
 
 use MediaWiki\Config\ServiceOptions;
 use MediaWiki\Extension\CommunityRequests\WishlistConfig;
+use MediaWiki\Language\LanguageNameUtils;
 use MediaWiki\Tests\Unit\MockServiceDependenciesTrait;
 use MediaWiki\Title\TitleFormatter;
 use MediaWiki\Title\TitleParser;
@@ -100,7 +101,8 @@ class AbstractWishlistEntityTest extends MediaWikiUnitTestCase {
 		$this->config = new WishlistConfig(
 			$serviceOptions,
 			$this->newServiceInstance( TitleParser::class, [ 'localInterwikis' => [] ] ),
-			$this->newServiceInstance( TitleFormatter::class, [] )
+			$this->newServiceInstance( TitleFormatter::class, [] ),
+			$this->newServiceInstance( LanguageNameUtils::class, [] ),
 		);
 	}
 }

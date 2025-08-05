@@ -26,6 +26,7 @@ use MediaWiki\Hook\GetDoubleUnderscoreIDsHook;
 use MediaWiki\Hook\LinksUpdateCompleteHook;
 use MediaWiki\Hook\LoginFormValidErrorMessagesHook;
 use MediaWiki\Hook\ParserAfterParseHook;
+use MediaWiki\Hook\ParserAfterTidyHook;
 use MediaWiki\Hook\ParserFirstCallInitHook;
 use MediaWiki\Hook\RecentChange_saveHook;
 use MediaWiki\Hook\SkinTemplateNavigation__UniversalHook;
@@ -62,7 +63,8 @@ class CommunityRequestsHooks implements
 	ParserFirstCallInitHook,
 	RecentChange_saveHook,
 	RevisionDataUpdatesHook,
-	SkinTemplateNavigation__UniversalHook
+	SkinTemplateNavigation__UniversalHook,
+	ParserAfterTidyHook
 {
 
 	public const WISHLIST_CHANGE_TAG = 'community-wishlist';
@@ -391,5 +393,31 @@ class CommunityRequestsHooks implements
 		}
 
 		$links['views'] = $newTabs;
+	}
+
+	/**
+	 * Replace the voting strip marker with a message containing the vote count.
+	 *
+	 * @param Parser $parser
+	 * @param string &$text
+	 */
+	public function onParserAfterTidy( $parser, &$text ) {
+		if ( !$this->config->isEnabled() || !$this->config->isWishOrFocusAreaPage( $parser->getPage() ) ) {
+			return;
+		}
+		$data = $parser->getOutput()->getExtensionData( self::EXT_DATA_KEY );
+		if ( !$data ) {
+			return;
+		}
+
+		$voteCount = intval( $data[AbstractWishlistEntity::PARAM_VOTE_COUNT] ?? 0 );
+		$text = str_replace(
+			AbstractTemplateRenderer::VOTING_STRIP_MARKER,
+			$parser->msg( "communityrequests-{$data['entityType']}-voting-info" )
+				->numParams( $voteCount )
+				->params( $voteCount )
+				->parse(),
+			$text
+		);
 	}
 }

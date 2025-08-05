@@ -23,10 +23,9 @@ class VoteTemplateRenderer extends AbstractTemplateRenderer {
 		}
 
 		$args = $this->getArgs();
-		$args['entityType'] = $this->getEntityType( $this->parser->getPage() );
-		$args['lang'] = $this->parser->getTargetLanguage()->getCode();
+		$entityType = $this->getEntityType( $this->parser->getPage() );
 
-		if ( !$args['entityType'] ) {
+		if ( !$entityType ) {
 			$this->logger->debug( __METHOD__ . ": Not a wish or focus area page found. {0}", [ json_encode( $args ) ] );
 			return '';
 		}
@@ -36,13 +35,16 @@ class VoteTemplateRenderer extends AbstractTemplateRenderer {
 			return $this->getMissingFieldsErrorMessage( $missingFields );
 		}
 
-		$extensionData = $this->parser->getOutput()->getExtensionData( self::EXT_DATA_KEY );
-
-		$args[AbstractWishlistEntity::PARAM_VOTE_COUNT]
-			= ( $extensionData[AbstractWishlistEntity::PARAM_VOTE_COUNT] ?? 0 ) + 1;
+		$extensionData = $this->parser->getOutput()->getExtensionData( self::EXT_DATA_KEY ) ?? [];
+		$extensionData[AbstractWishlistEntity::PARAM_VOTE_COUNT] ??= 0;
+		$extensionData[AbstractWishlistEntity::PARAM_VOTE_COUNT]++;
+		// Extension data needed for storage in CommunityRequestsHooks::onLinksUpdateComplete().
+		// This data may already exist if the page is a wish or focus area page.
+		$extensionData['entityType'] ??= $entityType;
+		$extensionData['lang'] ??= $this->parser->getTargetLanguage()->getCode();
 
 		$this->logger->debug( __METHOD__ . ": Rendering vote. {0}", [ json_encode( $args ) ] );
-		$this->parser->getOutput()->setExtensionData( self::EXT_DATA_KEY, $args );
+		$this->parser->getOutput()->setExtensionData( self::EXT_DATA_KEY, $extensionData );
 
 		return $this->renderVoteInternal( $args[ 'username'], $args['timestamp'], $args['comment'] );
 	}
@@ -55,7 +57,11 @@ class VoteTemplateRenderer extends AbstractTemplateRenderer {
 			$space . $this->msg( 'signature', $username, $username )->parse() .
 			$space . $this->formatDate( $timestamp );
 
-		return Html::rawElement( 'div', [ 'class' => 'ext-communityrequests-vote-entry' ], $out );
+		return Html::rawElement(
+			'div',
+			[ 'class' => 'ext-communityrequests-vote-entry' ],
+			$out
+		);
 	}
 
 	private function getEntityType( ?PageReference $identity ): ?string {

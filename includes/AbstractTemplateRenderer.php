@@ -20,6 +20,7 @@ abstract class AbstractTemplateRenderer {
 	public const TRACKING_CATEGORY = 'communityrequests-category';
 	public const ERROR_TRACKING_CATEGORY = 'communityrequests-error-category';
 	public const EXT_DATA_KEY = 'CommunityRequests-ext-data';
+	public const VOTING_STRIP_MARKER = Parser::MARKER_PREFIX . "-communityrequests-voting-" . Parser::MARKER_SUFFIX;
 
 	/** @var string This is overridden by subclasses to give the entity type */
 	protected string $entityType = '';
@@ -156,39 +157,37 @@ abstract class AbstractTemplateRenderer {
 		);
 	}
 
-	protected function getVotingSection( bool $votingEnabled, string $msgKey = 'wish' ): string {
+	/**
+	 * Get the HTML for the voting section of a wish or focus area page.
+	 *
+	 * @param bool $votingEnabled Whether voting is enabled
+	 * @return string HTML
+	 */
+	protected function getVotingSection( bool $votingEnabled ): string {
+		// Make sure the status allows voting.
+		$votingEnabled = $votingEnabled && in_array(
+			trim( $this->getArgs()[AbstractWishlistEntity::PARAM_STATUS] ?? '' ),
+			$this->config->getStatusWikitextValsEligibleForVoting()
+		);
+
 		$out = Html::element(
 			'div',
-			[ 'class' => 'mw-heading mw-heading2' ],
-			$this->msg( "communityrequests-$msgKey-voting" )->text()
+			[ 'class' => 'mw-heading mw-heading2', 'id' => 'Voting' ],
+			$this->msg( "communityrequests-{$this->entityType}-voting" )->text()
 		);
+		$out .= Html::openElement( 'div', [ 'class' => "ext-communityrequests-{$this->entityType}--voting" ] );
 
-		// TODO: Vote counting doesn't work yet (T388220)
-		$out .= $this->getDivRaw( 'voting-desc',
-			$this->msg( "communityrequests-$msgKey-voting-info", 0, 0 )->parse() . ' ' . (
-			$votingEnabled ?
-				$this->msg( "communityrequests-$msgKey-voting-info-open" )->escaped() :
-				$this->msg( "communityrequests-$msgKey-voting-info-closed" )->escaped()
-			)
-		);
+		// We need to wait for the full parser pass to complete to ensure all votes are counted.
+		// Add a strip marker for the vote count to be added later in CommunityRequestsHooks::onParserAfterTidy().
+		$out .= Html::openElement( 'p' ) . self::VOTING_STRIP_MARKER . ' ';
+		$out .= $votingEnabled ?
+			$this->msg( "communityrequests-{$this->entityType}-voting-info-open" )->escaped() :
+			$this->msg( "communityrequests-{$this->entityType}-voting-info-closed" )->escaped();
+		$out .= Html::closeElement( 'p' );
 
 		if ( $votingEnabled ) {
-			// TODO: add an cwaction=vote page for no-JS users, or something.
-			$votingButton = Html::element(
-				'button',
-				[
-					'class' => [ 'cdx-button', 'cdx-button--action-progressive', 'cdx-button--weight-primary' ],
-					'type' => 'button',
-					'disabled' => 'disabled',
-				],
-				$this->msg( "communityrequests-support-$msgKey" )->text()
-			);
-			$votingSection = Html::rawElement(
-				'div',
-				[ 'class' => 'ext-communityrequests-voting-btn' ],
-				$votingButton
-			);
-			$out .= $votingSection;
+			// Container for the voting button added by JavaScript.
+			$out .= Html::element( 'div', [ 'class' => 'ext-communityrequests-voting-btn' ] );
 		}
 
 		// Transclude the /Votes subpage if it exists.
@@ -199,6 +198,9 @@ abstract class AbstractTemplateRenderer {
 		if ( $voteSubpageTitle->exists() ) {
 			$out .= $this->parser->recursiveTagParse( '{{:' . $voteSubpagePath . '}}' );
 		}
+
+		// Close the voting container.
+		$out .= Html::closeElement( 'div' );
 
 		return $out;
 	}

@@ -92,6 +92,24 @@ END;
 		];
 	}
 
+	/**
+	 * @covers ::render
+	 * @covers \MediaWiki\Extension\CommunityRequests\HookHandler\CommunityRequestsHooks::onParserAfterTidy
+	 * @covers \MediaWiki\Extension\CommunityRequests\AbstractTemplateRenderer::getVotingSection
+	 */
+	public function testVoteCountRendering() {
+		$wish = $this->insertTestWish( 'Community Wishlist/Wishes/W123', 'en' );
+		$this->insertPage(
+			$wish->getPage()->getDBkey() . $this->config->getVotesPageSuffix(),
+			"{{#CommunityRequests:vote|username=TestUser1|timestamp=2023-10-01T12:00:00Z|comment=First vote}}\n" .
+				"{{#CommunityRequests:vote|username=TestUser2|timestamp=2023-10-01T12:00:00Z|comment=Second vote}}\n"
+		);
+		$wikiPage = $this->getServiceContainer()->getWikiPageFactory()->newFromTitle( $wish->getPage() );
+		$wikiPage->updateParserCache();
+		$parserOutput = $wikiPage->getParserOutput();
+		$this->assertStringContainsString( '<b>2 supporters</b>', $parserOutput->getRawText() );
+	}
+
 	// phpcs:enable Generic.Files.LineLength.TooLong
 
 	/**

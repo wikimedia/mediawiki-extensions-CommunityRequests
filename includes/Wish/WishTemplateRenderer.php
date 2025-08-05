@@ -224,12 +224,7 @@ class WishTemplateRenderer extends AbstractTemplateRenderer {
 			$audienceHeading . $audience .
 			$tasksHeading . $tasksHtml .
 			$detailsHeading . $detailsHtml .
-			$this->getVotingSection(
-				$this->config->isWishVotingEnabled() && in_array(
-					trim( $args[ Wish::PARAM_STATUS ] ?? '' ),
-					$this->config->getStatusWikitextValsEligibleForVoting()
-				)
-			)
+			$this->getVotingSection( $this->config->isWishVotingEnabled() )
 		);
 	}
 }

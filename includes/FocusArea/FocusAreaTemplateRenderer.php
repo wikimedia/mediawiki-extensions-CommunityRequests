@@ -167,13 +167,7 @@ class FocusAreaTemplateRenderer extends AbstractTemplateRenderer {
 		}
 
 		// Voting section.
-		$out .= $this->getVotingSection(
-			$this->config->isFocusAreaVotingEnabled() && in_array(
-				trim( $args[ FocusArea::PARAM_STATUS ] ?? '' ),
-				$this->config->getStatusWikitextValsEligibleForVoting()
-			),
-			'focus-area'
-		);
+		$out .= $this->getVotingSection( $this->config->isFocusAreaVotingEnabled() );
 
 		return Html::rawElement( 'div', [ 'class' => 'ext-communityrequests-focus-area' ], $out );
 	}

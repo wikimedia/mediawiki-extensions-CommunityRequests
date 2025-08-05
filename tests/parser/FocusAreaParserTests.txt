@@ -34,10 +34,7 @@ title=Community_Wishlist/Focus_areas/FA1
 </div><div class="mw-heading mw-heading3">Community members</div><div class="ext-communityrequests-focus-area--volunteers">
 <p><a href="/index.php?title=User:Admin&amp;action=edit&amp;redlink=1" class="new" title="User:Admin (page does not exist)">Admin</a>
 </p>
-</div><div class="mw-heading mw-heading2">Voting</div><div class="ext-communityrequests-focus-area--voting-desc">
-<p>This focus area currently has <b>0 supporters</b>. Voting for this focus area is open until it is completed. Show your support using the button below.
-</p>
-</div><div class="ext-communityrequests-voting-btn"><button class="cdx-button cdx-button--action-progressive cdx-button--weight-primary" type="button" disabled="">Support focus area</button></div></div>
+</div><div class="mw-heading mw-heading2" id="Voting">Voting</div><div class="ext-communityrequests-focus-area--voting"><p>This focus area currently has <b>0 supporters</b>. Voting for this focus area is open until it is completed. Show your support using the button below.</p><div class="ext-communityrequests-voting-btn"></div></div></div>
 !! end
 
 !! test
@@ -66,10 +63,7 @@ title=Community_Wishlist/Focus_areas/FA2
 </div><div class="mw-heading mw-heading3">Community members</div><div class="ext-communityrequests-focus-area--volunteers">
 <p><a href="/index.php?title=User:Admin&amp;action=edit&amp;redlink=1" class="new" title="User:Admin (page does not exist)">Admin</a>
 </p>
-</div><div class="mw-heading mw-heading2">Voting</div><div class="ext-communityrequests-focus-area--voting-desc">
-<p>This focus area currently has <b>0 supporters</b>. Voting for this focus area is currently closed.
-</p>
-</div></div>
+</div><div class="mw-heading mw-heading2" id="Voting">Voting</div><div class="ext-communityrequests-focus-area--voting"><p>This focus area currently has <b>0 supporters</b>. Voting for this focus area is currently closed.</p></div></div>
 !! end
 
 !! test

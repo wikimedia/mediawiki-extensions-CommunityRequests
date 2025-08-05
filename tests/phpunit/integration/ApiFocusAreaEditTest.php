@@ -90,7 +90,7 @@ class ApiFocusAreaEditTest extends ApiTestCase {
 		return [
 			'valid focus area' => [
 				[
-					'status' => 'draft',
+					'status' => 'under-review',
 					'title' => 'My test focus area',
 					'description' => '[[Test]] {{description}}',
 					'shortdescription' => 'Short [[desc]]',
@@ -102,7 +102,7 @@ class ApiFocusAreaEditTest extends ApiTestCase {
 				[
 					'focusareaedit' => [
 						'title' => 'My test focus area',
-						'status' => 'draft',
+						'status' => 'under-review',
 						'description' => '[[Test]] {{description}}',
 						'shortdescription' => 'Short [[desc]]',
 						'owners' => "* Community Tech\n* Editing",
@@ -115,7 +115,7 @@ class ApiFocusAreaEditTest extends ApiTestCase {
 			],
 			'missing title' => [
 				[
-					'status' => 'draft',
+					'status' => 'under-review',
 					'title' => '',
 					'description' => '[[Test]] {{description}}',
 					'shortdescription' => 'Short [[desc]]',
@@ -139,7 +139,7 @@ class ApiFocusAreaEditTest extends ApiTestCase {
 		$this->expectApiErrorCode( 'focusareaedit-nopermission' );
 		$this->doApiRequestWithToken( [
 			'action' => 'focusareaedit',
-			'status' => 'draft',
+			'status' => 'under-review',
 			'title' => 'My test focus area',
 			'description' => '[[Test]] {{description}}',
 			'shortdescription' => 'Short [[desc]]',

@@ -78,11 +78,11 @@ END;
 	public static function provideTestTrackingCategories(): array {
 		return [
 			'valid wish' => [
-				'{{#CommunityRequests: wish | title=Valid Wish | status=submitted | type=change | projects=commons | created=2023-10-01T12:00:00Z | proposer=$1 | baselang=en | description=A valid wish}}',
+				'{{#CommunityRequests: wish | title=Valid Wish | status=under-review | type=change | projects=commons | created=2023-10-01T12:00:00Z | proposer=$1 | baselang=en | description=A valid wish}}',
 				false,
 			],
 			'missing title' => [
-				'{{#CommunityRequests: wish | status=submitted | type=change | projects=commons | created=2023-10-01T12:00:00Z | proposer=$1 | baselang=en |Missing title}}',
+				'{{#CommunityRequests: wish | status=under-review | type=change | projects=commons | created=2023-10-01T12:00:00Z | proposer=$1 | baselang=en |Missing title}}',
 				true,
 			],
 			'unknown status' => [

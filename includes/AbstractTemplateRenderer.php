@@ -1,5 +1,6 @@
 <?php
-declare( strict_types = 1 );
+
+declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CommunityRequests;
 
@@ -92,8 +93,8 @@ abstract class AbstractTemplateRenderer {
 		$mappedArgs = [];
 		foreach ( $this->getUnmappedArgs() as $name => $value ) {
 			$name = (string)$name;
-			if ( isset( $aliases[ strtolower( $name ) ] ) ) {
-				$name = $aliases[ strtolower( $name ) ];
+			if ( isset( $aliases[strtolower( $name )] ) ) {
+				$name = $aliases[strtolower( $name )];
 			}
 			$mappedArgs[$name] = $value;
 		}
@@ -143,12 +144,17 @@ abstract class AbstractTemplateRenderer {
 			[
 				'href' => $title->getLocalURL(),
 				'class' => [
-					'cdx-button', 'cdx-button--fake-button', 'cdx-button--fake-button--enabled',
-					'cdx-button--action-default', 'cdx-button--weight-normal', 'cdx-button--enabled'
+					'cdx-button',
+					'cdx-button--fake-button',
+					'cdx-button--fake-button--enabled',
+					'cdx-button--action-default',
+					'cdx-button--weight-normal',
+					'cdx-button--enabled'
 				],
 				'role' => 'button',
 			],
-			Html::element( 'span',
+			Html::element(
+				'span',
 				[
 					'class' => [ 'cdx-button__icon', "ext-communityrequests-{$this->entityType}--$icon" ],
 					'aria-hidden' => 'true',
@@ -192,8 +198,8 @@ abstract class AbstractTemplateRenderer {
 
 		// Transclude the /Votes subpage if it exists.
 		// @phan-suppress-next-line PhanTypeMismatchArgumentNullable
-		$voteSubpagePath = Title::newFromPageReference( $this->parser->getPage() )->getPrefixedDBkey() .
-			$this->config->getVotesPageSuffix();
+		$voteSubpagePath = Title::newFromPageReference( $this->parser->getPage() )->getPrefixedDBkey()
+			. $this->config->getVotesPageSuffix();
 		$voteSubpageTitle = Title::newFromText( $voteSubpagePath );
 		if ( $voteSubpageTitle->exists() ) {
 			$out .= $this->parser->recursiveTagParse( '{{:' . $voteSubpagePath . '}}' );
@@ -247,9 +253,13 @@ abstract class AbstractTemplateRenderer {
 	 * @return string HTML
 	 */
 	protected function getMissingFieldsErrorMessage( array $missingFields ): string {
-		return Html::element( 'p', [ 'class' => 'error' ],
-			$this->msg( 'communityrequests-error-required-fields',
-				$this->parser->getTargetLanguage()->commaList( $missingFields ), count( $missingFields )
+		return Html::element(
+			'p',
+			[ 'class' => 'error' ],
+			$this->msg(
+				'communityrequests-error-required-fields',
+				$this->parser->getTargetLanguage()->commaList( $missingFields ),
+				count( $missingFields )
 			)->text()
 		);
 	}

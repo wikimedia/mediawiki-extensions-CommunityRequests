@@ -78,7 +78,7 @@ describe( 'WishlistIntake wish submission', () => {
 		);
 
 		await expect( ( await ViewWishPage.wishTitle.getText() ).trim() ).toBe( 'This is a test wish' );
-		await expect( await ViewWishPage.statusChip.getText() ).toBe( 'Submitted' );
+		await expect( await ViewWishPage.statusChip.getText() ).toBe( 'Under review' );
 		await expect( await ViewWishPage.description.getText() ).toContain(
 			'This is a test description.'
 		);

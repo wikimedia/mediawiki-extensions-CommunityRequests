@@ -389,14 +389,15 @@
 				"communityrequests-wishes-votecount-header",
 				"communityrequests-wishes-created-header",
 				"communityrequests-wishes-updated-header",
-				"communityrequests-status-draft",
-				"communityrequests-status-submitted",
-				"communityrequests-status-open",
+				"communityrequests-status-under-review",
+				"communityrequests-status-unsupported",
+				"communityrequests-status-declined",
+				"communityrequests-status-community-opportunity",
+				"communityrequests-status-long-term-opportunity",
+				"communityrequests-status-near-term-opportunity",
+				"communityrequests-status-prioritized",
 				"communityrequests-status-in-progress",
-				"communityrequests-status-delivered",
-				"communityrequests-status-blocked",
-				"communityrequests-status-archived",
-				"communityrequests-status-unknown"
+				"communityrequests-status-done"
 			]
 		}
 	},
@@ -575,36 +576,43 @@
 		"CommunityRequestsStatuses": {
 			"description": "The available statuses for wishes and focus areas.",
 			"value": {
-				"draft": {
+				"under-review": {
 					"id": 0,
-					"label": "communityrequests-status-draft",
-					"voting": false
-				},
-				"submitted": {
-					"id": 1,
-					"label": "communityrequests-status-submitted",
+					"label": "communityrequests-status-under-review",
 					"default": true
 				},
-				"open": {
+				"unsupported": {
+					"id": 1,
+					"label": "communityrequests-status-unsupported"
+				},
+				"declined": {
 					"id": 2,
-					"label": "communityrequests-status-open"
-				},
-				"in-progress": {
-					"id": 3,
-					"label": "communityrequests-status-in-progress"
-				},
-				"delivered": {
-					"id": 4,
-					"label": "communityrequests-status-delivered",
+					"label": "communityrequests-status-declined",
 					"voting": false
 				},
-				"blocked": {
-					"id": 5,
-					"label": "communityrequests-status-blocked"
+				"community-opportunity": {
+					"id": 3,
+					"label": "communityrequests-status-community-opportunity"
 				},
-				"archived": {
+				"long-term-opportunity": {
+					"id": 4,
+					"label": "communityrequests-status-long-term-opportunity"
+				},
+				"near-term-opportunity": {
+					"id": 5,
+					"label": "communityrequests-status-near-term-opportunity"
+				},
+				"prioritized": {
 					"id": 6,
-					"label": "communityrequests-status-archived",
+					"label": "communityrequests-status-prioritized"
+				},
+				"in-progress": {
+					"id": 7,
+					"label": "communityrequests-status-in-progress"
+				},
+				"done": {
+					"id": 8,
+					"label": "communityrequests-status-done",
 					"voting": false
 				}
 			}

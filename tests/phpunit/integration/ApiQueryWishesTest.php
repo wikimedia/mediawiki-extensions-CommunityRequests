@@ -216,7 +216,7 @@ class ApiQueryWishesTest extends ApiTestCase {
 	private function createTestWish( $params = [] ): array {
 		$params = [
 			'action' => 'wishedit',
-			'status' => $params[ 'status' ] ?? 'open',
+			'status' => $params[ 'status' ] ?? 'under-review',
 			'title' => $params[ 'title' ] ?? 'Test Wish',
 			'type' => $params[ 'type' ] ?? 'feature',
 			'description' => $params[ 'description' ] ?? 'This is a test wish.',

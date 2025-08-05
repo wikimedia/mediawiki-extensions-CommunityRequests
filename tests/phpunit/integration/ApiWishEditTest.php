@@ -113,7 +113,7 @@ class ApiWishEditTest extends ApiTestCase {
 		return [
 			'invalid project' => [
 				[
-					'status' => 'submitted',
+					'status' => 'under-review',
 					'focusarea' => '',
 					'title' => 'Test Wish',
 					'description' => 'This is a test wish.',
@@ -144,7 +144,7 @@ class ApiWishEditTest extends ApiTestCase {
 			],
 			'missing proposer' => [
 				[
-					'status' => 'submitted',
+					'status' => 'under-review',
 					'focusarea' => '',
 					'title' => 'Test Wish',
 					'description' => 'This is a test wish.',
@@ -161,7 +161,7 @@ class ApiWishEditTest extends ApiTestCase {
 			],
 			'all projects' => [
 				[
-					'status' => 'submitted',
+					'status' => 'under-review',
 					'focusarea' => '',
 					'title' => 'Test Wish',
 					'description' => 'This is a test wish.',
@@ -186,7 +186,7 @@ class ApiWishEditTest extends ApiTestCase {
 			],
 			'no tasks' => [
 				[
-					'status' => 'submitted',
+					'status' => 'under-review',
 					'focusarea' => '',
 					'title' => 'Test Wish',
 					'description' => 'This is a test wish.',
@@ -212,7 +212,7 @@ class ApiWishEditTest extends ApiTestCase {
 			],
 			'new wish not in site language' => [
 				[
-					'status' => 'submitted',
+					'status' => 'under-review',
 					'focusarea' => '',
 					'title' => 'Test Wish',
 					'description' => 'This is a test wish.',

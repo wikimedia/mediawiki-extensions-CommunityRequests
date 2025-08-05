@@ -138,12 +138,7 @@ class WishTemplateRenderer extends AbstractTemplateRenderer {
 		$audience = $this->getDiv( 'audience', $args[ Wish::PARAM_AUDIENCE ] ?? '' );
 
 		// Phabricator tasks.
-		$tasksHeading = Html::element(
-			'div',
-			[ 'class' => 'mw-heading mw-heading3' ],
-			$this->msg( 'communityrequests-wish-phabricator-heading' )->text()
-		);
-		$tasks = array_map( function ( $task ) {
+		$tasks = array_filter( array_map( function ( $task ) {
 			$task = trim( $task );
 			if ( $task === '' ) {
 				return null;
@@ -156,11 +151,20 @@ class WishTemplateRenderer extends AbstractTemplateRenderer {
 				new TitleValue( NS_MAIN, $task, '', 'phab' ),
 				$task
 			);
-		}, explode( Wish::TEMPLATE_ARRAY_DELIMITER, $args[ Wish::PARAM_PHAB_TASKS ] ?? '' ) );
-		$tasksHtml = $this->getDivRaw(
-			'phabtasks',
-			$language->commaList( array_filter( $tasks ) )
-		);
+		}, explode( Wish::TEMPLATE_ARRAY_DELIMITER, $args[ Wish::PARAM_PHAB_TASKS ] ?? '' ) ) );
+		$tasksHeading = '';
+		$tasksHtml = '';
+		if ( count( $tasks ) ) {
+			$tasksHeading = Html::element(
+				'div',
+				[ 'class' => 'mw-heading mw-heading3' ],
+				$this->msg( 'communityrequests-wish-phabricator-heading' )->text()
+			);
+			$tasksHtml = $this->getDivRaw(
+				'phabtasks',
+				$language->commaList( array_filter( $tasks ) )
+			);
+		}
 
 		// Other details.
 		$detailsHeading = Html::element(

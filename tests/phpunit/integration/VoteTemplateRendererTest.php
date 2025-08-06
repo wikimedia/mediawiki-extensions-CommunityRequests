@@ -1,11 +1,10 @@
 <?php
 declare( strict_types = 1 );
 
-namespace MediaWiki\Extension\CommunityRequests\Test\Integration;
+namespace MediaWiki\Extension\CommunityRequests\Tests\Integration;
 
 use MediaWiki\Extension\CommunityRequests\AbstractWishlistStore;
 use MediaWiki\Extension\CommunityRequests\FocusArea\FocusArea;
-use MediaWiki\Extension\CommunityRequests\Tests\CommunityRequestsIntegrationTestCase;
 use MediaWiki\Extension\CommunityRequests\Wish\Wish;
 use MediaWiki\Title\Title;
 

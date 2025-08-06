@@ -4,7 +4,6 @@ declare( strict_types = 1 );
 namespace MediaWiki\Extension\CommunityRequests\Tests\Integration;
 
 use InvalidArgumentException;
-use MediaWiki\Extension\CommunityRequests\Tests\CommunityRequestsIntegrationTestCase;
 use MediaWiki\Extension\CommunityRequests\Wish\Wish;
 use MediaWiki\Extension\CommunityRequests\Wish\WishStore;
 use MediaWiki\Title\Title;

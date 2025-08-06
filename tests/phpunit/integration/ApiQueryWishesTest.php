@@ -3,14 +3,14 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CommunityRequests\Tests\Integration;
 
-use MediaWiki\Tests\Api\ApiTestCase;
+use MediaWiki\Extension\CommunityRequests\Wish\WishStore;
 
 /**
  * @group CommunityRequests
  * @group Database
  * @coversDefaultClass \MediaWiki\Extension\CommunityRequests\Api\ApiQueryWishes
  */
-class ApiQueryWishesTest extends ApiTestCase {
+class ApiQueryWishesTest extends CommunityRequestsIntegrationTestCase {
 
 	/**
 	 * @covers ::execute
@@ -24,21 +24,25 @@ class ApiQueryWishesTest extends ApiTestCase {
 		$this->assertSame( [], $ret[ 'query' ][ 'communityrequests-wishes' ] );
 	}
 
+	protected function getStore(): WishStore {
+		return $this->getServiceContainer()->get( 'CommunityRequests.WishStore' );
+	}
+
 	/**
 	 * @covers ::execute
 	 * @covers \MediaWiki\Extension\CommunityRequests\AbstractWishlistStore::getAll
 	 */
 	public function testExecuteSortByCreated(): void {
 		$queryKey = 'communityrequests-wishes';
-		$this->createTestWish( [
+		$this->createTestWishWithApi( [
 			'title' => 'Test Wish 1',
 			'created' => '2023-10-01T00:00:00Z',
 		] );
-		$this->createTestWish( [
+		$this->createTestWishWithApi( [
 			'title' => 'Test Wish 2',
 			'created' => '2023-10-02T00:00:00Z',
 		] );
-		$this->createTestWish( [
+		$this->createTestWishWithApi( [
 			'title' => 'Test Wish 3',
 			'created' => '2023-10-03T00:00:00Z',
 		] );
@@ -73,15 +77,15 @@ class ApiQueryWishesTest extends ApiTestCase {
 	 */
 	public function testExecuteSortByUpdated(): void {
 		$queryKey = 'communityrequests-wishes';
-		$this->createTestWish( [
+		$this->createTestWishWithApi( [
 			'title' => 'Test Wish 1',
 			'updated' => '2023-10-01T01:00:00Z',
 		] );
-		$this->createTestWish( [
+		$this->createTestWishWithApi( [
 			'title' => 'Test Wish 2',
 			'updated' => '2023-10-02T01:00:00Z',
 		] );
-		$this->createTestWish( [
+		$this->createTestWishWithApi( [
 			'title' => 'Test Wish 3',
 			'updated' => '2023-10-03T01:00:00Z',
 		] );
@@ -116,15 +120,15 @@ class ApiQueryWishesTest extends ApiTestCase {
 	 */
 	public function testExecuteSortByTitle(): void {
 		$queryKey = 'communityrequests-wishes';
-		$this->createTestWish( [
+		$this->createTestWishWithApi( [
 			'title' => 'Test Wish A',
 			'created' => '2023-11-01T00:00:00Z',
 		] );
-		$this->createTestWish( [
+		$this->createTestWishWithApi( [
 			'title' => 'Test Wish B',
 			'created' => '2023-12-01T00:00:00Z',
 		] );
-		$this->createTestWish( [
+		$this->createTestWishWithApi( [
 			'title' => 'Test Wish C',
 			'created' => '2023-09-01T00:00:00Z',
 		] );
@@ -158,15 +162,15 @@ class ApiQueryWishesTest extends ApiTestCase {
 	 * @covers ::execute
 	 */
 	public function testExecuteWithContinue(): void {
-		$this->createTestWish( [
+		$this->createTestWishWithApi( [
 			'title' => 'Test Wish 1',
 			'created' => '2023-10-01T00:00:00Z',
 		] );
-		$this->createTestWish( [
+		$this->createTestWishWithApi( [
 			'title' => 'Test Wish 2',
 			'created' => '2023-10-02T00:00:00Z',
 		] );
-		$this->createTestWish( [
+		$this->createTestWishWithApi( [
 			'title' => 'Test Wish 3',
 			'created' => '2023-10-03T00:00:00Z',
 		] );
@@ -202,8 +206,8 @@ class ApiQueryWishesTest extends ApiTestCase {
 	 * @covers ::execute
 	 */
 	public function testExecuteWithCount(): void {
-		$this->createTestWish();
-		$this->createTestWish();
+		$this->createTestWishWithApi();
+		$this->createTestWishWithApi();
 
 		[ $ret ] = $this->doApiRequest( [
 			'action' => 'query',
@@ -213,7 +217,39 @@ class ApiQueryWishesTest extends ApiTestCase {
 		$this->assertSame( 2, $ret[ 'query' ][ 'communityrequests-wishes-metadata' ][ 'count' ] );
 	}
 
-	private function createTestWish( $params = [] ): array {
+	/**
+	 * @covers ::execute
+	 */
+	public function testExecuteWithLanguageFallbacks(): void {
+		$this->markTestSkippedIfExtensionNotLoaded( 'Translate' );
+
+		// Create a wish in French.
+		$this->insertTestWish( 'Community Wishlist/Wishes/W1', 'fr' );
+		// Add English translation.
+		$this->insertTestWish( 'Community Wishlist/Wishes/W1', 'en', '2023-10-01T00:00:00Z', false );
+
+		[ $ret ] = $this->doApiRequest( [
+			'action' => 'query',
+			'list' => 'communityrequests-wishes',
+			'crwlang' => 'fr',
+		] );
+		$wishesFr = $ret['query']['communityrequests-wishes'];
+		$this->assertCount( 1, $wishesFr );
+		$this->assertSame( 'Community Wishlist/Wishes/W1', $wishesFr[0]['crwtitle'] );
+		$this->assertSame( 'translation-fr-Community Wishlist/Wishes/W1', $wishesFr[0]['title'] );
+
+		[ $ret ] = $this->doApiRequest( [
+			'action' => 'query',
+			'list' => 'communityrequests-wishes',
+			'crwlang' => 'en',
+		] );
+		$wishesEn = $ret['query']['communityrequests-wishes'];
+		$this->assertCount( 1, $wishesEn );
+		$this->assertSame( 'Community Wishlist/Wishes/W1/en', $wishesEn[0]['crwtitle'] );
+		$this->assertSame( 'translation-en-Community Wishlist/Wishes/W1/en', $wishesEn[0]['title'] );
+	}
+
+	private function createTestWishWithApi( $params = [] ): array {
 		$params = [
 			'action' => 'wishedit',
 			'status' => $params[ 'status' ] ?? 'under-review',

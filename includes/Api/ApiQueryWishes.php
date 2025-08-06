@@ -11,11 +11,15 @@ use MediaWiki\Extension\CommunityRequests\FocusArea\FocusAreaStore;
 use MediaWiki\Extension\CommunityRequests\Wish\Wish;
 use MediaWiki\Extension\CommunityRequests\Wish\WishStore;
 use MediaWiki\Extension\CommunityRequests\WishlistConfig;
+use MediaWiki\Page\PageReferenceValue;
+use MediaWiki\Registration\ExtensionRegistry;
 use MediaWiki\Title\Title;
 use Wikimedia\ParamValidator\ParamValidator;
 use Wikimedia\ParamValidator\TypeDef\IntegerDef;
 
 class ApiQueryWishes extends ApiQueryBase {
+
+	private bool $translateInstalled;
 
 	public function __construct(
 		ApiQuery $queryModule,
@@ -23,8 +27,10 @@ class ApiQueryWishes extends ApiQueryBase {
 		private readonly WishlistConfig $config,
 		private readonly WishStore $store,
 		private readonly FocusAreaStore $focusAreaStore,
+		private readonly ExtensionRegistry $extensionRegistry,
 	) {
 		parent::__construct( $queryModule, $moduleName, 'crw' );
+		$this->translateInstalled = $this->extensionRegistry->isLoaded( 'Translate' );
 	}
 
 	/** @inheritDoc */
@@ -85,16 +91,24 @@ class ApiQueryWishes extends ApiQueryBase {
 			// Only return requested properties.
 			$wishData = array_intersect_key( $wishData, array_flip( $params[ 'prop' ] ) );
 
-			// Always include the wish ID and pagetitle.
+			// Always include the wish ID.
 			$wishData = [
 				'id' => $wish->getPage()->getId(),
 				...$wishData,
 			];
 
+			// We want to link to the translated wish page, not the base language page (T401256).
+			$pageRef = $this->translateInstalled && $wish->getLang() !== $wish->getBaseLang() ?
+				PageReferenceValue::localReference(
+					$wish->getPage()->getNamespace(),
+					$wish->getPage()->getDBkey() . '/' . $wish->getLang(),
+				) :
+				$wish->getPage();
+
 			// Add wish page title and namespace.
 			ApiQueryBase::addTitleInfo(
 				$wishData,
-				Title::newFromPageIdentity( $wish->getPage() ),
+				Title::newFromPageReference( $pageRef ),
 				$this->getModulePrefix()
 			);
 

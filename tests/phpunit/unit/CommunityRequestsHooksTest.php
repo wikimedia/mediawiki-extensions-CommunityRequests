@@ -1,7 +1,7 @@
 <?php
 declare( strict_types = 1 );
 
-namespace MediaWiki\Extension\CommunityRequests\Test\Unit;
+namespace MediaWiki\Extension\CommunityRequests\Tests\Unit;
 
 use MediaWiki\Config\HashConfig;
 use MediaWiki\Config\ServiceOptions;

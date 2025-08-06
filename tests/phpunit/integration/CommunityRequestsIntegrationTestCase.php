@@ -1,7 +1,7 @@
 <?php
 declare( strict_types = 1 );
 
-namespace MediaWiki\Extension\CommunityRequests\Tests;
+namespace MediaWiki\Extension\CommunityRequests\Tests\Integration;
 
 use MediaWiki\Extension\CommunityRequests\AbstractWishlistEntity;
 use MediaWiki\Extension\CommunityRequests\AbstractWishlistStore;
@@ -9,13 +9,13 @@ use MediaWiki\Extension\CommunityRequests\WishlistConfig;
 use MediaWiki\Extension\Translate\PageTranslation\TranslatablePageMarker;
 use MediaWiki\Extension\Translate\PageTranslation\TranslatablePageSettings;
 use MediaWiki\MainConfigNames;
+use MediaWiki\Tests\Api\ApiTestCase;
 use MediaWiki\Title\Title;
-use MediaWikiIntegrationTestCase;
 use MessageLocalizer;
 use Wikimedia\ObjectCache\EmptyBagOStuff;
 use Wikimedia\Rdbms\IDBAccessObject;
 
-abstract class CommunityRequestsIntegrationTestCase extends MediaWikiIntegrationTestCase {
+abstract class CommunityRequestsIntegrationTestCase extends ApiTestCase {
 
 	public const EDIT_MARK_FOR_TRANSLATION = true;
 	public const EDIT_AS_TRANSLATION_SUBPAGE = false;

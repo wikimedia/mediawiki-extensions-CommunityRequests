@@ -18,7 +18,7 @@ class FocusAreaIndexTemplateRenderer extends AbstractTemplateRenderer {
 		if ( !$this->config->isEnabled() ) {
 			return '';
 		}
-		$this->addTrackingCategory( self::TRACKING_CATEGORY );
+		$this->parser->addTrackingCategory( self::TRACKING_CATEGORY );
 		$outputHTML = '';
 		$args = $this->getArgs();
 
@@ -111,11 +111,6 @@ class FocusAreaIndexTemplateRenderer extends AbstractTemplateRenderer {
 
 	/** @inheritDoc */
 	protected function getArgAliases(): array {
-		return [
-			'lang' => 'lang',
-			'sort' => 'sort',
-			'dir' => 'dir',
-			'limit' => 'limit',
-		];
+		return [];
 	}
 }

@@ -20,15 +20,15 @@ class WishIndexTemplateRenderer extends AbstractTemplateRenderer {
 			return '';
 		}
 
-		$this->addTrackingCategory( self::TRACKING_CATEGORY );
+		$this->parser->addTrackingCategory( self::TRACKING_CATEGORY );
 
 		$output = $this->parser->getOutput();
 		$args = $this->getArgs();
 		$output->setJsConfigVar( 'wishesData', [
-			'lang' => htmlspecialchars( $args[ 'lang' ] ?? $output->getLanguage()->toBcp47Code() ),
-			'sort' => $args[ 'sort' ] ?? 'created',
-			'dir' => $args[ 'dir' ] ?? 'descending',
-			'limit' => (int)( $args[ 'limit' ] ?? 10 ),
+			'lang' => htmlspecialchars( trim( $args['lang'] ?? $this->parser->getTargetLanguage()->getCode() ) ),
+			'sort' => htmlspecialchars( trim( $args['sort'] ?? 'created' ) ),
+			'dir' => htmlspecialchars( trim( $args['dir'] ?? 'descending' ) ),
+			'limit' => intval( $args['limit'] ?? 10 ),
 		] );
 		$output->addModules( [ 'ext.communityrequests.wish-index' ] );
 
@@ -38,11 +38,6 @@ class WishIndexTemplateRenderer extends AbstractTemplateRenderer {
 
 	/** @inheritDoc */
 	protected function getArgAliases(): array {
-		return [
-			'lang' => 'lang',
-			'sort' => 'sort',
-			'dir' => 'dir',
-			'limit' => 'limit',
-		];
+		return [];
 	}
 }

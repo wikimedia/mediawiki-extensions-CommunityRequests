@@ -29,7 +29,7 @@ class FocusAreaTemplateRenderer extends AbstractTemplateRenderer {
 		$args = $this->getArgs();
 		$args[ 'description' ] ??= '';
 
-		$this->addTrackingCategory( self::FOCUS_AREA_TRACKING_CATEGORY );
+		$this->parser->addTrackingCategory( self::FOCUS_AREA_TRACKING_CATEGORY );
 
 		// Add tracking category for missing critical data.
 		$requiredFields = [
@@ -64,7 +64,7 @@ class FocusAreaTemplateRenderer extends AbstractTemplateRenderer {
 		$statusLabel = $this->config->getStatusLabelFromWikitextVal( $args[ FocusArea::PARAM_STATUS ] ?? '' );
 		if ( $statusLabel === null ) {
 			$statusLabel = 'communityrequests-status-unknown';
-			$this->addTrackingCategory( self::ERROR_TRACKING_CATEGORY );
+			$this->parser->addTrackingCategory( self::ERROR_TRACKING_CATEGORY );
 		}
 		$statusChipHtml = Html::rawElement(
 			'span',

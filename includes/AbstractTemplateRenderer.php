@@ -206,17 +206,6 @@ abstract class AbstractTemplateRenderer {
 	}
 
 	/**
-	 * Adds a tracking category to the parser if the page is a wish or focus area page.
-	 *
-	 * @param string $category
-	 */
-	protected function addTrackingCategory( string $category ): void {
-		if ( $this->config->isWishOrFocusAreaPage( $this->parser->getPage() ) ) {
-			$this->parser->addTrackingCategory( $category );
-		}
-	}
-
-	/**
 	 * Format a date for display in the target language.
 	 *
 	 * @param string $date The date to format, in ISO 8601 format
@@ -245,7 +234,7 @@ abstract class AbstractTemplateRenderer {
 
 		if ( $missingFields ) {
 			// Add tracking category for missing critical data.
-			$this->addTrackingCategory( self::ERROR_TRACKING_CATEGORY );
+			$this->parser->addTrackingCategory( self::ERROR_TRACKING_CATEGORY );
 		}
 
 		return $missingFields;

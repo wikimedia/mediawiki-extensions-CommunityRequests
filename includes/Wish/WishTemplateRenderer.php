@@ -25,7 +25,7 @@ class WishTemplateRenderer extends AbstractTemplateRenderer {
 			return '';
 		}
 
-		$this->addTrackingCategory( self::WISH_TRACKING_CATEGORY );
+		$this->parser->addTrackingCategory( self::WISH_TRACKING_CATEGORY );
 
 		$args = $this->getArgs();
 
@@ -66,7 +66,7 @@ class WishTemplateRenderer extends AbstractTemplateRenderer {
 		$statusLabel = $this->config->getStatusLabelFromWikitextVal( $args[ Wish::PARAM_STATUS ] ?? '' );
 		if ( $statusLabel === null ) {
 			$statusLabel = 'communityrequests-status-unknown';
-			$this->addTrackingCategory( self::ERROR_TRACKING_CATEGORY );
+			$this->parser->addTrackingCategory( self::ERROR_TRACKING_CATEGORY );
 		}
 		$statusChipHtml = Html::rawElement(
 			'span',
@@ -145,7 +145,7 @@ class WishTemplateRenderer extends AbstractTemplateRenderer {
 		$projectLabels = array_map( function ( $wikitextVal ) {
 			$label = $this->config->getProjectLabelFromWikitextVal( $wikitextVal );
 			if ( $label === null ) {
-				$this->addTrackingCategory( self::ERROR_TRACKING_CATEGORY );
+				$this->parser->addTrackingCategory( self::ERROR_TRACKING_CATEGORY );
 				return null;
 			}
 			return $this->msg( $label )->text();
@@ -176,7 +176,7 @@ class WishTemplateRenderer extends AbstractTemplateRenderer {
 				return null;
 			}
 			if ( !preg_match( '/^T\d+$/', $task ) ) {
-				$this->addTrackingCategory( self::ERROR_TRACKING_CATEGORY );
+				$this->parser->addTrackingCategory( self::ERROR_TRACKING_CATEGORY );
 				return null;
 			}
 			return $this->linkRenderer->makeLink(

@@ -127,7 +127,7 @@ END;
 	protected function insertTestFocusArea(
 		string $page,
 		string $langCode,
-		string $created,
+		string $created = '2025-07-14T20:08:17Z',
 		string $status = 'open'
 	): ?AbstractWishlistEntity {
 		$focusAreaTitle = Title::newFromText( $page );
@@ -139,7 +139,7 @@ END;
 |short_description = Short description
 |owners = tbd
 |volunteers = tbd
-|created = 2025-07-14T20:08:17Z
+|created = $created
 |baselang = $langCode
 }}
 END;

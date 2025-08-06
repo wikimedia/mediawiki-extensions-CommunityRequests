@@ -5,5 +5,11 @@
 			"Tomasdd"
 		]
 	},
-	"communityrequests-project-all-projects": "Visi projektai"
+	"communityrequests-edit-with-form": "Redaguoti naudojant formą",
+	"communityrequests-project-all-projects": "Visi projektai",
+	"communityrequests-project-show-less": "Rodyti mažiau",
+	"communityrequests-project-show-all": "Rodyti viską",
+	"communityrequests-project-other-label": "Tai kažkas kita",
+	"communityrequests-create-success": "Jūsų pageidavimas pateiktas.",
+	"communityrequests-edit-success": "Jūsų pageidavimas išsaugotas."
 }

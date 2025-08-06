@@ -13,6 +13,7 @@ use MediaWiki\Page\PageIdentityValue;
 use MediaWiki\Permissions\UltimateAuthority;
 use MediaWiki\Title\TitleValue;
 use MediaWiki\User\User;
+use Throwable;
 use Wikimedia\Rdbms\IExpression;
 use Wikimedia\Rdbms\IMaintainableDatabase;
 use Wikimedia\Rdbms\LikeValue;
@@ -148,7 +149,14 @@ class NukeWishlist extends Maintenance {
 			}
 
 			$page = PageIdentityValue::localIdentity( (int)$row->page_id, (int)$row->page_namespace, $row->page_title );
-			$entity = $store->get( $page );
+			$entity = null;
+			try {
+				$entity = $store->get( $page );
+			} catch ( Throwable $e ) {
+				$this->output(
+					"Failed to retrieve $entityName for page {$page->getDBkey()}: " . $e->getMessage() . "\n"
+				);
+			}
 
 			$this->output( "Deleting $entityName page: {$page->getDBkey()}\n" );
 

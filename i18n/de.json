@@ -208,6 +208,8 @@
 	"tag-community-wishlist": "[[Special:MyLanguage/Community Wishlist|Community-Wunschliste]]",
 	"right-manage-wishlist": "Verwalte die Community-Wunschliste ohne Einschränkungen",
 	"action-manage-wishlist": "Verwalte die Community-Wunschliste ohne Einschränkungen",
+	"right-manually-edit-wishlist": "Community-Wunschliste-Wünsche und Schwerpunktbereiche ohne Formular manuell bearbeiten",
+	"action-manually-edit-wishlist": "Community-Wunschliste-Wünsche und Schwerpunktbereiche ohne Formular manuell zu bearbeiten",
 	"group-community-wishlist-manager": "Community-Wunschlisten-Verwalter",
 	"group-community-wishlist-manager-member": "Community-Wunschlisten-Verwalter"
 }

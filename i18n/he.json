@@ -2,6 +2,7 @@
 	"@metadata": {
 		"authors": [
 			"Amire80",
+			"Neriah",
 			"YaronSh"
 		]
 	},
@@ -13,6 +14,7 @@
 	"communityrequests-form-error": "משהו השתבש. נא לנסות לשמור שוב או לבקש עזרה ב[[$1|דף השיחה]].",
 	"communityrequests-description": "נא לתאר את הבעיה שלך",
 	"communityrequests-description-description": "נא להסביר בפירוט את המשאלה או את הבעיה {{GENDER:|שאתה מתייחס|שאת מתייחסת}} אליה.",
+	"communityrequests-title-label": "כותרת",
 	"communityrequests-title-error": "נא להזין ערך עבור השדה הזה (בין $1 ל־$2 {{PLURAL:$2|תווים}}).",
 	"communityrequests-title-description": "נא לוודא שהכותרת שלך מכילה תיאור קצר של המשאלה או הבעיה.",
 	"communityrequests-description-error": "נא להזין ערך עבור השדה הזה ({{PLURAL:$1|תו אחד|$1 תווים}} או יותר).",
@@ -40,7 +42,7 @@
 	"communityrequests-audience-label": "משתמשים מושפעים עיקריים",
 	"communityrequests-audience-description": "נא לתאר על איזו קבוצת משתמשים ועל איזה מצב זה הכי ישפיע",
 	"communityrequests-audience-error": "נא להזין ערך עבור השדה הזה (בין $1 ל־$2 {{PLURAL:$2|תווים}}).",
-	"communityrequests-phabricator-label": "משימות פבריקטור (לא חובה)",
+	"communityrequests-phabricator-label": "משימות פבריקטור",
 	"communityrequests-phabricator-desc": "נא להזין מזהים או כתובות URL של משימות פבריקטור.",
 	"communityrequests-phabricator-chip-desc": "רשימה של מזהי משימות של פבריקטור.",
 	"communityrequests-create-success": "המשאלה שלך נשלחה",
@@ -77,15 +79,20 @@
 	"communityrequests-wish-created": "נוצרה: $1",
 	"communityrequests-wish-updated": "עודכנה לאחרונה: $1",
 	"communityrequests-wish-proposer": "מאת: $1",
+	"communityrequests-wish-voting": "הצבעה",
 	"communityrequests-wishes-status-header": "מצב",
 	"communityrequests-wishes-type-header": "סוג",
+	"communityrequests-wishes-title-header": "כותרת",
 	"communityrequests-wishes-projects-header": "מיזמים",
+	"communityrequests-wishes-votecount-header": "הצבעות",
+	"communityrequests-wishes-created-header": "נוצר",
 	"communityrequests-focus-area-unassigned": "לא מוקצות",
 	"communityrequests-submit-wish": "שליחת משאלה",
 	"communityrequests-form-loading": "טעינת טופס קליטה...",
 	"communityrequests-form-loading-1": "אם הטופס לא נטען, נא לוודא שהפעלת JavaScript.",
 	"communityrequests-form-loading-2": "אם {{אתה עדיין נתקל בביעות, בקש|את עדיין נתקלת בבעיות, בקשי}} עזרה בדף $1.",
 	"communityrequests-please-log-in": "נא להיכנס לחשבון כדי לבקש משאלה.",
+	"communityrequests-focus-area-description": "תיאור",
 	"communityrequests-focus-area-supported": "נתמכ על־ידי:",
 	"communityrequests-focus-area-supported-val": "{{PLURAL:$1|אדם אחד|$2 אנשים}}",
 	"communityrequests-focus-area-owners-label": "בעלים:",
@@ -104,5 +111,6 @@
 	"communityrequests-translation-switch": "לתרגם אותו אוטומטית באמצעות [https://www.mediawiki.org/wiki/Special:MyLanguage/MinT כלי תרגום המכונה של ויקימדיה].",
 	"communityrequests-translation-progress": "{{PLURAL:$2|תורגם חלק אחד|תורגמו $1 חלקים}} של הטקסט",
 	"communityrequests-translation-errors": "אירעה שגיאה:",
-	"communityrequests-disabled": "האפשרות הזאת של רשימת משאלות הקהילה אינה פעילה כעת."
+	"communityrequests-disabled": "האפשרות הזאת של רשימת משאלות הקהילה אינה פעילה כעת.",
+	"apihelp-query+communityrequests-wishes-paramvalue-sort-title": "מיון לפי כותרת"
 }

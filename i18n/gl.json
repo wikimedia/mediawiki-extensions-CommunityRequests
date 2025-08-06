@@ -207,6 +207,8 @@
 	"tag-community-wishlist": "[[Special:MyLanguage/Community Wishlist|Lista de desexos da comunidade]]",
 	"right-manage-wishlist": "Xestionar a lista de desexos da comunidade sen restricións",
 	"action-manage-wishlist": "xestionar a lista de desexos da comunidade sen restricións",
+	"right-manually-edit-wishlist": "Editar manualmente os desexos e as áreas de enfoque da lista de desexos da comunidade sen un formulario",
+	"action-manually-edit-wishlist": "editar manualmente os desexos e as áreas de enfoque da lista de desexos da comunidade sen un formulario",
 	"group-community-wishlist-manager": "Xestor da lista de desexos da comunidade",
 	"group-community-wishlist-manager-member": "Xestor da lista de desexos da comunidade"
 }

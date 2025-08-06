@@ -50,7 +50,7 @@ class VoteTemplateRenderer extends AbstractTemplateRenderer {
 	}
 
 	private function renderVoteInternal( string $username, string $timestamp, string $comment ): string {
-		$space = $this->msg( 'word-separator' )->text();
+		$space = $this->msg( 'word-separator' )->escaped();
 		$out = Html::element( 'span', [ 'class' => 'ext-communityrequests-vote-entry--support' ] ) .
 			Html::element( 'b', [], $this->msg( 'communityrequests-support-label' )->text() ) .
 			$space . $this->parser->recursiveTagParse( $comment ) .

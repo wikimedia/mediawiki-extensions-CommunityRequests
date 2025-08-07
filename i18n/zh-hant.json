@@ -206,6 +206,8 @@
 	"tag-community-wishlist": "[[Special:MyLanguage/Community Wishlist|社群願望清單]]",
 	"right-manage-wishlist": "不受限制地管理社群願望清單",
 	"action-manage-wishlist": "不受限制地管理社群願望清單",
+	"right-manually-edit-wishlist": "手動編輯社群願望清單的願望和重點領域，無需透過表單",
+	"action-manually-edit-wishlist": "手動編輯社群願望清單的願望和重點領域，而無需透過表單",
 	"group-community-wishlist-manager": "社群願望清單管理員",
 	"group-community-wishlist-manager-member": "社群願望清單管理員"
 }

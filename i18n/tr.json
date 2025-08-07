@@ -207,6 +207,8 @@
 	"tag-community-wishlist": "[[Special:MyLanguage/Community Wishlist|Topluluk Dilek Listesi]]",
 	"right-manage-wishlist": "Topluluk Dilek Listesini kısıtlama olmaksızın yönetin",
 	"action-manage-wishlist": "Topluluk Dilek Listesini kısıtlama olmaksızın yönetmeye",
+	"right-manually-edit-wishlist": "Topluluk Dilek Listesi dileklerini ve odak alanlarını bir form olmadan elle düzenleyin",
+	"action-manually-edit-wishlist": "Topluluk Dilek Listesi dileklerini ve odak alanlarını bir form olmadan elle düzenlemeye",
 	"group-community-wishlist-manager": "Topluluk Dilek Listesi yöneticisi",
 	"group-community-wishlist-manager-member": "Topluluk Dilek Listesi yöneticisi"
 }

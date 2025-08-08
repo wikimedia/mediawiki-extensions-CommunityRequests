@@ -63,20 +63,7 @@ class WishTemplateRenderer extends AbstractTemplateRenderer {
 		$language = $this->parser->getTargetLanguage();
 
 		// Title and status.
-		$statusLabel = $this->config->getStatusLabelFromWikitextVal( $args[ Wish::PARAM_STATUS ] ?? '' );
-		if ( $statusLabel === null ) {
-			$statusLabel = 'communityrequests-status-unknown';
-			$this->parser->addTrackingCategory( self::ERROR_TRACKING_CATEGORY );
-		}
-		$statusChipHtml = Html::rawElement(
-			'span',
-			[ 'class' => 'cdx-info-chip ext-communityrequests-wish--status' ],
-			Html::element(
-				'span',
-				[ 'class' => 'cdx-info-chip__text' ],
-				$this->msg( $statusLabel )->text()
-			)
-		);
+		$statusChipHtml = $this->getStatusChipHtml();
 		$titleSpan = Html::element(
 			'span',
 			[ 'class' => 'ext-communityrequests-wish--title' ],

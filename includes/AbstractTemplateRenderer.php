@@ -126,6 +126,44 @@ abstract class AbstractTemplateRenderer {
 		);
 	}
 
+	/**
+	 * Get status chip HTML for the current entity type.
+	 *
+	 * @return string HTML for status chip
+	 */
+	protected function getStatusChipHtml(): string {
+		$cssClass = 'cdx-info-chip ext-communityrequests-' . $this->entityType . '--status';
+
+		$statusValue = $this->getArgs()[ AbstractWishlistEntity::PARAM_STATUS ] ?? '';
+
+		if ( $statusValue === 'done' ) {
+			$cssClass .= ' cdx-info-chip--success';
+		}
+
+		$statusLabel = $this->config->getStatusLabelFromWikitextVal( $statusValue );
+		if ( $statusLabel === null ) {
+			$statusLabel = 'communityrequests-status-unknown';
+			$this->parser->addTrackingCategory( self::ERROR_TRACKING_CATEGORY );
+		}
+
+		return Html::rawElement(
+			'span',
+			[ 'class' => $cssClass ],
+			Html::element(
+				'span',
+				[ 'class' => 'cdx-info-chip__text' ],
+				$this->msg( $statusLabel )->text()
+			)
+		);
+	}
+
+	/**
+	 * Generate a list item element for the specified field and parameter.
+	 *
+	 * @param string $field
+	 * @param string $param
+	 * @return string HTML list item element
+	 */
 	protected function getListItem( string $field, string $param ): string {
 		return Html::rawElement(
 			'li',

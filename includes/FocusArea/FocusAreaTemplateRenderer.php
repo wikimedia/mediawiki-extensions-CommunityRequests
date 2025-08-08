@@ -61,20 +61,7 @@ class FocusAreaTemplateRenderer extends AbstractTemplateRenderer {
 		$out = '';
 
 		// Title and status.
-		$statusLabel = $this->config->getStatusLabelFromWikitextVal( $args[ FocusArea::PARAM_STATUS ] ?? '' );
-		if ( $statusLabel === null ) {
-			$statusLabel = 'communityrequests-status-unknown';
-			$this->parser->addTrackingCategory( self::ERROR_TRACKING_CATEGORY );
-		}
-		$statusChipHtml = Html::rawElement(
-			'span',
-			[ 'class' => 'cdx-info-chip ext-communityrequests-focus-area--status' ],
-			Html::element(
-				'span',
-				[ 'class' => 'cdx-info-chip__text' ],
-				$this->parser->msg( $statusLabel )->text()
-			)
-		);
+		$statusChipHtml = $this->getStatusChipHtml();
 		$titleSpan = Html::element(
 			'span',
 			[ 'class' => 'ext-communityrequests-focus-area--title' ],

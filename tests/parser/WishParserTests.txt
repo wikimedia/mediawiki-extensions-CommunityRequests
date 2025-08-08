@@ -70,6 +70,36 @@ title=Community_Wishlist/Wishes/W2
 !! end
 
 !! test
+Example wish with done status
+!! options
+title=Community_Wishlist/Wishes/W2
+!! wikitext
+{{#CommunityRequests: wish
+|title = Test Wish with Voting Disabled
+|status = done
+|type = change
+|audience = Example audience
+|projects = commons,wikisource
+|otherproject = Some other project
+|phabtasks = T123,T456
+|created = 2023-10-01T12:00:00Z
+|proposer = Admin
+|baselang = en
+|description = This is a wish without voting.}}
+!! html
+<div class="ext-communityrequests-wish"><div class="mw-heading mw-heading2 ext-communityrequests-wish--heading"><span class="ext-communityrequests-wish--title">Test Wish with Voting Disabled</span><span class="cdx-info-chip ext-communityrequests-wish--status cdx-info-chip--success"><span class="cdx-info-chip__text">Done</span></span></div><a href="/wiki/Special:WishlistIntake/Community_Wishlist/Wishes/W2" class="cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--action-default cdx-button--weight-normal cdx-button--enabled" role="button"><span class="cdx-button__icon ext-communityrequests-wish--edit" aria-hidden="true"></span>Edit wish</a>&#160;<a href="/wiki/Talk:Community_Wishlist/Wishes/W2" class="cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--action-default cdx-button--weight-normal cdx-button--enabled" role="button"><span class="cdx-button__icon ext-communityrequests-wish--speech-bubbles" aria-hidden="true"></span>Discuss this wish</a><div class="mw-heading mw-heading3">Description</div><div class="ext-communityrequests-wish--description">
+<p>This is a wish without voting.
+</p>
+</div><div class="mw-heading mw-heading3">Assigned focus area</div><div class="ext-communityrequests-wish--focus-area">
+<p>Unassigned
+</p>
+</div><div class="mw-heading mw-heading3">Type of wish</div><p class="ext-communityrequests-wish--wish-type">System change</p><div class="mw-heading mw-heading3">Related projects</div><p class="ext-communityrequests-wish--projects">Wikimedia Commons, Wikisource</p><p class="ext-communityrequests-wish--other-project">Some other project</p><div class="mw-heading mw-heading3">Affected users</div><p class="ext-communityrequests-wish--audience">Example audience</p><div class="mw-heading mw-heading3">Phabricator tasks</div><div class="ext-communityrequests-wish--phabtasks">
+<p><a href="http://example.org/wiki/phab:T123" class="extiw" title="phab:T123">T123</a>, <a href="http://example.org/wiki/phab:T456" class="extiw" title="phab:T456">T456</a>
+</p>
+</div><div class="mw-heading mw-heading3">Other details</div><ul><li class="ext-communityrequests-wish--created">Created: 12:00, 1 October 2023</li><li class="ext-communityrequests-wish--updated">Last updated: 00:02, 1 January 1970</li><li class="ext-communityrequests-wish--proposer">Author: <a href="/index.php?title=User:Admin&amp;action=edit&amp;redlink=1" class="new" title="User:Admin (page does not exist)">Admin</a> (<a href="/index.php?title=User_talk:Admin&amp;action=edit&amp;redlink=1" class="new" title="User talk:Admin (page does not exist)">talk</a>)</li></ul><div class="mw-heading mw-heading2" id="Voting">Voting</div><div class="ext-communityrequests-wish--voting"><p>This wish currently has <b>0 supporters</b>. Supporting this wish is currently disabled.</p></div></div>
+!! end
+
+!! test
 Missing proposer and created timestamp
 !! options
 title=Community_Wishlist/Wishes/W3

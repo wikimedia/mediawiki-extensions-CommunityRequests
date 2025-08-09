@@ -41,6 +41,8 @@
 		></wish-type-section>
 		<tags-section
 			v-model:tags="wish.tags"
+			:optional-label="true"
+			:show-description="true"
 		></tags-section>
 		<audience-section
 			v-model:audience="wish.audience"

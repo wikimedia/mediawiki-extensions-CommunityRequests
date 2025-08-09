@@ -16,7 +16,9 @@
 		@update:sort="onUpdateSort"
 		@load-more="onLoadMore"
 	>
-		<template #empty-state>{{ $i18n( 'communityrequests-wishes-table-empty' ).text() }}</template>
+		<template #empty-state>
+			{{ $i18n( 'communityrequests-wishes-table-empty' ).text() }}
+		</template>
 		<template #item-title="{ item, row }">
 			<a
 				:href="mw.Title.makeTitle( row.crwns, row.crwtitle ).getUrl()"
@@ -80,7 +82,7 @@
 </template>
 
 <script>
-const { defineComponent, computed, nextTick, ref, ComputedRef, Ref } = require( 'vue' );
+const { defineComponent, computed, nextTick, ref, ComputedRef, Ref, watch } = require( 'vue' );
 const { CdxInfoChip, CdxMessage, CdxTable } = require( '../codex.js' );
 const { formatDate } = require( 'mediawiki.DateFormatter' );
 const { CommunityRequestsStatuses, CommunityRequestsWishPagePrefix } = require( '../common/config.json' );
@@ -451,6 +453,11 @@ module.exports = exports = defineComponent( {
 		}
 
 		fetchWishes();
+
+		watch( () => [ props.focusareas, props.statuses, props.tags ], () => {
+			// Ensure the wishlist is updated when the tags prop changes.
+			fetchWishes();
+		}, { deep: true } );
 
 		return {
 			columns,

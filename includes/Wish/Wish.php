@@ -25,6 +25,7 @@ class Wish extends AbstractWishlistEntity {
 	public const PARAM_PHAB_TASKS = 'phabtasks';
 	public const PARAM_PROPOSER = 'proposer';
 	public const PARAM_CREATED = 'created';
+	public const PARAM_SHOW_FILTERS = 'showfilters';
 	public const PARAMS = [
 		self::PARAM_STATUS,
 		self::PARAM_TYPE,

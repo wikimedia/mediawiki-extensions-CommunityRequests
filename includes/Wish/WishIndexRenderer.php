@@ -25,6 +25,8 @@ class WishIndexRenderer extends AbstractRenderer {
 		}
 
 		$output = $this->parser->getOutput();
+
+		$showFilters = boolval( $this->getArgs()[ Wish::PARAM_SHOW_FILTERS ] ?? false );
 		$output->setJsConfigVar( 'wishesData', [
 			'lang' => $this->getSafeArg( 'lang', $this->parser->getTargetLanguage()->getCode() ),
 			'sort' => $this->getSafeArg( 'sort', 'created' ),
@@ -50,7 +52,18 @@ class WishIndexRenderer extends AbstractRenderer {
 					'FA' . (int)$matches[1] :
 					null
 			),
+			Wish::PARAM_SHOW_FILTERS => $showFilters
 		] );
+
+		if ( $showFilters ) {
+			$output->setJsConfigVar( 'focusareasData',
+				[
+					WishStore::FOCUS_AREA_UNASSIGNED =>
+						$this->msg( 'communityrequests-focus-area-unassigned' )->escaped()
+				] + $this->focusAreaStore->getFormattedArray( $this->parser->getTargetLanguage()->getCode() )
+			);
+		}
+
 		$output->addModules( [ 'ext.communityrequests.wish-index' ] );
 
 		// TODO: generate full initial HTML with PHP

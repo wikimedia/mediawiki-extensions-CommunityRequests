@@ -87,6 +87,30 @@ class FocusAreaStore extends AbstractWishlistStore {
 		return $out;
 	}
 
+	/**
+	 * Get a focus areas Array where the key is the entity ID.
+	 *
+	 * @param string $lang
+	 * @return string[]
+	 */
+	public function getFormattedArray( string $lang ) {
+		// Fetch focus area titles and wikitext values.
+		/** @var FocusArea[] $focusAreas */
+		$focusAreas = $this->getAll(
+			$lang,
+			self::titleField(),
+			self::SORT_ASC,
+			self::MAX_FOCUS_AREAS
+		);
+		$focusAreasData = [];
+		foreach ( $focusAreas as $focusArea ) {
+			$wikitextVal = $this->config->getEntityWikitextVal( $focusArea->getPage() );
+			$focusAreasData[(string)$wikitextVal] = $focusArea->getTitle();
+		}
+
+		return $focusAreasData;
+	}
+
 	// Saving focus areas.
 
 	/** @inheritDoc */

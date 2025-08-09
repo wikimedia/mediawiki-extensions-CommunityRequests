@@ -31,6 +31,7 @@ abstract class AbstractWishlistStore {
 
 	public const TITLE_MAX_CHARS = 100;
 	public const TITLE_MAX_BYTES = 255;
+	public const MAX_FOCUS_AREAS = 1000;
 	public const SORT_ASC = SelectQueryBuilder::SORT_ASC;
 	public const SORT_DESC = SelectQueryBuilder::SORT_DESC;
 	public const FILTER_NONE = [];

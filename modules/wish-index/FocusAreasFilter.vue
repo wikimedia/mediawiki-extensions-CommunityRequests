@@ -1,8 +1,6 @@
 <template>
 	<cdx-field
-		class="ext-communityrequests-intake__tags"
 		:is-fieldset="true"
-		:optional="optionalLabel"
 	>
 		<cdx-multiselect-lookup
 			v-model:input-chips="chips"
@@ -11,7 +9,7 @@
 			:keep-input-on-selection="true"
 			:menu-items="menuItems"
 			:menu-config="menuConfig"
-			:aria-label="$i18n( 'communityrequests-tags-label' ).text()"
+			:aria-label="$i18n( 'communityrequests-wishes-filters-focus-areas-label' ).text()"
 			@input="onInput"
 			@update:selected="onSelection"
 			@blur="validateInstantly"
@@ -19,53 +17,54 @@
 		>
 		</cdx-multiselect-lookup>
 		<template #label>
-			{{ $i18n( 'communityrequests-tags-label' ).text() }}
-		</template>
-		<template v-if="showDescription" #description>
-			{{ $i18n( 'communityrequests-tags-description' ).text() }}
+			{{ $i18n( 'communityrequests-wishes-filters-focus-areas-label' ).text() }}
 		</template>
 		<input
-			:value="tags"
+			:value="focusareas"
 			type="hidden"
-			name="tags"
+			name="focusareas"
 		>
 	</cdx-field>
 </template>
 
 <script>
-const { defineComponent, nextTick, ref, watch } = require( 'vue' );
+const { defineComponent, nextTick, ref, watch, Ref } = require( 'vue' );
 const { CdxField, CdxMultiselectLookup } = require( '../codex.js' );
-const { CommunityRequestsTags } = require( '../common/config.json' );
-const Util = require( '../common/Util.js' );
-const tagsList = [];
-let label = '';
-for ( const value in CommunityRequestsTags.navigation ) {
-	label = Util.getTagLabel( value );
-	if ( label ) {
-		tagsList.push( { value, label } );
-	}
-}
 
 module.exports = exports = defineComponent( {
-	name: 'TagsSection',
+	name: 'FocusAreasFilter',
 	components: {
 		CdxField,
 		CdxMultiselectLookup
 	},
 	props: {
-		optionalLabel: { type: Boolean, default: false },
-		showDescription: { type: Boolean, default: false },
-		tags: { type: Array, default: () => [] },
+		focusareas: { type: Array, default: () => [] },
 		clearField: { type: Boolean, default: false }
 	},
 	emits: [
-		'update:tags'
+		'update:focusareas'
 	],
 	setup( props, { emit } ) {
-		const chips = ref( tagsList.filter( ( tag ) => props.tags.includes( tag.value ) ) );
-		const selection = ref( props.tags );
+		const focusareasData = mw.config.get( 'focusareasData' );
+		const wikitextVals = Object.keys( focusareasData );
+		/**
+		 * Menu items for the MultiSelect component.
+		 *
+		 * @type {Ref<Array>}
+		 */
+		const focusareasList = wikitextVals.map(
+			( id ) => ( {
+				label: focusareasData[ id ],
+				value: id
+			} )
+		);
+
+		const chips = ref( focusareasList.filter(
+			( focusarea ) => props.focusareas.includes( focusarea.value )
+		) );
+		const selection = ref( props.focusareas );
 		const inputValue = ref( '' );
-		const menuItems = ref( tagsList );
+		const menuItems = ref( focusareasList );
 		const menuConfig = {
 			visibleItemLimit: 5
 		};
@@ -83,15 +82,15 @@ module.exports = exports = defineComponent( {
 		}
 
 		/**
-		 * Emit the updated tags.
+		 * Emit the updated focusareas.
 		 */
 		function onSelection() {
 			if ( selection.value !== null ) {
-				emit( 'update:tags', selection.value );
+				emit( 'update:focusareas', selection.value );
 			}
-			// Reset the search value and menu. T404767.
+			// Reset the search value and menu.
 			inputValue.value = '';
-			menuItems.value = tagsList;
+			menuItems.value = focusareasList;
 		}
 
 		/**
@@ -102,7 +101,7 @@ module.exports = exports = defineComponent( {
 		function onInput( value ) {
 			// Reset menu items if the input was cleared.
 			if ( !value ) {
-				menuItems.value = tagsList;
+				menuItems.value = focusareasList;
 				return;
 			}
 
@@ -112,8 +111,8 @@ module.exports = exports = defineComponent( {
 			}
 
 			// Update menuItems to tags that match the input value.
-			menuItems.value = tagsList.filter(
-				( tag ) => tag.label.toLowerCase().includes( value.toLowerCase() )
+			menuItems.value = focusareasList.filter(
+				( focusarea ) => focusarea.label.toLowerCase().includes( value.toLowerCase() )
 			);
 		}
 
@@ -121,7 +120,7 @@ module.exports = exports = defineComponent( {
 			if ( newValue ) {
 				selection.value = [];
 				inputValue.value = '';
-				emit( 'update:tags', selection.value );
+				emit( 'update:focusareas', selection.value );
 			}
 		} );
 

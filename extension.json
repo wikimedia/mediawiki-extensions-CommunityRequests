@@ -382,20 +382,29 @@
 		"ext.communityrequests.wish-index": {
 			"class": "MediaWiki\\ResourceLoader\\CodexModule",
 			"codexComponents": [
+				"CdxAccordion",
+				"CdxButton",
+				"CdxField",
 				"CdxInfoChip",
 				"CdxMessage",
+				"CdxMultiselectLookup",
 				"CdxTable"
 			],
 			"packageFiles": [
 				"wish-index/init.js",
+				"wish-index/FocusAreasFilter.vue",
+				"wish-index/StatusesFilter.vue",
+				"wish-index/WishIndex.vue",
+				"wish-index/WishIndexFilters.vue",
 				"wish-index/WishIndexTable.vue",
 				"common/Util.js",
+				"intake/TagsSection.vue",
 				{
 					"name": "common/config.json",
 					"config": [
 						"CommunityRequestsStatuses",
-						"CommunityRequestsWishPagePrefix",
-						"CommunityRequestsTags"
+						"CommunityRequestsTags",
+						"CommunityRequestsWishPagePrefix"
 					]
 				}
 			],
@@ -407,15 +416,19 @@
 				"mediawiki.DateFormatter"
 			],
 			"messages": [
+				"communityrequests-wishes-filters-clear",
+				"communityrequests-wishes-filters-header",
+				"communityrequests-wishes-filters-focus-areas-label",
+				"communityrequests-wishes-filters-statuses-label",
 				"communityrequests-wishes-table-caption",
 				"communityrequests-wishes-table-empty",
 				"communityrequests-wishes-status-header",
+				"communityrequests-wishes-tags-header",
 				"communityrequests-wishes-type-header",
 				"communityrequests-wishes-in-focusarea-text",
 				"communityrequests-wishes-title-header",
 				"communityrequests-wishes-title-and-focusarea-header",
 				"communityrequests-focus-area-unassigned",
-				"communityrequests-wishes-tags-header",
 				"communityrequests-wishes-votecount-header",
 				"communityrequests-wishes-created-header",
 				"communityrequests-wishes-updated-header",
@@ -429,7 +442,9 @@
 				"communityrequests-status-in-progress",
 				"communityrequests-status-done",
 				"communityrequests-tags-more",
-				"quotation-marks"
+				"quotation-marks",
+				"communityrequests-tags-label",
+				"communityrequests-update-label"
 			],
 			"factory": "\\MediaWiki\\Extension\\CommunityRequests\\Wish\\SpecialWishlistIntake::addResourceLoaderMessages"
 		}

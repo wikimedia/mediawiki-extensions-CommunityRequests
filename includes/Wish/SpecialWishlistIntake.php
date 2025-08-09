@@ -4,7 +4,6 @@ declare( strict_types = 1 );
 namespace MediaWiki\Extension\CommunityRequests\Wish;
 
 use MediaWiki\Extension\CommunityRequests\AbstractWishlistSpecialPage;
-use MediaWiki\Extension\CommunityRequests\FocusArea\FocusArea;
 use MediaWiki\Extension\CommunityRequests\FocusArea\FocusAreaStore;
 use MediaWiki\Extension\CommunityRequests\WishlistConfig;
 use MediaWiki\Message\Message;
@@ -50,21 +49,9 @@ class SpecialWishlistIntake extends AbstractWishlistSpecialPage {
 
 		$this->getOutput()->setSubtitle( $this->msg( 'communityrequests-form-subtitle' ) );
 
-		// Fetch focus area titles and wikitext values.
-		/** @var FocusArea[] $focusAreas */
-		$focusAreas = $this->focusAreaStore->getAll(
+		$focusAreaData = $this->focusAreaStore->getFormattedArray(
 			$this->getLanguage()->getCode(),
-			FocusAreaStore::titleField(),
-			FocusAreaStore::SORT_ASC,
-			// TODO: Scalability/performance; 1000 should last us, forever… but we should not hardcode this.
-			//   Maybe replace with an PrefixIndex query?
-			1000
 		);
-		$focusAreaData = [];
-		foreach ( $focusAreas as $focusArea ) {
-			$wikitextVal = $this->config->getEntityWikitextVal( $focusArea->getPage() );
-			$focusAreaData[(string)$wikitextVal] = $focusArea->getTitle();
-		}
 
 		// Add to JS config.
 		$this->getOutput()->addJsConfigVars( [

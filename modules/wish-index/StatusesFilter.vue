@@ -1,8 +1,6 @@
 <template>
 	<cdx-field
-		class="ext-communityrequests-intake__tags"
 		:is-fieldset="true"
-		:optional="optionalLabel"
 	>
 		<cdx-multiselect-lookup
 			v-model:input-chips="chips"
@@ -11,7 +9,7 @@
 			:keep-input-on-selection="true"
 			:menu-items="menuItems"
 			:menu-config="menuConfig"
-			:aria-label="$i18n( 'communityrequests-tags-label' ).text()"
+			:aria-label="$i18n( 'communityrequests-wishes-filters-statuses-label' ).text()"
 			@input="onInput"
 			@update:selected="onSelection"
 			@blur="validateInstantly"
@@ -19,15 +17,12 @@
 		>
 		</cdx-multiselect-lookup>
 		<template #label>
-			{{ $i18n( 'communityrequests-tags-label' ).text() }}
-		</template>
-		<template v-if="showDescription" #description>
-			{{ $i18n( 'communityrequests-tags-description' ).text() }}
+			{{ $i18n( 'communityrequests-wishes-filters-statuses-label' ).text() }}
 		</template>
 		<input
-			:value="tags"
+			:value="statuses"
 			type="hidden"
-			name="tags"
+			name="statuses"
 		>
 	</cdx-field>
 </template>
@@ -35,37 +30,42 @@
 <script>
 const { defineComponent, nextTick, ref, watch } = require( 'vue' );
 const { CdxField, CdxMultiselectLookup } = require( '../codex.js' );
-const { CommunityRequestsTags } = require( '../common/config.json' );
-const Util = require( '../common/Util.js' );
-const tagsList = [];
-let label = '';
-for ( const value in CommunityRequestsTags.navigation ) {
-	label = Util.getTagLabel( value );
-	if ( label ) {
-		tagsList.push( { value, label } );
-	}
-}
+const { CommunityRequestsStatuses } = require( '../common/config.json' );
+const statusesList = Object.keys( CommunityRequestsStatuses )
+	.map( ( status ) => ( {
+		// Messages are configurable. By default, they include:
+		// * communityrequests-status-draft
+		// * communityrequests-status-submitted
+		// * communityrequests-status-open
+		// * communityrequests-status-in-progress
+		// * communityrequests-status-delivered
+		// * communityrequests-status-blocked
+		// * communityrequests-status-archived
+		label: mw.msg( CommunityRequestsStatuses[ status ].label ),
+		value: status
+	} ) );
 
 module.exports = exports = defineComponent( {
-	name: 'TagsSection',
+	name: 'StatusesFilter',
 	components: {
 		CdxField,
 		CdxMultiselectLookup
 	},
 	props: {
-		optionalLabel: { type: Boolean, default: false },
-		showDescription: { type: Boolean, default: false },
-		tags: { type: Array, default: () => [] },
+		statuses: { type: Array, default: () => [] },
 		clearField: { type: Boolean, default: false }
 	},
 	emits: [
-		'update:tags'
+		'update:statuses'
 	],
 	setup( props, { emit } ) {
-		const chips = ref( tagsList.filter( ( tag ) => props.tags.includes( tag.value ) ) );
-		const selection = ref( props.tags );
+		const chips = ref( statusesList.filter(
+			( status ) => props.statuses.includes( status.value )
+		) );
+		const selection = ref( props.statuses );
 		const inputValue = ref( '' );
-		const menuItems = ref( tagsList );
+		const menuItems = ref( statusesList );
+
 		const menuConfig = {
 			visibleItemLimit: 5
 		};
@@ -83,15 +83,15 @@ module.exports = exports = defineComponent( {
 		}
 
 		/**
-		 * Emit the updated tags.
+		 * Emit the updated statuses.
 		 */
 		function onSelection() {
 			if ( selection.value !== null ) {
-				emit( 'update:tags', selection.value );
+				emit( 'update:statuses', selection.value );
 			}
-			// Reset the search value and menu. T404767.
+			// Reset the search value and menu.
 			inputValue.value = '';
-			menuItems.value = tagsList;
+			menuItems.value = statusesList;
 		}
 
 		/**
@@ -102,7 +102,7 @@ module.exports = exports = defineComponent( {
 		function onInput( value ) {
 			// Reset menu items if the input was cleared.
 			if ( !value ) {
-				menuItems.value = tagsList;
+				menuItems.value = statusesList;
 				return;
 			}
 
@@ -111,9 +111,9 @@ module.exports = exports = defineComponent( {
 				return;
 			}
 
-			// Update menuItems to tags that match the input value.
-			menuItems.value = tagsList.filter(
-				( tag ) => tag.label.toLowerCase().includes( value.toLowerCase() )
+			// Update menuItems to statues that match the input value.
+			menuItems.value = statusesList.filter(
+				( status ) => status.label.toLowerCase().includes( value.toLowerCase() )
 			);
 		}
 
@@ -121,7 +121,7 @@ module.exports = exports = defineComponent( {
 			if ( newValue ) {
 				selection.value = [];
 				inputValue.value = '';
-				emit( 'update:tags', selection.value );
+				emit( 'update:statuses', selection.value );
 			}
 		} );
 

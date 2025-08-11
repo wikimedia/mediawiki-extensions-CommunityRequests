@@ -7,6 +7,7 @@
 			"Goombiis",
 			"JLTRY",
 			"Mahabarata",
+			"McDutchie",
 			"SleaY",
 			"WillyM"
 		]
@@ -78,6 +79,14 @@
 	"communityrequests-status-blocked": "Bloqué",
 	"communityrequests-status-archived": "Archivé",
 	"communityrequests-status-unknown": "Inconnu",
+	"communityrequests-status-under-review": "Under review",
+	"communityrequests-status-unsupported": "Unsupported",
+	"communityrequests-status-declined": "Declined",
+	"communityrequests-status-community-opportunity": "Community opportunity",
+	"communityrequests-status-long-term-opportunity": "Long-term opportunity",
+	"communityrequests-status-near-term-opportunity": "Near-term opportunity",
+	"communityrequests-status-prioritized": "Prioritized",
+	"communityrequests-status-done": "Done",
 	"communityrequests-edit-wish": "Modifier le souhait",
 	"communityrequests-discuss-wish": "Discutez de ce souhait",
 	"communityrequests-wish-description-heading": "Description",
@@ -210,5 +219,6 @@
 	"right-manage-wishlist": "Gérer la liste de souhaits de la communauté sans restrictions",
 	"action-manage-wishlist": "gérer la liste de souhaits de la communauté sans restrictions",
 	"group-community-wishlist-manager": "Gestionnaires de la liste de souhaits de la communauté",
-	"group-community-wishlist-manager-member": "Gestionnaire de la liste de souhaits de la communauté"
+	"group-community-wishlist-manager-member": "Gestionnaire de la liste de souhaits de la communauté",
+	"communityrequests-cant-manually-edit": "Editing of this Community Wishlist page must be done using [[$1|the intake form]]."
 }

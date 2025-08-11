@@ -20,6 +20,8 @@
 	"communityrequests-status-in-progress": "تھیندا پئے",
 	"communityrequests-status-blocked": "بلاک تھی ڳیا",
 	"communityrequests-status-unknown": "نامعلوم",
+	"communityrequests-status-declined": "انکار تھی ڳیا",
+	"communityrequests-status-done": "تھی ڳیا",
 	"communityrequests-wish-description-heading": "تفصیل",
 	"communityrequests-wish-other-details-heading": "ٻیاں تفیلاں",
 	"communityrequests-wish-created": "بݨ ڳیا",
@@ -36,5 +38,6 @@
 	"communityrequests-focus-area-th-wish": "خواہش",
 	"communityrequests-focus-area-owners": "مالک",
 	"communityrequests-focus-area-volunteers": "برادری دے ارکان",
-	"communityrequests-translation-errors": "ہک خرابی تھی ڳئی:"
+	"communityrequests-translation-errors": "ہک خرابی تھی ڳئی:",
+	"communityrequests-support-label": "رہنمائی"
 }

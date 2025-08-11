@@ -4,6 +4,7 @@
 			"Aoum",
 			"Cookai1205",
 			"GuoPC",
+			"Peterxy12",
 			"人间百态",
 			"沈澄心"
 		]
@@ -63,6 +64,14 @@
 	"communityrequests-status-blocked": "窒碍难行",
 	"communityrequests-status-archived": "已存档",
 	"communityrequests-status-unknown": "未知",
+	"communityrequests-status-under-review": "正在审核",
+	"communityrequests-status-unsupported": "不受支持",
+	"communityrequests-status-declined": "已拒绝",
+	"communityrequests-status-community-opportunity": "社群機會",
+	"communityrequests-status-long-term-opportunity": "长期机会",
+	"communityrequests-status-near-term-opportunity": "短期機會",
+	"communityrequests-status-prioritized": "优先",
+	"communityrequests-status-done": "完成",
 	"communityrequests-edit-wish": "编辑愿望",
 	"communityrequests-discuss-wish": "讨论本愿望",
 	"communityrequests-wish-description-heading": "描述",
@@ -78,7 +87,7 @@
 	"communityrequests-wish-voting": "表决",
 	"communityrequests-wish-voting-info": "此愿望目前有''' $1 {{PLURAL:$2|支持者|supporters}}'''。",
 	"communityrequests-wish-voting-info-open": "这项愿望的投票将持续开放，直至完成为止。请使用下方按钮表达您的支持。",
-	"communityrequests-wish-voting-info-closed": "针对此愿望的投票目前已结束。",
+	"communityrequests-wish-voting-info-closed": "目前无法支持此愿望。",
 	"communityrequests-wish-voting-not-logged-in": "请登录以支持此愿望",
 	"communityrequests-wish-voters-heading": "支持这一愿望的人",
 	"communityrequests-wish-no-votes": "尚未有支持者。",
@@ -119,7 +128,7 @@
 	"communityrequests-focus-area-voting": "投票",
 	"communityrequests-focus-area-voting-info": "该重点领域目前有''' $1 {{PLURAL:$2|支持者|supporters}}'''。",
 	"communityrequests-focus-area-voting-info-open": "此重点领域的投票将持续开放，直至投票结束。请使用下方按钮表达您的支持。",
-	"communityrequests-focus-area-voting-info-closed": "该重点领域的投票目前已结束。",
+	"communityrequests-focus-area-voting-info-closed": "目前无法支持此重点领域。",
 	"communityrequests-focus-area-voting-not-logged-in": "请登录以支持该重点领域",
 	"communityrequests-focus-area-voters-heading": "本领域的支持者",
 	"communityrequests-focus-area-no-votes": "尚未有支持者。",
@@ -133,5 +142,6 @@
 	"right-manage-wishlist": "不受限制地管理社区愿望清单",
 	"action-manage-wishlist": "不受限制地管理社区愿望清单",
 	"group-community-wishlist-manager": "社区愿望清单管理器",
-	"group-community-wishlist-manager-member": "社区愿望清单管理器"
+	"group-community-wishlist-manager-member": "社区愿望清单管理器",
+	"communityrequests-cant-manually-edit": "此社群願望清單頁面必須用[[$1|登記表]]來編輯。"
 }

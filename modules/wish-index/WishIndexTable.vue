@@ -9,7 +9,8 @@
 		:paginate="true"
 		:server-pagination="true"
 		:total-rows="totalWishCount"
-		:pagination-size-default="10"
+		:pagination-size-default="limit"
+		:pagination-size-options="paginationSizeOptions"
 		:pending="pending"
 		@update:sort="onUpdateSort"
 		@load-more="onLoadMore"
@@ -64,6 +65,10 @@ const api = new mw.Api();
 /**
  * @typedef {Object} TableSort
  * @see https://doc.wikimedia.org/codex/latest/components/types-and-constants.html#tablesort
+ */
+/**
+ * @typedef {Object} TablePaginationSizeOption
+ * @see https://doc.wikimedia.org/codex/latest/components/types-and-constants.html#tablepaginationsizeoption
  */
 
 /**
@@ -171,6 +176,7 @@ module.exports = exports = defineComponent( {
 		/**
 		 * The direction of the pagination.
 		 *
+		 * @todo Currently is always 'forward' (T401027)
 		 * @type {Ref<'forward'|'backward'>}
 		 */
 		const direction = ref( 'forward' );
@@ -215,6 +221,14 @@ module.exports = exports = defineComponent( {
 
 		// Non-reactive local variables
 
+		/**
+		 * FIXME: Codex seems to do the math wrong when changing pagination size
+		 * with the `serverPagination` prop set. For now, we only allow the
+		 * given `limit` and hide the pagination size selector.
+		 *
+		 * @type {TablePaginationSizeOption[]}
+		 */
+		const paginationSizeOptions = [ { value: props.limit } ];
 		const previousContinueValues = [];
 		let currentContinueValue = null;
 		let nextContinueValue = null;
@@ -280,27 +294,12 @@ module.exports = exports = defineComponent( {
 		 * @param {number} rows
 		 */
 		function onLoadMore( offset, rows ) {
-			// FIXME: 'first' and 'last' events don't work (reported to Codex team),
-			// so we infer based on the offset and total count. This causes some weirdness,
-			// i.e. if the user navigates to the last page and there are fewer rows than page size,
-			// it will treat it the same as clicking "last" and you get a full page of data
-			// with the direction flipped.
 			if ( offset === 0 ) {
 				currentOffset = 0;
 				previousContinueValues.length = 0;
 				currentContinueValue = null;
 				nextContinueValue = null;
-				direction.value = 'forward';
-			} else if ( offset + rows >= totalWishCount.value ) {
-				currentOffset = 0;
-				previousContinueValues.length = 0;
-				currentContinueValue = null;
-				nextContinueValue = null;
-				direction.value = 'backward';
-			} else if (
-				( offset > currentOffset && direction.value === 'forward' ) ||
-				( offset < currentOffset && direction.value === 'backward' )
-			) {
+			} else if ( offset > currentOffset ) {
 				previousContinueValues.push( currentContinueValue );
 				currentContinueValue = nextContinueValue;
 			} else {
@@ -339,6 +338,7 @@ module.exports = exports = defineComponent( {
 			error,
 			pending,
 			totalWishCount,
+			paginationSizeOptions,
 			mw,
 			formatDate,
 			onUpdateSort,
@@ -348,3 +348,14 @@ module.exports = exports = defineComponent( {
 	}
 } );
 </script>
+
+<style lang="less">
+// Hide the pagination size selector; Codex does not handle it correctly with server pagination.
+.cdx-table-pager__start {
+	display: none;
+}
+// Hide the "last page" button until T401027 is resolved.
+.cdx-button.cdx-table-pager__button-last {
+	display: none;
+}
+</style>

@@ -368,12 +368,7 @@
 			],
 			"packageFiles": [
 				"wish-index/init.js",
-				"wish-index/WishIndexTable.vue",
-				{
-					"name": "common/config.json",
-					"config": [
-					]
-				}
+				"wish-index/WishIndexTable.vue"
 			],
 			"dependencies": [
 				"vue",
@@ -382,6 +377,7 @@
 				"mediawiki.DateFormatter"
 			],
 			"messages": [
+				"communityrequests-wishes-table-caption",
 				"communityrequests-wishes-status-header",
 				"communityrequests-wishes-type-header",
 				"communityrequests-wishes-title-header",

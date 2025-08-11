@@ -39,7 +39,7 @@ title=Community_Wishlist/Wishes/W1
 |baselang = en
 |description = This is a [[test]] {{wish}}.}}
 !! html
-<div class="ext-communityrequests-wish"><div class="mw-heading mw-heading2 ext-communityrequests-wish--heading"><span class="ext-communityrequests-wish--title">Test Wish</span><span class="cdx-info-chip ext-communityrequests-wish--status"><span class="cdx-info-chip__text">Prioritized</span></span></div><div class="mw-heading mw-heading3">Description</div><div class="ext-communityrequests-wish--description">
+<div class="ext-communityrequests-wish"><div class="mw-heading mw-heading2 ext-communityrequests-wish--heading"><span class="ext-communityrequests-wish--title">Test Wish</span><span class="cdx-info-chip ext-communityrequests-wish--status cdx-info-chip--notice"><span class="cdx-info-chip__text">Prioritized</span></span></div><div class="mw-heading mw-heading3">Description</div><div class="ext-communityrequests-wish--description">
 <p>This is a <a href="/wiki/Test" title="Test">test</a> This is a test template for parser tests.
 </p>
 </div><div class="mw-heading mw-heading3">Assigned focus area</div><div class="ext-communityrequests-wish--focus-area">
@@ -72,7 +72,7 @@ title=Community_Wishlist/Wishes/W2
 |baselang = en
 |description = This is a wish without voting.}}
 !! html
-<div class="ext-communityrequests-wish"><div class="mw-heading mw-heading2 ext-communityrequests-wish--heading"><span class="ext-communityrequests-wish--title">Test Wish with Voting Disabled</span><span class="cdx-info-chip ext-communityrequests-wish--status"><span class="cdx-info-chip__text">Declined</span></span></div><div class="mw-heading mw-heading3">Description</div><div class="ext-communityrequests-wish--description">
+<div class="ext-communityrequests-wish"><div class="mw-heading mw-heading2 ext-communityrequests-wish--heading"><span class="ext-communityrequests-wish--title">Test Wish with Voting Disabled</span><span class="cdx-info-chip ext-communityrequests-wish--status cdx-info-chip--notice"><span class="cdx-info-chip__text">Declined</span></span></div><div class="mw-heading mw-heading3">Description</div><div class="ext-communityrequests-wish--description">
 <p>This is a wish without voting.
 </p>
 </div><div class="mw-heading mw-heading3">Assigned focus area</div><div class="ext-communityrequests-wish--focus-area">
@@ -157,7 +157,7 @@ language=he
 |baselang = he
 |description = זהו [[test]] {{wish}}}}
 !! html
-<div class="ext-communityrequests-wish"><div class="mw-heading mw-heading2 ext-communityrequests-wish--heading"><span class="ext-communityrequests-wish--title">משאלת מבחן (Hebrew)</span><span class="cdx-info-chip ext-communityrequests-wish--status"><span class="cdx-info-chip__text">מצב לא ידוע</span></span></div><div class="mw-heading mw-heading3">תיאור</div><div class="ext-communityrequests-wish--description">
+<div class="ext-communityrequests-wish"><div class="mw-heading mw-heading2 ext-communityrequests-wish--heading"><span class="ext-communityrequests-wish--title">משאלת מבחן (Hebrew)</span><span class="cdx-info-chip ext-communityrequests-wish--status cdx-info-chip--notice"><span class="cdx-info-chip__text">מצב לא ידוע</span></span></div><div class="mw-heading mw-heading3">תיאור</div><div class="ext-communityrequests-wish--description">
 <p>זהו <a href="/wiki/Test" title="Test">test</a> This is a test template for parser tests
 </p>
 </div><div class="mw-heading mw-heading3">תחום מיקוד מוקצה</div><div class="ext-communityrequests-wish--focus-area">

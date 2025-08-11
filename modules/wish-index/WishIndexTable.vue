@@ -34,7 +34,7 @@
 			<span v-else>{{ $i18n( 'communityrequests-focus-area-unassigned' ).text() }}</span>
 		</template>
 		<template #item-status="{ item }">
-			<cdx-info-chip>{{ wishStatus( item ) }}</cdx-info-chip>
+			<cdx-info-chip :status="wishStatusStyle( item )">{{ wishStatus( item ) }}</cdx-info-chip>
 		</template>
 		<template #item-created="{ item }">
 			{{ formatDate( Date.parse( item ) ) }}
@@ -56,6 +56,7 @@
 const { defineComponent, computed, ref, ComputedRef, Ref } = require( 'vue' );
 const { CdxInfoChip, CdxMessage, CdxTable } = require( '../codex.js' );
 const { formatDate } = require( 'mediawiki.DateFormatter' );
+const { CommunityRequestsStatuses } = require( '../common/config.json' );
 const api = new mw.Api();
 
 /**
@@ -311,7 +312,7 @@ module.exports = exports = defineComponent( {
 		}
 
 		/**
-		 * Get the localized status of a wish.
+		 * Get the localized status label for a wish.
 		 *
 		 * @param {string} status
 		 * @return {string}
@@ -329,6 +330,18 @@ module.exports = exports = defineComponent( {
 			return mw.message( `communityrequests-status-${ status }` ).text();
 		}
 
+		/**
+		 * Get the style for the status chip.
+		 *
+		 * @param {string} status
+		 * @return {string}
+		 */
+		function wishStatusStyle( status ) {
+			return CommunityRequestsStatuses[ status ] ?
+				CommunityRequestsStatuses[ status ].style :
+				'notice';
+		}
+
 		fetchWishes();
 
 		return {
@@ -343,7 +356,8 @@ module.exports = exports = defineComponent( {
 			formatDate,
 			onUpdateSort,
 			onLoadMore,
-			wishStatus
+			wishStatus,
+			wishStatusStyle
 		};
 	}
 } );

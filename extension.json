@@ -367,7 +367,13 @@
 			],
 			"packageFiles": [
 				"wish-index/init.js",
-				"wish-index/WishIndexTable.vue"
+				"wish-index/WishIndexTable.vue",
+				{
+					"name": "common/config.json",
+					"config": [
+						"CommunityRequestsStatuses"
+					]
+				}
 			],
 			"dependencies": [
 				"vue",
@@ -576,7 +582,8 @@
 				"done": {
 					"id": 8,
 					"label": "communityrequests-status-done",
-					"voting": false
+					"voting": false,
+					"style": "success"
 				}
 			}
 		},

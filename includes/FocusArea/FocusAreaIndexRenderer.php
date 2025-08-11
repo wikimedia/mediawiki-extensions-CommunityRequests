@@ -33,28 +33,9 @@ class FocusAreaIndexRenderer extends AbstractRenderer {
 		);
 
 		foreach ( $focusAreas as $focusArea ) {
-			$status = $this->config->getStatuses()[
-				$this->config->getStatusWikitextValFromId( $focusArea->getStatus() )
-			];
-
 			$statusChipHtml = Html::openElement( 'div' ) .
-				Html::rawElement(
-					'span',
-					[ 'class' => 'cdx-info-chip' ],
-					Html::element(
-						'span',
-						[ 'class' => 'cdx-info-chip__text' ],
-						// Messages are configurable. By default they include:
-						// * communityrequests-status-draft,
-						// * communityrequests-status-submitted,
-						// * communityrequests-status-open,
-						// * communityrequests-status-in-progress,
-						// * communityrequests-status-delivered,
-						// * communityrequests-status-blocked,
-						// * communityrequests-status-archived,
-						// * communityrequests-status-unknown
-						$this->msg( $status['label'] )->text()
-					)
+				$this->getStatusChipHtml(
+					$this->config->getStatusWikitextValFromId( $focusArea->getStatus() )
 				) .
 				Html::closeElement( 'div' );
 

@@ -117,22 +117,22 @@ abstract class AbstractRenderer {
 	/**
 	 * Get status chip HTML for the current entity type.
 	 *
+	 * @param ?string $wikitextVal If not provided, will use the status from $this->getArgs().
 	 * @return string HTML for status chip
 	 */
-	protected function getStatusChipHtml(): string {
-		$cssClass = 'cdx-info-chip ext-communityrequests-' . $this->entityType . '--status';
+	protected function getStatusChipHtml( ?string $wikitextVal = null ): string {
+		$cssClass = "cdx-info-chip ext-communityrequests-{$this->entityType}--status";
 
-		$statusValue = $this->getArgs()[AbstractWishlistEntity::PARAM_STATUS] ?? '';
+		$wikitextVal ??= $this->getArgs()[ AbstractWishlistEntity::PARAM_STATUS ] ?? '';
 
-		if ( $statusValue === 'done' ) {
-			$cssClass .= ' cdx-info-chip--success';
-		}
-
-		$statusLabel = $this->config->getStatusLabelFromWikitextVal( $statusValue );
+		$statusLabel = $this->config->getStatusLabelFromWikitextVal( $wikitextVal );
 		if ( $statusLabel === null ) {
 			$statusLabel = 'communityrequests-status-unknown';
 			$this->parser->addTrackingCategory( self::ERROR_TRACKING_CATEGORY );
 		}
+
+		$style = $this->config->getStatuses()[$wikitextVal]['style'] ?? 'notice';
+		$cssClass .= " cdx-info-chip--$style";
 
 		return Html::rawElement(
 			'span',

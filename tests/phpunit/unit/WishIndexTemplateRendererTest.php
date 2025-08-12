@@ -100,7 +100,21 @@ class WishIndexTemplateRendererTest extends AbstractWishlistEntityTest {
 					'dir' => 'descending',
 					'limit' => 20,
 				]
-			]
+			],
+			[
+				[
+					'lang' => '',
+					'sort' => '',
+					'dir' => '',
+					'limit' => '',
+				],
+				[
+					'lang' => 'en',
+					'sort' => 'created',
+					'dir' => 'descending',
+					'limit' => 10,
+				]
+			],
 		];
 	}
 }

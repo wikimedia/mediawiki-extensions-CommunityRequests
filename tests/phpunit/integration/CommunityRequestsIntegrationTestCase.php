@@ -89,9 +89,9 @@ END;
 		$ret = $this->insertPage( $insertTitle, $wikitext );
 		$this->runDeferredUpdates();
 
-		$this->assertGreaterThan( 0, $ret[ 'id' ] );
+		$this->assertGreaterThan( 0, $ret['id'] );
 		/** @var Title $newTitle */
-		$newTitle = $ret[ 'title' ];
+		$newTitle = $ret['title'];
 
 		if ( $shouldMarkForTranslation ) {
 			/** @var TranslatablePageMarker $transPageMarker */
@@ -147,7 +147,7 @@ END;
 		$ret = $this->insertPage( $focusAreaTitle, $wikitext );
 		$this->runDeferredUpdates();
 
-		$this->assertGreaterThan( 0, $ret[ 'id' ] );
+		$this->assertGreaterThan( 0, $ret['id'] );
 
 		return $this->getStore()->get( $focusAreaTitle, $langCode );
 	}

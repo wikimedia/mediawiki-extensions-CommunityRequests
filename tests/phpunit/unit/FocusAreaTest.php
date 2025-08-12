@@ -50,7 +50,7 @@ class FocusAreaTest extends AbstractWishlistEntityTest {
 | status = submitted
 | title = Improve search functionality
 | description = Make [[search]] results more relevant and faster.
-| short_description = [[Search]] improvements
+| shortdescription = [[Search]] improvements
 | owners = [[Community Tech]]
 | volunteers = [[User:TheDJ|TheDJ]], [[User:Novem Linguae|Novem Linguae]]
 | created = 2023-10-01T12:00:00Z
@@ -110,13 +110,13 @@ END
 			$wikitextParams,
 			$this->config
 		);
-		$this->assertSame( $expected[ 'title' ], $focusArea->getTitle() );
-		$this->assertSame( $expected[ 'status' ], $focusArea->getStatus() );
-		$this->assertSame( $expected[ 'description' ], $focusArea->getDescription() );
-		$this->assertSame( $expected[ 'shortDescription' ], $focusArea->getShortDescription() );
-		$this->assertSame( $expected[ 'owners' ], $focusArea->getOwners() );
-		$this->assertSame( $expected[ 'volunteers' ], $focusArea->getVolunteers() );
-		$this->assertSame( $expected[ 'created' ], $focusArea->getCreated() );
+		$this->assertSame( $expected['title'], $focusArea->getTitle() );
+		$this->assertSame( $expected['status'], $focusArea->getStatus() );
+		$this->assertSame( $expected['description'], $focusArea->getDescription() );
+		$this->assertSame( $expected['shortDescription'], $focusArea->getShortDescription() );
+		$this->assertSame( $expected['owners'], $focusArea->getOwners() );
+		$this->assertSame( $expected['volunteers'], $focusArea->getVolunteers() );
+		$this->assertSame( $expected['created'], $focusArea->getCreated() );
 	}
 
 	public static function provideNewFromWikitextParams(): array {

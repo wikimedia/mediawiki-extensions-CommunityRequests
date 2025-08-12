@@ -9,9 +9,9 @@ use MediaWiki\Title\Title;
 /**
  * @group CommunityRequests
  * @group Database
- * @covers \MediaWiki\Extension\CommunityRequests\FocusArea\FocusAreaTemplateRenderer
+ * @covers \MediaWiki\Extension\CommunityRequests\FocusArea\FocusAreaRenderer
  */
-class FocusAreaTemplateRendererTest extends CommunityRequestsIntegrationTestCase {
+class FocusAreaRendererTest extends CommunityRequestsIntegrationTestCase {
 
 	protected function getStore(): FocusAreaStore {
 		return $this->getServiceContainer()->get( 'CommunityRequests.FocusAreaStore' );
@@ -38,8 +38,8 @@ END;
 			$this->getTestUser()->getUser()
 		);
 
-		$focusArea = $this->getStore()->get( $ret[ 'title' ] );
-		$this->assertSame( $ret[ 'id' ], $focusArea->getPage()->getId() );
+		$focusArea = $this->getStore()->get( $ret['title'] );
+		$this->assertSame( $ret['id'], $focusArea->getPage()->getId() );
 		$this->assertSame( $this->config->getStatusIdFromWikitextVal( 'open' ), $focusArea->getStatus() );
 		$this->assertSame( 'Test Focus Area', $focusArea->getTitle() );
 		$this->assertSame( 'A brief description of the focus area.', $focusArea->getShortDescription() );

@@ -36,7 +36,7 @@ class ApiWishEditTest extends ApiTestCase {
 		// Ensure we have a user to work with.
 		User::createNew( 'TestUser' );
 
-		$params[ 'action' ] = 'wishedit';
+		$params['action'] = 'wishedit';
 
 		// If $expected is a string, we expect an error message to match it.
 		if ( is_string( $expected ) ) {
@@ -54,56 +54,56 @@ class ApiWishEditTest extends ApiTestCase {
 		}
 
 		// Assert warnings if applicable.
-		if ( isset( $expected[ 'warnings' ] ) ) {
-			$this->assertArrayEquals( $expected[ 'warnings' ], $ret[ 'warnings' ] );
+		if ( isset( $expected['warnings'] ) ) {
+			$this->assertArrayEquals( $expected['warnings' ], $ret['warnings' ] );
 		} else {
 			$this->assertArrayNotHasKey( 'warnings', $ret );
 		}
 
 		// To reduce duplication in the test cases, expect back what was given in $params.
-		$expected[ 'wishedit' ] ??= [];
-		$expected[ 'wishedit' ] += $params;
+		$expected['wishedit'] ??= [];
+		$expected['wishedit'] += $params;
 
 		// Main body of the response.
-		$this->assertSame( $expected[ 'wishedit' ][ 'title' ], $ret[ 'wishedit' ][ 'title' ] );
-		$this->assertSame( $expected[ 'wishedit' ][ 'status' ], $ret[ 'wishedit' ][ 'status' ] );
-		$this->assertSame( $expected[ 'wishedit' ][ 'type' ], $ret[ 'wishedit' ][ 'type' ] );
-		$this->assertSame( $expected[ 'wishedit' ][ 'focusarea' ], $ret[ 'wishedit' ][ 'focusarea' ] );
-		$this->assertSame( $expected[ 'wishedit' ][ 'description' ], $ret[ 'wishedit' ][ 'description' ] );
-		$this->assertSame( $expected[ 'wishedit' ][ 'projects' ], $ret[ 'wishedit' ][ 'projects' ] );
-		$this->assertSame( $expected[ 'wishedit' ][ 'otherproject' ], $ret[ 'wishedit' ][ 'otherproject' ] );
-		$this->assertSame( $expected[ 'wishedit' ][ 'audience' ], $ret[ 'wishedit' ][ 'audience' ] );
-		$this->assertSame( $expected[ 'wishedit' ][ 'phabtasks' ], $ret[ 'wishedit' ][ 'phabtasks' ] );
-		$this->assertSame( $expected[ 'wishedit' ][ 'proposer' ], $ret[ 'wishedit' ][ 'proposer' ] );
-		$this->assertSame( $expected[ 'wishedit' ][ 'created' ], $ret[ 'wishedit' ][ 'created' ] );
+		$this->assertSame( $expected['wishedit']['title'], $ret['wishedit']['title'] );
+		$this->assertSame( $expected['wishedit']['status'], $ret['wishedit']['status'] );
+		$this->assertSame( $expected['wishedit']['type'], $ret['wishedit']['type'] );
+		$this->assertSame( $expected['wishedit']['focusarea'], $ret['wishedit']['focusarea'] );
+		$this->assertSame( $expected['wishedit']['description'], $ret['wishedit']['description'] );
+		$this->assertSame( $expected['wishedit']['projects'], $ret['wishedit']['projects'] );
+		$this->assertSame( $expected['wishedit']['otherproject'], $ret['wishedit']['otherproject'] );
+		$this->assertSame( $expected['wishedit']['audience'], $ret['wishedit']['audience'] );
+		$this->assertSame( $expected['wishedit']['phabtasks'], $ret['wishedit']['phabtasks'] );
+		$this->assertSame( $expected['wishedit']['proposer'], $ret['wishedit']['proposer'] );
+		$this->assertSame( $expected['wishedit']['created'], $ret['wishedit']['created'] );
 		$this->assertTrue(
-			preg_match( '/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z/', $ret[ 'wishedit' ][ 'updated' ] ) === 1
+			preg_match( '/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z/', $ret['wishedit']['updated'] ) === 1
 		);
-		$this->assertSame( $expected[ 'wishedit' ][ 'baselang' ], $ret[ 'wishedit' ][ 'baselang' ] );
+		$this->assertSame( $expected['wishedit']['baselang'], $ret['wishedit']['baselang'] );
 
 		// Fetch the revision.
 		$revLookup = $this->getServiceContainer()->getRevisionLookup();
-		$revTitle = Title::newFromText( $ret[ 'wishedit' ][ 'wish' ] );
+		$revTitle = Title::newFromText( $ret['wishedit']['wish'] );
 		$revision = $revLookup->getRevisionByTitle( $revTitle->toPageIdentity() );
 		$this->assertSame( $expectedSummary, $revision->getComment()->text );
 
 		// If the baselang is not the site language, we expect translations to be stored in that language.
-		if ( $ret[ 'wishedit' ][ 'baselang' ] !== $this->getConfVar( MainConfigNames::LanguageCode ) ) {
+		if ( $ret['wishedit']['baselang'] !== $this->getConfVar( MainConfigNames::LanguageCode ) ) {
 			$this->runDeferredUpdates();
 			$translationLang = $this->getDb()->newSelectQueryBuilder()
 				->select( 'crt_lang' )
 				->from( 'communityrequests_wishes_translations' )
 				->where( [ 'crt_wish' => $revTitle->getId() ] )
 				->fetchField();
-			$this->assertSame( $expected[ 'wishedit' ][ 'baselang' ], $translationLang );
+			$this->assertSame( $expected['wishedit']['baselang'], $translationLang );
 		}
 
 		// Make an additional edit and assert the edit summary, if applicable.
 		if ( $expectedUpdateSummary !== null ) {
-			$params[ 'wish' ] = $ret[ 'wishedit' ][ 'wish' ];
-			$params[ 'description' ] = 'Updated description';
+			$params['wish'] = $ret['wishedit']['wish'];
+			$params['description'] = 'Updated description';
 			[ $ret ] = $this->doApiRequestWithToken( $params );
-			$this->assertSame( 'Updated description', $ret[ 'wishedit' ][ 'description' ] );
+			$this->assertSame( 'Updated description', $ret['wishedit']['description'] );
 			$revision = $revLookup->getNextRevision( $revision );
 			$this->assertSame( $expectedUpdateSummary, $revision->getComment()->text );
 		}

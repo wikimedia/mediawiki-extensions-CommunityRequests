@@ -3,12 +3,12 @@ declare( strict_types = 1 );
 
 namespace MediaWiki\Extension\CommunityRequests;
 
-use MediaWiki\Extension\CommunityRequests\FocusArea\FocusAreaIndexTemplateRenderer;
+use MediaWiki\Extension\CommunityRequests\FocusArea\FocusAreaIndexRenderer;
+use MediaWiki\Extension\CommunityRequests\FocusArea\FocusAreaRenderer;
 use MediaWiki\Extension\CommunityRequests\FocusArea\FocusAreaStore;
-use MediaWiki\Extension\CommunityRequests\FocusArea\FocusAreaTemplateRenderer;
-use MediaWiki\Extension\CommunityRequests\Vote\VoteTemplateRenderer;
-use MediaWiki\Extension\CommunityRequests\Wish\WishIndexTemplateRenderer;
-use MediaWiki\Extension\CommunityRequests\Wish\WishTemplateRenderer;
+use MediaWiki\Extension\CommunityRequests\Vote\VoteRenderer;
+use MediaWiki\Extension\CommunityRequests\Wish\WishIndexRenderer;
+use MediaWiki\Extension\CommunityRequests\Wish\WishRenderer;
 use MediaWiki\Html\Html;
 use MediaWiki\Linker\LinkRenderer;
 use MediaWiki\Parser\Parser;
@@ -18,7 +18,7 @@ use Psr\Log\LoggerInterface;
 /**
  * Functions for generating HTML on the wish and focus area pages
  */
-class TemplateRendererFactory {
+class RendererFactory {
 
 	public function __construct(
 		private readonly WishlistConfig $config,
@@ -45,7 +45,7 @@ class TemplateRendererFactory {
 				'isHTML' => true
 			];
 		} else {
-			$this->addTrackingCategory( $parser, AbstractTemplateRenderer::ERROR_TRACKING_CATEGORY );
+			$this->addTrackingCategory( $parser, AbstractRenderer::ERROR_TRACKING_CATEGORY );
 			return Html::element(
 				'span',
 				[ 'class' => 'error' ],
@@ -55,20 +55,20 @@ class TemplateRendererFactory {
 	}
 
 	/**
-	 * Get a template renderer, or null if there is no such entity type
+	 * Get a parser function renderer, or null if there is no such renderer type
 	 *
 	 * @param Parser $parser
 	 * @param PPFrame $frame
 	 * @param array $args
-	 * @param string $entityType
-	 * @return AbstractTemplateRenderer|null
+	 * @param string $rendererType
+	 * @return AbstractRenderer|null
 	 */
 	protected function maybeGetInstance(
 		Parser $parser,
 		PPFrame $frame,
 		array $args,
-		string $entityType
-	): ?AbstractTemplateRenderer {
+		string $rendererType
+	): ?AbstractRenderer {
 		$constructorArgs = [
 			$this->config,
 			$this->focusAreaStore,
@@ -78,12 +78,12 @@ class TemplateRendererFactory {
 			$frame,
 			$args
 		];
-		return match ( $entityType ) {
-			'wish' => new WishTemplateRenderer( ...$constructorArgs ),
-			'wish-index' => new WishIndexTemplateRenderer( ...$constructorArgs ),
-			'focus-area' => new FocusAreaTemplateRenderer( ...$constructorArgs ),
-			'focus-area-index' => new FocusAreaIndexTemplateRenderer( ...$constructorArgs ),
-			'vote' => new VoteTemplateRenderer( ...$constructorArgs ),
+		return match ( $rendererType ) {
+			'wish' => new WishRenderer( ...$constructorArgs ),
+			'wish-index' => new WishIndexRenderer( ...$constructorArgs ),
+			'focus-area' => new FocusAreaRenderer( ...$constructorArgs ),
+			'focus-area-index' => new FocusAreaIndexRenderer( ...$constructorArgs ),
+			'vote' => new VoteRenderer( ...$constructorArgs ),
 			default => null,
 		};
 	}

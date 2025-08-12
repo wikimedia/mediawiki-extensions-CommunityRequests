@@ -25,7 +25,7 @@ class ApiFocusAreaEdit extends ApiWishlistEntityBase {
 		$focusArea = FocusArea::newFromWikitextParams(
 			$this->title,
 			// Edits are only made to the base language page.
-			$this->params[ 'baselang' ],
+			$this->params['baselang'],
 			$this->params,
 			$this->config
 		);
@@ -33,28 +33,28 @@ class ApiFocusAreaEdit extends ApiWishlistEntityBase {
 		$saveStatus = $this->save(
 			$focusArea->toWikitext( $this->config ),
 			$this->getEditSummary( $focusArea ),
-			$this->params[ 'token' ],
-			$this->params[ 'baserevid' ] ?? null
+			$this->params['token'],
+			$this->params['baserevid'] ?? null
 		);
 
 		if ( $saveStatus->isOK() === false ) {
 			$this->dieWithError( $saveStatus->getMessages() );
 		}
 
-		$resultData = $saveStatus->getValue()->getResultData()[ 'edit' ];
+		$resultData = $saveStatus->getValue()->getResultData()['edit'];
 		// ApiEditPage adds the 'title' key to the result data, but we want to use 'focusarea'.
-		$resultData[ 'focusarea' ] = $resultData[ 'title' ];
-		unset( $resultData[ 'title' ] );
+		$resultData['focusarea'] = $resultData['title'];
+		unset( $resultData['title'] );
 		// 'newtimestamp' should be 'updated'.
-		$resultData[ 'updated' ] = $resultData[ 'newtimestamp' ];
-		unset( $resultData[ 'newtimestamp' ] );
+		$resultData['updated'] = $resultData['newtimestamp'];
+		unset( $resultData['newtimestamp'] );
 		$ret = $resultData + $focusArea->toArray( $this->config, true );
 		$this->getResult()->addValue( null, $this->getModuleName(), $ret );
 	}
 
 	/** @inheritDoc */
 	public function getEditSummary( AbstractWishlistEntity $entity ): string {
-		return trim( $this->params[ 'focusarea' ] ?? '' ) ? $this->editSummarySave() : $this->editSummaryPublish();
+		return trim( $this->params['focusarea'] ?? '' ) ? $this->editSummarySave() : $this->editSummaryPublish();
 	}
 
 	/** @inheritDoc */
@@ -73,10 +73,10 @@ class ApiFocusAreaEdit extends ApiWishlistEntityBase {
 
 	/** @inheritDoc */
 	protected function getWishlistEntityTitle(): Title {
-		if ( isset( $this->params[ 'focusarea' ] ) ) {
+		if ( isset( $this->params['focusarea'] ) ) {
 			return Title::newFromText(
 				$this->config->getFocusAreaPagePrefix() .
-				$this->store->getIdFromInput( $this->params[ 'focusarea' ] )
+				$this->store->getIdFromInput( $this->params['focusarea'] )
 			);
 		} else {
 			// If this is a new focus area, generate a new ID and page title.

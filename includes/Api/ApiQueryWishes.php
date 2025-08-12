@@ -37,7 +37,7 @@ class ApiQueryWishes extends ApiQueryBase {
 	public function execute() {
 		$params = $this->extractRequestParams();
 
-		$order = match ( $params[ 'sort' ] ) {
+		$order = match ( $params['sort'] ) {
 			'created' => WishStore::createdField(),
 			'updated' => WishStore::updatedField(),
 			'title' => WishStore::titleField(),
@@ -46,15 +46,15 @@ class ApiQueryWishes extends ApiQueryBase {
 		};
 
 		$offsetArg = null;
-		if ( isset( $params[ 'continue' ] ) ) {
-			$offsetArg = $this->parseContinueParamOrDie( $params[ 'continue' ], [ 'string', 'timestamp', 'int' ] );
+		if ( isset( $params['continue'] ) ) {
+			$offsetArg = $this->parseContinueParamOrDie( $params['continue'], [ 'string', 'timestamp', 'int' ] );
 		}
 
 		$wishes = $this->store->getAll(
-			$params[ 'lang' ] ?? $this->getLanguage()->getCode(),
+			$params['lang'] ?? $this->getLanguage()->getCode(),
 			$order,
-			$params[ 'dir' ] === 'ascending' ? WishStore::SORT_ASC : WishStore::SORT_DESC,
-			$params[ 'limit' ] + 1,
+			$params['dir'] === 'ascending' ? WishStore::SORT_ASC : WishStore::SORT_DESC,
+			$params['limit'] + 1,
 			$offsetArg
 		);
 
@@ -62,8 +62,8 @@ class ApiQueryWishes extends ApiQueryBase {
 
 		foreach ( $wishes as $index => /** @var Wish $wish */ $wish ) {
 			// Do this here to avoid unnecessarily fetching wikitext for wishes that won't be returned.
-			if ( $index === $params[ 'limit' ] ) {
-				$timestamp = match ( $params[ 'sort' ] ) {
+			if ( $index === $params['limit'] ) {
+				$timestamp = match ( $params['sort'] ) {
 					'updated' => wfTimestamp( TS_MW, $wish->getUpdated() ),
 					default => wfTimestamp( TS_MW, $wish->getCreated() ),
 				};
@@ -78,18 +78,18 @@ class ApiQueryWishes extends ApiQueryBase {
 			$wishData = $wish->toArray( $this->config, true );
 
 			// Fill in fields that only live in wikitext, if requested.
-			$wikitextFields = array_intersect( $params[ 'prop' ], $this->store->getWikitextFields() );
+			$wikitextFields = array_intersect( $params['prop'], $this->store->getWikitextFields() );
 			if ( count( $wikitextFields ) ) {
 				$wikitextData = $this->store->getDataFromWikitext( $wish->getPage()->getId() );
 
 				// TODO: strip out <translate> tags and translation markers.
 				foreach ( $wikitextFields as $field ) {
-					$wishData[ $field ] = $wikitextData[ $field ] ?? '';
+					$wishData[$field] = $wikitextData[$field] ?? '';
 				}
 			}
 
 			// Only return requested properties.
-			$wishData = array_intersect_key( $wishData, array_flip( $params[ 'prop' ] ) );
+			$wishData = array_intersect_key( $wishData, array_flip( $params['prop'] ) );
 
 			// Always include the wish ID.
 			$wishData = [
@@ -122,7 +122,7 @@ class ApiQueryWishes extends ApiQueryBase {
 				// TODO: Include this in the WishStore::getAll() query.
 				$focusArea = $this->focusAreaStore->get(
 					$wish->getFocusArea(),
-						$params[ 'lang' ] ?? $this->getLanguage()->getCode()
+						$params['lang'] ?? $this->getLanguage()->getCode()
 				);
 				$wishData['focusareatitle'] = $focusArea->getTitle();
 			}
@@ -131,7 +131,7 @@ class ApiQueryWishes extends ApiQueryBase {
 		}
 
 		// If the count parameter is set, include the total number of wishes.
-		if ( $params[ 'count' ] ) {
+		if ( $params['count'] ) {
 			$result->addValue(
 				[ 'query', "{$this->getModuleName()}-metadata" ],
 				'count',

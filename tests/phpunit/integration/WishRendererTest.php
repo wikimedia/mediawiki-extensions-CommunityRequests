@@ -9,9 +9,9 @@ use MediaWiki\Title\Title;
 /**
  * @group CommunityRequests
  * @group Database
- * @coversDefaultClass \MediaWiki\Extension\CommunityRequests\Wish\WishTemplateRenderer
+ * @coversDefaultClass \MediaWiki\Extension\CommunityRequests\Wish\WishRenderer
  */
-class WishTemplateRendererTest extends CommunityRequestsIntegrationTestCase {
+class WishRendererTest extends CommunityRequestsIntegrationTestCase {
 
 	protected function getStore(): WishStore {
 		return $this->getServiceContainer()->get( 'CommunityRequests.WishStore' );
@@ -42,8 +42,8 @@ END;
 			$user
 		);
 
-		$wish = $this->getStore()->get( $ret[ 'title' ] );
-		$this->assertSame( $ret[ 'id' ], $wish->getPage()->getId() );
+		$wish = $this->getStore()->get( $ret['title'] );
+		$this->assertSame( $ret['id'], $wish->getPage()->getId() );
 		$this->assertSame( 'Test Wish', $wish->getTitle() );
 		$this->assertSame( $this->config->getStatusIdFromWikitextVal( 'open' ), $wish->getStatus() );
 		$this->assertSame( $this->config->getWishTypeIdFromWikitextVal( 'change' ), $wish->getType() );
@@ -64,7 +64,7 @@ END;
 			NS_MAIN,
 			$this->getTestUser()->getUser()
 		);
-		$categories = array_keys( $ret[ 'title' ]->getParentCategories() );
+		$categories = array_keys( $ret['title']->getParentCategories() );
 		$this->assertContains( 'Category:Community_Wishlist/Wishes', $categories );
 		if ( $shouldBeInCategory ) {
 			$this->assertContains( 'Category:Pages_with_Community_Wishlist_errors', $categories );
@@ -94,7 +94,7 @@ END;
 	/**
 	 * @covers ::render
 	 * @covers \MediaWiki\Extension\CommunityRequests\HookHandler\CommunityRequestsHooks::onParserAfterTidy
-	 * @covers \MediaWiki\Extension\CommunityRequests\AbstractTemplateRenderer::getVotingSection
+	 * @covers \MediaWiki\Extension\CommunityRequests\AbstractRenderer::getVotingSection
 	 */
 	public function testVoteCountRendering() {
 		$wish = $this->insertTestWish( 'Community Wishlist/Wishes/W123', 'en' );

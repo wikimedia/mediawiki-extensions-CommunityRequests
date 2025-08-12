@@ -3,10 +3,10 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CommunityRequests\Wish;
 
-use MediaWiki\Extension\CommunityRequests\AbstractTemplateRenderer;
+use MediaWiki\Extension\CommunityRequests\AbstractRenderer;
 use MediaWiki\Html\Html;
 
-class WishIndexTemplateRenderer extends AbstractTemplateRenderer {
+class WishIndexRenderer extends AbstractRenderer {
 
 	protected string $entityType = 'wish-index';
 
@@ -48,10 +48,5 @@ class WishIndexTemplateRenderer extends AbstractTemplateRenderer {
 		return htmlspecialchars(
 			trim( $this->getArgs()[$key] ?? $default ) ?: $default
 		);
-	}
-
-	/** @inheritDoc */
-	protected function getArgAliases(): array {
-		return [];
 	}
 }

@@ -220,7 +220,6 @@
 						"CommunityRequestsFocusAreaPagePrefix",
 						"CommunityRequestsProjects",
 						"CommunityRequestsStatuses",
-						"CommunityRequestsWishTemplate",
 						"CommunityRequestsWishTypes"
 					]
 				}
@@ -420,25 +419,6 @@
 			"description": "The title of the page to use as the index for all wishes.",
 			"value": "Community Wishlist/Wishes"
 		},
-		"CommunityRequestsWishTemplate": {
-			"description": "Configuration for the template that displays and stores wishes.",
-			"value": {
-				"params": {
-					"status": "status",
-					"type": "type",
-					"title": "title",
-					"focusarea": "focusarea",
-					"description": "description",
-					"audience": "audience",
-					"projects": "projects",
-					"otherproject": "otherproject",
-					"phabtasks": "tasks",
-					"proposer": "proposer",
-					"created": "created",
-					"baselang": "baselang"
-				}
-			}
-		},
 		"CommunityRequestsWishTypes": {
 			"description": "The available types of wishes. Labels are message keys to be suffixed with -label and -description.",
 			"value": {
@@ -472,21 +452,6 @@
 		"CommunityRequestsFocusAreaIndexPage": {
 			"description": "The title of the page to use as the index for all focus areas.",
 			"value": "Community Wishlist/Focus areas"
-		},
-		"CommunityRequestsFocusAreaTemplate": {
-			"description": "Configuration for the template that displays and stores focus areas.",
-			"value": {
-				"params": {
-					"title": "title",
-					"description": "description",
-					"shortdescription": "short_description",
-					"status": "status",
-					"owners": "owners",
-					"volunteers": "volunteers",
-					"created": "created",
-					"baselang": "baselang"
-				}
-			}
 		},
 		"CommunityRequestsProjects": {
 			"description": "The projects to show in the project selection.",
@@ -615,23 +580,9 @@
 				}
 			}
 		},
-		"CommunityRequestsSupportTemplate": {
-			"description": "",
-			"value": "Template:Community Wishlist/Support"
-		},
 		"CommunityRequestsVotesPageSuffix": {
 			"description": "The subpage where votes of wishes and focus areas are stored. The value is appended to the wish or focus area page title.",
 			"value": "/Votes"
-		},
-		"CommunityRequestsVoteTemplate": {
-			"description": "Configuration for the parser function that displays and count votes.",
-			"value": {
-				"params": {
-					"username": "username",
-					"timestamp": "timestamp",
-					"comment": "comment"
-				}
-			}
 		},
 		"CommunityRequestsWishVotingEnabled": {
 			"description": "Whether to enable voting for wishes.",

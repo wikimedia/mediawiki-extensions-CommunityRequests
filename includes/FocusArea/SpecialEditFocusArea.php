@@ -56,7 +56,7 @@ class SpecialEditFocusArea extends AbstractWishlistSpecialPage {
 	public function onSubmit( array $data, ?HTMLForm $form = null ) {
 		// Grab data directly from POST request. We should use the given $data once ::getFormFields() is implemented.
 		$data = $form->getRequest()->getPostValues();
-		$data[ 'title' ] = $data[ 'entitytitle' ];
+		$data['title'] = $data['entitytitle'];
 
 		return parent::onSubmit( $data, $form );
 	}

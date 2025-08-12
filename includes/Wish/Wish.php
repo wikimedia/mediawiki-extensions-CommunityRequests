@@ -16,7 +16,7 @@ use MediaWiki\Utils\MWTimestamp;
  */
 class Wish extends AbstractWishlistEntity {
 
-	// Constants used for parsing and constructing the template invocation.
+	// Constants used for parsing and constructing the parser function invocation.
 	public const PARAM_TYPE = 'type';
 	public const PARAM_FOCUS_AREA = 'focusarea';
 	public const PARAM_AUDIENCE = 'audience';
@@ -39,8 +39,8 @@ class Wish extends AbstractWishlistEntity {
 		self::PARAM_CREATED,
 		self::PARAM_BASE_LANG,
 	];
-	public const TEMPLATE_VALUE_PROJECTS_ALL = 'all';
-	public const TEMPLATE_ARRAY_DELIMITER = ',';
+	public const VALUE_PROJECTS_ALL = 'all';
+	public const VALUE_ARRAY_DELIMITER = ',';
 
 	// Wish properties.
 	private int $type;
@@ -182,9 +182,6 @@ class Wish extends AbstractWishlistEntity {
 		$wikitext = "{{#CommunityRequests: wish\n";
 
 		foreach ( self::PARAMS as $param ) {
-			// TODO: Remove all vestiges of ze templates.
-			$displayParam = $config->getWishTemplateParams()[ $param ];
-
 			// Match ID values to their wikitext representations, as defined by site configuration.
 			$value = match ( $param ) {
 				self::PARAM_PROJECTS => $config->getProjectsWikitextValsFromIds( $this->projects ),
@@ -201,12 +198,12 @@ class Wish extends AbstractWishlistEntity {
 
 			if ( is_array( $value ) ) {
 				// Convert arrays to a comma-separated string.
-				$value = implode( self::TEMPLATE_ARRAY_DELIMITER, $value );
+				$value = implode( self::VALUE_ARRAY_DELIMITER, $value );
 			}
 
 			// Append wikitext.
 			$value = trim( (string)$value );
-			$wikitext .= "| $displayParam = $value\n";
+			$wikitext .= "| $param = $value\n";
 		}
 
 		$wikitext .= "}}\n";
@@ -222,21 +219,21 @@ class Wish extends AbstractWishlistEntity {
 		WishlistConfig $config,
 		?UserIdentity $proposer = null
 	): self {
-		$faValue = $config->getFocusAreaPageRefFromWikitextVal( $params[ self::PARAM_FOCUS_AREA ] ?? '' );
+		$faValue = $config->getFocusAreaPageRefFromWikitextVal( $params[self::PARAM_FOCUS_AREA] ?? '' );
 		$fields = [
-			'type' => $config->getWishTypeIdFromWikitextVal( $params[ self::PARAM_TYPE ] ?? '' ),
-			'status' => $config->getStatusIdFromWikitextVal( $params[ self::PARAM_STATUS ] ?? '' ),
-			'title' => $params[ self::PARAM_TITLE ] ?? '',
+			'type' => $config->getWishTypeIdFromWikitextVal( $params[self::PARAM_TYPE] ?? '' ),
+			'status' => $config->getStatusIdFromWikitextVal( $params[self::PARAM_STATUS] ?? '' ),
+			'title' => $params[self::PARAM_TITLE] ?? '',
 			// TODO: It would be better to avoid use of Title here.
 			'focusArea' => $faValue ? Title::newFromPageReference( $faValue ) : null,
-			'description' => $params[ self::PARAM_DESCRIPTION ] ?? '',
-			'projects' => self::getProjectsFromCsv( $params[ self::PARAM_PROJECTS ] ?? '', $config ),
-			'otherProject' => $params[ self::PARAM_OTHER_PROJECT ] ?? null,
-			'audience' => $params[ self::PARAM_AUDIENCE ] ?? '',
-			'phabTasks' => self::getPhabTasksFromCsv( $params[ self::PARAM_PHAB_TASKS ] ?? '' ),
-			'created' => $params[ self::PARAM_CREATED ] ?? null,
-			'baseLang' => $params[ self::PARAM_BASE_LANG ] ?? $lang,
-			'voteCount' => $params[ self::PARAM_VOTE_COUNT ] ?? null,
+			'description' => $params[self::PARAM_DESCRIPTION] ?? '',
+			'projects' => self::getProjectsFromCsv( $params[self::PARAM_PROJECTS] ?? '', $config ),
+			'otherProject' => $params[self::PARAM_OTHER_PROJECT] ?? null,
+			'audience' => $params[self::PARAM_AUDIENCE] ?? '',
+			'phabTasks' => self::getPhabTasksFromCsv( $params[self::PARAM_PHAB_TASKS] ?? '' ),
+			'created' => $params[self::PARAM_CREATED] ?? null,
+			'baseLang' => $params[self::PARAM_BASE_LANG] ?? $lang,
+			'voteCount' => $params[self::PARAM_VOTE_COUNT] ?? null,
 		];
 
 		return new self( $pageTitle, $lang, $proposer, $fields );
@@ -250,9 +247,9 @@ class Wish extends AbstractWishlistEntity {
 	 * @return int[]
 	 */
 	public static function getProjectsFromCsv( string $csvProjects, WishlistConfig $config ): array {
-		if ( $csvProjects === self::TEMPLATE_VALUE_PROJECTS_ALL ) {
+		if ( $csvProjects === self::VALUE_PROJECTS_ALL ) {
 			// If the value is 'all', return all project IDs.
-			return array_values( array_map( static fn ( $p ) => (int)$p[ 'id' ], $config->getProjects() ) );
+			return array_values( array_map( static fn ( $p ) => (int)$p['id'], $config->getProjects() ) );
 		}
 
 		// @phan-suppress-next-line PhanTypeMismatchReturn
@@ -260,7 +257,7 @@ class Wish extends AbstractWishlistEntity {
 			array_filter(
 				array_map(
 					static fn ( $name ) => $config->getProjectIdFromWikitextVal( $name ),
-					explode( self::TEMPLATE_ARRAY_DELIMITER, $csvProjects )
+					explode( self::VALUE_ARRAY_DELIMITER, $csvProjects )
 				),
 				static fn ( $id ) => $id !== null
 			)
@@ -275,7 +272,7 @@ class Wish extends AbstractWishlistEntity {
 	 */
 	public static function getPhabTasksFromCsv( string $csvTasks ): array {
 		$tasks = [];
-		$taskIds = explode( self::TEMPLATE_ARRAY_DELIMITER, $csvTasks );
+		$taskIds = explode( self::VALUE_ARRAY_DELIMITER, $csvTasks );
 		foreach ( $taskIds as $id ) {
 			$matches = [];
 			preg_match( '/^T?(\d+)$/', trim( $id ), $matches );

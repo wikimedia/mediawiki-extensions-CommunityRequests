@@ -202,8 +202,8 @@ class FocusAreaStore extends AbstractWishlistStore {
 	}
 
 	/** @inheritDoc */
-	public function getTemplateParams(): array {
-		return $this->config->getFocusAreaTemplateParams();
+	public function getParams(): array {
+		return FocusArea::PARAMS;
 	}
 
 	/** @inheritDoc */

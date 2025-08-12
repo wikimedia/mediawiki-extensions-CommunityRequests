@@ -5,7 +5,6 @@ namespace MediaWiki\Extension\CommunityRequests\Tests\Unit;
 
 use MediaWiki\Extension\CommunityRequests\Wish\Wish;
 use MediaWiki\Tests\Unit\Permissions\MockAuthorityTrait;
-use MediaWiki\Title\TitleValue;
 use MockTitleTrait;
 
 /**
@@ -22,14 +21,6 @@ class WishTest extends AbstractWishlistEntityTest {
 	 */
 	public function testToWikitext( array $wishData, string $expectedWikitext ): void {
 		$wish = $this->getTestWish( $wishData );
-		$templateTitleValue = $this->getMockBuilder( TitleValue::class )
-			->disableOriginalConstructor()
-			->getMock();
-		$templateTitleValue->method( 'getText' )
-			->willReturn( 'Community Wishlist/Wish' );
-		$templateTitleValue->method( 'getNamespace' )
-			->willReturn( NS_TEMPLATE );
-
 		$this->assertSame(
 			$expectedWikitext,
 			$wish->toWikitext( $this->config )->getText()
@@ -63,7 +54,7 @@ class WishTest extends AbstractWishlistEntityTest {
 | audience = Editors and readers
 | projects = wikipedia,wikiquote,wikiversity
 | otherproject = Offline wikis
-| tasks = T123,T456
+| phabtasks = T123,T456
 | proposer = Petr
 | created = 2023-10-01T12:00:00Z
 | baselang = en
@@ -162,14 +153,14 @@ END
 			$this->config,
 			$this->mockRegisteredUltimateAuthority()->getUser(),
 		);
-		$this->assertSame( $expected[ 'title' ], $wish->getTitle() );
-		$this->assertSame( $expected[ 'status' ], $wish->getStatus() );
-		$this->assertSame( $expected[ 'description' ], $wish->getDescription() );
-		$this->assertSame( $expected[ 'type' ], $wish->getType() );
-		$this->assertSame( $expected[ 'projects' ], $wish->getProjects() );
-		$this->assertSame( $expected[ 'otherProject' ], $wish->getOtherProject() );
-		$this->assertSame( $expected[ 'phabTasks' ], $wish->getPhabTasks() );
-		$this->assertSame( $expected[ 'created' ], $wish->getCreated() );
+		$this->assertSame( $expected['title'], $wish->getTitle() );
+		$this->assertSame( $expected['status'], $wish->getStatus() );
+		$this->assertSame( $expected['description'], $wish->getDescription() );
+		$this->assertSame( $expected['type'], $wish->getType() );
+		$this->assertSame( $expected['projects'], $wish->getProjects() );
+		$this->assertSame( $expected['otherProject'], $wish->getOtherProject() );
+		$this->assertSame( $expected['phabTasks'], $wish->getPhabTasks() );
+		$this->assertSame( $expected['created'], $wish->getCreated() );
 	}
 
 	public static function provideNewFromWikitextParams(): array {

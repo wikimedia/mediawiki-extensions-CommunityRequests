@@ -34,10 +34,6 @@ class WishlistConfigTest extends MediaWikiUnitTestCase {
 				WishlistConfig::WISH_CATEGORY => 'Category:Wishes',
 				WishlistConfig::WISH_PAGE_PREFIX => 'Community Wishlist/W',
 				WishlistConfig::WISH_INDEX_PAGE => 'Community Wishlist/Wishes',
-				WishlistConfig::WISH_TEMPLATE => [
-					'page' => 'Template:Wish',
-					'params' => [ 'title' => 'title', 'description' => 'desc' ],
-				],
 				WishlistConfig::WISH_TYPES => [
 					'feature' => [
 						'id' => 0,
@@ -51,10 +47,6 @@ class WishlistConfigTest extends MediaWikiUnitTestCase {
 				WishlistConfig::FOCUS_AREA_CATEGORY => 'Category:Focus areas',
 				WishlistConfig::FOCUS_AREA_PAGE_PREFIX => 'Community Wishlist/FA',
 				WishlistConfig::FOCUS_AREA_INDEX_PAGE => 'Community Wishlist/Focus areas',
-				WishlistConfig::FOCUS_AREA_TEMPLATE => [
-					'page' => 'Template:Focus area',
-					'params' => [ 'title' => 'title', 'description' => 'desc' ]
-				],
 				WishlistConfig::PROJECTS => [
 					'wikipedia' => [
 						'id' => 0,
@@ -81,15 +73,7 @@ class WishlistConfigTest extends MediaWikiUnitTestCase {
 						'default' => true
 					]
 				],
-				WishlistConfig::SUPPORT_TEMPLATE => 'Template:Community Wishlist/Support',
 				WishlistConfig::VOTES_PAGE_SUFFIX => '/Votes',
-				WishlistConfig::VOTE_TEMPLATE => [
-					'params' => [
-						'username' => 'username',
-						'timestamp' => 'timestamp',
-						'comment' => 'comment',
-					]
-				],
 				WishlistConfig::WISH_VOTING_ENABLED => true,
 				WishlistConfig::FOCUS_AREA_VOTING_ENABLED => true,
 			] ),
@@ -112,8 +96,6 @@ class WishlistConfigTest extends MediaWikiUnitTestCase {
 	 * @covers ::getWishPagePrefix
 	 * @covers ::getFocusAreaPagePrefix
 	 * @covers ::getWishIndexPage
-	 * @covers ::getWishTemplateParams
-	 * @covers ::getFocusAreaTemplateParams
 	 * @covers ::getStatuses
 	 * @covers ::getWishTypes
 	 * @covers ::getProjects
@@ -124,19 +106,13 @@ class WishlistConfigTest extends MediaWikiUnitTestCase {
 		$this->assertSame( 'Category:Wishes', $this->config->getWishCategory() );
 		$this->assertSame( 'Community Wishlist/W', $this->config->getWishPagePrefix() );
 		$this->assertSame( 'Community Wishlist/Wishes', $this->config->getWishIndexPage() );
-		$this->assertSame( [ 'title' => 'title', 'description' => 'desc' ], $this->config->getWishTemplateParams() );
 		$this->assertSame( [ 'feature', 'bug' ], array_keys( $this->config->getWishTypes() ) );
 		$this->assertSame( 'Category:Focus areas', $this->config->getFocusAreaCategory() );
 		$this->assertSame( 'Community Wishlist/FA', $this->config->getFocusAreaPagePrefix() );
 		$this->assertSame( 'Community Wishlist/Focus areas', $this->config->getFocusAreaIndexPage() );
-		$this->assertSame(
-			[ 'title' => 'title', 'description' => 'desc' ],
-			$this->config->getFocusAreaTemplateParams()
-		);
 		$this->assertSame( [ 'open', 'closed', 'unknown' ], array_keys( $this->config->getStatuses() ) );
 		$this->assertSame( [ 'open', 'closed', 'unknown' ], array_keys( $this->config->getStatuses() ) );
 		$this->assertSame( [ 'wikipedia', 'wikisource' ], array_keys( $this->config->getProjects() ) );
-		$this->assertSame( 'Template:Community Wishlist/Support', $this->config->getSupportTemplate() );
 		$this->assertSame( '/Votes', $this->config->getVotesPageSuffix() );
 		$this->assertTrue( $this->config->isWishVotingEnabled() );
 		$this->assertTrue( $this->config->isFocusAreaVotingEnabled() );

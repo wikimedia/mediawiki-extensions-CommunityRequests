@@ -40,33 +40,33 @@ class ApiWishEdit extends ApiWishlistEntityBase {
 		$wish = Wish::newFromWikitextParams(
 			$this->title,
 			// Edits are only made to the base language page.
-			$this->params[ 'baselang' ],
+			$this->params['baselang'],
 			[
 				...$this->params,
-				'projects' => implode( ',', $this->params[ 'projects' ] ),
-				'phabtasks' => implode( ',', $this->params[ 'phabtasks' ] ?? [] ),
+				'projects' => implode( ',', $this->params['projects'] ),
+				'phabtasks' => implode( ',', $this->params['phabtasks'] ?? [] ),
 			],
 			$this->config,
-			$this->userFactory->newFromName( $this->params[ 'proposer' ] ),
+			$this->userFactory->newFromName( $this->params['proposer'] ),
 		);
 		$saveStatus = $this->save(
 			$wish->toWikitext( $this->config ),
 			$this->getEditSummary( $wish ),
-			$this->params[ 'token' ],
-			$this->params[ 'baserevid' ] ?? null
+			$this->params['token'],
+			$this->params['baserevid'] ?? null
 		);
 
 		if ( $saveStatus->isOK() === false ) {
 			$this->dieWithError( $saveStatus->getMessages()[0] );
 		}
 
-		$resultData = $saveStatus->getValue()->getResultData()[ 'edit' ];
+		$resultData = $saveStatus->getValue()->getResultData()['edit'];
 		// ApiEditPage adds the 'title' key to the result data, but we want to use 'wish'.
-		$resultData[ 'wish' ] = $resultData[ 'title' ];
-		unset( $resultData[ 'title' ] );
+		$resultData['wish'] = $resultData['title'];
+		unset( $resultData['title'] );
 		// 'newtimestamp' should be 'updated'.
-		$resultData[ 'updated' ] = $resultData[ 'newtimestamp' ];
-		unset( $resultData[ 'newtimestamp' ] );
+		$resultData['updated'] = $resultData['newtimestamp'];
+		unset( $resultData['newtimestamp'] );
 		$ret = [
 			...$wish->toArray( $this->config, true ),
 			...$resultData
@@ -80,7 +80,7 @@ class ApiWishEdit extends ApiWishlistEntityBase {
 			throw new RuntimeException( 'Expected a Wish object but got a ' . get_class( $entity ) );
 		}
 
-		$summary = trim( $this->params[ 'wish' ] ?? '' ) ? $this->editSummarySave() : $this->editSummaryPublish();
+		$summary = trim( $this->params['wish'] ?? '' ) ? $this->editSummarySave() : $this->editSummaryPublish();
 
 		// If there are Phabricator tasks, add them to the edit summary.
 		if ( count( $entity->getPhabTasks() ) > 0 ) {
@@ -112,10 +112,10 @@ class ApiWishEdit extends ApiWishlistEntityBase {
 
 	/** @inheritDoc */
 	protected function getWishlistEntityTitle(): Title {
-		if ( isset( $this->params[ 'wish' ] ) ) {
+		if ( isset( $this->params['wish'] ) ) {
 			return Title::newFromText(
 				$this->config->getWishPagePrefix() .
-				$this->store->getIdFromInput( $this->params[ 'wish' ] )
+				$this->store->getIdFromInput( $this->params['wish'] )
 			);
 		} else {
 			// If this is a new wish, generate a new ID and page title.
@@ -149,9 +149,9 @@ class ApiWishEdit extends ApiWishlistEntityBase {
 			],
 			'projects' => [
 				ParamValidator::PARAM_TYPE => [
-					Wish::TEMPLATE_VALUE_PROJECTS_ALL,
+					Wish::VALUE_PROJECTS_ALL,
 					...array_values( array_map(
-						fn ( array $project ) => $this->config->getProjectWikitextValFromId( $project[ 'id' ] ),
+						fn ( array $project ) => $this->config->getProjectWikitextValFromId( $project['id'] ),
 						$this->config->getProjects()
 					) )
 				],

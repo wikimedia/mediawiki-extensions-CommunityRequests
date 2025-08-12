@@ -57,7 +57,7 @@ class SpecialWishlistIntake extends AbstractWishlistSpecialPage {
 		$focusAreaData = [];
 		foreach ( $focusAreas as $focusArea ) {
 			$wikitextVal = $this->config->getEntityWikitextVal( $focusArea->getPage() );
-			$focusAreaData[ (string)$wikitextVal ] = $focusArea->getTitle();
+			$focusAreaData[(string)$wikitextVal] = $focusArea->getTitle();
 		}
 
 		// Add to JS config.
@@ -89,11 +89,11 @@ class SpecialWishlistIntake extends AbstractWishlistSpecialPage {
 	public function onSubmit( array $data, ?HTMLForm $form = null ) {
 		// Grab data directly from POST request. We should use the given $data once ::getFormFields() is implemented.
 		$data = $form->getRequest()->getPostValues();
-		$data[ 'title' ] = $data[ 'entitytitle' ];
+		$data['title'] = $data['entitytitle'];
 
 		// API wants pipe-separated arrays, not CSV.
-		$data[ 'projects' ] = str_replace( ',', '|', $data[ 'projects' ] );
-		$data[ 'phabtasks' ] = str_replace( ',', '|', $data[ 'phabtasks' ] );
+		$data['projects'] = str_replace( ',', '|', $data['projects'] );
+		$data['phabtasks'] = str_replace( ',', '|', $data['phabtasks'] );
 
 		return parent::onSubmit( $data, $form );
 	}

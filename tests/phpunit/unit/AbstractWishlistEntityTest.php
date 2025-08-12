@@ -29,23 +29,6 @@ class AbstractWishlistEntityTest extends MediaWikiUnitTestCase {
 			WishlistConfig::WISH_CATEGORY => '',
 			WishlistConfig::WISH_PAGE_PREFIX => '',
 			WishlistConfig::WISH_INDEX_PAGE => '',
-			WishlistConfig::WISH_TEMPLATE => [
-				'page' => 'Template:Wish',
-				'params' => [
-					'status' => 'status',
-					'type' => 'type',
-					'title' => 'title',
-					'focusarea' => 'focusarea',
-					'description' => 'description',
-					'audience' => 'audience',
-					'projects' => 'projects',
-					'otherproject' => 'otherproject',
-					'phabtasks' => 'tasks',
-					'proposer' => 'proposer',
-					'created' => 'created',
-					'baselang' => 'baselang',
-				]
-			],
 			WishlistConfig::WISH_TYPES => [
 				'bug' => [ 'id' => 1 ],
 				'change' => [ 'id' => 2 ],
@@ -53,20 +36,6 @@ class AbstractWishlistEntityTest extends MediaWikiUnitTestCase {
 			WishlistConfig::FOCUS_AREA_CATEGORY => '',
 			WishlistConfig::FOCUS_AREA_PAGE_PREFIX => 'Community Wishlist/Focus Areas/',
 			WishlistConfig::FOCUS_AREA_INDEX_PAGE => '',
-			WishlistConfig::FOCUS_AREA_TEMPLATE => [
-				'page' => 'Template:FocusArea',
-				'params' => [
-					'title' => 'title',
-					'description' => 'description',
-					'shortdescription' => 'short_description',
-					'status' => 'status',
-					'owners' => 'owners',
-					'volunteers' => 'volunteers',
-					'created' => 'created',
-					'updated' => 'updated',
-					'baselang' => 'baselang',
-				]
-			],
 			WishlistConfig::PROJECTS => [
 				'wikipedia' => [ 'id' => 0 ],
 				'wikidata' => [ 'id' => 1 ],
@@ -86,15 +55,7 @@ class AbstractWishlistEntityTest extends MediaWikiUnitTestCase {
 				'submitted' => [ 'id' => 1 ],
 				'archived' => [ 'id' => 6 ],
 			],
-			WishlistConfig::SUPPORT_TEMPLATE => '',
 			WishlistConfig::VOTES_PAGE_SUFFIX => '',
-			WishlistConfig::VOTE_TEMPLATE => [
-				'params' => [
-					'username' => 'username',
-					'timestamp' => 'timestamp',
-					'comment' => 'comment',
-				]
-			],
 			WishlistConfig::WISH_VOTING_ENABLED => true,
 			WishlistConfig::FOCUS_AREA_VOTING_ENABLED => true,
 		] );

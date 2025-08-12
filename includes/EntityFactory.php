@@ -16,9 +16,8 @@ class EntityFactory {
 	}
 
 	/**
-	 * Create an AbstractWishlistEntity from the array stored to the
-	 * ParserOutput's extension data. This array originally comes from the
-	 * template renderer.
+	 * Create an AbstractWishlistEntity from the array stored to the ParserOutput's
+	 * extension data. This array originally comes from the parser function renderer.
 	 *
 	 * @param array $data An associative array of parameters
 	 * @param PageIdentity $baseTitle The base title of the wish or focus area
@@ -31,7 +30,7 @@ class EntityFactory {
 				$data['lang'],
 				$data,
 				$this->config,
-				$this->userFactory->newFromName( $data[ Wish::PARAM_PROPOSER ] ?? '' ),
+				$this->userFactory->newFromName( $data[Wish::PARAM_PROPOSER] ?? '' ),
 			),
 			'focus-area' => FocusArea::newFromWikitextParams(
 				$baseTitle,

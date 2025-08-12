@@ -92,7 +92,7 @@ class CreateTestWishlist extends Maintenance {
 		for ( $i = 1; $i <= $numWishes; $i++ ) {
 			$title = $config->getWishPagePrefix() . $wishStore->getNewId();
 			$projects = array_rand( $config->getProjects(), rand( 1, 3 ) );
-			$lang = $langs[ array_rand( $langs ) ];
+			$lang = $langs[array_rand( $langs )];
 			$wish = Wish::newFromWikitextParams(
 				Title::newFromText( $title ),
 				$lang,
@@ -109,7 +109,7 @@ class CreateTestWishlist extends Maintenance {
 						range( 1, rand( 0, 3 ) )
 					) ),
 					Wish::PARAM_FOCUS_AREA => count( $focusAreaIds ) ?
-						$focusAreaIds[ array_rand( $focusAreaIds ) ] :
+						$focusAreaIds[array_rand( $focusAreaIds )] :
 						null,
 					Wish::PARAM_PROPOSER => $user->getName(),
 					Wish::PARAM_CREATED => $this->getRandomTimestamp(),
@@ -147,7 +147,7 @@ class CreateTestWishlist extends Maintenance {
 			for ( $s = 0; $s < rand( min( 5, $numSentences ), $numSentences ); $s++ ) {
 				$sentenceLength = rand( min( 5, $numWords ), $numWords );
 				$sentence = implode( ' ', array_map(
-					static fn ( $_i ) => $words[ array_rand( $words ) ],
+					static fn ( $_i ) => $words[array_rand( $words )],
 					range( 1, $sentenceLength )
 				) );
 				$paragraph .= ucfirst( $sentence ) . '. ';

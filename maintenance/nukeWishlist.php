@@ -167,7 +167,7 @@ class NukeWishlist extends Maintenance {
 			if ( !$status->isOK() ) {
 				$this->fatalError(
 					"Failed to delete page {$page->getDBkey()}: " .
-					wfMessage( $status->getMessages()[ 0 ] )->text()
+					wfMessage( $status->getMessages()[0] )->text()
 				);
 			}
 

@@ -28,17 +28,13 @@ class WishlistConfig {
 	public const WISH_CATEGORY = 'CommunityRequestsWishCategory';
 	public const WISH_PAGE_PREFIX = 'CommunityRequestsWishPagePrefix';
 	public const WISH_INDEX_PAGE = 'CommunityRequestsWishIndexPage';
-	public const WISH_TEMPLATE = 'CommunityRequestsWishTemplate';
 	public const WISH_TYPES = 'CommunityRequestsWishTypes';
 	public const FOCUS_AREA_CATEGORY = 'CommunityRequestsFocusAreaCategory';
 	public const FOCUS_AREA_PAGE_PREFIX = 'CommunityRequestsFocusAreaPagePrefix';
 	public const FOCUS_AREA_INDEX_PAGE = 'CommunityRequestsFocusAreaIndexPage';
-	public const FOCUS_AREA_TEMPLATE = 'CommunityRequestsFocusAreaTemplate';
 	public const PROJECTS = 'CommunityRequestsProjects';
 	public const STATUSES = 'CommunityRequestsStatuses';
-	public const SUPPORT_TEMPLATE = 'CommunityRequestsSupportTemplate';
 	public const VOTES_PAGE_SUFFIX = 'CommunityRequestsVotesPageSuffix';
-	public const VOTE_TEMPLATE = 'CommunityRequestsVoteTemplate';
 	public const WISH_VOTING_ENABLED = 'CommunityRequestsWishVotingEnabled';
 	public const FOCUS_AREA_VOTING_ENABLED = 'CommunityRequestsFocusAreaVotingEnabled';
 	public const CONSTRUCTOR_OPTIONS = [
@@ -47,17 +43,13 @@ class WishlistConfig {
 		self::WISH_CATEGORY,
 		self::WISH_PAGE_PREFIX,
 		self::WISH_INDEX_PAGE,
-		self::WISH_TEMPLATE,
 		self::WISH_TYPES,
 		self::FOCUS_AREA_CATEGORY,
 		self::FOCUS_AREA_PAGE_PREFIX,
 		self::FOCUS_AREA_INDEX_PAGE,
-		self::FOCUS_AREA_TEMPLATE,
 		self::PROJECTS,
 		self::STATUSES,
-		self::SUPPORT_TEMPLATE,
 		self::VOTES_PAGE_SUFFIX,
-		self::VOTE_TEMPLATE,
 		self::WISH_VOTING_ENABLED,
 		self::FOCUS_AREA_VOTING_ENABLED,
 	];
@@ -70,13 +62,9 @@ class WishlistConfig {
 	private string $focusAreaPagePrefix;
 	private string $wishIndexPage;
 	private string $focusAreaIndexPage;
-	private array $wishTemplate;
-	private array $focusAreaTemplate;
-	private array $voteTemplate;
 	private array $wishTypes;
 	private array $projects;
 	private array $statuses;
-	private string $supportTemplate;
 	private string $votesPageSuffix;
 	private bool $wishVotingEnabled;
 	private bool $focusAreaVotingEnabled;
@@ -92,17 +80,13 @@ class WishlistConfig {
 		$this->wishCategory = $config->get( self::WISH_CATEGORY );
 		$this->wishPagePrefix = $config->get( self::WISH_PAGE_PREFIX );
 		$this->wishIndexPage = $config->get( self::WISH_INDEX_PAGE );
-		$this->wishTemplate = $config->get( self::WISH_TEMPLATE );
 		$this->wishTypes = $config->get( self::WISH_TYPES );
 		$this->focusAreaCategory = $config->get( self::FOCUS_AREA_CATEGORY );
 		$this->focusAreaPagePrefix = $config->get( self::FOCUS_AREA_PAGE_PREFIX );
 		$this->focusAreaIndexPage = $config->get( self::FOCUS_AREA_INDEX_PAGE );
-		$this->focusAreaTemplate = $config->get( self::FOCUS_AREA_TEMPLATE );
 		$this->projects = $config->get( self::PROJECTS );
 		$this->statuses = $config->get( self::STATUSES );
-		$this->supportTemplate = $config->get( self::SUPPORT_TEMPLATE );
 		$this->votesPageSuffix = $config->get( self::VOTES_PAGE_SUFFIX );
-		$this->voteTemplate = $config->get( self::VOTE_TEMPLATE );
 		$this->wishVotingEnabled = $config->get( self::WISH_VOTING_ENABLED );
 		$this->focusAreaVotingEnabled = $config->get( self::FOCUS_AREA_VOTING_ENABLED );
 	}
@@ -129,10 +113,6 @@ class WishlistConfig {
 		return $this->wishIndexPage;
 	}
 
-	public function getWishTemplateParams(): array {
-		return $this->wishTemplate[ 'params' ];
-	}
-
 	public function getWishTypes(): array {
 		return $this->wishTypes;
 	}
@@ -143,10 +123,6 @@ class WishlistConfig {
 
 	public function getFocusAreaIndexPage(): string {
 		return $this->focusAreaIndexPage;
-	}
-
-	public function getFocusAreaTemplateParams(): array {
-		return $this->focusAreaTemplate[ 'params' ];
 	}
 
 	public function getFocusAreaPagePrefix(): string {
@@ -161,16 +137,8 @@ class WishlistConfig {
 		return $this->statuses;
 	}
 
-	public function getSupportTemplate(): string {
-		return $this->supportTemplate;
-	}
-
 	public function getVotesPageSuffix(): string {
 		return $this->votesPageSuffix;
-	}
-
-	public function getVoteTemplateParams(): array {
-		return $this->voteTemplate[ 'params' ];
 	}
 
 	public function isWishVotingEnabled(): bool {
@@ -191,7 +159,7 @@ class WishlistConfig {
 	public function getStatusesEligibleForVoting(): array {
 		return array_filter(
 			$this->statuses,
-			static fn ( $status ) => $status[ 'voting' ] ?? true
+			static fn ( $status ) => $status['voting'] ?? true
 		);
 	}
 
@@ -202,7 +170,7 @@ class WishlistConfig {
 	 */
 	public function getStatusIdsEligibleForVoting(): array {
 		return array_values( array_map(
-			static fn ( $status ) => (int)$status[ 'id' ],
+			static fn ( $status ) => (int)$status['id'],
 			$this->getStatusesEligibleForVoting()
 		) );
 	}
@@ -368,7 +336,7 @@ class WishlistConfig {
 			? $fullPrefix : substr( $fullPrefix, $slashPos + 1 );
 		$remaining = substr( $identityStr, strlen( $fullPrefix ) );
 		// Ignore subpages.
-		$remaining = explode( '/', $remaining )[ 0 ];
+		$remaining = explode( '/', $remaining )[0];
 		return $shortPrefix . preg_replace( '/^[^0-9]*/', '', $remaining );
 	}
 
@@ -408,7 +376,7 @@ class WishlistConfig {
 	 */
 	public function getWishTypeLabelFromWikitextVal( string $type ): ?string {
 		$type = trim( $type );
-		return $this->wishTypes[ $type ][ 'label' ] ?? null;
+		return $this->wishTypes[$type]['label'] ?? null;
 	}
 
 	/**
@@ -419,8 +387,8 @@ class WishlistConfig {
 	 */
 	public function getProjectIdFromWikitextVal( string $project ): ?int {
 		$project = trim( $project );
-		if ( isset( $this->projects[ $project ] ) ) {
-			return (int)$this->projects[ $project ][ 'id' ];
+		if ( isset( $this->projects[$project] ) ) {
+			return (int)$this->projects[$project]['id'];
 		}
 		return null;
 	}
@@ -432,11 +400,11 @@ class WishlistConfig {
 	 * @return ?string The label of the project, or null if not found.
 	 */
 	public function getProjectLabelFromWikitextVal( string $project ): ?string {
-		if ( $project === Wish::TEMPLATE_VALUE_PROJECTS_ALL ) {
+		if ( $project === Wish::VALUE_PROJECTS_ALL ) {
 			return 'communityrequests-project-all-projects';
 		}
 		$project = trim( $project );
-		return $this->projects[ $project ][ 'label' ] ?? null;
+		return $this->projects[$project]['label'] ?? null;
 	}
 
 	/**
@@ -457,7 +425,7 @@ class WishlistConfig {
 	 */
 	public function getStatusLabelFromWikitextVal( string $status ): ?string {
 		$status = trim( $status );
-		return $this->statuses[ $status ][ 'label' ] ?? null;
+		return $this->statuses[$status]['label'] ?? null;
 	}
 
 	/**
@@ -471,13 +439,13 @@ class WishlistConfig {
 	 */
 	private function getIdFromWikitextVal( string $val, array $config ): int {
 		$val = trim( $val );
-		if ( isset( $config[ $val ] ) ) {
-			return (int)$config[ $val ][ 'id' ];
+		if ( isset( $config[$val] ) ) {
+			return (int)$config[$val]['id'];
 		}
 		// If the value is not found, return the default value.
 		foreach ( $config as $item ) {
-			if ( $item[ 'default' ] ?? false ) {
-				return (int)$item[ 'id' ];
+			if ( $item['default'] ?? false ) {
+				return (int)$item['id'];
 			}
 		}
 		throw new ConfigException(
@@ -518,12 +486,12 @@ class WishlistConfig {
 	 */
 	public function getProjectsWikitextValsFromIds( array $ids ): array {
 		$allProjectIds = array_map(
-			static fn ( $p ) => (int)$p[ 'id' ],
+			static fn ( $p ) => (int)$p['id'],
 			$this->projects
 		);
 		$isAllProjects = array_diff( $allProjectIds, $ids ) === [];
 		if ( $isAllProjects ) {
-			return [ Wish::TEMPLATE_VALUE_PROJECTS_ALL ];
+			return [ Wish::VALUE_PROJECTS_ALL ];
 		}
 		return array_map(
 			fn ( $id ) => $this->getProjectWikitextValFromId( $id ),
@@ -553,7 +521,7 @@ class WishlistConfig {
 	 */
 	private function getWikitextValFromId( int $id, array $config ): string {
 		foreach ( $config as $key => $item ) {
-			if ( (int)$item[ 'id' ] === $id ) {
+			if ( (int)$item['id'] === $id ) {
 				return $key;
 			}
 		}

@@ -315,9 +315,9 @@ class WishStore extends AbstractWishlistStore {
 					// TODO: do this in the main query instead of separately.
 					'focusArea' => Title::newFromID( (int)$row->cr_focus_area ),
 					'title' => $row->crt_title,
-					'projects' => $projectsByPage[ $row->cr_page ] ?? [],
+					'projects' => $projectsByPage[$row->cr_page] ?? [],
 					'otherProject' => $row->crt_other_project,
-					'phabTasks' => $phabTasksByPage[ $row->cr_page ] ?? [],
+					'phabTasks' => $phabTasksByPage[$row->cr_page] ?? [],
 					'voteCount' => (int)$row->cr_vote_count,
 					'created' => $row->cr_created,
 					'updated' => $row->cr_updated,
@@ -350,7 +350,7 @@ class WishStore extends AbstractWishlistStore {
 		// Group by wish ID.
 		$projectsByWish = [];
 		foreach ( $projects as $project ) {
-			$projectsByWish[ $project->crp_wish ][] = (int)$project->crp_project;
+			$projectsByWish[$project->crp_wish][] = (int)$project->crp_project;
 		}
 
 		return $projectsByWish;
@@ -377,7 +377,7 @@ class WishStore extends AbstractWishlistStore {
 		// Group by wish ID.
 		$phabTasksByWish = [];
 		foreach ( $phabTasks as $task ) {
-			$phabTasksByWish[ $task->crpt_wish ][] = (int)$task->crpt_task_id;
+			$phabTasksByWish[$task->crpt_wish][] = (int)$task->crpt_task_id;
 		}
 
 		return $phabTasksByWish;
@@ -405,8 +405,8 @@ class WishStore extends AbstractWishlistStore {
 	}
 
 	/** @inheritDoc */
-	public function getTemplateParams(): array {
-		return $this->config->getWishTemplateParams();
+	public function getParams(): array {
+		return Wish::PARAMS;
 	}
 
 	/** @inheritDoc */

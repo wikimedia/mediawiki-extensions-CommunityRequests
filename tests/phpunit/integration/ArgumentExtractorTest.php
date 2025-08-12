@@ -1,15 +1,16 @@
 <?php
+declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CommunityRequests\Tests\Integration;
 
-use MediaWiki\Extension\CommunityRequests\TemplateArgumentExtractor;
+use MediaWiki\Extension\CommunityRequests\ArgumentExtractor;
 use MediaWikiIntegrationTestCase;
 
 /**
- * @covers \MediaWiki\Extension\CommunityRequests\TemplateArgumentExtractor
+ * @covers \MediaWiki\Extension\CommunityRequests\ArgumentExtractor
  */
-class TemplateArgumentExtractorTest extends MediaWikiIntegrationTestCase {
-	public static function provideGetArgs() {
+class ArgumentExtractorTest extends MediaWikiIntegrationTestCase {
+	public static function provideGetArgs(): array {
 		return [
 			'simple match' => [
 				'{{#CommunityRequests: wish|a|b=c}}',
@@ -81,11 +82,11 @@ class TemplateArgumentExtractorTest extends MediaWikiIntegrationTestCase {
 	/**
 	 * @dataProvider provideGetArgs
 	 * @param string $input
-	 * @param array $expected
+	 * @param ?array $expected
 	 */
-	public function testGetArgs( $input, $expected ) {
+	public function testGetArgs( string $input, ?array $expected ) {
 		$services = $this->getServiceContainer();
-		$extractor = new TemplateArgumentExtractor(
+		$extractor = new ArgumentExtractor(
 			$services->getParserFactory(),
 		);
 		$result = $extractor->getFuncArgs( 'communityrequests', 'wish', $input );

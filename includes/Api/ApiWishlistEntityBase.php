@@ -46,7 +46,7 @@ abstract class ApiWishlistEntityBase extends ApiBase {
 		$title = $this->getWishlistEntityTitle();
 
 		if ( !$title ) {
-			$this->dieWithError( [ 'apierror-invalidtitle', wfEscapeWikiText( $this->params[ 'wish' ] ) ] );
+			$this->dieWithError( [ 'apierror-invalidtitle', wfEscapeWikiText( $this->params['wish'] ) ] );
 		} elseif ( !$title->canExist() ) {
 			$this->dieWithError( 'apierror-pagecannotexist' );
 		}

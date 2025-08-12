@@ -3,10 +3,10 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CommunityRequests\FocusArea;
 
-use MediaWiki\Extension\CommunityRequests\AbstractTemplateRenderer;
+use MediaWiki\Extension\CommunityRequests\AbstractRenderer;
 use MediaWiki\Html\Html;
 
-class FocusAreaIndexTemplateRenderer extends AbstractTemplateRenderer {
+class FocusAreaIndexRenderer extends AbstractRenderer {
 	protected string $entityType = 'focus-area-index';
 
 	/**
@@ -26,9 +26,9 @@ class FocusAreaIndexTemplateRenderer extends AbstractTemplateRenderer {
 
 		/** @var FocusArea[] $focusAreas */
 		$focusAreas = $this->focusAreaStore->getAll(
-			$args[ 'lang' ] ?? $this->parser->getContentLanguage()->getCode(),
-			$args[ 'sort' ] ?? 'created',
-			$args[ 'dir' ] ?? 'descending',
+			$args['lang'] ?? $this->parser->getContentLanguage()->getCode(),
+			$args['sort'] ?? 'created',
+			$args['dir'] ?? 'descending',
 			intval( $args['limit'] ?? 10 )
 		);
 
@@ -53,7 +53,7 @@ class FocusAreaIndexTemplateRenderer extends AbstractTemplateRenderer {
 						// * communityrequests-status-blocked,
 						// * communityrequests-status-archived,
 						// * communityrequests-status-unknown
-						$this->msg( $status[ 'label' ] )->text()
+						$this->msg( $status['label'] )->text()
 					)
 				) .
 				Html::closeElement( 'div' );
@@ -107,10 +107,5 @@ class FocusAreaIndexTemplateRenderer extends AbstractTemplateRenderer {
 			[ 'class' => 'ext-communityrequests-focus-area-index' ],
 			$outputHTML
 		);
-	}
-
-	/** @inheritDoc */
-	protected function getArgAliases(): array {
-		return [];
 	}
 }

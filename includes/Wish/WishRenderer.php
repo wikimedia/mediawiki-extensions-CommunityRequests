@@ -3,11 +3,11 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CommunityRequests\Wish;
 
-use MediaWiki\Extension\CommunityRequests\AbstractTemplateRenderer;
+use MediaWiki\Extension\CommunityRequests\AbstractRenderer;
 use MediaWiki\Html\Html;
 use MediaWiki\Title\TitleValue;
 
-class WishTemplateRenderer extends AbstractTemplateRenderer {
+class WishRenderer extends AbstractRenderer {
 	public const WISH_TRACKING_CATEGORY = 'communityrequests-wish-category';
 
 	protected string $entityType = 'wish';
@@ -41,21 +41,16 @@ class WishTemplateRenderer extends AbstractTemplateRenderer {
 		}
 
 		// These need to be set here because we need them for display in ::renderWishInternal().
-		$args[ 'updated' ] = $this->parser->getRevisionTimestamp();
-		$args[ Wish::PARAM_CREATED ] ??= $args[ 'updated' ];
+		$args['updated'] = $this->parser->getRevisionTimestamp();
+		$args[Wish::PARAM_CREATED] ??= $args['updated'];
 
-		$args[ 'entityType' ] = 'wish';
-		$args[ 'lang' ] = $this->parser->getTargetLanguage()->getCode();
+		$args['entityType'] = 'wish';
+		$args['lang'] = $this->parser->getTargetLanguage()->getCode();
 
 		// Cache the wish data for storage after the links update.
 		$this->parser->getOutput()->setExtensionData( self::EXT_DATA_KEY, $args );
 
 		return $this->renderWishInternal( $args );
-	}
-
-	/** @inheritDoc */
-	protected function getArgAliases(): array {
-		return array_flip( $this->config->getWishTemplateParams() );
 	}
 
 	private function renderWishInternal( array $args ): string {
@@ -66,7 +61,7 @@ class WishTemplateRenderer extends AbstractTemplateRenderer {
 		$titleSpan = Html::element(
 			'span',
 			[ 'class' => 'ext-communityrequests-wish--title' ],
-			$args[ Wish::PARAM_TITLE ]
+			$args[Wish::PARAM_TITLE]
 		);
 		$headingHtml = Html::rawElement(
 			'div',
@@ -82,7 +77,7 @@ class WishTemplateRenderer extends AbstractTemplateRenderer {
 		);
 		$descHtml = $this->getDivRaw(
 			'description',
-			$this->parser->recursiveTagParse( $args[ 'description' ] ?? '' )
+			$this->parser->recursiveTagParse( $args['description'] ?? '' )
 		);
 
 		// Focus area.
@@ -93,7 +88,7 @@ class WishTemplateRenderer extends AbstractTemplateRenderer {
 		);
 		$focusArea = $this->getDivRaw(
 			'focus-area',
-			$this->getFocusAreaLink( $args[ Wish::PARAM_FOCUS_AREA ] ?? null )
+			$this->getFocusAreaLink( $args[Wish::PARAM_FOCUS_AREA] ?? null )
 		);
 
 		// Wish type.
@@ -105,7 +100,7 @@ class WishTemplateRenderer extends AbstractTemplateRenderer {
 		$wishType = $this->getDiv(
 			'wish-type',
 			$this->msg(
-				$this->config->getWishTypeLabelFromWikitextVal( $args[ Wish::PARAM_TYPE ] ?? '' ) . '-label'
+				$this->config->getWishTypeLabelFromWikitextVal( $args[Wish::PARAM_TYPE] ?? '' ) . '-label'
 			)->text()
 		);
 
@@ -122,11 +117,11 @@ class WishTemplateRenderer extends AbstractTemplateRenderer {
 				return null;
 			}
 			return $this->msg( $label )->text();
-		}, array_filter( explode( Wish::TEMPLATE_ARRAY_DELIMITER, $args[ Wish::PARAM_PROJECTS ] ?? '' ) ) );
+		}, array_filter( explode( Wish::VALUE_ARRAY_DELIMITER, $args[Wish::PARAM_PROJECTS] ?? '' ) ) );
 		// @phan-suppress-next-line SecurityCheck-DoubleEscaped
 		$projects = $this->getDiv( 'projects', $language->commaList( array_filter( $projectLabels ) ) );
-		if ( isset( $args[ Wish::PARAM_OTHER_PROJECT ] ) ) {
-			$projects .= $this->getDiv( 'other-project', $args[ Wish::PARAM_OTHER_PROJECT ] );
+		if ( isset( $args[Wish::PARAM_OTHER_PROJECT] ) ) {
+			$projects .= $this->getDiv( 'other-project', $args[Wish::PARAM_OTHER_PROJECT] );
 		}
 
 		// Audience.
@@ -135,7 +130,7 @@ class WishTemplateRenderer extends AbstractTemplateRenderer {
 			[ 'class' => 'mw-heading mw-heading3' ],
 			$this->msg( 'communityrequests-wish-audience-heading' )->text()
 		);
-		$audience = $this->getDiv( 'audience', $args[ Wish::PARAM_AUDIENCE ] ?? '' );
+		$audience = $this->getDiv( 'audience', $args[Wish::PARAM_AUDIENCE] ?? '' );
 
 		// Phabricator tasks.
 		$tasks = array_filter( array_map( function ( $task ) {
@@ -151,7 +146,7 @@ class WishTemplateRenderer extends AbstractTemplateRenderer {
 				new TitleValue( NS_MAIN, $task, '', 'phab' ),
 				$task
 			);
-		}, explode( Wish::TEMPLATE_ARRAY_DELIMITER, $args[ Wish::PARAM_PHAB_TASKS ] ?? '' ) ) );
+		}, explode( Wish::VALUE_ARRAY_DELIMITER, $args[ Wish::PARAM_PHAB_TASKS ] ?? '' ) ) );
 		$tasksHeading = '';
 		$tasksHtml = '';
 		if ( count( $tasks ) ) {
@@ -172,18 +167,18 @@ class WishTemplateRenderer extends AbstractTemplateRenderer {
 			[ 'class' => 'mw-heading mw-heading3' ],
 			$this->msg( 'communityrequests-wish-other-details-heading' )->text()
 		);
-		$proposerVal = $args[ Wish::PARAM_PROPOSER ] ?? '';
+		$proposerVal = $args[Wish::PARAM_PROPOSER] ?? '';
 
 		$detailsHtml = Html::rawElement(
 			'ul',
 			[],
 			$this->getListItem(
 				'created',
-				$this->formatDate( $args[ Wish::PARAM_CREATED ] )
+				$this->formatDate( $args[Wish::PARAM_CREATED] )
 			) .
 			$this->getListItem(
 				'updated',
-				$this->formatDate( $args[ 'updated' ] )
+				$this->formatDate( $args['updated'] )
 			) .
 			$this->getListItem(
 				'proposer',

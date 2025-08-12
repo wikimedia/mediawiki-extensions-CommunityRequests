@@ -10,7 +10,7 @@ use MediaWiki\Parser\PPFrame;
 use MediaWiki\Parser\PPNode;
 use MediaWiki\Parser\PPNode_Hash_Tree;
 
-class TemplateArgumentExtractor {
+class ArgumentExtractor {
 	private const MAX_DEPTH = 30;
 
 	public function __construct(

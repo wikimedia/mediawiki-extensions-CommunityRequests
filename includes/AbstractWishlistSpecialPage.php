@@ -117,16 +117,15 @@ abstract class AbstractWishlistSpecialPage extends FormSpecialPage {
 			throw new RuntimeException( 'Failed to load wikitext data for wishlist entity' );
 		}
 		$wikitextFields = $this->store->getWikitextFields();
-		$templateParams = $this->store->getTemplateParams();
 		$this->getOutput()->addJsConfigVars( [
 			'intakeId' => $entityId,
 			'intakeData' => [
 				...$entity->toArray( $this->config ),
 				...array_map(
-					static fn ( $field ) => $wikitextData[ $templateParams[ $field ] ],
+					static fn ( $field ) => $wikitextData[$field],
 					array_combine( $wikitextFields, $wikitextFields ),
 				),
-				'baseRevId' => $wikitextData[ 'baseRevId' ],
+				'baseRevId' => $wikitextData['baseRevId'],
 			],
 		] );
 
@@ -211,7 +210,7 @@ abstract class AbstractWishlistSpecialPage extends FormSpecialPage {
 		$context->setRequest( new DerivativeRequest( $this->getRequest(), [
 			'action' => $action,
 			$path => $this->entityId,
-			'token' => $data[ 'wpEditToken' ],
+			'token' => $data['wpEditToken'],
 			...$data,
 		] ) );
 		$api = new ApiMain( $context, true );

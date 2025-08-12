@@ -2,18 +2,14 @@
 
 namespace MediaWiki\Extension\CommunityRequests\Vote;
 
-use MediaWiki\Extension\CommunityRequests\AbstractTemplateRenderer;
+use MediaWiki\Extension\CommunityRequests\AbstractRenderer;
 use MediaWiki\Extension\CommunityRequests\AbstractWishlistEntity;
 use MediaWiki\Html\Html;
 use MediaWiki\Page\PageReference;
 
-class VoteTemplateRenderer extends AbstractTemplateRenderer {
+class VoteRenderer extends AbstractRenderer {
 
 	protected string $entityType = 'vote';
-
-	protected function getArgAliases(): array {
-		return [];
-	}
 
 	public function render(): string {
 		if ( !$this->config->isWishOrFocusAreaPage( $this->parser->getPage() ) &&
@@ -46,7 +42,7 @@ class VoteTemplateRenderer extends AbstractTemplateRenderer {
 		$this->logger->debug( __METHOD__ . ": Rendering vote. {0}", [ json_encode( $args ) ] );
 		$this->parser->getOutput()->setExtensionData( self::EXT_DATA_KEY, $extensionData );
 
-		return $this->renderVoteInternal( $args[ 'username'], $args['timestamp'], $args['comment'] );
+		return $this->renderVoteInternal( $args['username'], $args['timestamp'], $args['comment'] );
 	}
 
 	private function renderVoteInternal( string $username, string $timestamp, string $comment ): string {

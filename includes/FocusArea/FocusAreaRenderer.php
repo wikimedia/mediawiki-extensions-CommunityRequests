@@ -3,18 +3,13 @@ declare( strict_types = 1 );
 
 namespace MediaWiki\Extension\CommunityRequests\FocusArea;
 
-use MediaWiki\Extension\CommunityRequests\AbstractTemplateRenderer;
+use MediaWiki\Extension\CommunityRequests\AbstractRenderer;
 use MediaWiki\Html\Html;
 
-class FocusAreaTemplateRenderer extends AbstractTemplateRenderer {
+class FocusAreaRenderer extends AbstractRenderer {
 	public const FOCUS_AREA_TRACKING_CATEGORY = 'communityrequests-focus-area-category';
 
 	protected string $entityType = 'focus-area';
-
-	/** @inheritDoc */
-	protected function getArgAliases(): array {
-		return array_flip( $this->config->getFocusAreaTemplateParams() );
-	}
 
 	/**
 	 * Render {{#CommunityRequests: focus-area}}
@@ -27,7 +22,7 @@ class FocusAreaTemplateRenderer extends AbstractTemplateRenderer {
 			return '';
 		}
 		$args = $this->getArgs();
-		$args[ 'description' ] ??= '';
+		$args['description'] ??= '';
 
 		$this->parser->addTrackingCategory( self::FOCUS_AREA_TRACKING_CATEGORY );
 
@@ -44,11 +39,11 @@ class FocusAreaTemplateRenderer extends AbstractTemplateRenderer {
 		}
 
 		// These need to be set here because we need them for display in ::renderFocusAreaInternal().
-		$args[ 'updated' ] = $this->parser->getRevisionTimestamp();
-		$args[ FocusArea::PARAM_CREATED ] ??= $args[ 'updated' ];
+		$args['updated'] = $this->parser->getRevisionTimestamp();
+		$args[FocusArea::PARAM_CREATED] ??= $args['updated'];
 
-		$args[ 'entityType' ] = 'focus-area';
-		$args[ 'lang' ] = $this->parser->getTargetLanguage()->getCode();
+		$args['entityType'] = 'focus-area';
+		$args['lang'] = $this->parser->getTargetLanguage()->getCode();
 
 		$this->logger->debug( __METHOD__ . ": Rendering focus area. {0}", [ json_encode( $args ) ] );
 		$this->parser->getOutput()->setExtensionData( self::EXT_DATA_KEY, $args );
@@ -65,7 +60,7 @@ class FocusAreaTemplateRenderer extends AbstractTemplateRenderer {
 		$titleSpan = Html::element(
 			'span',
 			[ 'class' => 'ext-communityrequests-focus-area--title' ],
-			$args[ FocusArea::PARAM_TITLE ]
+			$args[FocusArea::PARAM_TITLE]
 		);
 		$out .= Html::rawElement(
 			'div',
@@ -81,7 +76,7 @@ class FocusAreaTemplateRenderer extends AbstractTemplateRenderer {
 		);
 		$out .= $this->getDivRaw(
 			'description',
-			$this->parser->recursiveTagParse( $args[ 'description' ] )
+			$this->parser->recursiveTagParse( $args['description'] )
 		);
 
 		// Other details.
@@ -95,11 +90,11 @@ class FocusAreaTemplateRenderer extends AbstractTemplateRenderer {
 			[],
 			$this->getListItem(
 				'created',
-				$this->formatDate( $args[ FocusArea::PARAM_CREATED ] )
+				$this->formatDate( $args[FocusArea::PARAM_CREATED] )
 			) .
 			$this->getListItem(
 				'updated',
-				$this->formatDate( $args[ 'updated' ] )
+				$this->formatDate( $args['updated'] )
 			)
 		);
 
@@ -119,8 +114,8 @@ class FocusAreaTemplateRenderer extends AbstractTemplateRenderer {
 		// TODO: implement wishes table somewhere else and re-use it here.
 
 		// Teams and affiliates section.
-		$owners = $args[ FocusArea::PARAM_OWNERS ] ?? '';
-		$volunteers = $args[ FocusArea::PARAM_VOLUNTEERS ] ?? '';
+		$owners = $args[FocusArea::PARAM_OWNERS] ?? '';
+		$volunteers = $args[FocusArea::PARAM_VOLUNTEERS] ?? '';
 		if ( $owners || $volunteers ) {
 			$out .= Html::element(
 				'div',

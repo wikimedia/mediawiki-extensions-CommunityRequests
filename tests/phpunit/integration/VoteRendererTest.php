@@ -11,9 +11,9 @@ use MediaWiki\Title\Title;
 /**
  * @group CommunityRequests
  * @group Database
- * @coversDefaultClass \MediaWiki\Extension\CommunityRequests\Vote\VoteTemplateRenderer
+ * @coversDefaultClass \MediaWiki\Extension\CommunityRequests\Vote\VoteRenderer
  */
-class VoteTemplateRendererTest extends CommunityRequestsIntegrationTestCase {
+class VoteRendererTest extends CommunityRequestsIntegrationTestCase {
 
 	protected function getStore(): AbstractWishlistStore {
 		return $this->store;

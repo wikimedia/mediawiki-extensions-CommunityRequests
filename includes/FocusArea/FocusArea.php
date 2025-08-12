@@ -15,7 +15,7 @@ use MediaWiki\Utils\MWTimestamp;
  */
 class FocusArea extends AbstractWishlistEntity {
 
-	// Constants used for parsing and constructing the template invocation.
+	// Constants used for parsing and constructing the parser function invocation.
 	public const PARAM_SHORT_DESCRIPTION = 'shortdescription';
 	public const PARAM_OWNERS = 'owners';
 	public const PARAM_VOLUNTEERS = 'volunteers';
@@ -114,9 +114,6 @@ class FocusArea extends AbstractWishlistEntity {
 	public function toWikitext( WishlistConfig $config ): WikitextContent {
 		$wikitext = "{{#CommunityRequests: focus-area\n";
 		foreach ( self::PARAMS as $param ) {
-			// TODO: Remove all vestiges of ze templates.
-			$displayParam = $config->getFocusAreaTemplateParams()[ $param ];
-
 			// Match ID values to their wikitext representations, as defined by site configuration.
 			$value = match ( $param ) {
 				self::PARAM_STATUS => $config->getStatusWikitextValFromId( $this->status ),
@@ -128,7 +125,7 @@ class FocusArea extends AbstractWishlistEntity {
 
 			// Append wikitext.
 			$value = trim( (string)$value );
-			$wikitext .= "| $displayParam = $value\n";
+			$wikitext .= "| $param = $value\n";
 		}
 		$wikitext .= "}}\n";
 		return new WikitextContent( $wikitext );
@@ -142,15 +139,15 @@ class FocusArea extends AbstractWishlistEntity {
 		WishlistConfig $config
 	): self {
 		$fields = [
-			'status' => $config->getStatusIdFromWikitextVal( $params[ self::PARAM_STATUS ] ?? '' ),
-			'title' => $params[ self::PARAM_TITLE ] ?? '',
-			'description' => $params[ self::PARAM_DESCRIPTION ] ?? null,
-			'shortDescription' => $params[ self::PARAM_SHORT_DESCRIPTION ] ?? '',
-			'owners' => $params[ self::PARAM_OWNERS ] ?? '',
-			'volunteers' => $params[ self::PARAM_VOLUNTEERS ] ?? '',
-			'created' => $params[ self::PARAM_CREATED ] ?? null,
+			'status' => $config->getStatusIdFromWikitextVal( $params[self::PARAM_STATUS] ?? '' ),
+			'title' => $params[self::PARAM_TITLE] ?? '',
+			'description' => $params[self::PARAM_DESCRIPTION] ?? null,
+			'shortDescription' => $params[self::PARAM_SHORT_DESCRIPTION] ?? '',
+			'owners' => $params[self::PARAM_OWNERS] ?? '',
+			'volunteers' => $params[self::PARAM_VOLUNTEERS] ?? '',
+			'created' => $params[self::PARAM_CREATED] ?? null,
 			'baseLang' => $lang,
-			'voteCount' => $params[ self::PARAM_VOTE_COUNT] ?? null,
+			'voteCount' => $params[self::PARAM_VOTE_COUNT] ?? null,
 		];
 		return new self( $pageTitle, $lang, $fields );
 	}

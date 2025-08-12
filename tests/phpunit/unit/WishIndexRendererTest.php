@@ -5,7 +5,7 @@ namespace MediaWiki\Extension\CommunityRequests\Tests\Integration;
 
 use MediaWiki\Extension\CommunityRequests\FocusArea\FocusAreaStore;
 use MediaWiki\Extension\CommunityRequests\Tests\Unit\AbstractWishlistEntityTest;
-use MediaWiki\Extension\CommunityRequests\Wish\WishIndexTemplateRenderer;
+use MediaWiki\Extension\CommunityRequests\Wish\WishIndexRenderer;
 use MediaWiki\Language\Language;
 use MediaWiki\Linker\LinkRenderer;
 use MediaWiki\Parser\Parser;
@@ -16,9 +16,9 @@ use Psr\Log\LoggerInterface;
 
 /**
  * @group CommunityRequests
- * @coversDefaultClass \MediaWiki\Extension\CommunityRequests\Wish\WishIndexTemplateRenderer
+ * @coversDefaultClass \MediaWiki\Extension\CommunityRequests\Wish\WishIndexRenderer
  */
-class WishIndexTemplateRendererTest extends AbstractWishlistEntityTest {
+class WishIndexRendererTest extends AbstractWishlistEntityTest {
 
 	use MockTitleTrait;
 
@@ -49,7 +49,7 @@ class WishIndexTemplateRendererTest extends AbstractWishlistEntityTest {
 			->willReturn( $language );
 		$parser->expects( $this->once() )
 			->method( 'addTrackingCategory' )
-			->with( WishIndexTemplateRenderer::TRACKING_CATEGORY );
+			->with( WishIndexRenderer::TRACKING_CATEGORY );
 		$childFrame = $this->createNoOpMock( PPFrame::class, [ 'getArguments' ] );
 		$childFrame->expects( $this->once() )
 			->method( 'getArguments' )
@@ -59,7 +59,7 @@ class WishIndexTemplateRendererTest extends AbstractWishlistEntityTest {
 			->method( 'newChild' )
 			->willReturn( $childFrame );
 
-		$renderer = new WishIndexTemplateRenderer(
+		$renderer = new WishIndexRenderer(
 			$this->config,
 			$this->createNoOpMock( FocusAreaStore::class ),
 			$this->createNoOpMock( LoggerInterface::class ),

@@ -11,12 +11,12 @@ use MediaWiki\Context\RequestContext;
 use MediaWiki\Deferred\DeferrableUpdate;
 use MediaWiki\Deferred\LinksUpdate\LinksUpdate;
 use MediaWiki\Deferred\MWCallableUpdate;
-use MediaWiki\Extension\CommunityRequests\AbstractTemplateRenderer;
+use MediaWiki\Extension\CommunityRequests\AbstractRenderer;
 use MediaWiki\Extension\CommunityRequests\AbstractWishlistEntity;
 use MediaWiki\Extension\CommunityRequests\AbstractWishlistStore;
 use MediaWiki\Extension\CommunityRequests\EntityFactory;
 use MediaWiki\Extension\CommunityRequests\FocusArea\FocusAreaStore;
-use MediaWiki\Extension\CommunityRequests\TemplateRendererFactory;
+use MediaWiki\Extension\CommunityRequests\RendererFactory;
 use MediaWiki\Extension\CommunityRequests\Wish\WishStore;
 use MediaWiki\Extension\CommunityRequests\WishlistConfig;
 use MediaWiki\Extension\Translate\MessageLoading\MessageHandle;
@@ -74,10 +74,10 @@ class CommunityRequestsHooks implements
 	public const WISHLIST_CHANGE_TAG = 'community-wishlist';
 	public const MAGIC_MACHINETRANSLATION = 'machinetranslation';
 	public const SESSION_KEY = 'communityrequests-intake';
-	protected const EXT_DATA_KEY = AbstractTemplateRenderer::EXT_DATA_KEY;
+	protected const EXT_DATA_KEY = AbstractRenderer::EXT_DATA_KEY;
 	protected bool $translateInstalled;
 	protected bool $pageLanguageUseDB;
-	private TemplateRendererFactory $templateRendererFactory;
+	private RendererFactory $rendererFactory;
 	/** @var AbstractWishlistStore[] */
 	private array $stores;
 
@@ -105,7 +105,7 @@ class CommunityRequestsHooks implements
 			// Happens in unit tests.
 			$this->translateInstalled = false;
 		}
-		$this->templateRendererFactory = new TemplateRendererFactory(
+		$this->rendererFactory = new RendererFactory(
 			$config,
 			$focusAreaStore,
 			$this->logger,
@@ -131,7 +131,7 @@ class CommunityRequestsHooks implements
 		}
 		$parser->setFunctionHook(
 			'communityrequests',
-			$this->templateRendererFactory->render( ... ),
+			$this->rendererFactory->render( ... ),
 			Parser::SFH_OBJECT_ARGS
 		);
 	}
@@ -223,18 +223,18 @@ class CommunityRequestsHooks implements
 				$data = $parserOutput->getExtensionData( self::EXT_DATA_KEY );
 
 				if ( $data &&
-					$data[ AbstractWishlistEntity::PARAM_BASE_LANG ] !== $title->getPageLanguage()->getCode() &&
+					$data[AbstractWishlistEntity::PARAM_BASE_LANG] !== $title->getPageLanguage()->getCode() &&
 					// @phan-suppress-next-line PhanUndeclaredClassMethod
 					TranslatablePage::isTranslationPage( $title ) === false
 				) {
 					$store->setPageLanguage(
 						$title->getId(),
-						$data[ AbstractWishlistEntity::PARAM_BASE_LANG ]
+						$data[AbstractWishlistEntity::PARAM_BASE_LANG]
 					);
 					// Keep track of the language change in the extension data to guard
 					// against race conditions. This will be used later instead of fetching
 					// page language from the Title object.
-					$data[ 'lang' ] = $data[ AbstractWishlistEntity::PARAM_BASE_LANG ];
+					$data['lang'] = $data[AbstractWishlistEntity::PARAM_BASE_LANG];
 					$parserOutput->setExtensionData( self::EXT_DATA_KEY, $data );
 				}
 			}, __METHOD__ );
@@ -322,7 +322,7 @@ class CommunityRequestsHooks implements
 		if ( !$data ) {
 			return;
 		}
-		$store = $this->stores[ $data['entityType'] ];
+		$store = $this->stores[$data['entityType']];
 		$title = $linksUpdate->getTitle();
 		$entity = $this->entityFactory->createFromParserData( $data, $this->getCanonicalWishlistPage( $title ) );
 
@@ -422,7 +422,7 @@ class CommunityRequestsHooks implements
 
 		$voteCount = intval( $data[AbstractWishlistEntity::PARAM_VOTE_COUNT] ?? 0 );
 		$text = str_replace(
-			AbstractTemplateRenderer::VOTING_STRIP_MARKER,
+			AbstractRenderer::VOTING_STRIP_MARKER,
 			$parser->msg( "communityrequests-{$data['entityType']}-voting-info" )
 				->numParams( $voteCount )
 				->params( $voteCount )

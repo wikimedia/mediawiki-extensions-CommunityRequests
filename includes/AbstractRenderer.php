@@ -1,5 +1,4 @@
 <?php
-
 declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CommunityRequests;
@@ -17,7 +16,7 @@ use Psr\Log\LoggerInterface;
 /**
  * The base class for wish/focus area parser function implementations
  */
-abstract class AbstractTemplateRenderer {
+abstract class AbstractRenderer {
 	public const TRACKING_CATEGORY = 'communityrequests-category';
 	public const ERROR_TRACKING_CATEGORY = 'communityrequests-error-category';
 	public const EXT_DATA_KEY = 'CommunityRequests-ext-data';
@@ -68,8 +67,8 @@ abstract class AbstractTemplateRenderer {
 	}
 
 	/**
-	 * Get the associative array of template arguments indexed by the names
-	 * given in the source.
+	 * Get the associative array of parser function arguments
+	 * indexed by the names given in the source.
 	 *
 	 * @return (string|int)[]
 	 */
@@ -84,29 +83,18 @@ abstract class AbstractTemplateRenderer {
 	}
 
 	/**
-	 * Get the template arguments by their canonical names
+	 * Get the parser function arguments keyed by their names.
 	 *
 	 * @return array
 	 */
 	protected function getArgs(): array {
-		$aliases = $this->getArgAliases();
 		$mappedArgs = [];
 		foreach ( $this->getUnmappedArgs() as $name => $value ) {
 			$name = (string)$name;
-			if ( isset( $aliases[strtolower( $name )] ) ) {
-				$name = $aliases[strtolower( $name )];
-			}
 			$mappedArgs[$name] = $value;
 		}
 		return $mappedArgs;
 	}
-
-	/**
-	 * Get the map of template argument aliases to their canonical names
-	 *
-	 * @return array
-	 */
-	abstract protected function getArgAliases(): array;
 
 	// HTML helpers for rendering wish or focus area pages.
 
@@ -134,7 +122,7 @@ abstract class AbstractTemplateRenderer {
 	protected function getStatusChipHtml(): string {
 		$cssClass = 'cdx-info-chip ext-communityrequests-' . $this->entityType . '--status';
 
-		$statusValue = $this->getArgs()[ AbstractWishlistEntity::PARAM_STATUS ] ?? '';
+		$statusValue = $this->getArgs()[AbstractWishlistEntity::PARAM_STATUS] ?? '';
 
 		if ( $statusValue === 'done' ) {
 			$cssClass .= ' cdx-info-chip--success';

@@ -21,7 +21,7 @@ class ApiQueryWishesTest extends CommunityRequestsIntegrationTestCase {
 			'list' => 'communityrequests-wishes',
 			'crwlang' => 'en',
 		] );
-		$this->assertSame( [], $ret[ 'query' ][ 'communityrequests-wishes' ] );
+		$this->assertSame( [], $ret['query']['communityrequests-wishes'] );
 	}
 
 	protected function getStore(): WishStore {
@@ -54,10 +54,10 @@ class ApiQueryWishesTest extends CommunityRequestsIntegrationTestCase {
 			'crwdir' => 'ascending',
 			'crwlang' => 'en',
 		] );
-		$this->assertCount( 3, $ret[ 'query' ][ $queryKey ] );
-		$this->assertSame( 'Test Wish 1', $ret[ 'query' ][ $queryKey ][ 0 ][ 'title' ] );
-		$this->assertSame( 'Test Wish 2', $ret[ 'query' ][ $queryKey ][ 1 ][ 'title' ] );
-		$this->assertSame( 'Test Wish 3', $ret[ 'query' ][ $queryKey ][ 2 ][ 'title' ] );
+		$this->assertCount( 3, $ret['query'][$queryKey] );
+		$this->assertSame( 'Test Wish 1', $ret['query'][$queryKey][0]['title'] );
+		$this->assertSame( 'Test Wish 2', $ret['query'][$queryKey][1]['title'] );
+		$this->assertSame( 'Test Wish 3', $ret['query'][$queryKey][2]['title'] );
 
 		[ $ret ] = $this->doApiRequest( [
 			'action' => 'query',
@@ -66,10 +66,10 @@ class ApiQueryWishesTest extends CommunityRequestsIntegrationTestCase {
 			'crwdir' => 'descending',
 			'crwlang' => 'en',
 		] );
-		$this->assertCount( 3, $ret[ 'query' ][ $queryKey ] );
-		$this->assertSame( 'Test Wish 3', $ret[ 'query' ][ $queryKey ][ 0 ][ 'title' ] );
-		$this->assertSame( 'Test Wish 2', $ret[ 'query' ][ $queryKey ][ 1 ][ 'title' ] );
-		$this->assertSame( 'Test Wish 1', $ret[ 'query' ][ $queryKey ][ 2 ][ 'title' ] );
+		$this->assertCount( 3, $ret['query'][$queryKey] );
+		$this->assertSame( 'Test Wish 3', $ret['query'][$queryKey][0]['title'] );
+		$this->assertSame( 'Test Wish 2', $ret['query'][$queryKey][1]['title'] );
+		$this->assertSame( 'Test Wish 1', $ret['query'][$queryKey][2]['title'] );
 	}
 
 	/**
@@ -97,10 +97,10 @@ class ApiQueryWishesTest extends CommunityRequestsIntegrationTestCase {
 			'crwdir' => 'ascending',
 			'crwlang' => 'en',
 		] );
-		$this->assertCount( 3, $ret[ 'query' ][ $queryKey ] );
-		$this->assertSame( 'Test Wish 1', $ret[ 'query' ][ $queryKey ][ 0 ][ 'title' ] );
-		$this->assertSame( 'Test Wish 2', $ret[ 'query'][ $queryKey ][ 1 ][ 'title'] );
-		$this->assertSame( 'Test Wish 3', $ret[ 'query'][ $queryKey ][ 2 ][ 'title'] );
+		$this->assertCount( 3, $ret['query'][$queryKey] );
+		$this->assertSame( 'Test Wish 1', $ret['query'][$queryKey][0]['title'] );
+		$this->assertSame( 'Test Wish 2', $ret['query'][$queryKey][1]['title'] );
+		$this->assertSame( 'Test Wish 3', $ret['query'][$queryKey][2]['title'] );
 
 		[ $ret ] = $this->doApiRequest( [
 			'action' => 'query',
@@ -109,10 +109,10 @@ class ApiQueryWishesTest extends CommunityRequestsIntegrationTestCase {
 			'crwdir' => 'descending',
 			'crwlang' => 'en',
 		 ] );
-		$this->assertCount( 3, $ret[ 'query'][ $queryKey ] );
-		$this->assertSame( 'Test Wish 3', $ret[ 'query'][ $queryKey ][ 0 ][ 'title'] );
-		$this->assertSame( 'Test Wish 2', $ret[ 'query'][ $queryKey ][ 1 ][ 'title'] );
-		$this->assertSame( 'Test Wish 1', $ret[ 'query'][ $queryKey ][ 2 ][ 'title'] );
+		$this->assertCount( 3, $ret['query'][$queryKey] );
+		$this->assertSame( 'Test Wish 3', $ret['query'][$queryKey][0]['title'] );
+		$this->assertSame( 'Test Wish 2', $ret['query'][$queryKey][1]['title'] );
+		$this->assertSame( 'Test Wish 1', $ret['query'][$queryKey][2]['title'] );
 	}
 
 	/**
@@ -140,10 +140,10 @@ class ApiQueryWishesTest extends CommunityRequestsIntegrationTestCase {
 			'crwdir' => 'ascending',
 			'crwlang' => 'en',
 		] );
-		$this->assertCount( 3, $ret[ 'query' ][ $queryKey ] );
-		$this->assertSame( 'Test Wish A', $ret[ 'query' ][ $queryKey ][ 0 ][ 'title' ] );
-		$this->assertSame( 'Test Wish B', $ret[ 'query' ][ $queryKey ][ 1 ][ 'title' ] );
-		$this->assertSame( 'Test Wish C', $ret[ 'query' ][ $queryKey ][ 2 ][ 'title' ] );
+		$this->assertCount( 3, $ret['query'][$queryKey] );
+		$this->assertSame( 'Test Wish A', $ret['query'][$queryKey][0]['title'] );
+		$this->assertSame( 'Test Wish B', $ret['query'][$queryKey][1]['title'] );
+		$this->assertSame( 'Test Wish C', $ret['query'][$queryKey][2]['title'] );
 
 		[ $ret ] = $this->doApiRequest( [
 			'action' => 'query',
@@ -152,10 +152,10 @@ class ApiQueryWishesTest extends CommunityRequestsIntegrationTestCase {
 			'crwdir' => 'descending',
 			'crwlang' => 'en',
 		] );
-		$this->assertCount( 3, $ret[ 'query' ][ $queryKey ] );
-		$this->assertSame( 'Test Wish C', $ret[ 'query' ][ $queryKey ][ 0 ][ 'title' ] );
-		$this->assertSame( 'Test Wish B', $ret[ 'query' ][ $queryKey ][ 1 ][ 'title' ] );
-		$this->assertSame( 'Test Wish A', $ret[ 'query' ][ $queryKey ][ 2 ][ 'title' ] );
+		$this->assertCount( 3, $ret['query'][$queryKey] );
+		$this->assertSame( 'Test Wish C', $ret['query'][$queryKey][0]['title'] );
+		$this->assertSame( 'Test Wish B', $ret['query'][$queryKey][1]['title'] );
+		$this->assertSame( 'Test Wish A', $ret['query'][$queryKey][2]['title'] );
 	}
 
 	/**
@@ -183,10 +183,10 @@ class ApiQueryWishesTest extends CommunityRequestsIntegrationTestCase {
 			'crwlang' => 'en',
 			'crwlimit' => 2,
 		] );
-		$this->assertCount( 2, $ret[ 'query' ][ 'communityrequests-wishes' ] );
-		$this->assertSame( 'Test Wish 3', $ret[ 'query' ][ 'communityrequests-wishes' ][ 0 ][ 'title' ] );
-		$this->assertSame( 'Test Wish 2', $ret[ 'query' ][ 'communityrequests-wishes' ][ 1 ][ 'title' ] );
-		$this->assertSame( 'Test Wish 1|20231001000000|0', $ret[ 'continue' ][ 'crwcontinue' ] );
+		$this->assertCount( 2, $ret['query']['communityrequests-wishes'] );
+		$this->assertSame( 'Test Wish 3', $ret['query']['communityrequests-wishes'][0]['title'] );
+		$this->assertSame( 'Test Wish 2', $ret['query']['communityrequests-wishes'][1]['title'] );
+		$this->assertSame( 'Test Wish 1|20231001000000|0', $ret['continue']['crwcontinue'] );
 
 		[ $ret ] = $this->doApiRequest( [
 			'action' => 'query',
@@ -197,8 +197,8 @@ class ApiQueryWishesTest extends CommunityRequestsIntegrationTestCase {
 			'crwlimit' => 2,
 			'crwcontinue' => 'Test Wish 1|20231001000000|2',
 		] );
-		$this->assertCount( 1, $ret[ 'query' ][ 'communityrequests-wishes' ] );
-		$this->assertSame( 'Test Wish 1', $ret[ 'query' ][ 'communityrequests-wishes' ][ 0 ][ 'title' ] );
+		$this->assertCount( 1, $ret['query']['communityrequests-wishes'] );
+		$this->assertSame( 'Test Wish 1', $ret['query']['communityrequests-wishes'][0]['title'] );
 		$this->assertArrayNotHasKey( 'continue', $ret );
 	}
 
@@ -214,7 +214,7 @@ class ApiQueryWishesTest extends CommunityRequestsIntegrationTestCase {
 			'list' => 'communityrequests-wishes',
 			'crwcount' => 1,
 		] );
-		$this->assertSame( 2, $ret[ 'query' ][ 'communityrequests-wishes-metadata' ][ 'count' ] );
+		$this->assertSame( 2, $ret['query']['communityrequests-wishes-metadata']['count'] );
 	}
 
 	/**
@@ -252,17 +252,17 @@ class ApiQueryWishesTest extends CommunityRequestsIntegrationTestCase {
 	private function createTestWishWithApi( $params = [] ): array {
 		$params = [
 			'action' => 'wishedit',
-			'status' => $params[ 'status' ] ?? 'under-review',
-			'title' => $params[ 'title' ] ?? 'Test Wish',
-			'type' => $params[ 'type' ] ?? 'feature',
-			'description' => $params[ 'description' ] ?? 'This is a test wish.',
-			'projects' => $params[ 'projects' ] ?? 'wikipedia|commons',
-			'otherproject' => $params[ 'otherproject' ] ?? '',
-			'audience' => $params[ 'audience' ] ?? 'everyone',
-			'phabtasks' => $params[ 'phabtasks' ] ?? 'T123,T456',
-			'proposer' => $params[ 'proposer' ] ?? $this->getTestUser()->getUser()->getName(),
-			'created' => $params[ 'created' ] ?? '2023-10-01T00:00:00Z',
-			'baselang' => $params[ 'baselang' ] ?? 'en',
+			'status' => $params['status'] ?? 'under-review',
+			'title' => $params['title'] ?? 'Test Wish',
+			'type' => $params['type'] ?? 'feature',
+			'description' => $params['description'] ?? 'This is a test wish.',
+			'projects' => $params['projects'] ?? 'wikipedia|commons',
+			'otherproject' => $params['otherproject'] ?? '',
+			'audience' => $params['audience'] ?? 'everyone',
+			'phabtasks' => $params['phabtasks'] ?? 'T123,T456',
+			'proposer' => $params['proposer'] ?? $this->getTestUser()->getUser()->getName(),
+			'created' => $params['created'] ?? '2023-10-01T00:00:00Z',
+			'baselang' => $params['baselang'] ?? 'en',
 			...$params,
 		];
 

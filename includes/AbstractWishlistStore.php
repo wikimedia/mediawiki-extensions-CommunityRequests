@@ -224,7 +224,7 @@ abstract class AbstractWishlistStore {
 		if ( $offset ) {
 			$conds = [];
 			foreach ( $orderPrecedence as $field ) {
-				$conds[ $field ] = match ( $field ) {
+				$conds[$field] = match ( $field ) {
 					// Timestamp
 					static::createdField() => $offset[1],
 					static::updatedField() => $offset[1],
@@ -284,19 +284,19 @@ abstract class AbstractWishlistStore {
 		foreach ( $resultWrapper as $entityData ) {
 			$pageId = $entityData->{ static::pageField() };
 			$langCode = $entityData->{ static::translationLangField() };
-			$entityDataByPage[ $pageId ][ $langCode ] = $entityData;
+			$entityDataByPage[$pageId][$langCode] = $entityData;
 		}
 
 		foreach ( $entityDataByPage as $entityDataByLang ) {
 			// All rows in $entityData have the same base language.
 			$baseLang = reset( $entityDataByLang )->{ static::baseLangField() };
 			// This will be overridden if a user-preferred language is found.
-			$row = $entityDataByLang[ $baseLang ];
+			$row = $entityDataByLang[$baseLang];
 
 			// Find the first row with a matching language.
 			foreach ( $fallbackLangs as $fallbackLang ) {
-				if ( isset( $entityDataByLang[ $fallbackLang ] ) ) {
-					$row = $entityDataByLang[ $fallbackLang ];
+				if ( isset( $entityDataByLang[$fallbackLang] ) ) {
+					$row = $entityDataByLang[$fallbackLang];
 					break;
 				}
 			}
@@ -339,7 +339,7 @@ abstract class AbstractWishlistStore {
 			static::translationForeignKey() => $entity->getPage()->getId(),
 			static::translationLangField() => $entity->getLang()
 		];
-		$dataSet[ static::titleField() ] = mb_strcut( $entity->getTitle(), 0, static::TITLE_MAX_BYTES, 'UTF-8' );
+		$dataSet[static::titleField()] = mb_strcut( $entity->getTitle(), 0, static::TITLE_MAX_BYTES, 'UTF-8' );
 		$dbw->newInsertQueryBuilder()
 			->insert( static::translationsTableName() )
 			->rows( [ array_merge( $data, $dataSet ) ] )
@@ -379,7 +379,7 @@ abstract class AbstractWishlistStore {
 
 		// Delete everything else if we're dealing with the base language.
 		if ( $entity->isBaseLang() ) {
-			$assocData[ static::tableName() ] = static::pageField();
+			$assocData[static::tableName()] = static::pageField();
 			foreach ( $assocData as $table => $foreignKey ) {
 				$dbw->newDeleteQueryBuilder()
 					->deleteFrom( $table )
@@ -432,7 +432,7 @@ abstract class AbstractWishlistStore {
 	}
 
 	/**
-	 * Parse wish data from the template invocation of a wishlist entity page.
+	 * Get data from the parser function invocation of a wishlist entity page.
 	 *
 	 * @param int $pageId The page ID of the wish or focus area.
 	 * @return ?array The parsed data from the wikitext.
@@ -446,7 +446,7 @@ abstract class AbstractWishlistStore {
 			throw new RuntimeException( 'Invalid content type for AbstractWishlistEntity' );
 		}
 		$wikitext = $content->getText();
-		$args = ( new TemplateArgumentExtractor( $this->parserFactory ) )
+		$args = ( new ArgumentExtractor( $this->parserFactory ) )
 			->getFuncArgs(
 				'communityrequests',
 				$this->entityType(),
@@ -454,25 +454,25 @@ abstract class AbstractWishlistStore {
 			);
 		if ( $args !== null ) {
 			// Include baseRevId
-			$args[ 'baseRevId' ] = $revRecord->getId();
+			$args['baseRevId'] = $revRecord->getId();
 		}
 		return $args;
 	}
 
 	/**
-	 * Get the fields that only exist in the wikitext template invocation,
-	 * and should be extracted with ::getDataFromWikitext().
+	 * Get the fields that only exist in the wikitext and not in the database.
+	 * These should be extracted with ::getDataFromWikitext().
 	 *
 	 * @return string[]
 	 */
 	abstract public function getWikitextFields(): array;
 
 	/**
-	 * Get the parameters for the template invocation of the wishlist entity.
+	 * Get the parameters for the parser function invocation.
 	 *
 	 * @return array
 	 */
-	abstract public function getTemplateParams(): array;
+	abstract public function getParams(): array;
 
 	/**
 	 * Get the prefix for the wishlist entity page.

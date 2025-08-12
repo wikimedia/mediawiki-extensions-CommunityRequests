@@ -25,7 +25,7 @@ class ApiFocusAreaEditTest extends ApiTestCase {
 		string $expectedSummary = '',
 		?string $expectedUpdateSummary = null
 	): void {
-		$params[ 'action' ] = 'focusareaedit';
+		$params['action'] = 'focusareaedit';
 
 		// If $expected is a string, we expect an error message to match it.
 		if ( is_string( $expected ) ) {
@@ -42,45 +42,45 @@ class ApiFocusAreaEditTest extends ApiTestCase {
 		}
 
 		// Assert warnings if applicable.
-		if ( isset( $expected[ 'warnings' ] ) ) {
-			$this->assertArrayEquals( $expected[ 'warnings' ], $ret[ 'warnings' ] );
+		if ( isset( $expected['warnings'] ) ) {
+			$this->assertArrayEquals( $expected['warnings'], $ret['warnings'] );
 		} else {
 			$this->assertArrayNotHasKey( 'warnings', $ret );
 		}
 
 		// To reduce duplication in the test cases, expect back what was given in $params.
-		$expected[ 'focusareaedit' ] ??= [];
-		$expected[ 'focusareaedit' ] += $params;
+		$expected['focusareaedit'] ??= [];
+		$expected['focusareaedit'] += $params;
 
 		// Main body of the response.
-		$this->assertSame( $expected[ 'focusareaedit' ][ 'title' ], $ret[ 'focusareaedit' ][ 'title' ] );
-		$this->assertSame( $expected[ 'focusareaedit' ][ 'status' ], $ret[ 'focusareaedit' ][ 'status' ] );
-		$this->assertSame( $expected[ 'focusareaedit' ][ 'description' ], $ret[ 'focusareaedit' ][ 'description' ] );
+		$this->assertSame( $expected['focusareaedit']['title'], $ret['focusareaedit']['title'] );
+		$this->assertSame( $expected['focusareaedit']['status'], $ret['focusareaedit']['status'] );
+		$this->assertSame( $expected['focusareaedit']['description'], $ret['focusareaedit']['description'] );
 		$this->assertSame(
-			$expected[ 'focusareaedit' ][ 'shortdescription' ],
-			$ret[ 'focusareaedit' ][ 'shortdescription' ]
+			$expected['focusareaedit']['shortdescription'],
+			$ret['focusareaedit']['shortdescription']
 		);
-		$this->assertSame( $expected[ 'focusareaedit' ][ 'owners' ], $ret[ 'focusareaedit' ][ 'owners' ] );
-		$this->assertSame( $expected[ 'focusareaedit' ][ 'volunteers' ], $ret[ 'focusareaedit' ][ 'volunteers' ] );
-		$this->assertSame( $expected[ 'focusareaedit' ][ 'created' ], $ret[ 'focusareaedit' ][ 'created' ] );
+		$this->assertSame( $expected['focusareaedit']['owners'], $ret['focusareaedit']['owners'] );
+		$this->assertSame( $expected['focusareaedit']['volunteers'], $ret['focusareaedit']['volunteers'] );
+		$this->assertSame( $expected['focusareaedit']['created'], $ret['focusareaedit']['created'] );
 		$this->assertTrue(
-			preg_match( '/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z/', $ret[ 'focusareaedit' ][ 'updated' ] ) === 1
+			preg_match( '/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z/', $ret['focusareaedit']['updated'] ) === 1
 		);
-		$this->assertSame( $expected[ 'focusareaedit' ][ 'baselang' ], $ret[ 'focusareaedit' ][ 'baselang' ] );
+		$this->assertSame( $expected['focusareaedit']['baselang'], $ret['focusareaedit']['baselang'] );
 
 		// Fetch the revision.
 		$revLookup = $this->getServiceContainer()->getRevisionLookup();
 		$revision = $revLookup->getRevisionByTitle(
-			Title::newFromText( $ret[ 'focusareaedit' ][ 'focusarea' ] )->toPageIdentity()
+			Title::newFromText( $ret['focusareaedit']['focusarea'] )->toPageIdentity()
 		);
 		$this->assertSame( $expectedSummary, $revision->getComment()->text );
 
 		// Make an additional edit and assert the edit summary, if applicable.
 		if ( $expectedUpdateSummary !== null ) {
-			$params[ 'focusarea' ] = $ret[ 'focusareaedit' ][ 'focusarea' ];
-			$params[ 'description' ] = 'Updated description';
+			$params['focusarea'] = $ret['focusareaedit']['focusarea'];
+			$params['description'] = 'Updated description';
 			[ $ret ] = $this->doApiRequestWithToken( $params );
-			$this->assertSame( 'Updated description', $ret[ 'focusareaedit' ][ 'description' ] );
+			$this->assertSame( 'Updated description', $ret['focusareaedit']['description'] );
 			$revision = $revLookup->getNextRevision( $revision );
 			$this->assertSame( $expectedUpdateSummary, $revision->getComment()->text );
 		}

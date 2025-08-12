@@ -183,6 +183,7 @@ class CommunityRequestsHooks implements
 	/**
 	 * Returns base language page identity for a wish or focus area page.
 	 *
+	 * @todo Replace with the static WishlistConfig::getCanonicalWishlistPage()
 	 * @param PageIdentity $identity
 	 * @return PageIdentity
 	 */

@@ -223,12 +223,14 @@ abstract class AbstractRenderer {
 		}
 
 		// Transclude the /Votes subpage if it exists.
-		// @phan-suppress-next-line PhanTypeMismatchArgumentNullable
-		$voteSubpagePath = Title::newFromPageReference( $this->parser->getPage() )->getPrefixedDBkey()
-			. $this->config->getVotesPageSuffix();
-		$voteSubpageTitle = Title::newFromText( $voteSubpagePath );
-		if ( $voteSubpageTitle->exists() ) {
-			$out .= $this->parser->recursiveTagParse( '{{:' . $voteSubpagePath . '}}' );
+		$basePage = $this->config->getCanonicalEntityPageRef( $this->parser->getPage() );
+		if ( $basePage ) {
+			$voteSubpagePath = Title::newFromPageReference( $basePage )->getPrefixedDBkey()
+				. $this->config->getVotesPageSuffix();
+			$voteSubpageTitle = Title::newFromText( $voteSubpagePath );
+			if ( $voteSubpageTitle->exists() ) {
+				$out .= $this->parser->recursiveTagParse( '{{:' . $voteSubpagePath . '}}' );
+			}
 		}
 
 		// Close the voting container.

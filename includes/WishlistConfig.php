@@ -260,6 +260,35 @@ class WishlistConfig {
 	}
 
 	/**
+	 * Get a page reference for the canonical entity (no language suffix)
+	 * given an entity page or translation subpage.
+	 *
+	 * @param ?PageReference $identity
+	 * @return ?PageReference null if the identity is null or not a valid translation subpage,
+	 *   or the canonical page is not a wish or focus area page.
+	 */
+	public function getCanonicalEntityPageRef( ?PageReference $identity ): ?PageReference {
+		if ( $identity === null ) {
+			return null;
+		}
+
+		$parts = explode( '/', $identity->getDBkey() );
+		$lastPart = end( $parts );
+		if ( $this->languageNameUtils->isKnownLanguageTag( $lastPart ) ) {
+			array_pop( $parts );
+			$entityPageStr = implode( '/', $parts );
+			try {
+				$entityPage = $this->titleParser->parseTitle( $entityPageStr, $identity->getNamespace() );
+			} catch ( MalformedTitleException ) {
+				return null;
+			}
+			$identity = PageReferenceValue::localReference( $entityPage->getNamespace(), $entityPage->getDBkey() );
+		}
+
+		return $this->isWishOrFocusAreaPage( $identity ) ? $identity : null;
+	}
+
+	/**
 	 * Check if the given PageReference is the wish index page.
 	 *
 	 * @param ?PageReference $identity

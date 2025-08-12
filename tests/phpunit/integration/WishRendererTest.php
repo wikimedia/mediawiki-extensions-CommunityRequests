@@ -97,16 +97,30 @@ END;
 	 * @covers \MediaWiki\Extension\CommunityRequests\AbstractRenderer::getVotingSection
 	 */
 	public function testVoteCountRendering() {
+		$wikiPageFactory = $this->getServiceContainer()->getWikiPageFactory();
 		$wish = $this->insertTestWish( 'Community Wishlist/Wishes/W123', 'en' );
 		$this->insertPage(
 			$wish->getPage()->getDBkey() . $this->config->getVotesPageSuffix(),
 			"{{#CommunityRequests:vote|username=TestUser1|timestamp=2023-10-01T12:00:00Z|comment=First vote}}\n" .
 				"{{#CommunityRequests:vote|username=TestUser2|timestamp=2023-10-01T12:00:00Z|comment=Second vote}}\n"
 		);
-		$wikiPage = $this->getServiceContainer()->getWikiPageFactory()->newFromTitle( $wish->getPage() );
+		$wikiPage = $wikiPageFactory->newFromTitle( $wish->getPage() );
 		$wikiPage->updateParserCache();
 		$parserOutput = $wikiPage->getParserOutput();
 		$this->assertStringContainsString( '<b>2 supporters</b>', $parserOutput->getRawText() );
+
+		$wishDe = $this->insertTestWish(
+			'Community Wishlist/Wishes/W123',
+			'de',
+			'2025-01-01T00:00:00Z',
+			self::EDIT_AS_TRANSLATION_SUBPAGE
+		);
+		$wikiPageDe = $wikiPageFactory->newFromTitle(
+			Title::newFromPageReference( $wishDe->getTranslationSubpage() )
+		);
+		$wikiPageDe->updateParserCache();
+		$parserOutputDe = $wikiPageDe->getParserOutput();
+		$this->assertStringContainsString( '<b>2 Unterstützer</b>', $parserOutputDe->getRawText() );
 	}
 
 	// phpcs:enable Generic.Files.LineLength.TooLong

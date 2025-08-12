@@ -8,6 +8,7 @@ use MediaWiki\Config\ServiceOptions;
 use MediaWiki\Extension\CommunityRequests\WishlistConfig;
 use MediaWiki\Language\LanguageNameUtils;
 use MediaWiki\MainConfigNames;
+use MediaWiki\Page\PageReferenceValue;
 use MediaWiki\Tests\Unit\MockServiceDependenciesTrait;
 use MediaWiki\Title\TitleFormatter;
 use MediaWiki\Title\TitleParser;
@@ -299,5 +300,34 @@ class WishlistConfigTest extends MediaWikiUnitTestCase {
 			$this->config->getEntityWikitextVal( $this->makeMockTitle( 'Community Wishlist/W123/Votes' ) )
 		);
 		$this->assertNull( $this->config->getEntityWikitextVal( $this->makeMockTitle( 'Bogus' ) ) );
+	}
+
+	/**
+	 * @covers ::getCanonicalEntityPageRef
+	 */
+	public function testGetCanonicalEntityPageRef(): void {
+		$this->assertSame(
+			'Community_Wishlist/W123',
+			$this->config->getCanonicalEntityPageRef(
+				PageReferenceValue::localReference( NS_MAIN, 'Community Wishlist/W123/fr' )
+			)->getDBkey()
+		);
+		$this->assertSame(
+			'Community_Wishlist/W123',
+			$this->config->getCanonicalEntityPageRef(
+				PageReferenceValue::localReference( NS_MAIN, 'Community Wishlist/W123' )
+			)->getDBkey()
+		);
+		$this->assertNull(
+			$this->config->getCanonicalEntityPageRef(
+				PageReferenceValue::localReference( NS_MAIN, 'Community Wishlist/W123/fr-fake' )
+			)
+		);
+		$this->assertNull(
+			$this->config->getCanonicalEntityPageRef(
+				PageReferenceValue::localReference( NS_MAIN, 'Something else/W123/fr' )
+			)
+		);
+		$this->assertNull( $this->config->getCanonicalEntityPageRef( null ) );
 	}
 }

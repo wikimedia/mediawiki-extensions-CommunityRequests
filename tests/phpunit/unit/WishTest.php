@@ -246,10 +246,35 @@ END
 		);
 	}
 
-	private function getTestWish( array $wishData ): Wish {
+	/**
+	 * @covers ::getPage
+	 * @covers ::getTranslationSubpage
+	 */
+	public function testGetTranslationSubpage(): void {
+		$wishEn = $this->getTestWish( [] );
+		$wishFr = $this->getTestWish( [ Wish::PARAM_BASE_LANG => 'en' ], 'fr' );
+		$this->assertSame(
+			'Community_Wishlist/Wishes/W123',
+			$wishEn->getPage()->getDBkey()
+		);
+		$this->assertSame(
+			'Community_Wishlist/Wishes/W123',
+			$wishEn->getTranslationSubpage()->getDBkey()
+		);
+		$this->assertSame(
+			'Community_Wishlist/Wishes/W123',
+			$wishFr->getPage()->getDBkey()
+		);
+		$this->assertSame(
+			'Community_Wishlist/Wishes/W123/fr',
+			$wishFr->getTranslationSubpage()->getDBkey()
+		);
+	}
+
+	private function getTestWish( array $wishData, string $lang = 'en' ): Wish {
 		return new Wish(
 			$this->makeMockTitle( 'Community Wishlist/Wishes/W123' ),
-			'en',
+			$lang,
 			$this->mockRegisteredUltimateAuthority()->getUser(),
 			$wishData
 		);

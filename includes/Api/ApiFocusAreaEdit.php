@@ -48,7 +48,7 @@ class ApiFocusAreaEdit extends ApiWishlistEntityBase {
 		// 'newtimestamp' should be 'updated'.
 		$resultData[FocusArea::PARAM_UPDATED] = $resultData['newtimestamp'];
 		unset( $resultData['newtimestamp'] );
-		$ret = $resultData + $focusArea->toArray( $this->config, true );
+		$ret = $resultData + $focusArea->toArray( $this->config );
 		$this->getResult()->addValue( null, $this->getModuleName(), $ret );
 	}
 

@@ -11,6 +11,7 @@ use MediaWiki\Extension\CommunityRequests\IdGenerator\IdGenerator;
 use MediaWiki\Extension\CommunityRequests\WishlistConfig;
 use MediaWiki\Languages\LanguageFallback;
 use MediaWiki\Page\PageIdentityValue;
+use MediaWiki\Page\PageStore;
 use MediaWiki\Parser\ParserFactory;
 use MediaWiki\Revision\RevisionStore;
 use MediaWiki\Title\Title;
@@ -21,7 +22,6 @@ use MediaWiki\User\UserFactory;
 use Wikimedia\Rdbms\IConnectionProvider;
 use Wikimedia\Rdbms\IDatabase;
 use Wikimedia\Rdbms\IReadableDatabase;
-use Wikimedia\Rdbms\IResultWrapper;
 
 /**
  * WishStore is responsible for all database operations related to wishes.
@@ -41,6 +41,7 @@ class WishStore extends AbstractWishlistStore {
 		protected ParserFactory $parserFactory,
 		protected TitleParser $titleParser,
 		protected TitleFormatter $titleFormatter,
+		protected PageStore $pageStore,
 		protected IdGenerator $idGenerator,
 		protected WishlistConfig $config,
 	) {
@@ -51,6 +52,7 @@ class WishStore extends AbstractWishlistStore {
 			$parserFactory,
 			$titleParser,
 			$titleFormatter,
+			$pageStore,
 			$idGenerator,
 			$config,
 		);
@@ -181,7 +183,7 @@ class WishStore extends AbstractWishlistStore {
 			'cr_actor' => $proposer,
 			'cr_type' => $wish->getType(),
 			'cr_status' => $wish->getStatus(),
-			'cr_focus_area' => $wish->getFocusArea()?->getId() ?: null,
+			'cr_focus_area' => $wish->getFocusAreaPage()?->getId() ?: null,
 			'cr_created' => $dbw->timestamp( $created ),
 			'cr_updated' => $dbw->timestamp( $wish->getUpdated() ?: wfTimestampNow() ),
 		];
@@ -287,16 +289,14 @@ class WishStore extends AbstractWishlistStore {
 	}
 
 	/** @inheritDoc */
-	protected function getEntitiesFromLangFallbacks(
+	protected function getEntitiesFromDbResult(
 		IReadableDatabase $dbr,
-		IResultWrapper $resultWrapper,
-		?string $lang = null
+		array $rows,
+		array $entityDataByPage,
 	): array {
-		[ $rows, $wishesByPage ] = parent::getEntitiesFromLangFallbacksInternal( $resultWrapper, $lang );
-
 		// Fetch projects for all wishes in one go, and then the same for Phab tasks.
-		$projectsByPage = $this->getProjectsForWishes( $dbr, array_keys( $wishesByPage ) );
-		$phabTasksByPage = $this->getPhabTasksForWishes( $dbr, array_keys( $wishesByPage ) );
+		$projectsByPage = $this->getProjectsForWishes( $dbr, array_keys( $entityDataByPage ) );
+		$phabTasksByPage = $this->getPhabTasksForWishes( $dbr, array_keys( $entityDataByPage ) );
 
 		$wishes = [];
 		foreach ( $rows as $row ) {
@@ -312,9 +312,9 @@ class WishStore extends AbstractWishlistStore {
 				[
 					Wish::PARAM_TYPE => (int)$row->cr_type,
 					Wish::PARAM_STATUS => (int)$row->cr_status,
-					// TODO: do this in the main query instead of separately.
-					Wish::PARAM_FOCUS_AREA => Title::newFromID( (int)$row->cr_focus_area ),
 					Wish::PARAM_TITLE => $row->crt_title,
+					// TODO: refactor to fetch page ID in the main query.
+					Wish::PARAM_FOCUS_AREA => Title::newFromID( (int)$row->cr_focus_area ),
 					Wish::PARAM_PROJECTS => $projectsByPage[$row->cr_page] ?? [],
 					Wish::PARAM_OTHER_PROJECT => $row->crt_other_project,
 					Wish::PARAM_PHAB_TASKS => $phabTasksByPage[$row->cr_page] ?? [],
@@ -322,6 +322,9 @@ class WishStore extends AbstractWishlistStore {
 					Wish::PARAM_CREATED => $row->cr_created,
 					Wish::PARAM_UPDATED => $row->cr_updated,
 					Wish::PARAM_BASE_LANG => $row->cr_base_lang,
+					// "Virtual" fields that only exist when querying for wikitext.
+					Wish::PARAM_DESCRIPTION => $row->crt_description ?? null,
+					Wish::PARAM_AUDIENCE => $row->crt_audience ?? null,
 				]
 			);
 		}
@@ -394,6 +397,16 @@ class WishStore extends AbstractWishlistStore {
 	/** @inheritDoc */
 	public function getNewId(): int {
 		return $this->idGenerator->getNewId( IdGenerator::TYPE_WISH );
+	}
+
+	/** @inheritDoc */
+	public function getExtTranslateFields(): array {
+		return [
+			Wish::PARAM_TITLE => 'crt_title',
+			Wish::PARAM_DESCRIPTION => 'crt_description',
+			Wish::PARAM_OTHER_PROJECT => 'crt_other_project',
+			Wish::PARAM_AUDIENCE => 'crt_audience',
+		];
 	}
 
 	/** @inheritDoc */

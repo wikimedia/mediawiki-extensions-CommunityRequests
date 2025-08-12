@@ -11,7 +11,6 @@ use MediaWiki\Extension\CommunityRequests\IdGenerator\IdGenerator;
 use MediaWiki\Page\PageIdentityValue;
 use Wikimedia\Rdbms\IDatabase;
 use Wikimedia\Rdbms\IReadableDatabase;
-use Wikimedia\Rdbms\IResultWrapper;
 
 class FocusAreaStore extends AbstractWishlistStore {
 
@@ -155,13 +154,11 @@ class FocusAreaStore extends AbstractWishlistStore {
 	}
 
 	/** @inheritDoc */
-	protected function getEntitiesFromLangFallbacks(
+	protected function getEntitiesFromDbResult(
 		IReadableDatabase $dbr,
-		IResultWrapper $resultWrapper,
-		?string $lang = null
+		array $rows,
+		array $entityDataByPage
 	): array {
-		[ $rows, ] = parent::getEntitiesFromLangFallbacksInternal( $resultWrapper, $lang );
-
 		$focusAreas = [];
 		foreach ( $rows as $row ) {
 			$focusAreas[] = new FocusArea(
@@ -180,6 +177,10 @@ class FocusAreaStore extends AbstractWishlistStore {
 					FocusArea::PARAM_CREATED => $row->crfa_created,
 					FocusArea::PARAM_UPDATED => $row->crfa_updated,
 					FocusArea::PARAM_BASE_LANG => $row->crfa_base_lang,
+					// "Virtual" fields that only exist when querying for wikitext.
+					FocusArea::PARAM_DESCRIPTION => $row->crfat_description ?? '',
+					FocusArea::PARAM_OWNERS => $row->crfat_owners ?? '',
+					FocusArea::PARAM_VOLUNTEERS => $row->crfat_volunteers ?? '',
 				]
 			);
 		}
@@ -190,6 +191,17 @@ class FocusAreaStore extends AbstractWishlistStore {
 	/** @inheritDoc */
 	public function getNewId(): int {
 		return $this->idGenerator->getNewId( IdGenerator::TYPE_FOCUS_AREA );
+	}
+
+	/** @inheritDoc */
+	public function getExtTranslateFields(): array {
+		return [
+			FocusArea::PARAM_TITLE => 'crfat_title',
+			FocusArea::PARAM_DESCRIPTION => 'crfat_description',
+			FocusArea::PARAM_SHORT_DESCRIPTION => 'crfat_short_description',
+			FocusArea::PARAM_OWNERS => 'crfat_owners',
+			FocusArea::PARAM_VOLUNTEERS => 'crfat_volunteers',
+		];
 	}
 
 	/** @inheritDoc */

@@ -74,16 +74,12 @@ abstract class AbstractWishlistEntity {
 
 	/**
 	 * Get a page reference for the translation subpage of this wish or focus area.
-	 * If this is the base language, it returns the root page without a language suffix.
 	 * This method does not verify if the translation subpage exists, nor does it
 	 * validate the language code.
 	 *
 	 * @return PageReference
 	 */
 	public function getTranslationSubpage(): PageReference {
-		if ( $this->isBaseLang() ) {
-			return $this->page;
-		}
 		return PageReferenceValue::localReference(
 			$this->page->getNamespace(),
 			$this->page->getDBkey() . '/' . $this->lang

@@ -56,7 +56,6 @@ class FocusAreaRenderer extends AbstractRenderer {
 	}
 
 	private function renderFocusAreaInternal( array $args ): string {
-		$language = $this->parser->getContentLanguage();
 		$out = '';
 
 		// Title and status.

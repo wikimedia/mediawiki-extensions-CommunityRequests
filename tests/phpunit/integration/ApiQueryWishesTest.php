@@ -11,6 +11,7 @@ use MediaWiki\Tests\Api\ApiTestCase;
  * @group CommunityRequests
  * @group Database
  * @covers \MediaWiki\Extension\CommunityRequests\Api\ApiQueryWishes
+ * @covers \MediaWiki\Extension\CommunityRequests\AbstractWishlistStore
  */
 class ApiQueryWishesTest extends ApiTestCase {
 
@@ -240,6 +241,29 @@ class ApiQueryWishesTest extends ApiTestCase {
 		$this->assertCount( 1, $wishesEn );
 		$this->assertSame( 'Community Wishlist/Wishes/W1/en', $wishesEn[0]['crwtitle'] );
 		$this->assertSame( 'Title in English', $wishesEn[0][Wish::PARAM_TITLE] );
+	}
+
+	public function testExecuteNoTranslateTagsReturned(): void {
+		$this->markTestSkippedIfExtensionNotLoaded( 'Translate' );
+		$this->insertTestWish(
+			'Community Wishlist/Wishes/W1',
+			'en',
+			[
+				Wish::PARAM_TITLE => '<translate>Translatable title</translate>',
+				Wish::PARAM_DESCRIPTION => '<translate>Translatable description</translate>',
+				Wish::PARAM_AUDIENCE => '<translate>Translatable audience</translate>',
+			],
+		);
+		[ $ret ] = $this->doApiRequest( [
+			'action' => 'query',
+			'list' => 'communityrequests-wishes',
+			'crwprop' => 'title|description|audience',
+			'crwlang' => 'en',
+		] );
+		$wish = $ret['query']['communityrequests-wishes'][0];
+		$this->assertSame( 'Translatable title', $wish[Wish::PARAM_TITLE] );
+		$this->assertSame( 'Translatable description', $wish[Wish::PARAM_DESCRIPTION] );
+		$this->assertSame( 'Translatable audience', $wish[Wish::PARAM_AUDIENCE] );
 	}
 
 	private function createTestWishWithApi( $params = [] ): array {

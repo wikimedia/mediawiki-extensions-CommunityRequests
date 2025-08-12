@@ -246,7 +246,7 @@ END
 			$wishEn->getPage()->getDBkey()
 		);
 		$this->assertSame(
-			'Community_Wishlist/Wishes/W123',
+			'Community_Wishlist/Wishes/W123/en',
 			$wishEn->getTranslationSubpage()->getDBkey()
 		);
 		$this->assertSame(

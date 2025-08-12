@@ -8,6 +8,8 @@ use MediaWiki\Content\WikitextContent;
 use MediaWiki\Extension\CommunityRequests\IdGenerator\IdGenerator;
 use MediaWiki\Languages\LanguageFallback;
 use MediaWiki\Page\PageIdentity;
+use MediaWiki\Page\PageReferenceValue;
+use MediaWiki\Page\PageStore;
 use MediaWiki\Parser\ParserFactory;
 use MediaWiki\Revision\RevisionStore;
 use MediaWiki\Title\TitleFormatter;
@@ -28,6 +30,22 @@ abstract class AbstractWishlistStore {
 	public const TITLE_MAX_BYTES = 255;
 	public const SORT_ASC = SelectQueryBuilder::SORT_ASC;
 	public const SORT_DESC = SelectQueryBuilder::SORT_DESC;
+	public const FILTER_NONE = null;
+
+	/**
+	 * No wikitext fields will be fetched. All data comes from the CommunityRequests database tables.
+	 */
+	public const FETCH_WIKITEXT_NONE = 0;
+	/**
+	 * Fetch wikitext fields as-is, including any <translate> tags.
+	 * Use this when fetching the content for editing such as in Special:WishlistIntake.
+	 */
+	public const FETCH_WIKITEXT_RAW = 1;
+	/**
+	 * Fetch wikitext fields after being processed by Extension:Translate.
+	 * Use this when displaying translated content, such as in the APIs.
+	 */
+	public const FETCH_WIKITEXT_TRANSLATED = 2;
 
 	public function __construct(
 		protected IConnectionProvider $dbProvider,
@@ -36,6 +54,7 @@ abstract class AbstractWishlistStore {
 		protected ParserFactory $parserFactory,
 		protected TitleParser $titleParser,
 		protected TitleFormatter $titleFormatter,
+		protected PageStore $pageStore,
 		protected IdGenerator $idGenerator,
 		protected WishlistConfig $config,
 	) {
@@ -130,9 +149,14 @@ abstract class AbstractWishlistStore {
 	 *
 	 * @param PageIdentity $page
 	 * @param ?string $lang
+	 * @param int $fetchWikitext See ::getAll() for possible values.
 	 * @return ?AbstractWishlistEntity
 	 */
-	public function get( PageIdentity $page, ?string $lang = null ): ?AbstractWishlistEntity {
+	public function get(
+		PageIdentity $page,
+		?string $lang = null,
+		int $fetchWikitext = self::FETCH_WIKITEXT_NONE,
+	): ?AbstractWishlistEntity {
 		if ( !$this->config->isWishOrFocusAreaPage( $page ) ) {
 			return null;
 		}
@@ -154,7 +178,7 @@ abstract class AbstractWishlistStore {
 			return null;
 		}
 
-		return $this->getEntitiesFromLangFallbacks( $dbr, $data, $lang )[0] ?? null;
+		return $this->getEntitiesFromDbResultInternal( $data, $lang, $fetchWikitext )[0] ?? null;
 	}
 
 	/**
@@ -179,14 +203,22 @@ abstract class AbstractWishlistStore {
 	 * @param string $sort Use AbstractWishlistStore::SORT_ASC or AbstractWishlistStore::SORT_DESC.
 	 * @param int $limit Limit the number of results.
 	 * @param ?array $offset As produced by ApiBase::parseContinueParamOrDie().
-	 * @return array
+	 * @param ?array $filters Unused; reserved for future use.
+	 * @param int $fetchWikitext Which fields to fetch from wikitext. One of:
+	 *   - self::FETCH_WIKITEXT_NONE - Default; the page content is not queried.
+	 *   - self::FETCH_WIKITEXT_RAW - Return fields that could contain <translate> tags and include them as-is.
+	 *   - self::FETCH_WIKITEXT_TRANSLATED - Query the translation subpage to return fields after being
+	 *       processed by Extension:Translate, i.e. with <translate> tags stripped out.
+	 * @return AbstractWishlistEntity[]
 	 */
 	public function getAll(
 		string $lang,
 		string $orderBy,
 		string $sort = self::SORT_DESC,
 		int $limit = 50,
-		?array $offset = null
+		?array $offset = null,
+		?array $filters = self::FILTER_NONE,
+		int $fetchWikitext = self::FETCH_WIKITEXT_NONE,
 	): array {
 		$dbr = $this->dbProvider->getReplicaDatabase();
 		$langs = array_unique( [
@@ -240,38 +272,45 @@ abstract class AbstractWishlistStore {
 			);
 		}
 
-		$entities = $this->getEntitiesFromLangFallbacks( $dbr, $select->fetchResultSet(), $lang );
+		$entities = $this->getEntitiesFromDbResultInternal(
+			$select->fetchResultSet(),
+			$lang,
+			$fetchWikitext
+		);
 		return array_slice( $entities, 0, $limit );
 	}
 
 	/**
-	 * Create a list of AbstractWishlistEntity objects from the given result set, grouping by page ID
-	 * and using the first row with a matching language in the user's language and/or fallback chain,
-	 * or finally the base language if no match is found.
+	 * Create a list of AbstractWishlistEntity objects from the given result set.
 	 *
 	 * This method is also responsible for fetching any associated data.
 	 *
 	 * @param IReadableDatabase $dbr The database connection.
-	 * @param IResultWrapper $resultWrapper The DB result wrapper.
-	 * @param ?string $lang The requested language code. Null to use the base language.
+	 * @param array $rows The DB rows containing static::fields().
+	 * @param array $entityDataByPage DB rows grouped by page ID and language.
 	 * @return AbstractWishlistEntity[]
 	 */
-	abstract protected function getEntitiesFromLangFallbacks(
+	abstract protected function getEntitiesFromDbResult(
 		IReadableDatabase $dbr,
-		IResultWrapper $resultWrapper,
-		?string $lang = null
+		array $rows,
+		array $entityDataByPage,
 	): array;
 
 	/**
-	 * @param IResultWrapper $resultWrapper
-	 * @param ?string $lang
-	 * @return array with members:
-	 *   - (array): DB rows containing static::fields()
-	 *   - (array): DB rows grouped by page ID and language.
+	 * Groups results by page ID, using the first row with a matching language in the user's
+	 * language and/or fallback chain, or finally the base language if no match is found.
+	 *
+	 * If wikitext is requested, it will be fetched from the base entity page or translation subpage,
+	 * and added to the result rows with the keys as defined in ::getExtTranslateFields().
+	 *
+	 * Results are then fed through ::getEntitiesFromDbResult() to return AbstractWishlistEntity objects.
+	 *
+	 * @return AbstractWishlistEntity[]
 	 */
-	protected function getEntitiesFromLangFallbacksInternal(
+	private function getEntitiesFromDbResultInternal(
 		IResultWrapper $resultWrapper,
-		?string $lang = null
+		?string $lang = null,
+		int $fetchWikitext = self::FETCH_WIKITEXT_NONE,
 	): array {
 		$fallbackLangs = $lang === null ? [] : array_unique( [
 			$lang,
@@ -279,16 +318,39 @@ abstract class AbstractWishlistStore {
 		] );
 
 		$rows = [];
-		// Group the result set by wish page ID and language.
+		// Group the result set by entity page ID and language.
 		$entityDataByPage = [];
 		foreach ( $resultWrapper as $entityData ) {
-			$pageId = $entityData->{ static::pageField() };
+			$pageId = (int)$entityData->{ static::pageField() };
 			$langCode = $entityData->{ static::translationLangField() };
+
+			// Fetch wikitext fields if requested.
+			if ( $fetchWikitext ) {
+				// For self::FETCH_WIKITEXT_RAW
+				$translationPageId = $pageId;
+
+				// For self::FETCH_WIKITEXT_TRANSLATED, use the page ID of the translation subpage.
+				if ( $fetchWikitext === self::FETCH_WIKITEXT_TRANSLATED ) {
+					$translationPageRef = PageReferenceValue::localReference(
+						(int)$entityData->page_namespace,
+						$entityData->page_title . '/' . $entityData->{static::baseLangField()}
+					);
+					$translationPageId = $this->pageStore->getPageByReference( $translationPageRef )?->getId()
+						?? $translationPageId;
+				}
+
+				// Fetch wikitext data from the page and merge it into the row.
+				$wikitextData = $this->getDataFromPageId( $translationPageId );
+				foreach ( $this->getExtTranslateFields() as $field => $property ) {
+					$entityData->$property = $wikitextData[$field] ?? '';
+				}
+			}
+
 			$entityDataByPage[$pageId][$langCode] = $entityData;
 		}
 
 		foreach ( $entityDataByPage as $entityDataByLang ) {
-			// All rows in $entityData have the same base language.
+			// All rows will have the same base language.
 			$baseLang = reset( $entityDataByLang )->{ static::baseLangField() };
 			// This will be overridden if a user-preferred language is found.
 			$row = $entityDataByLang[$baseLang];
@@ -304,7 +366,11 @@ abstract class AbstractWishlistStore {
 			$rows[] = $row;
 		}
 
-		return [ $rows, $entityDataByPage ];
+		return $this->getEntitiesFromDbResult(
+			$this->dbProvider->getReplicaDatabase(),
+			$rows,
+			$entityDataByPage
+		);
 	}
 
 	/**
@@ -317,18 +383,12 @@ abstract class AbstractWishlistStore {
 	abstract public function save( AbstractWishlistEntity $entity ): void;
 
 	/**
-	 * Get a new wish ID using the IdGenerator.
-	 *
-	 * @return int The new wish ID.
+	 * Get a new entity ID using the IdGenerator.
 	 */
 	abstract public function getNewId(): int;
 
 	/**
 	 * Save the translations for a wishlist entity.
-	 *
-	 * @param AbstractWishlistEntity $entity
-	 * @param IDatabase $dbw
-	 * @param array $dataSet
 	 */
 	protected function saveTranslations(
 		AbstractWishlistEntity $entity,
@@ -396,9 +456,6 @@ abstract class AbstractWishlistStore {
 	/**
 	 * Set the language of a wish or focus area page.
 	 * This method updates the page_lang field in the page table.
-	 *
-	 * @param int $pageId
-	 * @param string $newLang
 	 */
 	public function setPageLanguage( int $pageId, string $newLang ): void {
 		$dbw = $this->dbProvider->getPrimaryDatabase();
@@ -432,51 +489,76 @@ abstract class AbstractWishlistStore {
 	}
 
 	/**
-	 * Get data from the parser function invocation of a wishlist entity page.
+	 * Parse wikitext of a wish or focus area parser function invocation into an array of data.
 	 *
-	 * @param int $pageId The page ID of the wish or focus area.
-	 * @return ?array The parsed data from the wikitext.
-	 *   This includes a 'baseRevId' key with the latest revision ID of the wish page.
-	 * @throws RuntimeException If the content type is not WikitextContent.
+	 * @param WikitextContent $content
+	 * @return ?array
 	 */
-	public function getDataFromWikitext( int $pageId ): ?array {
+	public function getDataFromWikitextContent( WikitextContent $content ): ?array {
+		return ( new ArgumentExtractor( $this->parserFactory ) )
+			->getFuncArgs(
+				'communityrequests',
+				$this->entityType(),
+				$content->getText()
+			);
+	}
+
+	/**
+	 * Parse wikitext content of a wish or focus area page given its page ID.
+	 *
+	 * @param int $pageId The parsed data from the wikitext.
+	 * @return ?array Includes the latest revision ID of the entity page with
+	 *   the key AbstractWishlistEntity::PARAM_BASE_REV_ID.
+	 * @throws RuntimeException If the content type is not WikitextContent or
+	 *   if the page otherwise could not be parsed.
+	 */
+	public function getDataFromPageId( int $pageId ): ?array {
 		$revRecord = $this->revisionStore->getRevisionByPageId( $pageId );
 		$content = $revRecord->getMainContentRaw();
 		if ( !$content instanceof WikitextContent ) {
 			throw new RuntimeException( 'Invalid content type for AbstractWishlistEntity' );
 		}
-		$wikitext = $content->getText();
-		$args = ( new ArgumentExtractor( $this->parserFactory ) )
-			->getFuncArgs(
-				'communityrequests',
-				$this->entityType(),
-				$wikitext
-			);
-		if ( $args !== null ) {
-			$args[AbstractWishlistEntity::PARAM_BASE_REV_ID] = $revRecord->getId();
+		$args = $this->getDataFromWikitextContent( $content );
+		if ( !$args ) {
+			throw new RuntimeException( "Failed to load wikitext data for page ID $pageId" );
 		}
+		$args[AbstractWishlistEntity::PARAM_BASE_REV_ID] = $revRecord->getId();
 		return $args;
 	}
 
 	/**
-	 * Get the fields that only exist in the wikitext and not in the database.
-	 * These should be extracted with ::getDataFromWikitext().
+	 * Get the fields that either only live in wikitext (not stored in CommunityRequest DB tables),
+	 * or fields that could be tagged for translation with Extension:Translate,
+	 * and thus should be fetched from wikitext instead of the CommunityRequests tables
+	 * when WishStore::getAll() is called with self::FETCH_WIKITEXT_TRANSLATED.
+	 *
+	 * Effectively, any field that could contain <translate> tags should be listed here.
+	 *
+	 * Keys are AbstractWishlistEntity::PARAM_* constants, and values are database column names
+	 * that are merged into the DB result set. The values may be "virtual" column names for
+	 * easier referencing in the subclass implementation of ::getEntitiesFromDbResult().
 	 *
 	 * @return string[]
+	 */
+	abstract public function getExtTranslateFields(): array;
+
+	/**
+	 * Fields that ONLY live in wikitext, and not in CommunityRequests DB tables.
+	 *
+	 * This is a subset of getWikitextFields() to aid performance of the API
+	 * by avoiding unnecessary querying of page content.
+	 *
+	 * @return string[] AbstractWishlistEntity::PARAM_* constants.
 	 */
 	abstract public function getWikitextFields(): array;
 
 	/**
 	 * Get the parameters for the parser function invocation.
-	 *
-	 * @return array
 	 */
 	abstract public function getParams(): array;
 
 	/**
 	 * Get the prefix for the wishlist entity page.
-	 *
-	 * @return string
 	 */
 	abstract public function getPagePrefix(): string;
 }

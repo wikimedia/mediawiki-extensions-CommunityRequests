@@ -18,7 +18,6 @@ use MediaWiki\Status\Status;
 use MediaWiki\Title\Title;
 use MediaWiki\Title\TitleParser;
 use MediaWiki\Title\TitleValue;
-use RuntimeException;
 
 abstract class AbstractWishlistSpecialPage extends FormSpecialPage {
 
@@ -51,6 +50,7 @@ abstract class AbstractWishlistSpecialPage extends FormSpecialPage {
 		$this->entityId = $this->store->getIdFromInput( $entityId );
 		$this->pageTitle = Title::newFromText( $this->store->getPagePrefix() . $this->entityId );
 
+		// Redirect to "view source" (action=edit) if the user does not have permission to edit.
 		if ( !$this->getUser()->probablyCan( 'edit', $this->pageTitle ) ) {
 			$this->getOutput()->redirect( $this->pageTitle->getEditURL() );
 		}
@@ -102,31 +102,24 @@ abstract class AbstractWishlistSpecialPage extends FormSpecialPage {
 	 * Load an existing entity (wish or focus area) from the store.
 	 *
 	 * @param int $entityId
-	 * @return bool
+	 * @param ?Title $title Ignore; for unit tests only.
+	 * @return bool True if the entity was found and loaded, false otherwise.
 	 */
-	protected function loadExistingEntity( int $entityId ): bool {
-		$entity = $this->store->get( $this->pageTitle );
+	public function loadExistingEntity( int $entityId, ?Title $title = null ): bool {
+		$entity = $this->store->get(
+			$title ?? $this->pageTitle,
+			null,
+			AbstractWishlistStore::FETCH_WIKITEXT_RAW,
+		);
 
 		if ( !$entity ) {
 			$this->showErrorPage();
 			return false;
 		}
 
-		$wikitextData = $this->store->getDataFromWikitext( $entity->getPage()->getId() );
-		if ( $wikitextData === null ) {
-			throw new RuntimeException( 'Failed to load wikitext data for wishlist entity' );
-		}
-		$wikitextFields = $this->store->getWikitextFields();
 		$this->getOutput()->addJsConfigVars( [
 			'intakeId' => $entityId,
-			'intakeData' => [
-				...$entity->toArray( $this->config ),
-				...array_map(
-					static fn ( $field ) => $wikitextData[$field],
-					array_combine( $wikitextFields, $wikitextFields ),
-				),
-				'baseRevId' => $wikitextData['baseRevId'],
-			],
+			'intakeData' => $entity->toArray( $this->config ),
 		] );
 
 		$this->entityId = $entityId;

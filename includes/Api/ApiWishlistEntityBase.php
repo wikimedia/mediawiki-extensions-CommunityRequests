@@ -95,7 +95,7 @@ abstract class ApiWishlistEntityBase extends ApiBase {
 		$context->setRequest( new DerivativeRequest( $this->getRequest(), $apiParams ) );
 		$api = new ApiMain( $context, true );
 
-		// FIXME: make use of EditFilterMergedContent hook to impose our own edit checks
+		// TODO: make use of EditFilterMergedContent hook to impose our own edit checks
 		//   (Status will show up in SpecialFormPage) Such as a missing proposer or invalid creation date.
 		try {
 			$api->execute();

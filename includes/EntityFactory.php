@@ -27,14 +27,14 @@ class EntityFactory {
 		return match ( $data[AbstractWishlistEntity::PARAM_ENTITY_TYPE] ?? '' ) {
 			'wish' => Wish::newFromWikitextParams(
 				$baseTitle,
-				$data['lang'],
+				$data[AbstractWishlistEntity::PARAM_LANG],
 				$data,
 				$this->config,
 				$this->userFactory->newFromName( $data[Wish::PARAM_PROPOSER] ?? '' ),
 			),
 			'focus-area' => FocusArea::newFromWikitextParams(
 				$baseTitle,
-				$data['lang'],
+				$data[AbstractWishlistEntity::PARAM_LANG],
 				$data,
 				$this->config
 			)

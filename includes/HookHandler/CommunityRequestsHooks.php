@@ -322,7 +322,10 @@ class CommunityRequestsHooks implements
 		$store = $this->stores[$data[AbstractWishlistEntity::PARAM_ENTITY_TYPE]];
 		$title = $linksUpdate->getTitle();
 		$entity = $this->entityFactory->createFromParserData( $data, $this->getCanonicalEntityPage( $title ) );
-
+		$this->logger->debug(
+			__METHOD__ . ': Saving [[{0}]] with data: {1}',
+			[ $title->getPrefixedText(), json_encode( $data ) ]
+		);
 		$store->save( $entity );
 	}
 

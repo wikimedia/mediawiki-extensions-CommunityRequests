@@ -11,6 +11,7 @@ use MediaWiki\Extension\CommunityRequests\FocusArea\FocusAreaStore;
 use MediaWiki\Extension\CommunityRequests\Wish\Wish;
 use MediaWiki\Extension\CommunityRequests\Wish\WishStore;
 use MediaWiki\Extension\CommunityRequests\WishlistConfig;
+use MediaWiki\Page\PageIdentity;
 use MediaWiki\Page\PageReferenceValue;
 use MediaWiki\Registration\ExtensionRegistry;
 use MediaWiki\Title\Title;
@@ -50,17 +51,23 @@ class ApiQueryWishes extends ApiQueryBase {
 			$offsetArg = $this->parseContinueParamOrDie( $params['continue'], [ 'string', 'timestamp', 'int' ] );
 		}
 
+		$wikitextFields = array_intersect( $params['prop'], $this->store->getWikitextFields() );
 		$wishes = $this->store->getAll(
 			$params[Wish::PARAM_LANG] ?? $this->getLanguage()->getCode(),
 			$order,
 			$params['dir'] === 'ascending' ? WishStore::SORT_ASC : WishStore::SORT_DESC,
 			$params['limit'] + 1,
-			$offsetArg
+			$offsetArg,
+			null,
+			// Fetch fields that only live in wikitext, and only if requested.
+			$wikitextFields ? WishStore::FETCH_WIKITEXT_TRANSLATED : WishStore::FETCH_WIKITEXT_NONE,
 		);
 
 		$result = $this->getResult();
 
 		foreach ( $wishes as $index => /** @var Wish $wish */ $wish ) {
+			'@phan-var Wish $wish';
+
 			// Do this here to avoid unnecessarily fetching wikitext for wishes that won't be returned.
 			if ( $index === $params['limit'] ) {
 				$timestamp = match ( $params['sort'] ) {
@@ -75,18 +82,7 @@ class ApiQueryWishes extends ApiQueryBase {
 				break;
 			}
 
-			$wishData = $wish->toArray( $this->config, true );
-
-			// Fill in fields that only live in wikitext, if requested.
-			$wikitextFields = array_intersect( $params['prop'], $this->store->getWikitextFields() );
-			if ( count( $wikitextFields ) ) {
-				$wikitextData = $this->store->getDataFromWikitext( $wish->getPage()->getId() );
-
-				// TODO: strip out <translate> tags and translation markers.
-				foreach ( $wikitextFields as $field ) {
-					$wishData[$field] = $wikitextData[$field] ?? '';
-				}
-			}
+			$wishData = $wish->toArray( $this->config );
 
 			// Only return requested properties.
 			$wishData = array_intersect_key( $wishData, array_flip( $params['prop'] ) );
@@ -113,16 +109,18 @@ class ApiQueryWishes extends ApiQueryBase {
 			);
 
 			// Add focus area page title and namespace, if applicable.
-			if ( $wish->getFocusArea() ) {
+			$focusAreaPage = $wish->getFocusAreaPage();
+			if ( $focusAreaPage ) {
+				'@phan-var PageIdentity $focusAreaPage';
 				ApiQueryBase::addTitleInfo(
 					$wishData,
-					Title::newFromPageIdentity( $wish->getFocusArea() ),
+					Title::newFromPageIdentity( $focusAreaPage ),
 					'crfa'
 				);
 				// TODO: Include this in the WishStore::getAll() query.
 				$focusArea = $this->focusAreaStore->get(
-					$wish->getFocusArea(),
-						$params[Wish::PARAM_LANG] ?? $this->getLanguage()->getCode()
+					$focusAreaPage,
+					$params[Wish::PARAM_LANG] ?? $this->getLanguage()->getCode()
 				);
 				$wishData['focusareatitle'] = $focusArea->getTitle();
 			}

@@ -92,7 +92,7 @@ class FocusArea extends AbstractWishlistEntity {
 
 	/** @inheritDoc */
 	public function toArray( WishlistConfig $config, bool $lowerCaseKeyNames = false ): array {
-		$ret = [
+		return [
 			self::PARAM_STATUS => $config->getStatusWikitextValFromId( $this->status ),
 			self::PARAM_TITLE => $this->title,
 			self::PARAM_DESCRIPTION => $this->description,
@@ -103,11 +103,6 @@ class FocusArea extends AbstractWishlistEntity {
 			self::PARAM_BASE_LANG => $this->baselang,
 			self::PARAM_VOTE_COUNT => $this->votecount,
 		];
-		if ( $lowerCaseKeyNames ) {
-			// Convert keys to lower case for API compatibility.
-			$ret = array_change_key_case( $ret, CASE_LOWER );
-		}
-		return $ret;
 	}
 
 	/** @inheritDoc */

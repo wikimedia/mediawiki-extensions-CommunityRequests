@@ -30,6 +30,7 @@ return [
 			$services->getParserFactory(),
 			$services->getTitleParser(),
 			$services->getTitleFormatter(),
+			$services->getPageStore(),
 			$services->get( 'CommunityRequests.IdGenerator' ),
 			$services->get( 'CommunityRequests.WishlistConfig' ),
 		);
@@ -66,6 +67,7 @@ return [
 			$services->getParserFactory(),
 			$services->getTitleParser(),
 			$services->getTitleFormatter(),
+			$services->getPageStore(),
 			$services->get( 'CommunityRequests.IdGenerator' ),
 			$services->get( 'CommunityRequests.WishlistConfig' ),
 		);

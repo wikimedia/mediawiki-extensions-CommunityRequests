@@ -84,8 +84,8 @@ class WishStoreTest extends MediaWikiIntegrationTestCase {
 		/** @var Wish $retrievedWish */
 		$retrievedWish = $this->getStore()->get( $wish->getPage(), 'en' );
 		$this->assertSame(
-			$wish->getFocusArea()->getId(),
-			$retrievedWish->getFocusArea()->getId()
+			$wish->getFocusAreaPage()->getId(),
+			$retrievedWish->getFocusAreaPage()->getId()
 		);
 	}
 
@@ -149,6 +149,7 @@ class WishStoreTest extends MediaWikiIntegrationTestCase {
 
 	public function testGetWishesLangFallbacks(): void {
 		$this->markTestSkippedIfExtensionNotLoaded( 'Translate' );
+
 		$this->insertTestWish(
 			'Community Wishlist/Wishes/W1',
 			'en',
@@ -242,6 +243,7 @@ class WishStoreTest extends MediaWikiIntegrationTestCase {
 				Wish::PARAM_CREATED => '2222-01-23T00:00:00Z',
 			],
 		);
+
 		$wishes = $this->getStore()->getAll(
 			'en',
 			WishStore::createdField(),
@@ -253,13 +255,15 @@ class WishStoreTest extends MediaWikiIntegrationTestCase {
 		$this->assertSame( 'W2 (hr)', $wishes[1]->getTitle() );
 	}
 
-	public function testGetDataFromWikitext(): void {
+	public function testGetDataFromWikitextContent(): void {
 		$wikitext = <<<END
 {{#CommunityRequests: wish
 |title=Test
 |status=  declined
 |type=
+
 feature
+
 |description=<translate>[[<tvar name="1">Foo</tvar>|Bar]] {{baz}}</translate>
 
 == Section ==<!-- comments! -->
@@ -269,7 +273,8 @@ Example text
 END;
 		$title = Title::newFromText( 'W999' );
 		$this->insertPage( $title, $wikitext );
-		$actual = $this->getStore()->getDataFromWikitext( $title->getId() );
+
+		$actual = $this->getStore()->getDataFromPageId( $title->getId() );
 		$this->assertSame( 'declined', $actual[Wish::PARAM_STATUS] );
 		$this->assertSame( 'feature', $actual[Wish::PARAM_TYPE] );
 		$this->assertSame( 'Test', $actual[Wish::PARAM_TITLE] );

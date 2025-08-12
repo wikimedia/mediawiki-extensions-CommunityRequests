@@ -20,7 +20,6 @@ class FocusAreaIndexRenderer extends AbstractRenderer {
 		}
 		$this->parser->addTrackingCategory( self::TRACKING_CATEGORY );
 		$outputHTML = '';
-		$args = $this->getArgs();
 
 		$this->parser->getOutput()->addModuleStyles( [ 'ext.communityrequests.styles' ] );
 
@@ -33,6 +32,8 @@ class FocusAreaIndexRenderer extends AbstractRenderer {
 		);
 
 		foreach ( $focusAreas as $focusArea ) {
+			'@phan-var FocusArea $focusArea';
+
 			$statusChipHtml = Html::openElement( 'div' ) .
 				$this->getStatusChipHtml(
 					$this->config->getStatusWikitextValFromId( $focusArea->getStatus() )

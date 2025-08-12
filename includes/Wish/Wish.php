@@ -109,7 +109,7 @@ class Wish extends AbstractWishlistEntity {
 	 *
 	 * @return ?PageIdentity
 	 */
-	public function getFocusArea(): ?PageIdentity {
+	public function getFocusAreaPage(): ?PageIdentity {
 		return $this->focusarea;
 	}
 
@@ -150,15 +150,12 @@ class Wish extends AbstractWishlistEntity {
 	}
 
 	/** @inheritDoc */
-	public function toArray(
-		WishlistConfig $config,
-		bool $lowerCaseKeyNames = false
-	): array {
-		$ret = [
+	public function toArray( WishlistConfig $config ): array {
+		return [
 			self::PARAM_STATUS => $config->getStatusWikitextValFromId( $this->status ),
 			self::PARAM_TYPE => $config->getWishTypeWikitextValFromId( $this->type ),
 			self::PARAM_TITLE => $this->title,
-			self::PARAM_FOCUS_AREA => $config->getEntityWikitextVal( $this->getFocusArea() ) ?: '',
+			self::PARAM_FOCUS_AREA => $config->getEntityWikitextVal( $this->getFocusAreaPage() ) ?: '',
 			self::PARAM_DESCRIPTION => $this->description,
 			self::PARAM_AUDIENCE => $this->audience,
 			self::PARAM_PROJECTS => $config->getProjectsWikitextValsFromIds( $this->projects ),
@@ -170,11 +167,6 @@ class Wish extends AbstractWishlistEntity {
 			self::PARAM_UPDATED => $this->updated,
 			self::PARAM_BASE_LANG => $this->baselang,
 		];
-		if ( $lowerCaseKeyNames ) {
-			// Convert keys to lower case for API compatibility.
-			$ret = array_change_key_case( $ret, CASE_LOWER );
-		}
-		return $ret;
 	}
 
 	/** @inheritDoc */
@@ -184,11 +176,10 @@ class Wish extends AbstractWishlistEntity {
 		foreach ( self::PARAMS as $param ) {
 			// Match ID values to their wikitext representations, as defined by site configuration.
 			$value = match ( $param ) {
-				self::PARAM_PROJECTS => $config->getProjectsWikitextValsFromIds( $this->projects ),
-				self::PARAM_OTHER_PROJECT => $this->otherproject ?? '',
-				self::PARAM_PHAB_TASKS => array_map( static fn ( $id ) => "T$id", $this->phabtasks ),
 				self::PARAM_STATUS => $config->getStatusWikitextValFromId( $this->status ),
 				self::PARAM_TYPE => $config->getWishTypeWikitextValFromId( $this->type ),
+				self::PARAM_PROJECTS => $config->getProjectsWikitextValsFromIds( $this->projects ),
+				self::PARAM_PHAB_TASKS => array_map( static fn ( $id ) => "T$id", $this->phabtasks ),
 				self::PARAM_FOCUS_AREA => $config->getEntityWikitextVal( $this->focusarea ) ?: '',
 				self::PARAM_CREATED => MWTimestamp::convert( TS_ISO_8601, $this->created ),
 				self::PARAM_PROPOSER => $this->proposer ? $this->proposer->getName() : '',

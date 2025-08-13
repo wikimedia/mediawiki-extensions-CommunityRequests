@@ -198,7 +198,7 @@ abstract class AbstractRenderer {
 	protected function getVotingSection( bool $votingEnabled ): string {
 		// Make sure the status allows voting.
 		$votingEnabled = $votingEnabled && in_array(
-			trim( $this->getArgs()[AbstractWishlistEntity::PARAM_STATUS] ?? '' ),
+			$this->getArg( AbstractWishlistEntity::PARAM_STATUS, '' ),
 			$this->config->getStatusWikitextValsEligibleForVoting()
 		);
 
@@ -270,6 +270,34 @@ abstract class AbstractRenderer {
 		}
 
 		return $missingFields;
+	}
+
+	/**
+	 * Get a template argument with fallback handling.
+	 *
+	 * @param string $key
+	 * @param string|int $default The default value if the argument is missing or empty
+	 * @return string Trimmed value or fallback (not HTML-escaped)
+	 */
+	protected function getArg( string $key, string|int $default ): string {
+		$value = (string)( $this->getArgs()[$key] ?? $default );
+		if ( $value == $default ) {
+			return $value;
+		}
+
+		return trim( $value ) ?: (string)$default;
+	}
+
+	/**
+	 * Get an HTML-safe template argument with fallback handling.
+	 * Same as getArg() but HTML-escapes the result for safe output.
+	 *
+	 * @param string $key
+	 * @param string|int $default
+	 * @return string HTML-safe value
+	 */
+	protected function getSafeArg( string $key, string|int $default ): string {
+		return htmlspecialchars( $this->getArg( $key, $default ) );
 	}
 
 	/**

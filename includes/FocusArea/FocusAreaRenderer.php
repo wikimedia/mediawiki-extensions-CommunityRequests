@@ -76,7 +76,7 @@ class FocusAreaRenderer extends AbstractRenderer {
 		);
 		$out .= $this->getDivRaw(
 			'description',
-			$this->parser->recursiveTagParse( $args[FocusArea::PARAM_DESCRIPTION] )
+			$this->parser->recursiveTagParse( $this->getArg( FocusArea::PARAM_DESCRIPTION, '' ) )
 		);
 
 		// Other details.
@@ -114,8 +114,8 @@ class FocusAreaRenderer extends AbstractRenderer {
 		// TODO: implement wishes table somewhere else and re-use it here.
 
 		// Teams and affiliates section.
-		$owners = $args[FocusArea::PARAM_OWNERS] ?? '';
-		$volunteers = $args[FocusArea::PARAM_VOLUNTEERS] ?? '';
+		$owners = $this->getArg( FocusArea::PARAM_OWNERS, '' );
+		$volunteers = $this->getArg( FocusArea::PARAM_VOLUNTEERS, '' );
 		if ( $owners || $volunteers ) {
 			$out .= Html::element(
 				'div',
@@ -131,7 +131,7 @@ class FocusAreaRenderer extends AbstractRenderer {
 				);
 				$out .= $this->getDivRaw(
 					'owners',
-					$this->parser->recursiveTagParse( trim( $owners ) )
+					$this->parser->recursiveTagParse( $owners )
 				);
 			}
 
@@ -143,7 +143,7 @@ class FocusAreaRenderer extends AbstractRenderer {
 				);
 				$out .= $this->getDivRaw(
 					'volunteers',
-					$this->parser->recursiveTagParse( trim( $volunteers ) )
+					$this->parser->recursiveTagParse( $volunteers )
 				);
 			}
 		}

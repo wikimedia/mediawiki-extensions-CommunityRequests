@@ -100,7 +100,7 @@ class WishRenderer extends AbstractRenderer {
 		$wishType = $this->getDiv(
 			'wish-type',
 			$this->msg(
-				$this->config->getWishTypeLabelFromWikitextVal( $args[Wish::PARAM_TYPE] ?? '' ) . '-label'
+				$this->config->getWishTypeLabelFromWikitextVal( $this->getArg( Wish::PARAM_TYPE, '' ) ) . '-label'
 			)->text()
 		);
 
@@ -117,11 +117,12 @@ class WishRenderer extends AbstractRenderer {
 				return null;
 			}
 			return $this->msg( $label )->text();
-		}, array_filter( explode( Wish::VALUE_ARRAY_DELIMITER, $args[Wish::PARAM_PROJECTS] ?? '' ) ) );
+		}, array_filter( explode( Wish::VALUE_ARRAY_DELIMITER, $this->getArg( Wish::PARAM_PROJECTS, '' ) ) ) );
 		// @phan-suppress-next-line SecurityCheck-DoubleEscaped
 		$projects = $this->getDiv( 'projects', $language->commaList( array_filter( $projectLabels ) ) );
-		if ( isset( $args[Wish::PARAM_OTHER_PROJECT] ) ) {
-			$projects .= $this->getDiv( 'other-project', $args[Wish::PARAM_OTHER_PROJECT] );
+		$otherProject = $this->getArg( Wish::PARAM_OTHER_PROJECT, '' );
+		if ( $otherProject ) {
+			$projects .= $this->getDiv( 'other-project', $otherProject );
 		}
 
 		// Audience.
@@ -130,7 +131,7 @@ class WishRenderer extends AbstractRenderer {
 			[ 'class' => 'mw-heading mw-heading3' ],
 			$this->msg( 'communityrequests-wish-audience-heading' )->text()
 		);
-		$audience = $this->getDiv( 'audience', $args[Wish::PARAM_AUDIENCE] ?? '' );
+		$audience = $this->getDiv( 'audience', $this->getArg( Wish::PARAM_AUDIENCE, '' ) );
 
 		// Phabricator tasks.
 		$tasks = array_filter( array_map( function ( $task ) {
@@ -146,7 +147,7 @@ class WishRenderer extends AbstractRenderer {
 				new TitleValue( NS_MAIN, $task, '', 'phab' ),
 				$task
 			);
-		}, explode( Wish::VALUE_ARRAY_DELIMITER, $args[Wish::PARAM_PHAB_TASKS] ?? '' ) ) );
+		}, explode( Wish::VALUE_ARRAY_DELIMITER, $this->getArg( Wish::PARAM_PHAB_TASKS, '' ) ) ) );
 		$tasksHeading = '';
 		$tasksHtml = '';
 		if ( count( $tasks ) ) {
@@ -167,7 +168,7 @@ class WishRenderer extends AbstractRenderer {
 			[ 'class' => 'mw-heading mw-heading3' ],
 			$this->msg( 'communityrequests-wish-other-details-heading' )->text()
 		);
-		$proposerVal = $args[Wish::PARAM_PROPOSER] ?? '';
+		$proposerVal = $this->getArg( Wish::PARAM_PROPOSER, '' );
 
 		$detailsHtml = Html::rawElement(
 			'ul',

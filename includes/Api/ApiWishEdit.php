@@ -65,8 +65,10 @@ class ApiWishEdit extends ApiWishlistEntityBase {
 		$resultData['wish'] = $resultData['title'];
 		unset( $resultData['title'] );
 		// 'newtimestamp' should be 'updated'.
-		$resultData[Wish::PARAM_UPDATED] = $resultData['newtimestamp'];
-		unset( $resultData['newtimestamp'] );
+		if ( isset( $resultData['newtimestamp'] ) ) {
+			$resultData[Wish::PARAM_UPDATED] = $resultData['newtimestamp'];
+			unset( $resultData['newtimestamp'] );
+		}
 		$ret = [
 			...$wish->toArray( $this->config ),
 			...$resultData

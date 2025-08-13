@@ -148,7 +148,7 @@
 	"communityrequests-focus-area-voting": "Vote",
 	"communityrequests-focus-area-voting-info": "Ce domaine d’action compte actuellement '''$1 {{PLURAL:$2|supporter|supporters}}'''.",
 	"communityrequests-focus-area-voting-info-open": "Le vote pour ce domaine d’action est ouvert jusqu’à sa complétion. Montrez votre soutien en utilisant le bouton ci-dessous.",
-	"communityrequests-focus-area-voting-info-closed": "La prise en charge de ce domaine d’intérêt est actuellement désactivée.",
+	"communityrequests-focus-area-voting-info-closed": "La prise en charge de ce domaine d’action est actuellement désactivée.",
 	"communityrequests-focus-area-voting-not-logged-in": "Veuillez vous connecter pour soutenir ce domaine d'action",
 	"communityrequests-focus-area-voters-heading": "Les soutiens de ce domaine",
 	"communityrequests-focus-area-no-votes": "Pas de partisans encore.",

@@ -5,6 +5,10 @@
 			"Ktchankt"
 		]
 	},
+	"communityrequests-focus-area-create-success": "你嘅重點領域已經提交咗。",
+	"communityrequests-focus-area-edit-success": "你嘅焦點區域已經儲存咗。",
+	"communityrequests-view-all-focus-areas": "睇返晒所有焦點區域。",
+	"communityrequests-error-required-fields": "缺少嘅必填{{PLURAL:$2|欄位}}: $1",
 	"communityrequests-status-under-review": "喺度審查緊",
 	"communityrequests-status-unsupported": "唔支援",
 	"communityrequests-status-declined": "拒絕咗",
@@ -20,5 +24,8 @@
 	"communityrequests-wishes-votecount-header": "投票",
 	"communityrequests-wishes-updated-header": "更新咗",
 	"communityrequests-focus-area-voting-info-closed": "支持呢個焦點區域而家停用咗。",
+	"communityrequests-support-label": "支持",
+	"right-manually-edit-wishlist": "喺冇表格嘅情況下手動編輯社群願望清單願望同埋重點領域",
+	"action-manually-edit-wishlist": "喺冇表格嘅情況下手動編輯社群願望清單願望同埋重點領域",
 	"communityrequests-cant-manually-edit": "編輯呢個社群願望清單頁面必須用[[$1|入學表格]]嚟編輯。"
 }

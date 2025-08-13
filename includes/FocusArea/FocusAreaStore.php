@@ -173,13 +173,13 @@ class FocusAreaStore extends AbstractWishlistStore {
 				),
 				$row->crfat_lang,
 				[
-					'status' => (int)$row->crfa_status,
-					'title' => $row->crfat_title,
-					'shortDescription' => $row->crfat_short_description,
-					'voteCount' => (int)$row->crfa_vote_count,
-					'created' => $row->crfa_created,
-					'updated' => $row->crfa_updated,
-					'baseLang' => $row->crfa_base_lang,
+					FocusArea::PARAM_STATUS => (int)$row->crfa_status,
+					FocusArea::PARAM_TITLE => $row->crfat_title,
+					FocusArea::PARAM_SHORT_DESCRIPTION => $row->crfat_short_description,
+					FocusArea::PARAM_VOTE_COUNT => (int)$row->crfa_vote_count,
+					FocusArea::PARAM_CREATED => $row->crfa_created,
+					FocusArea::PARAM_UPDATED => $row->crfa_updated,
+					FocusArea::PARAM_BASE_LANG => $row->crfa_base_lang,
 				]
 			);
 		}

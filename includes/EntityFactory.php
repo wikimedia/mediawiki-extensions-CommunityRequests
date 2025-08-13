@@ -24,7 +24,7 @@ class EntityFactory {
 	 * @return AbstractWishlistEntity
 	 */
 	public function createFromParserData( array $data, PageIdentity $baseTitle ): AbstractWishlistEntity {
-		return match ( $data['entityType'] ?? '' ) {
+		return match ( $data[AbstractWishlistEntity::PARAM_ENTITY_TYPE] ?? '' ) {
 			'wish' => Wish::newFromWikitextParams(
 				$baseTitle,
 				$data['lang'],

@@ -41,11 +41,11 @@ class WishRenderer extends AbstractRenderer {
 		}
 
 		// These need to be set here because we need them for display in ::renderWishInternal().
-		$args['updated'] = $this->parser->getRevisionTimestamp();
-		$args[Wish::PARAM_CREATED] ??= $args['updated'];
+		$args[Wish::PARAM_UPDATED] = $this->parser->getRevisionTimestamp();
+		$args[Wish::PARAM_CREATED] ??= $args[Wish::PARAM_UPDATED];
 
-		$args['entityType'] = 'wish';
-		$args['lang'] = $this->parser->getTargetLanguage()->getCode();
+		$args[Wish::PARAM_ENTITY_TYPE] = 'wish';
+		$args[Wish::PARAM_LANG] = $this->parser->getTargetLanguage()->getCode();
 
 		// Cache the wish data for storage after the links update.
 		$this->parser->getOutput()->setExtensionData( self::EXT_DATA_KEY, $args );
@@ -77,7 +77,7 @@ class WishRenderer extends AbstractRenderer {
 		);
 		$descHtml = $this->getDivRaw(
 			'description',
-			$this->parser->recursiveTagParse( $args['description'] ?? '' )
+			$this->parser->recursiveTagParse( $args[Wish::PARAM_DESCRIPTION] ?? '' )
 		);
 
 		// Focus area.
@@ -146,7 +146,7 @@ class WishRenderer extends AbstractRenderer {
 				new TitleValue( NS_MAIN, $task, '', 'phab' ),
 				$task
 			);
-		}, explode( Wish::VALUE_ARRAY_DELIMITER, $args[ Wish::PARAM_PHAB_TASKS ] ?? '' ) ) );
+		}, explode( Wish::VALUE_ARRAY_DELIMITER, $args[Wish::PARAM_PHAB_TASKS] ?? '' ) ) );
 		$tasksHeading = '';
 		$tasksHtml = '';
 		if ( count( $tasks ) ) {
@@ -178,7 +178,7 @@ class WishRenderer extends AbstractRenderer {
 			) .
 			$this->getListItem(
 				'updated',
-				$this->formatDate( $args['updated'] )
+				$this->formatDate( $args[Wish::PARAM_UPDATED] )
 			) .
 			$this->getListItem(
 				'proposer',

@@ -32,9 +32,9 @@ class WishStoreTest extends CommunityRequestsIntegrationTestCase {
 			'en',
 			$this->getTestUser()->getUser(),
 			[
-				'projects' => [ 1, 2, 3 ],
-				'phabTasks' => [ 123, 456 ],
-				'created' => '2025-01-01T00:00:00Z',
+				Wish::PARAM_PROJECTS => [ 1, 2, 3 ],
+				Wish::PARAM_PHAB_TASKS => [ 123, 456 ],
+				Wish::PARAM_CREATED => '2025-01-01T00:00:00Z',
 			]
 		);
 		$this->getStore()->save( $wish );
@@ -86,8 +86,8 @@ class WishStoreTest extends CommunityRequestsIntegrationTestCase {
 			'en',
 			$this->getTestUser()->getUser(),
 			[
-				'focusArea' => $this->getExistingTestPage( 'Community Wishlist/Focus Areas/FA123' ),
-				'created' => '2025-01-01T00:00:00Z',
+				Wish::PARAM_FOCUS_AREA => $this->getExistingTestPage( 'Community Wishlist/Focus Areas/FA123' ),
+				Wish::PARAM_CREATED => '2025-01-01T00:00:00Z',
 			]
 		);
 		$this->getStore()->save( $wish );
@@ -136,7 +136,7 @@ class WishStoreTest extends CommunityRequestsIntegrationTestCase {
 			Title::newFromText( 'Community Wishlist/Wishes/W123' ),
 			'en',
 			$this->getTestUser()->getUser(),
-			[ 'created' => null ]
+			[ Wish::PARAM_CREATED => null ]
 		);
 		$this->expectException( InvalidArgumentException::class );
 		$this->getStore()->save( $wish );
@@ -247,34 +247,29 @@ class WishStoreTest extends CommunityRequestsIntegrationTestCase {
 	public function testGetDataFromWikitext(): void {
 		$wikitext = <<<END
 {{#CommunityRequests: wish
-|status=2
-|type=1
-|title=<translate>Test</translate>
+|title=Test
+|status=  declined
+|type=
+feature
 |description=<translate>[[<tvar name="1">Foo</tvar>|Bar]] {{baz}}</translate>
 
-== Section ==
+== Section ==<!-- comments! -->
 Example text
-|created=22220123000000
+|created=2222-01-23T00:00:00Z
 }}
 END;
 		$title = Title::newFromText( 'W999' );
 		$this->insertPage( $title, $wikitext );
-		$wish = new Wish(
-			$title,
-			'en',
-			$this->getTestUser()->getUser()
-		);
-
-		$actual = $this->getStore()->getDataFromWikitext( $wish->getPage()->getId() );
+		$actual = $this->getStore()->getDataFromWikitext( $title->getId() );
+		$this->assertSame( 'declined', $actual[Wish::PARAM_STATUS] );
+		$this->assertSame( 'feature', $actual[Wish::PARAM_TYPE] );
+		$this->assertSame( 'Test', $actual[Wish::PARAM_TITLE] );
 		$this->assertSame(
-			"<translate>[[<tvar name=\"1\">Foo</tvar>|Bar]] {{baz}}</translate>\n\n== Section ==\nExample text",
-			$actual['description']
+			"<translate>[[<tvar name=\"1\">Foo</tvar>|Bar]] {{baz}}</translate>" .
+				"\n\n== Section ==<!-- comments! -->\nExample text",
+			$actual[Wish::PARAM_DESCRIPTION]
 		);
-		$this->assertArrayHasKey( 'status', $actual );
-		$this->assertArrayHasKey( 'type', $actual );
-		$this->assertArrayHasKey( 'title', $actual );
-		$this->assertArrayHasKey( 'description', $actual );
-		$this->assertArrayHasKey( 'created', $actual );
+		$this->assertSame( '2222-01-23T00:00:00Z', $actual[Wish::PARAM_CREATED] );
 	}
 
 	/**
@@ -301,8 +296,8 @@ END;
 			'en',
 			$this->getTestUser()->getUser(),
 			[
-				'title' => str_repeat( 'a', 500 ),
-				'created' => '2025-01-01T00:00:00Z',
+				Wish::PARAM_TITLE => str_repeat( 'a', 500 ),
+				Wish::PARAM_CREATED => '2025-01-01T00:00:00Z',
 			]
 		);
 		$this->getStore()->save( $wish );

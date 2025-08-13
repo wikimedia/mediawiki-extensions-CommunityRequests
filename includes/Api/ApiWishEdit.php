@@ -40,20 +40,20 @@ class ApiWishEdit extends ApiWishlistEntityBase {
 		$wish = Wish::newFromWikitextParams(
 			$this->title,
 			// Edits are only made to the base language page.
-			$this->params['baselang'],
+			$this->params[Wish::PARAM_BASE_LANG],
 			[
 				...$this->params,
-				'projects' => implode( ',', $this->params['projects'] ),
-				'phabtasks' => implode( ',', $this->params['phabtasks'] ?? [] ),
+				Wish::PARAM_PROJECTS => implode( ',', $this->params[Wish::PARAM_PROJECTS] ),
+				Wish::PARAM_PHAB_TASKS => implode( ',', $this->params[Wish::PARAM_PHAB_TASKS] ?? [] ),
 			],
 			$this->config,
-			$this->userFactory->newFromName( $this->params['proposer'] ),
+			$this->userFactory->newFromName( $this->params[Wish::PARAM_PROPOSER] ),
 		);
 		$saveStatus = $this->save(
 			$wish->toWikitext( $this->config ),
 			$this->getEditSummary( $wish ),
 			$this->params['token'],
-			$this->params['baserevid'] ?? null
+			$this->params[Wish::PARAM_BASE_REV_ID] ?? null
 		);
 
 		if ( $saveStatus->isOK() === false ) {
@@ -65,10 +65,10 @@ class ApiWishEdit extends ApiWishlistEntityBase {
 		$resultData['wish'] = $resultData['title'];
 		unset( $resultData['title'] );
 		// 'newtimestamp' should be 'updated'.
-		$resultData['updated'] = $resultData['newtimestamp'];
+		$resultData[Wish::PARAM_UPDATED] = $resultData['newtimestamp'];
 		unset( $resultData['newtimestamp'] );
 		$ret = [
-			...$wish->toArray( $this->config, true ),
+			...$wish->toArray( $this->config ),
 			...$resultData
 		];
 		$this->getResult()->addValue( null, $this->getModuleName(), $ret );
@@ -98,14 +98,14 @@ class ApiWishEdit extends ApiWishlistEntityBase {
 
 	/** @inheritDoc */
 	protected function editSummaryPublish(): string {
-		return $this->msg( 'communityrequests-publish-wish-summary', $this->params['title'] )
+		return $this->msg( 'communityrequests-publish-wish-summary', $this->params[Wish::PARAM_TITLE] )
 			->inContentLanguage()
 			->text();
 	}
 
 	/** @inheritDoc */
 	protected function editSummarySave(): string {
-		return $this->msg( 'communityrequests-save-wish-summary', $this->params['title'] )
+		return $this->msg( 'communityrequests-save-wish-summary', $this->params[Wish::PARAM_TITLE] )
 			->inContentLanguage()
 			->text();
 	}
@@ -129,25 +129,25 @@ class ApiWishEdit extends ApiWishlistEntityBase {
 		// NOTE: Keys should match the Wish::PARAM_* constants where possible.
 		return [
 			'wish' => [ ParamValidator::PARAM_TYPE => 'string' ],
-			'status' => [
+			Wish::PARAM_STATUS => [
 				ParamValidator::PARAM_TYPE => array_keys( $this->config->getStatuses() ),
 				ParamValidator::PARAM_REQUIRED => true,
 			],
-			'focusarea' => [ ParamValidator::PARAM_TYPE => 'string' ],
-			'title' => [
+			Wish::PARAM_FOCUS_AREA => [ ParamValidator::PARAM_TYPE => 'string' ],
+			Wish::PARAM_TITLE => [
 				ParamValidator::PARAM_TYPE => 'string',
 				ParamValidator::PARAM_REQUIRED => true,
 				StringDef::PARAM_MAX_BYTES => WishStore::TITLE_MAX_BYTES,
 			],
-			'description' => [
+			Wish::PARAM_DESCRIPTION => [
 				ParamValidator::PARAM_TYPE => 'text',
 				ParamValidator::PARAM_REQUIRED => true,
 			],
-			'type' => [
+			Wish::PARAM_TYPE => [
 				ParamValidator::PARAM_TYPE => array_keys( $this->config->getWishTypes() ),
 				ParamValidator::PARAM_REQUIRED => true,
 			],
-			'projects' => [
+			Wish::PARAM_PROJECTS => [
 				ParamValidator::PARAM_TYPE => [
 					Wish::VALUE_PROJECTS_ALL,
 					...array_values( array_map(
@@ -158,32 +158,32 @@ class ApiWishEdit extends ApiWishlistEntityBase {
 				ParamValidator::PARAM_ISMULTI => true,
 				ParamValidator::PARAM_REQUIRED => true,
 			],
-			'otherproject' => [
+			Wish::PARAM_OTHER_PROJECT => [
 				ParamValidator::PARAM_TYPE => 'string',
 			],
-			'audience' => [
+			Wish::PARAM_AUDIENCE => [
 				ParamValidator::PARAM_TYPE => 'string',
 				StringDef::PARAM_MAX_CHARS => WishStore::AUDIENCE_MAX_CHARS,
 			],
-			'phabtasks' => [
+			Wish::PARAM_PHAB_TASKS => [
 				// TODO: maybe make our own TypeDef for Phab tasks?
 				ParamValidator::PARAM_TYPE => 'string',
 				ParamValidator::PARAM_ISMULTI => true,
 			],
-			'proposer' => [
+			Wish::PARAM_PROPOSER => [
 				ParamValidator::PARAM_TYPE => 'user',
 				UserDef::PARAM_ALLOWED_USER_TYPES => [ 'name' ],
 				ParamValidator::PARAM_REQUIRED => true,
 			],
-			'created' => [
+			Wish::PARAM_CREATED => [
 				ParamValidator::PARAM_TYPE => 'timestamp',
 				ParamValidator::PARAM_REQUIRED => true,
 			],
-			'baselang' => [
+			Wish::PARAM_BASE_LANG => [
 				ParamValidator::PARAM_TYPE => 'string',
 				ParamValidator::PARAM_REQUIRED => true,
 			],
-			'baserevid' => [
+			Wish::PARAM_BASE_REV_ID => [
 				ParamValidator::PARAM_TYPE => 'integer',
 				ApiBase::PARAM_HELP_MSG => 'apihelp-edit-param-baserevid',
 			],

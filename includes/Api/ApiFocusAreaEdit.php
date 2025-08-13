@@ -25,7 +25,7 @@ class ApiFocusAreaEdit extends ApiWishlistEntityBase {
 		$focusArea = FocusArea::newFromWikitextParams(
 			$this->title,
 			// Edits are only made to the base language page.
-			$this->params['baselang'],
+			$this->params[FocusArea::PARAM_BASE_LANG],
 			$this->params,
 			$this->config
 		);
@@ -34,7 +34,7 @@ class ApiFocusAreaEdit extends ApiWishlistEntityBase {
 			$focusArea->toWikitext( $this->config ),
 			$this->getEditSummary( $focusArea ),
 			$this->params['token'],
-			$this->params['baserevid'] ?? null
+			$this->params[FocusArea::PARAM_BASE_REV_ID] ?? null
 		);
 
 		if ( $saveStatus->isOK() === false ) {
@@ -46,7 +46,7 @@ class ApiFocusAreaEdit extends ApiWishlistEntityBase {
 		$resultData['focusarea'] = $resultData['title'];
 		unset( $resultData['title'] );
 		// 'newtimestamp' should be 'updated'.
-		$resultData['updated'] = $resultData['newtimestamp'];
+		$resultData[FocusArea::PARAM_UPDATED] = $resultData['newtimestamp'];
 		unset( $resultData['newtimestamp'] );
 		$ret = $resultData + $focusArea->toArray( $this->config, true );
 		$this->getResult()->addValue( null, $this->getModuleName(), $ret );
@@ -105,37 +105,37 @@ class ApiFocusAreaEdit extends ApiWishlistEntityBase {
 		// NOTE: Keys should match the FocusArea::PARAM_* constants where possible.
 		return [
 			'focusarea' => [ ParamValidator::PARAM_TYPE => 'string' ],
-			'status' => [
+			FocusArea::PARAM_STATUS => [
 				ParamValidator::PARAM_TYPE => array_keys( $this->config->getStatuses() ),
 				ParamValidator::PARAM_REQUIRED => true,
 			],
-			'title' => [
+			FocusArea::PARAM_TITLE => [
 				ParamValidator::PARAM_TYPE => 'string',
 				ParamValidator::PARAM_REQUIRED => true,
 				StringDef::PARAM_MAX_BYTES => FocusAreaStore::TITLE_MAX_BYTES,
 			],
-			'description' => [
+			FocusArea::PARAM_DESCRIPTION => [
 				ParamValidator::PARAM_TYPE => 'text',
 				ParamValidator::PARAM_REQUIRED => true,
 			],
-			'shortdescription' => [
+			FocusArea::PARAM_SHORT_DESCRIPTION => [
 				ParamValidator::PARAM_TYPE => 'string',
 			],
-			'owners' => [
+			FocusArea::PARAM_OWNERS => [
 				ParamValidator::PARAM_TYPE => 'string',
 			],
-			'volunteers' => [
+			FocusArea::PARAM_VOLUNTEERS => [
 				ParamValidator::PARAM_TYPE => 'string',
 			],
-			'created' => [
+			FocusArea::PARAM_CREATED => [
 				ParamValidator::PARAM_TYPE => 'timestamp',
 				ParamValidator::PARAM_REQUIRED => true,
 			],
-			'baselang' => [
+			FocusArea::PARAM_BASE_LANG => [
 				ParamValidator::PARAM_TYPE => 'string',
 				ParamValidator::PARAM_REQUIRED => true,
 			],
-			'baserevid' => [
+			FocusArea::PARAM_BASE_REV_ID => [
 				ParamValidator::PARAM_TYPE => 'integer',
 				ApiBase::PARAM_HELP_MSG => 'apihelp-edit-param-baserevid',
 			],

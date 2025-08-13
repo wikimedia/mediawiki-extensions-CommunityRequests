@@ -31,11 +31,11 @@ class FocusAreaStoreTest extends CommunityRequestsIntegrationTestCase {
 			$page,
 			'en',
 			[
-				'shortDescription' => 'Test focus area',
-				'status' => 'blocked',
-				'title' => 'Test Focus Area',
-				'created' => '2025-01-01T00:00:00Z',
-				'voteCount' => 42,
+				FocusArea::PARAM_SHORT_DESCRIPTION => 'Test focus area',
+				FocusArea::PARAM_STATUS => 'blocked',
+				FocusArea::PARAM_TITLE => 'Test Focus Area',
+				FocusArea::PARAM_CREATED => '2025-01-01T00:00:00Z',
+				FocusArea::PARAM_VOTE_COUNT => 42,
 			]
 		);
 		$this->getStore()->save( $focusArea );

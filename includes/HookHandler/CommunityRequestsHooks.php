@@ -234,7 +234,7 @@ class CommunityRequestsHooks implements
 					// Keep track of the language change in the extension data to guard
 					// against race conditions. This will be used later instead of fetching
 					// page language from the Title object.
-					$data['lang'] = $data[AbstractWishlistEntity::PARAM_BASE_LANG];
+					$data[AbstractWishlistEntity::PARAM_LANG] = $data[AbstractWishlistEntity::PARAM_BASE_LANG];
 					$parserOutput->setExtensionData( self::EXT_DATA_KEY, $data );
 				}
 			}, __METHOD__ );
@@ -322,7 +322,7 @@ class CommunityRequestsHooks implements
 		if ( !$data ) {
 			return;
 		}
-		$store = $this->stores[$data['entityType']];
+		$store = $this->stores[$data[AbstractWishlistEntity::PARAM_ENTITY_TYPE]];
 		$title = $linksUpdate->getTitle();
 		$entity = $this->entityFactory->createFromParserData( $data, $this->getCanonicalWishlistPage( $title ) );
 
@@ -423,7 +423,7 @@ class CommunityRequestsHooks implements
 		$voteCount = intval( $data[AbstractWishlistEntity::PARAM_VOTE_COUNT] ?? 0 );
 		$text = str_replace(
 			AbstractRenderer::VOTING_STRIP_MARKER,
-			$parser->msg( "communityrequests-{$data['entityType']}-voting-info" )
+			$parser->msg( "communityrequests-{$data[AbstractWishlistEntity::PARAM_ENTITY_TYPE]}-voting-info" )
 				->numParams( $voteCount )
 				->params( $voteCount )
 				->parse(),

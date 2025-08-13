@@ -14,11 +14,11 @@ const getWrapper = ( props = {} ) => {
 };
 
 const defaultProps = {
-	baseLang: 'en',
-	baseRevId: 12345,
+	baselang: 'en',
+	baserevid: 12345,
 	created: '2023-10-01T12:00:00Z',
 	description: 'Test Description',
-	shortDescription: 'Test Short Description',
+	shortdescription: 'Test Short Description',
 	owners: '* Community Tech\n* Editing',
 	volunteers: '* User1\n* User2',
 	status: 'draft',

@@ -15,7 +15,7 @@ use MediaWiki\Utils\MWTimestamp;
  */
 class FocusArea extends AbstractWishlistEntity {
 
-	// Constants used for parsing and constructing the parser function invocation.
+	// Constants used for parser function, extension data, and API parameters.
 	public const PARAM_SHORT_DESCRIPTION = 'shortdescription';
 	public const PARAM_OWNERS = 'owners';
 	public const PARAM_VOLUNTEERS = 'volunteers';
@@ -31,7 +31,7 @@ class FocusArea extends AbstractWishlistEntity {
 	];
 
 	// Focus area properties.
-	private string $shortDescription;
+	private string $shortdescription;
 	private string $owners;
 	private string $volunteers;
 
@@ -42,14 +42,14 @@ class FocusArea extends AbstractWishlistEntity {
 	 *   - 'status' (int): The status ID of the focus area.
 	 *   - 'title' (string): The title of the focus area.
 	 *   - 'description' (?string): The description of the focus area.
-	 *   - 'shortDescription' (string): The short description of the focus area.
+	 *   - 'shortdescription' (string): The short description of the focus area.
 	 *   - 'owners' (string): WMF owners of the focus area.
 	 *   - 'volunteers' (string): Volunteers contributing to the focus area.
-	 *   - 'voteCount' (int): The number of votes for the focus area.
+	 *   - 'votecount' (int): The number of votes for the focus area.
 	 *   - 'created' (string): The creation timestamp of the focus area.
 	 *   - 'updated' (string): The last updated timestamp of the focus area.
 	 *   - 'status' (int): The status ID of the focus area.
-	 *   - 'baseLang' (string): The base language of the focus area.
+	 *   - 'baselang' (string): The base language of the focus area.
 	 * @throws InvalidArgumentException If the title or short description is empty.
 	 */
 	public function __construct(
@@ -58,9 +58,9 @@ class FocusArea extends AbstractWishlistEntity {
 		array $fields
 	) {
 		parent::__construct( $page, $lang, $fields );
-		$this->shortDescription = $fields['shortDescription'] ?? '';
-		$this->owners = $fields['owners'] ?? '';
-		$this->volunteers = $fields['volunteers'] ?? '';
+		$this->shortdescription = $fields[self::PARAM_SHORT_DESCRIPTION] ?? '';
+		$this->owners = $fields[self::PARAM_OWNERS] ?? '';
+		$this->volunteers = $fields[self::PARAM_VOLUNTEERS] ?? '';
 	}
 
 	/**
@@ -69,7 +69,7 @@ class FocusArea extends AbstractWishlistEntity {
 	 * @return string
 	 */
 	public function getShortDescription(): string {
-		return $this->shortDescription;
+		return $this->shortdescription;
 	}
 
 	/**
@@ -93,15 +93,15 @@ class FocusArea extends AbstractWishlistEntity {
 	/** @inheritDoc */
 	public function toArray( WishlistConfig $config, bool $lowerCaseKeyNames = false ): array {
 		$ret = [
-			'status' => $config->getStatusWikitextValFromId( $this->status ),
-			'title' => $this->title,
-			'description' => $this->description,
-			'shortDescription' => $this->shortDescription,
-			'owners' => $this->owners,
-			'volunteers' => $this->volunteers,
-			'created' => $this->created,
-			'baseLang' => $this->baseLang,
-			'voteCount' => $this->voteCount,
+			self::PARAM_STATUS => $config->getStatusWikitextValFromId( $this->status ),
+			self::PARAM_TITLE => $this->title,
+			self::PARAM_DESCRIPTION => $this->description,
+			self::PARAM_SHORT_DESCRIPTION => $this->shortdescription,
+			self::PARAM_OWNERS => $this->owners,
+			self::PARAM_VOLUNTEERS => $this->volunteers,
+			self::PARAM_CREATED => $this->created,
+			self::PARAM_BASE_LANG => $this->baselang,
+			self::PARAM_VOTE_COUNT => $this->votecount,
 		];
 		if ( $lowerCaseKeyNames ) {
 			// Convert keys to lower case for API compatibility.
@@ -117,9 +117,7 @@ class FocusArea extends AbstractWishlistEntity {
 			// Match ID values to their wikitext representations, as defined by site configuration.
 			$value = match ( $param ) {
 				self::PARAM_STATUS => $config->getStatusWikitextValFromId( $this->status ),
-				self::PARAM_SHORT_DESCRIPTION => $this->shortDescription,
 				self::PARAM_CREATED => MWTimestamp::convert( TS_ISO_8601, $this->created ),
-				self::PARAM_BASE_LANG => $this->baseLang,
 				default => $this->{ $param },
 			};
 
@@ -139,15 +137,15 @@ class FocusArea extends AbstractWishlistEntity {
 		WishlistConfig $config
 	): self {
 		$fields = [
-			'status' => $config->getStatusIdFromWikitextVal( $params[self::PARAM_STATUS] ?? '' ),
-			'title' => $params[self::PARAM_TITLE] ?? '',
-			'description' => $params[self::PARAM_DESCRIPTION] ?? null,
-			'shortDescription' => $params[self::PARAM_SHORT_DESCRIPTION] ?? '',
-			'owners' => $params[self::PARAM_OWNERS] ?? '',
-			'volunteers' => $params[self::PARAM_VOLUNTEERS] ?? '',
-			'created' => $params[self::PARAM_CREATED] ?? null,
-			'baseLang' => $lang,
-			'voteCount' => $params[self::PARAM_VOTE_COUNT] ?? null,
+			self::PARAM_STATUS => $config->getStatusIdFromWikitextVal( $params[self::PARAM_STATUS] ?? '' ),
+			self::PARAM_TITLE => $params[self::PARAM_TITLE] ?? '',
+			self::PARAM_DESCRIPTION => $params[self::PARAM_DESCRIPTION] ?? null,
+			self::PARAM_SHORT_DESCRIPTION => $params[self::PARAM_SHORT_DESCRIPTION] ?? '',
+			self::PARAM_OWNERS => $params[self::PARAM_OWNERS] ?? '',
+			self::PARAM_VOLUNTEERS => $params[self::PARAM_VOLUNTEERS] ?? '',
+			self::PARAM_CREATED => $params[self::PARAM_CREATED] ?? null,
+			self::PARAM_BASE_LANG => $lang,
+			self::PARAM_VOTE_COUNT => $params[self::PARAM_VOTE_COUNT] ?? null,
 		];
 		return new self( $pageTitle, $lang, $fields );
 	}

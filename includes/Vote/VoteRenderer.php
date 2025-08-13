@@ -36,8 +36,8 @@ class VoteRenderer extends AbstractRenderer {
 		$extensionData[AbstractWishlistEntity::PARAM_VOTE_COUNT]++;
 		// Extension data needed for storage in CommunityRequestsHooks::onLinksUpdateComplete().
 		// This data may already exist if the page is a wish or focus area page.
-		$extensionData['entityType'] ??= $entityType;
-		$extensionData['lang'] ??= $this->parser->getTargetLanguage()->getCode();
+		$extensionData[AbstractWishlistEntity::PARAM_ENTITY_TYPE] ??= $entityType;
+		$extensionData[AbstractWishlistEntity::PARAM_LANG] ??= $this->parser->getTargetLanguage()->getCode();
 
 		$this->logger->debug( __METHOD__ . ": Rendering vote. {0}", [ json_encode( $args ) ] );
 		$this->parser->getOutput()->setExtensionData( self::EXT_DATA_KEY, $extensionData );

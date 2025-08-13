@@ -22,7 +22,7 @@ class FocusAreaRenderer extends AbstractRenderer {
 			return '';
 		}
 		$args = $this->getArgs();
-		$args['description'] ??= '';
+		$args[FocusArea::PARAM_DESCRIPTION] ??= '';
 
 		$this->parser->addTrackingCategory( self::FOCUS_AREA_TRACKING_CATEGORY );
 
@@ -39,11 +39,11 @@ class FocusAreaRenderer extends AbstractRenderer {
 		}
 
 		// These need to be set here because we need them for display in ::renderFocusAreaInternal().
-		$args['updated'] = $this->parser->getRevisionTimestamp();
-		$args[FocusArea::PARAM_CREATED] ??= $args['updated'];
+		$args[FocusArea::PARAM_UPDATED] = $this->parser->getRevisionTimestamp();
+		$args[FocusArea::PARAM_CREATED] ??= $args[FocusArea::PARAM_UPDATED];
 
-		$args['entityType'] = 'focus-area';
-		$args['lang'] = $this->parser->getTargetLanguage()->getCode();
+		$args[FocusArea::PARAM_ENTITY_TYPE] = 'focus-area';
+		$args[FocusArea::PARAM_LANG] = $this->parser->getTargetLanguage()->getCode();
 
 		$this->logger->debug( __METHOD__ . ": Rendering focus area. {0}", [ json_encode( $args ) ] );
 		$this->parser->getOutput()->setExtensionData( self::EXT_DATA_KEY, $args );
@@ -76,7 +76,7 @@ class FocusAreaRenderer extends AbstractRenderer {
 		);
 		$out .= $this->getDivRaw(
 			'description',
-			$this->parser->recursiveTagParse( $args['description'] )
+			$this->parser->recursiveTagParse( $args[FocusArea::PARAM_DESCRIPTION] )
 		);
 
 		// Other details.
@@ -94,7 +94,7 @@ class FocusAreaRenderer extends AbstractRenderer {
 			) .
 			$this->getListItem(
 				'updated',
-				$this->formatDate( $args['updated'] )
+				$this->formatDate( $args[FocusArea::PARAM_UPDATED] )
 			)
 		);
 

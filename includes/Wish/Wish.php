@@ -16,7 +16,7 @@ use MediaWiki\Utils\MWTimestamp;
  */
 class Wish extends AbstractWishlistEntity {
 
-	// Constants used for parsing and constructing the parser function invocation.
+	// Constants used for parser function, extension data, and API parameters.
 	public const PARAM_TYPE = 'type';
 	public const PARAM_FOCUS_AREA = 'focusarea';
 	public const PARAM_AUDIENCE = 'audience';
@@ -44,10 +44,10 @@ class Wish extends AbstractWishlistEntity {
 
 	// Wish properties.
 	private int $type;
-	private ?PageIdentity $focusArea;
+	private ?PageIdentity $focusarea;
 	private array $projects;
-	private array $phabTasks;
-	private ?string $otherProject;
+	private array $phabtasks;
+	private ?string $otherproject;
 	private ?string $audience;
 
 	/**
@@ -58,18 +58,18 @@ class Wish extends AbstractWishlistEntity {
 	 * @param array $fields The fields of the wish, including:
 	 *   - 'type' (int): The type ID of the wish.
 	 *   - 'status' (int): The status ID of the wish.
-	 *   - 'focusArea' (?PageIdentity): The focus area page the wish is assigned to, or null if not assigned.
+	 *   - 'focusarea' (?PageIdentity): The focus area page the wish is assigned to, or null if not assigned.
 	 *   - 'title' (string): The title of the wish.
 	 *   - 'description' (?string): The description of the wish.
 	 *   - 'projects' (array<int>): IDs of $wgCommunityRequestsProjects associated with the wish.
-	 *   - 'otherProject' (?string): The 'other project' associated with the wish.
+	 *   - 'otherproject' (?string): The 'other project' associated with the wish.
 	 *   - 'audience' (?string): The group(s) of users the wish would benefit.
-	 *   - 'phabTasks' (array<int>): IDs of Phabricator tasks associated with the wish.
-	 *   - 'voteCount' (int): The number of votes for the wish.
+	 *   - 'phabtasks' (array<int>): IDs of Phabricator tasks associated with the wish.
+	 *   - 'votecount' (int): The number of votes for the wish.
 	 *   - 'created' (?string): The creation timestamp of the wish. If null, it will be fetched
 	 *        for existing wishes, and set to the current timestamp for new wishes.
 	 *   - 'updated' (?string): The last updated timestamp of the wish.
-	 *   - 'baseLang' (?string): The base language of the wish (defaults to $lang)
+	 *   - 'baselang' (?string): The base language of the wish (defaults to $lang)
 	 */
 	public function __construct(
 		protected PageIdentity $page,
@@ -78,12 +78,12 @@ class Wish extends AbstractWishlistEntity {
 		array $fields = []
 	) {
 		parent::__construct( $page, $lang, $fields );
-		$this->type = intval( $fields['type'] ?? 0 );
-		$this->focusArea = $fields['focusArea'] ?? null;
-		$this->projects = $fields['projects'] ?? [];
-		$this->otherProject = ( $fields['otherProject'] ?? '' ) ?: null;
-		$this->phabTasks = $fields['phabTasks'] ?? [];
-		$this->audience = $fields['audience'] ?? '';
+		$this->type = intval( $fields[self::PARAM_TYPE] ?? 0 );
+		$this->focusarea = $fields[self::PARAM_FOCUS_AREA] ?? null;
+		$this->projects = $fields[self::PARAM_PROJECTS] ?? [];
+		$this->otherproject = ( $fields[self::PARAM_OTHER_PROJECT] ?? '' ) ?: null;
+		$this->phabtasks = $fields[self::PARAM_PHAB_TASKS] ?? [];
+		$this->audience = $fields[self::PARAM_AUDIENCE] ?? '';
 	}
 
 	/**
@@ -110,7 +110,7 @@ class Wish extends AbstractWishlistEntity {
 	 * @return ?PageIdentity
 	 */
 	public function getFocusArea(): ?PageIdentity {
-		return $this->focusArea;
+		return $this->focusarea;
 	}
 
 	/**
@@ -128,7 +128,7 @@ class Wish extends AbstractWishlistEntity {
 	 * @return ?string
 	 */
 	public function getOtherProject(): ?string {
-		return $this->otherProject;
+		return $this->otherproject;
 	}
 
 	/**
@@ -146,7 +146,7 @@ class Wish extends AbstractWishlistEntity {
 	 * @return array<int>
 	 */
 	public function getPhabTasks(): array {
-		return $this->phabTasks;
+		return $this->phabtasks;
 	}
 
 	/** @inheritDoc */
@@ -155,20 +155,20 @@ class Wish extends AbstractWishlistEntity {
 		bool $lowerCaseKeyNames = false
 	): array {
 		$ret = [
-			'status' => $config->getStatusWikitextValFromId( $this->status ),
-			'type' => $config->getWishTypeWikitextValFromId( $this->type ),
-			'title' => $this->title,
-			'focusArea' => $config->getEntityWikitextVal( $this->getFocusArea() ) ?: '',
-			'description' => $this->description,
-			'audience' => $this->audience,
-			'projects' => $config->getProjectsWikitextValsFromIds( $this->projects ),
-			'otherProject' => (string)$this->otherProject,
-			'phabTasks' => array_map( static fn ( $t ) => "T$t", $this->phabTasks ),
-			'proposer' => $this->proposer?->getName(),
-			'voteCount' => $this->voteCount,
-			'created' => $this->created,
-			'updated' => $this->updated,
-			'baseLang' => $this->baseLang,
+			self::PARAM_STATUS => $config->getStatusWikitextValFromId( $this->status ),
+			self::PARAM_TYPE => $config->getWishTypeWikitextValFromId( $this->type ),
+			self::PARAM_TITLE => $this->title,
+			self::PARAM_FOCUS_AREA => $config->getEntityWikitextVal( $this->getFocusArea() ) ?: '',
+			self::PARAM_DESCRIPTION => $this->description,
+			self::PARAM_AUDIENCE => $this->audience,
+			self::PARAM_PROJECTS => $config->getProjectsWikitextValsFromIds( $this->projects ),
+			self::PARAM_OTHER_PROJECT => (string)$this->otherproject,
+			self::PARAM_PHAB_TASKS => array_map( static fn ( $t ) => "T$t", $this->phabtasks ),
+			self::PARAM_PROPOSER => $this->proposer?->getName(),
+			self::PARAM_VOTE_COUNT => $this->votecount,
+			self::PARAM_CREATED => $this->created,
+			self::PARAM_UPDATED => $this->updated,
+			self::PARAM_BASE_LANG => $this->baselang,
 		];
 		if ( $lowerCaseKeyNames ) {
 			// Convert keys to lower case for API compatibility.
@@ -185,14 +185,14 @@ class Wish extends AbstractWishlistEntity {
 			// Match ID values to their wikitext representations, as defined by site configuration.
 			$value = match ( $param ) {
 				self::PARAM_PROJECTS => $config->getProjectsWikitextValsFromIds( $this->projects ),
-				self::PARAM_OTHER_PROJECT => $this->otherProject ?? '',
-				self::PARAM_PHAB_TASKS => array_map( static fn ( $id ) => "T$id", $this->phabTasks ),
+				self::PARAM_OTHER_PROJECT => $this->otherproject ?? '',
+				self::PARAM_PHAB_TASKS => array_map( static fn ( $id ) => "T$id", $this->phabtasks ),
 				self::PARAM_STATUS => $config->getStatusWikitextValFromId( $this->status ),
 				self::PARAM_TYPE => $config->getWishTypeWikitextValFromId( $this->type ),
-				self::PARAM_FOCUS_AREA => $config->getEntityWikitextVal( $this->focusArea ) ?: '',
+				self::PARAM_FOCUS_AREA => $config->getEntityWikitextVal( $this->focusarea ) ?: '',
 				self::PARAM_CREATED => MWTimestamp::convert( TS_ISO_8601, $this->created ),
 				self::PARAM_PROPOSER => $this->proposer ? $this->proposer->getName() : '',
-				self::PARAM_BASE_LANG => $this->baseLang,
+				self::PARAM_BASE_LANG => $this->baselang,
 				default => $this->{ $param },
 			};
 
@@ -221,19 +221,19 @@ class Wish extends AbstractWishlistEntity {
 	): self {
 		$faValue = $config->getFocusAreaPageRefFromWikitextVal( $params[self::PARAM_FOCUS_AREA] ?? '' );
 		$fields = [
-			'type' => $config->getWishTypeIdFromWikitextVal( $params[self::PARAM_TYPE] ?? '' ),
-			'status' => $config->getStatusIdFromWikitextVal( $params[self::PARAM_STATUS] ?? '' ),
-			'title' => $params[self::PARAM_TITLE] ?? '',
+			self::PARAM_TYPE => $config->getWishTypeIdFromWikitextVal( $params[self::PARAM_TYPE] ?? '' ),
+			self::PARAM_STATUS => $config->getStatusIdFromWikitextVal( $params[self::PARAM_STATUS] ?? '' ),
+			self::PARAM_TITLE => $params[self::PARAM_TITLE] ?? '',
 			// TODO: It would be better to avoid use of Title here.
-			'focusArea' => $faValue ? Title::newFromPageReference( $faValue ) : null,
-			'description' => $params[self::PARAM_DESCRIPTION] ?? '',
-			'projects' => self::getProjectsFromCsv( $params[self::PARAM_PROJECTS] ?? '', $config ),
-			'otherProject' => $params[self::PARAM_OTHER_PROJECT] ?? null,
-			'audience' => $params[self::PARAM_AUDIENCE] ?? '',
-			'phabTasks' => self::getPhabTasksFromCsv( $params[self::PARAM_PHAB_TASKS] ?? '' ),
-			'created' => $params[self::PARAM_CREATED] ?? null,
-			'baseLang' => $params[self::PARAM_BASE_LANG] ?? $lang,
-			'voteCount' => $params[self::PARAM_VOTE_COUNT] ?? null,
+			self::PARAM_FOCUS_AREA => $faValue ? Title::newFromPageReference( $faValue ) : null,
+			self::PARAM_DESCRIPTION => $params[self::PARAM_DESCRIPTION] ?? '',
+			self::PARAM_PROJECTS => self::getProjectsFromCsv( $params[self::PARAM_PROJECTS] ?? '', $config ),
+			self::PARAM_OTHER_PROJECT => $params[self::PARAM_OTHER_PROJECT] ?? null,
+			self::PARAM_AUDIENCE => $params[self::PARAM_AUDIENCE] ?? '',
+			self::PARAM_PHAB_TASKS => self::getPhabTasksFromCsv( $params[self::PARAM_PHAB_TASKS] ?? '' ),
+			self::PARAM_CREATED => $params[self::PARAM_CREATED] ?? null,
+			self::PARAM_BASE_LANG => $params[self::PARAM_BASE_LANG] ?? $lang,
+			self::PARAM_VOTE_COUNT => $params[self::PARAM_VOTE_COUNT] ?? null,
 		];
 
 		return new self( $pageTitle, $lang, $proposer, $fields );

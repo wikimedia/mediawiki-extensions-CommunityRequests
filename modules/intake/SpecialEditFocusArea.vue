@@ -29,7 +29,7 @@
 			class="ext-communityrequests-intake__short-description"
 		>
 			<cdx-text-area
-				v-model="focusArea.shortDescription"
+				v-model="focusArea.shortdescription"
 				name="shortdescription"
 			></cdx-text-area>
 			<template #label>
@@ -78,12 +78,12 @@
 			name="created"
 		>
 		<input
-			:value="baseRevId"
+			:value="baserevid"
 			type="hidden"
 			name="baserevid"
 		>
 		<input
-			:value="baseLang"
+			:value="baselang"
 			type="hidden"
 			name="baselang"
 		>
@@ -133,11 +133,11 @@ module.exports = exports = defineComponent( {
 		FooterSection
 	},
 	props: {
-		baseLang: { type: String, default: mw.config.get( 'wgUserLanguage' ) },
-		baseRevId: { type: Number, default: 0 },
+		baselang: { type: String, default: mw.config.get( 'wgUserLanguage' ) },
+		baserevid: { type: Number, default: 0 },
 		created: { type: String, default: '' },
 		description: { type: String, default: '' },
-		shortDescription: { type: String, default: '' },
+		shortdescription: { type: String, default: '' },
 		owners: { type: String, default: '' },
 		volunteers: { type: String, default: '' },
 		status: {
@@ -328,7 +328,3 @@ module.exports = exports = defineComponent( {
 	}
 } );
 </script>
-
-<style lang="less">
-@import 'mediawiki.skin.variables.less';
-</style>

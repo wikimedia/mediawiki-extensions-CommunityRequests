@@ -310,18 +310,18 @@ class WishStore extends AbstractWishlistStore {
 				$row->crt_lang,
 				$this->userFactory->newFromActorId( (int)$row->cr_actor ),
 				[
-					'type' => (int)$row->cr_type,
-					'status' => (int)$row->cr_status,
+					Wish::PARAM_TYPE => (int)$row->cr_type,
+					Wish::PARAM_STATUS => (int)$row->cr_status,
 					// TODO: do this in the main query instead of separately.
-					'focusArea' => Title::newFromID( (int)$row->cr_focus_area ),
-					'title' => $row->crt_title,
-					'projects' => $projectsByPage[$row->cr_page] ?? [],
-					'otherProject' => $row->crt_other_project,
-					'phabTasks' => $phabTasksByPage[$row->cr_page] ?? [],
-					'voteCount' => (int)$row->cr_vote_count,
-					'created' => $row->cr_created,
-					'updated' => $row->cr_updated,
-					'baseLang' => $row->cr_base_lang,
+					Wish::PARAM_FOCUS_AREA => Title::newFromID( (int)$row->cr_focus_area ),
+					Wish::PARAM_TITLE => $row->crt_title,
+					Wish::PARAM_PROJECTS => $projectsByPage[$row->cr_page] ?? [],
+					Wish::PARAM_OTHER_PROJECT => $row->crt_other_project,
+					Wish::PARAM_PHAB_TASKS => $phabTasksByPage[$row->cr_page] ?? [],
+					Wish::PARAM_VOTE_COUNT => (int)$row->cr_vote_count,
+					Wish::PARAM_CREATED => $row->cr_created,
+					Wish::PARAM_UPDATED => $row->cr_updated,
+					Wish::PARAM_BASE_LANG => $row->cr_base_lang,
 				]
 			);
 		}

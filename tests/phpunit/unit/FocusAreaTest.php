@@ -21,11 +21,11 @@ class FocusAreaTest extends AbstractWishlistEntityTest {
 	 * @dataProvider provideToWikitext
 	 */
 	public function testToWikitext( array $focusAreaData, string $expectedWikitext ): void {
-		$wish = $this->getTestFocusArea( $focusAreaData );
+		$focusArea = $this->getTestFocusArea( $focusAreaData );
 
 		$this->assertSame(
 			$expectedWikitext,
-			$wish->toWikitext( $this->config )->getText()
+			$focusArea->toWikitext( $this->config )->getText()
 		);
 	}
 
@@ -36,14 +36,14 @@ class FocusAreaTest extends AbstractWishlistEntityTest {
 		return [
 			[
 				[
-					'title' => 'Improve search functionality',
-					'status' => 1,
-					'description' => 'Make [[search]] results more relevant and faster.',
-					'shortDescription' => '[[Search]] improvements',
-					'owners' => '[[Community Tech]]',
-					'volunteers' => '[[User:TheDJ|TheDJ]], [[User:Novem Linguae|Novem Linguae]]',
-					'created' => '2023-10-01T12:00:00Z',
-					'baseLang' => 'en',
+					FocusArea::PARAM_TITLE => 'Improve search functionality',
+					FocusArea::PARAM_STATUS => 1,
+					FocusArea::PARAM_DESCRIPTION => 'Make [[search]] results more relevant and faster.',
+					FocusArea::PARAM_SHORT_DESCRIPTION => '[[Search]] improvements',
+					FocusArea::PARAM_OWNERS => '[[Community Tech]]',
+					FocusArea::PARAM_VOLUNTEERS => '[[User:TheDJ|TheDJ]], [[User:Novem Linguae|Novem Linguae]]',
+					FocusArea::PARAM_CREATED => '2023-10-01T12:00:00Z',
+					FocusArea::PARAM_BASE_LANG => 'en',
 				],
 				<<<"END"
 {{#CommunityRequests: focus-area
@@ -67,8 +67,8 @@ END
 	 * @dataProvider provideToArray
 	 */
 	public function testToArray( array $focusAreaData, array $expected ): void {
-		$wish = $this->getTestFocusArea( $focusAreaData );
-		$this->assertSame( $expected, $wish->toArray( $this->config ) );
+		$focusArea = $this->getTestFocusArea( $focusAreaData );
+		$this->assertSame( $expected, $focusArea->toArray( $this->config ) );
 	}
 
 	/**
@@ -78,22 +78,22 @@ END
 		return [
 			[
 				[
-					'status' => 1,
-					'title' => 'Improve search functionality',
-					'created' => '2023-10-01T12:00:00Z',
-					'baseLang' => 'en',
-					'voteCount' => 42,
+					FocusArea::PARAM_STATUS => 1,
+					FocusArea::PARAM_TITLE => 'Improve search functionality',
+					FocusArea::PARAM_CREATED => '2023-10-01T12:00:00Z',
+					FocusArea::PARAM_BASE_LANG => 'en',
+					FocusArea::PARAM_VOTE_COUNT => 42,
 				],
 				[
-					'status' => 'submitted',
-					'title' => 'Improve search functionality',
-					'description' => null,
-					'shortDescription' => '',
-					'owners' => '',
-					'volunteers' => '',
-					'created' => '2023-10-01T12:00:00Z',
-					'baseLang' => 'en',
-					'voteCount' => 42,
+					FocusArea::PARAM_STATUS => 'submitted',
+					FocusArea::PARAM_TITLE => 'Improve search functionality',
+					FocusArea::PARAM_DESCRIPTION => null,
+					FocusArea::PARAM_SHORT_DESCRIPTION => '',
+					FocusArea::PARAM_OWNERS => '',
+					FocusArea::PARAM_VOLUNTEERS => '',
+					FocusArea::PARAM_CREATED => '2023-10-01T12:00:00Z',
+					FocusArea::PARAM_BASE_LANG => 'en',
+					FocusArea::PARAM_VOTE_COUNT => 42,
 				],
 			]
 		];
@@ -110,53 +110,53 @@ END
 			$wikitextParams,
 			$this->config
 		);
-		$this->assertSame( $expected['title'], $focusArea->getTitle() );
-		$this->assertSame( $expected['status'], $focusArea->getStatus() );
-		$this->assertSame( $expected['description'], $focusArea->getDescription() );
-		$this->assertSame( $expected['shortDescription'], $focusArea->getShortDescription() );
-		$this->assertSame( $expected['owners'], $focusArea->getOwners() );
-		$this->assertSame( $expected['volunteers'], $focusArea->getVolunteers() );
-		$this->assertSame( $expected['created'], $focusArea->getCreated() );
+		$this->assertSame( $expected[FocusArea::PARAM_TITLE], $focusArea->getTitle() );
+		$this->assertSame( $expected[FocusArea::PARAM_STATUS], $focusArea->getStatus() );
+		$this->assertSame( $expected[FocusArea::PARAM_DESCRIPTION], $focusArea->getDescription() );
+		$this->assertSame( $expected[FocusArea::PARAM_SHORT_DESCRIPTION], $focusArea->getShortDescription() );
+		$this->assertSame( $expected[FocusArea::PARAM_OWNERS], $focusArea->getOwners() );
+		$this->assertSame( $expected[FocusArea::PARAM_VOLUNTEERS], $focusArea->getVolunteers() );
+		$this->assertSame( $expected[FocusArea::PARAM_CREATED], $focusArea->getCreated() );
 	}
 
 	public static function provideNewFromWikitextParams(): array {
 		return [
 			[
 				[
-					'title' => 'Improve search functionality',
-					'status' => 'submitted',
-					'description' => 'Make [[search]] results more relevant and faster.',
-					'shortdescription' => '[[Search]] improvements',
-					'owners' => '[[Community Tech]]',
-					'volunteers' => '[[User:TheDJ|TheDJ]], [[User:Novem Linguae|Novem Linguae]]',
-					'created' => '2023-10-01T12:00:00Z',
+					FocusArea::PARAM_TITLE => 'Improve search functionality',
+					FocusArea::PARAM_STATUS => 'submitted',
+					FocusArea::PARAM_DESCRIPTION => 'Make [[search]] results more relevant and faster.',
+					FocusArea::PARAM_SHORT_DESCRIPTION => '[[Search]] improvements',
+					FocusArea::PARAM_OWNERS => '[[Community Tech]]',
+					FocusArea::PARAM_VOLUNTEERS => '[[User:TheDJ|TheDJ]], [[User:Novem Linguae|Novem Linguae]]',
+					FocusArea::PARAM_CREATED => '2023-10-01T12:00:00Z',
 				],
 				[
-					'title' => 'Improve search functionality',
-					'status' => 1,
-					'description' => 'Make [[search]] results more relevant and faster.',
-					'shortDescription' => '[[Search]] improvements',
-					'owners' => '[[Community Tech]]',
-					'volunteers' => '[[User:TheDJ|TheDJ]], [[User:Novem Linguae|Novem Linguae]]',
-					'created' => '2023-10-01T12:00:00Z',
+					FocusArea::PARAM_TITLE => 'Improve search functionality',
+					FocusArea::PARAM_STATUS => 1,
+					FocusArea::PARAM_DESCRIPTION => 'Make [[search]] results more relevant and faster.',
+					FocusArea::PARAM_SHORT_DESCRIPTION => '[[Search]] improvements',
+					FocusArea::PARAM_OWNERS => '[[Community Tech]]',
+					FocusArea::PARAM_VOLUNTEERS => '[[User:TheDJ|TheDJ]], [[User:Novem Linguae|Novem Linguae]]',
+					FocusArea::PARAM_CREATED => '2023-10-01T12:00:00Z',
 				]
 			],
 			[
 				[
-					'title' => 'Fix all the bugs ever created',
-					'status' => 'archived',
-					'description' => 'Fix everything.',
-					'shortDescription' => '',
-					'created' => '2023-10-01T12:00:00Z',
+					FocusArea::PARAM_TITLE => 'Fix all the bugs ever created',
+					FocusArea::PARAM_STATUS => 'archived',
+					FocusArea::PARAM_DESCRIPTION => 'Fix everything.',
+					FocusArea::PARAM_SHORT_DESCRIPTION => '',
+					FocusArea::PARAM_CREATED => '2023-10-01T12:00:00Z',
 				],
 				[
-					'title' => 'Fix all the bugs ever created',
-					'status' => 6,
-					'description' => 'Fix everything.',
-					'shortDescription' => '',
-					'owners' => '',
-					'volunteers' => '',
-					'created' => '2023-10-01T12:00:00Z',
+					FocusArea::PARAM_TITLE => 'Fix all the bugs ever created',
+					FocusArea::PARAM_STATUS => 6,
+					FocusArea::PARAM_DESCRIPTION => 'Fix everything.',
+					FocusArea::PARAM_SHORT_DESCRIPTION => '',
+					FocusArea::PARAM_OWNERS => '',
+					FocusArea::PARAM_VOLUNTEERS => '',
+					FocusArea::PARAM_CREATED => '2023-10-01T12:00:00Z',
 				]
 			]
 		];

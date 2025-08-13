@@ -453,8 +453,7 @@ abstract class AbstractWishlistStore {
 				$wikitext
 			);
 		if ( $args !== null ) {
-			// Include baseRevId
-			$args['baseRevId'] = $revRecord->getId();
+			$args[AbstractWishlistEntity::PARAM_BASE_REV_ID] = $revRecord->getId();
 		}
 		return $args;
 	}

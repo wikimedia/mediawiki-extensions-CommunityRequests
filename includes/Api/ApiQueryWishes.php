@@ -38,10 +38,10 @@ class ApiQueryWishes extends ApiQueryBase {
 		$params = $this->extractRequestParams();
 
 		$order = match ( $params['sort'] ) {
-			'created' => WishStore::createdField(),
-			'updated' => WishStore::updatedField(),
-			'title' => WishStore::titleField(),
-			'votecount' => WishStore::voteCountField(),
+			Wish::PARAM_CREATED => WishStore::createdField(),
+			Wish::PARAM_UPDATED => WishStore::updatedField(),
+			Wish::PARAM_TITLE => WishStore::titleField(),
+			Wish::PARAM_VOTE_COUNT => WishStore::voteCountField(),
 			default => throw new InvalidArgumentException( 'Invalid sort parameter.' ),
 		};
 
@@ -51,7 +51,7 @@ class ApiQueryWishes extends ApiQueryBase {
 		}
 
 		$wishes = $this->store->getAll(
-			$params['lang'] ?? $this->getLanguage()->getCode(),
+			$params[Wish::PARAM_LANG] ?? $this->getLanguage()->getCode(),
 			$order,
 			$params['dir'] === 'ascending' ? WishStore::SORT_ASC : WishStore::SORT_DESC,
 			$params['limit'] + 1,
@@ -64,7 +64,7 @@ class ApiQueryWishes extends ApiQueryBase {
 			// Do this here to avoid unnecessarily fetching wikitext for wishes that won't be returned.
 			if ( $index === $params['limit'] ) {
 				$timestamp = match ( $params['sort'] ) {
-					'updated' => wfTimestamp( TS_MW, $wish->getUpdated() ),
+					Wish::PARAM_UPDATED => wfTimestamp( TS_MW, $wish->getUpdated() ),
 					default => wfTimestamp( TS_MW, $wish->getCreated() ),
 				};
 				// We have more results, so set the continue parameter.
@@ -122,7 +122,7 @@ class ApiQueryWishes extends ApiQueryBase {
 				// TODO: Include this in the WishStore::getAll() query.
 				$focusArea = $this->focusAreaStore->get(
 					$wish->getFocusArea(),
-						$params['lang'] ?? $this->getLanguage()->getCode()
+						$params[Wish::PARAM_LANG] ?? $this->getLanguage()->getCode()
 				);
 				$wishData['focusareatitle'] = $focusArea->getTitle();
 			}
@@ -146,56 +146,56 @@ class ApiQueryWishes extends ApiQueryBase {
 	public function getAllowedParams() {
 		$apiHelpMsgPrefix = 'apihelp-query+communityrequests-wishes-paramvalue';
 		return [
-			'lang' => [
+			Wish::PARAM_LANG => [
 				ParamValidator::PARAM_TYPE => 'string',
 			],
 			'prop' => [
 				ParamValidator::PARAM_DEFAULT => 'status|type|title|votecount|created|updated',
 				ParamValidator::PARAM_ISMULTI => true,
 				ParamValidator::PARAM_TYPE => [
-					'status',
-					'type',
-					'title',
-					'focusarea',
-					'description',
-					'audience',
-					'projects',
-					'otherproject',
-					'phabtasks',
-					'proposer',
-					'votecount',
-					'created',
-					'updated',
+					Wish::PARAM_STATUS,
+					Wish::PARAM_TYPE,
+					Wish::PARAM_TITLE,
+					Wish::PARAM_FOCUS_AREA,
+					Wish::PARAM_DESCRIPTION,
+					Wish::PARAM_AUDIENCE,
+					Wish::PARAM_PROJECTS,
+					Wish::PARAM_OTHER_PROJECT,
+					Wish::PARAM_PHAB_TASKS,
+					Wish::PARAM_PROPOSER,
+					Wish::PARAM_VOTE_COUNT,
+					Wish::PARAM_CREATED,
+					Wish::PARAM_UPDATED,
 				],
 				ApiBase::PARAM_HELP_MSG_PER_VALUE => [
-					'status' => "$apiHelpMsgPrefix-prop-status",
-					'type' => "$apiHelpMsgPrefix-prop-type",
-					'title' => "$apiHelpMsgPrefix-prop-title",
-					'focusarea' => "$apiHelpMsgPrefix-prop-focusarea",
-					'description' => "$apiHelpMsgPrefix-prop-description",
-					'audience' => "$apiHelpMsgPrefix-prop-audience",
-					'projects' => "$apiHelpMsgPrefix-prop-projects",
-					'otherproject' => "$apiHelpMsgPrefix-prop-otherproject",
-					'phabtasks' => "$apiHelpMsgPrefix-prop-phabtasks",
-					'proposer' => "$apiHelpMsgPrefix-prop-proposer",
-					'votecount' => "$apiHelpMsgPrefix-prop-votecount",
-					'created' => "$apiHelpMsgPrefix-prop-created",
-					'updated' => "$apiHelpMsgPrefix-prop-updated",
+					Wish::PARAM_STATUS => "$apiHelpMsgPrefix-prop-status",
+					Wish::PARAM_TYPE => "$apiHelpMsgPrefix-prop-type",
+					Wish::PARAM_TITLE => "$apiHelpMsgPrefix-prop-title",
+					Wish::PARAM_FOCUS_AREA => "$apiHelpMsgPrefix-prop-focusarea",
+					Wish::PARAM_DESCRIPTION => "$apiHelpMsgPrefix-prop-description",
+					Wish::PARAM_AUDIENCE => "$apiHelpMsgPrefix-prop-audience",
+					Wish::PARAM_PROJECTS => "$apiHelpMsgPrefix-prop-projects",
+					Wish::PARAM_OTHER_PROJECT => "$apiHelpMsgPrefix-prop-otherproject",
+					Wish::PARAM_PHAB_TASKS => "$apiHelpMsgPrefix-prop-phabtasks",
+					Wish::PARAM_PROPOSER => "$apiHelpMsgPrefix-prop-proposer",
+					Wish::PARAM_VOTE_COUNT => "$apiHelpMsgPrefix-prop-votecount",
+					Wish::PARAM_CREATED => "$apiHelpMsgPrefix-prop-created",
+					Wish::PARAM_UPDATED => "$apiHelpMsgPrefix-prop-updated",
 				],
 			],
 			'sort' => [
-				ParamValidator::PARAM_DEFAULT => 'created',
+				ParamValidator::PARAM_DEFAULT => Wish::PARAM_CREATED,
 				ParamValidator::PARAM_TYPE => [
-					'created',
-					'updated',
-					'title',
-					'votecount',
+					Wish::PARAM_CREATED,
+					Wish::PARAM_UPDATED,
+					Wish::PARAM_TITLE,
+					Wish::PARAM_VOTE_COUNT,
 				],
 				ApiBase::PARAM_HELP_MSG_PER_VALUE => [
-					'created' => "$apiHelpMsgPrefix-sort-created",
-					'updated' => "$apiHelpMsgPrefix-sort-updated",
-					'title' => "$apiHelpMsgPrefix-sort-title",
-					'votecount' => "$apiHelpMsgPrefix-sort-votecount",
+					Wish::PARAM_CREATED => "$apiHelpMsgPrefix-sort-created",
+					Wish::PARAM_UPDATED => "$apiHelpMsgPrefix-sort-updated",
+					Wish::PARAM_TITLE => "$apiHelpMsgPrefix-sort-title",
+					Wish::PARAM_VOTE_COUNT => "$apiHelpMsgPrefix-sort-votecount",
 				],
 			],
 			'dir' => [

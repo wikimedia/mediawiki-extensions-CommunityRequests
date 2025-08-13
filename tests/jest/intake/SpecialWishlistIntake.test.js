@@ -15,13 +15,13 @@ const getWrapper = ( props = {} ) => {
 
 const defaultProps = {
 	audience: 'Test Audience',
-	baseLang: 'en',
-	baseRevId: 12345,
+	baselang: 'en',
+	baserevid: 12345,
 	created: '2023-10-01T12:00:00Z',
 	description: 'Test Description',
-	focusArea: 'FA1',
-	otherProject: 'Other Project',
-	phabTasks: [ 'T123', 'T456' ],
+	focusarea: 'FA1',
+	otherproject: 'Other Project',
+	phabtasks: [ 'T123', 'T456' ],
 	projects: [ 'commons', 'wikisource' ],
 	proposer: 'MusikAnimal',
 	status: 'submitted',

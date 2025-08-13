@@ -16,11 +16,11 @@
 			name="status">
 		<focus-area-section
 			v-if="isWishlistManager"
-			v-model:focus-area="wish.focusArea"
+			v-model:focus-area="wish.focusarea"
 			@update:focus-area="formChanged = true"
 		></focus-area-section>
 		<input
-			:value="wish.focusArea"
+			:value="wish.focusarea"
 			type="hidden"
 			name="focusarea">
 		<description-section
@@ -41,7 +41,7 @@
 		></wish-type-section>
 		<project-section
 			v-model:projects="wish.projects"
-			v-model:other-project="wish.otherProject"
+			v-model:other-project="wish.otherproject"
 			:status="projectStatus"
 			:status-type="projectStatusType"
 		></project-section>
@@ -50,7 +50,7 @@
 			:status="audienceStatus"
 		></audience-section>
 		<phabricator-tasks
-			v-model:tasks="wish.phabTasks"
+			v-model:tasks="wish.phabtasks"
 		></phabricator-tasks>
 		<input
 			:value="created"
@@ -63,12 +63,12 @@
 			name="proposer"
 		>
 		<input
-			:value="baseRevId"
+			:value="baserevid"
 			type="hidden"
 			name="baserevid"
 		>
 		<input
-			:value="baseLang"
+			:value="baselang"
 			type="hidden"
 			name="baselang"
 		>
@@ -124,13 +124,13 @@ module.exports = exports = defineComponent( {
 	},
 	props: {
 		audience: { type: String, default: '' },
-		baseLang: { type: String, default: mw.config.get( 'wgUserLanguage' ) },
-		baseRevId: { type: Number, default: 0 },
+		baselang: { type: String, default: mw.config.get( 'wgUserLanguage' ) },
+		baserevid: { type: Number, default: 0 },
 		created: { type: String, default: '' },
 		description: { type: String, default: '' },
-		focusArea: { type: String, default: '' },
-		otherProject: { type: String, default: '' },
-		phabTasks: { type: Array, default: () => [] },
+		focusarea: { type: String, default: '' },
+		otherproject: { type: String, default: '' },
+		phabtasks: { type: Array, default: () => [] },
 		projects: { type: Array, default: () => [] },
 		proposer: { type: String, default: mw.config.get( 'wgUserName' ) },
 		status: {
@@ -264,11 +264,11 @@ module.exports = exports = defineComponent( {
 			descriptionStatus.value = ( wish.description.length < 50 ) ? 'error' : 'default';
 			typeStatus.value = wish.type === '' ? 'error' : 'default';
 			// No project selected, other project is empty
-			if ( wish.projects.length === 0 && !wish.otherProject ) {
+			if ( wish.projects.length === 0 && !wish.otherproject ) {
 				projectStatus.value = 'error';
 				projectStatusType.value = 'noSelection';
 				// Other project has content > 3, but no other project is entered
-			} else if ( wish.otherProject.length < 3 && wish.projects.length < 1 ) {
+			} else if ( wish.otherproject.length < 3 && wish.projects.length < 1 ) {
 				projectStatus.value = 'error';
 				projectStatusType.value = 'invalidOther';
 			} else {

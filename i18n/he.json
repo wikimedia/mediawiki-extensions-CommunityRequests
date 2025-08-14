@@ -80,6 +80,8 @@
 	"communityrequests-wish-updated": "עודכנה לאחרונה: $1",
 	"communityrequests-wish-proposer": "מאת: $1",
 	"communityrequests-wish-voting": "הצבעה",
+	"communityrequests-wish-no-votes": "אין תומכים עדיין.",
+	"communityrequests-wishes-table-caption": "רשימת משאלות",
 	"communityrequests-wishes-status-header": "מצב",
 	"communityrequests-wishes-type-header": "סוג",
 	"communityrequests-wishes-title-header": "כותרת",
@@ -93,6 +95,7 @@
 	"communityrequests-form-loading-2": "אם {{אתה עדיין נתקל בביעות, בקש|את עדיין נתקלת בבעיות, בקשי}} עזרה בדף $1.",
 	"communityrequests-please-log-in": "נא להיכנס לחשבון כדי לבקש משאלה.",
 	"communityrequests-focus-area-description": "תיאור",
+	"communityrequests-focus-area-short-description": "תיאור קצר",
 	"communityrequests-focus-area-supported": "נתמכ על־ידי:",
 	"communityrequests-focus-area-supported-val": "{{PLURAL:$1|אדם אחד|$2 אנשים}}",
 	"communityrequests-focus-area-owners-label": "בעלים:",
@@ -112,5 +115,7 @@
 	"communityrequests-translation-progress": "{{PLURAL:$2|תורגם חלק אחד|תורגמו $1 חלקים}} של הטקסט",
 	"communityrequests-translation-errors": "אירעה שגיאה:",
 	"communityrequests-disabled": "האפשרות הזאת של רשימת משאלות הקהילה אינה פעילה כעת.",
+	"communityrequests-category": "רשימת משאלות הקהילה",
+	"communityrequests-support-label": "תמיכה",
 	"apihelp-query+communityrequests-wishes-paramvalue-sort-title": "מיון לפי כותרת"
 }

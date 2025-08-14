@@ -16,6 +16,7 @@ use MediaWiki\MainConfigNames;
 use MediaWiki\Parser\Parser;
 use MediaWiki\Parser\ParserOutput;
 use MediaWiki\Permissions\PermissionManager;
+use MediaWiki\Registration\ExtensionRegistry;
 use MediaWiki\Session\SessionManager;
 use MediaWiki\Skin\SkinTemplate;
 use MediaWiki\SpecialPage\SpecialPage;
@@ -136,6 +137,7 @@ class CommunityRequestsHooksTest extends MediaWikiUnitTestCase {
 		$handler = $this->getHandler(
 			[
 				WishlistConfig::WISH_PAGE_PREFIX => 'Community Wishlist/Wishes/W',
+				WishlistConfig::VOTES_PAGE_SUFFIX => '/Votes',
 				WishlistConfig::FOCUS_AREA_PAGE_PREFIX => 'Community Wishlist/Focus areas/FA',
 			],
 			$permissionManager,
@@ -285,7 +287,8 @@ class CommunityRequestsHooksTest extends MediaWikiUnitTestCase {
 	private function getHandler(
 		array $serviceOptions = [],
 		?PermissionManager $permissionManager = null,
-		?SessionManager $sessionManager = null
+		?SessionManager $sessionManager = null,
+		?ExtensionRegistry $extensionRegistry = null
 	): CommunityRequestsHooks {
 		$serviceOptions = new ServiceOptions( WishlistConfig::CONSTRUCTOR_OPTIONS, [
 			WishlistConfig::ENABLED => true,
@@ -311,16 +314,19 @@ class CommunityRequestsHooksTest extends MediaWikiUnitTestCase {
 			$this->newServiceInstance( LanguageNameUtils::class, [] ),
 		);
 		$mainConfig = new HashConfig( [ MainConfigNames::PageLanguageUseDB => true ] );
+		$extensionRegistry = $extensionRegistry ?: $this->createNoOpMock( ExtensionRegistry::class, [ 'isLoaded' ] );
+		$extensionRegistry->method( 'isLoaded' )->willReturn( false );
 		return new CommunityRequestsHooks(
 			$config,
-			$this->newServiceInstance( WishStore::class, [] ),
+			$this->createNoOpMock( WishStore::class ),
 			$this->createNoOpMock( FocusAreaStore::class ),
 			$this->createNoOpMock( EntityFactory::class ),
 			$this->createNoOpMock( LinkRenderer::class ),
 			$permissionManager ?: $this->createNoOpMock( PermissionManager::class ),
 			$this->getSpecialPageFactory(),
 			new NullLogger(),
-			$mainConfig
+			$mainConfig,
+			$extensionRegistry
 		);
 	}
 

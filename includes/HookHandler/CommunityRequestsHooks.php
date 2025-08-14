@@ -52,7 +52,6 @@ use MediaWiki\Title\Title;
 use MediaWiki\User\User;
 use MessageSpecifier;
 use Psr\Log\LoggerInterface;
-use RuntimeException;
 
 // phpcs:disable MediaWiki.NamingConventions.LowerCamelFunctionsName.FunctionName
 class CommunityRequestsHooks implements
@@ -96,15 +95,12 @@ class CommunityRequestsHooks implements
 		private readonly PermissionManager $permissionManager,
 		private readonly SpecialPageFactory $specialPageFactory,
 		private readonly LoggerInterface $logger,
-		Config $mainConfig
+		Config $mainConfig,
+		?ExtensionRegistry $extensionRegistry = null
 	) {
+		$extensionRegistry ??= ExtensionRegistry::getInstance();
 		$this->pageLanguageUseDB = $mainConfig->get( MainConfigNames::PageLanguageUseDB );
-		try {
-			$this->translateInstalled = ExtensionRegistry::getInstance()->isLoaded( 'Translate' );
-		} catch ( RuntimeException ) {
-			// Happens in unit tests.
-			$this->translateInstalled = false;
-		}
+		$this->translateInstalled = $extensionRegistry->isLoaded( 'Translate' );
 		$this->rendererFactory = new RendererFactory(
 			$config,
 			$focusAreaStore,
@@ -187,7 +183,7 @@ class CommunityRequestsHooks implements
 	 * @param PageIdentity $identity
 	 * @return PageIdentity
 	 */
-	public function getCanonicalWishlistPage( PageIdentity $identity ): PageIdentity {
+	public function getCanonicalEntityPage( PageIdentity $identity ): PageIdentity {
 		// Use the base non-translated page (if Translate is installed) or if $identity is a Vote page.
 		if ( ( $this->translateInstalled &&
 			// @phan-suppress-next-line PhanUndeclaredClassMethod
@@ -269,7 +265,7 @@ class CommunityRequestsHooks implements
 		}
 		$store = $this->getStoreForTitle( $page );
 		$entity = $store->get(
-			$this->getCanonicalWishlistPage( $page ),
+			$this->getCanonicalEntityPage( $page ),
 			Title::castFromPageIdentity( $page )->getPageLanguage()->getCode()
 		);
 		if ( $entity ) {
@@ -325,7 +321,7 @@ class CommunityRequestsHooks implements
 		}
 		$store = $this->stores[$data[AbstractWishlistEntity::PARAM_ENTITY_TYPE]];
 		$title = $linksUpdate->getTitle();
-		$entity = $this->entityFactory->createFromParserData( $data, $this->getCanonicalWishlistPage( $title ) );
+		$entity = $this->entityFactory->createFromParserData( $data, $this->getCanonicalEntityPage( $title ) );
 
 		$store->save( $entity );
 	}
@@ -361,6 +357,17 @@ class CommunityRequestsHooks implements
 			return;
 		}
 
+		$this->updateDiscussionLink( $sktemplate, $links );
+		$this->updateEditLinks( $sktemplate, $links );
+	}
+
+	/**
+	 * Update the edit links for the given skin template.
+	 *
+	 * @param SkinTemplate $sktemplate
+	 * @param array &$links
+	 */
+	private function updateEditLinks( SkinTemplate $sktemplate, array &$links ): void {
 		// Check edit permission first, to short-circuit and avoid additional DB queries.
 		if ( !$this->permissionManager->quickUserCan( 'edit', $sktemplate->getUser(), $sktemplate->getTitle() ) ) {
 			return;
@@ -404,6 +411,34 @@ class CommunityRequestsHooks implements
 		}
 
 		$links['views'] = $newTabs;
+	}
+
+	/**
+	 * Update the discussion link for the given skin template.
+	 *
+	 * @param SkinTemplate $sktemplate
+	 * @param array &$links
+	 */
+	private function updateDiscussionLink( SkinTemplate $sktemplate, array &$links ): void {
+		$canonicalPage = $this->getCanonicalEntityPage( $sktemplate->getTitle() );
+		$talkPage = Title::newFromPageIdentity( $canonicalPage )->getTalkPageIfDefined();
+
+		if ( !$talkPage ) {
+			return;
+		}
+
+		$href = $talkPage->exists()
+			? $talkPage->getLinkURL()
+			: $talkPage->getLinkURL( [ 'action' => 'edit', 'redlink' => 1 ] );
+		$class = $talkPage->exists() ? '' : 'new';
+
+		// Skins build their links from different sources, so we need to set them all.
+		$links['namespaces']['talk']['href'] = $href;
+		$links['namespaces']['talk']['class'] = $class;
+		$links['namespaces']['talk']['link-class'] = $class;
+		$links['associated-pages']['talk']['href'] = $href;
+		$links['associated-pages']['talk']['class'] = $class;
+		$links['associated-pages']['talk']['link-class'] = $class;
 	}
 
 	/**

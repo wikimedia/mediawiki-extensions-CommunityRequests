@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"Cabal"
+			"Cabal",
+			"Kuldeepburjbhalaike"
 		]
 	},
 	"communityrequests-project-all-projects": "ਸਾਰੇ ਪ੍ਰੋਜੈਕਟ",
@@ -17,9 +18,9 @@
 	"communityrequests-wish-description-heading": "ਵੇਰਵਾ",
 	"communityrequests-wish-type-heading": "ਇੱਛਾ ਦੀ ਕਿਸਮ",
 	"communityrequests-wish-other-details-heading": "ਹੋਰ ਵੇਰਵੇ",
-	"communityrequests-wish-created": "ਬਣਾਇਆ ਗਿਆ",
-	"communityrequests-wish-updated": "ਆਖਰੀ ਵਾਰ ਨਵਿਆਈਆ ਗਿਆ",
-	"communityrequests-wish-proposer": "ਲਿਖਾਰੀ",
+	"communityrequests-wish-created": "ਬਣਾਇਆ ਗਿਆ: $1",
+	"communityrequests-wish-updated": "ਆਖ਼ਰੀ ਵਾਰ ਨਵਿਆਇਆ: $1",
+	"communityrequests-wish-proposer": "ਲੇਖਕ: $1",
 	"communityrequests-wishes-type-header": "ਕਿਸਮ",
 	"communityrequests-wishes-projects-header": "ਪ੍ਰੋਜੈਕਟ",
 	"communityrequests-focus-area-owners-label": "ਮਾਲਕ:",

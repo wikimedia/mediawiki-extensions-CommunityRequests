@@ -61,6 +61,7 @@
 	"communityrequests-support": "ГӀо",
 	"communityrequests-supported": "ХӀинцале а гӀо дина",
 	"communityrequests-unsupport-focus-area": "Хьайн кхаж дӀабаккха",
+	"communityrequests-error-required-fields": "Оьшуш йац {{PLURAL:$2|меттиг}}: $1",
 	"communityrequests-status": "Статус",
 	"communityrequests-status-draft": "Ӏаьржиг",
 	"communityrequests-status-submitted": "ТӀетоьхна",
@@ -91,6 +92,8 @@
 	"communityrequests-wish-updated": "ТӀаьххьара карлайаькхина терахь: $1",
 	"communityrequests-wish-proposer": "Автор: $1",
 	"communityrequests-wish-voting": "Кхаж тасар",
+	"communityrequests-wish-voting-not-logged-in": "Дехар до, цу лаамна гӀодан авторизаци йе.",
+	"communityrequests-wish-voters-heading": "Оцу лаамийн агӀончаш",
 	"communityrequests-wish-no-votes": "Цкъачунна агӀончаш бац.",
 	"communityrequests-wishes-table-caption": "Лаамийн могӀам",
 	"communityrequests-wishes-status-header": "Статус",
@@ -128,6 +131,7 @@
 	"communityrequests-translation-progress": "Гочдина $1 $2 {{PLURAL:$2|дакъа}} текстан.",
 	"communityrequests-translation-errors": "ГӀалат даьлла:",
 	"communityrequests-disabled": "Йукъараллин лаамийн могӀаман и функционал карарчу хенахь дӀайаьккхина йу.",
+	"communityrequests-publish-wish-summary": "«$1» лааман публикаци",
 	"communityrequests-support-label": "ГӀо",
 	"communityrequests-error-category": "Йукъараллин лаамийн могӀамехь гӀалаташ долу агӀонаш",
 	"apihelp-focusareaedit-param-status": "Фокусан меттиган статус.",
@@ -136,6 +140,8 @@
 	"apihelp-query+communityrequests-wishes-paramvalue-prop-type": "Лаамийн тайпа",
 	"apihelp-query+communityrequests-wishes-paramvalue-prop-title": "Лаамийн цӀе",
 	"apihelp-query+communityrequests-wishes-paramvalue-sort-created": "Кхоьллина хене хьаьжжина нисйар",
+	"apihelp-query+communityrequests-wishes-paramvalue-sort-updated": "ТӀаьххьара карладаьккхинчу денца дӀасакъастаде",
+	"apihelp-query+communityrequests-wishes-paramvalue-sort-votecount": "ГӀоьнчийн дукхаллица дӀасакъастаде",
 	"apihelp-query+communityrequests-wishes-paramvalue-sort-title": "ЦӀерца дӀасакъастаде",
 	"tag-community-wishlist": "[[Special:MyLanguage/Community Wishlist|Йукъараллин лаамийн могӀам]]"
 }

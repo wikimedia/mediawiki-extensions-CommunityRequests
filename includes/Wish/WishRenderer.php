@@ -135,7 +135,12 @@ class WishRenderer extends AbstractRenderer {
 			[ 'class' => 'mw-heading mw-heading3' ],
 			$this->msg( 'communityrequests-wish-audience-heading' )->text()
 		);
-		$audience = $this->getDiv( 'audience', $this->getArg( Wish::PARAM_AUDIENCE, '' ) );
+		$audienceHtml = $this->getDivRaw(
+			'audience',
+			$this->parser->recursiveTagParse(
+				$this->getArg( Wish::PARAM_AUDIENCE, '' )
+			)
+		);
 
 		// Phabricator tasks.
 		$tasks = array_filter( array_map( function ( $task ) {
@@ -197,7 +202,7 @@ class WishRenderer extends AbstractRenderer {
 			$focusAreaHeading . $focusArea .
 			$wishTypeHeading . $wishType .
 			$projectsHeading . $projects .
-			$audienceHeading . $audience .
+			$audienceHeading . $audienceHtml .
 			$tasksHeading . $tasksHtml .
 			$detailsHeading . $detailsHtml .
 			$this->getVotingSection( $this->config->isWishVotingEnabled() )

@@ -3,15 +3,18 @@ declare( strict_types = 1 );
 
 namespace MediaWiki\Extension\CommunityRequests\Tests\Integration;
 
+use MediaWiki\Extension\CommunityRequests\Wish\Wish;
 use MediaWiki\Extension\CommunityRequests\Wish\WishStore;
 use MediaWiki\Title\Title;
+use MediaWikiIntegrationTestCase;
 
 /**
  * @group CommunityRequests
  * @group Database
  * @coversDefaultClass \MediaWiki\Extension\CommunityRequests\Wish\WishRenderer
  */
-class WishRendererTest extends CommunityRequestsIntegrationTestCase {
+class WishRendererTest extends MediaWikiIntegrationTestCase {
+	use WishlistTestTrait;
 
 	protected function getStore(): WishStore {
 		return $this->getServiceContainer()->get( 'CommunityRequests.WishStore' );
@@ -98,7 +101,11 @@ END;
 	 */
 	public function testVoteCountRendering() {
 		$wikiPageFactory = $this->getServiceContainer()->getWikiPageFactory();
-		$wish = $this->insertTestWish( 'Community Wishlist/Wishes/W123', 'en' );
+		$wish = $this->insertTestWish(
+			'Community Wishlist/Wishes/W123',
+			'en',
+			[ 'title' => '<translate>Test wish</translate>' ]
+		);
 		$this->insertPage(
 			$wish->getPage()->getDBkey() . $this->config->getVotesPageSuffix(),
 			"{{#CommunityRequests:vote|username=TestUser1|timestamp=2023-10-01T12:00:00Z|comment=First vote}}\n" .
@@ -112,8 +119,7 @@ END;
 		$wishDe = $this->insertTestWish(
 			'Community Wishlist/Wishes/W123',
 			'de',
-			'2025-01-01T00:00:00Z',
-			self::EDIT_AS_TRANSLATION_SUBPAGE
+			[ Wish::PARAM_BASE_LANG => 'en' ]
 		);
 		$wikiPageDe = $wikiPageFactory->newFromTitle(
 			Title::newFromPageReference( $wishDe->getTranslationSubpage() )
@@ -129,7 +135,7 @@ END;
 	 * @covers ::render
 	 */
 	public function testChangePageLanguage(): void {
-		$wish = $this->insertTestWish( 'Community Wishlist/Wishes/W123', 'fr', '20220123000000' );
+		$wish = $this->insertTestWish( 'Community Wishlist/Wishes/W123', 'fr' );
 		$this->assertSame( 'fr', Title::newFromPageIdentity( $wish->getPage() )->getPageLanguage()->getCode() );
 	}
 }

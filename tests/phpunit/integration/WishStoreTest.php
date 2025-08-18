@@ -7,6 +7,7 @@ use InvalidArgumentException;
 use MediaWiki\Extension\CommunityRequests\Wish\Wish;
 use MediaWiki\Extension\CommunityRequests\Wish\WishStore;
 use MediaWiki\Title\Title;
+use MediaWikiIntegrationTestCase;
 use Wikimedia\Timestamp\ConvertibleTimestamp;
 
 /**
@@ -14,7 +15,8 @@ use Wikimedia\Timestamp\ConvertibleTimestamp;
  * @group Database
  * @coversDefaultClass \MediaWiki\Extension\CommunityRequests\Wish\WishStore
  */
-class WishStoreTest extends CommunityRequestsIntegrationTestCase {
+class WishStoreTest extends MediaWikiIntegrationTestCase {
+	use WishlistTestTrait;
 
 	protected function getStore(): WishStore {
 		return $this->getServiceContainer()->get( 'CommunityRequests.WishStore' );
@@ -149,8 +151,16 @@ class WishStoreTest extends CommunityRequestsIntegrationTestCase {
 		$wishes = $this->getStore()->getAll( 'en', WishStore::createdField() );
 		$this->assertSame( [], $wishes );
 
-		$wish1 = $this->insertTestWish( 'Community Wishlist/Wishes/W1', 'en', '2222-01-23T00:00:00Z' );
-		$wish2 = $this->insertTestWish( 'Community Wishlist/Wishes/W2', 'en', '3333-01-23T00:00:00Z' );
+		$wish1 = $this->insertTestWish(
+			'Community Wishlist/Wishes/W1',
+			'en',
+			[ Wish::PARAM_CREATED => '2222-01-23T00:00:00Z' ],
+		);
+		$wish2 = $this->insertTestWish(
+			'Community Wishlist/Wishes/W2',
+			'en',
+			[ Wish::PARAM_CREATED => '3333-01-23T00:00:00Z' ],
+		);
 
 		$wishes = $this->getStore()->getAll( 'en', WishStore::createdField() );
 		$this->assertCount( 2, $wishes );
@@ -161,6 +171,7 @@ class WishStoreTest extends CommunityRequestsIntegrationTestCase {
 
 	/**
 	 * @covers ::getAll
+	 * @covers ::getEntitiesFromLangFallbacks
 	 * @covers ::delete
 	 */
 	public function testGetWishesLangFallbacks(): void {
@@ -168,29 +179,41 @@ class WishStoreTest extends CommunityRequestsIntegrationTestCase {
 		$this->insertTestWish(
 			'Community Wishlist/Wishes/W1',
 			'en',
-			'2222-01-23T00:00:00Z'
+			[
+				Wish::PARAM_TITLE => '<translate>Example wish</translate>',
+				Wish::PARAM_CREATED => '2222-01-23T00:00:00Z'
+			],
 		);
 		$this->insertTestWish(
 			'Community Wishlist/Wishes/W1',
 			'bs',
-			'2222-12-30T00:00:00Z',
-			CommunityRequestsIntegrationTestCase::EDIT_AS_TRANSLATION_SUBPAGE
+			[
+				Wish::PARAM_CREATED => '2222-12-30T00:00:00Z',
+				Wish::PARAM_BASE_LANG => 'en',
+			],
 		);
 		$this->insertTestWish(
 			'Community Wishlist/Wishes/W2',
 			'hr',
-			'4444-01-23T00:00:00Z'
+			[
+				Wish::PARAM_CREATED => '4444-01-23T00:00:00Z',
+			],
 		);
 		$this->insertTestWish(
 			'Community Wishlist/Wishes/W3',
 			'de',
-			'3333-01-23T00:00:00Z'
+			[
+				Wish::PARAM_TITLE => '<translate>Beispielwunsch</translate>',
+				Wish::PARAM_CREATED => '3333-01-23T00:00:00Z',
+			],
 		);
 		$this->insertTestWish(
 			'Community Wishlist/Wishes/W3',
 			'fr',
-			'3333-01-23T00:00:00',
-			CommunityRequestsIntegrationTestCase::EDIT_AS_TRANSLATION_SUBPAGE
+			[
+				Wish::PARAM_CREATED => '3333-01-23T00:00:00',
+				Wish::PARAM_BASE_LANG => 'de',
+			],
 		);
 
 		// 'sh' should return W2, W3/de, W1/bs
@@ -218,17 +241,38 @@ class WishStoreTest extends CommunityRequestsIntegrationTestCase {
 
 	/**
 	 * @covers ::getAll
+	 * @covers ::getEntitiesFromLangFallbacks
 	 */
 	public function testGetWishesLimitEmulation(): void {
-		$this->insertTestWish( 'Community Wishlist/Wishes/W1', 'hr' );
+		$this->markTestSkippedIfExtensionNotLoaded( 'Translate' );
+
+		$this->insertTestWish(
+			'Community Wishlist/Wishes/W1',
+			'hr',
+			[
+				Wish::PARAM_TITLE => '<translate>W1 (hr)</translate>',
+				// Ensure with SORT_DESC by createdField that this wish is returned last.
+				Wish::PARAM_CREATED => '3333-01-23T00:00:00Z',
+			],
+		);
 		$this->insertTestWish(
 			'Community Wishlist/Wishes/W1',
 			'en',
-			'2222-01-23T00:00:00Z',
-			CommunityRequestsIntegrationTestCase::EDIT_AS_TRANSLATION_SUBPAGE
+			[
+				Wish::PARAM_TITLE => 'W1 (hr)/en',
+				// Translations have the same created date as the original wish.
+				Wish::PARAM_CREATED => '3333-01-23T00:00:00Z',
+				Wish::PARAM_BASE_LANG => 'hr',
+			],
 		);
-		$this->insertTestWish( 'Community Wishlist/Wishes/W2', 'hr' );
-
+		$this->insertTestWish(
+			'Community Wishlist/Wishes/W2',
+			'hr',
+			[
+				Wish::PARAM_TITLE => '<translate>W2 (hr)</translate>',
+				Wish::PARAM_CREATED => '2222-01-23T00:00:00Z',
+			],
+		);
 		$wishes = $this->getStore()->getAll(
 			'en',
 			WishStore::createdField(),
@@ -236,9 +280,8 @@ class WishStoreTest extends CommunityRequestsIntegrationTestCase {
 			2
 		);
 		$this->assertCount( 2, $wishes );
-		$this->assertSame( 'Community_Wishlist/Wishes/W1', $wishes[0]->getPage()->getDBkey() );
-		$this->assertSame( 'en', $wishes[0]->getLang() );
-		$this->assertSame( 'Community_Wishlist/Wishes/W2', $wishes[1]->getPage()->getDBkey() );
+		$this->assertSame( 'W1 (hr)/en', $wishes[0]->getTitle() );
+		$this->assertSame( 'W2 (hr)', $wishes[1]->getTitle() );
 	}
 
 	/**

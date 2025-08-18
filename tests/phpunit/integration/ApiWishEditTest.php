@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 namespace MediaWiki\Extension\CommunityRequests\Tests\Integration;
 
 use MediaWiki\Api\ApiUsageException;
+use MediaWiki\Extension\CommunityRequests\AbstractWishlistStore;
 use MediaWiki\MainConfigNames;
 use MediaWiki\Tests\Api\ApiTestCase;
 use MediaWiki\Title\Title;
@@ -15,10 +16,10 @@ use MediaWiki\User\User;
  * @coversDefaultClass \MediaWiki\Extension\CommunityRequests\Api\ApiWishEdit
  */
 class ApiWishEditTest extends ApiTestCase {
+	use WishlistTestTrait;
 
-	protected function setUp(): void {
-		parent::setUp();
-		$this->overrideConfigValue( MainConfigNames::PageLanguageUseDB, true );
+	protected function getStore(): AbstractWishlistStore {
+		return $this->getServiceContainer()->get( 'CommunityRequests.WishStore' );
 	}
 
 	/**
@@ -89,7 +90,6 @@ class ApiWishEditTest extends ApiTestCase {
 
 		// If the baselang is not the site language, we expect translations to be stored in that language.
 		if ( $ret['wishedit']['baselang'] !== $this->getConfVar( MainConfigNames::LanguageCode ) ) {
-			$this->runDeferredUpdates();
 			$translationLang = $this->getDb()->newSelectQueryBuilder()
 				->select( 'crt_lang' )
 				->from( 'communityrequests_wishes_translations' )

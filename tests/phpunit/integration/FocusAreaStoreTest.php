@@ -7,6 +7,7 @@ use InvalidArgumentException;
 use MediaWiki\Extension\CommunityRequests\FocusArea\FocusArea;
 use MediaWiki\Extension\CommunityRequests\FocusArea\FocusAreaStore;
 use MediaWiki\Title\Title;
+use MediaWikiIntegrationTestCase;
 use Wikimedia\Timestamp\ConvertibleTimestamp;
 
 /**
@@ -14,7 +15,8 @@ use Wikimedia\Timestamp\ConvertibleTimestamp;
  * @group Database
  * @coversDefaultClass \MediaWiki\Extension\CommunityRequests\FocusArea\FocusAreaStore
  */
-class FocusAreaStoreTest extends CommunityRequestsIntegrationTestCase {
+class FocusAreaStoreTest extends MediaWikiIntegrationTestCase {
+	use WishlistTestTrait;
 
 	protected function getStore(): FocusAreaStore {
 		return $this->getServiceContainer()->get( 'CommunityRequests.FocusAreaStore' );

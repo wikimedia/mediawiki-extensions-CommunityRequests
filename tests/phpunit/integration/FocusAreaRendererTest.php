@@ -5,13 +5,15 @@ namespace MediaWiki\Extension\CommunityRequests\Tests\Integration;
 
 use MediaWiki\Extension\CommunityRequests\FocusArea\FocusAreaStore;
 use MediaWiki\Title\Title;
+use MediaWikiIntegrationTestCase;
 
 /**
  * @group CommunityRequests
  * @group Database
  * @covers \MediaWiki\Extension\CommunityRequests\FocusArea\FocusAreaRenderer
  */
-class FocusAreaRendererTest extends CommunityRequestsIntegrationTestCase {
+class FocusAreaRendererTest extends MediaWikiIntegrationTestCase {
+	use WishlistTestTrait;
 
 	protected function getStore(): FocusAreaStore {
 		return $this->getServiceContainer()->get( 'CommunityRequests.FocusAreaStore' );

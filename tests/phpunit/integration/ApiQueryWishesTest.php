@@ -1,16 +1,20 @@
 <?php
-declare( strict_types=1 );
+declare( strict_types = 1 );
 
 namespace MediaWiki\Extension\CommunityRequests\Tests\Integration;
 
+use MediaWiki\Extension\CommunityRequests\Wish\Wish;
 use MediaWiki\Extension\CommunityRequests\Wish\WishStore;
+use MediaWiki\Tests\Api\ApiTestCase;
 
 /**
  * @group CommunityRequests
  * @group Database
  * @coversDefaultClass \MediaWiki\Extension\CommunityRequests\Api\ApiQueryWishes
  */
-class ApiQueryWishesTest extends CommunityRequestsIntegrationTestCase {
+class ApiQueryWishesTest extends ApiTestCase {
+
+	use WishlistTestTrait;
 
 	/**
 	 * @covers ::execute
@@ -224,9 +228,20 @@ class ApiQueryWishesTest extends CommunityRequestsIntegrationTestCase {
 		$this->markTestSkippedIfExtensionNotLoaded( 'Translate' );
 
 		// Create a wish in French.
-		$this->insertTestWish( 'Community Wishlist/Wishes/W1', 'fr' );
-		// Add English translation.
-		$this->insertTestWish( 'Community Wishlist/Wishes/W1', 'en', '2023-10-01T00:00:00Z', false );
+		$this->insertTestWish(
+			'Community Wishlist/Wishes/W1',
+			'fr',
+			[ Wish::PARAM_TITLE => '<translate>Original French title</translate>' ],
+		);
+		// Add an English translation.
+		$this->insertTestWish(
+			'Community Wishlist/Wishes/W1',
+			'en',
+			[
+				Wish::PARAM_TITLE => 'Title in English',
+				Wish::PARAM_BASE_LANG => 'fr'
+			],
+		);
 
 		[ $ret ] = $this->doApiRequest( [
 			'action' => 'query',
@@ -236,7 +251,7 @@ class ApiQueryWishesTest extends CommunityRequestsIntegrationTestCase {
 		$wishesFr = $ret['query']['communityrequests-wishes'];
 		$this->assertCount( 1, $wishesFr );
 		$this->assertSame( 'Community Wishlist/Wishes/W1', $wishesFr[0]['crwtitle'] );
-		$this->assertSame( 'translation-fr-Community Wishlist/Wishes/W1', $wishesFr[0]['title'] );
+		$this->assertSame( 'Original French title', $wishesFr[0][Wish::PARAM_TITLE] );
 
 		[ $ret ] = $this->doApiRequest( [
 			'action' => 'query',
@@ -246,7 +261,7 @@ class ApiQueryWishesTest extends CommunityRequestsIntegrationTestCase {
 		$wishesEn = $ret['query']['communityrequests-wishes'];
 		$this->assertCount( 1, $wishesEn );
 		$this->assertSame( 'Community Wishlist/Wishes/W1/en', $wishesEn[0]['crwtitle'] );
-		$this->assertSame( 'translation-en-Community Wishlist/Wishes/W1/en', $wishesEn[0]['title'] );
+		$this->assertSame( 'Title in English', $wishesEn[0][Wish::PARAM_TITLE] );
 	}
 
 	private function createTestWishWithApi( $params = [] ): array {

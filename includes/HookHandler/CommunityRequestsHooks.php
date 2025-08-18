@@ -20,7 +20,6 @@ use MediaWiki\Extension\CommunityRequests\RendererFactory;
 use MediaWiki\Extension\CommunityRequests\Wish\WishStore;
 use MediaWiki\Extension\CommunityRequests\WishlistConfig;
 use MediaWiki\Extension\Translate\MessageLoading\MessageHandle;
-use MediaWiki\Extension\Translate\PageTranslation\TranslatablePage;
 use MediaWiki\Extension\Translate\Utilities\Utilities;
 use MediaWiki\Hook\GetDoubleUnderscoreIDsHook;
 use MediaWiki\Hook\LinksUpdateCompleteHook;
@@ -220,9 +219,10 @@ class CommunityRequestsHooks implements
 				$data = $parserOutput->getExtensionData( self::EXT_DATA_KEY );
 
 				if ( $data &&
+					// Only set the page language if it is not already set to the base language, and…
 					$data[AbstractWishlistEntity::PARAM_BASE_LANG] !== $title->getPageLanguage()->getCode() &&
-					// @phan-suppress-next-line PhanUndeclaredClassMethod
-					TranslatablePage::isTranslationPage( $title ) === false
+					// $title is the base page (not a translation subpage).
+					$this->config->getCanonicalEntityPageRef( $title )->isSamePageAs( $title->toPageIdentity() )
 				) {
 					$store->setPageLanguage(
 						$title->getId(),

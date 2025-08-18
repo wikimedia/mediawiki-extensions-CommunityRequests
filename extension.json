@@ -33,7 +33,7 @@
 		"MediaWiki\\Extension\\CommunityRequests\\Tests\\": "tests/phpunit/"
 	},
 	"TestAutoloadClasses": {
-		"MediaWiki\\Extension\\CommunityRequests\\Tests\\Integration\\CommunityRequestsIntegrationTestCase": "tests/phpunit/integration/CommunityRequestsIntegrationTestCase.php",
+		"MediaWiki\\Extension\\CommunityRequests\\Tests\\Integration\\WishlistTestTrait": "tests/phpunit/integration/WishlistTestTrait.php",
 		"MediaWiki\\Extension\\CommunityRequests\\Tests\\Unit\\AbstractWishlistEntityTest": "tests/phpunit/unit/AbstractWishlistEntityTest.php"
 	},
 	"ServiceWiringFiles": [

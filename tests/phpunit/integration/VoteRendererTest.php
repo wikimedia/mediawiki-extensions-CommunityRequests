@@ -7,13 +7,15 @@ use MediaWiki\Extension\CommunityRequests\AbstractWishlistStore;
 use MediaWiki\Extension\CommunityRequests\FocusArea\FocusArea;
 use MediaWiki\Extension\CommunityRequests\Wish\Wish;
 use MediaWiki\Title\Title;
+use MediaWikiIntegrationTestCase;
 
 /**
  * @group CommunityRequests
  * @group Database
  * @coversDefaultClass \MediaWiki\Extension\CommunityRequests\Vote\VoteRenderer
  */
-class VoteRendererTest extends CommunityRequestsIntegrationTestCase {
+class VoteRendererTest extends MediaWikiIntegrationTestCase {
+	use WishlistTestTrait;
 
 	protected function getStore(): AbstractWishlistStore {
 		return $this->store;
@@ -26,7 +28,7 @@ class VoteRendererTest extends CommunityRequestsIntegrationTestCase {
 		$this->store = $this->getServiceContainer()->get( 'CommunityRequests.WishStore' );
 
 		$wishTitleStr = $this->config->getWishPagePrefix() . '123';
-		$wish = $this->insertTestWish( $wishTitleStr, 'en', '3333-01-23T00:00:00Z' );
+		$wish = $this->insertTestWish( $wishTitleStr, 'en' );
 		$this->assertSame( 0, $wish->getVoteCount() );
 
 		$this->insertVotes( $wishTitleStr, 3 );
@@ -42,7 +44,7 @@ class VoteRendererTest extends CommunityRequestsIntegrationTestCase {
 		$this->store = $this->getServiceContainer()->get( 'CommunityRequests.FocusAreaStore' );
 
 		$focusAreaTitleStr = $this->config->getFocusAreaPagePrefix() . '123';
-		$focusArea = $this->insertTestFocusArea( $focusAreaTitleStr, 'en', '3333-01-23T00:00:00Z' );
+		$focusArea = $this->insertTestFocusArea( $focusAreaTitleStr, 'en' );
 		$this->assertSame( 0, $focusArea->getVoteCount() );
 
 		$this->insertVotes( $focusAreaTitleStr, 3 );
@@ -58,7 +60,7 @@ class VoteRendererTest extends CommunityRequestsIntegrationTestCase {
 		$this->store = $this->getServiceContainer()->get( 'CommunityRequests.WishStore' );
 
 		$wishTitleStr = $this->config->getWishPagePrefix() . '123';
-		$wish = $this->insertTestWish( $wishTitleStr, 'en', '3333-01-23T00:00:00Z' );
+		$wish = $this->insertTestWish( $wishTitleStr, 'en' );
 		$this->assertSame( 0, $wish->getVoteCount() );
 
 		$this->store->save(
@@ -84,7 +86,7 @@ class VoteRendererTest extends CommunityRequestsIntegrationTestCase {
 		$this->store = $this->getServiceContainer()->get( 'CommunityRequests.WishStore' );
 
 		$wishTitleStr = $this->config->getWishPagePrefix() . '123';
-		$wish = $this->insertTestWish( $wishTitleStr, 'en', '3333-01-23T00:00:00Z' );
+		$wish = $this->insertTestWish( $wishTitleStr, 'en' );
 		$this->assertSame( 0, $wish->getVoteCount() );
 
 		$this->insertVotes( $wishTitleStr, 5 );
@@ -110,7 +112,7 @@ class VoteRendererTest extends CommunityRequestsIntegrationTestCase {
 		$this->store = $this->getServiceContainer()->get( 'CommunityRequests.FocusAreaStore' );
 
 		$focusAreaTitleStr = $this->config->getFocusAreaPagePrefix() . '123';
-		$focusArea = $this->insertTestFocusArea( $focusAreaTitleStr, 'en', '3333-01-23T00:00:00Z' );
+		$focusArea = $this->insertTestFocusArea( $focusAreaTitleStr, 'en' );
 		$this->assertSame( 0, $focusArea->getVoteCount() );
 
 		$this->insertVotes( $focusAreaTitleStr, 5 );

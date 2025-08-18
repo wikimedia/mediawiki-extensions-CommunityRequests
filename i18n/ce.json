@@ -134,6 +134,7 @@
 	"communityrequests-publish-wish-summary": "«$1» лааман публикаци",
 	"communityrequests-support-label": "ГӀо",
 	"communityrequests-error-category": "Йукъараллин лаамийн могӀамехь гӀалаташ долу агӀонаш",
+	"apihelp-wishedit-param-proposer": "Лаам кховдийна декъашхо.",
 	"apihelp-focusareaedit-param-status": "Фокусан меттиган статус.",
 	"apihelp-focusareaedit-param-title": "ГӀуллакхан меттиган цӀе.",
 	"apihelp-query+communityrequests-wishes-paramvalue-prop-status": "Лаамийн статус",

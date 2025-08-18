@@ -223,7 +223,9 @@
 	"tag-community-wishlist": "[[Special:MyLanguage/Community Wishlist|Liste de souhaits de la communauté]]",
 	"right-manage-wishlist": "Gérer la liste de souhaits de la communauté sans restrictions",
 	"action-manage-wishlist": "gérer la liste de souhaits de la communauté sans restrictions",
+	"right-manually-edit-wishlist": "Modifier manuellement les souhaits et domaines d’action de la liste de souhaits de la communauté sans formulaire",
+	"action-manually-edit-wishlist": "modifier manuellement les souhaits et domaines d’action de la liste de souhaits de la communauté sans formulaire",
 	"group-community-wishlist-manager": "Gestionnaires de la liste de souhaits de la communauté",
 	"group-community-wishlist-manager-member": "Gestionnaire de la liste de souhaits de la communauté",
-	"communityrequests-cant-manually-edit": "La modification de cette page de liste de souhaits de la communauté doit être effectuée à l'aide du [[$1 |formulaire d'admission]]."
+	"communityrequests-cant-manually-edit": "La modification de cette page de liste de souhaits de la communauté doit être effectuée à l’aide du [[$1|formulaire d’admission]]."
 }

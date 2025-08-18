@@ -60,7 +60,7 @@
 	"communityrequests-support-dialog-title": "Title of voting dialog window.\n\nParameters:\n* $1 – Title of the wish or focus area.",
 	"communityrequests-support-focus-area": "Button label for the voting button on focus area pages.",
 	"communityrequests-support-focus-area-confirmed": "Message shown after voting for a focus area.",
-	"communityrequests-support-wish": "Button label for the voting button on wish pages. '''<span style=\"color: red\">“Support” is a verb,</span> referring to supporting this wish.'''",
+	"communityrequests-support-wish": "{{Doc-important|“Support” is a verb, referring to supporting this wish.'''}}\n\nButton label for the voting button on wish pages.",
 	"communityrequests-support-wish-confirmed": "Message shown after voting for a focus area.",
 	"communityrequests-optional-comment": "Form field label in the voting dialog window.",
 	"communityrequests-support": "Primary button label in the voting dialog window. It describes an action: \"Express support for a wish, vote for a wish\".",

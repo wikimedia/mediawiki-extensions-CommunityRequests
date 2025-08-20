@@ -1,7 +1,9 @@
 {
 	"@metadata": {
 		"authors": [
-			"Amire80"
+			"Amire80",
+			"Neriah",
+			"YaronSh"
 		]
 	},
 	"communityrequests-desc": "מערכת לניהול הצעות ובקשות טכניות של קהילת ויקי.",
@@ -54,21 +56,21 @@
 	"communityrequests-optional-comment": "הערה (לא חובה)",
 	"communityrequests-support": "לתמוך",
 	"communityrequests-supported": "כבר נתמך",
-	"communityrequests-support-focus-area-confirmed": "הצבעת בעד תמיכה בהתמקדות בזה",
+	"communityrequests-support-focus-area-confirmed": "הצבעת בעד תחום המיקוד הזה.",
 	"communityrequests-unsupport-focus-area": "הסרת הצבעת התמיכה שלך",
 	"communityrequests-status": "מצב",
 	"communityrequests-status-draft": "טיוטה",
-	"communityrequests-status-submitted": "מוגשת",
+	"communityrequests-status-submitted": "הוגשה",
 	"communityrequests-status-open": "פתוחה",
-	"communityrequests-status-in-progress": "בתהליך",
-	"communityrequests-status-delivered": "נמסרה",
+	"communityrequests-status-in-progress": "בעבודה",
+	"communityrequests-status-delivered": "בוצעה",
 	"communityrequests-status-blocked": "חסומה",
 	"communityrequests-status-archived": "מאורכבת",
 	"communityrequests-status-unknown": "מצב לא ידוע",
 	"communityrequests-edit-wish": "עריכת משאלה",
 	"communityrequests-discuss-wish": "דיון על המשאלה הזאת",
 	"communityrequests-wish-description-heading": "תיאור",
-	"communityrequests-wish-focus-area-heading": "אזור מיקוד מוקצה",
+	"communityrequests-wish-focus-area-heading": "תחום מיקוד מוקצה",
 	"communityrequests-wish-type-heading": "סוג המשאלה",
 	"communityrequests-wish-related-heading": "מיזמים קשורים",
 	"communityrequests-wish-audience-heading": "משתמשים מושפעים",

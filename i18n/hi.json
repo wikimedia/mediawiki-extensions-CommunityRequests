@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"Abijeet Patro"
+			"Abijeet Patro",
+			"Saurmandal"
 		]
 	},
 	"communityrequests-wishtype-bug-label": "बग रिपोर्ट",
@@ -16,5 +17,9 @@
 	"communityrequests-wishes-status-header": "स्थिति",
 	"communityrequests-wishes-type-header": "प्रकार",
 	"communityrequests-wishes-title-header": "शीर्षक",
-	"communityrequests-wishes-created-header": "बनाया गया"
+	"communityrequests-wishes-created-header": "बनाया गया",
+	"right-manage-wishlist": "बिना प्रतिबंधों के सामुदायिक इच्छासूची प्रबंधित करना",
+	"action-manage-wishlist": "बिना प्रतिबंधों के सामुदायिक इच्छासूची प्रबंधित करने",
+	"right-manually-edit-wishlist": "सामुदायिक इच्छासूची की इच्छाएँ हाथ से सम्पादित करना और बिना फ़ॉर्म के क्षेत्रों पर फ़ोकस करना",
+	"action-manually-edit-wishlist": "सामुदायिक इच्छासूची की इच्छाएँ हाथ से सम्पादित करने और बिना फ़ॉर्म के क्षेत्रों पर फ़ोकस करने"
 }

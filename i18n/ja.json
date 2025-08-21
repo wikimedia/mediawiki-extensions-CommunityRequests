@@ -2,7 +2,8 @@
 	"@metadata": {
 		"authors": [
 			"Aphaia",
-			"Cookai1205"
+			"Cookai1205",
+			"Omotecho"
 		]
 	},
 	"communityrequests-status-draft": "下書き",
@@ -44,5 +45,7 @@
 	"communityrequests-focus-area-owners": "主催者",
 	"communityrequests-focus-area-volunteers": "コミュニティ参加者",
 	"communityrequests-focus-area-voting": "投票",
-	"communityrequests-focus-area-voting-info": "現状でこの領域の '''{{PLURAL:$2|賛同者}}は $1名'''います。期間満了まで票を受け付けます。以下のボタンを使い、賛成すると示してください。"
+	"communityrequests-focus-area-voting-info": "現状でこの領域の '''{{PLURAL:$2|賛同者}}は $1名'''います。期間満了まで票を受け付けます。以下のボタンを使い、賛成すると示してください。",
+	"right-manually-edit-wishlist": "コミュニティ要望リストのフォームを使わずに要望や焦点エリアを手動で編集",
+	"action-manually-edit-wishlist": "コミュニティ要望リストのフォームを使わずに要望や焦点エリアを手動で編集"
 }

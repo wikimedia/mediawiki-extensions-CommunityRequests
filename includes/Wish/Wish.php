@@ -40,7 +40,6 @@ class Wish extends AbstractWishlistEntity {
 		self::PARAM_BASE_LANG,
 	];
 	public const VALUE_PROJECTS_ALL = 'all';
-	public const VALUE_ARRAY_DELIMITER = ',';
 
 	// Wish properties.
 	private int $type;
@@ -189,7 +188,7 @@ class Wish extends AbstractWishlistEntity {
 
 			if ( is_array( $value ) ) {
 				// Convert arrays to a comma-separated string.
-				$value = implode( self::VALUE_ARRAY_DELIMITER, $value );
+				$value = implode( WishStore::ARRAY_DELIMITER_WIKITEXT, $value );
 			}
 
 			// Append wikitext.
@@ -248,7 +247,7 @@ class Wish extends AbstractWishlistEntity {
 			array_filter(
 				array_map(
 					static fn ( $name ) => $config->getProjectIdFromWikitextVal( $name ),
-					explode( self::VALUE_ARRAY_DELIMITER, $csvProjects )
+					explode( WishStore::ARRAY_DELIMITER_WIKITEXT, $csvProjects )
 				),
 				static fn ( $id ) => $id !== null
 			)
@@ -263,7 +262,7 @@ class Wish extends AbstractWishlistEntity {
 	 */
 	public static function getPhabTasksFromCsv( string $csvTasks ): array {
 		$tasks = [];
-		$taskIds = explode( self::VALUE_ARRAY_DELIMITER, $csvTasks );
+		$taskIds = explode( WishStore::ARRAY_DELIMITER_WIKITEXT, $csvTasks );
 		foreach ( $taskIds as $id ) {
 			$matches = [];
 			preg_match( '/^T?(\d+)$/', trim( $id ), $matches );

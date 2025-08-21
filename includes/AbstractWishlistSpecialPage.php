@@ -192,6 +192,13 @@ abstract class AbstractWishlistSpecialPage extends FormSpecialPage {
 
 	/** @inheritDoc */
 	public function onSubmit( array $data, ?HTMLForm $form = null ) {
+		// Grab data directly from POST request. We should use the given $data once ::getFormFields() is implemented.
+		$data = $form->getRequest()->getPostValues();
+		$data['title'] = $data['entitytitle'];
+
+		// API wants pipe-separated arrays, not CSV.
+		$data = $this->store->normalizeArrayValues( $data, AbstractWishlistStore::ARRAY_DELIMITER_API );
+
 		$path = $this->getApiPath();
 		$action = $path . 'edit';
 
@@ -210,6 +217,9 @@ abstract class AbstractWishlistSpecialPage extends FormSpecialPage {
 		try {
 			$api->execute();
 		} catch ( ApiUsageException $e ) {
+			$this->getOutput()->addJsConfigVars( [
+				'intakeData' => $this->store->normalizeArrayValues( $data ),
+			] );
 			return $e->getStatusValue();
 		}
 

@@ -178,6 +178,7 @@
 	"apierror-wishedit-notawish": "The page you are trying to edit is not a valid wish.",
 	"apierror-focusareaedit-notafocusarea": "The page you are trying to edit is not a valid focus area.",
 	"apierror-focusareaedit-nopermission": "You do not have permission to create or edit focus areas in the Community Wishlist.",
+	"apierror-wishlist-entity-parse": "Unable to parse wishlist entity. It may contain invalid wikitext. Please ensure there are no extraneous pipe characters (<code>|</code>) in the wikitext.",
 	"apihelp-focusareaedit-summary": "Create or update a focus area in the Community Wishlist.",
 	"apihelp-focusareaedit-param-focusarea": "The focus area to update. This can be either the full page title, a prefixed focus area ID (e.g. \"FA123\"), or the focus area ID as an integer. Leave empty to create a new focus area.",
 	"apihelp-focusareaedit-param-status": "The status of the focus area.",

@@ -423,6 +423,14 @@ class WishStore extends AbstractWishlistStore {
 	}
 
 	/** @inheritDoc */
+	public function getArrayParams(): array {
+		return [
+			Wish::PARAM_PROJECTS,
+			Wish::PARAM_PHAB_TASKS,
+		];
+	}
+
+	/** @inheritDoc */
 	public function getPagePrefix(): string {
 		return $this->config->getWishPagePrefix();
 	}

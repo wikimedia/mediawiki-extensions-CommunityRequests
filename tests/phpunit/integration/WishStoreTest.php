@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 namespace MediaWiki\Extension\CommunityRequests\Tests\Integration;
 
 use InvalidArgumentException;
+use MediaWiki\Extension\CommunityRequests\AbstractWishlistStore;
 use MediaWiki\Extension\CommunityRequests\Wish\Wish;
 use MediaWiki\Extension\CommunityRequests\Wish\WishStore;
 use MediaWiki\Title\Title;
@@ -311,5 +312,64 @@ END;
 		$this->getStore()->save( $wish );
 		$wish = $this->getStore()->get( $title );
 		$this->assertSame( str_repeat( 'a', 255 ), $wish->getTitle() );
+	}
+
+	/**
+	 * @dataProvider provideNormalizeArrayValues
+	 */
+	public function testNormalizeArrayValues( $data, $delimiter, $expected ): void {
+		$this->assertSame(
+			$expected,
+			$this->getStore()->normalizeArrayValues( $data, $delimiter )
+		);
+	}
+
+	public function provideNormalizeArrayValues(): array {
+		return [
+			'from SPECIAL to WIKITEXT' => [
+				[
+					Wish::PARAM_PROJECTS => [ 'wikipedia', 'commons', 'wiktionary' ],
+					Wish::PARAM_PHAB_TASKS => [ 'T123' ],
+				],
+				AbstractWishlistStore::ARRAY_DELIMITER_WIKITEXT,
+				[
+					Wish::PARAM_PROJECTS => 'wikipedia,commons,wiktionary',
+					Wish::PARAM_PHAB_TASKS => 'T123',
+				]
+			],
+			'from SPECIAL to API' => [
+				[
+					Wish::PARAM_PROJECTS => [ 'wikipedia' ],
+					Wish::PARAM_PHAB_TASKS => [ 'T123', 'T456' ],
+				],
+				AbstractWishlistStore::ARRAY_DELIMITER_API,
+				[
+					Wish::PARAM_PROJECTS => 'wikipedia',
+					Wish::PARAM_PHAB_TASKS => 'T123|T456',
+				]
+			],
+			'from API to SPECIAL' => [
+				[
+					Wish::PARAM_PROJECTS => 'wikipedia|commons|wiktionary',
+					Wish::PARAM_PHAB_TASKS => '',
+				],
+				AbstractWishlistStore::ARRAY_DELIMITER_SPECIAL,
+				[
+					Wish::PARAM_PROJECTS => [ 'wikipedia', 'commons', 'wiktionary' ],
+					Wish::PARAM_PHAB_TASKS => [],
+				]
+			],
+			'from WIKITEXT to SPECIAL' => [
+				[
+					Wish::PARAM_PROJECTS => 'wikipedia,commons,wiktionary',
+					Wish::PARAM_PHAB_TASKS => 'T123',
+				],
+				AbstractWishlistStore::ARRAY_DELIMITER_SPECIAL,
+				[
+					Wish::PARAM_PROJECTS => [ 'wikipedia', 'commons', 'wiktionary' ],
+					Wish::PARAM_PHAB_TASKS => [ 'T123' ],
+				]
+			],
+		];
 	}
 }

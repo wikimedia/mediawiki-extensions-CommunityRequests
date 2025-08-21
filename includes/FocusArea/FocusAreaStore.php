@@ -219,6 +219,11 @@ class FocusAreaStore extends AbstractWishlistStore {
 	}
 
 	/** @inheritDoc */
+	public function getArrayParams(): array {
+		return [];
+	}
+
+	/** @inheritDoc */
 	public function getPagePrefix(): string {
 		return $this->config->getFocusAreaPagePrefix();
 	}

@@ -7,6 +7,7 @@ use MediaWiki\Api\ApiUsageException;
 use MediaWiki\Extension\CommunityRequests\HookHandler\CommunityRequestsHooks;
 use MediaWiki\Tests\Api\ApiTestCase;
 use MediaWiki\Title\Title;
+use MediaWiki\User\User;
 
 /**
  * @group CommunityRequests
@@ -147,5 +148,24 @@ class ApiFocusAreaEditTest extends ApiTestCase {
 			'created' => '2023-10-01T12:00:00Z',
 			'baselang' => 'en',
 		], null, $this->getTestUser()->getUser() );
+	}
+
+	public function testExecuteParsingFailure(): void {
+		// Ensure we have a user to work with.
+		User::createNew( 'TestUser' );
+
+		$params = [
+			'action' => 'focusareaedit',
+			'status' => 'under-review',
+			'title' => 'My test focus area',
+			'description' => 'This is a valid description',
+			'shortdescription' => 'This is a | test short desc with stray pipes',
+			'owners' => "* Community Tech\n* Editing",
+			'volunteers' => "* [[User:Volunteer1]]\n* [[User:Volunteer2]]",
+			'created' => '2023-10-01T12:00:00Z',
+			'baselang' => 'en',
+		];
+		$this->expectApiErrorCode( 'wishlist-entity-parse' );
+		$this->doApiRequestWithToken( $params );
 	}
 }

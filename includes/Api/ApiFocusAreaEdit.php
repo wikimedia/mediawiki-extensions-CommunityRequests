@@ -30,9 +30,20 @@ class ApiFocusAreaEdit extends ApiWishlistEntityBase {
 			$this->config
 		);
 
+		// Confirm we can parse and then re-create the same wikitext.
+		$wikitext = $focusArea->toWikitext( $this->config );
+		$validateWish = FocusArea::newFromWikitextParams(
+			$focusArea->getPage(),
+			$focusArea->getBaseLang(),
+			(array)$this->store->getDataFromWikitextContent( $wikitext ),
+			$this->config,
+		);
+		if ( $wikitext->getText() !== $validateWish->toWikitext( $this->config )->getText() ) {
+			$this->dieWithError( 'apierror-wishlist-entity-parse' );
+		}
+
 		$saveStatus = $this->save(
-			$focusArea->toWikitext( $this->config ),
-			$this->getEditSummary( $focusArea ),
+			$focusArea,
 			$this->params['token'],
 			$this->params[FocusArea::PARAM_BASE_REV_ID] ?? null
 		);

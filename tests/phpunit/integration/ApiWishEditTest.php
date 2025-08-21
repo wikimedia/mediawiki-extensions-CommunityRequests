@@ -244,4 +244,24 @@ class ApiWishEditTest extends ApiTestCase {
 			]
 		];
 	}
+
+	public function testExecuteParsingFailure(): void {
+		// Ensure we have a user to work with.
+		User::createNew( 'TestUser' );
+
+		$params = [
+			'action' => 'wishedit',
+			'status' => 'under-review',
+			'title' => 'Test Wish',
+			'description' => 'This is a | test wish with stray pipes',
+			'type' => 'feature',
+			'projects' => 'commons|wikidata',
+			'phabtasks' => 'T123|T456|T789',
+			'proposer' => 'TestUser',
+			'created' => '2023-10-01T12:00:00Z',
+			'baselang' => 'en',
+		];
+		$this->expectApiErrorCode( 'wishlist-entity-parse' );
+		$this->doApiRequestWithToken( $params );
+	}
 }

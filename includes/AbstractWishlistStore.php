@@ -32,6 +32,10 @@ abstract class AbstractWishlistStore {
 	public const SORT_DESC = SelectQueryBuilder::SORT_DESC;
 	public const FILTER_NONE = null;
 
+	public const ARRAY_DELIMITER_WIKITEXT = ',';
+	public const ARRAY_DELIMITER_API = '|';
+	public const ARRAY_DELIMITER_SPECIAL = null;
+
 	/**
 	 * No wikitext fields will be fetched. All data comes from the CommunityRequests database tables.
 	 */
@@ -574,6 +578,46 @@ abstract class AbstractWishlistStore {
 	 * Get the parameters for the parser function invocation.
 	 */
 	abstract public function getParams(): array;
+
+	/**
+	 * Get the parameters for the parser function who values are array-like.
+	 * - In the APIs, values are transformed to be pipe-separated.
+	 * - In the wikitext, values are comma-separated.
+	 * - In the Special forms, values are one-dimensional arrays.
+	 */
+	abstract public function getArrayParams(): array;
+
+	/**
+	 * Normalize array-like parameter values into the desired format.
+	 *
+	 * @param array $data Full entity data as an associative array.
+	 * @param ?string $delimiter One of:
+	 *   - self::ARRAY_DELIMITER_SPECIAL (null) to return an array of strings,
+	 *   - self::ARRAY_DELIMITER_WIKITEXT (comma) to return a comma-separated string,
+	 *   - self::ARRAY_DELIMITER_API (pipe) to return a pipe-separated string.
+	 * @return array The modified $data array with array-like values normalized.
+	 */
+	public function normalizeArrayValues(
+		array $data,
+		?string $delimiter = self::ARRAY_DELIMITER_SPECIAL
+	): array {
+		foreach ( $this->getArrayParams() as $param ) {
+			$values = $data[$param] ?? '';
+			$fromDelimiter = self::ARRAY_DELIMITER_WIKITEXT;
+			if ( is_array( $values ) ) {
+				$values = implode( self::ARRAY_DELIMITER_WIKITEXT, $values );
+			} elseif ( str_contains( $values, self::ARRAY_DELIMITER_API ) ) {
+				$fromDelimiter = self::ARRAY_DELIMITER_API;
+			}
+			$values = array_filter( explode( $fromDelimiter, $values ) );
+			if ( $delimiter ) {
+				$data[$param] = implode( $delimiter, $values );
+			} else {
+				$data[$param] = $values;
+			}
+		}
+		return $data;
+	}
 
 	/**
 	 * Get the prefix for the wishlist entity page.

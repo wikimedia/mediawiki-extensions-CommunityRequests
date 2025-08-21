@@ -6,7 +6,6 @@ namespace MediaWiki\Extension\CommunityRequests\Api;
 use MediaWiki\Api\ApiBase;
 use MediaWiki\Api\ApiMain;
 use MediaWiki\Api\ApiUsageException;
-use MediaWiki\Content\WikitextContent;
 use MediaWiki\Context\DerivativeContext;
 use MediaWiki\Extension\CommunityRequests\AbstractWishlistEntity;
 use MediaWiki\Extension\CommunityRequests\AbstractWishlistStore;
@@ -65,16 +64,14 @@ abstract class ApiWishlistEntityBase extends ApiBase {
 	/**
 	 * Save a wishlist item to the wiki through ApiEditPage.
 	 *
-	 * @param WikitextContent $content
-	 * @param string $summary
+	 * @param AbstractWishlistEntity $entity
 	 * @param string $token
 	 * @param int|null $baseRevId
 	 * @param array $tags
 	 * @return StatusValue
 	 */
 	protected function save(
-		WikitextContent $content,
-		string $summary,
+		AbstractWishlistEntity $entity,
 		string $token,
 		?int $baseRevId = null,
 		array $tags = []
@@ -82,8 +79,8 @@ abstract class ApiWishlistEntityBase extends ApiBase {
 		$apiParams = [
 			'action' => 'edit',
 			'title' => $this->title->getPrefixedDBkey(),
-			'text' => $content->getText(),
-			'summary' => $summary,
+			'text' => $entity->toWikitext( $this->config )->getText(),
+			'summary' => $this->getEditSummary( $entity ),
 			'token' => $token,
 			'baserevid' => $baseRevId,
 			'tags' => implode( '|', $tags ),

@@ -49,9 +49,22 @@ class ApiWishEdit extends ApiWishlistEntityBase {
 			$this->config,
 			$this->userFactory->newFromName( $this->params[Wish::PARAM_PROPOSER] ),
 		);
+
+		// Confirm we can parse and then re-create the same wikitext.
+		$wikitext = $wish->toWikitext( $this->config );
+		$validateWish = Wish::newFromWikitextParams(
+			$wish->getPage(),
+			$wish->getBaseLang(),
+			(array)$this->store->getDataFromWikitextContent( $wikitext ),
+			$this->config,
+			$wish->getProposer(),
+		);
+		if ( $wikitext->getText() !== $validateWish->toWikitext( $this->config )->getText() ) {
+			$this->dieWithError( 'apierror-wishlist-entity-parse' );
+		}
+
 		$saveStatus = $this->save(
-			$wish->toWikitext( $this->config ),
-			$this->getEditSummary( $wish ),
+			$wish,
 			$this->params['token'],
 			$this->params[Wish::PARAM_BASE_REV_ID] ?? null
 		);

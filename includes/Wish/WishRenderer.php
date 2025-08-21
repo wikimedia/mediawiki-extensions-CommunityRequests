@@ -121,7 +121,7 @@ class WishRenderer extends AbstractRenderer {
 				return null;
 			}
 			return $this->msg( $label )->text();
-		}, array_filter( explode( Wish::VALUE_ARRAY_DELIMITER, $this->getArg( Wish::PARAM_PROJECTS, '' ) ) ) );
+		}, array_filter( explode( WishStore::ARRAY_DELIMITER_WIKITEXT, $this->getArg( Wish::PARAM_PROJECTS, '' ) ) ) );
 		// @phan-suppress-next-line SecurityCheck-DoubleEscaped
 		$projects = $this->getDiv( 'projects', $language->commaList( array_filter( $projectLabels ) ) );
 		$otherProject = $this->getArg( Wish::PARAM_OTHER_PROJECT, '' );
@@ -156,7 +156,7 @@ class WishRenderer extends AbstractRenderer {
 				new TitleValue( NS_MAIN, $task, '', 'phab' ),
 				$task
 			);
-		}, explode( Wish::VALUE_ARRAY_DELIMITER, $this->getArg( Wish::PARAM_PHAB_TASKS, '' ) ) ) );
+		}, explode( WishStore::ARRAY_DELIMITER_WIKITEXT, $this->getArg( Wish::PARAM_PHAB_TASKS, '' ) ) ) );
 		$tasksHeading = '';
 		$tasksHtml = '';
 		if ( count( $tasks ) ) {

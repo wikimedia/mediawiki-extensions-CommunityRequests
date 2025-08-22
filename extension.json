@@ -143,10 +143,6 @@
 			"manage-wishlist": true,
 			"manually-edit-wishlist": true
 		},
-		"staff": {
-			"manage-wishlist": true,
-			"manually-edit-wishlist": true
-		},
 		"community-wishlist-manager": {
 			"manage-wishlist": true,
 			"manually-edit-wishlist": true

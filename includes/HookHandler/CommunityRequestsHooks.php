@@ -21,10 +21,8 @@ use MediaWiki\Extension\CommunityRequests\Wish\WishStore;
 use MediaWiki\Extension\CommunityRequests\WishlistConfig;
 use MediaWiki\Extension\Translate\MessageLoading\MessageHandle;
 use MediaWiki\Extension\Translate\Utilities\Utilities;
-use MediaWiki\Hook\GetDoubleUnderscoreIDsHook;
 use MediaWiki\Hook\LinksUpdateCompleteHook;
 use MediaWiki\Hook\LoginFormValidErrorMessagesHook;
-use MediaWiki\Hook\ParserAfterParseHook;
 use MediaWiki\Hook\ParserAfterTidyHook;
 use MediaWiki\Hook\ParserFirstCallInitHook;
 use MediaWiki\Hook\RecentChange_saveHook;
@@ -42,6 +40,7 @@ use MediaWiki\Parser\Parser;
 use MediaWiki\Permissions\Authority;
 use MediaWiki\Permissions\Hook\GetUserPermissionsErrorsExpensiveHook;
 use MediaWiki\Permissions\PermissionManager;
+use MediaWiki\Preferences\Hook\GetPreferencesHook;
 use MediaWiki\RecentChanges\RecentChange;
 use MediaWiki\Registration\ExtensionRegistry;
 use MediaWiki\Revision\RenderedRevision;
@@ -51,6 +50,7 @@ use MediaWiki\Skin\SkinTemplate;
 use MediaWiki\SpecialPage\SpecialPageFactory;
 use MediaWiki\Storage\Hook\RevisionDataUpdatesHook;
 use MediaWiki\Title\Title;
+use MediaWiki\User\Options\UserOptionsManager;
 use MediaWiki\User\User;
 use MessageSpecifier;
 use Psr\Log\LoggerInterface;
@@ -59,22 +59,21 @@ use Psr\Log\LoggerInterface;
 class CommunityRequestsHooks implements
 	BeforePageDisplayHook,
 	ChangeTagsListActiveHook,
-	GetDoubleUnderscoreIDsHook,
 	LinksUpdateCompleteHook,
 	ListDefinedTagsHook,
 	LoginFormValidErrorMessagesHook,
-	ParserAfterParseHook,
 	ParserFirstCallInitHook,
 	RecentChange_saveHook,
 	RevisionDataUpdatesHook,
 	SkinTemplateNavigation__UniversalHook,
 	ParserAfterTidyHook,
 	GetUserPermissionsErrorsExpensiveHook,
-	BeforeDisplayNoArticleTextHook
+	BeforeDisplayNoArticleTextHook,
+	GetPreferencesHook
 {
 
 	public const WISHLIST_CHANGE_TAG = 'community-wishlist';
-	public const MAGIC_MACHINETRANSLATION = 'machinetranslation';
+	public const PREF_MACHINETRANSLATION = 'usemachinetranslation';
 	public const SESSION_KEY = 'communityrequests-intake';
 	protected const EXT_DATA_KEY = AbstractRenderer::EXT_DATA_KEY;
 	protected bool $translateInstalled;
@@ -97,6 +96,7 @@ class CommunityRequestsHooks implements
 		LinkRenderer $linkRenderer,
 		private readonly PermissionManager $permissionManager,
 		private readonly SpecialPageFactory $specialPageFactory,
+		private readonly UserOptionsManager $userOptionsManager,
 		private readonly LoggerInterface $logger,
 		Config $mainConfig,
 		?ExtensionRegistry $extensionRegistry = null
@@ -117,13 +117,6 @@ class CommunityRequestsHooks implements
 	}
 
 	/** @inheritDoc */
-	public function onGetDoubleUnderscoreIDs( &$doubleUnderscoreIDs ) {
-		if ( $this->config->isEnabled() ) {
-			$doubleUnderscoreIDs[] = self::MAGIC_MACHINETRANSLATION;
-		}
-	}
-
-	/** @inheritDoc */
 	public function onParserFirstCallInit( $parser ) {
 		if ( !$this->config->isEnabled() ) {
 			return;
@@ -133,16 +126,6 @@ class CommunityRequestsHooks implements
 			$this->rendererFactory->render( ... ),
 			Parser::SFH_OBJECT_ARGS
 		);
-	}
-
-	/** @inheritDoc */
-	public function onParserAfterParse( $parser, &$text, $stripState ) {
-		if ( !$this->config->isEnabled() ) {
-			return;
-		}
-		if ( $parser->getOutput()->getPageProperty( self::MAGIC_MACHINETRANSLATION ) !== null ) {
-			$parser->getOutput()->addModules( [ 'ext.communityrequests.mint' ] );
-		}
 	}
 
 	/** @inheritDoc */
@@ -282,7 +265,7 @@ class CommunityRequestsHooks implements
 		if ( !$this->config->isEnabled() ||
 			!(
 				$this->config->isWishOrFocusAreaPage( $out->getTitle() ) ||
-				$this->config->isVotesPage( $out->getTitle() )
+				$this->config->isWishOrFocusAreaIndexPage( $out->getTitle() )
 			)
 		) {
 			return;
@@ -291,13 +274,16 @@ class CommunityRequestsHooks implements
 		// Post-edit success message.
 		// TODO: Possibly replace with the leaner mediawiki.codex.messagebox.styles module.
 		//   Though this would mean the message can't be dismissable.
-		if ( $out->getRequest()->getSession()->get( self::SESSION_KEY ) ) {
+		if ( $this->config->isWishOrFocusAreaPage( $out->getTitle() ) &&
+			$out->getRequest()->getSession()->get( self::SESSION_KEY )
+		) {
 			$postEditVal = $out->getRequest()->getSession()->get( self::SESSION_KEY );
 			$out->getRequest()->getSession()->remove( self::SESSION_KEY );
 			$out->addJsConfigVars( 'intakePostEdit', $postEditVal );
 			$out->addModules( 'ext.communityrequests.intake' );
 		}
-		// If the page is a wish or focus area, add the voting module.
+
+		// Voting module.
 		if (
 			( $this->config->isWishVotingEnabled() && $this->config->isWishPage( $out->getTitle() ) ) ||
 			( $this->config->isFocusAreaVotingEnabled() && $this->config->isFocusAreaPage( $out->getTitle() ) )
@@ -305,6 +291,20 @@ class CommunityRequestsHooks implements
 			$out->addModules( 'ext.communityrequests.voting' );
 		}
 
+		// Machine translation module.
+		if (
+			// Do static checks first before querying user options.
+			(
+				$this->config->isWishOrFocusAreaPage( $out->getTitle() ) ||
+				$this->config->isWishIndexPage( $out->getTitle() ) ||
+				$this->config->isFocusAreaIndexPage( $out->getTitle() )
+			) &&
+			$this->userOptionsManager->getBoolOption( $out->getUser(), self::PREF_MACHINETRANSLATION )
+		) {
+			$out->addModules( 'ext.communityrequests.mint' );
+		}
+
+		// Render-blocking CSS.
 		$out->addModuleStyles( 'ext.communityrequests.styles' );
 	}
 
@@ -559,5 +559,25 @@ class CommunityRequestsHooks implements
 			);
 
 		return false;
+	}
+
+	/**
+	 * Add preference for machine translations.
+	 *
+	 * @param User $user
+	 * @param array &$preferences
+	 */
+	public function onGetPreferences( $user, &$preferences ) {
+		if ( !$this->config->isEnabled() ) {
+			return;
+		}
+		$preferences[self::PREF_MACHINETRANSLATION] = [
+			'type' => 'toggle',
+			'label-message' => [
+				'communityrequests-wishlist-machine-translation',
+				( $this->translateInstalled ? 'Special:MyLanguage/' : '' ) . $this->config->getHomepage(),
+			],
+			'section' => 'personal/i18n',
+		];
 	}
 }

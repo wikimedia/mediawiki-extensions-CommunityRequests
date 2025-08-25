@@ -7,6 +7,7 @@ use Language;
 use MediaWiki\Config\HashConfig;
 use MediaWiki\Config\ServiceOptions;
 use MediaWiki\Context\RequestContext;
+use MediaWiki\Extension\CommunityRequests\AbstractWishlistSpecialPage;
 use MediaWiki\Extension\CommunityRequests\EntityFactory;
 use MediaWiki\Extension\CommunityRequests\FocusArea\FocusAreaStore;
 use MediaWiki\Extension\CommunityRequests\HookHandler\CommunityRequestsHooks;
@@ -15,12 +16,13 @@ use MediaWiki\Extension\CommunityRequests\WishlistConfig;
 use MediaWiki\Language\LanguageNameUtils;
 use MediaWiki\Linker\LinkRenderer;
 use MediaWiki\MainConfigNames;
+use MediaWiki\Output\OutputPage;
 use MediaWiki\Page\Article;
-use MediaWiki\Parser\Parser;
-use MediaWiki\Parser\ParserOutput;
 use MediaWiki\Permissions\PermissionManager;
 use MediaWiki\Registration\ExtensionRegistry;
-use MediaWiki\Session\SessionManager;
+use MediaWiki\Request\WebRequest;
+use MediaWiki\Session\Session;
+use MediaWiki\Skin\Skin;
 use MediaWiki\Skin\SkinTemplate;
 use MediaWiki\SpecialPage\SpecialPage;
 use MediaWiki\SpecialPage\SpecialPageFactory;
@@ -31,9 +33,9 @@ use MediaWiki\Tests\Unit\Permissions\MockAuthorityTrait;
 use MediaWiki\Title\TitleFormatter;
 use MediaWiki\Title\TitleParser;
 use MediaWiki\User\User;
+use MediaWiki\User\UserOptionsManager;
 use MediaWikiUnitTestCase;
 use MockTitleTrait;
-use OutputPage;
 use Psr\Log\NullLogger;
 
 /**
@@ -49,45 +51,117 @@ class CommunityRequestsHooksTest extends MediaWikiUnitTestCase {
 	use MockServiceDependenciesTrait;
 
 	/**
-	 * @dataProvider provideOnParserAfterParse
+	 * @dataProvider provideOnBeforePageDisplay
 	 */
-	public function testOnParserAfterParse( bool $enabled, bool $magicWordPropSet, bool $moduleAdded ): void {
-		$parser = $this->createMock( Parser::class );
-		$parserOutput = $this->createMock( ParserOutput::class );
+	public function testOnBeforePageDisplay( array $opts = [], array $expectedModules = [] ): void {
+		$opts = array_merge(
+			[
+				'enabled' => true,
+				'wishVotingEnabled' => true,
+				'focusAreaVotingEnabled' => true,
+				'title' => $this->makeMockTitle( 'Community Wishlist/Wishes/W123' ),
+				'postEditVal' => null,
+				'prefersMachineTranslation' => false,
+			],
+			$opts
+		);
 
-		if ( !$enabled ) {
-			$parser->expects( $this->never() )->method( 'getOutput' );
-		} else {
-			$parser->expects( $this->atLeastOnce() )
-				->method( 'getOutput' )
-				->willReturn( $parserOutput );
+		$out = $this->createNoOpMock( OutputPage::class, [
+			'addJsConfigVars',
+			'addModules',
+			'addModuleStyles',
+			'getRequest',
+			'getTitle',
+			'getUser',
+		] );
+		$out->expects( $this->exactly( count( $expectedModules ) ) )
+			->method( 'addModules' )
+			->willReturnMap(
+				array_map(
+					static fn ( $m ) => [ $m ],
+					$expectedModules
+				)
+			);
+		$out->method( 'getTitle' )->willReturn( $opts['title'] );
+		$out->expects( $this->atMost( 1 ) )
+			->method( 'getUser' )
+			->willReturn( $this->createMock( User::class ) );
+		if ( in_array( 'ext.communityrequests.intake', $expectedModules ) ) {
+			$out->expects( $this->once() )
+				->method( 'addJsConfigVars' )
+				->with( 'intakePostEdit', $opts['postEditVal'] );
 		}
-
-		if ( $enabled && $magicWordPropSet && $moduleAdded ) {
-			$parserOutput->expects( $this->once() )
-				->method( 'getPageProperty' )
-				->willReturn( true );
-			$parserOutput->expects( $this->once() )->method( 'addModules' )
-				->with( [ 'ext.communityrequests.mint' ] );
+		$session = $this->createNoOpMock( Session::class, [ 'get', 'remove' ] );
+		if ( $opts['postEditVal'] !== null ) {
+			$session->expects( $this->exactly( 2 ) )
+				->method( 'get' )
+				->with( CommunityRequestsHooks::SESSION_KEY )
+				->willReturn( $opts['postEditVal'] );
+			$session->expects( $this->once() )
+				->method( 'remove' );
 		} else {
-			$parserOutput->expects( $this->never() )->method( 'addModules' );
+			$session->expects( $this->atMost( 1 ) )->method( 'get' );
+			$session->expects( $this->never() )->method( 'remove' );
 		}
+		$webRequest = $this->createNoOpMock( WebRequest::class, [ 'getSession' ] );
+		$webRequest->expects( $this->atMost( 3 ) )
+			->method( 'getSession' )
+			->willReturn( $session );
+		$out->expects( $this->atMost( 3 ) )
+			->method( 'getRequest' )
+			->willReturn( $webRequest );
 
-		$text = '';
-		$handler = $this->getHandler( [ WishlistConfig::ENABLED => $enabled ] );
-		$handler->onParserAfterParse( $parser, $text, null );
+		$userOptionsManager = $this->createNoOpMock( UserOptionsManager::class, [ 'getBoolOption' ] );
+		$userOptionsManager->expects( $this->atMost( 1 ) )
+			->method( 'getBoolOption' )
+			->willReturn( $opts['prefersMachineTranslation'] );
+		$handler = $this->getHandler( [
+			WishlistConfig::ENABLED => $opts['enabled'],
+			WishlistConfig::WISH_VOTING_ENABLED => $opts['wishVotingEnabled'],
+			WishlistConfig::FOCUS_AREA_VOTING_ENABLED => $opts['focusAreaVotingEnabled'],
+			WishlistConfig::WISH_PAGE_PREFIX => 'Community Wishlist/Wishes/W',
+			WishlistConfig::FOCUS_AREA_PAGE_PREFIX => 'Community Wishlist/Focus areas/FA',
+			WishlistConfig::WISH_INDEX_PAGE => 'Community Wishlist/Wishes',
+			WishlistConfig::FOCUS_AREA_INDEX_PAGE => 'Community Wishlist/Focus areas',
+		], null, $userOptionsManager );
+		$handler->onBeforePageDisplay( $out, $this->createNoOpMock( Skin::class ) );
 	}
 
-	public static function provideOnParserAfterParse(): array {
+	public function provideOnBeforePageDisplay(): array {
 		return [
-			[ 'enabled' => false, 'magic_word_prop' => false, 'module_added' => false ],
-			[ 'enabled' => false, 'magic_word_prop' => false, 'module_added' => true ],
-			[ 'enabled' => false, 'magic_word_prop' => true, 'module_added' => false ],
-			[ 'enabled' => false, 'magic_word_prop' => true, 'module_added' => true ],
-			[ 'enabled' => true, 'magic_word_prop' => false, 'module_added' => false ],
-			[ 'enabled' => true, 'magic_word_prop' => false, 'module_added' => true ],
-			[ 'enabled' => true, 'magic_word_prop' => true, 'module_added' => false ],
-			[ 'enabled' => true, 'magic_word_prop' => true, 'module_added' => true ],
+			'disabled' => [
+				[ 'enabled' => false ],
+				[]
+			],
+			'non-wish page' => [
+				[ 'title' => $this->makeMockTitle( 'Some other page' ) ],
+				[],
+			],
+			'post-edit new wish' => [
+				[
+					'title' => $this->makeMockTitle( 'Community Wishlist/Wishes/W123' ),
+					'postEditVal' => AbstractWishlistSpecialPage::SESSION_VALUE_CREATED,
+				],
+				[ 'ext.communityrequests.intake', 'ext.communityrequests.voting' ],
+			],
+			'view focus area' => [
+				[ 'title' => $this->makeMockTitle( 'Community Wishlist/Focus areas/FA123' ) ],
+				[ 'ext.communityrequests.voting' ],
+			],
+			'view wish, voting disabled' => [
+				[
+					'title' => $this->makeMockTitle( 'Community Wishlist/Wishes/W123' ),
+					'wishVotingEnabled' => false,
+				],
+				[],
+			],
+			'view wish, prefers machine translation' => [
+				[
+					'title' => $this->makeMockTitle( 'Community Wishlist/Wishes/W123' ),
+					'prefersMachineTranslation' => true,
+				],
+				[ 'ext.communityrequests.voting', 'ext.communityrequests.mint' ],
+			],
 		];
 	}
 
@@ -331,8 +405,8 @@ class CommunityRequestsHooksTest extends MediaWikiUnitTestCase {
 	private function getHandler(
 		array $serviceOptions = [],
 		?PermissionManager $permissionManager = null,
-		?SessionManager $sessionManager = null,
-		?ExtensionRegistry $extensionRegistry = null
+		?UserOptionsManager $userOptionsManager = null,
+		?ExtensionRegistry $extensionRegistry = null,
 	): CommunityRequestsHooks {
 		$serviceOptions = new ServiceOptions( WishlistConfig::CONSTRUCTOR_OPTIONS, [
 			WishlistConfig::ENABLED => true,
@@ -368,6 +442,7 @@ class CommunityRequestsHooksTest extends MediaWikiUnitTestCase {
 			$this->createNoOpMock( LinkRenderer::class ),
 			$permissionManager ?: $this->createNoOpMock( PermissionManager::class ),
 			$this->getSpecialPageFactory(),
+			$userOptionsManager ?: $this->createNoOpMock( UserOptionsManager::class ),
 			new NullLogger(),
 			$mainConfig,
 			$extensionRegistry

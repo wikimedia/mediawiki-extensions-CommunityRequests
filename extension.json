@@ -50,11 +50,9 @@
 	},
 	"Hooks": {
 		"ChangeTagsListActive": "main",
-		"GetDoubleUnderscoreIDs": "main",
 		"ListDefinedTags": "main",
 		"LoadExtensionSchemaUpdates": "schema",
 		"LoginFormValidErrorMessages": "main",
-		"ParserAfterParse": "main",
 		"RecentChange_save": "main",
 		"BeforePageDisplay": "main",
 		"ParserFirstCallInit": "main",
@@ -64,7 +62,8 @@
 		"SkinTemplateNavigation::Universal": "main",
 		"ParserAfterTidy": "main",
 		"getUserPermissionsErrorsExpensive": "main",
-		"BeforeDisplayNoArticleText": "main"
+		"BeforeDisplayNoArticleText": "main",
+		"GetPreferences": "main"
 	},
 	"HookHandlers": {
 		"main": {
@@ -77,6 +76,7 @@
 				"LinkRenderer",
 				"PermissionManager",
 				"SpecialPageFactory",
+				"UserOptionsManager",
 				"CommunityRequests.Logger",
 				"MainConfig"
 			]
@@ -149,6 +149,9 @@
 			"manage-wishlist": true,
 			"manually-edit-wishlist": true
 		}
+	},
+	"DefaultUserOptions": {
+		"usemachinetranslation": 0
 	},
 	"ResourceFileModulePaths": {
 		"localBasePath": "modules",
@@ -290,7 +293,7 @@
 		},
 		"ext.communityrequests.mint": {
 			"packageFiles": [
-				"mint/banner.js",
+				"mint/init.js",
 				"mint/TranslationBanner.vue",
 				{
 					"name": "mint/icons.json",
@@ -369,7 +372,8 @@
 				{
 					"name": "common/config.json",
 					"config": [
-						"CommunityRequestsStatuses"
+						"CommunityRequestsStatuses",
+						"CommunityRequestsWishPagePrefix"
 					]
 				}
 			],

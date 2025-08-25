@@ -19,6 +19,7 @@
 			<a
 				class="ext-communityrequests-wishes--title-link"
 				:href="mw.Title.makeTitle( row.crwns, row.crwtitle ).getUrl()"
+				:lang="getLangAttr( row )"
 			>
 				{{ item }}
 			</a>
@@ -34,7 +35,9 @@
 			<span v-else>{{ $i18n( 'communityrequests-focus-area-unassigned' ).text() }}</span>
 		</template>
 		<template #item-status="{ item }">
-			<cdx-info-chip :status="wishStatusStyle( item )">{{ wishStatus( item ) }}</cdx-info-chip>
+			<cdx-info-chip :status="wishStatusStyle( item )">
+				{{ wishStatus( item ) }}
+			</cdx-info-chip>
 		</template>
 		<template #item-created="{ item }">
 			{{ formatDate( Date.parse( item ) ) }}
@@ -53,10 +56,10 @@
 </template>
 
 <script>
-const { defineComponent, computed, ref, ComputedRef, Ref } = require( 'vue' );
+const { defineComponent, computed, nextTick, ref, ComputedRef, Ref } = require( 'vue' );
 const { CdxInfoChip, CdxMessage, CdxTable } = require( '../codex.js' );
 const { formatDate } = require( 'mediawiki.DateFormatter' );
-const { CommunityRequestsStatuses } = require( '../common/config.json' );
+const { CommunityRequestsStatuses, CommunityRequestsWishPagePrefix } = require( '../common/config.json' );
 const api = new mw.Api();
 
 /**
@@ -253,7 +256,10 @@ module.exports = exports = defineComponent( {
 				action: 'query',
 				format: 'json',
 				list: 'communityrequests-wishes',
-				crwprop: columns.value.map( ( column ) => column.id ).join( '|' ),
+				crwprop: columns.value
+					.map( ( column ) => column.id )
+					.concat( [ 'baselang' ] )
+					.join( '|' ),
 				crwlang: props.lang,
 				crwsort: apiSort.value,
 				crwdir: apiDir.value,
@@ -280,6 +286,10 @@ module.exports = exports = defineComponent( {
 			}
 
 			pending.value = false;
+
+			// Fire the wikipage.content hook to trigger dynamic updates, such as MinT translations.
+			await nextTick();
+			mw.hook( 'wikipage.content' ).fire( mw.util.$content.find( '#mw-content-text' ) );
 		}
 
 		/**
@@ -346,6 +356,27 @@ module.exports = exports = defineComponent( {
 				'notice';
 		}
 
+		/**
+		 * Get the appropriate `lang` attribute for the wish title link.
+		 *
+		 * @param {Object} row
+		 * @return {string}
+		 */
+		function getLangAttr( row ) {
+			if ( row.baselang === props.lang ) {
+				return row.baselang;
+			}
+			const langCodeMatches = mw.Title.makeTitle( row.crwns, row.crwtitle )
+				.getPrefixedDb()
+				.slice( CommunityRequestsWishPagePrefix.length )
+				// Strip ID and trailing forward slash.
+				.match( /^[0-9]*\/(.*)$/ );
+			if ( langCodeMatches && langCodeMatches[ 1 ] ) {
+				return langCodeMatches[ 1 ];
+			}
+			return row.baselang;
+		}
+
 		fetchWishes();
 
 		return {
@@ -361,7 +392,8 @@ module.exports = exports = defineComponent( {
 			onUpdateSort,
 			onLoadMore,
 			wishStatus,
-			wishStatusStyle
+			wishStatusStyle,
+			getLangAttr
 		};
 	}
 } );

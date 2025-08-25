@@ -164,6 +164,7 @@ class ApiQueryWishes extends ApiQueryBase {
 					Wish::PARAM_VOTE_COUNT,
 					Wish::PARAM_CREATED,
 					Wish::PARAM_UPDATED,
+					Wish::PARAM_BASE_LANG,
 				],
 				ApiBase::PARAM_HELP_MSG_PER_VALUE => [
 					Wish::PARAM_STATUS => "$apiHelpMsgPrefix-prop-status",

@@ -209,6 +209,7 @@
 	"apihelp-query+communityrequests-wishes-paramvalue-prop-votecount": "Number of users who supported the wish",
 	"apihelp-query+communityrequests-wishes-paramvalue-prop-created": "Date and time the wish was created",
 	"apihelp-query+communityrequests-wishes-paramvalue-prop-updated": "Date and time the wish was last updated",
+	"apihelp-query+communityrequests-wishes-paramvalue-prop-baselang": "The base language of the wish from which translations are made",
 	"apihelp-query+communityrequests-wishes-paramvalue-sort-created": "Sort by creation date",
 	"apihelp-query+communityrequests-wishes-paramvalue-sort-updated": "Sort by last updated date",
 	"apihelp-query+communityrequests-wishes-paramvalue-sort-votecount": "Sort by number of supporters",
@@ -223,5 +224,6 @@
 	"grouppage-community-wishlist-manager": "mw:Special:MyLanguage/Help:Extension:CommunityRequests/Community Wishlist manager",
 	"communityrequests-cant-manually-edit": "Editing of this Community Wishlist page must be done using [[$1|the intake form]].",
 	"communityrequests-missing-wish": "This wish does not exist. You can [{{fullurl:{{#Special:Log}}|page={{FULLPAGENAMEE}}}} search the related logs] to find out where it went, or [[$1|create a new wish]].",
-	"communityrequests-missing-focus-area": "This focus area does not exist. You can [{{fullurl:{{#Special:Log}}|page={{FULLPAGENAMEE}}}} search the related logs] to find out where it went, or [[$1|create a new focus area]]."
+	"communityrequests-missing-focus-area": "This focus area does not exist. You can [{{fullurl:{{#Special:Log}}|page={{FULLPAGENAMEE}}}} search the related logs] to find out where it went, or [[$1|create a new focus area]].",
+	"communityrequests-wishlist-machine-translation": "Enable automatic machine translation in the [[$1|Community Wishlist]]."
 }

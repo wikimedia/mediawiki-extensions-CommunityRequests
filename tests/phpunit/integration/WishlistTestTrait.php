@@ -163,7 +163,10 @@ trait WishlistTestTrait {
 	 *
 	 * This method should be called after inserting a test wish that contains translatable content.
 	 */
-	public function markForTranslation( Title $title ): void {
+	public function markForTranslation( Title|string $title ): void {
+		if ( is_string( $title ) ) {
+			$title = Title::newFromText( $title );
+		}
 		/** @var TranslatablePageMarker $transPageMarker */
 		$transPageMarker = $this->getServiceContainer()->get( 'Translate:TranslatablePageMarker' );
 

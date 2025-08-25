@@ -275,7 +275,9 @@ abstract class AbstractWishlistStore {
 		$entities = $this->getEntitiesFromDbResultInternal(
 			$select->fetchResultSet(),
 			$lang,
-			$fetchWikitext
+			$fetchWikitext,
+			$sort,
+			$orderPrecedence,
 		);
 		return array_slice( $entities, 0, $limit );
 	}
@@ -286,7 +288,7 @@ abstract class AbstractWishlistStore {
 	 * This method is also responsible for fetching any associated data.
 	 *
 	 * @param IReadableDatabase $dbr The database connection.
-	 * @param array $rows The DB rows containing static::fields().
+	 * @param array $rows Sorted DB rows containing static::fields().
 	 * @param array $entityDataByPage DB rows grouped by page ID and language.
 	 * @return AbstractWishlistEntity[]
 	 */
@@ -309,8 +311,10 @@ abstract class AbstractWishlistStore {
 	 */
 	private function getEntitiesFromDbResultInternal(
 		IResultWrapper $resultWrapper,
-		?string $lang = null,
+		?string $lang,
 		int $fetchWikitext = self::FETCH_WIKITEXT_NONE,
+		string $sort = self::SORT_DESC,
+		array $orderPrecedence = [],
 	): array {
 		$fallbackLangs = $lang === null ? [] : array_unique( [
 			$lang,
@@ -364,6 +368,19 @@ abstract class AbstractWishlistStore {
 			}
 
 			$rows[] = $row;
+		}
+
+		// Re-sort $rows to match the original order of the result set.
+		if ( $orderPrecedence ) {
+			usort( $rows, static function ( $a, $b ) use ( $orderPrecedence, $sort ) {
+				$sorterArrayA = array_map( static fn ( $field ) => $a->$field, $orderPrecedence );
+				$sorterArrayB = array_map( static fn ( $field ) => $b->$field, $orderPrecedence );
+				$comparison = $sorterArrayA <=> $sorterArrayB;
+				if ( $comparison !== 0 ) {
+					return $sort === self::SORT_DESC ? -$comparison : $comparison;
+				}
+				return 0;
+			} );
 		}
 
 		return $this->getEntitiesFromDbResult(

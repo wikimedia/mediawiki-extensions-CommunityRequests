@@ -116,9 +116,17 @@ class ApiQueryWishesTest extends ApiTestCase {
 			'title' => 'Test Wish A',
 			'created' => '2023-11-01T00:00:00Z',
 		] );
-		$this->createTestWishWithApi( [
-			'title' => 'Test Wish B',
+		// Make Wish B translatable.
+		$wishBPage = $this->createTestWishWithApi( [
+			'title' => '<translate>Test Wish B</translate>',
 			'created' => '2023-12-01T00:00:00Z',
+		] )['wishedit']['wish'];
+		$this->markForTranslation( $wishBPage );
+		// Insert a translation for wish B, to ensure sorting still works correctly.
+		$this->insertTestWish( $wishBPage, 'fr', [
+			// Would normally come before "Test Wish A".
+			Wish::PARAM_TITLE => 'A French translation',
+			Wish::PARAM_BASE_LANG => 'en',
 		] );
 		$this->createTestWishWithApi( [
 			'title' => 'Test Wish C',
@@ -130,11 +138,12 @@ class ApiQueryWishesTest extends ApiTestCase {
 			'list' => 'communityrequests-wishes',
 			'crwsort' => 'title',
 			'crwdir' => 'ascending',
-			'crwlang' => 'en',
+			'crwlang' => 'fr',
+			'crlimit' => 3,
 		] );
 		$this->assertCount( 3, $ret['query'][$queryKey] );
-		$this->assertSame( 'Test Wish A', $ret['query'][$queryKey][0]['title'] );
-		$this->assertSame( 'Test Wish B', $ret['query'][$queryKey][1]['title'] );
+		$this->assertSame( 'A French translation', $ret['query'][$queryKey][0]['title'] );
+		$this->assertSame( 'Test Wish A', $ret['query'][$queryKey][1]['title'] );
 		$this->assertSame( 'Test Wish C', $ret['query'][$queryKey][2]['title'] );
 
 		[ $ret ] = $this->doApiRequest( [
@@ -142,12 +151,12 @@ class ApiQueryWishesTest extends ApiTestCase {
 			'list' => 'communityrequests-wishes',
 			'crwsort' => 'title',
 			'crwdir' => 'descending',
-			'crwlang' => 'en',
+			'crwlang' => 'fr',
 		] );
 		$this->assertCount( 3, $ret['query'][$queryKey] );
 		$this->assertSame( 'Test Wish C', $ret['query'][$queryKey][0]['title'] );
-		$this->assertSame( 'Test Wish B', $ret['query'][$queryKey][1]['title'] );
-		$this->assertSame( 'Test Wish A', $ret['query'][$queryKey][2]['title'] );
+		$this->assertSame( 'Test Wish A', $ret['query'][$queryKey][1]['title'] );
+		$this->assertSame( 'A French translation', $ret['query'][$queryKey][2]['title'] );
 	}
 
 	public function testExecuteWithContinue(): void {

@@ -233,6 +233,10 @@ abstract class AbstractWishlistStore {
 			default => [ static::titleField(), static::createdField(), static::voteCountField() ],
 		};
 
+		$sortDir = in_array( strtolower( $sort ), [ 'descending', 'desc' ] ) ?
+				static::SORT_DESC :
+				static::SORT_ASC;
+
 		$select = $dbr->newSelectQueryBuilder()
 			->caller( __METHOD__ )
 			->table( static::tableName() )
@@ -246,10 +250,7 @@ abstract class AbstractWishlistStore {
 				static::translationLangField() => $langs,
 				static::translationLangField() . '=' . static::baseLangField()
 			], $dbr::LIST_OR ) )
-			->orderBy(
-				$orderPrecedence,
-				$sort === static::SORT_DESC ? static::SORT_DESC : static::SORT_ASC
-			)
+			->orderBy( $orderPrecedence, $sortDir )
 			// Leave room for the fallback languages.
 			->limit( $limit * ( count( $langs ) + 1 ) );
 
@@ -268,7 +269,7 @@ abstract class AbstractWishlistStore {
 			}
 
 			$select->andWhere(
-				$dbr->buildComparison( $sort === static::SORT_DESC ? '<=' : '>=', $conds )
+				$dbr->buildComparison( $sortDir === static::SORT_DESC ? '<=' : '>=', $conds )
 			);
 		}
 
@@ -276,7 +277,7 @@ abstract class AbstractWishlistStore {
 			$select->fetchResultSet(),
 			$lang,
 			$fetchWikitext,
-			$sort,
+			$sortDir,
 			$orderPrecedence,
 		);
 		return array_slice( $entities, 0, $limit );

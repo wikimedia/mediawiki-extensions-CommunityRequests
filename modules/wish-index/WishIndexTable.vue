@@ -172,7 +172,11 @@ module.exports = exports = defineComponent( {
 		 *
 		 * @type {Ref<TableSort>}
 		 */
-		const tableSort = ref( { [ props.sort ]: props.dir === 'ascending' ? 'asc' : 'desc' } );
+		const tableSort = ref( { [ props.sort ]:
+			[ 'ascending', 'asc' ].includes( props.dir.toLowerCase() ) ?
+				'asc' :
+				'desc'
+		} );
 
 		/**
 		 * The direction of the pagination.

@@ -187,146 +187,44 @@ class WishlistConfig {
 	/**
 	 * Check if the given PageReference could be a wish page based on its title.
 	 *
-	 * @param ?PageReference $identity
+	 * @param ?PageReference $reference
 	 * @return bool
 	 */
-	public function isWishPage( ?PageReference $identity ): bool {
-		return $this->titleStartsWith( $identity, $this->wishPagePrefix );
+	public function isWishPage( ?PageReference $reference ): bool {
+		return $this->isEntityPage( $reference, $this->wishPagePrefix );
 	}
 
 	/**
 	 * Check if the given PageReference could be a focus area page based on its title.
 	 *
-	 * @param ?PageReference $identity
+	 * @param ?PageReference $reference
 	 * @return bool
 	 */
-	public function isFocusAreaPage( ?PageReference $identity ): bool {
-		return $this->titleStartsWith( $identity, $this->focusAreaPagePrefix );
+	public function isFocusAreaPage( ?PageReference $reference ): bool {
+		return $this->isEntityPage( $reference, $this->focusAreaPagePrefix );
 	}
 
 	/**
 	 * Check if the given PageReference could be a wish or focus area page based on its title.
 	 *
-	 * @param ?PageReference $identity
+	 * @param ?PageReference $reference
 	 * @return bool
 	 */
-	public function isWishOrFocusAreaPage( ?PageReference $identity ): bool {
-		return $this->isWishPage( $identity ) || $this->isFocusAreaPage( $identity );
+	public function isWishOrFocusAreaPage( ?PageReference $reference ): bool {
+		return $this->isWishPage( $reference ) || $this->isFocusAreaPage( $reference );
 	}
 
-	/**
-	 * Check if the given PageReference could be a votes page based on its title.
-	 *
-	 * @param ?PageReference $identity
-	 * @return bool
-	 */
-	public function isVotesPage( ?PageReference $identity ): bool {
-		if ( $identity === null ) {
-			return false;
-		}
-
-		$identityStr = $this->titleFormatter->getPrefixedDBkey( $identity );
-		$pageSuffix = $this->titleParser->parseTitle( $this->votesPageSuffix );
-		$pageSuffixStr = $this->titleFormatter->getPrefixedDBkey( $pageSuffix );
-
-		return str_ends_with( $identityStr, $pageSuffixStr );
-	}
-
-	/**
-	 * Get the entity page reference from a votes page reference.
-	 *
-	 * @param ?PageReference $identity
-	 * @return ?PageReference
-	 */
-	public function getEntityPageRefFromVotesPage( ?PageReference $identity ): ?PageReference {
-		if ( $identity === null ) {
-			return null;
-		}
-
-		$identityStr = $this->titleFormatter->getPrefixedDBkey( $identity );
-		$votesPageSuffixStr = $this->titleFormatter->getPrefixedDBkey(
-			$this->titleParser->parseTitle( $this->votesPageSuffix )
-		);
-
-		if ( !str_ends_with( $identityStr, $votesPageSuffixStr ) ) {
-			return null;
-		}
-
-		// Remove the votes page suffix.
-		$entityPageStr = $this->titleParser->parseTitle(
-			substr( $identityStr, 0, -strlen( $votesPageSuffixStr ) )
-		);
-		return PageReferenceValue::localReference( $entityPageStr->getNamespace(), $entityPageStr->getDBkey() );
-	}
-
-	/**
-	 * Get a page reference for the canonical entity (no language suffix)
-	 * given an entity page or translation subpage.
-	 *
-	 * @param ?PageReference $identity
-	 * @return ?PageReference null if the identity is null or not a valid translation subpage,
-	 *   or the canonical page is not a wish or focus area page.
-	 */
-	public function getCanonicalEntityPageRef( ?PageReference $identity ): ?PageReference {
-		if ( $identity === null ) {
-			return null;
-		}
-
-		$parts = explode( '/', $identity->getDBkey() );
-		$lastPart = end( $parts );
-		if ( $this->languageNameUtils->isKnownLanguageTag( $lastPart ) ) {
-			array_pop( $parts );
-			$entityPageStr = implode( '/', $parts );
-			try {
-				$entityPage = $this->titleParser->parseTitle( $entityPageStr, $identity->getNamespace() );
-			} catch ( MalformedTitleException ) {
-				return null;
-			}
-			$identity = PageReferenceValue::localReference( $entityPage->getNamespace(), $entityPage->getDBkey() );
-		}
-
-		return $this->isWishOrFocusAreaPage( $identity ) ? $identity : null;
-	}
-
-	/**
-	 * Check if the given PageReference is the wish index page.
-	 *
-	 * @param ?PageReference $identity
-	 * @return bool
-	 */
-	public function isWishIndexPage( ?PageReference $identity ): bool {
-		if ( $identity === null ) {
-			return false;
-		}
-		$indexStr = $this->titleFormatter->getPrefixedDBkey(
-			$this->titleParser->parseTitle( $this->wishIndexPage )
-		);
-		$identityStr = $this->titleFormatter->getPrefixedDBkey( $identity );
-		if ( $identityStr === $indexStr ) {
-			return true;
-		}
-		// Check if the identity starts with the index page, followed by a slash and a language code.
-		if ( str_starts_with( $identityStr, $indexStr ) ) {
-			$remaining = substr( $identityStr, strlen( $indexStr ) );
-			// Remove leading slash.
-			$remaining = ltrim( $remaining, '/' );
-			// Check if the remaining part is a language code.
-			return $this->languageNameUtils->isKnownLanguageTag( $remaining );
-		}
-		return false;
-	}
-
-	private function titleStartsWith( ?PageReference $identity, string $prefix ): bool {
-		if ( $identity === null ) {
+	private function isEntityPage( ?PageReference $reference, string $prefix ): bool {
+		if ( $reference === null ) {
 			return false;
 		}
 		$pagePrefix = $this->titleParser->parseTitle( $prefix );
 
-		$identityStr = $this->titleFormatter->getPrefixedDBkey( $identity );
+		$referenceStr = $this->titleFormatter->getPrefixedDBkey( $reference );
 		$pagePrefixStr = $this->titleFormatter->getPrefixedDBkey( $pagePrefix );
-		$remaining = substr( $identityStr, strlen( $pagePrefixStr ) );
+		$remaining = substr( $referenceStr, strlen( $pagePrefixStr ) );
 
-		$hasPrefix = str_starts_with( $identityStr, $pagePrefixStr );
+		$hasPrefix = str_starts_with( $referenceStr, $pagePrefixStr );
 		if ( $hasPrefix && is_numeric( $remaining ) ) {
 			return true;
 		} elseif ( !$hasPrefix ) {
@@ -344,26 +242,154 @@ class WishlistConfig {
 		$remaining = ltrim( $remaining, '/' );
 
 		// Check if the $remaining is a valid language code.
-		return $remaining !== ltrim( $this->votesPageSuffix, '/' ) &&
-			$this->languageNameUtils->isKnownLanguageTag( $remaining );
+		return $this->languageNameUtils->isKnownLanguageTag( $remaining );
+	}
+
+	/**
+	 * Check if the given PageReference could be a votes page based on its title.
+	 *
+	 * @param ?PageReference $reference
+	 * @return bool
+	 */
+	public function isVotesPage( ?PageReference $reference ): bool {
+		if ( $reference === null ) {
+			return false;
+		}
+
+		$referenceStr = $this->titleFormatter->getPrefixedDBkey( $reference );
+		$pageSuffix = $this->titleParser->parseTitle( $this->votesPageSuffix );
+		$pageSuffixStr = $this->titleFormatter->getPrefixedDBkey( $pageSuffix );
+
+		if ( !str_ends_with( $referenceStr, $pageSuffixStr ) ) {
+			return false;
+		}
+
+		$entityPageStr = substr( $referenceStr, 0, -strlen( $pageSuffixStr ) );
+		$entityPageRef = PageReferenceValue::localReference( $reference->getNamespace(), $entityPageStr );
+		$canonicalEntityPageRef = $this->getCanonicalEntityPageRef( $entityPageRef );
+		return $canonicalEntityPageRef && $entityPageRef->isSamePageAs( $canonicalEntityPageRef );
+	}
+
+	/**
+	 * Get the entity page reference from a votes page reference.
+	 *
+	 * @param ?PageReference $reference
+	 * @return ?PageReference
+	 */
+	public function getEntityPageRefFromVotesPage( ?PageReference $reference ): ?PageReference {
+		if ( $reference === null || !$this->isVotesPage( $reference ) ) {
+			return null;
+		}
+
+		$referenceStr = $this->titleFormatter->getPrefixedDBkey( $reference );
+		$votesPageSuffixStr = $this->titleFormatter->getPrefixedDBkey(
+			$this->titleParser->parseTitle( $this->votesPageSuffix )
+		);
+
+		// Remove the votes page suffix.
+		$entityPageStr = $this->titleParser->parseTitle(
+			substr( $referenceStr, 0, -strlen( $votesPageSuffixStr ) )
+		);
+		return PageReferenceValue::localReference( $entityPageStr->getNamespace(), $entityPageStr->getDBkey() );
+	}
+
+	/**
+	 * Get a page reference for the canonical entity (no language suffix)
+	 * given an entity page or translation subpage.
+	 *
+	 * @param ?PageReference $reference
+	 * @return ?PageReference null if the reference is null or not a valid translation subpage,
+	 *   or the canonical page is not a wish or focus area page.
+	 */
+	public function getCanonicalEntityPageRef( ?PageReference $reference ): ?PageReference {
+		if ( $reference === null ) {
+			return null;
+		}
+
+		$parts = explode( '/', $reference->getDBkey() );
+		$lastPart = end( $parts );
+		if ( $this->languageNameUtils->isKnownLanguageTag( $lastPart ) ) {
+			array_pop( $parts );
+			$entityPageStr = implode( '/', $parts );
+			try {
+				$entityPage = $this->titleParser->parseTitle( $entityPageStr, $reference->getNamespace() );
+			} catch ( MalformedTitleException ) {
+				return null;
+			}
+			$reference = PageReferenceValue::localReference( $entityPage->getNamespace(), $entityPage->getDBkey() );
+		}
+
+		return $this->isWishOrFocusAreaPage( $reference ) ? $reference : null;
+	}
+
+	/**
+	 * Check if the given PageReference is the wish index page.
+	 *
+	 * @param ?PageReference $reference
+	 * @return bool
+	 */
+	public function isWishIndexPage( ?PageReference $reference ): bool {
+		return $this->isIndexPage( $reference, $this->wishIndexPage );
+	}
+
+	/**
+	 * Check if the given PageReference is the focus area index page.
+	 *
+	 * @param ?PageReference $reference
+	 * @return bool
+	 */
+	public function isFocusAreaIndexPage( ?PageReference $reference ): bool {
+		return $this->isIndexPage( $reference, $this->focusAreaIndexPage );
+	}
+
+	/**
+	 * Check if the given PageReference is either the wish or focus area index page.
+	 *
+	 * @param ?PageReference $reference
+	 * @return bool
+	 */
+	public function isWishOrFocusAreaIndexPage( ?PageReference $reference ): bool {
+		return $this->isWishIndexPage( $reference ) || $this->isFocusAreaIndexPage( $reference );
+	}
+
+	private function isIndexPage( ?PageReference $reference, string $prefix ): bool {
+		if ( $reference === null ) {
+			return false;
+		}
+		$indexStr = $this->titleFormatter->getPrefixedDBkey(
+			$this->titleParser->parseTitle( $prefix )
+		);
+		$referenceStr = $this->titleFormatter->getPrefixedDBkey( $reference );
+		if ( $referenceStr === $indexStr ) {
+			return true;
+		}
+		// Check if the reference starts with the index page, followed by a slash and a language code.
+		if ( str_starts_with( $referenceStr, $indexStr ) ) {
+			$remaining = substr( $referenceStr, strlen( $indexStr ) );
+			// Remove leading slash.
+			$remaining = ltrim( $remaining, '/' );
+			// Check if the remaining part is a language code.
+			return $this->languageNameUtils->isKnownLanguageTag( $remaining );
+		}
+		return false;
 	}
 
 	/**
 	 * Get the wish or focus area display ID given a PageReference.
 	 *
-	 * @param ?PageReference $identity
+	 * @param ?PageReference $reference
 	 * @return ?string The display ID, e.g. "W1" or "FA1".
 	 */
-	public function getEntityWikitextVal( ?PageReference $identity ): ?string {
-		if ( !$identity || !$this->isWishOrFocusAreaPage( $identity ) ) {
+	public function getEntityWikitextVal( ?PageReference $reference ): ?string {
+		if ( !$reference || !$this->isWishOrFocusAreaPage( $reference ) ) {
 			return null;
 		}
-		$fullPrefix = $this->isWishPage( $identity ) ? $this->wishPagePrefix : $this->focusAreaPagePrefix;
-		$identityStr = $this->titleFormatter->getPrefixedDBkey( $identity );
+		$fullPrefix = $this->isWishPage( $reference ) ? $this->wishPagePrefix : $this->focusAreaPagePrefix;
+		$referenceStr = $this->titleFormatter->getPrefixedDBkey( $reference );
 		$slashPos = strrpos( $fullPrefix, '/' );
 		$shortPrefix = $slashPos === false
 			? $fullPrefix : substr( $fullPrefix, $slashPos + 1 );
-		$remaining = substr( $identityStr, strlen( $fullPrefix ) );
+		$remaining = substr( $referenceStr, strlen( $fullPrefix ) );
 		// Ignore subpages.
 		$remaining = explode( '/', $remaining )[0];
 		return $shortPrefix . preg_replace( '/^[^0-9]*/', '', $remaining );

@@ -155,7 +155,14 @@ class WishlistConfigTest extends MediaWikiUnitTestCase {
 		);
 	}
 
-	public function testIsWishIndexPage(): void {
+	public function testIsWishOrFocusAreaIndexPage(): void {
+		$this->assertTrue(
+			$this->config->isWishOrFocusAreaIndexPage( $this->makeMockTitle( 'Community Wishlist/Wishes' ) )
+		);
+		$this->assertTrue(
+			$this->config->isWishOrFocusAreaIndexPage( $this->makeMockTitle( 'Community Wishlist/Focus areas' ) )
+		);
+
 		$this->assertTrue( $this->config->isWishIndexPage( $this->makeMockTitle( 'Community Wishlist/Wishes' ) ) );
 		$this->assertTrue( $this->config->isWishIndexPage( $this->makeMockTitle( 'Community Wishlist/Wishes/fr' ) ) );
 		$this->assertFalse(
@@ -165,7 +172,22 @@ class WishlistConfigTest extends MediaWikiUnitTestCase {
 			$this->config->isWishIndexPage( $this->makeMockTitle( 'Community Wishlist/Wishes/b-o-g-u-s' ) )
 		);
 		$this->assertFalse(
-			$this->config->isWishIndexPage( $this->makeMockTitle( 'Community Wishlist/Wishes/W123' ) )
+			$this->config->isWishIndexPage( $this->makeMockTitle( 'Community Wishlist/W123/Wishes' ) )
+		);
+		$this->assertTrue(
+			$this->config->isFocusAreaIndexPage( $this->makeMockTitle( 'Community Wishlist/Focus areas' ) )
+		);
+		$this->assertTrue(
+			$this->config->isFocusAreaIndexPage( $this->makeMockTitle( 'Community Wishlist/Focus areas/fr' ) )
+		);
+		$this->assertFalse(
+			$this->config->isFocusAreaIndexPage( $this->makeMockTitle( 'Community Wishlist/Focus areas/fr-fake' ) )
+		);
+		$this->assertFalse(
+			$this->config->isFocusAreaIndexPage( $this->makeMockTitle( 'Community Wishlist/Focus areas/b-o-g-u-s' ) )
+		);
+		$this->assertFalse(
+			$this->config->isFocusAreaIndexPage( $this->makeMockTitle( 'Community Wishlist/FA123/Focus areas' ) )
 		);
 	}
 
@@ -271,5 +293,14 @@ class WishlistConfigTest extends MediaWikiUnitTestCase {
 			)
 		);
 		$this->assertNull( $this->config->getCanonicalEntityPageRef( null ) );
+	}
+
+	public function testIsVotesPage(): void {
+		$this->assertTrue( $this->config->isVotesPage( $this->makeMockTitle( 'Community Wishlist/W123/Votes' ) ) );
+		$this->assertTrue( $this->config->isVotesPage( $this->makeMockTitle( 'Community Wishlist/FA123/Votes' ) ) );
+		$this->assertFalse( $this->config->isVotesPage( $this->makeMockTitle( 'Community Wishlist/W123/Votes/fr' ) ) );
+		$this->assertFalse( $this->config->isVotesPage( $this->makeMockTitle( 'Community Wishlist/W123/fr/Votes' ) ) );
+		$this->assertFalse( $this->config->isVotesPage( $this->makeMockTitle( 'Community Wishlist/W123' ) ) );
+		$this->assertFalse( $this->config->isVotesPage( $this->makeMockTitle( 'Community Wishlist/Votes' ) ) );
 	}
 }

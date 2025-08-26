@@ -544,6 +544,7 @@
 				"under-review": {
 					"id": 0,
 					"label": "communityrequests-status-under-review",
+					"voting": false,
 					"default": true
 				},
 				"unsupported": {

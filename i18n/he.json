@@ -123,7 +123,7 @@
 	"communityrequests-focus-area-owners": "בעלים",
 	"communityrequests-focus-area-volunteers": "חברי הקהילה",
 	"communityrequests-focus-area-voting": "הצבעה",
-	"communityrequests-focus-area-voting-info": "לתחום הזה יש כרגע\n'''{{PLURAL:$2|תומך אחד|$1 תומכים}}'''.\nהצבעה בעד התחום הזה פתוחה עד להשלמתה.\n{{GENDER:|תביע|תביעי}} את תמיכתך באמצעות הכפתור למטה.",
+	"communityrequests-focus-area-voting-info": "לתחום המיקוד הזה יש כרגע\n'''{{PLURAL:$2|תומך אחד|$1 תומכים}}'''.",
 	"communityrequests-focus-area-voting-not-logged-in": "נא להיכנס לחשבון כדי לתמוך בתחום המיקוד הזה",
 	"communityrequests-focus-area-voters-heading": "תומכי התחום הזה",
 	"communityrequests-focus-area-no-votes": "עדיין אין תומכים.",

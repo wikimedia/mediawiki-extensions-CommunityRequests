@@ -5,6 +5,7 @@ namespace MediaWiki\Extension\CommunityRequests\Tests\Integration;
 
 use MediaWiki\Api\ApiUsageException;
 use MediaWiki\Extension\CommunityRequests\AbstractWishlistStore;
+use MediaWiki\Extension\CommunityRequests\HookHandler\CommunityRequestsHooks;
 use MediaWiki\MainConfigNames;
 use MediaWiki\Tests\Api\ApiTestCase;
 use MediaWiki\Title\Title;
@@ -46,6 +47,7 @@ class ApiWishEditTest extends ApiTestCase {
 		}
 
 		// Make the request.
+		CommunityRequestsHooks::$allowManualEditing = true;
 		[ $ret ] = $this->doApiRequestWithToken( $params );
 
 		// If we were asserting an error, we're done.

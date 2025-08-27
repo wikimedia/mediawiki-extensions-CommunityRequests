@@ -29,10 +29,13 @@ use MediaWiki\Hook\ParserAfterTidyHook;
 use MediaWiki\Hook\ParserFirstCallInitHook;
 use MediaWiki\Hook\RecentChange_saveHook;
 use MediaWiki\Hook\SkinTemplateNavigation__UniversalHook;
+use MediaWiki\Html\Html;
 use MediaWiki\Linker\LinkRenderer;
 use MediaWiki\Logging\ManualLogEntry;
 use MediaWiki\MainConfigNames;
 use MediaWiki\Output\Hook\BeforePageDisplayHook;
+use MediaWiki\Page\Article;
+use MediaWiki\Page\Hook\BeforeDisplayNoArticleTextHook;
 use MediaWiki\Page\PageIdentity;
 use MediaWiki\Page\ProperPageIdentity;
 use MediaWiki\Parser\Parser;
@@ -66,7 +69,8 @@ class CommunityRequestsHooks implements
 	RevisionDataUpdatesHook,
 	SkinTemplateNavigation__UniversalHook,
 	ParserAfterTidyHook,
-	GetUserPermissionsErrorsExpensiveHook
+	GetUserPermissionsErrorsExpensiveHook,
+	BeforeDisplayNoArticleTextHook
 {
 
 	public const WISHLIST_CHANGE_TAG = 'community-wishlist';
@@ -376,6 +380,13 @@ class CommunityRequestsHooks implements
 			return;
 		}
 
+		// If the page doesn't exist, don't show any edit tabs. We do this even for privileged users,
+		// as manual creation of entity pages could cause data integrity issues.
+		if ( !$sktemplate->getTitle()->exists() ) {
+			unset( $links['views']['edit'], $links['views']['ve-edit'] );
+			return;
+		}
+
 		$tabs = $links['views'];
 
 		// Remove existing "Edit" tabs unless the user has the 'manually-edit-wishlist' right.
@@ -492,7 +503,7 @@ class CommunityRequestsHooks implements
 			return true;
 		}
 
-		if ( !$this->permissionManager->userHasRight( $user, 'manually-edit-wishlist' ) ) {
+		if ( !$this->permissionManager->userHasRight( $user, 'manually-edit-wishlist' ) || !$title->exists() ) {
 			$result = [
 				// Message instructing users to use the Special page form.
 				[
@@ -511,5 +522,42 @@ class CommunityRequestsHooks implements
 		}
 
 		return true;
+	}
+
+	/**
+	 * We implement this solely to replace the standard message that
+	 * is shown when an entity does not exist.
+	 *
+	 * @param Article $article
+	 * @return bool|void
+	 */
+	public function onBeforeDisplayNoArticleText( $article ) {
+		if ( !$this->config->isEnabled() ||
+			!$this->config->isWishOrFocusAreaPage( $article->getTitle() ) ||
+			$article->getOldID()
+		) {
+			return true;
+		}
+
+		$isWish = $this->config->isWishPage( $article->getTitle() );
+		$context = $article->getContext();
+		$text = $context->msg( 'communityrequests-missing-' . ( $isWish ? 'wish' : 'focus-area' ) )
+			->params( $this->specialPageFactory->getPage(
+					$isWish ? 'WishlistIntake' : 'EditFocusArea'
+				)->getPageTitle() )
+			->plain();
+		$dir = $context->getLanguage()->getDir();
+		$context->getOutput()
+			->addWikiTextAsInterface(
+				Html::openElement( 'div', [
+					'class' => "noarticletext mw-content-$dir",
+					'dir' => $dir,
+					'lang' => $context->getLanguage()->getHtmlCode(),
+				] ) .
+				$text .
+				Html::closeElement( 'div' )
+			);
+
+		return false;
 	}
 }

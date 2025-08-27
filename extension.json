@@ -63,7 +63,8 @@
 		"RevisionDataUpdates": "main",
 		"SkinTemplateNavigation::Universal": "main",
 		"ParserAfterTidy": "main",
-		"getUserPermissionsErrorsExpensive": "main"
+		"getUserPermissionsErrorsExpensive": "main",
+		"BeforeDisplayNoArticleText": "main"
 	},
 	"HookHandlers": {
 		"main": {

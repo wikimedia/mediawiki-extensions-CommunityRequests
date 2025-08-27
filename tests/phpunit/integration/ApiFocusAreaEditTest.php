@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 namespace MediaWiki\Extension\CommunityRequests\Tests\Integration;
 
 use MediaWiki\Api\ApiUsageException;
+use MediaWiki\Extension\CommunityRequests\HookHandler\CommunityRequestsHooks;
 use MediaWiki\Tests\Api\ApiTestCase;
 use MediaWiki\Title\Title;
 
@@ -34,6 +35,7 @@ class ApiFocusAreaEditTest extends ApiTestCase {
 		}
 
 		// Make the request.
+		CommunityRequestsHooks::$allowManualEditing = true;
 		[ $ret ] = $this->doApiRequestWithToken( $params, null, $this->getTestSysop()->getUser() );
 
 		// If we were asserting an error, we're done.

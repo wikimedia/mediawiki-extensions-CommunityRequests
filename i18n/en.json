@@ -220,5 +220,7 @@
 	"group-community-wishlist-manager": "Community Wishlist manager",
 	"group-community-wishlist-manager-member": "Community Wishlist manager",
 	"grouppage-community-wishlist-manager": "mw:Special:MyLanguage/Help:Extension:CommunityRequests/Community Wishlist manager",
-	"communityrequests-cant-manually-edit": "Editing of this Community Wishlist page must be done using [[$1|the intake form]]."
+	"communityrequests-cant-manually-edit": "Editing of this Community Wishlist page must be done using [[$1|the intake form]].",
+	"communityrequests-missing-wish": "This wish does not exist. You can [{{fullurl:{{#Special:Log}}|page={{FULLPAGENAMEE}}}} search the related logs] to find out where it went, or [[$1|create a new wish]].",
+	"communityrequests-missing-focus-area": "This focus area does not exist. You can [{{fullurl:{{#Special:Log}}|page={{FULLPAGENAMEE}}}} search the related logs] to find out where it went, or [[$1|create a new focus area]]."
 }

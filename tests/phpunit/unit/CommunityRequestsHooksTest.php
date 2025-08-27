@@ -3,8 +3,10 @@ declare( strict_types = 1 );
 
 namespace MediaWiki\Extension\CommunityRequests\Tests\Unit;
 
+use Language;
 use MediaWiki\Config\HashConfig;
 use MediaWiki\Config\ServiceOptions;
+use MediaWiki\Context\RequestContext;
 use MediaWiki\Extension\CommunityRequests\EntityFactory;
 use MediaWiki\Extension\CommunityRequests\FocusArea\FocusAreaStore;
 use MediaWiki\Extension\CommunityRequests\HookHandler\CommunityRequestsHooks;
@@ -13,6 +15,7 @@ use MediaWiki\Extension\CommunityRequests\WishlistConfig;
 use MediaWiki\Language\LanguageNameUtils;
 use MediaWiki\Linker\LinkRenderer;
 use MediaWiki\MainConfigNames;
+use MediaWiki\Page\Article;
 use MediaWiki\Parser\Parser;
 use MediaWiki\Parser\ParserOutput;
 use MediaWiki\Permissions\PermissionManager;
@@ -30,6 +33,7 @@ use MediaWiki\Title\TitleParser;
 use MediaWiki\User\User;
 use MediaWikiUnitTestCase;
 use MockTitleTrait;
+use OutputPage;
 use Psr\Log\NullLogger;
 
 /**
@@ -88,9 +92,9 @@ class CommunityRequestsHooksTest extends MediaWikiUnitTestCase {
 	}
 
 	/**
-	 * @dataProvider provideEditWithFormTab
+	 * @dataProvider provideUpdateEditLinks
 	 */
-	public function testEditWithFormTab(
+	public function testUpdateEditLinks(
 		array $opts = [],
 		array $expectedTabs = []
 	): void {
@@ -149,7 +153,7 @@ class CommunityRequestsHooksTest extends MediaWikiUnitTestCase {
 		$this->assertSame( $expectedTabs, array_keys( $links['views'] ) );
 	}
 
-	public function provideEditWithFormTab(): array {
+	public function provideUpdateEditLinks(): array {
 		return [
 			[
 				[],
@@ -280,6 +284,48 @@ class CommunityRequestsHooksTest extends MediaWikiUnitTestCase {
 				true,
 			]
 		];
+	}
+
+	public function testBeforeDisplayNoArticleText(): void {
+		$handler = $this->getHandler(
+			[
+				WishlistConfig::WISH_PAGE_PREFIX => 'Community Wishlist/Wishes/W',
+				WishlistConfig::FOCUS_AREA_PAGE_PREFIX => 'Community Wishlist/Focus areas/FA',
+			]
+		);
+		$testTitle = $this->makeMockTitle( 'Community Wishlist/Wishes/W9999' );
+		$language = $this->createNoOpMock( Language::class, [ 'getDir', 'getHtmlCode' ] );
+		$language->expects( $this->once() )
+			->method( 'getDir' )
+			->willReturn( 'ltr' );
+		$language->expects( $this->once() )
+			->method( 'getHtmlCode' )
+			->willReturn( 'en' );
+		$outputPage = $this->createNoOpMock( OutputPage::class, [ 'addWikiTextAsInterface' ] );
+		$outputPage->expects( $this->once() )
+			->method( 'addWikiTextAsInterface' );
+		$context = $this->createNoOpMock( RequestContext::class, [ 'getLanguage', 'getOutput', 'msg' ] );
+		$context->expects( $this->exactly( 2 ) )
+			->method( 'getLanguage' )
+			->willReturn( $language );
+		$context->expects( $this->once() )
+			->method( 'getOutput' )
+			->willReturn( $outputPage );
+		$context->expects( $this->once() )
+			->method( 'msg' )
+			->willReturnCallback( [ new FakeQqxMessageLocalizer(), 'msg' ] );
+		$article = $this->createNoOpMock( Article::class, [ 'getTitle', 'getOldID', 'getContext' ] );
+		$article->expects( $this->exactly( 2 ) )
+			->method( 'getTitle' )
+			->willReturn( $testTitle );
+		$article->expects( $this->once() )
+			->method( 'getOldID' )
+			->willReturn( 0 );
+		$article->expects( $this->once() )
+			->method( 'getContext' )
+			->willReturn( $context );
+
+		$handler->onBeforeDisplayNoArticleText( $article );
 	}
 
 	private function getHandler(

@@ -48,4 +48,40 @@ END;
 		$this->assertSame( 'A brief description of the focus area.', $focusArea->getShortDescription() );
 		$this->assertSame( '2023-10-01T12:00:00Z', $focusArea->getCreated() );
 	}
+
+	/**
+	 * @dataProvider provideTestTrackingCategories
+	 */
+	public function testTrackingCategories( string $wikitext, bool $shouldBeInCategory ): void {
+		$ret = $this->insertPage(
+			Title::newFromText( $this->config->getFocusAreaPagePrefix() . '123' ),
+			$wikitext,
+			NS_MAIN
+		);
+		$categories = array_keys( $ret['title']->getParentCategories() );
+		$this->assertContains( 'Category:Community_Wishlist/Focus_areas', $categories );
+		if ( $shouldBeInCategory ) {
+			$this->assertContains( 'Category:Pages_with_Community_Wishlist_errors', $categories );
+		} else {
+			$this->assertNotContains( 'Category:Pages_with_Community_Wishlist_errors', $categories );
+		}
+	}
+
+	// phpcs:disable Generic.Files.LineLength.TooLong
+	public static function provideTestTrackingCategories(): array {
+		return [
+			'valid focus area' => [
+				'{{#CommunityRequests: focus-area | title=Valid FA | status=under-review | created=2023-10-01T12:00:00Z | baselang=en | description=A valid FA}}',
+				false,
+			],
+			'missing title' => [
+				'{{#CommunityRequests: focus-area | status=under-review | created=2023-10-01T12:00:00Z | baselang=en }}',
+				true,
+			],
+			'unknown status' => [
+				'{{#CommunityRequests: focus-area | title=Invalid Status FA | status=bogus | created=2023-10-01T12:00:00Z | baselang=en | description=Unknown status}}',
+				true,
+			],
+		];
+	}
 }

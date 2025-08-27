@@ -21,7 +21,8 @@
 	},
 	"TrackingCategories": [
 		"communityrequests-error-category",
-		"communityrequests-wish-category"
+		"communityrequests-wish-category",
+		"communityrequests-focus-area-category"
 	],
 	"AutoloadClasses": {
 		"MediaWiki\\Extension\\CommunityRequests\\Maintenance\\NukeWishlist": "maintenance/nukeWishlist.php"

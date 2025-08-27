@@ -61,16 +61,18 @@ class MigrateFromGadget extends Maintenance {
 	private $areaIds;
 	/** @var User|null */
 	private $scriptUser;
+	/** @var array|null */
+	private $statusMappings;
+	/** @var Title|null */
+	private $currentTitle;
 
 	public function __construct() {
 		parent::__construct();
 
 		$this->addDescription( 'Migrate wishes and focus areas created by ' .
 			'the wishlist intake gadget to this extension' );
-
 		$this->addOption( 'dry-run',
 			'Dry run only, do not perform any action' );
-
 		$this->addOption( 'focus-areas',
 			'Migrate all focus areas' );
 		$this->addOption( 'focus-area',
@@ -79,7 +81,6 @@ class MigrateFromGadget extends Maintenance {
 		$this->addOption( 'focus-area-prefix',
 			'The title prefix for unmigrated focus areas',
 				false, true );
-
 		$this->addOption( 'wishes',
 			'Migrate all wishes' );
 		$this->addOption( 'wish',
@@ -87,6 +88,9 @@ class MigrateFromGadget extends Maintenance {
 			false, true );
 		$this->addOption( 'wish-prefix',
 			'The title prefix for unmigrated wish pages' );
+		$this->addOption( 'status-csv',
+			'Path to wishes status migration CSV file',
+			false, true );
 	}
 
 	private function initServices() {
@@ -104,6 +108,12 @@ class MigrateFromGadget extends Maintenance {
 
 	public function execute() {
 		$this->initServices();
+
+		// Check if status-csv is required
+		$processingWishes = $this->hasOption( 'wishes' ) || $this->hasOption( 'wish' );
+		if ( $processingWishes && !$this->hasOption( 'status-csv' ) ) {
+			$this->fatalError( "The --status-csv option is required when using --wishes or --wish\n" );
+		}
 
 		$timeRegex = "/^(\| *created *= *)([0-9]+:[0-9]+, [0-9]+ \w+ [0-9]{4} \(\w+\)).*$/m";
 		$focusAreaReplacements = [
@@ -132,7 +142,11 @@ class MigrateFromGadget extends Maintenance {
 			// Simplify proposer field
 			'proposer' => [
 				"/^\| *proposer *=.*(?i)\[\[User:([^|\]]+)(\||]]).*$/m",
-				'\| proposer = $1',
+				'| proposer = $1',
+			],
+			'tasks' => [
+				'/^(\| *tasks *= *)(.*)$/m',
+				'| phabtasks = $2',
 			],
 			// Created timestamp should be ISO-8601
 			'created' => [
@@ -149,6 +163,13 @@ class MigrateFromGadget extends Maintenance {
 					} else {
 						return $m[0];
 					}
+				},
+			],
+			// Set new status during migration
+			'status' => [
+				'/^(\| *status *= *)(.*)$/m',
+				function ( $m ) {
+					return $m[1] . $this->getNewStatus();
 				},
 			],
 			// Don't complain if the focus area was empty
@@ -228,6 +249,7 @@ class MigrateFromGadget extends Maintenance {
 		$titlesDone = [];
 		foreach ( $titleTexts as $titleText ) {
 			$title = Title::newFromText( $titleText );
+			$this->currentTitle = $title;
 			if ( str_starts_with( $titleText, $store->getPagePrefix() )
 				|| isset( $titlesDone[$titleText] )
 			) {
@@ -624,6 +646,67 @@ class MigrateFromGadget extends Maintenance {
 			}
 		}
 		return $this->scriptUser;
+	}
+
+	/**
+	 * Get the new status for a wish during migration
+	 * if status is not found return default status
+	 *
+	 * @return string The new status to set
+	 */
+	private function getNewStatus(): string {
+		$this->loadStatusMappings();
+		$mappingKey = $this->normalizeUrlForStatusMapping( $this->currentTitle->getPrefixedDBkey() );
+
+		$newStatus = $this->statusMappings[$mappingKey] ?? '';
+		if ( $newStatus ) {
+			return $newStatus;
+		}
+
+		print "No status mapping found for title: {$mappingKey}. Defaulting to under-review\n";
+		// set default status
+		return 'under-review';
+	}
+
+	/**
+	 * Load status mappings from CSV file
+	 */
+	private function loadStatusMappings(): void {
+		if ( $this->statusMappings !== null ) {
+			return;
+		}
+
+		$this->statusMappings = [];
+		$csvPath = $this->getOption( 'status-csv' );
+		if ( !file_exists( $csvPath ) ) {
+			$this->fatalError( "Status mapping CSV file not found at $csvPath\n" );
+		}
+
+		$handle = fopen( $csvPath, 'r' );
+		if ( !$handle ) {
+			$this->fatalError( "Could not open CSV file $csvPath\n" );
+		}
+
+		// Skip header row
+		$row = fgetcsv( $handle );
+		// @phan-suppress-next-line PhanPluginDuplicateAdjacentStatement
+		$row = fgetcsv( $handle );
+		while ( $row !== false ) {
+			if ( count( $row ) >= 2 && !empty( $row[0] ) ) {
+				$newStatus = trim( $row[1] ?? '' );
+				$mappingKey = $this->normalizeUrlForStatusMapping( trim( $row[0] ?? '' ) );
+				$this->statusMappings[$mappingKey] = str_replace( ' ', '-', strtolower( $newStatus ) );
+			}
+			$row = fgetcsv( $handle );
+		}
+		fclose( $handle );
+		print "Loaded " . count( $this->statusMappings ) . " status mappings from CSV\n";
+	}
+
+	private function normalizeUrlForStatusMapping( string $url ): string {
+		// Remove protocol and domain from URL to get just the page path
+		$mappingKey = preg_replace( '~^(?:https?://[^/]+)?/wiki/~', '', $url );
+		return urldecode( strtolower( $mappingKey ) );
 	}
 }
 

@@ -16,14 +16,14 @@ use Psr\Log\LoggerInterface;
 
 /**
  * @group CommunityRequests
- * @coversDefaultClass \MediaWiki\Extension\CommunityRequests\Wish\WishIndexRenderer
+ * @covers \MediaWiki\Extension\CommunityRequests\Wish\WishIndexRenderer
+ * @covers \MediaWiki\Extension\CommunityRequests\RendererFactory
  */
 class WishIndexRendererTest extends AbstractWishlistEntityTest {
 
 	use MockTitleTrait;
 
 	/**
-	 * @covers ::render
 	 * @dataProvider provideTestJsVars
 	 */
 	public function testJsVars( array $args, array $expectedJsVars ): void {

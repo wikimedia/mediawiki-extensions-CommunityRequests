@@ -12,7 +12,8 @@ use MediaWikiIntegrationTestCase;
 /**
  * @group CommunityRequests
  * @group Database
- * @coversDefaultClass \MediaWiki\Extension\CommunityRequests\Vote\VoteRenderer
+ * @covers \MediaWiki\Extension\CommunityRequests\Vote\VoteRenderer
+ * @covers \MediaWiki\Extension\CommunityRequests\RendererFactory
  */
 class VoteRendererTest extends MediaWikiIntegrationTestCase {
 	use WishlistTestTrait;
@@ -21,9 +22,6 @@ class VoteRendererTest extends MediaWikiIntegrationTestCase {
 		return $this->store;
 	}
 
-	/**
-	 * @covers ::render
-	 */
 	public function testCountVotesOnWishPage(): void {
 		$this->store = $this->getServiceContainer()->get( 'CommunityRequests.WishStore' );
 
@@ -37,9 +35,6 @@ class VoteRendererTest extends MediaWikiIntegrationTestCase {
 		$this->assertSame( 3, $wish->getVoteCount() );
 	}
 
-	/**
-	 * @covers ::render
-	 */
 	public function testCountVotesOnFocusAreaPage(): void {
 		$this->store = $this->getServiceContainer()->get( 'CommunityRequests.FocusAreaStore' );
 
@@ -53,9 +48,6 @@ class VoteRendererTest extends MediaWikiIntegrationTestCase {
 		$this->assertSame( 3, $focusArea->getVoteCount() );
 	}
 
-	/**
-	 * @covers ::render
-	 */
 	public function testUpdateVotesCount(): void {
 		$this->store = $this->getServiceContainer()->get( 'CommunityRequests.WishStore' );
 
@@ -79,9 +71,6 @@ class VoteRendererTest extends MediaWikiIntegrationTestCase {
 		$this->assertSame( 1, $wish->getVoteCount() );
 	}
 
-	/**
-	 * @covers ::render
-	 */
 	public function testWishUpdateShouldNotWipeCount(): void {
 		$this->store = $this->getServiceContainer()->get( 'CommunityRequests.WishStore' );
 
@@ -105,9 +94,6 @@ class VoteRendererTest extends MediaWikiIntegrationTestCase {
 		$this->assertSame( 5, $wish->getVoteCount() );
 	}
 
-	/**
-	 * @covers ::render
-	 */
 	public function testFocusAreaUpdateShouldNotWipeCount(): void {
 		$this->store = $this->getServiceContainer()->get( 'CommunityRequests.FocusAreaStore' );
 

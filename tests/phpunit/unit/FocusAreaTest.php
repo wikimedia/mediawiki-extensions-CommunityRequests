@@ -9,7 +9,7 @@ use MockTitleTrait;
 
 /**
  * @group CommunityRequests
- * @coversDefaultClass \MediaWiki\Extension\CommunityRequests\FocusArea\FocusArea
+ * @covers \MediaWiki\Extension\CommunityRequests\FocusArea\FocusArea
  */
 class FocusAreaTest extends AbstractWishlistEntityTest {
 
@@ -17,7 +17,6 @@ class FocusAreaTest extends AbstractWishlistEntityTest {
 	use MockAuthorityTrait;
 
 	/**
-	 * @covers ::toWikitext
 	 * @dataProvider provideToWikitext
 	 */
 	public function testToWikitext( array $focusAreaData, string $expectedWikitext ): void {
@@ -63,7 +62,6 @@ END
 	}
 
 	/**
-	 * @covers ::toArray
 	 * @dataProvider provideToArray
 	 */
 	public function testToArray( array $focusAreaData, array $expected ): void {
@@ -100,7 +98,6 @@ END
 	}
 
 	/**
-	 * @covers ::newFromWikitextParams
 	 * @dataProvider provideNewFromWikitextParams
 	 */
 	public function testNewFromWikitextParams( $wikitextParams, $expected ): void {

@@ -1,11 +1,16 @@
 <?php
+declare( strict_types = 1 );
+
+namespace MediaWiki\Extension\CommunityRequests\Tests\Integration;
 
 use MediaWiki\Exception\UserNotLoggedIn;
 use MediaWiki\Extension\CommunityRequests\Wish\SpecialWishlistIntake;
+use SpecialPageTestBase;
 
 /**
- * @coversDefaultClass \MediaWiki\Extension\CommunityRequests\Wish\SpecialWishlistIntake
  * @group Database
+ * @covers \MediaWiki\Extension\CommunityRequests\Wish\SpecialWishlistIntake
+ * @covers \MediaWiki\Extension\CommunityRequests\AbstractWishlistSpecialPage
  */
 class SpecialWishlistIntakeTest extends SpecialPageTestBase {
 	/**
@@ -15,9 +20,6 @@ class SpecialWishlistIntakeTest extends SpecialPageTestBase {
 		return $this->getServiceContainer()->getSpecialPageFactory()->getPage( 'WishlistIntake' );
 	}
 
-	/**
-	 * @covers \MediaWiki\Extension\CommunityRequests\AbstractWishlistSpecialPage::addResourceLoaderMessages
-	 */
 	public function testGetMessages(): void {
 		$this->overrideConfigValues( [
 			'CommunityRequestsWishTypes' => [
@@ -63,17 +65,11 @@ class SpecialWishlistIntakeTest extends SpecialPageTestBase {
 		], $actual->getMessages(), true, true );
 	}
 
-	/**
-	 * @covers ::execute
-	 */
 	public function testLoggedOut(): void {
 		$this->expectException( UserNotLoggedIn::class );
 		$this->executeSpecialPage();
 	}
 
-	/**
-	 * @covers ::execute
-	 */
 	public function testNotFound(): void {
 		[ $html ] = $this->executeSpecialPage( '12345', null, null, $this->getTestUser()->getAuthority() );
 		$this->assertStringContainsString(

@@ -8,7 +8,7 @@ use MediaWiki\Tests\Maintenance\MaintenanceBaseTestCase;
 use MediaWiki\Title\Title;
 
 /**
- * @coversDefaultClass \MediaWiki\Extension\CommunityRequests\Maintenance\NukeWishlist
+ * @covers \MediaWiki\Extension\CommunityRequests\Maintenance\NukeWishlist
  * @group Database
  */
 class NukeWishlistTest extends MaintenanceBaseTestCase {
@@ -17,9 +17,6 @@ class NukeWishlistTest extends MaintenanceBaseTestCase {
 		return NukeWishlist::class;
 	}
 
-	/**
-	 * @covers ::execute
-	 */
 	public function testExecuteWithNoEntitiesOrPages(): void {
 		$this->newSelectQueryBuilder()
 			->select( 'COUNT(*)' )
@@ -34,9 +31,6 @@ class NukeWishlistTest extends MaintenanceBaseTestCase {
 		$this->expectOutputString( "0 focus-area page(s) and their related data have been deleted.\n" );
 	}
 
-	/**
-	 * @covers ::execute
-	 */
 	public function testExecuteWithNoWishes(): void {
 		$this->getExistingTestPage( 'Community Wishlist/Wishes/W2' );
 		$this->getExistingTestPage( 'Community Wishlist/Wishes/W50' );
@@ -48,9 +42,6 @@ class NukeWishlistTest extends MaintenanceBaseTestCase {
 		$this->expectOutputString( "2 wish page(s) and their related data have been deleted.\n" );
 	}
 
-	/**
-	 * @covers ::execute
-	 */
 	public function testExecute(): void {
 		$proposer = $this->getTestUser()->getUser()->getName();
 		$this->insertPage(

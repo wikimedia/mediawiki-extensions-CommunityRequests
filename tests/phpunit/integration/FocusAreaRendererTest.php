@@ -11,6 +11,8 @@ use MediaWikiIntegrationTestCase;
  * @group CommunityRequests
  * @group Database
  * @covers \MediaWiki\Extension\CommunityRequests\FocusArea\FocusAreaRenderer
+ * @covers \MediaWiki\Extension\CommunityRequests\AbstractRenderer
+ * @covers \MediaWiki\Extension\CommunityRequests\RendererFactory
  */
 class FocusAreaRendererTest extends MediaWikiIntegrationTestCase {
 	use WishlistTestTrait;
@@ -21,7 +23,6 @@ class FocusAreaRendererTest extends MediaWikiIntegrationTestCase {
 
 	/**
 	 * Test that a focus area can be created from a wiki page.
-	 *
 	 */
 	public function testCreateFocusAreaFromWikiPage(): void {
 		$wikitext = <<<END

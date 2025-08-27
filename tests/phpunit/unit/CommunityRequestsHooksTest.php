@@ -34,7 +34,8 @@ use Psr\Log\NullLogger;
 
 /**
  * @group CommunityRequests
- * @coversDefaultClass \MediaWiki\Extension\CommunityRequests\HookHandler\CommunityRequestsHooks
+ * @covers \MediaWiki\Extension\CommunityRequests\HookHandler\CommunityRequestsHooks
+ * @covers \MediaWiki\Extension\CommunityRequests\RendererFactory
  */
 class CommunityRequestsHooksTest extends MediaWikiUnitTestCase {
 
@@ -44,7 +45,6 @@ class CommunityRequestsHooksTest extends MediaWikiUnitTestCase {
 	use MockServiceDependenciesTrait;
 
 	/**
-	 * @covers ::onParserAfterParse
 	 * @dataProvider provideOnParserAfterParse
 	 */
 	public function testOnParserAfterParse( bool $enabled, bool $magicWordPropSet, bool $moduleAdded ): void {
@@ -88,7 +88,6 @@ class CommunityRequestsHooksTest extends MediaWikiUnitTestCase {
 	}
 
 	/**
-	 * @covers ::onSkinTemplateNavigation__Universal
 	 * @dataProvider provideEditWithFormTab
 	 */
 	public function testEditWithFormTab(
@@ -187,7 +186,6 @@ class CommunityRequestsHooksTest extends MediaWikiUnitTestCase {
 	}
 
 	/**
-	 * @covers ::onGetUserPermissionsErrorsExpensive
 	 * @dataProvider provideManuallyEditing
 	 */
 	public function testManuallyEditing(

@@ -10,15 +10,12 @@ use MediaWiki\Tests\Api\ApiTestCase;
 /**
  * @group CommunityRequests
  * @group Database
- * @coversDefaultClass \MediaWiki\Extension\CommunityRequests\Api\ApiQueryWishes
+ * @covers \MediaWiki\Extension\CommunityRequests\Api\ApiQueryWishes
  */
 class ApiQueryWishesTest extends ApiTestCase {
 
 	use WishlistTestTrait;
 
-	/**
-	 * @covers ::execute
-	 */
 	public function testExecuteNoWishes(): void {
 		[ $ret ] = $this->doApiRequest( [
 			'action' => 'query',
@@ -32,10 +29,6 @@ class ApiQueryWishesTest extends ApiTestCase {
 		return $this->getServiceContainer()->get( 'CommunityRequests.WishStore' );
 	}
 
-	/**
-	 * @covers ::execute
-	 * @covers \MediaWiki\Extension\CommunityRequests\AbstractWishlistStore::getAll
-	 */
 	public function testExecuteSortByCreated(): void {
 		$queryKey = 'communityrequests-wishes';
 		$this->createTestWishWithApi( [
@@ -76,9 +69,6 @@ class ApiQueryWishesTest extends ApiTestCase {
 		$this->assertSame( 'Test Wish 1', $ret['query'][$queryKey][2]['title'] );
 	}
 
-	/**
-	 * @covers ::execute
-	 */
 	public function testExecuteSortByUpdated(): void {
 		$queryKey = 'communityrequests-wishes';
 		$this->createTestWishWithApi( [
@@ -119,9 +109,6 @@ class ApiQueryWishesTest extends ApiTestCase {
 		$this->assertSame( 'Test Wish 1', $ret['query'][$queryKey][2]['title'] );
 	}
 
-	/**
-	 * @covers ::execute
-	 */
 	public function testExecuteSortByTitle(): void {
 		$queryKey = 'communityrequests-wishes';
 		$this->createTestWishWithApi( [
@@ -162,9 +149,6 @@ class ApiQueryWishesTest extends ApiTestCase {
 		$this->assertSame( 'Test Wish A', $ret['query'][$queryKey][2]['title'] );
 	}
 
-	/**
-	 * @covers ::execute
-	 */
 	public function testExecuteWithContinue(): void {
 		$this->createTestWishWithApi( [
 			'title' => 'Test Wish 1',
@@ -206,9 +190,6 @@ class ApiQueryWishesTest extends ApiTestCase {
 		$this->assertArrayNotHasKey( 'continue', $ret );
 	}
 
-	/**
-	 * @covers ::execute
-	 */
 	public function testExecuteWithCount(): void {
 		$this->createTestWishWithApi();
 		$this->createTestWishWithApi();
@@ -221,9 +202,6 @@ class ApiQueryWishesTest extends ApiTestCase {
 		$this->assertSame( 2, $ret['query']['communityrequests-wishes-metadata']['count'] );
 	}
 
-	/**
-	 * @covers ::execute
-	 */
 	public function testExecuteWithLanguageFallbacks(): void {
 		$this->markTestSkippedIfExtensionNotLoaded( 'Translate' );
 

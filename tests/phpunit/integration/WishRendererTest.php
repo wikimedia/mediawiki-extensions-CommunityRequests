@@ -11,7 +11,9 @@ use MediaWikiIntegrationTestCase;
 /**
  * @group CommunityRequests
  * @group Database
- * @coversDefaultClass \MediaWiki\Extension\CommunityRequests\Wish\WishRenderer
+ * @covers \MediaWiki\Extension\CommunityRequests\Wish\WishRenderer
+ * @covers \MediaWiki\Extension\CommunityRequests\AbstractRenderer
+ * @covers \MediaWiki\Extension\CommunityRequests\RendererFactory
  */
 class WishRendererTest extends MediaWikiIntegrationTestCase {
 	use WishlistTestTrait;
@@ -22,8 +24,6 @@ class WishRendererTest extends MediaWikiIntegrationTestCase {
 
 	/**
 	 * Test that a wish can be created from a wiki page.
-	 *
-	 * @covers ::render
 	 */
 	public function testCreateWishFromWikiPage(): void {
 		$user = $this->getTestUser()->getUser();
@@ -57,7 +57,6 @@ END;
 
 	/**
 	 * @dataProvider provideTestTrackingCategories
-	 * @covers ::render
 	 */
 	public function testTrackingCategories( string $wikitext, bool $shouldBeInCategory ): void {
 		$userName = $this->getTestUser()->getUser()->getName();
@@ -95,7 +94,6 @@ END;
 	}
 
 	/**
-	 * @covers ::render
 	 * @covers \MediaWiki\Extension\CommunityRequests\HookHandler\CommunityRequestsHooks::onParserAfterTidy
 	 * @covers \MediaWiki\Extension\CommunityRequests\AbstractRenderer::getVotingSection
 	 */
@@ -131,9 +129,6 @@ END;
 
 	// phpcs:enable Generic.Files.LineLength.TooLong
 
-	/**
-	 * @covers ::render
-	 */
 	public function testChangePageLanguage(): void {
 		$wish = $this->insertTestWish( 'Community Wishlist/Wishes/W123', 'fr' );
 		$this->assertSame( 'fr', Title::newFromPageIdentity( $wish->getPage() )->getPageLanguage()->getCode() );

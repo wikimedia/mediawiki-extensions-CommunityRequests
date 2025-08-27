@@ -13,7 +13,9 @@ use Wikimedia\Timestamp\ConvertibleTimestamp;
 /**
  * @group CommunityRequests
  * @group Database
- * @coversDefaultClass \MediaWiki\Extension\CommunityRequests\FocusArea\FocusAreaStore
+ * @covers \MediaWiki\Extension\CommunityRequests\FocusArea\FocusAreaStore
+ * @covers \MediaWiki\Extension\CommunityRequests\AbstractWishlistStore
+ * @covers \MediaWiki\Extension\CommunityRequests\EntityFactory
  */
 class FocusAreaStoreTest extends MediaWikiIntegrationTestCase {
 	use WishlistTestTrait;
@@ -22,10 +24,6 @@ class FocusAreaStoreTest extends MediaWikiIntegrationTestCase {
 		return $this->getServiceContainer()->get( 'CommunityRequests.FocusAreaStore' );
 	}
 
-	/**
-	 * @covers ::save
-	 * @covers ::get
-	 */
 	public function testSaveAndGetFocusArea(): void {
 		ConvertibleTimestamp::setFakeTime( '2025-01-23T00:00:00Z' );
 		$page = $this->getExistingTestPage( 'Community Wishlist/Focus areas/FA123' );
@@ -49,9 +47,6 @@ class FocusAreaStoreTest extends MediaWikiIntegrationTestCase {
 		$this->assertSame( 42, $retrievedFocusArea->getVoteCount() );
 	}
 
-	/**
-	 * @covers ::save
-	 */
 	public function testSaveWishWithNoPage(): void {
 		$fauxPage = Title::newFromText( 'Community Wishlist/Wishes/W111' );
 		$wish = new FocusArea(
@@ -63,9 +58,6 @@ class FocusAreaStoreTest extends MediaWikiIntegrationTestCase {
 		$this->getStore()->save( $wish );
 	}
 
-	/**
-	 * @covers ::save
-	 */
 	public function testSaveWithNoCreationDate(): void {
 		$wish = new FocusArea(
 			Title::newFromText( 'Community Wishlist/Wishes/W123' ),

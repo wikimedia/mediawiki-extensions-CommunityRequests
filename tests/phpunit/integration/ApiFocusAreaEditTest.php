@@ -10,13 +10,13 @@ use MediaWiki\Title\Title;
 /**
  * @group CommunityRequests
  * @group Database
- * @coversDefaultClass \MediaWiki\Extension\CommunityRequests\Api\ApiFocusAreaEdit
+ * @covers \MediaWiki\Extension\CommunityRequests\Api\ApiFocusAreaEdit
+ * @covers \MediaWiki\Extension\CommunityRequests\Api\ApiWishlistEntityBase
+ * @covers \MediaWiki\Extension\CommunityRequests\HookHandler\CommunityRequestsHooks
  */
 class ApiFocusAreaEditTest extends ApiTestCase {
 
 	/**
-	 * @covers ::execute
-	 * @covers ::getEditSummary
 	 * @dataProvider provideTestExecute
 	 */
 	public function testExecute(
@@ -128,9 +128,6 @@ class ApiFocusAreaEditTest extends ApiTestCase {
 		];
 	}
 
-	/**
-	 * @covers ::execute
-	 */
 	public function testExecuteNoPermission(): void {
 		$this->expectException( ApiUsageException::class );
 		$this->expectExceptionMessage(

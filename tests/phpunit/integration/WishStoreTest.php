@@ -13,7 +13,9 @@ use Wikimedia\Timestamp\ConvertibleTimestamp;
 /**
  * @group CommunityRequests
  * @group Database
- * @coversDefaultClass \MediaWiki\Extension\CommunityRequests\Wish\WishStore
+ * @covers \MediaWiki\Extension\CommunityRequests\Wish\WishStore
+ * @covers \MediaWiki\Extension\CommunityRequests\AbstractWishlistStore
+ * @covers \MediaWiki\Extension\CommunityRequests\EntityFactory
  */
 class WishStoreTest extends MediaWikiIntegrationTestCase {
 	use WishlistTestTrait;
@@ -22,10 +24,6 @@ class WishStoreTest extends MediaWikiIntegrationTestCase {
 		return $this->getServiceContainer()->get( 'CommunityRequests.WishStore' );
 	}
 
-	/**
-	 * @covers ::save
-	 * @covers ::get
-	 */
 	public function testSaveAndGetWish(): void {
 		ConvertibleTimestamp::setFakeTime( '2025-01-23T00:00:00Z' );
 		$page = $this->getExistingTestPage( 'Community Wishlist/Wishes/W123' );
@@ -49,9 +47,6 @@ class WishStoreTest extends MediaWikiIntegrationTestCase {
 		$this->assertSame( '2025-01-23T00:00:00Z', $retrievedWish->getUpdated() );
 	}
 
-	/**
-	 * @covers ::save
-	 */
 	public function testSaveWishWithNoPage(): void {
 		$fauxPage = Title::newFromText( 'Community Wishlist/Wishes/W111' );
 		$wish = new Wish(
@@ -64,9 +59,6 @@ class WishStoreTest extends MediaWikiIntegrationTestCase {
 		$this->getStore()->save( $wish );
 	}
 
-	/**
-	 * @covers ::save
-	 */
 	public function testSaveNewWishWithNoProposer(): void {
 		$wish = new Wish(
 			Title::newFromText( 'Community Wishlist/Wishes/W123' ),
@@ -78,10 +70,6 @@ class WishStoreTest extends MediaWikiIntegrationTestCase {
 		$this->getStore()->save( $wish );
 	}
 
-	/**
-	 * @covers ::save
-	 * @covers ::get
-	 */
 	public function testSaveWithFocusArea(): void {
 		$wish = new Wish(
 			$this->getExistingTestPage( 'Community Wishlist/Wishes/W123' ),
@@ -101,10 +89,6 @@ class WishStoreTest extends MediaWikiIntegrationTestCase {
 		);
 	}
 
-	/**
-	 * @covers ::save
-	 * @covers ::get
-	 */
 	public function testSaveThenResaveWithNoProposerOrCreationDate(): void {
 		$user = $this->getTestUser()->getUser();
 		ConvertibleTimestamp::setFakeTime( '2025-01-23T00:00:00Z' );
@@ -130,9 +114,6 @@ class WishStoreTest extends MediaWikiIntegrationTestCase {
 		$this->assertSame( '2025-02-01T00:00:00Z', $retrievedWish2->getUpdated() );
 	}
 
-	/**
-	 * @covers ::save
-	 */
 	public function testSaveWithNoCreationDate(): void {
 		$wish = new Wish(
 			Title::newFromText( 'Community Wishlist/Wishes/W123' ),
@@ -144,9 +125,6 @@ class WishStoreTest extends MediaWikiIntegrationTestCase {
 		$this->getStore()->save( $wish );
 	}
 
-	/**
-	 * @covers ::getAll
-	 */
 	public function testGetAll(): void {
 		$wishes = $this->getStore()->getAll( 'en', WishStore::createdField() );
 		$this->assertSame( [], $wishes );
@@ -169,11 +147,6 @@ class WishStoreTest extends MediaWikiIntegrationTestCase {
 		$this->assertSame( $wish1->getPage()->getId(), $wishes[1]->getPage()->getId() );
 	}
 
-	/**
-	 * @covers ::getAll
-	 * @covers ::getEntitiesFromLangFallbacks
-	 * @covers ::delete
-	 */
 	public function testGetWishesLangFallbacks(): void {
 		$this->markTestSkippedIfExtensionNotLoaded( 'Translate' );
 		$this->insertTestWish(
@@ -239,10 +212,6 @@ class WishStoreTest extends MediaWikiIntegrationTestCase {
 		$this->assertSame( 'en', $wishes[2]->getLang() );
 	}
 
-	/**
-	 * @covers ::getAll
-	 * @covers ::getEntitiesFromLangFallbacks
-	 */
 	public function testGetWishesLimitEmulation(): void {
 		$this->markTestSkippedIfExtensionNotLoaded( 'Translate' );
 
@@ -284,9 +253,6 @@ class WishStoreTest extends MediaWikiIntegrationTestCase {
 		$this->assertSame( 'W2 (hr)', $wishes[1]->getTitle() );
 	}
 
-	/**
-	 * @covers ::getDataFromWikitext
-	 */
 	public function testGetDataFromWikitext(): void {
 		$wikitext = <<<END
 {{#CommunityRequests: wish
@@ -315,9 +281,6 @@ END;
 		$this->assertSame( '2222-01-23T00:00:00Z', $actual[Wish::PARAM_CREATED] );
 	}
 
-	/**
-	 * @covers ::getIdFromInput
-	 */
 	public function testGetIdFromInput(): void {
 		$this->assertSame( 123, $this->getStore()->getIdFromInput( 123 ) );
 		$this->assertSame( 123, $this->getStore()->getIdFromInput( '123' ) );
@@ -329,9 +292,6 @@ END;
 		$this->assertSame( 503, $this->getStore()->getIdFromInput( '2025 Community Wishlist/Wishes/W503' ) );
 	}
 
-	/**
-	 * @covers ::saveTranslations
-	 */
 	public function testTitleOverMaxBytes(): void {
 		$title = $this->getExistingTestPage( 'Community Wishlist/Wishes/W123' );
 		$wish = new Wish(

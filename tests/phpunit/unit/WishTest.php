@@ -9,14 +9,14 @@ use MockTitleTrait;
 
 /**
  * @group CommunityRequests
- * @coversDefaultClass \MediaWiki\Extension\CommunityRequests\Wish\Wish
+ * @covers \MediaWiki\Extension\CommunityRequests\Wish\Wish
+ * @covers \MediaWiki\Extension\CommunityRequests\AbstractWishlistEntity
  */
 class WishTest extends AbstractWishlistEntityTest {
 	use MockTitleTrait;
 	use MockAuthorityTrait;
 
 	/**
-	 * @covers ::toWikitext
 	 * @dataProvider provideToWikitext
 	 */
 	public function testToWikitext( array $wishData, string $expectedWikitext ): void {
@@ -66,7 +66,6 @@ END
 	}
 
 	/**
-	 * @covers ::toArray
 	 * @dataProvider provideToArray
 	 */
 	public function testToArray( array $wishData, array $expected ): void {
@@ -142,7 +141,6 @@ END
 	}
 
 	/**
-	 * @covers ::newFromWikitextParams
 	 * @dataProvider provideNewFromWikitextParams
 	 */
 	public function testNewFromWikitextParams( $wikitextParams, $expected ): void {
@@ -220,9 +218,6 @@ END
 		];
 	}
 
-	/**
-	 * @covers ::getProjectsFromCsv
-	 */
 	public function testGetProjectsFromCsv(): void {
 		$this->assertSame( [], Wish::getProjectsFromCsv( '', $this->config ) );
 		$this->assertSame(
@@ -235,9 +230,6 @@ END
 		);
 	}
 
-	/**
-	 * @covers ::getPhabTasksFromCsv
-	 */
 	public function testGetPhabTasksFromCsv(): void {
 		$this->assertSame( [], Wish::getPhabTasksFromCsv( '' ) );
 		$this->assertSame(
@@ -246,10 +238,6 @@ END
 		);
 	}
 
-	/**
-	 * @covers ::getPage
-	 * @covers ::getTranslationSubpage
-	 */
 	public function testGetTranslationSubpage(): void {
 		$wishEn = $this->getTestWish( [] );
 		$wishFr = $this->getTestWish( [ Wish::PARAM_BASE_LANG => 'en' ], 'fr' );

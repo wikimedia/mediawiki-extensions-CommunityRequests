@@ -13,7 +13,9 @@ use MediaWiki\User\User;
 /**
  * @group CommunityRequests
  * @group Database
- * @coversDefaultClass \MediaWiki\Extension\CommunityRequests\Api\ApiWishEdit
+ * @covers \MediaWiki\Extension\CommunityRequests\Api\ApiWishEdit
+ * @covers \MediaWiki\Extension\CommunityRequests\Api\ApiWishlistEntityBase
+ * @covers \MediaWiki\Extension\CommunityRequests\HookHandler\CommunityRequestsHooks
  */
 class ApiWishEditTest extends ApiTestCase {
 	use WishlistTestTrait;
@@ -23,9 +25,6 @@ class ApiWishEditTest extends ApiTestCase {
 	}
 
 	/**
-	 * @covers ::execute
-	 * @covers ::getEditSummary
-	 * @covers \MediaWiki\Extension\CommunityRequests\HookHandler\CommunityRequestsHooks::onRevisionDataUpdates
 	 * @dataProvider provideTestExecute
 	 */
 	public function testExecute(

@@ -48,13 +48,17 @@ class SpecialWishlistIntakeTest extends SpecialPageTestBase {
 					'label' => 'communityrequests-wishtype-bug'
 				]
 			],
-			'CommunityRequestsProjects' => [
-				[
-					'id' => 0,
-					'label' => 'project-localized-name-group-wikipedia'
-				], [
-					'id' => 1,
-					'label' => 'communityrequests-project-wikimedia'
+			'CommunityRequestsTags' => [
+				'navigation' => [
+					'admins' => [
+						'id' => 0,
+						'category' => 'Category:Community Wishlist/Wishes/Admins and stewards',
+					],
+					'botsgadgets' => [
+						'id' => 1,
+						'category' => 'Category:Community Wishlist/Wishes/Bots and gadgets',
+						'label' => 'communityrequests-tag-bots-gadgets',
+					]
 				]
 			],
 			'CommunityRequestsStatuses' => [
@@ -71,14 +75,14 @@ class SpecialWishlistIntakeTest extends SpecialPageTestBase {
 
 		$actual = SpecialWishlistIntake::addResourceLoaderMessages( [ 'messages' => [] ] );
 		$this->assertArrayEquals( [
-			'communityrequests-project-wikimedia',
 			'communityrequests-status-accepted',
 			'communityrequests-status-draft',
+			'communityrequests-tag-admins',
+			'communityrequests-tag-bots-gadgets',
 			'communityrequests-wishtype-bug-description',
 			'communityrequests-wishtype-bug-label',
 			'communityrequests-wishtype-feature-description',
 			'communityrequests-wishtype-feature-label',
-			'project-localized-name-group-wikipedia',
 		], $actual->getMessages(), true, true );
 	}
 
@@ -105,8 +109,7 @@ class SpecialWishlistIntakeTest extends SpecialPageTestBase {
 |status = prioritized
 |type = change
 |audience = Example audience
-|projects = commons,wikisource
-|otherproject = Some other project
+|tags = multimedia,wikisource
 |phabtasks = T123,T456
 |created = 2023-10-01T12:00:00Z
 |proposer = TestUser
@@ -127,8 +130,7 @@ END;
 |status = prioritized
 |type = change
 |audience = <translate>Example audience</translate>
-|projects = commons,wikisource
-|otherproject = <translate>Some other project</translate>
+|tags = multimedia,wikisource
 |phabtasks = T123,T456
 |created = 2023-10-01T12:00:00Z
 |proposer = TestUser
@@ -149,11 +151,7 @@ END;
 			$vars['intakeData'][Wish::PARAM_AUDIENCE]
 		);
 		$this->assertSame(
-			'<translate><!--T:3--> Some other project</translate>',
-			$vars['intakeData'][Wish::PARAM_OTHER_PROJECT]
-		);
-		$this->assertSame(
-			'<translate><!--T:4--> This is a [[test]] {{wish}}.</translate>',
+			'<translate><!--T:3--> This is a [[test]] {{wish}}.</translate>',
 			$vars['intakeData'][Wish::PARAM_DESCRIPTION]
 		);
 	}

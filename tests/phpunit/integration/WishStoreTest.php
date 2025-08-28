@@ -33,7 +33,7 @@ class WishStoreTest extends MediaWikiIntegrationTestCase {
 			'en',
 			$this->getTestUser()->getUser(),
 			[
-				Wish::PARAM_PROJECTS => [ 1, 2, 3 ],
+				Wish::PARAM_TAGS => [ 1, 2, 3 ],
 				Wish::PARAM_PHAB_TASKS => [ 123, 456 ],
 				Wish::PARAM_CREATED => '2025-01-01T00:00:00Z',
 			]
@@ -42,7 +42,7 @@ class WishStoreTest extends MediaWikiIntegrationTestCase {
 		$retrievedWish = $this->getStore()->get( $wish->getPage(), 'en' );
 		$this->assertInstanceOf( Wish::class, $retrievedWish );
 		$this->assertSame( $page->getId(), $retrievedWish->getPage()->getId() );
-		$this->assertArrayEquals( [ 1, 2, 3 ], $retrievedWish->getProjects() );
+		$this->assertArrayEquals( [ 1, 2, 3 ], $retrievedWish->getTags() );
 		$this->assertArrayEquals( [ 123, 456 ], $retrievedWish->getPhabTasks() );
 		$this->assertSame( '2025-01-01T00:00:00Z', $retrievedWish->getCreated() );
 		$this->assertSame( '2025-01-23T00:00:00Z', $retrievedWish->getUpdated() );
@@ -328,45 +328,45 @@ END;
 		return [
 			'from SPECIAL to WIKITEXT' => [
 				[
-					Wish::PARAM_PROJECTS => [ 'wikipedia', 'commons', 'wiktionary' ],
+					Wish::PARAM_TAGS => [ 'admins', 'multimedia', 'wiktionary' ],
 					Wish::PARAM_PHAB_TASKS => [ 'T123' ],
 				],
 				AbstractWishlistStore::ARRAY_DELIMITER_WIKITEXT,
 				[
-					Wish::PARAM_PROJECTS => 'wikipedia,commons,wiktionary',
+					Wish::PARAM_TAGS => 'admins,multimedia,wiktionary',
 					Wish::PARAM_PHAB_TASKS => 'T123',
 				]
 			],
 			'from SPECIAL to API' => [
 				[
-					Wish::PARAM_PROJECTS => [ 'wikipedia' ],
+					Wish::PARAM_TAGS => [ 'admins' ],
 					Wish::PARAM_PHAB_TASKS => [ 'T123', 'T456' ],
 				],
 				AbstractWishlistStore::ARRAY_DELIMITER_API,
 				[
-					Wish::PARAM_PROJECTS => 'wikipedia',
+					Wish::PARAM_TAGS => 'admins',
 					Wish::PARAM_PHAB_TASKS => 'T123|T456',
 				]
 			],
 			'from API to SPECIAL' => [
 				[
-					Wish::PARAM_PROJECTS => 'wikipedia|commons|wiktionary',
+					Wish::PARAM_TAGS => 'admins|multimedia|wiktionary',
 					Wish::PARAM_PHAB_TASKS => '',
 				],
 				AbstractWishlistStore::ARRAY_DELIMITER_SPECIAL,
 				[
-					Wish::PARAM_PROJECTS => [ 'wikipedia', 'commons', 'wiktionary' ],
+					Wish::PARAM_TAGS => [ 'admins', 'multimedia', 'wiktionary' ],
 					Wish::PARAM_PHAB_TASKS => [],
 				]
 			],
 			'from WIKITEXT to SPECIAL' => [
 				[
-					Wish::PARAM_PROJECTS => 'wikipedia,commons,wiktionary',
+					Wish::PARAM_TAGS => 'admins,multimedia,wiktionary',
 					Wish::PARAM_PHAB_TASKS => 'T123',
 				],
 				AbstractWishlistStore::ARRAY_DELIMITER_SPECIAL,
 				[
-					Wish::PARAM_PROJECTS => [ 'wikipedia', 'commons', 'wiktionary' ],
+					Wish::PARAM_TAGS => [ 'admins', 'multimedia', 'wiktionary' ],
 					Wish::PARAM_PHAB_TASKS => [ 'T123' ],
 				]
 			],

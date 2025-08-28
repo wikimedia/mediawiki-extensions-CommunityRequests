@@ -86,8 +86,10 @@ abstract class AbstractWishlistSpecialPage extends FormSpecialPage {
 			$messages[] = $type['label'] . '-label';
 			$messages[] = $type['label'] . '-description';
 		}
-		foreach ( $config->get( 'CommunityRequestsProjects' ) as $project ) {
-			$messages[] = $project['label'];
+		foreach ( $config->get( 'CommunityRequestsTags' ) as $tagGroup ) {
+			foreach ( $tagGroup as $tag => $tagConfig ) {
+				$messages[] = $tagConfig['label'] ?? "communityrequests-tag-$tag";
+			}
 		}
 		foreach ( $config->get( 'CommunityRequestsStatuses' ) as $status ) {
 			$messages[] = $status['label'];

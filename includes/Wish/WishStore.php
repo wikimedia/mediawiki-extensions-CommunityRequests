@@ -202,24 +202,24 @@ class WishStore extends AbstractWishlistStore {
 			->execute();
 
 		$this->saveTranslations( $wish, $dbw );
-		$this->saveProjectsAndPhabTasks( $wish, $dbw );
+		$this->saveTagsAndPhabTasks( $wish, $dbw );
 
 		$dbw->endAtomic( __METHOD__ );
 	}
 
 	/**
-	 * Save the projects and Phabricator tasks associated with a wish.
+	 * Save the tags and Phabricator tasks associated with a wish.
 	 *
 	 * @param Wish $wish The wish to save.
 	 * @param IDatabase $dbw The database connection.
 	 */
-	private function saveProjectsAndPhabTasks( Wish $wish, IDatabase $dbw ): void {
+	private function saveTagsAndPhabTasks( Wish $wish, IDatabase $dbw ): void {
 		$queryMetadata = [
 			[
 				'table' => 'communityrequests_tags',
 				'key' => 'crtg_tag',
 				'foreignKey' => 'crtg_wish',
-				'wishMethod' => 'getProjects',
+				'wishMethod' => 'getTags',
 			], [
 				'table' => 'communityrequests_phab_tasks',
 				'key' => 'crpt_task_id',
@@ -279,8 +279,8 @@ class WishStore extends AbstractWishlistStore {
 		array $rows,
 		array $entityDataByPage,
 	): array {
-		// Fetch projects for all wishes in one go, and then the same for Phab tasks.
-		$projectsByPage = $this->getProjectsForWishes( $dbr, array_keys( $entityDataByPage ) );
+		// Fetch tags for all wishes in one go, and then the same for Phab tasks.
+		$tagsByPage = $this->getTagsForWishes( $dbr, array_keys( $entityDataByPage ) );
 		$phabTasksByPage = $this->getPhabTasksForWishes( $dbr, array_keys( $entityDataByPage ) );
 
 		$wishes = [];
@@ -300,7 +300,7 @@ class WishStore extends AbstractWishlistStore {
 					Wish::PARAM_TITLE => $row->crt_title,
 					// TODO: refactor to fetch page ID in the main query.
 					Wish::PARAM_FOCUS_AREA => Title::newFromID( (int)$row->cr_focus_area ),
-					Wish::PARAM_PROJECTS => $projectsByPage[$row->cr_page] ?? [],
+					Wish::PARAM_TAGS => $tagsByPage[$row->cr_page] ?? [],
 					Wish::PARAM_PHAB_TASKS => $phabTasksByPage[$row->cr_page] ?? [],
 					Wish::PARAM_VOTE_COUNT => (int)$row->cr_vote_count,
 					Wish::PARAM_CREATED => $row->cr_created,
@@ -308,7 +308,6 @@ class WishStore extends AbstractWishlistStore {
 					Wish::PARAM_BASE_LANG => $row->cr_base_lang,
 					// "Virtual" fields that only exist when querying for wikitext.
 					Wish::PARAM_DESCRIPTION => $row->crt_description ?? null,
-					Wish::PARAM_OTHER_PROJECT => $row->crt_other_project ?? null,
 					Wish::PARAM_AUDIENCE => $row->crt_audience ?? null,
 				]
 			);
@@ -318,17 +317,17 @@ class WishStore extends AbstractWishlistStore {
 	}
 
 	/**
-	 * Get the projects associated with the given wishes.
+	 * Get the tags associated with the given wishes.
 	 *
 	 * @param IReadableDatabase $dbr The database connection.
 	 * @param array<int> $pageIds The page/wish IDs of the wishes.
-	 * @return array<int> The IDs of the projects associated with the wishes, keyed by wish ID.
+	 * @return array<int> The IDs of the tags associated with the wishes, keyed by wish ID.
 	 */
-	private function getProjectsForWishes( IReadableDatabase $dbr, array $pageIds ): array {
+	private function getTagsForWishes( IReadableDatabase $dbr, array $pageIds ): array {
 		if ( !count( $pageIds ) ) {
 			return [];
 		}
-		$projects = $dbr->newSelectQueryBuilder()
+		$tags = $dbr->newSelectQueryBuilder()
 			->caller( __METHOD__ )
 			->table( 'communityrequests_tags' )
 			->fields( [ 'crtg_wish', 'crtg_tag' ] )
@@ -336,12 +335,12 @@ class WishStore extends AbstractWishlistStore {
 			->fetchResultSet();
 
 		// Group by wish ID.
-		$projectsByWish = [];
-		foreach ( $projects as $project ) {
-			$projectsByWish[$project->crtg_wish][] = (int)$project->crtg_tag;
+		$tagsByWish = [];
+		foreach ( $tags as $tag ) {
+			$tagsByWish[$tag->crtg_wish][] = (int)$tag->crtg_tag;
 		}
 
-		return $projectsByWish;
+		return $tagsByWish;
 	}
 
 	/**
@@ -389,7 +388,6 @@ class WishStore extends AbstractWishlistStore {
 		return [
 			Wish::PARAM_TITLE => 'crt_title',
 			Wish::PARAM_DESCRIPTION => 'crt_description',
-			Wish::PARAM_OTHER_PROJECT => 'crt_other_project',
 			Wish::PARAM_AUDIENCE => 'crt_audience',
 		];
 	}
@@ -398,7 +396,6 @@ class WishStore extends AbstractWishlistStore {
 	public function getWikitextFields(): array {
 		return [
 			Wish::PARAM_DESCRIPTION,
-			Wish::PARAM_OTHER_PROJECT,
 			Wish::PARAM_AUDIENCE,
 		];
 	}
@@ -411,7 +408,7 @@ class WishStore extends AbstractWishlistStore {
 	/** @inheritDoc */
 	public function getArrayParams(): array {
 		return [
-			Wish::PARAM_PROJECTS,
+			Wish::PARAM_TAGS,
 			Wish::PARAM_PHAB_TASKS,
 		];
 	}

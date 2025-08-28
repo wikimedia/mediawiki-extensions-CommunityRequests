@@ -32,7 +32,7 @@ title=Community_Wishlist/Wishes/W1
 |status = prioritized
 |type = change
 |audience = [[Test]] audience
-|projects = commons,wikisource
+|tags = multimedia,wikisource
 |otherproject = Some other project
 |phabtasks = T123,T456
 |created = 2023-10-01T12:00:00Z
@@ -46,7 +46,7 @@ title=Community_Wishlist/Wishes/W1
 </div><div class="mw-heading mw-heading3">Assigned focus area</div><div class="ext-communityrequests-wish--focus-area">
 <p>Unassigned
 </p>
-</div><div class="mw-heading mw-heading3">Type of wish</div><p class="ext-communityrequests-wish--wish-type">System change</p><div class="mw-heading mw-heading3">Related projects</div><p class="ext-communityrequests-wish--projects">Wikimedia Commons, Wikisource</p><p class="ext-communityrequests-wish--other-project">Some other project</p><div class="mw-heading mw-heading3">Affected users</div><div class="ext-communityrequests-wish--audience">
+</div><div class="mw-heading mw-heading3">Type of wish</div><p class="ext-communityrequests-wish--wish-type">System change</p><div class="mw-heading mw-heading3">Tags</div><p class="ext-communityrequests-wish--tags">Multimedia and Commons, Wikisource</p><div class="mw-heading mw-heading3">Affected users</div><div class="ext-communityrequests-wish--audience">
 <p><a href="/wiki/Test" title="Test">Test</a> audience
 </p>
 </div><div class="mw-heading mw-heading3">Phabricator tasks</div><div class="ext-communityrequests-wish--phabtasks">
@@ -65,8 +65,7 @@ title=Community_Wishlist/Wishes/W2
 |status = declined
 |type = change
 |audience = Example audience
-|projects = commons,wikisource
-|otherproject = Some other project
+|tags = multimedia,wikisource
 |phabtasks = T123,T456
 |created = 2023-10-01T12:00:00Z
 |proposer = Admin
@@ -79,7 +78,7 @@ title=Community_Wishlist/Wishes/W2
 </div><div class="mw-heading mw-heading3">Assigned focus area</div><div class="ext-communityrequests-wish--focus-area">
 <p>Unassigned
 </p>
-</div><div class="mw-heading mw-heading3">Type of wish</div><p class="ext-communityrequests-wish--wish-type">System change</p><div class="mw-heading mw-heading3">Related projects</div><p class="ext-communityrequests-wish--projects">Wikimedia Commons, Wikisource</p><p class="ext-communityrequests-wish--other-project">Some other project</p><div class="mw-heading mw-heading3">Affected users</div><div class="ext-communityrequests-wish--audience">
+</div><div class="mw-heading mw-heading3">Type of wish</div><p class="ext-communityrequests-wish--wish-type">System change</p><div class="mw-heading mw-heading3">Tags</div><p class="ext-communityrequests-wish--tags">Multimedia and Commons, Wikisource</p><div class="mw-heading mw-heading3">Affected users</div><div class="ext-communityrequests-wish--audience">
 <p>Example audience
 </p>
 </div><div class="mw-heading mw-heading3">Phabricator tasks</div><div class="ext-communityrequests-wish--phabtasks">
@@ -98,8 +97,7 @@ title=Community_Wishlist/Wishes/W2
 |status = done
 |type = change
 |audience = Example audience
-|projects = commons,wikisource
-|otherproject = Some other project
+|tags = multimedia,wikisource
 |phabtasks = T123,T456
 |created = 2023-10-01T12:00:00Z
 |proposer = Admin
@@ -112,7 +110,7 @@ title=Community_Wishlist/Wishes/W2
 </div><div class="mw-heading mw-heading3">Assigned focus area</div><div class="ext-communityrequests-wish--focus-area">
 <p>Unassigned
 </p>
-</div><div class="mw-heading mw-heading3">Type of wish</div><p class="ext-communityrequests-wish--wish-type">System change</p><div class="mw-heading mw-heading3">Related projects</div><p class="ext-communityrequests-wish--projects">Wikimedia Commons, Wikisource</p><p class="ext-communityrequests-wish--other-project">Some other project</p><div class="mw-heading mw-heading3">Affected users</div><div class="ext-communityrequests-wish--audience">
+</div><div class="mw-heading mw-heading3">Type of wish</div><p class="ext-communityrequests-wish--wish-type">System change</p><div class="mw-heading mw-heading3">Tags</div><p class="ext-communityrequests-wish--tags">Multimedia and Commons, Wikisource</p><div class="mw-heading mw-heading3">Affected users</div><div class="ext-communityrequests-wish--audience">
 <p>Example audience
 </p>
 </div><div class="mw-heading mw-heading3">Phabricator tasks</div><div class="ext-communityrequests-wish--phabtasks">
@@ -151,7 +149,7 @@ language=qqx
 |status = submitted
 |type = change
 |audience = קהל לדוגמה
-|projects = commons,wikisource
+|tags = multimedia,wikisource
 |otherproject = פרויקט אחר כלשהו
 |created = 2023-10-01T12:00:00Z
 |proposer = Admin
@@ -164,7 +162,7 @@ language=qqx
 </div><div class="mw-heading mw-heading3">(communityrequests-wish-focus-area-heading)</div><div class="ext-communityrequests-wish--focus-area">
 <p>(communityrequests-focus-area-unassigned)
 </p>
-</div><div class="mw-heading mw-heading3">(communityrequests-wish-type-heading)</div><p class="ext-communityrequests-wish--wish-type">(communityrequests-wishtype-change-label)</p><div class="mw-heading mw-heading3">(communityrequests-wish-related-heading)</div><p class="ext-communityrequests-wish--projects">(project-localized-name-commonswiki)(comma-separator)(project-localized-name-group-wikisource)</p><p class="ext-communityrequests-wish--other-project">פרויקט אחר כלשהו</p><div class="mw-heading mw-heading3">(communityrequests-wish-audience-heading)</div><div class="ext-communityrequests-wish--audience">
+</div><div class="mw-heading mw-heading3">(communityrequests-wish-type-heading)</div><p class="ext-communityrequests-wish--wish-type">(communityrequests-wishtype-change-label)</p><div class="mw-heading mw-heading3">(communityrequests-tags-heading)</div><p class="ext-communityrequests-wish--tags">(communityrequests-tag-multimedia-commons)(comma-separator)(communityrequests-tag-wikisource)</p><div class="mw-heading mw-heading3">(communityrequests-wish-audience-heading)</div><div class="ext-communityrequests-wish--audience">
 <p>קהל לדוגמה
 </p>
 </div><div class="mw-heading mw-heading3">(communityrequests-wish-other-details-heading)</div><ul><li class="ext-communityrequests-wish--created">(communityrequests-wish-created: 12:00, 1 (october) 2023)</li><li class="ext-communityrequests-wish--updated">(communityrequests-wish-updated: 00:02, 1 (january) 1970)</li><li class="ext-communityrequests-wish--proposer">(communityrequests-wish-proposer: (signature: Admin, Admin))</li></ul><div class="mw-heading mw-heading2" id="Voting">(communityrequests-wish-voting)</div><div class="ext-communityrequests-wish--voting"><p>(communityrequests-wish-voting-info: 0, 0) (communityrequests-wish-voting-info-closed)</p></div></div>

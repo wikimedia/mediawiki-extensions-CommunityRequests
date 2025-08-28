@@ -38,8 +38,7 @@ class WishTest extends AbstractWishlistEntityTest {
 					Wish::PARAM_STATUS => 1,
 					Wish::PARAM_DESCRIPTION => 'Make [[search]] results more relevant and faster.',
 					Wish::PARAM_TYPE => 2,
-					Wish::PARAM_PROJECTS => [ 0, 6, 7 ],
-					Wish::PARAM_OTHER_PROJECT => 'Offline wikis',
+					Wish::PARAM_TAGS => [ 0, 6, 7 ],
 					Wish::PARAM_AUDIENCE => 'Editors and readers',
 					Wish::PARAM_PHAB_TASKS => [ 123, 456 ],
 					Wish::PARAM_CREATED => '2023-10-01T12:00:00Z',
@@ -52,8 +51,7 @@ class WishTest extends AbstractWishlistEntityTest {
 | title = Improve search functionality
 | focusarea = \n| description = Make [[search]] results more relevant and faster.
 | audience = Editors and readers
-| projects = wikipedia,wikiquote,wikiversity
-| otherproject = Offline wikis
+| tags = admins,android,mobileweb
 | phabtasks = T123,T456
 | proposer = Petr
 | created = 2023-10-01T12:00:00Z
@@ -83,9 +81,8 @@ END
 					Wish::PARAM_BASE_LANG => 'en',
 					Wish::PARAM_CREATED => '2023-10-01T12:00:00Z',
 					Wish::PARAM_UPDATED => '2023-10-02T12:00:00Z',
-					Wish::PARAM_OTHER_PROJECT => 'Offline wikis',
 					Wish::PARAM_PHAB_TASKS => [ 123, 456 ],
-					Wish::PARAM_PROJECTS => [ 0, 6, 7 ],
+					Wish::PARAM_TAGS => [ 0, 6, 7 ],
 					Wish::PARAM_STATUS => 1,
 					Wish::PARAM_TITLE => 'Improve search functionality',
 					Wish::PARAM_TYPE => 2,
@@ -98,8 +95,7 @@ END
 					Wish::PARAM_FOCUS_AREA => '',
 					Wish::PARAM_DESCRIPTION => null,
 					Wish::PARAM_AUDIENCE => '',
-					Wish::PARAM_PROJECTS => [ 'wikipedia', 'wikiquote', 'wikiversity' ],
-					Wish::PARAM_OTHER_PROJECT => 'Offline wikis',
+					Wish::PARAM_TAGS => [ 'admins', 'android', 'mobileweb' ],
 					Wish::PARAM_PHAB_TASKS => [ 'T123', 'T456' ],
 					Wish::PARAM_PROPOSER => 'Petr',
 					Wish::PARAM_VOTE_COUNT => 3,
@@ -112,9 +108,8 @@ END
 				[
 					Wish::PARAM_BASE_LANG => 'en',
 					Wish::PARAM_CREATED => '2023-10-01T12:00:00Z',
-					Wish::PARAM_OTHER_PROJECT => null,
 					Wish::PARAM_PHAB_TASKS => [],
-					Wish::PARAM_PROJECTS => [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ],
+					Wish::PARAM_TAGS => [],
 					Wish::PARAM_STATUS => 6,
 					Wish::PARAM_TITLE => 'Fix all the bugs ever created',
 					Wish::PARAM_TYPE => 1,
@@ -127,8 +122,7 @@ END
 					Wish::PARAM_FOCUS_AREA => '',
 					Wish::PARAM_DESCRIPTION => null,
 					Wish::PARAM_AUDIENCE => '',
-					Wish::PARAM_PROJECTS => [ 'all' ],
-					Wish::PARAM_OTHER_PROJECT => '',
+					Wish::PARAM_TAGS => [],
 					Wish::PARAM_PHAB_TASKS => [],
 					Wish::PARAM_PROPOSER => 'Petr',
 					Wish::PARAM_VOTE_COUNT => 1,
@@ -155,8 +149,7 @@ END
 		$this->assertSame( $expected[Wish::PARAM_STATUS], $wish->getStatus() );
 		$this->assertSame( $expected[Wish::PARAM_DESCRIPTION], $wish->getDescription() );
 		$this->assertSame( $expected[Wish::PARAM_TYPE], $wish->getType() );
-		$this->assertSame( $expected[Wish::PARAM_PROJECTS], $wish->getProjects() );
-		$this->assertSame( $expected[Wish::PARAM_OTHER_PROJECT], $wish->getOtherProject() );
+		$this->assertSame( $expected[Wish::PARAM_TAGS], $wish->getTags() );
 		$this->assertSame( $expected[Wish::PARAM_PHAB_TASKS], $wish->getPhabTasks() );
 		$this->assertSame( $expected[Wish::PARAM_CREATED], $wish->getCreated() );
 	}
@@ -169,8 +162,7 @@ END
 					Wish::PARAM_STATUS => 'submitted',
 					Wish::PARAM_DESCRIPTION => 'Make [[search]] results more relevant and faster.',
 					Wish::PARAM_TYPE => 'change',
-					Wish::PARAM_PROJECTS => 'wikipedia, wikiquote  , wikiversity,bogus',
-					Wish::PARAM_OTHER_PROJECT => 'Offline wikis',
+					Wish::PARAM_TAGS => 'admins, multimedia  , newcomers,bogus',
 					Wish::PARAM_AUDIENCE => 'Editors and readers',
 					Wish::PARAM_PHAB_TASKS => 'T123,T456',
 					Wish::PARAM_CREATED => '2023-10-01T12:00:00Z',
@@ -181,8 +173,7 @@ END
 					Wish::PARAM_STATUS => 1,
 					Wish::PARAM_DESCRIPTION => 'Make [[search]] results more relevant and faster.',
 					Wish::PARAM_TYPE => 2,
-					Wish::PARAM_PROJECTS => [ 0, 6, 7 ],
-					Wish::PARAM_OTHER_PROJECT => 'Offline wikis',
+					Wish::PARAM_TAGS => [ 0, 8, 9 ],
 					Wish::PARAM_AUDIENCE => 'Editors and readers',
 					Wish::PARAM_PHAB_TASKS => [ 123, 456 ],
 					Wish::PARAM_CREATED => '2023-10-01T12:00:00Z',
@@ -195,8 +186,7 @@ END
 					Wish::PARAM_STATUS => 'archived',
 					Wish::PARAM_DESCRIPTION => 'Fix everything.',
 					Wish::PARAM_TYPE => 'bug',
-					Wish::PARAM_PROJECTS => 'all',
-					Wish::PARAM_OTHER_PROJECT => '',
+					Wish::PARAM_TAGS => '',
 					Wish::PARAM_AUDIENCE => 'Human beings',
 					Wish::PARAM_PHAB_TASKS => '',
 					Wish::PARAM_CREATED => '2023-10-01T12:00:00Z',
@@ -207,8 +197,7 @@ END
 					Wish::PARAM_STATUS => 6,
 					Wish::PARAM_DESCRIPTION => 'Fix everything.',
 					Wish::PARAM_TYPE => 1,
-					Wish::PARAM_PROJECTS => [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ],
-					Wish::PARAM_OTHER_PROJECT => '',
+					Wish::PARAM_TAGS => [],
 					Wish::PARAM_AUDIENCE => 'Editors and readers',
 					Wish::PARAM_PHAB_TASKS => [],
 					Wish::PARAM_CREATED => '2023-10-01T12:00:00Z',
@@ -218,15 +207,11 @@ END
 		];
 	}
 
-	public function testGetProjectsFromCsv(): void {
-		$this->assertSame( [], Wish::getProjectsFromCsv( '', $this->config ) );
+	public function testGetTagsFromCsv(): void {
+		$this->assertSame( [], Wish::getTagsFromCsv( '', $this->config ) );
 		$this->assertSame(
 			[ 0, 2, 11 ],
-			Wish::getProjectsFromCsv( 'wikipedia,  commons ,, bogus,metawiki', $this->config )
-		);
-		$this->assertSame(
-			[ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ],
-			Wish::getProjectsFromCsv( 'all', $this->config )
+			Wish::getTagsFromCsv( 'admins,  categories ,, bogus,patrolling', $this->config )
 		);
 	}
 

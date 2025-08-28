@@ -5,7 +5,6 @@ namespace MediaWiki\Extension\CommunityRequests;
 
 use MediaWiki\Config\ConfigException;
 use MediaWiki\Config\ServiceOptions;
-use MediaWiki\Extension\CommunityRequests\Wish\Wish;
 use MediaWiki\Language\LanguageNameUtils;
 use MediaWiki\MainConfigNames;
 use MediaWiki\Page\PageReference;
@@ -33,7 +32,7 @@ class WishlistConfig {
 	public const FOCUS_AREA_CATEGORY = 'CommunityRequestsFocusAreaCategory';
 	public const FOCUS_AREA_PAGE_PREFIX = 'CommunityRequestsFocusAreaPagePrefix';
 	public const FOCUS_AREA_INDEX_PAGE = 'CommunityRequestsFocusAreaIndexPage';
-	public const PROJECTS = 'CommunityRequestsProjects';
+	public const TAGS = 'CommunityRequestsTags';
 	public const STATUSES = 'CommunityRequestsStatuses';
 	public const VOTES_PAGE_SUFFIX = 'CommunityRequestsVotesPageSuffix';
 	public const WISH_VOTING_ENABLED = 'CommunityRequestsWishVotingEnabled';
@@ -48,7 +47,7 @@ class WishlistConfig {
 		self::FOCUS_AREA_CATEGORY,
 		self::FOCUS_AREA_PAGE_PREFIX,
 		self::FOCUS_AREA_INDEX_PAGE,
-		self::PROJECTS,
+		self::TAGS,
 		self::STATUSES,
 		self::VOTES_PAGE_SUFFIX,
 		self::WISH_VOTING_ENABLED,
@@ -65,7 +64,7 @@ class WishlistConfig {
 	private string $wishIndexPage;
 	private string $focusAreaIndexPage;
 	private array $wishTypes;
-	private array $projects;
+	private array $navigationTags;
 	private array $statuses;
 	private string $votesPageSuffix;
 	private bool $wishVotingEnabled;
@@ -87,7 +86,7 @@ class WishlistConfig {
 		$this->focusAreaCategory = $config->get( self::FOCUS_AREA_CATEGORY );
 		$this->focusAreaPagePrefix = $config->get( self::FOCUS_AREA_PAGE_PREFIX );
 		$this->focusAreaIndexPage = $config->get( self::FOCUS_AREA_INDEX_PAGE );
-		$this->projects = $config->get( self::PROJECTS );
+		$this->navigationTags = $config->get( self::TAGS )['navigation'] ?? [];
 		$this->statuses = $config->get( self::STATUSES );
 		$this->votesPageSuffix = $config->get( self::VOTES_PAGE_SUFFIX );
 		$this->wishVotingEnabled = $config->get( self::WISH_VOTING_ENABLED );
@@ -133,8 +132,8 @@ class WishlistConfig {
 		return $this->focusAreaPagePrefix;
 	}
 
-	public function getProjects(): array {
-		return $this->projects;
+	public function getNavigationTags(): array {
+		return $this->navigationTags;
 	}
 
 	public function getStatuses(): array {
@@ -439,31 +438,30 @@ class WishlistConfig {
 	}
 
 	/**
-	 * Get the ID of a project from its wikitext value.
+	 * Get the ID of a tag given its wikitext value.
 	 *
-	 * @param string $project
-	 * @return ?int The ID of the project or null if not found.
+	 * @param string $tag
+	 * @return ?int The ID of the tag or null if not found.
 	 */
-	public function getProjectIdFromWikitextVal( string $project ): ?int {
-		$project = trim( $project );
-		if ( isset( $this->projects[$project] ) ) {
-			return (int)$this->projects[$project]['id'];
+	public function getTagIdFromWikitextVal( string $tag ): ?int {
+		$tag = trim( $tag );
+		if ( isset( $this->navigationTags[$tag] ) ) {
+			return (int)$this->navigationTags[$tag]['id'];
 		}
 		return null;
 	}
 
 	/**
-	 * Get the label of a project from its wikitext value.
+	 * Get the label of a tag from its wikitext value.
 	 *
-	 * @param string $project
-	 * @return ?string The label of the project, or null if not found.
+	 * @param string $tag
+	 * @return ?string The message key for the tag, or null if not found.
 	 */
-	public function getProjectLabelFromWikitextVal( string $project ): ?string {
-		if ( $project === Wish::VALUE_PROJECTS_ALL ) {
-			return 'communityrequests-project-all-projects';
-		}
-		$project = trim( $project );
-		return $this->projects[$project]['label'] ?? null;
+	public function getTagLabelFromWikitextVal( string $tag ): ?string {
+		$tag = trim( $tag );
+		return isset( $this->navigationTags[$tag] ) ?
+			$this->navigationTags[$tag]['label'] ?? "communityrequests-tag-$tag" :
+			null;
 	}
 
 	/**
@@ -526,36 +524,14 @@ class WishlistConfig {
 	}
 
 	/**
-	 * Get the wikitext value from a project ID.
+	 * Get the wikitext value from a tag ID.
 	 *
 	 * @param int $id
 	 * @return string
 	 * @throws ConfigException If the ID is not found in the configuration.
 	 */
-	public function getProjectWikitextValFromId( int $id ): string {
-		return $this->getWikitextValFromId( $id, $this->projects );
-	}
-
-	/**
-	 * Get the wikitext values from a list of project IDs.
-	 *
-	 * @param int[] $ids
-	 * @return string[]
-	 * @throws ConfigException If any ID is not found in the configuration.
-	 */
-	public function getProjectsWikitextValsFromIds( array $ids ): array {
-		$allProjectIds = array_map(
-			static fn ( $p ) => (int)$p['id'],
-			$this->projects
-		);
-		$isAllProjects = array_diff( $allProjectIds, $ids ) === [];
-		if ( $isAllProjects ) {
-			return [ Wish::VALUE_PROJECTS_ALL ];
-		}
-		return array_map(
-			fn ( $id ) => $this->getProjectWikitextValFromId( $id ),
-			$ids
-		);
+	public function getTagWikitextValFromId( int $id ): string {
+		return $this->getWikitextValFromId( $id, $this->navigationTags );
 	}
 
 	/**

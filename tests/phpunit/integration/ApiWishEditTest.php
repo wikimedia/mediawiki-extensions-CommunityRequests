@@ -72,8 +72,7 @@ class ApiWishEditTest extends ApiTestCase {
 		$this->assertSame( $expected['wishedit']['type'], $ret['wishedit']['type'] );
 		$this->assertSame( $expected['wishedit']['focusarea'], $ret['wishedit']['focusarea'] );
 		$this->assertSame( $expected['wishedit']['description'], $ret['wishedit']['description'] );
-		$this->assertSame( $expected['wishedit']['projects'], $ret['wishedit']['projects'] );
-		$this->assertSame( $expected['wishedit']['otherproject'], $ret['wishedit']['otherproject'] );
+		$this->assertSame( $expected['wishedit']['tags'], $ret['wishedit']['tags'] );
 		$this->assertSame( $expected['wishedit']['audience'], $ret['wishedit']['audience'] );
 		$this->assertSame( $expected['wishedit']['phabtasks'], $ret['wishedit']['phabtasks'] );
 		$this->assertSame( $expected['wishedit']['proposer'], $ret['wishedit']['proposer'] );
@@ -112,15 +111,14 @@ class ApiWishEditTest extends ApiTestCase {
 
 	public static function provideTestExecute(): array {
 		return [
-			'invalid project' => [
+			'invalid tag' => [
 				[
 					'status' => 'under-review',
 					'focusarea' => '',
 					'title' => 'Test Wish',
 					'description' => 'This is a test wish.',
 					'type' => 'feature',
-					'projects' => 'bogus|commons',
-					'otherproject' => '',
+					'tags' => 'bogus|multimedia',
 					'audience' => 'Experienced editors',
 					'phabtasks' => 'T123|T456|T789',
 					'proposer' => 'TestUser',
@@ -130,12 +128,12 @@ class ApiWishEditTest extends ApiTestCase {
 				[
 					'warnings' => [
 						'wishedit' => [
-							'warnings' => 'Unrecognized value for parameter "projects": bogus',
+							'warnings' => 'Unrecognized value for parameter "tags": bogus',
 						]
 					],
 					'wishedit' => [
 						'focusarea' => '',
-						'projects' => [ 'commons' ],
+						'tags' => [ 'multimedia' ],
 						'phabtasks' => [ 'T123', 'T456', 'T789' ],
 						'new' => true,
 					]
@@ -150,8 +148,7 @@ class ApiWishEditTest extends ApiTestCase {
 					'title' => 'Test Wish',
 					'description' => 'This is a test wish.',
 					'type' => 'feature',
-					'projects' => 'commons|wikidata',
-					'otherproject' => '',
+					'tags' => 'multimedia|wikidata',
 					'audience' => 'Experienced editors',
 					'phabtasks' => 'T123|T456|T789',
 					// No proposer
@@ -160,31 +157,6 @@ class ApiWishEditTest extends ApiTestCase {
 				],
 				'The "proposer" parameter must be set.'
 			],
-			'all projects' => [
-				[
-					'status' => 'under-review',
-					'focusarea' => '',
-					'title' => 'Test Wish',
-					'description' => 'This is a test wish.',
-					'type' => 'feature',
-					'projects' => 'all',
-					'otherproject' => '',
-					'audience' => 'Experienced editors',
-					'phabtasks' => 'T123|T456|T789',
-					'proposer' => 'TestUser',
-					'created' => '2023-10-01T12:00:00Z',
-					'baselang' => 'en',
-				],
-				[
-					'wishedit' => [
-						'focusarea' => '',
-						'projects' => [ 'all' ],
-						'phabtasks' => [ 'T123', 'T456', 'T789' ],
-						'new' => true,
-					]
-				],
-				'Publishing the wish "Test Wish" ([[phab:T123|T123]], [[phab:T456|T456]], [[phab:T789|T789]])'
-			],
 			'no tasks' => [
 				[
 					'status' => 'under-review',
@@ -192,8 +164,7 @@ class ApiWishEditTest extends ApiTestCase {
 					'title' => 'Test Wish',
 					'description' => 'This is a test wish.',
 					'type' => 'feature',
-					'projects' => 'commons|wikidata',
-					'otherproject' => '',
+					'tags' => 'multimedia|wikidata',
 					'audience' => 'Experienced editors',
 					// No tasks
 					'proposer' => 'TestUser',
@@ -203,7 +174,7 @@ class ApiWishEditTest extends ApiTestCase {
 				[
 					'wishedit' => [
 						'focusarea' => '',
-						'projects' => [ 'commons', 'wikidata' ],
+						'tags' => [ 'multimedia', 'wikidata' ],
 						'audience' => 'Experienced editors',
 						'phabtasks' => [],
 						'new' => true,
@@ -218,8 +189,7 @@ class ApiWishEditTest extends ApiTestCase {
 					'title' => 'Test Wish',
 					'description' => 'This is a test wish.',
 					'type' => 'feature',
-					'projects' => 'commons|wikidata',
-					'otherproject' => '',
+					'tags' => 'multimedia|wikidata',
 					'audience' => 'Experienced editors',
 					'proposer' => 'TestUser',
 					'created' => '2023-10-01T12:00:00Z',
@@ -234,7 +204,7 @@ class ApiWishEditTest extends ApiTestCase {
 						'audience' => 'Experienced editors',
 						// Other parameters are as expected
 						'focusarea' => '',
-						'projects' => [ 'commons', 'wikidata' ],
+						'tags' => [ 'multimedia', 'wikidata' ],
 						'phabtasks' => [],
 						'new' => true,
 						'baselang' => 'es',
@@ -255,7 +225,7 @@ class ApiWishEditTest extends ApiTestCase {
 			'title' => 'Test Wish',
 			'description' => 'This is a | test wish with stray pipes',
 			'type' => 'feature',
-			'projects' => 'commons|wikidata',
+			'tags' => 'multimedia|wikidata',
 			'phabtasks' => 'T123|T456|T789',
 			'proposer' => 'TestUser',
 			'created' => '2023-10-01T12:00:00Z',

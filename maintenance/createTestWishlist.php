@@ -91,7 +91,7 @@ class CreateTestWishlist extends Maintenance {
 			[ 'en', 'de', 'bs', 'hr', 'fr' ];
 		for ( $i = 1; $i <= $numWishes; $i++ ) {
 			$title = $config->getWishPagePrefix() . $wishStore->getNewId();
-			$projects = array_rand( $config->getProjects(), rand( 1, 3 ) );
+			$tags = array_rand( $config->getNavigationTags(), rand( 1, 3 ) );
 			$lang = $langs[array_rand( $langs )];
 			$wish = Wish::newFromWikitextParams(
 				Title::newFromText( $title ),
@@ -101,8 +101,7 @@ class CreateTestWishlist extends Maintenance {
 					Wish::PARAM_STATUS => array_rand( $config->getStatuses() ),
 					Wish::PARAM_TITLE => $this->getRandomTextBlob( 1, 1, 5 ) . " ($lang)",
 					Wish::PARAM_DESCRIPTION => $this->getRandomTextBlob(),
-					Wish::PARAM_PROJECTS => implode( ',', is_string( $projects ) ? [ $projects ] : $projects ),
-					Wish::PARAM_OTHER_PROJECT => $this->getRandomTextBlob( 1, 1, 3, true ),
+					Wish::PARAM_TAGS => implode( ',', is_string( $tags ) ? [ $tags ] : $tags ),
 					Wish::PARAM_AUDIENCE => $this->getRandomTextBlob( 1, 1, 5 ),
 					Wish::PARAM_PHAB_TASKS => implode( ',', array_map(
 						static fn ( $_i ) => 'T' . rand( 1000, 9999 ),

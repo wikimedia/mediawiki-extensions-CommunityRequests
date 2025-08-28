@@ -175,13 +175,12 @@
 			"class": "MediaWiki\\ResourceLoader\\CodexModule",
 			"codexComponents": [
 				"CdxButton",
-				"CdxCard",
-				"CdxCheckbox",
 				"CdxChipInput",
 				"CdxField",
 				"CdxIcon",
 				"CdxLabel",
 				"CdxMessage",
+				"CdxMultiselectLookup",
 				"CdxRadio",
 				"CdxSelect",
 				"CdxTextArea",
@@ -197,7 +196,7 @@
 				"intake/FocusAreaSection.vue",
 				"intake/FooterSection.vue",
 				"intake/PhabricatorTasks.vue",
-				"intake/ProjectSection.vue",
+				"intake/TagsSection.vue",
 				"intake/StatusSection.vue",
 				"intake/WishTypeSection.vue",
 				"common/Util.js",
@@ -205,9 +204,7 @@
 					"name": "intake/icons.json",
 					"callback": "MediaWiki\\ResourceLoader\\CodexModule::getIcons",
 					"callbackParam": [
-						"cdxIconClose",
-						"cdxIconCollapse",
-						"cdxIconExpand"
+						"cdxIconClose"
 					]
 				},
 				{
@@ -220,7 +217,7 @@
 						"CommunityRequestsWishPagePrefix",
 						"CommunityRequestsWishIndexPage",
 						"CommunityRequestsFocusAreaPagePrefix",
-						"CommunityRequestsProjects",
+						"CommunityRequestsTags",
 						"CommunityRequestsStatuses",
 						"CommunityRequestsWishTypes"
 					]
@@ -253,13 +250,8 @@
 				"communityrequests-focus-area-volunteers-placeholder",
 				"communityrequests-wishtype-label",
 				"communityrequests-wishtype-description",
-				"communityrequests-project-intro",
-				"communityrequests-project-help",
-				"communityrequests-project-all-projects",
-				"communityrequests-project-show-all",
-				"communityrequests-project-show-less",
-				"communityrequests-project-other-label",
-				"communityrequests-project-other-description",
+				"communityrequests-tags-label",
+				"communityrequests-tags-description",
 				"communityrequests-support-label",
 				"communityrequests-audience-label",
 				"communityrequests-audience-description",
@@ -276,7 +268,6 @@
 				"communityrequests-title-error",
 				"communityrequests-description-error",
 				"communityrequests-wishtype-error",
-				"communityrequests-project-no-selection",
 				"communityrequests-audience-error",
 				"communityrequests-status",
 				"communityrequests-close",
@@ -391,7 +382,7 @@
 				"communityrequests-wishes-title-header",
 				"communityrequests-wishes-focusarea-header",
 				"communityrequests-focus-area-unassigned",
-				"communityrequests-wishes-projects-header",
+				"communityrequests-wishes-tags-header",
 				"communityrequests-wishes-votecount-header",
 				"communityrequests-wishes-created-header",
 				"communityrequests-wishes-updated-header",
@@ -462,86 +453,99 @@
 			"description": "The title of the page to use as the index for all focus areas.",
 			"value": "Community Wishlist/Focus areas"
 		},
-		"CommunityRequestsProjects": {
-			"description": "The projects to show in the project selection.",
+		"CommunityRequestsTags": {
+			"description": "Available tags to classify and categorize wishes.",
 			"value": {
-				"wikipedia": {
-					"id": 0,
-					"domain": "www.wikipedia.org",
-					"label": "project-localized-name-group-wikipedia",
-					"logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/Wikipedia-logo-v2.svg/263px-Wikipedia-logo-v2.svg.png"
-				},
-				"wikidata": {
-					"id": 1,
-					"domain": "www.wikidata.org",
-					"label": "project-localized-name-wikidatawiki",
-					"logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/Wikidata-logo.svg/200px-Wikidata-logo.svg.png"
-				},
-				"commons": {
-					"id": 2,
-					"domain": "commons.wikimedia.org",
-					"label": "project-localized-name-commonswiki",
-					"logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Commons-logo.svg/200px-Commons-logo.svg.png"
-				},
-				"wikisource": {
-					"id": 3,
-					"domain": "www.wikisource.org",
-					"label": "project-localized-name-group-wikisource",
-					"logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Wikisource-logo.svg/200px-Wikisource-logo.svg.png"
-				},
-				"wiktionary": {
-					"id": 4,
-					"domain": "www.wiktionary.org",
-					"label": "project-localized-name-group-wiktionary",
-					"logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Wiktionary-logo.svg/200px-Wiktionary-logo.svg.png"
-				},
-				"wikivoyage": {
-					"id": 5,
-					"domain": "www.wikivoyage.org",
-					"label": "project-localized-name-group-wikivoyage",
-					"logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/Wikivoyage-Logo-v3-icon.svg/200px-Wikivoyage-Logo-v3-icon.svg.png"
-				},
-				"wikiquote": {
-					"id": 6,
-					"domain": "www.wikiquote.org",
-					"label": "project-localized-name-group-wikiquote",
-					"logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Wikiquote-logo.svg/200px-Wikiquote-logo.svg.png"
-				},
-				"wikiversity": {
-					"id": 7,
-					"domain": "www.wikiversity.org",
-					"label": "project-localized-name-group-wikiversity",
-					"logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Wikiversity_logo_2017.svg/200px-Wikiversity_logo_2017.svg.png"
-				},
-				"wikifunctions": {
-					"id": 8,
-					"domain": "www.wikifunctions.org",
-					"label": "project-localized-name-wikifunctionswiki",
-					"logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0c/Wikifunctions-logo.svg/200px-Wikifunctions-logo.svg.png"
-				},
-				"wikispecies": {
-					"id": 9,
-					"domain": "species.wikimedia.org",
-					"label": "project-localized-name-specieswiki",
-					"logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/Wikispecies-logo.svg/200px-Wikispecies-logo.svg.png"
-				},
-				"wikinews": {
-					"id": 10,
-					"domain": "www.wikinews.org",
-					"label": "project-localized-name-group-wikinews",
-					"logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Wikinews-logo.svg/200px-Wikinews-logo.svg.png"
-				},
-				"metawiki": {
-					"id": 11,
-					"domain": "meta.wikimedia.org",
-					"label": "project-localized-name-metawiki",
-					"logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Wikimedia_Community_Logo.svg/200px-Wikimedia_Community_Logo.svg.png"
-				},
-				"wmcs": {
-					"id": 12,
-					"domain": "wmcloud.org",
-					"label": "wikimedia-otherprojects-cloudservices",
-					"logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/Wikimedia_Cloud_Services_logo.svg/200px-Wikimedia_Cloud_Services_logo.svg.png"
+				"navigation": {
+					"admins": {
+						"id": 0,
+						"category": "Category:Community Wishlist/Wishes/Admins and stewards"
+					},
+					"botsgadgets": {
+						"id": 1,
+						"category": "Category:Community Wishlist/Wishes/Bots and gadgets",
+						"label": "communityrequests-tag-bots-gadgets"
+					},
+					"categories": {
+						"id": 2,
+						"category": "Category:Community Wishlist/Wishes/Categories"
+					},
+					"citations": {
+						"id": 3,
+						"category": "Category:Community Wishlist/Wishes/Citations"
+					},
+					"editing": {
+						"id": 4,
+						"category": "Category:Community Wishlist/Wishes/Editing"
+					},
+					"ios": {
+						"id": 5,
+						"category": "Category:Community Wishlist/Wishes/Wikipedia iOS app"
+					},
+					"android": {
+						"id": 6,
+						"category": "Category:Community Wishlist/Wishes/Wikipedia Android app"
+					},
+					"mobileweb": {
+						"id": 7,
+						"category": "Category:Community Wishlist/Wishes/Mobile web",
+						"label": "communityrequests-tag-mobile-web"
+					},
+					"multimedia": {
+						"id": 8,
+						"category": "Category:Community Wishlist/Wishes/Multimedia and Commons",
+						"label": "communityrequests-tag-multimedia-commons"
+					},
+					"newcomers": {
+						"id": 9,
+						"category": "Category:Community Wishlist/Wishes/New contributors"
+					},
+					"notifications": {
+						"id": 10,
+						"category": "Category:Community Wishlist/Wishes/Notifications"
+					},
+					"patrolling": {
+						"id": 11,
+						"category": "Category:Community Wishlist/Wishes/Patrolling"
+					},
+					"reading": {
+						"id": 12,
+						"category": "Category:Community Wishlist/Wishes/Reading"
+					},
+					"search": {
+						"id": 13,
+						"category": "Category:Community Wishlist/Wishes/Search"
+					},
+					"talkpages": {
+						"id": 14,
+						"category": "Category:Community Wishlist/Wishes/Talk pages",
+						"label": "communityrequests-tag-talk-pages"
+					},
+					"templates": {
+						"id": 15,
+						"category": "Category:Community Wishlist/Wishes/Templates"
+					},
+					"translation": {
+						"id": 16,
+						"category": "Category:Community Wishlist/Wishes/Translation"
+					},
+					"changelists": {
+						"id": 17,
+						"category": "Category:Community Wishlist/Wishes/Watchlist and recent changes",
+						"label": "communityrequests-tag-watchlist-rc"
+					},
+					"wikidata": {
+						"id": 18,
+						"category": "Category:Community Wishlist/Wishes/Wikidata"
+					},
+					"wikisource": {
+						"id": 19,
+						"category": "Category:Community Wishlist/Wishes/Wikisource"
+					},
+					"wiktionary": {
+						"id": 20,
+						"category": "Category:Community Wishlist/Wishes/Wiktionary"
+					}
 				}
 			}
 		},

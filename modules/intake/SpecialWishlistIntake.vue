@@ -39,12 +39,9 @@
 			:status="typeStatus"
 			@update:type="$event => ( wish.type = $event )"
 		></wish-type-section>
-		<project-section
-			v-model:projects="wish.projects"
-			v-model:other-project="wish.otherproject"
-			:status="projectStatus"
-			:status-type="projectStatusType"
-		></project-section>
+		<tags-section
+			v-model:tags="wish.tags"
+		></tags-section>
 		<audience-section
 			v-model:audience="wish.audience"
 			:status="audienceStatus"
@@ -94,7 +91,7 @@ const Util = require( '../common/Util.js' );
 const StatusSection = require( './StatusSection.vue' );
 const FocusAreaSection = require( './FocusAreaSection.vue' );
 const WishTypeSection = require( './WishTypeSection.vue' );
-const ProjectSection = require( './ProjectSection.vue' );
+const TagsSection = require( './TagsSection.vue' );
 const DescriptionSection = require( './DescriptionSection.vue' );
 const AudienceSection = require( './AudienceSection.vue' );
 const PhabricatorTasks = require( './PhabricatorTasks.vue' );
@@ -118,7 +115,7 @@ module.exports = exports = defineComponent( {
 		FocusAreaSection,
 		FooterSection,
 		PhabricatorTasks,
-		ProjectSection,
+		TagsSection,
 		StatusSection,
 		WishTypeSection
 	},
@@ -129,9 +126,8 @@ module.exports = exports = defineComponent( {
 		created: { type: String, default: '' },
 		description: { type: String, default: '' },
 		focusarea: { type: String, default: '' },
-		otherproject: { type: String, default: '' },
 		phabtasks: { type: Array, default: () => [] },
-		projects: { type: Array, default: () => [] },
+		tags: { type: Array, default: () => [] },
 		proposer: { type: String, default: mw.config.get( 'wgUserName' ) },
 		status: {
 			type: String,
@@ -155,18 +151,6 @@ module.exports = exports = defineComponent( {
 		 * @type {Ref<string>}
 		 */
 		const typeStatus = ref( 'default' );
-		/**
-		 * Status of the project field.
-		 *
-		 * @type {Ref<string>}
-		 */
-		const projectStatus = ref( 'default' );
-		/**
-		 * The type of error status for the project field.
-		 *
-		 * @type {Ref<string>}
-		 */
-		const projectStatusType = ref( 'default' );
 		/**
 		 * Status of the title field.
 		 *
@@ -263,24 +247,11 @@ module.exports = exports = defineComponent( {
 			titleStatus.value = ( title.length < 5 || title.length > titleMaxChars ) ? 'error' : 'default';
 			descriptionStatus.value = ( wish.description.length < 50 ) ? 'error' : 'default';
 			typeStatus.value = wish.type === '' ? 'error' : 'default';
-			// No project selected, other project is empty
-			if ( wish.projects.length === 0 && !wish.otherproject ) {
-				projectStatus.value = 'error';
-				projectStatusType.value = 'noSelection';
-				// Other project has content > 3, but no other project is entered
-			} else if ( wish.otherproject.length < 3 && wish.projects.length < 1 ) {
-				projectStatus.value = 'error';
-				projectStatusType.value = 'invalidOther';
-			} else {
-				projectStatus.value = 'default';
-				projectStatusType.value = 'default';
-			}
 			audienceStatus.value = ( wish.audience.length < 5 || wish.audience.length > 300 ) ? 'error' : 'default';
 			return typeStatus.value !== 'error' &&
 				titleStatus.value !== 'error' &&
 				descriptionStatus.value !== 'error' &&
-				audienceStatus.value !== 'error' &&
-				projectStatus.value !== 'error';
+				audienceStatus.value !== 'error';
 		}
 		/**
 		 * Add a function to be called before the form is submitted.
@@ -338,8 +309,6 @@ module.exports = exports = defineComponent( {
 		return {
 			wish,
 			typeStatus,
-			projectStatus,
-			projectStatusType,
 			titleStatus,
 			descriptionStatus,
 			audienceStatus,

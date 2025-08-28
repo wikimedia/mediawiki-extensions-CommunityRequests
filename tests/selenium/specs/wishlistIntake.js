@@ -28,7 +28,6 @@ describe( 'WishlistIntake wish submission', () => {
 		await expect( IntakePage.titleError ).toBeDisplayed();
 		await expect( IntakePage.descriptionError ).toBeDisplayed();
 		await expect( IntakePage.typeError ).toBeDisplayed();
-		await expect( IntakePage.projectsError ).toBeDisplayed();
 		await expect( IntakePage.audienceError ).toBeDisplayed();
 	} );
 
@@ -44,16 +43,14 @@ describe( 'WishlistIntake wish submission', () => {
 		await expect( IntakePage.titleError ).not.toBeDisplayed();
 	} );
 
-	it( 'should reveal all projects and the "It\'s something else" field when the "All projects" checkbox is checked', async () => {
-		await IntakePage.allProjectsCheckbox.click();
-		await expect( IntakePage.otherProjectInput ).toBeDisplayed();
-	} );
-
 	it( 'should hide errors if all required fields are filled in on submission', async () => {
 		await IntakePage.titleInput.setValue( 'This is a test wish' );
 		await IntakePage.descriptionEditable.waitForClickable();
 		await IntakePage.descriptionEditable.setValue( 'This is a test description.\n'.repeat( 10 ) );
 		await IntakePage.firstWishTypeInput.click();
+		await IntakePage.tagsInput.click();
+		await IntakePage.firstTagOption.waitForClickable();
+		await IntakePage.firstTagOption.click();
 		await IntakePage.audienceInput.setValue( 'This is a test audience' );
 		await IntakePage.phabricatorTasksInput.setValue( 'T123,T456' );
 		await IntakePage.submitButton.waitForClickable();
@@ -61,7 +58,6 @@ describe( 'WishlistIntake wish submission', () => {
 		await expect( IntakePage.titleError ).not.toBeDisplayed();
 		await expect( IntakePage.descriptionError ).not.toBeDisplayed();
 		await expect( IntakePage.typeError ).not.toBeDisplayed();
-		await expect( IntakePage.projectsError ).not.toBeDisplayed();
 		await expect( IntakePage.audienceError ).not.toBeDisplayed();
 		// Follow redirect to the new wish page
 		await browser.waitUntil(
@@ -83,7 +79,7 @@ describe( 'WishlistIntake wish submission', () => {
 			'This is a test description.'
 		);
 		await expect( await ViewWishPage.wishType.getText() ).toBe( 'Feature request' );
-		await expect( await ViewWishPage.projects.getText() ).toBe( 'All projects' );
+		await expect( await ViewWishPage.tags.getText() ).toBe( 'Admins and patrollers' );
 		await expect( ( await ViewWishPage.audience.getText() ).trim() ).toBe(
 			'This is a test audience'
 		);

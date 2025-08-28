@@ -48,15 +48,22 @@ class WishlistConfigTest extends MediaWikiUnitTestCase {
 				WishlistConfig::FOCUS_AREA_CATEGORY => 'Category:Focus areas',
 				WishlistConfig::FOCUS_AREA_PAGE_PREFIX => 'Community Wishlist/FA',
 				WishlistConfig::FOCUS_AREA_INDEX_PAGE => 'Community Wishlist/Focus areas',
-				WishlistConfig::PROJECTS => [
-					'wikipedia' => [
-						'id' => 0,
-						'label' => 'project-wikipedia',
-					],
-					'wikisource' => [
-						'id' => 1,
-						'label' => 'project-wikisource',
-					],
+				WishlistConfig::TAGS => [
+					'navigation' => [
+						'admins' => [
+							'id' => 0,
+							'category' => 'Category:Community Wishlist/Admins and stewards',
+						],
+						'botsgadgets' => [
+							'id' => 1,
+							'category' => 'Category:Community Wishlist/Bots and gadgets',
+							'label' => 'communityrequests-tag-bots-gadgets',
+						],
+						'editing' => [
+							'id' => 2,
+							'category' => 'Category:Community Wishlist/Editing',
+						],
+					]
 				],
 				WishlistConfig::STATUSES => [
 					'open' => [
@@ -103,7 +110,7 @@ class WishlistConfigTest extends MediaWikiUnitTestCase {
 		$this->assertSame( 'Community Wishlist/Focus areas', $this->config->getFocusAreaIndexPage() );
 		$this->assertSame( [ 'open', 'closed', 'unknown' ], array_keys( $this->config->getStatuses() ) );
 		$this->assertSame( [ 'open', 'closed', 'unknown' ], array_keys( $this->config->getStatuses() ) );
-		$this->assertSame( [ 'wikipedia', 'wikisource' ], array_keys( $this->config->getProjects() ) );
+		$this->assertSame( [ 'admins', 'botsgadgets', 'editing' ], array_keys( $this->config->getNavigationTags() ) );
 		$this->assertSame( '/Votes', $this->config->getVotesPageSuffix() );
 		$this->assertTrue( $this->config->isWishVotingEnabled() );
 		$this->assertTrue( $this->config->isFocusAreaVotingEnabled() );
@@ -220,16 +227,19 @@ class WishlistConfigTest extends MediaWikiUnitTestCase {
 		$this->assertNull( $this->config->getWishTypeLabelFromWikitextVal( 'bogus' ) );
 	}
 
-	public function testGetProjectIdFromWikitextVal(): void {
-		$this->assertSame( 0, $this->config->getProjectIdFromWikitextVal( 'wikipedia' ) );
-		$this->assertSame( 1, $this->config->getProjectIdFromWikitextVal( 'wikisource' ) );
-		$this->assertNull( $this->config->getProjectIdFromWikitextVal( 'bogus' ) );
+	public function testGetTagIdFromWikitextVal(): void {
+		$this->assertSame( 0, $this->config->getTagIdFromWikitextVal( 'admins' ) );
+		$this->assertSame( 1, $this->config->getTagIdFromWikitextVal( 'botsgadgets' ) );
+		$this->assertNull( $this->config->getTagIdFromWikitextVal( 'bogus' ) );
 	}
 
-	public function testGetProjectLabelFromWikitextVal(): void {
-		$this->assertSame( 'project-wikipedia', $this->config->getProjectLabelFromWikitextVal( 'wikipedia' ) );
-		$this->assertSame( 'project-wikisource', $this->config->getProjectLabelFromWikitextVal( 'wikisource' ) );
-		$this->assertNull( $this->config->getProjectLabelFromWikitextVal( 'bogus' ) );
+	public function testGetTagLabelFromWikitextVal(): void {
+		$this->assertSame( 'communityrequests-tag-admins', $this->config->getTagLabelFromWikitextVal( 'admins' ) );
+		$this->assertSame(
+			'communityrequests-tag-bots-gadgets',
+			$this->config->getTagLabelFromWikitextVal( 'botsgadgets' )
+		);
+		$this->assertNull( $this->config->getTagLabelFromWikitextVal( 'bogus' ) );
 	}
 
 	public function testGetStatusIdFromWikitextVal(): void {
@@ -244,13 +254,6 @@ class WishlistConfigTest extends MediaWikiUnitTestCase {
 		$this->assertSame( 'status-closed', $this->config->getStatusLabelFromWikitextVal( 'closed' ) );
 		$this->assertSame( 'status-unknown', $this->config->getStatusLabelFromWikitextVal( 'unknown' ) );
 		$this->assertNull( $this->config->getStatusLabelFromWikitextVal( 'bogus' ) );
-	}
-
-	public function testGetProjectsWikitextValsFromIds(): void {
-		$this->assertSame( [ 'all' ], $this->config->getProjectsWikitextValsFromIds( [ 0, 1 ] ) );
-		$this->assertSame( [ 'wikipedia' ], $this->config->getProjectsWikitextValsFromIds( [ 0 ] ) );
-		$this->expectException( ConfigException::class );
-		$this->config->getProjectsWikitextValsFromIds( [ 2 ] );
 	}
 
 	public function testGetEntityWikitextVal(): void {

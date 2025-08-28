@@ -36,16 +36,12 @@ class WishlistIntakePage extends Page {
 		return $( '.ext-communityrequests-intake__type .cdx-message--error' );
 	}
 
-	get allProjectsCheckbox() {
-		return $( '.ext-communityrequests-intake__project .cdx-checkbox__input' );
+	get tagsInput() {
+		return $( '.ext-communityrequests-intake__tags .cdx-chip-input__input' );
 	}
 
-	get otherProjectInput() {
-		return $( '.ext-communityrequests-intake__project-other input' );
-	}
-
-	get projectsError() {
-		return $( '.ext-communityrequests-intake__project .cdx-message--error' );
+	get firstTagOption() {
+		return $( '.ext-communityrequests-intake__tags .cdx-menu-item' );
 	}
 
 	get audienceInput() {

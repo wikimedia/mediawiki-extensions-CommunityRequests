@@ -20,8 +20,7 @@ class Wish extends AbstractWishlistEntity {
 	public const PARAM_TYPE = 'type';
 	public const PARAM_FOCUS_AREA = 'focusarea';
 	public const PARAM_AUDIENCE = 'audience';
-	public const PARAM_PROJECTS = 'projects';
-	public const PARAM_OTHER_PROJECT = 'otherproject';
+	public const PARAM_TAGS = 'tags';
 	public const PARAM_PHAB_TASKS = 'phabtasks';
 	public const PARAM_PROPOSER = 'proposer';
 	public const PARAM_CREATED = 'created';
@@ -32,21 +31,19 @@ class Wish extends AbstractWishlistEntity {
 		self::PARAM_FOCUS_AREA,
 		self::PARAM_DESCRIPTION,
 		self::PARAM_AUDIENCE,
-		self::PARAM_PROJECTS,
-		self::PARAM_OTHER_PROJECT,
+		self::PARAM_TAGS,
 		self::PARAM_PHAB_TASKS,
 		self::PARAM_PROPOSER,
 		self::PARAM_CREATED,
 		self::PARAM_BASE_LANG,
 	];
-	public const VALUE_PROJECTS_ALL = 'all';
+	public const VALUE_ARRAY_DELIMITER = ',';
 
 	// Wish properties.
 	private int $type;
 	private ?PageIdentity $focusarea;
-	private array $projects;
+	private array $tags;
 	private array $phabtasks;
-	private string $otherproject;
 	private string $audience;
 
 	/**
@@ -60,8 +57,7 @@ class Wish extends AbstractWishlistEntity {
 	 *   - 'focusarea' (?PageIdentity): The focus area page the wish is assigned to, or null if not assigned.
 	 *   - 'title' (string): The title of the wish.
 	 *   - 'description' (?string): The description of the wish.
-	 *   - 'projects' (array<int>): IDs of $wgCommunityRequestsProjects associated with the wish.
-	 *   - 'otherproject' (?string): The 'other project' associated with the wish.
+	 *   - 'tags' (array<int>): IDs of $wgCommunityRequestsTags associated with the wish.
 	 *   - 'audience' (?string): The group(s) of users the wish would benefit.
 	 *   - 'phabtasks' (array<int>): IDs of Phabricator tasks associated with the wish.
 	 *   - 'votecount' (int): The number of votes for the wish.
@@ -79,8 +75,7 @@ class Wish extends AbstractWishlistEntity {
 		parent::__construct( $page, $lang, $fields );
 		$this->type = intval( $fields[self::PARAM_TYPE] ?? 0 );
 		$this->focusarea = $fields[self::PARAM_FOCUS_AREA] ?? null;
-		$this->projects = $fields[self::PARAM_PROJECTS] ?? [];
-		$this->otherproject = $fields[self::PARAM_OTHER_PROJECT] ?? '';
+		$this->tags = $fields[self::PARAM_TAGS] ?? [];
 		$this->phabtasks = $fields[self::PARAM_PHAB_TASKS] ?? [];
 		$this->audience = $fields[self::PARAM_AUDIENCE] ?? '';
 	}
@@ -113,21 +108,12 @@ class Wish extends AbstractWishlistEntity {
 	}
 
 	/**
-	 * Get the IDs of the projects associated with the wish.
+	 * Get the IDs of the tags associated with the wish.
 	 *
 	 * @return array<int>
 	 */
-	public function getProjects(): array {
-		return $this->projects;
-	}
-
-	/**
-	 * Get the translated value of the 'other project' field.
-	 *
-	 * @return string
-	 */
-	public function getOtherProject(): string {
-		return $this->otherproject;
+	public function getTags(): array {
+		return $this->tags;
 	}
 
 	/**
@@ -157,8 +143,10 @@ class Wish extends AbstractWishlistEntity {
 			self::PARAM_FOCUS_AREA => $config->getEntityWikitextVal( $this->getFocusAreaPage() ) ?: '',
 			self::PARAM_DESCRIPTION => $this->description,
 			self::PARAM_AUDIENCE => $this->audience,
-			self::PARAM_PROJECTS => $config->getProjectsWikitextValsFromIds( $this->projects ),
-			self::PARAM_OTHER_PROJECT => $this->otherproject,
+			self::PARAM_TAGS => array_map(
+				static fn ( $id ) => $config->getTagWikitextValFromId( $id ),
+				$this->tags
+			),
 			self::PARAM_PHAB_TASKS => array_map( static fn ( $t ) => "T$t", $this->phabtasks ),
 			self::PARAM_PROPOSER => $this->proposer?->getName(),
 			self::PARAM_VOTE_COUNT => $this->votecount,
@@ -177,7 +165,10 @@ class Wish extends AbstractWishlistEntity {
 			$value = match ( $param ) {
 				self::PARAM_STATUS => $config->getStatusWikitextValFromId( $this->status ),
 				self::PARAM_TYPE => $config->getWishTypeWikitextValFromId( $this->type ),
-				self::PARAM_PROJECTS => $config->getProjectsWikitextValsFromIds( $this->projects ),
+				self::PARAM_TAGS => array_map(
+					static fn ( $id ) => $config->getTagWikitextValFromId( $id ),
+					$this->tags
+				),
 				self::PARAM_PHAB_TASKS => array_map( static fn ( $id ) => "T$id", $this->phabtasks ),
 				self::PARAM_FOCUS_AREA => $config->getEntityWikitextVal( $this->focusarea ) ?: '',
 				self::PARAM_CREATED => MWTimestamp::convert( TS_ISO_8601, $this->created ),
@@ -217,8 +208,7 @@ class Wish extends AbstractWishlistEntity {
 			// TODO: It would be better to avoid use of Title here.
 			self::PARAM_FOCUS_AREA => $faValue ? Title::newFromPageReference( $faValue ) : null,
 			self::PARAM_DESCRIPTION => $params[self::PARAM_DESCRIPTION] ?? '',
-			self::PARAM_PROJECTS => self::getProjectsFromCsv( $params[self::PARAM_PROJECTS] ?? '', $config ),
-			self::PARAM_OTHER_PROJECT => $params[self::PARAM_OTHER_PROJECT] ?? '',
+			self::PARAM_TAGS => self::getTagsFromCsv( $params[self::PARAM_TAGS] ?? '', $config ),
 			self::PARAM_AUDIENCE => $params[self::PARAM_AUDIENCE] ?? '',
 			self::PARAM_PHAB_TASKS => self::getPhabTasksFromCsv( $params[self::PARAM_PHAB_TASKS] ?? '' ),
 			self::PARAM_CREATED => $params[self::PARAM_CREATED] ?? null,
@@ -230,24 +220,19 @@ class Wish extends AbstractWishlistEntity {
 	}
 
 	/**
-	 * Given a comma-separated wikitext value for projects, get the project IDs.
+	 * Given a comma-separated wikitext value for tags, get the tag IDs.
 	 *
-	 * @param string $csvProjects
+	 * @param string $csvTags
 	 * @param WishlistConfig $config
 	 * @return int[]
 	 */
-	public static function getProjectsFromCsv( string $csvProjects, WishlistConfig $config ): array {
-		if ( $csvProjects === self::VALUE_PROJECTS_ALL ) {
-			// If the value is 'all', return all project IDs.
-			return array_values( array_map( static fn ( $p ) => (int)$p['id'], $config->getProjects() ) );
-		}
-
+	public static function getTagsFromCsv( string $csvTags, WishlistConfig $config ): array {
 		// @phan-suppress-next-line PhanTypeMismatchReturn
 		return array_values(
 			array_filter(
 				array_map(
-					static fn ( $name ) => $config->getProjectIdFromWikitextVal( $name ),
-					explode( WishStore::ARRAY_DELIMITER_WIKITEXT, $csvProjects )
+					static fn ( $name ) => $config->getTagIdFromWikitextVal( $name ),
+					explode( self::VALUE_ARRAY_DELIMITER, $csvTags )
 				),
 				static fn ( $id ) => $id !== null
 			)

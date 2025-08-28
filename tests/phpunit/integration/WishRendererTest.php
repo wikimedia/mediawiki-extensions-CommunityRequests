@@ -32,7 +32,7 @@ class WishRendererTest extends MediaWikiIntegrationTestCase {
 |title = Test Wish
 |status = open
 |type = change
-|projects = commons
+|tags = multimedia
 |created = 2023-10-01T12:00:00Z
 |proposer = {$user->getName()}
 |baselang = en
@@ -45,12 +45,13 @@ END;
 			$user
 		);
 
+		/** @var Wish $wish */
 		$wish = $this->getStore()->get( $ret['title'] );
 		$this->assertSame( $ret['id'], $wish->getPage()->getId() );
 		$this->assertSame( 'Test Wish', $wish->getTitle() );
 		$this->assertSame( $this->config->getStatusIdFromWikitextVal( 'open' ), $wish->getStatus() );
 		$this->assertSame( $this->config->getWishTypeIdFromWikitextVal( 'change' ), $wish->getType() );
-		$this->assertSame( [ $this->config->getProjectIdFromWikitextVal( 'commons' ) ], $wish->getProjects() );
+		$this->assertSame( [ $this->config->getTagIdFromWikitextVal( 'multimedia' ) ], $wish->getTags() );
 		$this->assertSame( $user->getName(), $wish->getProposer()->getName() );
 		$this->assertSame( '2023-10-01T12:00:00Z', $wish->getCreated() );
 	}

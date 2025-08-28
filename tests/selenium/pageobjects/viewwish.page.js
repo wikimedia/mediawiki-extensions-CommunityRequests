@@ -23,8 +23,8 @@ class ViewWishPage extends Page {
 		return $( '.ext-communityrequests-wish--wish-type' );
 	}
 
-	get projects() {
-		return $( '.ext-communityrequests-wish--projects' );
+	get tags() {
+		return $( '.ext-communityrequests-wish--tags' );
 	}
 
 	get audience() {

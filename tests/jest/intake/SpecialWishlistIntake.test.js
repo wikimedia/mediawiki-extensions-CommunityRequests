@@ -20,9 +20,8 @@ const defaultProps = {
 	created: '2023-10-01T12:00:00Z',
 	description: 'Test Description',
 	focusarea: 'FA1',
-	otherproject: 'Other Project',
 	phabtasks: [ 'T123', 'T456' ],
-	projects: [ 'commons', 'wikisource' ],
+	tags: [ 'multimedia', 'wikisource' ],
 	proposer: 'MusikAnimal',
 	status: 'submitted',
 	title: 'Test Title',
@@ -61,9 +60,8 @@ describe( 'SpecialWishlistIntake', () => {
 		expect( formData.get( 'created' ) ).toBe( '2023-10-01T12:00:00Z' );
 		expect( formData.get( 'description' ) ).toBe( 'Test Description' );
 		expect( formData.get( 'focusarea' ) ).toBe( 'FA1' );
-		expect( formData.get( 'otherproject' ) ).toBe( 'Other Project' );
 		expect( formData.get( 'phabtasks' ) ).toBe( 'T123,T456' );
-		expect( formData.get( 'projects' ) ).toBe( 'commons,wikisource' );
+		expect( formData.get( 'tags' ) ).toBe( 'multimedia,wikisource' );
 		expect( formData.get( 'proposer' ) ).toBe( 'MusikAnimal' );
 		expect( formData.get( 'status' ) ).toBe( 'submitted' );
 		expect( formData.get( 'type' ) ).toBe( 'bug' );

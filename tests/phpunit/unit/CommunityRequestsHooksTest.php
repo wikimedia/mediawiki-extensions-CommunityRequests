@@ -418,7 +418,7 @@ class CommunityRequestsHooksTest extends MediaWikiUnitTestCase {
 			WishlistConfig::FOCUS_AREA_CATEGORY => '',
 			WishlistConfig::FOCUS_AREA_PAGE_PREFIX => '',
 			WishlistConfig::FOCUS_AREA_INDEX_PAGE => '',
-			WishlistConfig::PROJECTS => [],
+			WishlistConfig::TAGS => [],
 			WishlistConfig::STATUSES => [],
 			WishlistConfig::VOTES_PAGE_SUFFIX => '',
 			WishlistConfig::WISH_VOTING_ENABLED => true,

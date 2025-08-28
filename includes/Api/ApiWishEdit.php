@@ -43,7 +43,7 @@ class ApiWishEdit extends ApiWishlistEntityBase {
 			$this->params[Wish::PARAM_BASE_LANG],
 			[
 				...$this->params,
-				Wish::PARAM_PROJECTS => implode( ',', $this->params[Wish::PARAM_PROJECTS] ),
+				Wish::PARAM_TAGS => implode( ',', $this->params[Wish::PARAM_TAGS] ),
 				Wish::PARAM_PHAB_TASKS => implode( ',', $this->params[Wish::PARAM_PHAB_TASKS] ?? [] ),
 			],
 			$this->config,
@@ -162,19 +162,12 @@ class ApiWishEdit extends ApiWishlistEntityBase {
 				ParamValidator::PARAM_TYPE => array_keys( $this->config->getWishTypes() ),
 				ParamValidator::PARAM_REQUIRED => true,
 			],
-			Wish::PARAM_PROJECTS => [
-				ParamValidator::PARAM_TYPE => [
-					Wish::VALUE_PROJECTS_ALL,
-					...array_values( array_map(
-						fn ( array $project ) => $this->config->getProjectWikitextValFromId( $project['id'] ),
-						$this->config->getProjects()
-					) )
-				],
+			Wish::PARAM_TAGS => [
+				ParamValidator::PARAM_TYPE => array_values( array_map(
+					fn ( array $tag ) => $this->config->getTagWikitextValFromId( $tag['id'] ),
+					$this->config->getNavigationTags()
+				) ),
 				ParamValidator::PARAM_ISMULTI => true,
-				ParamValidator::PARAM_REQUIRED => true,
-			],
-			Wish::PARAM_OTHER_PROJECT => [
-				ParamValidator::PARAM_TYPE => 'string',
 			],
 			Wish::PARAM_AUDIENCE => [
 				ParamValidator::PARAM_TYPE => 'string',

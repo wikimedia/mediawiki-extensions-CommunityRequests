@@ -66,7 +66,7 @@ trait WishlistTestTrait {
 			Wish::PARAM_AUDIENCE => 'everyone',
 			Wish::PARAM_STATUS => 'under-review',
 			Wish::PARAM_TYPE => 'change',
-			Wish::PARAM_PROJECTS => 'wikipedia,commons',
+			Wish::PARAM_TAGS => 'multimedia,newcomers',
 			Wish::PARAM_PHAB_TASKS => 'T123,T456',
 			Wish::PARAM_CREATED => '2025-01-01T00:00:00Z',
 			Wish::PARAM_PROPOSER => $this->getTestUser()->getUser()->getName(),

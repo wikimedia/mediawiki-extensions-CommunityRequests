@@ -108,26 +108,22 @@ class WishRenderer extends AbstractRenderer {
 			)->text()
 		);
 
-		// Projects.
-		$projectsHeading = Html::element(
+		// Tags.
+		$tagsHeading = Html::element(
 			'div',
 			[ 'class' => 'mw-heading mw-heading3' ],
-			$this->msg( 'communityrequests-wish-related-heading' )->text()
+			$this->msg( 'communityrequests-tags-heading' )->text()
 		);
-		$projectLabels = array_map( function ( $wikitextVal ) {
-			$label = $this->config->getProjectLabelFromWikitextVal( $wikitextVal );
+		$tagLabels = array_map( function ( $wikitextVal ) {
+			$label = $this->config->getTagLabelFromWikitextVal( $wikitextVal );
 			if ( $label === null ) {
 				$this->parser->addTrackingCategory( self::ERROR_TRACKING_CATEGORY );
 				return null;
 			}
 			return $this->msg( $label )->text();
-		}, array_filter( explode( WishStore::ARRAY_DELIMITER_WIKITEXT, $this->getArg( Wish::PARAM_PROJECTS, '' ) ) ) );
+		}, array_filter( explode( WishStore::ARRAY_DELIMITER_WIKITEXT, $this->getArg( Wish::PARAM_TAGS, '' ) ) ) );
 		// @phan-suppress-next-line SecurityCheck-DoubleEscaped
-		$projects = $this->getDiv( 'projects', $language->commaList( array_filter( $projectLabels ) ) );
-		$otherProject = $this->getArg( Wish::PARAM_OTHER_PROJECT, '' );
-		if ( $otherProject ) {
-			$projects .= $this->getDiv( 'other-project', $otherProject );
-		}
+		$tags = $this->getDiv( 'tags', $language->commaList( array_filter( $tagLabels ) ) );
 
 		// Audience.
 		$audienceHeading = Html::element(
@@ -201,7 +197,7 @@ class WishRenderer extends AbstractRenderer {
 			$descHeading . $descHtml .
 			$focusAreaHeading . $focusArea .
 			$wishTypeHeading . $wishType .
-			$projectsHeading . $projects .
+			$tagsHeading . $tags .
 			$audienceHeading . $audienceHtml .
 			$tasksHeading . $tasksHtml .
 			$detailsHeading . $detailsHtml .

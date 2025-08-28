@@ -39,8 +39,11 @@ class SpecialWishlistIntake extends AbstractWishlistSpecialPage {
 	}
 
 	/** @inheritDoc */
-	public function execute( $entityId ): bool {
+	public function execute( $entityId ) {
 		parent::execute( (string)$entityId );
+		if ( !$this->config->isEnabled() ) {
+			return;
+		}
 
 		$this->getOutput()->setSubtitle( $this->msg( 'communityrequests-form-subtitle' ) );
 
@@ -65,8 +68,6 @@ class SpecialWishlistIntake extends AbstractWishlistSpecialPage {
 			'intakeFocusAreas' => $focusAreaData,
 			'intakeAudienceMaxChars' => WishStore::AUDIENCE_MAX_CHARS,
 		] );
-
-		return true;
 	}
 
 	/** @inheritDoc */

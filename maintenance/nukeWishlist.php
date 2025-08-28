@@ -99,7 +99,7 @@ class NukeWishlist extends Maintenance {
 		if ( $this->nukeWishes ) {
 			$tables[] = 'communityrequests_wishes';
 			$tables[] = 'communityrequests_wishes_translations';
-			$tables[] = 'communityrequests_projects';
+			$tables[] = 'communityrequests_tags';
 			$tables[] = 'communityrequests_phab_tasks';
 			$this->resetIdCounter( 'wish' );
 		}

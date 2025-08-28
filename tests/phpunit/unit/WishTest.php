@@ -208,7 +208,7 @@ END
 					Wish::PARAM_DESCRIPTION => 'Fix everything.',
 					Wish::PARAM_TYPE => 1,
 					Wish::PARAM_PROJECTS => [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ],
-					Wish::PARAM_OTHER_PROJECT => null,
+					Wish::PARAM_OTHER_PROJECT => '',
 					Wish::PARAM_AUDIENCE => 'Editors and readers',
 					Wish::PARAM_PHAB_TASKS => [],
 					Wish::PARAM_CREATED => '2023-10-01T12:00:00Z',

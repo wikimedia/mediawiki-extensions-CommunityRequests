@@ -1,0 +1,107 @@
+{
+	"before": {
+		"name": "communityrequests_wishes_translations",
+		"comment": "Holds translations of translatable fields of individual community wishes",
+		"columns": [
+			{
+				"name": "crt_wish",
+				"type": "integer",
+				"comment": "Foreign key to communityrequests_wishes.cr_page",
+				"options": {
+					"unsigned": true,
+					"notnull": true
+				}
+			},
+			{
+				"name": "crt_title",
+				"comment": "Translated title of the wish",
+				"type": "binary",
+				"options": {
+					"length": 255,
+					"notnull": true
+				}
+			},
+			{
+				"name": "crt_other_project",
+				"comment": "Translation of the 'Other project'",
+				"type": "binary",
+				"options": {
+					"length": 255,
+					"notnull": false
+				}
+			},
+			{
+				"name": "crt_lang",
+				"comment": "Language code",
+				"type": "binary",
+				"options": {
+					"length": 35,
+					"notnull": true
+				}
+			}
+		],
+		"indexes": [
+			{
+				"name": "crt_lang_title",
+				"comment": "Index for filtering by language and title",
+				"columns": [
+					"crt_lang",
+					"crt_title"
+				],
+				"unique": false
+			}
+		],
+		"pk": [
+			"crt_lang",
+			"crt_wish"
+		]
+	},
+	"after": {
+		"name": "communityrequests_wishes_translations",
+		"comment": "Holds translations of translatable fields of individual community wishes",
+		"columns": [
+			{
+				"name": "crt_wish",
+				"type": "integer",
+				"comment": "Foreign key to communityrequests_wishes.cr_page",
+				"options": {
+					"unsigned": true,
+					"notnull": true
+				}
+			},
+			{
+				"name": "crt_title",
+				"comment": "Translated title of the wish",
+				"type": "binary",
+				"options": {
+					"length": 255,
+					"notnull": true
+				}
+			},
+			{
+				"name": "crt_lang",
+				"comment": "Language code",
+				"type": "binary",
+				"options": {
+					"length": 35,
+					"notnull": true
+				}
+			}
+		],
+		"indexes": [
+			{
+				"name": "crt_lang_title",
+				"comment": "Index for filtering by language and title",
+				"columns": [
+					"crt_lang",
+					"crt_title"
+				],
+				"unique": false
+			}
+		],
+		"pk": [
+			"crt_lang",
+			"crt_wish"
+		]
+	}
+}

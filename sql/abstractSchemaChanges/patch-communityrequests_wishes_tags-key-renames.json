@@ -1,0 +1,56 @@
+{
+	"before": {
+		"name": "communityrequests_tags",
+		"comment": "Project IDs associated with community wishes",
+		"columns": [
+			{
+				"name": "crp_project",
+				"comment": "ID of the project configured in $wgCommunityRequestsProjects",
+				"type": "integer",
+				"options": { "unsigned": true, "notnull": true }
+			},
+			{
+				"name": "crp_wish",
+				"comment": "Foreign key to cr_page",
+				"type": "integer",
+				"options": { "unsigned": true, "notnull": true }
+			}
+		],
+		"indexes": [
+			{
+				"name": "crp_project_wish",
+				"comment": "Index project-wish pairs",
+				"columns": [ "crp_project", "crp_wish" ],
+				"unique": false
+			}
+		],
+		"pk": [ "crp_wish", "crp_project" ]
+	},
+	"after": {
+		"name": "communityrequests_tags",
+		"comment": "Tag IDs associated with community wishes",
+		"columns": [
+			{
+				"name": "crtg_tag",
+				"comment": "ID of the tag as configured in $wgCommunityRequestsTags",
+				"type": "integer",
+				"options": { "unsigned": true, "notnull": true }
+			},
+			{
+				"name": "crtg_wish",
+				"comment": "Foreign key to cr_page",
+				"type": "integer",
+				"options": { "unsigned": true, "notnull": true }
+			}
+		],
+		"indexes": [
+			{
+				"name": "crtg_tag_wish",
+				"comment": "Index tag-wish pairs",
+				"columns": [ "crtg_tag", "crtg_wish" ],
+				"unique": false
+			}
+		],
+		"pk": [ "crtg_wish", "crtg_tag" ]
+	}
+}

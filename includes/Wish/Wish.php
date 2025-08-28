@@ -46,8 +46,8 @@ class Wish extends AbstractWishlistEntity {
 	private ?PageIdentity $focusarea;
 	private array $projects;
 	private array $phabtasks;
-	private ?string $otherproject;
-	private ?string $audience;
+	private string $otherproject;
+	private string $audience;
 
 	/**
 	 * @param PageIdentity $page The title of the base language wish page.
@@ -80,7 +80,7 @@ class Wish extends AbstractWishlistEntity {
 		$this->type = intval( $fields[self::PARAM_TYPE] ?? 0 );
 		$this->focusarea = $fields[self::PARAM_FOCUS_AREA] ?? null;
 		$this->projects = $fields[self::PARAM_PROJECTS] ?? [];
-		$this->otherproject = ( $fields[self::PARAM_OTHER_PROJECT] ?? '' ) ?: null;
+		$this->otherproject = $fields[self::PARAM_OTHER_PROJECT] ?? '';
 		$this->phabtasks = $fields[self::PARAM_PHAB_TASKS] ?? [];
 		$this->audience = $fields[self::PARAM_AUDIENCE] ?? '';
 	}
@@ -124,18 +124,18 @@ class Wish extends AbstractWishlistEntity {
 	/**
 	 * Get the translated value of the 'other project' field.
 	 *
-	 * @return ?string
+	 * @return string
 	 */
-	public function getOtherProject(): ?string {
+	public function getOtherProject(): string {
 		return $this->otherproject;
 	}
 
 	/**
 	 * Get the audience of the wish, i.e. the group(s) of users the wish would benefit.
 	 *
-	 * @return ?string
+	 * @return string
 	 */
-	public function getAudience(): ?string {
+	public function getAudience(): string {
 		return $this->audience;
 	}
 
@@ -158,7 +158,7 @@ class Wish extends AbstractWishlistEntity {
 			self::PARAM_DESCRIPTION => $this->description,
 			self::PARAM_AUDIENCE => $this->audience,
 			self::PARAM_PROJECTS => $config->getProjectsWikitextValsFromIds( $this->projects ),
-			self::PARAM_OTHER_PROJECT => (string)$this->otherproject,
+			self::PARAM_OTHER_PROJECT => $this->otherproject,
 			self::PARAM_PHAB_TASKS => array_map( static fn ( $t ) => "T$t", $this->phabtasks ),
 			self::PARAM_PROPOSER => $this->proposer?->getName(),
 			self::PARAM_VOTE_COUNT => $this->votecount,
@@ -218,7 +218,7 @@ class Wish extends AbstractWishlistEntity {
 			self::PARAM_FOCUS_AREA => $faValue ? Title::newFromPageReference( $faValue ) : null,
 			self::PARAM_DESCRIPTION => $params[self::PARAM_DESCRIPTION] ?? '',
 			self::PARAM_PROJECTS => self::getProjectsFromCsv( $params[self::PARAM_PROJECTS] ?? '', $config ),
-			self::PARAM_OTHER_PROJECT => $params[self::PARAM_OTHER_PROJECT] ?? null,
+			self::PARAM_OTHER_PROJECT => $params[self::PARAM_OTHER_PROJECT] ?? '',
 			self::PARAM_AUDIENCE => $params[self::PARAM_AUDIENCE] ?? '',
 			self::PARAM_PHAB_TASKS => self::getPhabTasksFromCsv( $params[self::PARAM_PHAB_TASKS] ?? '' ),
 			self::PARAM_CREATED => $params[self::PARAM_CREATED] ?? null,

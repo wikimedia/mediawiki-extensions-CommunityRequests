@@ -11,8 +11,6 @@ use MediaWiki\Installer\Hook\LoadExtensionSchemaUpdatesHook;
  */
 class SchemaHooks implements LoadExtensionSchemaUpdatesHook {
 
-	public const CACHE_VERSION = 2;
-
 	/**
 	 * @note The hook doesn't allow injecting services
 	 * @codeCoverageIgnore
@@ -27,29 +25,22 @@ class SchemaHooks implements LoadExtensionSchemaUpdatesHook {
 		$sqlDir = __DIR__ . '/../../sql';
 		$engine = $updater->getDB()->getType();
 
-		// For developer convenience from when redesigned the schema.
-		// TODO: Remove after some time.
-		$updater->dropExtensionTable( 'community_requests' );
-		$updater->dropExtensionTable( 'community_requests_projects' );
-		$updater->dropExtensionTable( 'community_requests_translations' );
-		$updater->dropExtensionTable( 'community_requests_focus_areas' );
-		$updater->dropExtensionTable( 'community_requests_focus_area_translations' );
-		$updater->dropExtensionTable( 'community_requests_projects' );
-		$updater->dropExtensionTable( 'community_requests_phab_tasks' );
-
 		$updater->addExtensionTable( 'communityrequests_wishes',
 			"$sqlDir/$engine/tables-generated.sql" );
-		$updater->addExtensionTable( 'communityrequests_focus_areas',
-			"$sqlDir/$engine/tables-generated.sql" );
-		$updater->addExtensionTable( 'communityrequests_wishes_translations',
-			"$sqlDir/$engine/tables-generated.sql" );
-		$updater->addExtensionTable( 'communityrequests_focus_areas_translations',
-			"$sqlDir/$engine/tables-generated.sql" );
-		$updater->addExtensionTable( 'communityrequests_projects',
-			"$sqlDir/$engine/tables-generated.sql" );
-		$updater->addExtensionTable( 'communityrequests_phab_tasks',
-			"$sqlDir/$engine/tables-generated.sql" );
-		$updater->addExtensionTable( 'communityrequests_counters',
-			"$sqlDir/$engine/tables-generated.sql" );
+
+		$updater->addExtensionTable( 'communityrequests_tags',
+			"$sqlDir/$engine/patch-communityrequests_projects_tags.sql" );
+		$updater->addExtensionField(
+			'communityrequests_tags',
+			'crtg_tag',
+			"$sqlDir/$engine/patch-communityrequests_wishes_tags-key-renames.sql"
+		);
+
+		// Drop cwt_other_project which now lives as a 'wikitext field'.
+		$updater->dropExtensionField(
+			'communityrequests_wishes_translations',
+			'cwt_other_project',
+			"$sqlDir/$engine/patch-communityrequests_wishes_translations-drop-cwt_other_project.sql"
+		);
 	}
 }

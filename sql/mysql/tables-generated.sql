@@ -37,7 +37,6 @@ CREATE TABLE /*_*/communityrequests_wishes_translations (
   crt_wish INT UNSIGNED NOT NULL,
   crt_lang VARBINARY(35) NOT NULL,
   crt_title VARBINARY(255) NOT NULL,
-  crt_other_project VARBINARY(255) DEFAULT NULL,
   INDEX crt_lang_title (crt_lang, crt_title),
   PRIMARY KEY(crt_lang, crt_wish)
 ) /*$wgDBTableOptions*/;
@@ -53,11 +52,11 @@ CREATE TABLE /*_*/communityrequests_focus_areas_translations (
 ) /*$wgDBTableOptions*/;
 
 
-CREATE TABLE /*_*/communityrequests_projects (
-  crp_project INT UNSIGNED NOT NULL,
-  crp_wish INT UNSIGNED NOT NULL,
-  INDEX crp_project_wish (crp_project, crp_wish),
-  PRIMARY KEY(crp_wish, crp_project)
+CREATE TABLE /*_*/communityrequests_tags (
+  crtg_tag INT UNSIGNED NOT NULL,
+  crtg_wish INT UNSIGNED NOT NULL,
+  INDEX crtg_tag_wish (crtg_tag, crtg_wish),
+  PRIMARY KEY(crtg_wish, crtg_tag)
 ) /*$wgDBTableOptions*/;
 
 

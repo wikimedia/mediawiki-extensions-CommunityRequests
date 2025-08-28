@@ -43,7 +43,6 @@ CREATE TABLE communityrequests_wishes_translations (
   crt_wish INT NOT NULL,
   crt_lang TEXT NOT NULL,
   crt_title TEXT NOT NULL,
-  crt_other_project TEXT DEFAULT NULL,
   PRIMARY KEY(crt_lang, crt_wish)
 );
 
@@ -61,13 +60,13 @@ CREATE TABLE communityrequests_focus_areas_translations (
 CREATE INDEX crfat_lang_title ON communityrequests_focus_areas_translations (crfat_lang, crfat_title);
 
 
-CREATE TABLE communityrequests_projects (
-  crp_project INT NOT NULL,
-  crp_wish INT NOT NULL,
-  PRIMARY KEY(crp_wish, crp_project)
+CREATE TABLE communityrequests_tags (
+  crtg_tag INT NOT NULL,
+  crtg_wish INT NOT NULL,
+  PRIMARY KEY(crtg_wish, crtg_tag)
 );
 
-CREATE INDEX crp_project_wish ON communityrequests_projects (crp_project, crp_wish);
+CREATE INDEX crtg_tag_wish ON communityrequests_tags (crtg_tag, crtg_wish);
 
 
 CREATE TABLE communityrequests_phab_tasks (

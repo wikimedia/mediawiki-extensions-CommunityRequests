@@ -43,7 +43,6 @@ CREATE TABLE /*_*/communityrequests_wishes_translations (
   crt_wish INTEGER UNSIGNED NOT NULL,
   crt_lang BLOB NOT NULL,
   crt_title BLOB NOT NULL,
-  crt_other_project BLOB DEFAULT NULL,
   PRIMARY KEY(crt_lang, crt_wish)
 );
 
@@ -61,13 +60,13 @@ CREATE TABLE /*_*/communityrequests_focus_areas_translations (
 CREATE INDEX crfat_lang_title ON /*_*/communityrequests_focus_areas_translations (crfat_lang, crfat_title);
 
 
-CREATE TABLE /*_*/communityrequests_projects (
-  crp_project INTEGER UNSIGNED NOT NULL,
-  crp_wish INTEGER UNSIGNED NOT NULL,
-  PRIMARY KEY(crp_wish, crp_project)
+CREATE TABLE /*_*/communityrequests_tags (
+  crtg_tag INTEGER UNSIGNED NOT NULL,
+  crtg_wish INTEGER UNSIGNED NOT NULL,
+  PRIMARY KEY(crtg_wish, crtg_tag)
 );
 
-CREATE INDEX crp_project_wish ON /*_*/communityrequests_projects (crp_project, crp_wish);
+CREATE INDEX crtg_tag_wish ON /*_*/communityrequests_tags (crtg_tag, crtg_wish);
 
 
 CREATE TABLE /*_*/communityrequests_phab_tasks (

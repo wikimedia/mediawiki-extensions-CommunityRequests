@@ -85,7 +85,6 @@ class WishStore extends AbstractWishlistStore {
 			'cr_created',
 			'cr_updated',
 			'crt_title',
-			'crt_other_project',
 			'crt_lang',
 		];
 	}
@@ -208,20 +207,6 @@ class WishStore extends AbstractWishlistStore {
 		$dbw->endAtomic( __METHOD__ );
 	}
 
-	/** @inheritDoc */
-	protected function saveTranslations(
-		AbstractWishlistEntity $entity,
-		IDatabase $dbw,
-		array $dataSet = [],
-	): void {
-		if ( !$entity instanceof Wish ) {
-			throw new InvalidArgumentException( '$entity must be a Wish instance.' );
-		}
-		parent::saveTranslations( $entity, $dbw, [
-			'crt_other_project' => $entity->getOtherProject() ?: null,
-		] );
-	}
-
 	/**
 	 * Save the projects and Phabricator tasks associated with a wish.
 	 *
@@ -231,9 +216,9 @@ class WishStore extends AbstractWishlistStore {
 	private function saveProjectsAndPhabTasks( Wish $wish, IDatabase $dbw ): void {
 		$queryMetadata = [
 			[
-				'table' => 'communityrequests_projects',
-				'key' => 'crp_project',
-				'foreignKey' => 'crp_wish',
+				'table' => 'communityrequests_tags',
+				'key' => 'crtg_tag',
+				'foreignKey' => 'crtg_wish',
 				'wishMethod' => 'getProjects',
 			], [
 				'table' => 'communityrequests_phab_tasks',
@@ -316,7 +301,6 @@ class WishStore extends AbstractWishlistStore {
 					// TODO: refactor to fetch page ID in the main query.
 					Wish::PARAM_FOCUS_AREA => Title::newFromID( (int)$row->cr_focus_area ),
 					Wish::PARAM_PROJECTS => $projectsByPage[$row->cr_page] ?? [],
-					Wish::PARAM_OTHER_PROJECT => $row->crt_other_project,
 					Wish::PARAM_PHAB_TASKS => $phabTasksByPage[$row->cr_page] ?? [],
 					Wish::PARAM_VOTE_COUNT => (int)$row->cr_vote_count,
 					Wish::PARAM_CREATED => $row->cr_created,
@@ -324,6 +308,7 @@ class WishStore extends AbstractWishlistStore {
 					Wish::PARAM_BASE_LANG => $row->cr_base_lang,
 					// "Virtual" fields that only exist when querying for wikitext.
 					Wish::PARAM_DESCRIPTION => $row->crt_description ?? null,
+					Wish::PARAM_OTHER_PROJECT => $row->crt_other_project ?? null,
 					Wish::PARAM_AUDIENCE => $row->crt_audience ?? null,
 				]
 			);
@@ -345,15 +330,15 @@ class WishStore extends AbstractWishlistStore {
 		}
 		$projects = $dbr->newSelectQueryBuilder()
 			->caller( __METHOD__ )
-			->table( 'communityrequests_projects' )
-			->fields( [ 'crp_wish', 'crp_project' ] )
-			->where( [ 'crp_wish' => $pageIds ] )
+			->table( 'communityrequests_tags' )
+			->fields( [ 'crtg_wish', 'crtg_tag' ] )
+			->where( [ 'crtg_wish' => $pageIds ] )
 			->fetchResultSet();
 
 		// Group by wish ID.
 		$projectsByWish = [];
 		foreach ( $projects as $project ) {
-			$projectsByWish[$project->crp_wish][] = (int)$project->crp_project;
+			$projectsByWish[$project->crtg_wish][] = (int)$project->crtg_tag;
 		}
 
 		return $projectsByWish;
@@ -389,7 +374,7 @@ class WishStore extends AbstractWishlistStore {
 	/** @inheritDoc */
 	public function delete( AbstractWishlistEntity $entity, array $assocData = [] ): IDatabase {
 		return parent::delete( $entity, [
-			'communityrequests_projects' => 'crp_wish',
+			'communityrequests_tags' => 'crtg_wish',
 			'communityrequests_phab_tasks' => 'crpt_wish'
 		] );
 	}
@@ -413,6 +398,7 @@ class WishStore extends AbstractWishlistStore {
 	public function getWikitextFields(): array {
 		return [
 			Wish::PARAM_DESCRIPTION,
+			Wish::PARAM_OTHER_PROJECT,
 			Wish::PARAM_AUDIENCE,
 		];
 	}

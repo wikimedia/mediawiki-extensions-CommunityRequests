@@ -5,7 +5,9 @@ namespace MediaWiki\Extension\CommunityRequests\FocusArea;
 
 use MediaWiki\Extension\CommunityRequests\AbstractWishlistSpecialPage;
 use MediaWiki\Extension\CommunityRequests\WishlistConfig;
+use MediaWiki\HTMLForm\HTMLForm;
 use MediaWiki\Message\Message;
+use MediaWiki\Title\Title;
 use MediaWiki\Title\TitleParser;
 
 class SpecialEditFocusArea extends AbstractWishlistSpecialPage {
@@ -43,6 +45,18 @@ class SpecialEditFocusArea extends AbstractWishlistSpecialPage {
 			[ $this->pageTitle->getPrefixedText() ],
 			$this->config->getHomepage()
 		);
+	}
+
+	/** @inheritDoc */
+	public function onSubmit( array $data, ?HTMLForm $form = null ) {
+		$status = parent::onSubmit( $data, $form );
+
+		// Invalidate the cache for the focus area index page.
+		if ( $status->isOK() ) {
+			Title::newFromText( $this->config->getFocusAreaIndexPage() )->invalidateCache();
+		}
+
+		return $status;
 	}
 
 	/** @inheritDoc */

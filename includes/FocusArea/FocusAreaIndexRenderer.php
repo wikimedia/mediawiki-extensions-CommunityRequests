@@ -42,7 +42,7 @@ class FocusAreaIndexRenderer extends AbstractRenderer {
 
 			$title = Html::element(
 				'div',
-				[ 'class' => 'cdx-card__text__title' ],
+				[ 'class' => 'cdx-card__text__title ext-communityrequests-focus-area-card__title' ],
 				$focusArea->getTitle()
 			);
 			$descriptionHtml = Html::rawElement(
@@ -79,7 +79,7 @@ class FocusAreaIndexRenderer extends AbstractRenderer {
 			);
 			$outputHTML .= Html::rawElement(
 				'div',
-				[ 'class' => 'cdx-card' ],
+				[ 'class' => 'cdx-card ext-communityrequests-focus-area-card' ],
 				$cardHtml
 			);
 		}

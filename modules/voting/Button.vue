@@ -1,6 +1,6 @@
 <template>
 	<cdx-button
-		v-if="!hasVoted"
+		v-if="hasVoted === false"
 		action="progressive"
 		weight="primary"
 		@click="open = true"
@@ -11,7 +11,7 @@
 		}}
 	</cdx-button>
 	<cdx-button
-		v-else
+		v-else-if="hasVoted === true"
 	>
 		<cdx-icon :icon="cdxIconCheck"></cdx-icon>
 		{{ $i18n( 'communityrequests-supported' ).text() }}
@@ -70,7 +70,7 @@ module.exports = exports = defineComponent( {
 		const api = new mw.Api();
 		const votesPageName = getBasePageName() + CommunityRequestsVotesPageSuffix;
 		const open = ref( false );
-		const hasVoted = ref( false );
+		const hasVoted = ref( null );
 		let comment = '';
 		let showVotedMessage = ref( false );
 		let submitting = ref( false );
@@ -221,9 +221,8 @@ module.exports = exports = defineComponent( {
 
 		onBeforeMount( () => {
 			loadVotes().then( ( votes ) => {
-				if ( votes && alreadyVoted( votes ) ) {
-					hasVoted.value = true;
-
+				hasVoted.value = votes.length > 0 && alreadyVoted( votes );
+				if ( hasVoted.value ) {
 					// Also check for the session storage param for the post-voting message.
 					showVotedMessage = mw.storage.session.get( 'wishlist-intake-vote-added' ) !== null;
 					mw.storage.session.remove( 'wishlist-intake-vote-added' );

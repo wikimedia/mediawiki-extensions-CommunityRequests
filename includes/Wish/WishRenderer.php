@@ -25,7 +25,7 @@ class WishRenderer extends AbstractRenderer {
 			return '';
 		}
 
-		$this->parser->addTrackingCategory( self::WISH_TRACKING_CATEGORY );
+		$this->addTrackingCategory( self::WISH_TRACKING_CATEGORY );
 
 		$args = $this->getArgs();
 

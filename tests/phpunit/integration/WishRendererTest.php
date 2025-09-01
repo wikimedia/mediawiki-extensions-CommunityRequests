@@ -55,42 +55,28 @@ END;
 		$this->assertSame( '2023-10-01T12:00:00Z', $wish->getCreated() );
 	}
 
-	/**
-	 * @dataProvider provideTestTrackingCategories
-	 */
-	public function testTrackingCategories( string $wikitext, bool $shouldBeInCategory ): void {
-		$userName = $this->getTestUser()->getUser()->getName();
-		$ret = $this->insertPage(
-			Title::newFromText( $this->config->getWishPagePrefix() . '123' ),
-			str_replace( '$1', $userName, $wikitext ),
-			NS_MAIN,
-			$this->getTestUser()->getUser()
-		);
-		$categories = array_keys( $ret['title']->getParentCategories() );
-		$this->assertContains( 'Category:Community_Wishlist/Wishes', $categories );
-		if ( $shouldBeInCategory ) {
-			$this->assertContains( 'Category:Pages_with_Community_Wishlist_errors', $categories );
-		} else {
-			$this->assertNotContains( 'Category:Pages_with_Community_Wishlist_errors', $categories );
-		}
-	}
+	public function testTrackingCategories(): void {
+		$this->markTestSkippedIfExtensionNotLoaded( 'Translate' );
 
-	// phpcs:disable Generic.Files.LineLength.TooLong
-	public static function provideTestTrackingCategories(): array {
-		return [
-			'valid wish' => [
-				'{{#CommunityRequests: wish | title=Valid Wish | status=under-review | type=change | projects=commons | created=2023-10-01T12:00:00Z | proposer=$1 | baselang=en | description=A valid wish}}',
-				false,
-			],
-			'missing title' => [
-				'{{#CommunityRequests: wish | status=under-review | type=change | projects=commons | created=2023-10-01T12:00:00Z | proposer=$1 | baselang=en |Missing title}}',
-				true,
-			],
-			'unknown status' => [
-				'{{#CommunityRequests: wish | title=Invalid Status Wish | status=bogus | type=change | projects=commons | created=2023-10-01T12:00:00Z | proposer=$1 | baselang=en | description=Unknown status}}',
-				true,
-			],
-		];
+		$wishTitle = Title::newFromText( $this->config->getWishPagePrefix() . '123' );
+		$this->insertTestWish( $wishTitle, 'en', [ Wish::PARAM_TITLE => '<translate>Test title</translate>' ] );
+		$categories = array_keys( $wishTitle->getParentCategories() );
+		$this->assertContains( 'Category:Community_Wishlist/Wishes', $categories );
+		$this->assertNotContains( 'Category:Community_Wishlist/Wishes/en', $categories );
+		$this->assertNotContains( 'Category:Pages_with_Community_Wishlist_errors', $categories );
+		// Add translation
+		$wishDe = $this->insertTestWish( $wishTitle, 'de', [ Wish::PARAM_BASE_LANG => 'en' ] );
+		$categories = array_keys(
+			Title::newFromPageReference( $wishDe->getTranslationSubpage() )->getParentCategories()
+		);
+		$this->assertContains( 'Category:Community_Wishlist/Wishes/de', $categories );
+
+		// Invalid wish (missing title)
+		$invalidTitle = Title::newFromText( $this->config->getWishPagePrefix() . '124' );
+		$this->insertTestWish( $invalidTitle, 'en', [ Wish::PARAM_TITLE => '' ] );
+		$categories = array_keys( $invalidTitle->getParentCategories() );
+		$this->assertContains( 'Category:Community_Wishlist/Wishes', $categories );
+		$this->assertContains( 'Category:Pages_with_Community_Wishlist_errors', $categories );
 	}
 
 	/**

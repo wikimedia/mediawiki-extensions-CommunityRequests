@@ -7,6 +7,7 @@ use MediaWiki\Config\ConfigException;
 use MediaWiki\Config\ServiceOptions;
 use MediaWiki\Extension\CommunityRequests\Wish\Wish;
 use MediaWiki\Language\LanguageNameUtils;
+use MediaWiki\MainConfigNames;
 use MediaWiki\Page\PageReference;
 use MediaWiki\Page\PageReferenceValue;
 use MediaWiki\Title\MalformedTitleException;
@@ -52,6 +53,7 @@ class WishlistConfig {
 		self::VOTES_PAGE_SUFFIX,
 		self::WISH_VOTING_ENABLED,
 		self::FOCUS_AREA_VOTING_ENABLED,
+		MainConfigNames::LanguageCode,
 	];
 
 	private bool $enabled;
@@ -68,6 +70,7 @@ class WishlistConfig {
 	private string $votesPageSuffix;
 	private bool $wishVotingEnabled;
 	private bool $focusAreaVotingEnabled;
+	public string $siteLanguage;
 
 	public function __construct(
 		ServiceOptions $config,
@@ -89,6 +92,7 @@ class WishlistConfig {
 		$this->votesPageSuffix = $config->get( self::VOTES_PAGE_SUFFIX );
 		$this->wishVotingEnabled = $config->get( self::WISH_VOTING_ENABLED );
 		$this->focusAreaVotingEnabled = $config->get( self::FOCUS_AREA_VOTING_ENABLED );
+		$this->siteLanguage = $config->get( MainConfigNames::LanguageCode );
 	}
 
 	// Getters

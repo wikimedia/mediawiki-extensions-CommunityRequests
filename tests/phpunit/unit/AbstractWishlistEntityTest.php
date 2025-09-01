@@ -6,6 +6,7 @@ namespace MediaWiki\Extension\CommunityRequests\Tests\Unit;
 use MediaWiki\Config\ServiceOptions;
 use MediaWiki\Extension\CommunityRequests\WishlistConfig;
 use MediaWiki\Language\LanguageNameUtils;
+use MediaWiki\MainConfigNames;
 use MediaWiki\Tests\Unit\MockServiceDependenciesTrait;
 use MediaWiki\Title\TitleFormatter;
 use MediaWiki\Title\TitleParser;
@@ -58,6 +59,7 @@ class AbstractWishlistEntityTest extends MediaWikiUnitTestCase {
 			WishlistConfig::VOTES_PAGE_SUFFIX => '',
 			WishlistConfig::WISH_VOTING_ENABLED => true,
 			WishlistConfig::FOCUS_AREA_VOTING_ENABLED => true,
+			MainConfigNames::LanguageCode => 'en',
 		] );
 		$this->config = new WishlistConfig(
 			$serviceOptions,

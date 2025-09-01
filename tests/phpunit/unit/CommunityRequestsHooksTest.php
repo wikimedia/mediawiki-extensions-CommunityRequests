@@ -423,6 +423,7 @@ class CommunityRequestsHooksTest extends MediaWikiUnitTestCase {
 			WishlistConfig::VOTES_PAGE_SUFFIX => '',
 			WishlistConfig::WISH_VOTING_ENABLED => true,
 			WishlistConfig::FOCUS_AREA_VOTING_ENABLED => true,
+			MainConfigNames::LanguageCode => 'en',
 			...$serviceOptions
 		] );
 		$config = new WishlistConfig(

@@ -53,18 +53,18 @@ trait WishlistTestTrait {
 	 * @param string $lang Either the base language (for new wishes),
 	 *   or the language of the translation (for translated wishes).
 	 * @param array $data Be sure to specify PARAM_BASE_LANG if $lang is different.
-	 * @return Wish
+	 * @return ?Wish
 	 */
 	protected function insertTestWish(
 		Title|string $wishPage,
 		string $lang,
 		array $data = [],
-	): Wish {
+	): ?Wish {
 		$defaultData = [
 			Wish::PARAM_TITLE => 'Test Wish',
 			Wish::PARAM_DESCRIPTION => 'This is a test wish.',
 			Wish::PARAM_AUDIENCE => 'everyone',
-			Wish::PARAM_STATUS => 'open',
+			Wish::PARAM_STATUS => 'under-review',
 			Wish::PARAM_TYPE => 'change',
 			Wish::PARAM_PROJECTS => 'wikipedia,commons',
 			Wish::PARAM_PHAB_TASKS => 'T123,T456',
@@ -86,13 +86,13 @@ trait WishlistTestTrait {
 	 * @param string $lang Either the base language (for new wishes),
 	 *   or the language of the translation (for translated wishes).
 	 * @param array $data Be sure to specify PARAM_BASE_LANG if $lang is different.
-	 * @return FocusArea
+	 * @return ?FocusArea
 	 */
 	protected function insertTestFocusArea(
 		Title|string $focusAreaPage,
 		string $lang,
 		array $data = [],
-	): FocusArea {
+	): ?FocusArea {
 		$defaultData = [
 			FocusArea::PARAM_TITLE => 'Test Focus Area',
 			FocusArea::PARAM_DESCRIPTION => 'This is a test focus area.',
@@ -112,7 +112,7 @@ trait WishlistTestTrait {
 		string $lang,
 		array $data = [],
 		array $defaultData = [],
-	): AbstractWishlistEntity {
+	): ?AbstractWishlistEntity {
 		if ( is_string( $title ) ) {
 			$title = Title::newFromText( $title );
 		}
@@ -137,9 +137,9 @@ trait WishlistTestTrait {
 			static fn ( $param ) => "$param = {$data[$param]}",
 			array_keys( $defaultData )
 		);
-		$wikitext = "{{#CommunityRequests: $entityType" .
+		$wikitext = "{{#CommunityRequests: $entityType\n" .
 			'|' . implode( "\n|", $args ) .
-			'}}';
+			"\n}}";
 
 		// Insert and assert existence and language.
 		$ret = $this->insertPage( $insertTitle, $wikitext );

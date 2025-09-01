@@ -77,6 +77,7 @@ class WishlistConfigTest extends MediaWikiUnitTestCase {
 				WishlistConfig::VOTES_PAGE_SUFFIX => '/Votes',
 				WishlistConfig::WISH_VOTING_ENABLED => true,
 				WishlistConfig::FOCUS_AREA_VOTING_ENABLED => true,
+				MainConfigNames::LanguageCode => 'en',
 			] ),
 			$this->newServiceInstance( TitleParser::class, [ 'localInterwikis' => [] ] ),
 			$this->newServiceInstance( TitleFormatter::class, [] ),

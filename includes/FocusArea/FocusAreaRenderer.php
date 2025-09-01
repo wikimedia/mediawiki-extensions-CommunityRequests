@@ -25,7 +25,7 @@ class FocusAreaRenderer extends AbstractRenderer {
 		$args = $this->getArgs();
 		$args[FocusArea::PARAM_DESCRIPTION] ??= '';
 
-		$this->parser->addTrackingCategory( self::FOCUS_AREA_TRACKING_CATEGORY );
+		$this->addTrackingCategory( self::FOCUS_AREA_TRACKING_CATEGORY );
 
 		// Add tracking category for missing critical data.
 		$requiredFields = [

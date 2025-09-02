@@ -57,9 +57,10 @@ class VoteRendererTest extends MediaWikiIntegrationTestCase {
 
 		$this->store->save(
 			Wish::newFromWikitextParams( $wish->getPage(), 'en', [
-					'votecount' => 5,
-					'proposer' => $wish->getProposer(),
-					'created' => $wish->getCreated(),
+					Wish::PARAM_TITLE => 'Test wish',
+					Wish::PARAM_VOTE_COUNT => 5,
+					Wish::PARAM_PROPOSER => $wish->getProposer(),
+					Wish::PARAM_CREATED => $wish->getCreated(),
 				],
 				$this->config
 			)
@@ -82,9 +83,9 @@ class VoteRendererTest extends MediaWikiIntegrationTestCase {
 
 		$this->store->save(
 			Wish::newFromWikitextParams( $wish->getPage(), 'en', [
-					'title' => 'Updated title',
-					'proposer' => $wish->getProposer(),
-					'created' => $wish->getCreated(),
+					Wish::PARAM_TITLE => 'Updated title',
+					Wish::PARAM_PROPOSER => $wish->getProposer(),
+					Wish::PARAM_CREATED => $wish->getCreated(),
 				],
 				$this->config
 			)
@@ -105,8 +106,8 @@ class VoteRendererTest extends MediaWikiIntegrationTestCase {
 
 		$this->store->save(
 			FocusArea::newFromWikitextParams( $focusArea->getPage(), 'en', [
-					'title' => 'Updated title',
-					'created' => $focusArea->getCreated(),
+					FocusArea::PARAM_TITLE => 'Updated title',
+					FocusArea::PARAM_CREATED => $focusArea->getCreated(),
 				],
 				$this->config
 			)

@@ -325,6 +325,13 @@ class CommunityRequestsHooks implements
 		}
 		$store = $this->stores[$data[AbstractWishlistEntity::PARAM_ENTITY_TYPE]];
 		$title = $linksUpdate->getTitle();
+		// If this a /Votes page, we need to reload the full entity data.
+		if ( $this->config->isVotesPage( $title ) ) {
+			$data = $store->normalizeArrayValues( array_merge(
+				$store->get( $this->getCanonicalEntityPage( $title ) )->toArray( $this->config ),
+				$data
+			), AbstractWishlistStore::ARRAY_DELIMITER_WIKITEXT );
+		}
 		$entity = $this->entityFactory->createFromParserData( $data, $this->getCanonicalEntityPage( $title ) );
 		$this->logger->debug(
 			__METHOD__ . ': Saving [[{0}]] with data: {1}',

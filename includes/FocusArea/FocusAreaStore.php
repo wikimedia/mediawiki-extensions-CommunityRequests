@@ -99,6 +99,9 @@ class FocusAreaStore extends AbstractWishlistStore {
 		if ( !$entity->getPage()->getId() ) {
 			throw new InvalidArgumentException( 'Focus area page has not been added to the database yet!' );
 		}
+		if ( !$entity->getTitle() ) {
+			throw new InvalidArgumentException( 'Focus areas must have a title!' );
+		}
 		$focusArea = $entity;
 
 		$dbw = $this->dbProvider->getPrimaryDatabase();

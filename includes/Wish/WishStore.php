@@ -144,6 +144,9 @@ class WishStore extends AbstractWishlistStore {
 		if ( !$entity->getPage()->getId() ) {
 			throw new InvalidArgumentException( 'Wish page has not been added to the database yet!' );
 		}
+		if ( !$entity->getTitle() ) {
+			throw new InvalidArgumentException( 'Wishes must have a title!' );
+		}
 		$wish = $entity;
 
 		$dbw = $this->dbProvider->getPrimaryDatabase();

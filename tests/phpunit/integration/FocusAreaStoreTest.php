@@ -47,24 +47,23 @@ class FocusAreaStoreTest extends MediaWikiIntegrationTestCase {
 		$this->assertSame( 42, $retrievedFocusArea->getVoteCount() );
 	}
 
-	public function testSaveWishWithNoPage(): void {
-		$fauxPage = Title::newFromText( 'Community Wishlist/Wishes/W111' );
+	public function testSaveWithNoPage(): void {
+		$fauxPage = Title::newFromText( 'Community Wishlist/Focus areas/FA111' );
 		$wish = new FocusArea(
 			$fauxPage,
 			'en',
 			[]
 		);
 		$this->expectException( InvalidArgumentException::class );
+		$this->expectExceptionMessage( 'Focus area page has not been added to the database yet!' );
 		$this->getStore()->save( $wish );
 	}
 
-	public function testSaveWithNoCreationDate(): void {
-		$wish = new FocusArea(
-			Title::newFromText( 'Community Wishlist/Wishes/W123' ),
-			'en',
-			[ 'created' => null ]
-		);
+	public function testSaveWishWithNoTitle(): void {
+		$title = $this->getExistingTestPage( 'Community Wishlist/Focus areas/FA123' )->getTitle();
+		$focusArea = new FocusArea( $title, 'en', [ FocusArea::PARAM_TITLE => '' ] );
 		$this->expectException( InvalidArgumentException::class );
-		$this->getStore()->save( $wish );
+		$this->expectExceptionMessage( 'Focus areas must have a title!' );
+		$this->getStore()->save( $focusArea );
 	}
 }

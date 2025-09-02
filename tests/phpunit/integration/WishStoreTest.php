@@ -33,6 +33,7 @@ class WishStoreTest extends MediaWikiIntegrationTestCase {
 			'en',
 			$this->getTestUser()->getUser(),
 			[
+				Wish::PARAM_TITLE => 'Example wish',
 				Wish::PARAM_TAGS => [ 1, 2, 3 ],
 				Wish::PARAM_PHAB_TASKS => [ 123, 456 ],
 				Wish::PARAM_CREATED => '2025-01-01T00:00:00Z',
@@ -57,17 +58,23 @@ class WishStoreTest extends MediaWikiIntegrationTestCase {
 			[]
 		);
 		$this->expectException( InvalidArgumentException::class );
+		$this->expectExceptionMessage( 'Wish page has not been added to the database yet!' );
 		$this->getStore()->save( $wish );
 	}
 
 	public function testSaveNewWishWithNoProposer(): void {
-		$wish = new Wish(
-			Title::newFromText( 'Community Wishlist/Wishes/W123' ),
-			'en',
-			null,
-			[]
-		);
+		$title = $this->getExistingTestPage( 'Community Wishlist/Wishes/W123' )->getTitle();
+		$wish = new Wish( $title, 'en', null, [ Wish::PARAM_TITLE => 'Test wish' ] );
 		$this->expectException( InvalidArgumentException::class );
+		$this->expectExceptionMessage( 'Wishes must have a proposer!' );
+		$this->getStore()->save( $wish );
+	}
+
+	public function testSaveWishWithNoTitle(): void {
+		$title = $this->getExistingTestPage( 'Community Wishlist/Wishes/W123' )->getTitle();
+		$wish = new Wish( $title, 'en', $this->getTestUser()->getUser(), [ Wish::PARAM_TITLE => '' ] );
+		$this->expectException( InvalidArgumentException::class );
+		$this->expectExceptionMessage( 'Wishes must have a title!' );
 		$this->getStore()->save( $wish );
 	}
 
@@ -77,6 +84,7 @@ class WishStoreTest extends MediaWikiIntegrationTestCase {
 			'en',
 			$this->getTestUser()->getUser(),
 			[
+				Wish::PARAM_TITLE => 'Example wish with focus area',
 				Wish::PARAM_FOCUS_AREA => $this->getExistingTestPage( 'Community Wishlist/Focus Areas/FA123' ),
 				Wish::PARAM_CREATED => '2025-01-01T00:00:00Z',
 			]
@@ -95,7 +103,12 @@ class WishStoreTest extends MediaWikiIntegrationTestCase {
 		ConvertibleTimestamp::setFakeTime( '2025-01-23T00:00:00Z' );
 		$page = $this->getExistingTestPage( 'Community Wishlist/Wishes/W123' );
 		ConvertibleTimestamp::setFakeTime( '2025-01-23T12:59:00Z' );
-		$wish1 = new Wish( $page, 'en', $user, [ 'created' => '2025-01-23T00:00:00Z' ] );
+		$wish1 = new Wish(
+			$page,
+			'en',
+			$user,
+			[ Wish::PARAM_TITLE => 'My wish', Wish::PARAM_CREATED => '2025-01-23T00:00:00Z' ]
+		);
 		$this->getStore()->save( $wish1 );
 		// Sanity checks.
 		$retrievedWish1 = $this->getStore()->get( $page, 'en' );
@@ -104,7 +117,7 @@ class WishStoreTest extends MediaWikiIntegrationTestCase {
 		$this->assertSame( '2025-01-23T12:59:00Z', $retrievedWish1->getUpdated() );
 		// Now resave without a proposer or creation date, and with a different current (fake) time.
 		ConvertibleTimestamp::setFakeTime( '2025-02-01T00:00:00Z' );
-		$wish2 = new Wish( $page, 'en', null, [] );
+		$wish2 = new Wish( $page, 'en', null, [ Wish::PARAM_TITLE => 'My wish' ] );
 		$this->getStore()->save( $wish2 );
 		$retrievedWish2 = $this->getStore()->get( $page, 'en' );
 		// Proposer should still be set to the original user.
@@ -113,17 +126,6 @@ class WishStoreTest extends MediaWikiIntegrationTestCase {
 		$this->assertSame( '2025-01-23T00:00:00Z', $retrievedWish2->getCreated() );
 		// And updated should be the new fake time.
 		$this->assertSame( '2025-02-01T00:00:00Z', $retrievedWish2->getUpdated() );
-	}
-
-	public function testSaveWithNoCreationDate(): void {
-		$wish = new Wish(
-			Title::newFromText( 'Community Wishlist/Wishes/W123' ),
-			'en',
-			$this->getTestUser()->getUser(),
-			[ Wish::PARAM_CREATED => null ]
-		);
-		$this->expectException( InvalidArgumentException::class );
-		$this->getStore()->save( $wish );
 	}
 
 	public function testGetAll(): void {

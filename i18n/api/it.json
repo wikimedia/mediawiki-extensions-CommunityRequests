@@ -1,0 +1,25 @@
+{
+	"@metadata": {
+		"authors": [
+			"Beta16"
+		]
+	},
+	"apihelp-wishedit-param-status": "Lo stato del desiderio.",
+	"apihelp-wishedit-param-title": "Il titolo del desiderio.",
+	"apihelp-wishedit-param-description": "La descrizione del desiderio. Potrebbe contenere wikitesto.",
+	"apihelp-wishedit-param-type": "Il tipo di desiderio.",
+	"apihelp-wishedit-param-projects": "Progetti a cui è correlato il desiderio.",
+	"apihelp-wishedit-param-proposer": "L'utente che ha proposto il desiderio.",
+	"apihelp-wishedit-param-created": "La data e l'ora in cui è stato creato il desiderio.",
+	"apierror-focusareaedit-notafocusarea": "La pagina che stai tentando di modificare non è un'area di interesse valida.",
+	"apihelp-query+communityrequests-wishes-paramvalue-prop-status": "Stato del desiderio",
+	"apihelp-query+communityrequests-wishes-paramvalue-prop-type": "Il tipo di desiderio",
+	"apihelp-query+communityrequests-wishes-paramvalue-prop-title": "Titolo del desiderio",
+	"apihelp-query+communityrequests-wishes-paramvalue-prop-focusarea": "Area di interesse a cui appartiene il desiderio",
+	"apihelp-query+communityrequests-wishes-paramvalue-prop-description": "Descrizione del desiderio",
+	"apihelp-query+communityrequests-wishes-paramvalue-prop-projects": "Progetti a cui è correlato il desiderio",
+	"apihelp-query+communityrequests-wishes-paramvalue-prop-proposer": "Utente che ha proposto il desiderio",
+	"apihelp-query+communityrequests-wishes-paramvalue-prop-votecount": "Numero di utenti che hanno supportato il desiderio",
+	"apihelp-query+communityrequests-wishes-paramvalue-sort-created": "Ordina per data di creazione",
+	"apihelp-query+communityrequests-wishes-paramvalue-sort-title": "Ordina per titolo"
+}

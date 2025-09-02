@@ -1,0 +1,30 @@
+{
+	"@metadata": {
+		"authors": [
+			"Gwanki"
+		]
+	},
+	"apihelp-query+communityrequests-wishes-summary": "Sami jerin buƙatun daga jerin buƙatun Al'umma.",
+	"apihelp-query+communityrequests-wishes-param-lang": "Lambar yare don tace buri ta.",
+	"apihelp-query+communityrequests-wishes-param-prop": "Abubuwan da ake so don samun.",
+	"apihelp-query+communityrequests-wishes-param-sort": "Abubuwan da ake so don warwarewa ta.",
+	"apihelp-query+communityrequests-wishes-param-dir": "Hanyar warware ta.",
+	"apihelp-query+communityrequests-wishes-param-limit": "Matsakaicin adadin buri na dawowa.",
+	"apihelp-query+communityrequests-wishes-paramvalue-prop-status": "Matsayin buri",
+	"apihelp-query+communityrequests-wishes-paramvalue-prop-type": "Nau'in fata",
+	"apihelp-query+communityrequests-wishes-paramvalue-prop-title": "Taken buri",
+	"apihelp-query+communityrequests-wishes-paramvalue-prop-focusarea": "Yankin mayar da hankali abin da ake so nasa ne",
+	"apihelp-query+communityrequests-wishes-paramvalue-prop-description": "Bayanin buri",
+	"apihelp-query+communityrequests-wishes-paramvalue-prop-audience": "Ƙungiya ta farko na masu amfani waɗanda suka amfana da buri",
+	"apihelp-query+communityrequests-wishes-paramvalue-prop-projects": "Ayyukan da ake so suna da alaƙa",
+	"apihelp-query+communityrequests-wishes-paramvalue-prop-otherproject": "Sunan aikin kyauta, idan buri ba shi da alaƙa da kowane ɗayan ayyukan da aka lissafa",
+	"apihelp-query+communityrequests-wishes-paramvalue-prop-phabtasks": "Ayyukan maharba masu alaƙa da buri",
+	"apihelp-query+communityrequests-wishes-paramvalue-prop-proposer": "Mai amfani wanda ya ba da shawarar buri",
+	"apihelp-query+communityrequests-wishes-paramvalue-prop-votecount": "Adadin masu amfani waɗanda suka goyi bayan buri",
+	"apihelp-query+communityrequests-wishes-paramvalue-prop-created": "Kwanan wata da lokaci an halicci buri",
+	"apihelp-query+communityrequests-wishes-paramvalue-prop-updated": "Kwanan wata da lokaci an sabunta buri na ƙarshe",
+	"apihelp-query+communityrequests-wishes-paramvalue-sort-created": "Tsara ta kwanan wata halitta",
+	"apihelp-query+communityrequests-wishes-paramvalue-sort-updated": "Tsara ta kwanan wata da aka sabunta",
+	"apihelp-query+communityrequests-wishes-paramvalue-sort-votecount": "A ware ta adadin magoya baya",
+	"apihelp-query+communityrequests-wishes-paramvalue-sort-title": "Tsara da take"
+}

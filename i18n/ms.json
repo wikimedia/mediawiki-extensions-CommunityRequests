@@ -49,9 +49,5 @@
 	"communityrequests-focus-area-volunteers": "Ahli komuniti",
 	"communityrequests-focus-area-no-votes": "Tiada penyokong lagi.",
 	"communityrequests-translation-translatable": "Laman ini mengandungi teks yang bukan dalam $1.",
-	"communityrequests-translation-errors": "Ralat berlaku:",
-	"apihelp-wishedit-param-status": "Status hajat.",
-	"apihelp-query+communityrequests-wishes-paramvalue-prop-status": "Status hajat",
-	"apihelp-query+communityrequests-wishes-paramvalue-prop-type": "Jenis hajat",
-	"apihelp-query+communityrequests-wishes-paramvalue-prop-title": "Tajuk hajat"
+	"communityrequests-translation-errors": "Ralat berlaku:"
 }

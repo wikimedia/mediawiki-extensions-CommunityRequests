@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Bisang",
 			"Ykhwong"
 		]
 	},
@@ -13,6 +14,6 @@
 	"communityrequests-focus-area-short-description": "짧은 설명",
 	"communityrequests-translation-translatable": "이 문서에는 $1로 되어 있지 않은 문구가 포함되어 있습니다.",
 	"communityrequests-support-label": "지원",
-	"apihelp-query+communityrequests-wishes-paramvalue-sort-updated": "마지막 갱신일로 정렬",
-	"action-manage-wishlist": "제한 없이 공동체 위시리스트를 관리할"
+	"action-manage-wishlist": "제한 없이 공동체 위시리스트를 관리할",
+	"group-community-wishlist-manager": "커뮤니티 위시리스트 관리자"
 }

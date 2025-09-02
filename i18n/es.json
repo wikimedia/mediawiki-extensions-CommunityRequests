@@ -67,21 +67,5 @@
 	"communityrequests-wish-proposer": "Autor",
 	"communityrequests-wishes-status-header": "Estado",
 	"communityrequests-wishes-type-header": "Tipo",
-	"communityrequests-wishes-projects-header": "Proyectos",
-	"apihelp-query+communityrequests-wishes-summary": "Obtén una lista de deseos de la Lista de deseos de la comunidad.",
-	"apihelp-query+communityrequests-wishes-param-lang": "El código de idioma por el que filtrar los deseos.",
-	"apihelp-query+communityrequests-wishes-param-prop": "Qué propiedades de deseo se obtendrán.",
-	"apihelp-query+communityrequests-wishes-param-sort": "La propiedad del deseo por la que se desea ordenar.",
-	"apihelp-query+communityrequests-wishes-param-dir": "La dirección por la que ordenar.",
-	"apihelp-query+communityrequests-wishes-paramvalue-prop-status": "Estado del deseo",
-	"apihelp-query+communityrequests-wishes-paramvalue-prop-title": "Título del deseo",
-	"apihelp-query+communityrequests-wishes-paramvalue-prop-focusarea": "Área de enfoque al que pertenece el deseo",
-	"apihelp-query+communityrequests-wishes-paramvalue-prop-description": "Descripción del deseo",
-	"apihelp-query+communityrequests-wishes-paramvalue-prop-projects": "Proyectos con los que está relacionado el deseo a",
-	"apihelp-query+communityrequests-wishes-paramvalue-prop-otherproject": "Nombre del proyecto de formato libre, si el deseo no está relacionado con ninguno de los proyectos enumerados",
-	"apihelp-query+communityrequests-wishes-paramvalue-prop-votecount": "Número de usuarios que apoyaron el deseo",
-	"apihelp-query+communityrequests-wishes-paramvalue-prop-created": "Fecha y hora en que se creó el deseo",
-	"apihelp-query+communityrequests-wishes-paramvalue-sort-created": "Ordenar por fecha de creación",
-	"apihelp-query+communityrequests-wishes-paramvalue-sort-votecount": "Ordenar por número de seguidores",
-	"apihelp-query+communityrequests-wishes-paramvalue-sort-title": "Ordenar por título"
+	"communityrequests-wishes-projects-header": "Proyectos"
 }

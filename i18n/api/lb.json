@@ -1,0 +1,36 @@
+{
+	"@metadata": {
+		"authors": [
+			"Volvox"
+		]
+	},
+	"apihelp-wishedit-summary": "E Wonsch an der Communautéitswonschlëscht uleeën oder aktualiséieren.",
+	"apihelp-wishedit-param-wish": "De Wonsch fir unzeleeën oder z'aktualiséieren. Dat kann entweeder de volle Säitentitel sinn, eng Wonsch-ID mat Prefix (z.&nbsp;B. „W123“) oder d'Wonsch-ID als ganz Zuel.",
+	"apihelp-wishedit-param-status": "De Status vum Wonsch.",
+	"apihelp-wishedit-param-focusarea": "De Fokusberäisch, zu deem de Wonsch gehéiert. Dat kann entweeder de volle Säitentitel sinn, eng Fokusberäich-ID mat Prefix (z.&nbsp;B. „FA123“) oder d'Fokusberäich-ID als ganz Zuel.",
+	"apihelp-wishedit-param-title": "Den Titel vum Wonsch.",
+	"apihelp-wishedit-param-description": "D'Beschreiwung vum Wonsch. Däerf Wikitext enthalen.",
+	"apihelp-wishedit-param-type": "Den Typ vum Wonsch.",
+	"apihelp-wishedit-param-projects": "Projeten, mat deenen de Wonsch zesummenhänkt.",
+	"apihelp-wishedit-param-otherproject": "Fräi formuléierte Projetsnumm, falls de Wonsch mat kengem vun den opgelëschte Projeten zesummenhänkt.",
+	"apihelp-wishedit-param-audience": "D'Haaptgrupp vu Benotzer, déi vum Wonsch profitéieren (z.&nbsp;B. „nei Benotzer“ oder „Administrateuren“).",
+	"apihelp-wishedit-param-phabtasks": "Eng Lëscht vun de Phabricator-Aufgaben-IDen (z.&nbsp;B. „T1234“).",
+	"apihelp-wishedit-param-proposer": "De Benotzer, deen de Wonsch virgeschloen huet.",
+	"apihelp-wishedit-param-created": "Den Datum an d'Auerzäit, wou de Wonsch ugeluecht gouf.",
+	"apierror-wishedit-notawish": "D'Säit, déi Dir ännere wëllt, ass kee gültege Wonsch.",
+	"apierror-focusareaedit-notafocusarea": "D'Säit, déi Dir ännere wëllt, ass kee gültege Fokusberäich.",
+	"apihelp-query+communityrequests-wishes-paramvalue-prop-status": "Status vum Wonsch",
+	"apihelp-query+communityrequests-wishes-paramvalue-prop-type": "Den Typ vum Wonsch",
+	"apihelp-query+communityrequests-wishes-paramvalue-prop-title": "Titel vum Wonsch",
+	"apihelp-query+communityrequests-wishes-paramvalue-prop-focusarea": "Fokusberäich, zu deem de Wonsch gehéiert",
+	"apihelp-query+communityrequests-wishes-paramvalue-prop-description": "Beschreiwung vum Wonsch",
+	"apihelp-query+communityrequests-wishes-paramvalue-prop-projects": "Projeten, op déi sech de Wonsch bezitt",
+	"apihelp-query+communityrequests-wishes-paramvalue-prop-proposer": "Benotzer, deen de Wonsch virgeschloen huet",
+	"apihelp-query+communityrequests-wishes-paramvalue-prop-votecount": "Zuel vu Benotzer, déi de Wonsch ënnerstëtzt hunn",
+	"apihelp-query+communityrequests-wishes-paramvalue-prop-created": "Datum an Auerzäit, wou de Wonsch ugeluecht gouf",
+	"apihelp-query+communityrequests-wishes-paramvalue-prop-updated": "Datum an Auerzäit, wou de Wonsch fir d'lescht aktualiséiert gouf",
+	"apihelp-query+communityrequests-wishes-paramvalue-sort-created": "Nom Datum vum Uleeën sortéieren",
+	"apihelp-query+communityrequests-wishes-paramvalue-sort-updated": "Nom Datum vun der leschter Aktualiséierung sortéieren",
+	"apihelp-query+communityrequests-wishes-paramvalue-sort-votecount": "No der Zuel vun Ënnerstëtzer sortéieren",
+	"apihelp-query+communityrequests-wishes-paramvalue-sort-title": "Nom Titel sortéieren"
+}

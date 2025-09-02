@@ -26,8 +26,6 @@
 	"communityrequests-focus-area-short-description": "Descrição breve",
 	"communityrequests-focus-area-volunteers-description": "Se houver voluntários que não fazem parte da organização, mas quer mencioná-los, liste-os aqui. São permitidas hiperligações e outros textos wiki simples.",
 	"communityrequests-focus-area-voting-info-closed": "Suportar esta área de focos está atualmente desativado.",
-	"communityrequests-wish-category": "Lista de Desejos/Desejos da comunidade",
-	"apihelp-wishedit-param-type": "O tipo de desejo.",
 	"action-manage-wishlist": "gerir a Lista de Desejos da Comunidade sem restrições",
 	"group-community-wishlist-manager": "Gestor da Lista de Desejos da Comunidade"
 }

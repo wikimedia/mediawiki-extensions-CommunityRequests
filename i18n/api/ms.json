@@ -1,0 +1,11 @@
+{
+	"@metadata": {
+		"authors": [
+			"Tofeiku"
+		]
+	},
+	"apihelp-wishedit-param-status": "Status hajat.",
+	"apihelp-query+communityrequests-wishes-paramvalue-prop-status": "Status hajat",
+	"apihelp-query+communityrequests-wishes-paramvalue-prop-type": "Jenis hajat",
+	"apihelp-query+communityrequests-wishes-paramvalue-prop-title": "Tajuk hajat"
+}

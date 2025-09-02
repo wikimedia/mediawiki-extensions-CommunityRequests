@@ -143,7 +143,7 @@ title=Community_Wishlist/Wishes/W3
 Example wish in Hebrew and with no tasks
 !! options
 title=Community_Wishlist/Wishes/W4
-language=he
+language=qqx
 !! wikitext
 {{#CommunityRequests: wish
 |title = משאלת מבחן (Hebrew)
@@ -157,14 +157,14 @@ language=he
 |baselang = he
 |description = זהו [[test]] {{wish}}}}
 !! html
-<div class="ext-communityrequests-wish"><div class="mw-heading mw-heading2 ext-communityrequests-wish--heading"><span class="ext-communityrequests-wish--title">משאלת מבחן (Hebrew)</span><span class="cdx-info-chip ext-communityrequests-wish--status cdx-info-chip--notice"><span class="cdx-info-chip__text">מצב לא ידוע</span></span></div><div class="mw-heading mw-heading3">תיאור</div><div class="ext-communityrequests-wish--description">
+<div class="ext-communityrequests-wish"><div class="mw-heading mw-heading2 ext-communityrequests-wish--heading"><span class="ext-communityrequests-wish--title">משאלת מבחן (Hebrew)</span><span class="cdx-info-chip ext-communityrequests-wish--status cdx-info-chip--notice"><span class="cdx-info-chip__text">(communityrequests-status-unknown)</span></span></div><div class="mw-heading mw-heading3">(communityrequests-wish-description-heading)</div><div class="ext-communityrequests-wish--description">
 <p>זהו <a href="/wiki/Test" title="Test">test</a> This is a test template for parser tests
 </p>
-</div><div class="mw-heading mw-heading3">תחום מיקוד מוקצה</div><div class="ext-communityrequests-wish--focus-area">
-<p>לא מוקצות
+</div><div class="mw-heading mw-heading3">(communityrequests-wish-focus-area-heading)</div><div class="ext-communityrequests-wish--focus-area">
+<p>(communityrequests-focus-area-unassigned)
 </p>
-</div><div class="mw-heading mw-heading3">סוג המשאלה</div><p class="ext-communityrequests-wish--wish-type">שינוי מערכת</p><div class="mw-heading mw-heading3">מיזמים קשורים</div><p class="ext-communityrequests-wish--projects">ויקישיתוף, ויקיטקסט</p><p class="ext-communityrequests-wish--other-project">פרויקט אחר כלשהו</p><div class="mw-heading mw-heading3">משתמשים מושפעים</div><div class="ext-communityrequests-wish--audience">
+</div><div class="mw-heading mw-heading3">(communityrequests-wish-type-heading)</div><p class="ext-communityrequests-wish--wish-type">(communityrequests-wishtype-change-label)</p><div class="mw-heading mw-heading3">(communityrequests-wish-related-heading)</div><p class="ext-communityrequests-wish--projects">(project-localized-name-commonswiki)(comma-separator)(project-localized-name-group-wikisource)</p><p class="ext-communityrequests-wish--other-project">פרויקט אחר כלשהו</p><div class="mw-heading mw-heading3">(communityrequests-wish-audience-heading)</div><div class="ext-communityrequests-wish--audience">
 <p>קהל לדוגמה
 </p>
-</div><div class="mw-heading mw-heading3">פרטים נוספים</div><ul><li class="ext-communityrequests-wish--created">נוצרה: 12:00, 1 באוקטובר 2023</li><li class="ext-communityrequests-wish--updated">עודכנה לאחרונה: 00:02, 1 בינואר 1970</li><li class="ext-communityrequests-wish--proposer">מאת: <a href="/index.php?title=%D7%9E%D7%A9%D7%AA%D7%9E%D7%A9:Admin&amp;action=edit&amp;redlink=1" class="new" title="User:Admin (הדף אינו קיים)">Admin</a> (<a href="/index.php?title=%D7%A9%D7%99%D7%97%D7%AA_%D7%9E%D7%A9%D7%AA%D7%9E%D7%A9:Admin&amp;action=edit&amp;redlink=1" class="new" title="User talk:Admin (הדף אינו קיים)">שיחה</a>)</li></ul><div class="mw-heading mw-heading2" id="Voting">הצבעה</div><div class="ext-communityrequests-wish--voting"><p>This wish currently has <b>0 supporters</b>. Supporting this wish is currently disabled.</p></div></div>
+</div><div class="mw-heading mw-heading3">(communityrequests-wish-other-details-heading)</div><ul><li class="ext-communityrequests-wish--created">(communityrequests-wish-created: 12:00, 1 (october) 2023)</li><li class="ext-communityrequests-wish--updated">(communityrequests-wish-updated: 00:02, 1 (january) 1970)</li><li class="ext-communityrequests-wish--proposer">(communityrequests-wish-proposer: (signature: Admin, Admin))</li></ul><div class="mw-heading mw-heading2" id="Voting">(communityrequests-wish-voting)</div><div class="ext-communityrequests-wish--voting"><p>(communityrequests-wish-voting-info: 0, 0) (communityrequests-wish-voting-info-closed)</p></div></div>
 !! end

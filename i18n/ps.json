@@ -3,5 +3,19 @@
 		"authors": [
 			"شاه زمان پټان"
 		]
-	}
+	},
+	"communityrequests-wishtype-unknown-label-short": "ناجوت",
+	"communityrequests-wishtype-error": "مهرباني وکړئ د هيلې يو ډول غوره کړئ.",
+	"communityrequests-project-intro": "ستاسو هيله د کومې پروژې اړوند ده؟",
+	"communityrequests-project-help": "ټولې هغه پروژې وټاکئ چې ستاسو هيله به پرې اغېز وکړي.",
+	"communityrequests-project-all-projects": "ټولې پروژې",
+	"communityrequests-project-show-less": "لږ ښودل",
+	"communityrequests-project-show-all": "ټول ښودل",
+	"communityrequests-project-other-label": "دا يو بل څه دي",
+	"communityrequests-project-other-description": "د بېلگې په توگه ويښيارتوکي، روباټونه او باندني توکي",
+	"communityrequests-support": "ملاتړ",
+	"communityrequests-supported": "له مخکې څخه ملاتړشوې",
+	"communityrequests-status-draft": "گارليک",
+	"communityrequests-status-submitted": "سپارل‌شوی",
+	"communityrequests-status-open": "پرانېستل"
 }

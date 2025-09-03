@@ -1,5 +1,6 @@
 !! options
 version=2
+requirements=extension:WikimediaMessages
 !! end
 
 !! article

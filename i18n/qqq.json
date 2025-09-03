@@ -115,6 +115,7 @@
 	"communityrequests-wish-voting-info-open": "Descriptive text in the voting section of a wish page, shown when the wish is open for voting.",
 	"communityrequests-wish-voting-info-closed": "Descriptive text in the voting section of a wish page, shown when the wish is closed for voting.",
 	"communityrequests-wish-voting-not-logged-in": "Warning shown instead of the voting button when a user is not logged in and so cannot vote.",
+	"communityrequests-voting-no-js": "Warning shown instead of the voting button when a user has JavaScript disabled and so cannot vote.",
 	"communityrequests-wish-voters-heading": "Section heading shown above the votes list on a wish page.",
 	"communityrequests-wish-no-votes": "Text shown when there are no votes for a wish.",
 	"communityrequests-wishes-table-caption": "Caption for the table of wishes on the 'all wishes' page.",

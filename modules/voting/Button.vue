@@ -30,6 +30,7 @@
 
 	<cdx-dialog
 		v-model:open="open"
+		:class="dialogClass"
 		:title="dialogTitle"
 		:use-close-button="true"
 		:primary-action="primaryAction"
@@ -37,10 +38,14 @@
 		@primary="onPrimaryAction"
 		@default="open = false"
 	>
-		<cdx-field>
+		<cdx-field
+			:disabled="submitting"
+			:status="submitStatus"
+			:messages="submitMessages"
+		>
 			<cdx-text-area
+				v-model="comment"
 				:disabled="submitting"
-				@input="updateComment"
 			></cdx-text-area>
 			<template #label>
 				{{ $i18n( 'communityrequests-optional-comment' ).text() }}
@@ -53,11 +58,28 @@
 </template>
 
 <script>
-const { defineComponent, computed, onBeforeMount, ref } = require( 'vue' );
+const { defineComponent, computed, onBeforeMount, ref, ComputedRef, Ref } = require( 'vue' );
 const { CdxButton, CdxDialog, CdxField, CdxIcon, CdxTextArea, CdxMessage } = require( '@wikimedia/codex' );
 const { cdxIconCheck } = require( './icons.json' );
 const Util = require( '../common/Util.js' );
 const { CommunityRequestsVotesPageSuffix } = require( '../common/config.json' );
+
+/**
+ * @typedef ModalAction
+ * @see https://doc.wikimedia.org/codex/latest/components/types-and-constants.html#modalaction
+ */
+/**
+ * @typedef PrimaryModalAction
+ * @see https://doc.wikimedia.org/codex/latest/components/types-and-constants.html#primarymodalaction
+ */
+/**
+ * @typedef {string} ValidationStatusType
+ * @see https://doc.wikimedia.org/codex/latest/components/types-and-constants.html#validationstatustype
+ */
+/**
+ * @typedef {Object} ValidationMessages
+ * @see https://doc.wikimedia.org/codex/latest/components/types-and-constants.html#validationmessages
+ */
 
 module.exports = exports = defineComponent( {
 	name: 'VotingButton',
@@ -70,67 +92,125 @@ module.exports = exports = defineComponent( {
 		CdxMessage
 	},
 	setup() {
+		// Reactive properties
+
+		/**
+		 * The value of the comment textarea.
+		 *
+		 * @type {Ref<string>}
+		 */
+		const comment = ref( '' );
+		/**
+		 * Whether the voting dialog is open.
+		 *
+		 * @type {Ref<boolean>}
+		 */
+		const open = ref( false );
+		/**
+		 * Whether the current user has already voted.
+		 *
+		 * @type {Ref<boolean|null>} Null until loaded.
+		 */
+		const hasVoted = ref( null );
+		/**
+		 * Whether to show the success message.
+		 *
+		 * @type {Ref<boolean>}
+		 */
+		const showVotedMessage = ref( false );
+		/**
+		 * Whether the form is being submitted.
+		 *
+		 * @type {Ref<boolean>}
+		 */
+		const submitting = ref( false );
+		/**
+		 * The status of the comment field.
+		 *
+		 * @type {Ref<ValidationStatusType>}
+		 */
+		const submitStatus = ref( 'default' );
+		/**
+		 * The messages for the comment field.
+		 *
+		 * @type {Ref<ValidationMessages>}
+		 */
+		const submitMessages = ref( [] );
+
+		// Computed properties
+
+		/**
+		 * The default action for the dialog (cancel button).
+		 *
+		 * @type {ComputedRef<ModalAction>}
+		 */
+		const defaultAction = computed( () => ( {
+			label: mw.msg( 'cancel' ),
+			disabled: submitting.value
+		} ) );
+		/**
+		 * The primary action for the dialog (submit button).
+		 *
+		 * @type {ComputedRef<PrimaryModalAction>}
+		 */
+		const primaryAction = computed( () => ( {
+			label: mw.msg( 'communityrequests-support' ),
+			actionType: 'progressive',
+			disabled: submitting.value
+		} ) );
+		/**
+		 * The dialog title.
+		 *
+		 * @type {ComputedRef<string>}
+		 */
+		const dialogTitle = computed( () => mw.msg(
+			'communityrequests-support-dialog-title',
+			Util.getEntityTitle()
+		) );
+		/**
+		 * The dialog CSS class.
+		 *
+		 * @type {ComputedRef<string>}
+		 */
+		const dialogClass = computed(
+			() => 'ext-communityrequests-voting__dialog' +
+				( submitting ? ' ext-communityrequests-voting__dialog--loading' : '' )
+		);
+
+		// Non-reactive properties
+
 		const api = new mw.Api();
 		const votesPageName = getBasePageName() + CommunityRequestsVotesPageSuffix;
-		const open = ref( false );
-		const hasVoted = ref( null );
-		let comment = '';
-		let showVotedMessage = ref( false );
-		let submitting = ref( false );
-
 		let basetimestamp = null;
 		let curtimestamp = null;
 
-		const defaultAction = computed( () => {
-			const action = { label: mw.msg( 'cancel' ), disabled: submitting.value };
-			return action;
-		} );
+		// Functions
 
-		const dialogTitle = computed( () => {
-			const title = mw.msg(
-				'communityrequests-support-dialog-title',
-				Util.getPageName()
-			);
-			return title;
-		} );
+		/**
+		 * Handle the primary action (submit) of the dialog.
+		 */
+		async function onPrimaryAction() {
+			submitting.value = true;
+			const votes = await loadVotes();
 
-		const primaryAction = computed( () => {
-			const action = {
-				label: mw.msg( 'communityrequests-support' ),
-				actionType: 'progressive',
-				disabled: submitting.value
-			};
-			return action;
-		} );
-
-		function updateComment( event ) {
-			comment = event.target.value;
-		}
-
-		function onPrimaryAction() {
-			submitting = true;
-			loadVotes().then( ( votes ) => {
-				addVote( votes ).then( ( editResult ) => {
-					open.value = false;
-					if ( !editResult ) {
-						return;
-					}
-					if ( editResult.edit.result === 'Success' ) {
-						// Purge and reload the page.
-						const postArgs = { action: 'purge', titles: mw.config.get( 'wgPageName' ) };
-						( new mw.Api() ).post( postArgs ).then( ( purgeRes ) => {
-							mw.storage.session.set( 'wishlist-intake-vote-added', 1 );
-							location.href = mw.util.getUrl( purgeRes.purge[ 0 ].title ) + '#voting';
-							showVotedMessage.value = true;
-							hasVoted.value = true;
-						} );
-					} else {
-						// @todo Handle errors.
-					}
-				} );
+			addVote( votes ).then( async () => {
+				submitStatus.value = 'default';
+				submitMessages.value = {};
+				hasVoted.value = true;
+				open.value = false;
+				mw.storage.session.set( 'wishlist-intake-vote-added', 1 );
+				// Purge the cache and reload the page.
+				const postArgs = { action: 'purge', titles: mw.config.get( 'wgPageName' ) };
+				const purgeRes = await ( new mw.Api() ).post( postArgs );
+				location.href = mw.util.getUrl( purgeRes.purge[ 0 ].title ) + '#Voting';
+				location.reload();
+			} ).catch( ( _e, { errors } ) => {
+				submitStatus.value = 'error';
+				submitMessages.value = { error: errors[ 0 ].text };
+			} ).always( () => {
+				submitting.value = false;
 			} );
 		}
-
 		/**
 		 * Get the name of the Translate 'source' page for this page.
 		 *
@@ -143,7 +223,6 @@ module.exports = exports = defineComponent( {
 			}
 			return pageName;
 		}
-
 		/**
 		 * Add a vote template to the votes list, and save the full wikitext
 		 * for both the Votes page and the Vote_count page.
@@ -158,9 +237,9 @@ module.exports = exports = defineComponent( {
 			}
 
 			const newVote = '{{#CommunityRequests: vote' +
-				' |comment=' + comment.replace( /\|/g, '{{!}}' ) +
+				' |comment=' + comment.value.replace( /\|/g, '{{!}}' ) +
 				' |username=' + mw.config.get( 'wgUserName' ) +
-				' |timestamp=' + ( new Date() ).toISOString() +
+				' |timestamp=' + ( new Date() ).toISOString().replace( /\.\d+Z$/, 'Z' ) +
 				' }}';
 			votes = votes.trim() + '\n' + newVote;
 			// Save the votes page.
@@ -174,12 +253,11 @@ module.exports = exports = defineComponent( {
 				starttimestamp: curtimestamp,
 				// Localize errors
 				uselang: mw.config.get( 'wgUserLanguage' ),
-				errorformat: 'html',
+				errorformat: 'plaintext',
 				errorlang: mw.config.get( 'wgUserLanguage' ),
 				errorsuselocal: true
 			} ) );
 		}
-
 		/**
 		 * Check if the current user has already voted.
 		 *
@@ -192,14 +270,13 @@ module.exports = exports = defineComponent( {
 			const regex = new RegExp( 'username\\s*=\\s*' + escapedUsername );
 			return votesWikitext.match( regex ) !== null;
 		}
-
 		/**
 		 * Load the current page's votes data.
 		 *
 		 * @return {Promise<string>}
 		 */
-		function loadVotes() {
-			return api.get( {
+		async function loadVotes() {
+			const response = await api.get( {
 				action: 'query',
 				titles: votesPageName,
 				prop: 'revisions',
@@ -209,34 +286,37 @@ module.exports = exports = defineComponent( {
 				assert: 'user',
 				format: 'json',
 				formatversion: 2
-			} ).then( ( response ) => {
-				const page = response.query && response.query.pages ?
-					response.query.pages[ 0 ] : {};
-
-				if ( page.missing ) {
-					return '';
-				}
-				curtimestamp = response.curtimestamp;
-				basetimestamp = page.revisions[ 0 ].timestamp;
-				return page.revisions[ 0 ].slots.main.content;
 			} );
+
+			const page = response.query && response.query.pages ?
+				response.query.pages[ 0 ] : {};
+
+			if ( page.missing ) {
+				return '';
+			}
+			curtimestamp = response.curtimestamp;
+			basetimestamp = page.revisions[ 0 ].timestamp;
+			return page.revisions[ 0 ].slots.main.content;
 		}
 
-		onBeforeMount( () => {
-			loadVotes().then( ( votes ) => {
-				hasVoted.value = votes.length > 0 && alreadyVoted( votes );
-				if ( hasVoted.value ) {
-					// Also check for the session storage param for the post-voting message.
-					showVotedMessage = mw.storage.session.get( 'wishlist-intake-vote-added' ) !== null;
-					mw.storage.session.remove( 'wishlist-intake-vote-added' );
-				}
-			} );
+		// Lifecycle hooks
+
+		onBeforeMount( async () => {
+			const votes = await loadVotes();
+			hasVoted.value = votes.length > 0 && alreadyVoted( votes );
+			if ( hasVoted.value ) {
+				// Also check for the session storage param for the post-voting message.
+				showVotedMessage.value = mw.storage.session.get( 'wishlist-intake-vote-added' ) !== null;
+				mw.storage.session.remove( 'wishlist-intake-vote-added' );
+			}
 		} );
 
 		return {
 			cdxIconCheck,
+			comment,
 			defaultAction,
 			dialogTitle,
+			dialogClass,
 			hasVoted,
 			isWishPage: Util.isWishPage(),
 			onPrimaryAction,
@@ -244,11 +324,20 @@ module.exports = exports = defineComponent( {
 			primaryAction,
 			showVotedMessage,
 			submitting,
-			updateComment
+			submitStatus,
+			submitMessages
 		};
 	}
 } );
 </script>
 
 <style lang="less">
+@import 'mediawiki.skin.variables.less';
+
+.ext-communityrequests-voting {
+	.cdx-button,
+	.cdx-message {
+		margin-bottom: @spacing-75;
+	}
+}
 </style>

@@ -100,7 +100,7 @@ abstract class AbstractRenderer {
 
 	protected function getDiv( string $field, string $text ): string {
 		return Html::element(
-			'p',
+			'div',
 			[ 'class' => "ext-communityrequests-{$this->entityType}--$field" ],
 			$text
 		);
@@ -219,7 +219,13 @@ abstract class AbstractRenderer {
 
 		if ( $votingEnabled ) {
 			// Container for the voting button added by JavaScript.
-			$out .= Html::element( 'div', [ 'class' => 'ext-communityrequests-voting-btn' ] );
+			$out .= Html::element( 'div', [ 'class' => 'ext-communityrequests-voting' ] );
+			// Noscript fallback message.
+			$out .= Html::rawElement( 'p', [],
+				Html::element( 'noscript', [],
+					$this->msg( 'communityrequests-wish-voting-no-js' )->text()
+				)
+			);
 		}
 
 		// Transclude the /Votes subpage if it exists.

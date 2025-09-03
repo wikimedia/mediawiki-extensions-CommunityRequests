@@ -114,6 +114,7 @@
 	"communityrequests-wish-voting-info-open": "Voting for this wish is open until it is completed. Show your support using the button below.",
 	"communityrequests-wish-voting-info-closed": "Supporting this wish is currently disabled.",
 	"communityrequests-wish-voting-not-logged-in": "Please log in to support this wish",
+	"communityrequests-voting-no-js": "Sorry, JavaScript is required to vote in the Community Wishlist.",
 	"communityrequests-wish-voters-heading": "Supporters of this wish",
 	"communityrequests-wish-no-votes": "No supporters yet.",
 	"communityrequests-wishes-table-caption": "List of wishes",

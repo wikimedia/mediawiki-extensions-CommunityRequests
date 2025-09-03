@@ -20,6 +20,25 @@ class Util {
 	}
 
 	/**
+	 * Attempt to get the title of the current wish or focus area from the DOM.
+	 * We can't pass in the title with JS vars from the server because the voting
+	 * module may be loaded after the parser output is cached.
+	 *
+	 * If we can't find the title in the DOM, fallback to the page name.
+	 *
+	 * @return {string} HTML-escaped title
+	 */
+	static getEntityTitle() {
+		const entityTitleQuery = document.querySelector(
+			`.ext-communityrequests-${ this.isWishPage() ? 'wish' : 'focus-area' }--title`
+		);
+		if ( entityTitleQuery ) {
+			return entityTitleQuery.textContent.trim();
+		}
+		return this.getPageName();
+	}
+
+	/**
 	 * Is the current page a wish page?
 	 *
 	 * @return {boolean}

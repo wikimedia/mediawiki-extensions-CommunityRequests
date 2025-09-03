@@ -1,5 +1,5 @@
 'use strict';
-const buttonRoot = document.querySelector( '.ext-communityrequests-voting-btn' );
+const buttonRoot = document.querySelector( '.ext-communityrequests-voting' );
 if ( buttonRoot ) {
 	const Vue = require( 'vue' );
 	let VotingButton = null;

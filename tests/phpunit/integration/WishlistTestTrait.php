@@ -53,12 +53,15 @@ trait WishlistTestTrait {
 	 * @param string $lang Either the base language (for new wishes),
 	 *   or the language of the translation (for translated wishes).
 	 * @param array $data Be sure to specify PARAM_BASE_LANG if $lang is different.
+	 * @param bool $markForTranslation Whether to mark the page for translation if it contains <translate> tags.
+	 *   This exists for a few narrow test cases where we want to test the unmarked state.
 	 * @return ?Wish
 	 */
 	protected function insertTestWish(
 		Title|string $wishPage,
 		string $lang,
 		array $data = [],
+		bool $markForTranslation = true,
 	): ?Wish {
 		$defaultData = [
 			Wish::PARAM_TITLE => 'Test Wish',
@@ -73,7 +76,7 @@ trait WishlistTestTrait {
 			Wish::PARAM_BASE_LANG => $lang,
 		];
 		/** @var Wish */
-		return $this->insertTestEntity( $wishPage, $lang, $data, $defaultData );
+		return $this->insertTestEntity( $wishPage, $lang, $data, $defaultData, $markForTranslation );
 	}
 
 	/**
@@ -86,12 +89,15 @@ trait WishlistTestTrait {
 	 * @param string $lang Either the base language (for new wishes),
 	 *   or the language of the translation (for translated wishes).
 	 * @param array $data Be sure to specify PARAM_BASE_LANG if $lang is different.
+	 * @param bool $markForTranslation Whether to mark the page for translation if it contains <translate> tags.
+	 *  This exists for a few narrow test cases where we want to test the unmarked state.
 	 * @return ?FocusArea
 	 */
 	protected function insertTestFocusArea(
 		Title|string $focusAreaPage,
 		string $lang,
 		array $data = [],
+		bool $markForTranslation = true,
 	): ?FocusArea {
 		$defaultData = [
 			FocusArea::PARAM_TITLE => 'Test Focus Area',
@@ -104,7 +110,7 @@ trait WishlistTestTrait {
 			FocusArea::PARAM_BASE_LANG => $lang,
 		];
 		/** @var FocusArea */
-		return $this->insertTestEntity( $focusAreaPage, $lang, $data, $defaultData );
+		return $this->insertTestEntity( $focusAreaPage, $lang, $data, $defaultData, $markForTranslation );
 	}
 
 	private function insertTestEntity(
@@ -112,6 +118,7 @@ trait WishlistTestTrait {
 		string $lang,
 		array $data = [],
 		array $defaultData = [],
+		bool $markForTranslation = true,
 	): ?AbstractWishlistEntity {
 		if ( is_string( $title ) ) {
 			$title = Title::newFromText( $title );
@@ -124,7 +131,8 @@ trait WishlistTestTrait {
 			$class = Wish::class;
 		}
 
-		$shouldMarkForTranslation = str_contains( implode( '', array_values( $data ) ), '<translate>' );
+		$shouldMarkForTranslation = $markForTranslation &&
+			str_contains( implode( '', array_values( $data ) ), '<translate' );
 		$data = array_merge( $defaultData, $data );
 
 		$insertTitle = $title;

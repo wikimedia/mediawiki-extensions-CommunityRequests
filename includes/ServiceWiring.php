@@ -34,6 +34,9 @@ return [
 			$services->get( 'CommunityRequests.IdGenerator' ),
 			$services->get( 'CommunityRequests.WishlistConfig' ),
 			$services->get( 'CommunityRequests.Logger' ),
+			$services->has( 'Translate:TranslatablePageParser' ) ?
+				$services->get( 'Translate:TranslatablePageParser' ) :
+				null,
 		);
 	},
 	'CommunityRequests.IdGenerator' => static function ( MediaWikiServices $services ): IdGenerator {
@@ -72,6 +75,9 @@ return [
 			$services->get( 'CommunityRequests.IdGenerator' ),
 			$services->get( 'CommunityRequests.WishlistConfig' ),
 			$services->get( 'CommunityRequests.Logger' ),
+			$services->has( 'Translate:TranslatablePageParser' ) ?
+				$services->get( 'Translate:TranslatablePageParser' ) :
+				null,
 		);
 	}
 ];

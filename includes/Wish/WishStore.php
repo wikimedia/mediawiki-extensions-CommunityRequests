@@ -9,6 +9,7 @@ use MediaWiki\Extension\CommunityRequests\AbstractWishlistEntity;
 use MediaWiki\Extension\CommunityRequests\AbstractWishlistStore;
 use MediaWiki\Extension\CommunityRequests\IdGenerator\IdGenerator;
 use MediaWiki\Extension\CommunityRequests\WishlistConfig;
+use MediaWiki\Extension\Translate\PageTranslation\TranslatablePageParser;
 use MediaWiki\Languages\LanguageFallback;
 use MediaWiki\Page\PageIdentityValue;
 use MediaWiki\Page\PageStore;
@@ -46,6 +47,7 @@ class WishStore extends AbstractWishlistStore {
 		protected IdGenerator $idGenerator,
 		protected WishlistConfig $config,
 		protected LoggerInterface $logger,
+		protected ?TranslatablePageParser $translatablePageParser,
 	) {
 		parent::__construct(
 			$dbProvider,
@@ -58,6 +60,7 @@ class WishStore extends AbstractWishlistStore {
 			$idGenerator,
 			$config,
 			$logger,
+			$translatablePageParser,
 		);
 	}
 

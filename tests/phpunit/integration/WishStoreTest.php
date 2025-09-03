@@ -374,4 +374,29 @@ END;
 			],
 		];
 	}
+
+	public function testStripTranslateTags(): void {
+		$this->markTestSkippedIfExtensionNotLoaded( 'Translate' );
+		$this->insertTestWish(
+			'Community Wishlist/Wishes/W123',
+			'en',
+			[
+				Wish::PARAM_TITLE => '<translate>Test title</translate>',
+				Wish::PARAM_DESCRIPTION => '<translate nowrap>Test description</translate>',
+			],
+			// Don't mark for translation
+			false
+		);
+		$wish = $this->getStore()->getAll(
+			'en',
+			WishStore::createdField(),
+			WishStore::SORT_DESC,
+			50,
+			null,
+			WishStore::FILTER_NONE,
+			WishStore::FETCH_WIKITEXT_TRANSLATED
+		)[0];
+		$this->assertSame( 'Test title', $wish->getTitle() );
+		$this->assertSame( 'Test description', $wish->getDescription() );
+	}
 }

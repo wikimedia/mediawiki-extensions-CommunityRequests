@@ -172,7 +172,7 @@ class CommunityRequestsHooks implements
 	public function getCanonicalEntityPage( PageIdentity $identity ): PageIdentity {
 		// Use the base non-translated page (if Translate is installed) or if $identity is a Vote page.
 		if ( ( $this->translateInstalled &&
-			// @phan-suppress-next-line PhanUndeclaredClassMethod
+			// @phan-suppress-next-line PhanTypeMismatchArgumentNullable
 			Utilities::isTranslationPage( new MessageHandle( Title::castFromPageIdentity( $identity ) ) ) ) ||
 			$this->config->isVotesPage( $identity )
 		) {

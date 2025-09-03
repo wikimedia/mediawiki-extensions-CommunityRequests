@@ -40,10 +40,7 @@ class MigrateFromGadget extends Maintenance {
 
 	/** @var MovePageFactory */
 	private $movePageFactory;
-	/**
-	 * @var TranslatableBundleMover
-	 * @suppress PhanUndeclaredTypeProperty
-	 */
+	/** @var TranslatableBundleMover */
 	private $bundleMover;
 	/** @var FormatterFactory */
 	private $formatterFactory;
@@ -236,11 +233,9 @@ class MigrateFromGadget extends Maintenance {
 			) {
 				// Already migrated
 				continue;
-				// @phan-suppress-next-line PhanUndeclaredClassMethod
 			} elseif ( TranslatablePage::isSourcePage( $title ) ) {
 				// Migrate the whole bundle
 				$this->migrateTranslateBundle( $store, $replacements, $titleText, $titlesDone );
-				// @phan-suppress-next-line PhanUndeclaredClassMethod
 			} elseif ( TranslatablePage::isTranslationPage( $title ) ) {
 				// Will be migrated as part of its bundle
 				continue;
@@ -413,7 +408,6 @@ class MigrateFromGadget extends Maintenance {
 			return;
 		}
 
-		// @phan-suppress-next-line PhanUndeclaredClassMethod
 		$pageCollection = $this->bundleMover->getPageMoveCollection(
 			$sourceTitle,
 			$destTitle,
@@ -432,7 +426,6 @@ class MigrateFromGadget extends Maintenance {
 		} else {
 			print "Moving bundle of " . count( $pagesToMove ) . " pages with base $titleText\n";
 
-			// @phan-suppress-next-line PhanUndeclaredClassMethod
 			$this->bundleMover->moveSynchronously(
 				$sourceTitle,
 				$destTitle,

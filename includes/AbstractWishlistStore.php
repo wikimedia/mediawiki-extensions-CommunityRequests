@@ -6,6 +6,7 @@ namespace MediaWiki\Extension\CommunityRequests;
 use InvalidArgumentException;
 use MediaWiki\Content\WikitextContent;
 use MediaWiki\Extension\CommunityRequests\IdGenerator\IdGenerator;
+use MediaWiki\Extension\Translate\PageTranslation\TranslatablePageParser;
 use MediaWiki\Languages\LanguageFallback;
 use MediaWiki\Page\PageIdentity;
 use MediaWiki\Page\PageReferenceValue;
@@ -63,6 +64,7 @@ abstract class AbstractWishlistStore {
 		protected IdGenerator $idGenerator,
 		protected WishlistConfig $config,
 		protected LoggerInterface $logger,
+		protected ?TranslatablePageParser $translatablePageParser
 	) {
 	}
 
@@ -352,12 +354,26 @@ abstract class AbstractWishlistStore {
 						$entityData->page_title . '/' . $entityData->{static::baseLangField()}
 					);
 					$translationPageId = $this->pageStore->getPageByReference( $translationPageRef )?->getId()
+						// If the translation subpage is missing, fallback to the base page.
 						?? $translationPageId;
 				}
 
 				// Fetch wikitext data from the page and merge it into the row.
 				$wikitextData = $this->getDataFromPageId( $translationPageId );
 				foreach ( $this->getExtTranslateFields() as $field => $property ) {
+					// Strip <translate> tags for self::FETCH_WIKITEXT_TRANSLATED,
+					// in case $translationPageId is the base page (translation subpage missing).
+					if ( $fetchWikitext === self::FETCH_WIKITEXT_TRANSLATED &&
+						isset( $wikitextData[$field] ) &&
+						$this->translatablePageParser?->containsMarkup( $wikitextData[$field] )
+					) {
+						$this->logger->debug(
+							__METHOD__ . ': Stripping <translate> tags from field {0} of entity {1}',
+							[ $field, $translationPageRef->__toString() ]
+						);
+						$wikitextData[$field] = $this->translatablePageParser->cleanupTags( $wikitextData[$field] );
+					}
+
 					$entityData->$property = $wikitextData[$field] ?? '';
 				}
 

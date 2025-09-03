@@ -503,21 +503,29 @@ class CommunityRequestsHooks implements
 			return true;
 		}
 
-		if ( !$this->permissionManager->userHasRight( $user, 'manually-edit-wishlist' ) || !$title->exists() ) {
-			$result = [
+		$userHasRight = $this->permissionManager->userHasRight( $user, 'manually-edit-wishlist' );
+		if ( !$userHasRight || !$title->exists() ) {
+			$result = [];
+
+			// Conditionally show messages based on rights or page existence (T403505).
+
+			if ( !$userHasRight || !$title->exists() ) {
 				// Message instructing users to use the Special page form.
-				[
+				$result[] = [
 					'communityrequests-cant-manually-edit',
 					$this->specialPageFactory->getPage(
 						$this->config->isWishPage( $title ) ? 'WishlistIntake' : 'EditFocusArea'
 					)->getPageTitle( $this->config->getEntityWikitextVal( $title ) ),
-				],
+				];
+			}
+			if ( !$userHasRight ) {
 				// Standard message listing the user groups that are allowed to manually edit.
-				$this->permissionManager->newFatalPermissionDeniedStatus(
+				$result[] = $this->permissionManager->newFatalPermissionDeniedStatus(
 					'manually-edit-wishlist',
 					RequestContext::getMain()
-				)->getMessages()[0]
-			];
+				)->getMessages()[0];
+			}
+
 			return false;
 		}
 

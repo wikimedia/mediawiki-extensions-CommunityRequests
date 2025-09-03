@@ -241,7 +241,7 @@ module.exports = exports = defineComponent( {
 		function validateForm() {
 			formError.value = false;
 			// Remove translate tags before checking title length.
-			const title = wish.title
+			const title = wish.title.trim()
 				.replace( /<\/?translate>/g, '' )
 				.replace( /<!--T:[0-9]+-->/g, '' );
 			titleStatus.value = ( title.length < 5 || title.length > titleMaxChars ) ? 'error' : 'default';

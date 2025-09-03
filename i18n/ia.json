@@ -164,6 +164,9 @@
 	"right-manually-edit-wishlist": "Modificar manualmente e sin formulario le desiros e areas de interesse del Lista de desiros del communitate",
 	"action-manually-edit-wishlist": "modificar manualmente e sin formulario le desiros e areas de interesse del Lista de desiros del communitate",
 	"group-community-wishlist-manager": "Gerentes del Lista de desiros del communitate",
-	"group-community-wishlist-manager-member": "Gerente del Lista de desiros del communitate",
-	"communityrequests-cant-manually-edit": "Le modification de iste pagina del Lista de desiros del communitate debe esser effectuate usante [[$1|le formulario de admission]]."
+	"group-community-wishlist-manager-member": "{{GENDER:$1|Gerente}} del Lista de desiros del communitate",
+	"communityrequests-cant-manually-edit": "Le modification de iste pagina del Lista de desiros del communitate debe esser effectuate usante [[$1|le formulario de admission]].",
+	"communityrequests-missing-wish": "Iste desiro non existe. Tu pote [{{fullurl:{{#Special:Log}}|page={{FULLPAGENAMEE}}}} cercar in le registros pertinente] pro discoperir ubi illo ha vadite, o [[$1|crear un nove desiro]].",
+	"communityrequests-missing-focus-area": "Iste area de interesse non existe. Tu pote [{{fullurl:{{#Special:Log}}|page={{FULLPAGENAMEE}}}} cercar in le registros pertinente] pro discoperir ubi illo ha vadite, o [[$1|crear un nove area de interesse]].",
+	"communityrequests-wishlist-machine-translation": "Activar le traduction machinal automatisate in le [[$1|Lista de desiros del communitate]]."
 }

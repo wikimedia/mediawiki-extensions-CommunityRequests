@@ -163,7 +163,10 @@
 	"action-manage-wishlist": "Topluluk Dilek Listesini kısıtlama olmaksızın yönetmeye",
 	"right-manually-edit-wishlist": "Topluluk Dilek Listesi dileklerini ve odak alanlarını bir form olmadan elle düzenleyin",
 	"action-manually-edit-wishlist": "Topluluk Dilek Listesi dileklerini ve odak alanlarını bir form olmadan elle düzenlemeye",
-	"group-community-wishlist-manager": "Topluluk Dilek Listesi yöneticisi",
-	"group-community-wishlist-manager-member": "Topluluk Dilek Listesi yöneticisi",
-	"communityrequests-cant-manually-edit": "Bu Topluluk Dilek Listesi sayfasının düzenlenmesi [[$1|kabul formu]] kullanılarak yapılmalıdır."
+	"group-community-wishlist-manager": "Topluluk Dilek Listesi yöneticileri",
+	"group-community-wishlist-manager-member": "Topluluk Dilek Listesi {{GENDER:$1|yöneticisi}}",
+	"communityrequests-cant-manually-edit": "Bu Topluluk Dilek Listesi sayfasının düzenlenmesi [[$1|kabul formu]] kullanılarak yapılmalıdır.",
+	"communityrequests-missing-wish": "Bu dilek yok. Nereye gittiğini öğrenmek için [{{fullurl:{{#Special:Log}}|page={{FULLPAGENAMEE}}}} ilgili günlükleri arayabilir] ya da [[$1|yeni bir dilek oluşturabilirsiniz]].",
+	"communityrequests-missing-focus-area": "Bu odak alanı yok. Nereye gittiğini öğrenmek için [{{fullurl:{{#Special:Log}}|page={{FULLPAGENAMEE}}}} ilgili günlükleri arayabilir] ya da [[$1|yeni bir odak alanı oluşturabilirsiniz]].",
+	"communityrequests-wishlist-machine-translation": "[[$1|Topluluk Dilek Listesi]]nde otomatik makine çevirisini etkinleştirin."
 }

@@ -18,6 +18,7 @@ use MediaWiki\Status\Status;
 use MediaWiki\Title\Title;
 use MediaWiki\Title\TitleParser;
 use MediaWiki\Title\TitleValue;
+use Psr\Log\LoggerInterface;
 
 abstract class AbstractWishlistSpecialPage extends FormSpecialPage {
 
@@ -32,6 +33,7 @@ abstract class AbstractWishlistSpecialPage extends FormSpecialPage {
 		protected WishlistConfig $config,
 		protected AbstractWishlistStore $store,
 		protected TitleParser $titleParser,
+		protected LoggerInterface $logger,
 		string $name,
 		string $restriction = ''
 	) {
@@ -217,6 +219,10 @@ abstract class AbstractWishlistSpecialPage extends FormSpecialPage {
 		] ) );
 		$api = new ApiMain( $context, true );
 		try {
+			$this->logger->debug(
+				__METHOD__ . ': Executing API {0} for entity ID {1} with data {2}',
+				[ $action, $this->entityId, $data ]
+			);
 			$api->execute();
 		} catch ( ApiUsageException $e ) {
 			$this->getOutput()->addJsConfigVars( [

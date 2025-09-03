@@ -95,7 +95,8 @@
 				"CommunityRequests.WishStore",
 				"CommunityRequests.FocusAreaStore",
 				"TitleParser",
-				"UserFactory"
+				"UserFactory",
+				"CommunityRequests.Logger"
 			]
 		},
 		"EditFocusArea": {
@@ -103,7 +104,8 @@
 			"services": [
 				"CommunityRequests.WishlistConfig",
 				"CommunityRequests.FocusAreaStore",
-				"TitleParser"
+				"TitleParser",
+				"CommunityRequests.Logger"
 			]
 		}
 	},

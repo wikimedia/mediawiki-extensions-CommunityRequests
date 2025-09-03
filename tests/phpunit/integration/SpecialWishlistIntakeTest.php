@@ -33,7 +33,8 @@ class SpecialWishlistIntakeTest extends SpecialPageTestBase {
 			$services->get( 'CommunityRequests.WishStore' ),
 			$services->get( 'CommunityRequests.FocusAreaStore' ),
 			$services->get( 'TitleParser' ),
-			$services->getUserFactory()
+			$services->getUserFactory(),
+			$services->get( 'CommunityRequests.Logger' ),
 		);
 	}
 

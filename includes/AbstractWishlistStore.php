@@ -14,6 +14,7 @@ use MediaWiki\Parser\ParserFactory;
 use MediaWiki\Revision\RevisionStore;
 use MediaWiki\Title\TitleFormatter;
 use MediaWiki\Title\TitleParser;
+use Psr\Log\LoggerInterface;
 use RuntimeException;
 use Wikimedia\Rdbms\IConnectionProvider;
 use Wikimedia\Rdbms\IDatabase;
@@ -61,6 +62,7 @@ abstract class AbstractWishlistStore {
 		protected PageStore $pageStore,
 		protected IdGenerator $idGenerator,
 		protected WishlistConfig $config,
+		protected LoggerInterface $logger,
 	) {
 	}
 
@@ -337,6 +339,11 @@ abstract class AbstractWishlistStore {
 			if ( $fetchWikitext ) {
 				// For self::FETCH_WIKITEXT_RAW
 				$translationPageId = $pageId;
+				// Use a PegeReference for logging.
+				$translationPageRef = PageReferenceValue::localReference(
+					(int)$entityData->page_namespace,
+					$entityData->page_title
+				);
 
 				// For self::FETCH_WIKITEXT_TRANSLATED, use the page ID of the translation subpage.
 				if ( $fetchWikitext === self::FETCH_WIKITEXT_TRANSLATED ) {
@@ -353,6 +360,11 @@ abstract class AbstractWishlistStore {
 				foreach ( $this->getExtTranslateFields() as $field => $property ) {
 					$entityData->$property = $wikitextData[$field] ?? '';
 				}
+
+				$this->logger->debug(
+					__METHOD__ . ': Fetched wikitext for entity {0} lang {1} with data {2}',
+					[ $translationPageRef->__toString(), $lang, $wikitextData ]
+				);
 			}
 
 			$entityDataByPage[$pageId][$langCode] = $entityData;
@@ -430,6 +442,10 @@ abstract class AbstractWishlistStore {
 			->uniqueIndexFields( [ static::translationForeignKey(), static::translationLangField() ] )
 			->caller( __METHOD__ )
 			->execute();
+		$this->logger->debug(
+			__METHOD__ . ': Saved translations for entity {0} with data {1}',
+			[ $entity->getPage()->__toString(), $dataSet ]
+		);
 	}
 
 	/**

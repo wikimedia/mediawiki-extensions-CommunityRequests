@@ -195,12 +195,13 @@ class CommunityRequestsHooks implements
 		if ( !$this->config->isEnabled() || !$this->config->isWishOrFocusAreaPage( $title ) ) {
 			return;
 		}
+		$method = __METHOD__;
 
 		if ( !$renderedRevision->getRevision()->getParentId() &&
 			$this->translateInstalled &&
 			$this->pageLanguageUseDB
 		) {
-			$updates[] = new MWCallableUpdate( function () use ( $title, $renderedRevision ) {
+			$updates[] = new MWCallableUpdate( function () use ( $title, $renderedRevision, $method ) {
 				$store = $this->getStoreForTitle( $title );
 				$parserOutput = $renderedRevision->getSlotParserOutput( SlotRecord::MAIN );
 				$data = $parserOutput->getExtensionData( self::EXT_DATA_KEY );
@@ -220,6 +221,11 @@ class CommunityRequestsHooks implements
 					// page language from the Title object.
 					$data[AbstractWishlistEntity::PARAM_LANG] = $data[AbstractWishlistEntity::PARAM_BASE_LANG];
 					$parserOutput->setExtensionData( self::EXT_DATA_KEY, $data );
+
+					$this->logger->debug(
+						$method . ': Set page language for {0} to {1}',
+						[ $title->toPageIdentity()->__toString(), $data[AbstractWishlistEntity::PARAM_BASE_LANG] ]
+					);
 				}
 			}, __METHOD__ );
 		}
@@ -257,6 +263,7 @@ class CommunityRequestsHooks implements
 		);
 		if ( $entity ) {
 			$store->delete( $entity );
+			$this->logger->debug( __METHOD__ . ': Deleted entity {0}', [ $entity->getPage()->__toString() ] );
 		}
 	}
 
@@ -334,8 +341,8 @@ class CommunityRequestsHooks implements
 		}
 		$entity = $this->entityFactory->createFromParserData( $data, $this->getCanonicalEntityPage( $title ) );
 		$this->logger->debug(
-			__METHOD__ . ': Saving [[{0}]] with data: {1}',
-			[ $title->getPrefixedText(), json_encode( $data ) ]
+			__METHOD__ . ': Saving {0} with data: {1}',
+			[ $title->toPageIdentity()->__toString(), json_encode( $data ) ]
 		);
 		$store->save( $entity );
 	}
@@ -478,6 +485,10 @@ class CommunityRequestsHooks implements
 		}
 
 		$voteCount = intval( $data[AbstractWishlistEntity::PARAM_VOTE_COUNT] ?? 0 );
+		$this->logger->debug(
+			__METHOD__ . ': Replacing voting strip marker in {0} with vote count {1}',
+			[ $parser->getPage()->__toString(), $voteCount ]
+		);
 		$text = str_replace(
 			AbstractRenderer::VOTING_STRIP_MARKER,
 			$parser->msg( "communityrequests-{$data[AbstractWishlistEntity::PARAM_ENTITY_TYPE]}-voting-info" )

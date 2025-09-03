@@ -10,6 +10,7 @@ use MediaWiki\Extension\CommunityRequests\WishlistConfig;
 use MediaWiki\Message\Message;
 use MediaWiki\Title\TitleParser;
 use MediaWiki\User\UserFactory;
+use Psr\Log\LoggerInterface;
 
 /**
  * JS-only Special page for submitting a new community request.
@@ -22,12 +23,14 @@ class SpecialWishlistIntake extends AbstractWishlistSpecialPage {
 		protected WishStore $wishStore,
 		protected FocusAreaStore $focusAreaStore,
 		protected TitleParser $titleParser,
-		protected UserFactory $userFactory
+		protected UserFactory $userFactory,
+		protected LoggerInterface $logger,
 	) {
 		parent::__construct(
 			$config,
 			$wishStore,
 			$titleParser,
+			$logger,
 			'WishlistIntake',
 		);
 	}

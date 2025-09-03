@@ -9,6 +9,7 @@ use MediaWiki\HTMLForm\HTMLForm;
 use MediaWiki\Message\Message;
 use MediaWiki\Title\Title;
 use MediaWiki\Title\TitleParser;
+use Psr\Log\LoggerInterface;
 
 class SpecialEditFocusArea extends AbstractWishlistSpecialPage {
 
@@ -16,14 +17,16 @@ class SpecialEditFocusArea extends AbstractWishlistSpecialPage {
 	public function __construct(
 		protected WishlistConfig $config,
 		protected FocusAreaStore $focusAreaStore,
-		protected TitleParser $titleParser
+		protected TitleParser $titleParser,
+		protected LoggerInterface $logger,
 	) {
 		parent::__construct(
 			$config,
 			$focusAreaStore,
 			$titleParser,
+			$logger,
 			'EditFocusArea',
-			'manage-wishlist'
+			'manage-wishlist',
 		);
 	}
 

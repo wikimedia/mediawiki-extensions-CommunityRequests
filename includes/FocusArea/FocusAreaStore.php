@@ -131,6 +131,11 @@ class FocusAreaStore extends AbstractWishlistStore {
 			->caller( __METHOD__ )
 			->execute();
 
+		$this->logger->debug(
+			__METHOD__ . ': Saved focus area {0} with data {1}',
+			[ $focusArea->getPage()->__toString(), $dataSet ]
+		);
+
 		$this->saveTranslations( $focusArea, $dbw );
 
 		$dbw->endAtomic( __METHOD__ );

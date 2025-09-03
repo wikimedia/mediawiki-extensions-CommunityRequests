@@ -33,6 +33,7 @@ return [
 			$services->getPageStore(),
 			$services->get( 'CommunityRequests.IdGenerator' ),
 			$services->get( 'CommunityRequests.WishlistConfig' ),
+			$services->get( 'CommunityRequests.Logger' ),
 		);
 	},
 	'CommunityRequests.IdGenerator' => static function ( MediaWikiServices $services ): IdGenerator {
@@ -70,6 +71,7 @@ return [
 			$services->getPageStore(),
 			$services->get( 'CommunityRequests.IdGenerator' ),
 			$services->get( 'CommunityRequests.WishlistConfig' ),
+			$services->get( 'CommunityRequests.Logger' ),
 		);
 	}
 ];

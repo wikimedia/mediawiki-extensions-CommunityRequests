@@ -19,6 +19,7 @@ use MediaWiki\Title\TitleFormatter;
 use MediaWiki\Title\TitleParser;
 use MediaWiki\User\ActorNormalization;
 use MediaWiki\User\UserFactory;
+use Psr\Log\LoggerInterface;
 use Wikimedia\Rdbms\IConnectionProvider;
 use Wikimedia\Rdbms\IDatabase;
 use Wikimedia\Rdbms\IReadableDatabase;
@@ -44,6 +45,7 @@ class WishStore extends AbstractWishlistStore {
 		protected PageStore $pageStore,
 		protected IdGenerator $idGenerator,
 		protected WishlistConfig $config,
+		protected LoggerInterface $logger,
 	) {
 		parent::__construct(
 			$dbProvider,
@@ -55,6 +57,7 @@ class WishStore extends AbstractWishlistStore {
 			$pageStore,
 			$idGenerator,
 			$config,
+			$logger,
 		);
 	}
 
@@ -203,6 +206,11 @@ class WishStore extends AbstractWishlistStore {
 			->uniqueIndexFields( [ 'cr_page' ] )
 			->caller( __METHOD__ )
 			->execute();
+
+		$this->logger->debug(
+			__METHOD__ . ': Saved wish {0} with data {1}',
+			[ $wish->getPage()->__toString(), $dataSet ]
+		);
 
 		$this->saveTranslations( $wish, $dbw );
 		$this->saveTagsAndPhabTasks( $wish, $dbw );

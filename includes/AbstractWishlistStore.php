@@ -237,9 +237,9 @@ abstract class AbstractWishlistStore {
 			default => [ static::titleField(), static::createdField(), static::voteCountField() ],
 		};
 
-		$sortDir = in_array( strtolower( $sort ), [ 'descending', 'desc' ] ) ?
-				static::SORT_DESC :
-				static::SORT_ASC;
+		$sortDir = in_array( strtolower( $sort ), [ 'ascending', 'asc' ] ) ?
+				static::SORT_ASC :
+				static::SORT_DESC;
 
 		$select = $dbr->newSelectQueryBuilder()
 			->caller( __METHOD__ )

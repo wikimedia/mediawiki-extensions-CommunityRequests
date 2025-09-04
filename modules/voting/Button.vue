@@ -45,6 +45,9 @@
 			<template #label>
 				{{ $i18n( 'communityrequests-optional-comment' ).text() }}
 			</template>
+			<template #help-text>
+				{{ $i18n( 'wikimedia-copyrightwarning' ).text() }}
+			</template>
 		</cdx-field>
 	</cdx-dialog>
 </template>

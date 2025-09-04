@@ -350,7 +350,8 @@
 				"communityrequests-support-wish",
 				"communityrequests-support-wish-confirmed",
 				"communityrequests-wish-voting-not-logged-in",
-				"communityrequests-supported"
+				"communityrequests-supported",
+				"wikimedia-copyrightwarning"
 			]
 		},
 		"ext.communityrequests.wish-index": {

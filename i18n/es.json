@@ -25,15 +25,6 @@
 	"communityrequests-wishtype-unknown-label": "No estoy seguro o no lo sé",
 	"communityrequests-wishtype-unknown-description": "Después de recibir tu deseo, asignaremos un tipo relevante.",
 	"communityrequests-wishtype-error": "Selecciona un tipo de deseo.",
-	"communityrequests-project-intro": "¿A qué proyectos está relacionado tu deseo?",
-	"communityrequests-project-help": "Selecciona todos los proyectos en los que tu deseo tendrá un impacto.",
-	"communityrequests-project-all-projects": "Todos los proyectos",
-	"communityrequests-project-show-less": "Mostrar menos",
-	"communityrequests-project-show-all": "Mostrar todo",
-	"communityrequests-project-other-label": "Es otra cosa",
-	"communityrequests-project-other-description": "Por ejemplo, accesorios, bots y herramientas externas",
-	"communityrequests-project-other-error": "Introduce un valor para este campo (mayor que $1 {{PLURAL:$1|caracter|caracteres}}), o selecciona una casilla de verificación de los proyectos.",
-	"communityrequests-project-no-selection": "Selecciona al menos $1 {{PLURAL:$1|casilla|casillas}} de verificación de los proyectos, o ingresa un valor para el campo \"$2\".",
 	"communityrequests-audience-label": "Principales usuarios afectados",
 	"communityrequests-audience-description": "Describe a qué grupo de usuarios y situación afectará más esto",
 	"communityrequests-audience-error": "Introduce un valor para este campo (entre $1 y $2 {{PLURAL:$2|caracteres}}).",
@@ -58,7 +49,6 @@
 	"communityrequests-wish-description-heading": "Descripción",
 	"communityrequests-wish-focus-area-heading": "Área de enfoque asignada",
 	"communityrequests-wish-type-heading": "Tipo de deseo",
-	"communityrequests-wish-related-heading": "Proyectos relacionados",
 	"communityrequests-wish-audience-heading": "Usuarios afectados",
 	"communityrequests-wish-phabricator-heading": "Tickets de Phabricator",
 	"communityrequests-wish-other-details-heading": "Otros detalles",
@@ -66,6 +56,5 @@
 	"communityrequests-wish-updated": "Última actualización",
 	"communityrequests-wish-proposer": "Autor",
 	"communityrequests-wishes-status-header": "Estado",
-	"communityrequests-wishes-type-header": "Tipo",
-	"communityrequests-wishes-projects-header": "Proyectos"
+	"communityrequests-wishes-type-header": "Tipo"
 }

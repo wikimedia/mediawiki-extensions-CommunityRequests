@@ -16,8 +16,6 @@
 	"apihelp-query+communityrequests-wishes-paramvalue-prop-focusarea": "Yankin mayar da hankali abin da ake so nasa ne",
 	"apihelp-query+communityrequests-wishes-paramvalue-prop-description": "Bayanin buri",
 	"apihelp-query+communityrequests-wishes-paramvalue-prop-audience": "Ƙungiya ta farko na masu amfani waɗanda suka amfana da buri",
-	"apihelp-query+communityrequests-wishes-paramvalue-prop-projects": "Ayyukan da ake so suna da alaƙa",
-	"apihelp-query+communityrequests-wishes-paramvalue-prop-otherproject": "Sunan aikin kyauta, idan buri ba shi da alaƙa da kowane ɗayan ayyukan da aka lissafa",
 	"apihelp-query+communityrequests-wishes-paramvalue-prop-phabtasks": "Ayyukan maharba masu alaƙa da buri",
 	"apihelp-query+communityrequests-wishes-paramvalue-prop-proposer": "Mai amfani wanda ya ba da shawarar buri",
 	"apihelp-query+communityrequests-wishes-paramvalue-prop-votecount": "Adadin masu amfani waɗanda suka goyi bayan buri",

@@ -14,8 +14,6 @@
 	"apihelp-query+communityrequests-wishes-paramvalue-prop-title": "Título del deseo",
 	"apihelp-query+communityrequests-wishes-paramvalue-prop-focusarea": "Área de enfoque al que pertenece el deseo",
 	"apihelp-query+communityrequests-wishes-paramvalue-prop-description": "Descripción del deseo",
-	"apihelp-query+communityrequests-wishes-paramvalue-prop-projects": "Proyectos con los que está relacionado el deseo a",
-	"apihelp-query+communityrequests-wishes-paramvalue-prop-otherproject": "Nombre del proyecto de formato libre, si el deseo no está relacionado con ninguno de los proyectos enumerados",
 	"apihelp-query+communityrequests-wishes-paramvalue-prop-votecount": "Número de usuarios que apoyaron el deseo",
 	"apihelp-query+communityrequests-wishes-paramvalue-prop-created": "Fecha y hora en que se creó el deseo",
 	"apihelp-query+communityrequests-wishes-paramvalue-sort-created": "Ordenar por fecha de creación",

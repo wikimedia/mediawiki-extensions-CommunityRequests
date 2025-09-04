@@ -5,8 +5,6 @@
 		]
 	},
 	"communityrequests-wishtype-unknown-label-short": "Անհայտ",
-	"communityrequests-project-all-projects": "Բոլոր նախագծեր",
-	"communityrequests-project-other-description": "օրինակ՝ գաջեթներ, բոտեր և արտաքին գործիքներ",
 	"communityrequests-close": "Փակել",
 	"communityrequests-status": "Կարգավիճակ",
 	"communityrequests-status-blocked": "Արգելափակված է",
@@ -16,6 +14,5 @@
 	"communityrequests-wish-proposer": "Հեղինակ",
 	"communityrequests-wishes-status-header": "Կարգավիճակ",
 	"communityrequests-wishes-type-header": "Տեսակ",
-	"communityrequests-wishes-projects-header": "Նախագծեր",
 	"communityrequests-support-label": "Աջակցություն"
 }

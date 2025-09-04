@@ -8,7 +8,6 @@
 	"apihelp-query+communityrequests-wishes-paramvalue-prop-status": "Status på ønsket",
 	"apihelp-query+communityrequests-wishes-paramvalue-prop-title": "Titel på ønsket.",
 	"apihelp-query+communityrequests-wishes-paramvalue-prop-description": "Beskrivelse af ønsket",
-	"apihelp-query+communityrequests-wishes-paramvalue-prop-projects": "Projekter som ønsket er relateret til",
 	"apihelp-query+communityrequests-wishes-paramvalue-prop-created": "Dato og tidspunkt, hvor ønsket blev oprettet",
 	"apihelp-query+communityrequests-wishes-paramvalue-sort-created": "Sortér efter oprettelsesdato",
 	"apihelp-query+communityrequests-wishes-paramvalue-sort-votecount": "Sortér efter antal støtter",

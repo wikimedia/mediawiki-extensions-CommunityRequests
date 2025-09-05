@@ -1,9 +1,11 @@
 {
 	"@metadata": {
 		"authors": [
-			"Kareyac"
+			"Kareyac",
+			"StanProg"
 		]
 	},
 	"communityrequests-close": "Затваряне",
+	"communityrequests-tag-wikidata": "Уикиданни",
 	"communityrequests-wish-proposer": "Автор"
 }

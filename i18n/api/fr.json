@@ -3,6 +3,7 @@
 		"authors": [
 			"Bananax47",
 			"Derugon",
+			"Escargot bleu",
 			"JLTRY",
 			"WillyM"
 		]
@@ -15,6 +16,7 @@
 	"apihelp-wishedit-param-description": "La description du souhait. Peut contenir du wikitexte.",
 	"apihelp-wishedit-param-type": "Le type du souhait.",
 	"apihelp-wishedit-param-audience": "Le groupe principal d'utilisateurs qui bénéficient du souhait (par exemple, « nouveaux utilisateurs » ou « administrateurs »).",
+	"apihelp-wishedit-param-tags": "Une liste de balises associées au souhait.",
 	"apihelp-wishedit-param-phabtasks": "Une liste d’identifiants de tâches Phabricator (par exemple « T1234 »).",
 	"apihelp-wishedit-param-proposer": "L'utilisateur qui a proposé le souhait.",
 	"apihelp-wishedit-param-created": "La date et l'heure à laquelle le souhait a été créé.",
@@ -22,6 +24,7 @@
 	"apierror-wishedit-notawish": "La page que vous essayez de modifier n'est pas un souhait valide.",
 	"apierror-focusareaedit-notafocusarea": "La page que vous essayez de modifier n'est pas un domaine d'action valide.",
 	"apierror-focusareaedit-nopermission": "Vous n'êtes pas autorisé à créer ou à modifier des domaines d'action dans la liste de souhaits de la communauté.",
+	"apierror-wishlist-entity-parse": "Impossible d'analyser l'entité de la liste de souhaits. Elle contient peut-être du code invalide. Veuillez vérifier l'absence de barres verticales (<code>|</code>) superflues.",
 	"apihelp-focusareaedit-summary": "Créer ou mettre à jour un domaine d’action dans la liste de souhaits de la communauté.",
 	"apihelp-focusareaedit-param-focusarea": "Le domaine d’action à mettre à jour. Il peut s’agir du titre complet de la page, d’un identifiant de domaine d’action préfixé (p. ex., « FA123 ») ou d’un identifiant de domainde d’action sous forme d’entier. Laissez ce champ vide pour créer un nouveau domaine d’action.",
 	"apihelp-focusareaedit-param-status": "L’état du domaine d’action.",
@@ -45,11 +48,13 @@
 	"apihelp-query+communityrequests-wishes-paramvalue-prop-focusarea": "Domaine d’action auquel le souhait appartient",
 	"apihelp-query+communityrequests-wishes-paramvalue-prop-description": "Description du souhait",
 	"apihelp-query+communityrequests-wishes-paramvalue-prop-audience": "Groupe principal d’utilisateurs qui bénéficient du souhait",
+	"apihelp-query+communityrequests-wishes-paramvalue-prop-tags": "Balises associées au souhait",
 	"apihelp-query+communityrequests-wishes-paramvalue-prop-phabtasks": "Tâches Phabricator associées au souhait",
 	"apihelp-query+communityrequests-wishes-paramvalue-prop-proposer": "Utilisateur qui a proposé le souhait",
 	"apihelp-query+communityrequests-wishes-paramvalue-prop-votecount": "Nombre d’utilisateurs qui ont soutenu le souhait",
 	"apihelp-query+communityrequests-wishes-paramvalue-prop-created": "Date et heure de la création du souhait",
 	"apihelp-query+communityrequests-wishes-paramvalue-prop-updated": "Date et heure de la dernière mise à jour du souhait",
+	"apihelp-query+communityrequests-wishes-paramvalue-prop-baselang": "La langue de base du souhait à partir de laquelle les traductions sont réalisées",
 	"apihelp-query+communityrequests-wishes-paramvalue-sort-created": "Trier par date de création",
 	"apihelp-query+communityrequests-wishes-paramvalue-sort-updated": "Trier par date de dernière mise à jour",
 	"apihelp-query+communityrequests-wishes-paramvalue-sort-votecount": "Trier par nombre de soutiens",

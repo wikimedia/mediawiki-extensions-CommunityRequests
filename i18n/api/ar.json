@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"Meno25"
+			"Meno25",
+			"Mohammed Qays"
 		]
 	},
 	"apihelp-wishedit-summary": "إنشاء أو تحديث أمنية في قائمة أمنيات المجتمع.",
@@ -43,6 +44,7 @@
 	"apihelp-query+communityrequests-wishes-paramvalue-prop-focusarea": "منطقة التركيز التي تنتمي إليها الرغبة",
 	"apihelp-query+communityrequests-wishes-paramvalue-prop-description": "وصف الرغبة",
 	"apihelp-query+communityrequests-wishes-paramvalue-prop-audience": "المجموعة الأساسية من المستخدمين المستفيدين من الرغبة",
+	"apihelp-query+communityrequests-wishes-paramvalue-prop-tags": "العلامات المرتبطة بالرغبة",
 	"apihelp-query+communityrequests-wishes-paramvalue-prop-phabtasks": "مهام فابريكاتور المرتبطة بالرغبة",
 	"apihelp-query+communityrequests-wishes-paramvalue-prop-proposer": "المستخدم الذي اقترح الرغبة",
 	"apihelp-query+communityrequests-wishes-paramvalue-prop-votecount": "عدد المستخدمين الذين دعموا الرغبة",

@@ -153,6 +153,8 @@
 	"right-manually-edit-wishlist": "Куьйга хийца лаамаш а, агӀонаш а йукъараллин лаамийн могӀамехь, форма лела а ца йеш",
 	"action-manually-edit-wishlist": "куьйга хийца лаамаш а, агӀонаш а йукъараллин лаамийн могӀамехь, форма лела а ца йеш",
 	"group-community-wishlist-manager": "Йукъараллин лаамийн могӀаман менеджер",
-	"group-community-wishlist-manager-member": "Йукъараллин лаамийн могӀаман менеджер",
-	"communityrequests-cant-manually-edit": "ХӀара йукъараллин лаамийн могӀаман агӀо хийца йеза [[$1|тӀеэцаран форма]] лелош."
+	"group-community-wishlist-manager-member": "Йукъараллин лаамийн могӀаман {{GENDER:$1|менеджер}}",
+	"communityrequests-cant-manually-edit": "ХӀара йукъараллин лаамийн могӀаман агӀо хийца йеза [[$1|тӀеэцаран форма]] лелош.",
+	"communityrequests-missing-focus-area": "ХӀокху фокусан меттиг йац. Хьан йиш йу [{{fullurl:{{#Special:Log}}|page={{FULLPAGENAMEE}}}} гергара журналаш леха], иза мича йахана хаа, йа [[$1|керла фокусан меттиг кхолла]].",
+	"communityrequests-wishlist-machine-translation": "[[$1|Йукъараллин лаамийн могӀам]] чохь авто машенан гочдар дӀахӀоттаде."
 }

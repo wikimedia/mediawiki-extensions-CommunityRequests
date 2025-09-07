@@ -19,6 +19,7 @@ class Wish extends AbstractWishlistEntity {
 	// Constants used for parser function, extension data, and API parameters.
 	public const PARAM_TYPE = 'type';
 	public const PARAM_FOCUS_AREA = 'focusarea';
+	public const PARAM_FOCUS_AREAS = 'focusareas';
 	public const PARAM_AUDIENCE = 'audience';
 	public const PARAM_TAGS = 'tags';
 	public const PARAM_PHAB_TASKS = 'phabtasks';

@@ -15,6 +15,7 @@ abstract class AbstractWishlistEntity {
 
 	// Constants used for parser function, extension data, and API parameters.
 	public const PARAM_STATUS = 'status';
+	public const PARAM_STATUSES = 'statuses';
 	public const PARAM_TITLE = 'title';
 	public const PARAM_DESCRIPTION = 'description';
 	public const PARAM_CREATED = 'created';

@@ -142,8 +142,17 @@ class WishStoreTest extends MediaWikiIntegrationTestCase {
 			'en',
 			[ Wish::PARAM_CREATED => '3333-01-23T00:00:00Z' ],
 		);
+		// A third wish, with no tags.
+		$wish3 = $this->insertTestWish(
+			'Community Wishlist/Wishes/W3',
+			'en',
+			[ Wish::PARAM_CREATED => '3333-01-23T00:00:00Z', Wish::PARAM_TAGS => '' ],
+		);
 
-		$wishes = $this->getStore()->getAll( 'en', WishStore::createdField() );
+		$wishes = $this->getStore()->getAll(
+			'en', WishStore::createdField(), AbstractWishlistStore::SORT_DESC, 50, null,
+			[ Wish::PARAM_TAGS => [ 'newcomers' ] ]
+		);
 		$this->assertCount( 2, $wishes );
 		$this->assertContainsOnlyInstancesOf( Wish::class, $wishes );
 		$this->assertSame( $wish2->getPage()->getId(), $wishes[0]->getPage()->getId() );

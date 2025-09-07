@@ -6,6 +6,8 @@ namespace MediaWiki\Extension\CommunityRequests;
 use InvalidArgumentException;
 use MediaWiki\Content\WikitextContent;
 use MediaWiki\Extension\CommunityRequests\IdGenerator\IdGenerator;
+use MediaWiki\Extension\CommunityRequests\Wish\Wish;
+use MediaWiki\Extension\CommunityRequests\Wish\WishStore;
 use MediaWiki\Extension\Translate\PageTranslation\TranslatablePageParser;
 use MediaWiki\Languages\LanguageFallback;
 use MediaWiki\Page\PageIdentity;
@@ -32,7 +34,7 @@ abstract class AbstractWishlistStore {
 	public const TITLE_MAX_BYTES = 255;
 	public const SORT_ASC = SelectQueryBuilder::SORT_ASC;
 	public const SORT_DESC = SelectQueryBuilder::SORT_DESC;
-	public const FILTER_NONE = null;
+	public const FILTER_NONE = [];
 
 	public const ARRAY_DELIMITER_WIKITEXT = ',';
 	public const ARRAY_DELIMITER_API = '|';
@@ -211,7 +213,7 @@ abstract class AbstractWishlistStore {
 	 * @param string $sort Use AbstractWishlistStore::SORT_ASC or AbstractWishlistStore::SORT_DESC.
 	 * @param int $limit Limit the number of results.
 	 * @param ?array $offset As produced by ApiBase::parseContinueParamOrDie().
-	 * @param ?array $filters Unused; reserved for future use.
+	 * @param array $filters Filters to apply to the query. Keys can be 'tags', 'statuses', or 'focusareas'.
 	 * @param int $fetchWikitext Which fields to fetch from wikitext. One of:
 	 *   - self::FETCH_WIKITEXT_NONE - Default; the page content is not queried.
 	 *   - self::FETCH_WIKITEXT_RAW - Return fields that could contain <translate> tags and include them as-is.
@@ -225,7 +227,7 @@ abstract class AbstractWishlistStore {
 		string $sort = self::SORT_DESC,
 		int $limit = 50,
 		?array $offset = null,
-		?array $filters = self::FILTER_NONE,
+		array $filters = self::FILTER_NONE,
 		int $fetchWikitext = self::FETCH_WIKITEXT_NONE,
 	): array {
 		$dbr = $this->dbProvider->getReplicaDatabase();
@@ -261,6 +263,55 @@ abstract class AbstractWishlistStore {
 			->orderBy( $orderPrecedence, $sortDir )
 			// Leave room for the fallback languages.
 			->limit( $limit * ( count( $langs ) + 1 ) );
+
+		if ( isset( $filters[Wish::PARAM_TAGS] ) && $this->entityType() === 'wish' ) {
+			$tagIds = [];
+			foreach ( $this->config->getNavigationTags() as $tagName => $tagInfo ) {
+				if ( in_array( $tagName, $filters[Wish::PARAM_TAGS] ) ) {
+					$tagIds[] = $tagInfo['id'];
+				}
+			}
+			// Probably unnecessary, because the API only allows valid tag names through.
+			if ( count( $tagIds ) > 0 ) {
+				// Select wishes with any of the given tags.
+				$select->join( WishStore::tagsTableName(), null, 'crtg_wish = cr_page' )
+					->andWhere( [ 'crtg_tag' => $tagIds ] );
+			}
+		}
+
+		if ( isset( $filters[Wish::PARAM_STATUSES] ) && $filters[Wish::PARAM_STATUSES] ) {
+			$statusIds = [];
+			foreach ( $this->config->getStatuses() as $statusName => $statusInfo ) {
+				if ( in_array( $statusName, $filters[Wish::PARAM_STATUSES] ) ) {
+					$statusIds[] = $statusInfo['id'];
+				}
+			}
+			$select->andWhere( [ 'cr_status' => $statusIds ] );
+		}
+
+		if ( isset( $filters[Wish::PARAM_FOCUS_AREAS] ) && $filters[Wish::PARAM_FOCUS_AREAS] ) {
+			$focusAreaPages = [];
+			foreach ( $filters[Wish::PARAM_FOCUS_AREAS] as $faName ) {
+				$faId = $this->getIdFromInput( $faName );
+				if ( $faId ) {
+					$focusAreaPage = $this->config->getFocusAreaPageRefFromWikitextVal( (string)$faId );
+					if ( $focusAreaPage ) {
+						$focusAreaPages[] = $focusAreaPage->getDBkey();
+					}
+				}
+			}
+			if ( count( $focusAreaPages ) > 0 ) {
+				// Get the namespace from the prefix.
+				$prefixRef = $this->config->getFocusAreaPageRefFromWikitextVal( 'FA1' );
+				$focusAreaPageIdsQuery = $dbr->newSelectQueryBuilder()
+					->caller( __METHOD__ )
+					->table( 'page' )
+					->fields( 'page_id' )
+					->where( [ 'page_namespace' => $prefixRef->getNamespace(), 'page_title' => $focusAreaPages ] );
+				$focusAreaPageIds = $focusAreaPageIdsQuery->fetchFieldValues();
+				$select->andWhere( [ 'cr_focus_area' => $focusAreaPageIds ] );
+			}
+		}
 
 		if ( $offset ) {
 			$conds = [];

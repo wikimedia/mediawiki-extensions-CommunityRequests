@@ -51,6 +51,12 @@ class ApiQueryWishes extends ApiQueryBase {
 			$offsetArg = $this->parseContinueParamOrDie( $params['continue'], [ 'string', 'timestamp', 'int' ] );
 		}
 
+		$filterArg = array_filter( [
+			Wish::PARAM_TAGS => $params[Wish::PARAM_TAGS] ?? null,
+			Wish::PARAM_STATUSES => $params[Wish::PARAM_STATUSES] ?? null,
+			Wish::PARAM_FOCUS_AREAS => $params[Wish::PARAM_FOCUS_AREAS] ?? null,
+		] );
+
 		$wikitextFields = array_intersect( $params['prop'], $this->store->getWikitextFields() );
 		$wishes = $this->store->getAll(
 			$params[Wish::PARAM_LANG] ?? $this->getLanguage()->getCode(),
@@ -58,7 +64,7 @@ class ApiQueryWishes extends ApiQueryBase {
 			$params['dir'] === 'ascending' ? WishStore::SORT_ASC : WishStore::SORT_DESC,
 			$params['limit'] + 1,
 			$offsetArg,
-			null,
+			$filterArg,
 			// Fetch fields that only live in wikitext, and only if requested.
 			$wikitextFields ? WishStore::FETCH_WIKITEXT_TRANSLATED : WishStore::FETCH_WIKITEXT_NONE,
 		);
@@ -143,12 +149,28 @@ class ApiQueryWishes extends ApiQueryBase {
 	/** @inheritDoc */
 	public function getAllowedParams() {
 		$apiHelpMsgPrefix = 'apihelp-query+communityrequests-wishes-paramvalue';
+		// NOTE: Keys should match the Wish::PARAM_* constants where possible.
 		return [
 			Wish::PARAM_LANG => [
 				ParamValidator::PARAM_TYPE => 'string',
 			],
+			Wish::PARAM_TAGS => [
+				ParamValidator::PARAM_TYPE => array_keys( $this->config->getNavigationTags() ),
+				ParamValidator::PARAM_ISMULTI => true,
+				ApiBase::PARAM_HELP_MSG => 'apihelp-query+communityrequests-wishes-param-tags',
+			],
+			Wish::PARAM_STATUSES => [
+				ParamValidator::PARAM_TYPE => array_keys( $this->config->getStatuses() ),
+				ParamValidator::PARAM_ISMULTI => true,
+				ApiBase::PARAM_HELP_MSG => 'apihelp-query+communityrequests-wishes-param-statuses',
+			],
+			Wish::PARAM_FOCUS_AREAS => [
+				ParamValidator::PARAM_TYPE => 'string',
+				ParamValidator::PARAM_ISMULTI => true,
+				ApiBase::PARAM_HELP_MSG => 'apihelp-query+communityrequests-wishes-param-focusareas',
+			],
 			'prop' => [
-				ParamValidator::PARAM_DEFAULT => 'status|type|title|votecount|created|updated',
+				ParamValidator::PARAM_DEFAULT => 'tags|status|type|title|votecount|created|updated',
 				ParamValidator::PARAM_ISMULTI => true,
 				ParamValidator::PARAM_TYPE => [
 					Wish::PARAM_STATUS,

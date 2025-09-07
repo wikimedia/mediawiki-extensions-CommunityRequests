@@ -276,6 +276,29 @@ class ApiQueryWishesTest extends ApiTestCase {
 		$this->assertSame( 'Translatable audience', $wish[Wish::PARAM_AUDIENCE] );
 	}
 
+	/**
+	 * @dataProvider provideExecuteFilterByTag
+	 */
+	public function testExecuteFilterByTag( ?string $crwtags, int $count ): void {
+		$this->createTestWishWithApi( [ Wish::PARAM_TAGS => 'categories' ] );
+		$this->createTestWishWithApi( [ Wish::PARAM_TAGS => 'categories|admins' ] );
+		$this->createTestWishWithApi( [ Wish::PARAM_TAGS => 'admins' ] );
+		[ $ret ] = $this->doApiRequest( [
+			'action' => 'query',
+			'list' => 'communityrequests-wishes',
+			'crwtags' => $crwtags,
+		] );
+		$this->assertCount( $count, $ret['query']['communityrequests-wishes'] );
+	}
+
+	public function provideExecuteFilterByTag(): array {
+		return [
+			[ 'crwtags' => null, 'count' => 3 ],
+			[ 'crwtags' => 'categories', 'count' => 2 ],
+			[ 'crwtags' => 'categories|admins', 'count' => 3 ],
+		];
+	}
+
 	private function createTestWishWithApi( $params = [] ): array {
 		$params = [
 			'action' => 'wishedit',

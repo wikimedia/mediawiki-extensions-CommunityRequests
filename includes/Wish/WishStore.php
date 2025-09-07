@@ -130,6 +130,15 @@ class WishStore extends AbstractWishlistStore {
 		return 'communityrequests_wishes_translations';
 	}
 
+	/**
+	 * The full name of the tags database table.
+	 *
+	 * @return string
+	 */
+	public static function tagsTableName(): string {
+		return 'communityrequests_tags';
+	}
+
 	/** @inheritDoc */
 	protected static function translationForeignKey(): string {
 		return 'crt_wish';

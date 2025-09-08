@@ -13,6 +13,7 @@
 	"apihelp-wishedit-param-description": "وصف الرغبة. قد يحتوي على نص ويكي.",
 	"apihelp-wishedit-param-type": "نوع الرغبة.",
 	"apihelp-wishedit-param-audience": "المجموعة الأساسية من المستخدمين الذين يستفيدون من هذه الرغبة (على سبيل المثال \"المستخدمين الجدد\" أو \"المسؤولين\").",
+	"apihelp-wishedit-param-tags": "قائمة من العلامات المرتبطة بالرغبة.",
 	"apihelp-wishedit-param-phabtasks": "قائمة معرفات مهام Phabricator (على سبيل المثال \"T1234\").",
 	"apihelp-wishedit-param-proposer": "المستخدم الذي اقترح الرغبة.",
 	"apihelp-wishedit-param-created": "التاريخ والوقت الذي تم فيه إنشاء الرغبة.",

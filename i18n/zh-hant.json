@@ -34,6 +34,7 @@
 	"communityrequests-wishtype-unknown-label-short": "未知",
 	"communityrequests-wishtype-error": "請選擇願望類型。",
 	"communityrequests-tags-label": "標籤",
+	"communityrequests-tags-description": "選擇與您的願望最相關的標籤。",
 	"communityrequests-audience-label": "主要涉及使用者",
 	"communityrequests-audience-description": "描述這將主要影響哪些使用者群體和情境",
 	"communityrequests-audience-error": "請在此欄位中輸入一個值（介於$1至$2個{{PLURAL:$2|字元}}）。",

@@ -42,6 +42,7 @@
 	"apihelp-query+communityrequests-wishes-paramvalue-prop-focusarea": "Лаам шена йукъабогӀу тидам тӀебохуьйтуш йолу меттиг",
 	"apihelp-query+communityrequests-wishes-paramvalue-prop-description": "Лаамех лаьцна дийцар",
 	"apihelp-query+communityrequests-wishes-paramvalue-prop-audience": "Лаамах пайда оьцучу декъашхойн коьрта тоба",
+	"apihelp-query+communityrequests-wishes-paramvalue-prop-tags": "Лаамца йоьзна йолу тегаш",
 	"apihelp-query+communityrequests-wishes-paramvalue-prop-phabtasks": "Лаамца доьзна долу фабрикаторан гӀуллакхаш",
 	"apihelp-query+communityrequests-wishes-paramvalue-prop-proposer": "Лаам кховдийна декъашхо",
 	"apihelp-query+communityrequests-wishes-paramvalue-prop-votecount": "Лаамна гӀо йинчу декъашхойн дукхалла",

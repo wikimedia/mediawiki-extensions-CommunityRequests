@@ -353,5 +353,9 @@ module.exports = exports = defineComponent( {
 	.cdx-label:not( .cdx-radio__label, .cdx-checkbox__label ) .cdx-label__label__text {
 		font-weight: @font-weight-bold;
 	}
+
+	#editpage-copywarn {
+		margin: @spacing-75 0;
+	}
 }
 </style>

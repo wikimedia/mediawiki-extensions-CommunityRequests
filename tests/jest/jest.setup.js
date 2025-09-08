@@ -61,7 +61,8 @@ function mockMwConfigGet( config = {} ) {
 			intakeId: null,
 			intakeTitleMaxChars: 255,
 			intakeWishlistManager: false,
-			intakeVeModules: []
+			intakeVeModules: [],
+			copyrightWarning: 'All contributions <em>are</em>.'
 		},
 		typeof mw.config.get === 'function' ? mw.config.get() : {},
 		config

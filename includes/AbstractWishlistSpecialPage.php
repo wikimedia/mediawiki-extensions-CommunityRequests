@@ -6,6 +6,7 @@ namespace MediaWiki\Extension\CommunityRequests;
 use MediaWiki\Api\ApiMain;
 use MediaWiki\Api\ApiUsageException;
 use MediaWiki\Context\DerivativeContext;
+use MediaWiki\EditPage\EditPage;
 use MediaWiki\Extension\CommunityRequests\HookHandler\CommunityRequestsHooks;
 use MediaWiki\Html\Html;
 use MediaWiki\HTMLForm\HTMLForm;
@@ -70,6 +71,7 @@ abstract class AbstractWishlistSpecialPage extends FormSpecialPage {
 		$this->getOutput()->addJsConfigVars( [
 			'intakeTitleMaxChars' => AbstractWishlistStore::TITLE_MAX_CHARS,
 			'intakeWishlistManager' => $this->getUser()->isAllowed( 'manage-wishlist' ),
+			'copyrightWarning' => EditPage::getCopyrightWarning( $this->getFullTitle(), 'parse', $this->getContext() ),
 		] );
 
 		parent::execute( (string)$entityId );

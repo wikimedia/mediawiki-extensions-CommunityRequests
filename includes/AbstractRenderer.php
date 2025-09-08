@@ -3,6 +3,7 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CommunityRequests;
 
+use MediaWiki\EditPage\EditPage;
 use MediaWiki\Extension\CommunityRequests\FocusArea\FocusAreaStore;
 use MediaWiki\Html\Html;
 use MediaWiki\Linker\LinkRenderer;
@@ -211,6 +212,7 @@ abstract class AbstractRenderer implements MessageLocalizer {
 			$this->msg( "communityrequests-{$this->entityType}-voting-info-closed" )->escaped();
 		$out .= Html::closeElement( 'p' );
 
+		$basePage = $this->config->getCanonicalEntityPageRef( $this->parser->getPage() );
 		if ( $votingEnabled ) {
 			// Container for the voting button added by JavaScript.
 			$out .= Html::element( 'div', [ 'class' => 'ext-communityrequests-voting' ] );
@@ -220,10 +222,15 @@ abstract class AbstractRenderer implements MessageLocalizer {
 					$this->msg( 'communityrequests-wish-voting-no-js' )->text()
 				)
 			);
+			if ( $basePage ) {
+				$this->parser->getOutput()->setJsConfigVar(
+					'copyrightWarning',
+					EditPage::getCopyrightWarning( $basePage, 'parse', $this )
+				);
+			}
 		}
 
 		// Transclude the /Votes subpage if it exists.
-		$basePage = $this->config->getCanonicalEntityPageRef( $this->parser->getPage() );
 		if ( $basePage ) {
 			$voteSubpagePath = Title::newFromPageReference( $basePage )->getPrefixedDBkey()
 				. $this->config->getVotesPageSuffix();

@@ -2,7 +2,7 @@
 	<footer class="ext-communityrequests-intake__footer">
 		<hr>
 		<!-- eslint-disable-next-line vue/no-v-html -->
-		<p v-html="$i18n( 'wikimedia-copyrightwarning' ).parse()"></p>
+		<div v-html="copyrightWarning"></div>
 		<cdx-button
 			weight="primary"
 			action="progressive"
@@ -51,6 +51,11 @@ module.exports = exports = defineComponent( {
 		formError: { type: Boolean, default: false },
 		formErrorMsg: { type: String, default: '' }
 	},
-	emits: [ 'submit' ]
+	emits: [ 'submit' ],
+	setup() {
+		return {
+			copyrightWarning: mw.config.get( 'copyrightWarning' )
+		};
+	}
 } );
 </script>

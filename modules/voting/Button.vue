@@ -51,7 +51,8 @@
 				{{ $i18n( 'communityrequests-optional-comment' ).text() }}
 			</template>
 			<template #help-text>
-				{{ $i18n( 'wikimedia-copyrightwarning' ).text() }}
+				<!-- eslint-disable-next-line vue/no-v-html -->
+				<div v-html="copyrightWarning"></div>
 			</template>
 		</cdx-field>
 	</cdx-dialog>
@@ -325,7 +326,8 @@ module.exports = exports = defineComponent( {
 			showVotedMessage,
 			submitting,
 			submitStatus,
-			submitMessages
+			submitMessages,
+			copyrightWarning: mw.config.get( 'copyrightWarning' )
 		};
 	}
 } );

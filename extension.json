@@ -259,7 +259,6 @@
 				"communityrequests-audience-description",
 				"communityrequests-phabricator-label",
 				"communityrequests-phabricator-desc",
-				"wikimedia-copyrightwarning",
 				"communityrequests-publish",
 				"communityrequests-save",
 				"publishpage",
@@ -350,8 +349,7 @@
 				"communityrequests-support-wish",
 				"communityrequests-support-wish-confirmed",
 				"communityrequests-wish-voting-not-logged-in",
-				"communityrequests-supported",
-				"wikimedia-copyrightwarning"
+				"communityrequests-supported"
 			]
 		},
 		"ext.communityrequests.wish-index": {

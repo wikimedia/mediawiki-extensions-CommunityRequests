@@ -48,22 +48,30 @@ vueConfig.global.directives = {
 /**
  * Mock calls to mw.config.get().
  *
- * @param {Object} [config] Will be merged with the defaults.
+ * @param {Object} [config] Will be merged with the defaults and any previous calls to this function.
  */
 function mockMwConfigGet( config = {} ) {
-	const mockConfig = Object.assign( {}, {
-		wgUserGroups: [],
-		wgUserLanguage: 'en',
-		wgUserName: 'ExampleUser',
-		wgCanonicalSpecialPageName: false,
-		intakeFocusAreas: {},
-		intakeId: null,
-		intakeTitleMaxChars: 255,
-		intakeWishlistManager: false,
-		intakeVeModules: []
-	}, config );
+	const mockConfig = Object.assign( {},
+		{
+			wgUserGroups: [],
+			wgUserLanguage: 'en',
+			wgUserName: 'ExampleUser',
+			wgCanonicalSpecialPageName: false,
+			intakeFocusAreas: {},
+			intakeId: null,
+			intakeTitleMaxChars: 255,
+			intakeWishlistManager: false,
+			intakeVeModules: []
+		},
+		typeof mw.config.get === 'function' ? mw.config.get() : {},
+		config
+	);
 
 	mw.config.get = jest.fn().mockImplementation( ( key ) => {
+		if ( key === undefined ) {
+			// If no key, return all current config values.
+			return mockConfig;
+		}
 		if ( !Object.keys( mockConfig ).includes( key ) ) {
 			throw new Error( 'Unexpected key: ' + key );
 		}

@@ -6,17 +6,17 @@ namespace MediaWiki\Extension\CommunityRequests;
 use MediaWiki\Extension\CommunityRequests\FocusArea\FocusAreaStore;
 use MediaWiki\Html\Html;
 use MediaWiki\Linker\LinkRenderer;
-use MediaWiki\Message\Message;
 use MediaWiki\Parser\Parser;
 use MediaWiki\Parser\PPFrame;
 use MediaWiki\Parser\PPNode;
 use MediaWiki\Title\Title;
+use MessageLocalizer;
 use Psr\Log\LoggerInterface;
 
 /**
  * The base class for wish/focus area parser function implementations
  */
-abstract class AbstractRenderer {
+abstract class AbstractRenderer implements MessageLocalizer {
 	public const TRACKING_CATEGORY = 'communityrequests-category';
 	public const ERROR_TRACKING_CATEGORY = 'communityrequests-error-category';
 	public const EXT_DATA_KEY = 'CommunityRequests-ext-data';
@@ -55,15 +55,9 @@ abstract class AbstractRenderer {
 	 */
 	abstract public function render(): string;
 
-	/**
-	 * Message proxy
-	 *
-	 * @param string $msg
-	 * @param mixed ...$params
-	 * @return Message
-	 */
-	protected function msg( string $msg, ...$params ): Message {
-		return $this->parser->msg( $msg, ...$params );
+	/** @inheritDoc */
+	public function msg( $key, ...$params ) {
+		return $this->parser->msg( $key, ...$params );
 	}
 
 	/**

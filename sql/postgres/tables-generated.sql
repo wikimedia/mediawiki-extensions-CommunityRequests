@@ -2,12 +2,13 @@
 -- Source: sql/tables.json
 -- Do not modify this file directly.
 -- See https://www.mediawiki.org/wiki/Manual:Schema_changes
-CREATE TABLE communityrequests_wishes (
+CREATE TABLE communityrequests_entities (
   cr_page INT NOT NULL,
-  cr_type INT NOT NULL,
+  cr_entity_type SMALLINT DEFAULT 0 NOT NULL,
   cr_status INT NOT NULL,
+  cr_wish_type INT DEFAULT NULL,
   cr_focus_area INT DEFAULT NULL,
-  cr_actor BIGINT NOT NULL,
+  cr_actor BIGINT DEFAULT NULL,
   cr_vote_count INT DEFAULT 0 NOT NULL,
   cr_base_lang TEXT NOT NULL,
   cr_created TIMESTAMPTZ NOT NULL,
@@ -15,58 +16,30 @@ CREATE TABLE communityrequests_wishes (
   PRIMARY KEY(cr_page)
 );
 
-CREATE INDEX cr_created ON communityrequests_wishes (cr_created);
+CREATE INDEX cr_created ON communityrequests_entities (cr_created);
 
-CREATE INDEX cr_updated ON communityrequests_wishes (cr_updated);
+CREATE INDEX cr_updated ON communityrequests_entities (cr_updated);
 
-CREATE INDEX cr_vote_count ON communityrequests_wishes (cr_vote_count);
-
-
-CREATE TABLE communityrequests_focus_areas (
-  crfa_page INT NOT NULL,
-  crfa_status INT NOT NULL,
-  crfa_vote_count INT DEFAULT 0 NOT NULL,
-  crfa_base_lang TEXT NOT NULL,
-  crfa_created TIMESTAMPTZ NOT NULL,
-  crfa_updated TIMESTAMPTZ NOT NULL,
-  PRIMARY KEY(crfa_page)
-);
-
-CREATE INDEX crfa_created ON communityrequests_focus_areas (crfa_created);
-
-CREATE INDEX crfa_updated ON communityrequests_focus_areas (crfa_updated);
-
-CREATE INDEX crfa_vote_count ON communityrequests_focus_areas (crfa_vote_count);
+CREATE INDEX cr_vote_count ON communityrequests_entities (cr_vote_count);
 
 
-CREATE TABLE communityrequests_wishes_translations (
-  crt_wish INT NOT NULL,
+CREATE TABLE communityrequests_translations (
+  crt_entity INT NOT NULL,
   crt_lang TEXT NOT NULL,
   crt_title TEXT NOT NULL,
-  PRIMARY KEY(crt_lang, crt_wish)
+  PRIMARY KEY(crt_lang, crt_entity)
 );
 
-CREATE INDEX crt_lang_title ON communityrequests_wishes_translations (crt_lang, crt_title);
-
-
-CREATE TABLE communityrequests_focus_areas_translations (
-  crfat_focus_area INT NOT NULL,
-  crfat_lang TEXT NOT NULL,
-  crfat_title TEXT NOT NULL,
-  crfat_short_description TEXT NOT NULL,
-  PRIMARY KEY(crfat_lang, crfat_focus_area)
-);
-
-CREATE INDEX crfat_lang_title ON communityrequests_focus_areas_translations (crfat_lang, crfat_title);
+CREATE INDEX crt_lang_title ON communityrequests_translations (crt_lang, crt_title);
 
 
 CREATE TABLE communityrequests_tags (
   crtg_tag INT NOT NULL,
-  crtg_wish INT NOT NULL,
-  PRIMARY KEY(crtg_wish, crtg_tag)
+  crtg_entity INT NOT NULL,
+  PRIMARY KEY(crtg_entity, crtg_tag)
 );
 
-CREATE INDEX crtg_tag_wish ON communityrequests_tags (crtg_tag, crtg_wish);
+CREATE INDEX crtg_tag_entity ON communityrequests_tags (crtg_tag, crtg_entity);
 
 
 CREATE TABLE communityrequests_counters (

@@ -2,12 +2,13 @@
 -- Source: sql/tables.json
 -- Do not modify this file directly.
 -- See https://www.mediawiki.org/wiki/Manual:Schema_changes
-CREATE TABLE /*_*/communityrequests_wishes (
+CREATE TABLE /*_*/communityrequests_entities (
   cr_page INTEGER UNSIGNED NOT NULL,
-  cr_type INTEGER UNSIGNED NOT NULL,
+  cr_entity_type SMALLINT DEFAULT 0 NOT NULL,
   cr_status INTEGER UNSIGNED NOT NULL,
+  cr_wish_type INTEGER UNSIGNED DEFAULT NULL,
   cr_focus_area INTEGER UNSIGNED DEFAULT NULL,
-  cr_actor BIGINT UNSIGNED NOT NULL,
+  cr_actor BIGINT UNSIGNED DEFAULT NULL,
   cr_vote_count INTEGER UNSIGNED DEFAULT 0 NOT NULL,
   cr_base_lang BLOB NOT NULL,
   cr_created BLOB NOT NULL,
@@ -15,58 +16,30 @@ CREATE TABLE /*_*/communityrequests_wishes (
   PRIMARY KEY(cr_page)
 );
 
-CREATE INDEX cr_created ON /*_*/communityrequests_wishes (cr_created);
+CREATE INDEX cr_created ON /*_*/communityrequests_entities (cr_created);
 
-CREATE INDEX cr_updated ON /*_*/communityrequests_wishes (cr_updated);
+CREATE INDEX cr_updated ON /*_*/communityrequests_entities (cr_updated);
 
-CREATE INDEX cr_vote_count ON /*_*/communityrequests_wishes (cr_vote_count);
-
-
-CREATE TABLE /*_*/communityrequests_focus_areas (
-  crfa_page INTEGER UNSIGNED NOT NULL,
-  crfa_status INTEGER UNSIGNED NOT NULL,
-  crfa_vote_count INTEGER UNSIGNED DEFAULT 0 NOT NULL,
-  crfa_base_lang BLOB NOT NULL,
-  crfa_created BLOB NOT NULL,
-  crfa_updated BLOB NOT NULL,
-  PRIMARY KEY(crfa_page)
-);
-
-CREATE INDEX crfa_created ON /*_*/communityrequests_focus_areas (crfa_created);
-
-CREATE INDEX crfa_updated ON /*_*/communityrequests_focus_areas (crfa_updated);
-
-CREATE INDEX crfa_vote_count ON /*_*/communityrequests_focus_areas (crfa_vote_count);
+CREATE INDEX cr_vote_count ON /*_*/communityrequests_entities (cr_vote_count);
 
 
-CREATE TABLE /*_*/communityrequests_wishes_translations (
-  crt_wish INTEGER UNSIGNED NOT NULL,
+CREATE TABLE /*_*/communityrequests_translations (
+  crt_entity INTEGER UNSIGNED NOT NULL,
   crt_lang BLOB NOT NULL,
   crt_title BLOB NOT NULL,
-  PRIMARY KEY(crt_lang, crt_wish)
+  PRIMARY KEY(crt_lang, crt_entity)
 );
 
-CREATE INDEX crt_lang_title ON /*_*/communityrequests_wishes_translations (crt_lang, crt_title);
-
-
-CREATE TABLE /*_*/communityrequests_focus_areas_translations (
-  crfat_focus_area INTEGER UNSIGNED NOT NULL,
-  crfat_lang BLOB NOT NULL,
-  crfat_title BLOB NOT NULL,
-  crfat_short_description BLOB NOT NULL,
-  PRIMARY KEY(crfat_lang, crfat_focus_area)
-);
-
-CREATE INDEX crfat_lang_title ON /*_*/communityrequests_focus_areas_translations (crfat_lang, crfat_title);
+CREATE INDEX crt_lang_title ON /*_*/communityrequests_translations (crt_lang, crt_title);
 
 
 CREATE TABLE /*_*/communityrequests_tags (
   crtg_tag INTEGER UNSIGNED NOT NULL,
-  crtg_wish INTEGER UNSIGNED NOT NULL,
-  PRIMARY KEY(crtg_wish, crtg_tag)
+  crtg_entity INTEGER UNSIGNED NOT NULL,
+  PRIMARY KEY(crtg_entity, crtg_tag)
 );
 
-CREATE INDEX crtg_tag_wish ON /*_*/communityrequests_tags (crtg_tag, crtg_wish);
+CREATE INDEX crtg_tag_entity ON /*_*/communityrequests_tags (crtg_tag, crtg_entity);
 
 
 CREATE TABLE /*_*/communityrequests_counters (

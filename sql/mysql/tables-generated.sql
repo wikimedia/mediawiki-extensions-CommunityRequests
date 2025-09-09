@@ -2,12 +2,13 @@
 -- Source: sql/tables.json
 -- Do not modify this file directly.
 -- See https://www.mediawiki.org/wiki/Manual:Schema_changes
-CREATE TABLE /*_*/communityrequests_wishes (
+CREATE TABLE /*_*/communityrequests_entities (
   cr_page INT UNSIGNED NOT NULL,
-  cr_type INT UNSIGNED NOT NULL,
+  cr_entity_type TINYINT(1) DEFAULT 0 NOT NULL,
   cr_status INT UNSIGNED NOT NULL,
+  cr_wish_type INT UNSIGNED DEFAULT NULL,
   cr_focus_area INT UNSIGNED DEFAULT NULL,
-  cr_actor BIGINT UNSIGNED NOT NULL,
+  cr_actor BIGINT UNSIGNED DEFAULT NULL,
   cr_vote_count INT UNSIGNED DEFAULT 0 NOT NULL,
   cr_base_lang VARBINARY(35) NOT NULL,
   cr_created BINARY(14) NOT NULL,
@@ -19,44 +20,20 @@ CREATE TABLE /*_*/communityrequests_wishes (
 ) /*$wgDBTableOptions*/;
 
 
-CREATE TABLE /*_*/communityrequests_focus_areas (
-  crfa_page INT UNSIGNED NOT NULL,
-  crfa_status INT UNSIGNED NOT NULL,
-  crfa_vote_count INT UNSIGNED DEFAULT 0 NOT NULL,
-  crfa_base_lang VARBINARY(35) NOT NULL,
-  crfa_created BINARY(14) NOT NULL,
-  crfa_updated BINARY(14) NOT NULL,
-  INDEX crfa_created (crfa_created),
-  INDEX crfa_updated (crfa_updated),
-  INDEX crfa_vote_count (crfa_vote_count),
-  PRIMARY KEY(crfa_page)
-) /*$wgDBTableOptions*/;
-
-
-CREATE TABLE /*_*/communityrequests_wishes_translations (
-  crt_wish INT UNSIGNED NOT NULL,
+CREATE TABLE /*_*/communityrequests_translations (
+  crt_entity INT UNSIGNED NOT NULL,
   crt_lang VARBINARY(35) NOT NULL,
   crt_title VARBINARY(255) NOT NULL,
   INDEX crt_lang_title (crt_lang, crt_title),
-  PRIMARY KEY(crt_lang, crt_wish)
-) /*$wgDBTableOptions*/;
-
-
-CREATE TABLE /*_*/communityrequests_focus_areas_translations (
-  crfat_focus_area INT UNSIGNED NOT NULL,
-  crfat_lang VARBINARY(35) NOT NULL,
-  crfat_title VARBINARY(255) NOT NULL,
-  crfat_short_description MEDIUMBLOB NOT NULL,
-  INDEX crfat_lang_title (crfat_lang, crfat_title),
-  PRIMARY KEY(crfat_lang, crfat_focus_area)
+  PRIMARY KEY(crt_lang, crt_entity)
 ) /*$wgDBTableOptions*/;
 
 
 CREATE TABLE /*_*/communityrequests_tags (
   crtg_tag INT UNSIGNED NOT NULL,
-  crtg_wish INT UNSIGNED NOT NULL,
-  INDEX crtg_tag_wish (crtg_tag, crtg_wish),
-  PRIMARY KEY(crtg_wish, crtg_tag)
+  crtg_entity INT UNSIGNED NOT NULL,
+  INDEX crtg_tag_entity (crtg_tag, crtg_entity),
+  PRIMARY KEY(crtg_entity, crtg_tag)
 ) /*$wgDBTableOptions*/;
 
 

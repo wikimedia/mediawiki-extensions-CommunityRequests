@@ -72,81 +72,29 @@ class WishStore extends AbstractWishlistStore {
 	// Schema
 
 	/** @inheritDoc */
-	protected static function tableName(): string {
-		return 'communityrequests_wishes';
-	}
-
-	/** @inheritDoc */
 	public static function fields(): array {
-		return [
-			'page_namespace',
-			'page_title',
-			'cr_page',
-			'cr_type',
-			'cr_status',
-			'cr_focus_area',
-			'cr_actor',
-			'cr_vote_count',
-			'cr_base_lang',
-			'cr_created',
-			'cr_updated',
-			'crt_title',
-			'crt_lang',
-		];
-	}
-
-	/** @inheritDoc */
-	public static function pageField(): string {
-		return 'cr_page';
-	}
-
-	/** @inheritDoc */
-	public static function createdField(): string {
-		return 'cr_created';
-	}
-
-	/** @inheritDoc */
-	public static function updatedField(): string {
-		return 'cr_updated';
-	}
-
-	/** @inheritDoc */
-	public static function voteCountField(): string {
-		return 'cr_vote_count';
-	}
-
-	/** @inheritDoc */
-	protected static function baseLangField(): string {
-		return 'cr_base_lang';
-	}
-
-	/** @inheritDoc */
-	public static function titleField(): string {
-		return 'crt_title';
-	}
-
-	/** @inheritDoc */
-	protected static function translationsTableName(): string {
-		return 'communityrequests_wishes_translations';
+		return array_merge( parent::fields(), [
+			static::wishTypeField(),
+			static::focusAreaField(),
+		] );
 	}
 
 	/**
-	 * The full name of the tags database table.
+	 * The field name for the wish type.
 	 *
 	 * @return string
 	 */
-	public static function tagsTableName(): string {
-		return 'communityrequests_tags';
+	public static function wishTypeField(): string {
+		return 'cr_wish_type';
 	}
 
-	/** @inheritDoc */
-	protected static function translationForeignKey(): string {
-		return 'crt_wish';
-	}
-
-	/** @inheritDoc */
-	protected static function translationLangField(): string {
-		return 'crt_lang';
+	/**
+	 * The field name for the focus area page ID.
+	 *
+	 * @return string
+	 */
+	public static function focusAreaField(): string {
+		return 'cr_focus_area';
 	}
 
 	// Saving wishes.
@@ -176,8 +124,8 @@ class WishStore extends AbstractWishlistStore {
 			$proposerCreated = $dbw->newSelectQueryBuilder()
 				->caller( __METHOD__ )
 				->from( self::tableName() )
-				->fields( [ 'cr_actor', self::createdField() ] )
-				->where( [ 'cr_page' => $wish->getPage()->getId() ] )
+				->fields( [ static::actorField(), self::createdField() ] )
+				->where( [ static::pageField() => $wish->getPage()->getId() ] )
 				->forUpdate()
 				->fetchRow();
 			if ( $proposerCreated ) {
@@ -189,25 +137,26 @@ class WishStore extends AbstractWishlistStore {
 			throw new InvalidArgumentException( 'Wishes must have a proposer!' );
 		}
 		if ( !$created ) {
-			throw new InvalidArgumentException( 'Wishes must have a created date!' );
+			throw new InvalidArgumentException( 'Wishes must have a created timestamp!' );
 		}
 
 		$data = [
-			'cr_page' => $wish->getPage()->getId(),
-			'cr_base_lang' => $wish->getBaseLang(),
+			static::entityTypeField() => AbstractWishlistStore::ENTITY_TYPE_WISH,
+			static::pageField() => $wish->getPage()->getId(),
+			static::baseLangField() => $wish->getBaseLang(),
 		];
 		$dataSet = [
-			'cr_actor' => $proposer,
-			'cr_type' => $wish->getType(),
-			'cr_status' => $wish->getStatus(),
-			'cr_focus_area' => $wish->getFocusAreaPage()?->getId() ?: null,
-			'cr_created' => $dbw->timestamp( $created ),
-			'cr_updated' => $dbw->timestamp( $wish->getUpdated() ?: wfTimestampNow() ),
+			static::actorField() => $proposer,
+			static::wishTypeField() => $wish->getType(),
+			static::statusField() => $wish->getStatus(),
+			static::focusAreaField() => $wish->getFocusAreaPage()?->getId() ?: null,
+			static::createdField() => $dbw->timestamp( $created ),
+			static::updatedField() => $dbw->timestamp( $wish->getUpdated() ?: wfTimestampNow() ),
 		];
 
 		// Set votes only if not null, otherwise leave unchanged.
 		if ( $wish->getVoteCount() !== null ) {
-			$dataSet['cr_vote_count'] = $wish->getVoteCount();
+			$dataSet[static::voteCountField()] = $wish->getVoteCount();
 		}
 
 		$dbw->newInsertQueryBuilder()
@@ -215,7 +164,7 @@ class WishStore extends AbstractWishlistStore {
 			->rows( [ array_merge( $data, $dataSet ) ] )
 			->set( $dataSet )
 			->onDuplicateKeyUpdate()
-			->uniqueIndexFields( [ 'cr_page' ] )
+			->uniqueIndexFields( [ static::pageField() ] )
 			->caller( __METHOD__ )
 			->execute();
 
@@ -241,7 +190,7 @@ class WishStore extends AbstractWishlistStore {
 			[
 				'table' => 'communityrequests_tags',
 				'key' => 'crtg_tag',
-				'foreignKey' => 'crtg_wish',
+				'foreignKey' => 'crtg_entity',
 				'wishMethod' => 'getTags',
 			]
 		];
@@ -304,24 +253,23 @@ class WishStore extends AbstractWishlistStore {
 		foreach ( $rows as $row ) {
 			$wishes[] = new Wish(
 				new PageIdentityValue(
-					(int)$row->cr_page,
+					(int)$row->{static::pageField()},
 					(int)$row->page_namespace,
 					$row->page_title,
 					WikiAwareEntity::LOCAL
 				),
-				$row->crt_lang,
-				$this->userFactory->newFromActorId( (int)$row->cr_actor ),
+				$row->{static::translationLangField()},
+				$this->userFactory->newFromActorId( (int)$row->{static::actorField()} ),
 				[
-					Wish::PARAM_TYPE => (int)$row->cr_type,
-					Wish::PARAM_STATUS => (int)$row->cr_status,
-					Wish::PARAM_TITLE => $row->crt_title,
-					// TODO: refactor to fetch page ID in the main query.
-					Wish::PARAM_FOCUS_AREA => Title::newFromID( (int)$row->cr_focus_area ),
-					Wish::PARAM_TAGS => $tagsByPage[$row->cr_page] ?? [],
-					Wish::PARAM_VOTE_COUNT => (int)$row->cr_vote_count,
-					Wish::PARAM_CREATED => $row->cr_created,
-					Wish::PARAM_UPDATED => $row->cr_updated,
-					Wish::PARAM_BASE_LANG => $row->cr_base_lang,
+					Wish::PARAM_TYPE => (int)$row->{static::wishTypeField()},
+					Wish::PARAM_STATUS => (int)$row->{static::statusField()},
+					Wish::PARAM_TITLE => $row->{static::titleField()},
+					Wish::PARAM_FOCUS_AREA => Title::newFromID( (int)$row->{static::focusAreaField()} ),
+					Wish::PARAM_TAGS => $tagsByPage[$row->{static::pageField()}] ?? [],
+					Wish::PARAM_VOTE_COUNT => (int)$row->{static::voteCountField()},
+					Wish::PARAM_CREATED => $row->{static::createdField()},
+					Wish::PARAM_UPDATED => $row->{static::updatedField()},
+					Wish::PARAM_BASE_LANG => $row->{static::baseLangField()},
 					// "Virtual" fields that only exist when querying for wikitext.
 					Wish::PARAM_DESCRIPTION => $row->crt_description ?? null,
 					Wish::PARAM_AUDIENCE => $row->crt_audience ?? null,
@@ -346,15 +294,15 @@ class WishStore extends AbstractWishlistStore {
 		}
 		$tags = $dbr->newSelectQueryBuilder()
 			->caller( __METHOD__ )
-			->table( 'communityrequests_tags' )
-			->fields( [ 'crtg_wish', 'crtg_tag' ] )
-			->where( [ 'crtg_wish' => $pageIds ] )
+			->table( static::tagsTableName() )
+			->fields( [ 'crtg_entity', 'crtg_tag' ] )
+			->where( [ 'crtg_entity' => $pageIds ] )
 			->fetchResultSet();
 
 		// Group by wish ID.
 		$tagsByWish = [];
 		foreach ( $tags as $tag ) {
-			$tagsByWish[$tag->crtg_wish][] = (int)$tag->crtg_tag;
+			$tagsByWish[$tag->crtg_entity][] = (int)$tag->crtg_tag;
 		}
 
 		return $tagsByWish;
@@ -363,7 +311,7 @@ class WishStore extends AbstractWishlistStore {
 	/** @inheritDoc */
 	public function delete( AbstractWishlistEntity $entity, array $assocData = [] ): IDatabase {
 		return parent::delete( $entity, [
-			'communityrequests_tags' => 'crtg_wish'
+			static::tagsTableName() => 'crtg_entity',
 		] );
 	}
 
@@ -375,7 +323,8 @@ class WishStore extends AbstractWishlistStore {
 	/** @inheritDoc */
 	public function getExtTranslateFields(): array {
 		return [
-			Wish::PARAM_TITLE => 'crt_title',
+			Wish::PARAM_TITLE => self::titleField(),
+			// Wikitext fields.
 			Wish::PARAM_DESCRIPTION => 'crt_description',
 			Wish::PARAM_AUDIENCE => 'crt_audience',
 			// We are using this field as a virtual field even though is it not translatable

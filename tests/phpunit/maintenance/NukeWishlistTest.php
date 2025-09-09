@@ -3,6 +3,7 @@ declare( strict_types = 1 );
 
 namespace MediaWiki\Extension\CommunityRequests\Tests\Maintenance;
 
+use MediaWiki\Extension\CommunityRequests\AbstractWishlistStore;
 use MediaWiki\Extension\CommunityRequests\Maintenance\NukeWishlist;
 use MediaWiki\Tests\Maintenance\MaintenanceBaseTestCase;
 use MediaWiki\Title\Title;
@@ -20,11 +21,7 @@ class NukeWishlistTest extends MaintenanceBaseTestCase {
 	public function testExecuteWithNoEntitiesOrPages(): void {
 		$this->newSelectQueryBuilder()
 			->select( 'COUNT(*)' )
-			->from( 'communityrequests_wishes' )
-			->assertFieldValue( 0 );
-		$this->newSelectQueryBuilder()
-			->select( 'COUNT(*)' )
-			->from( 'communityrequests_focus_areas' )
+			->from( AbstractWishlistStore::tableName() )
 			->assertFieldValue( 0 );
 		$this->maintenance->execute();
 		$this->expectOutputString( "0 wish page(s) and their related data have been deleted.\n" );
@@ -36,7 +33,7 @@ class NukeWishlistTest extends MaintenanceBaseTestCase {
 		$this->getExistingTestPage( 'Community Wishlist/Wishes/W50' );
 		$this->newSelectQueryBuilder()
 			->select( 'COUNT(*)' )
-			->from( 'communityrequests_wishes' )
+			->from( AbstractWishlistStore::tableName() )
 			->assertFieldValue( 0 );
 		$this->maintenance->execute();
 		$this->expectOutputString( "2 wish page(s) and their related data have been deleted.\n" );
@@ -56,7 +53,7 @@ class NukeWishlistTest extends MaintenanceBaseTestCase {
 		);
 		$this->newSelectQueryBuilder()
 			->select( 'COUNT(*)' )
-			->from( 'communityrequests_wishes' )
+			->from( AbstractWishlistStore::tableName() )
 			->assertFieldValue( 2 );
 		$this->maintenance->execute();
 		$this->expectOutputString( "2 wish page(s) and their related data have been deleted.\n" );

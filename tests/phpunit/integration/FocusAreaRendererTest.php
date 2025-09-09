@@ -41,7 +41,7 @@ END;
 			$this->getTestUser()->getUser()
 		);
 
-		$focusArea = $this->getStore()->get( $ret['title'] );
+		$focusArea = $this->getStore()->get( $ret['title'], 'en', FocusAreaStore::FETCH_WIKITEXT_TRANSLATED );
 		$this->assertSame( $ret['id'], $focusArea->getPage()->getId() );
 		$this->assertSame( $this->config->getStatusIdFromWikitextVal( 'open' ), $focusArea->getStatus() );
 		$this->assertSame( 'Test Focus Area', $focusArea->getTitle() );

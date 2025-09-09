@@ -1,29 +1,30 @@
 [
 	{
-		"name": "communityrequests_wishes",
-		"comment": "Holds data about individual community wishes",
+		"name": "communityrequests_entities",
+		"comment": "Holds data about individual wishlist wishes and focus areas",
 		"columns": [
 			{
 				"name": "cr_page",
 				"type": "integer",
-				"comment": "Foreign key to page_id and primary key for the communityrequests_wishes table",
+				"comment": "Foreign key to page_id and primary key for the communityrequests_entities table",
 				"options": {
 					"unsigned": true,
 					"notnull": true
 				}
 			},
 			{
-				"name": "cr_type",
-				"comment": "The ID of the type of the wish, configured in $wgCommunityRequestsWishTypes",
-				"type": "integer",
+				"name": "cr_entity_type",
+				"type": "mwtinyint",
+				"comment": "The ID of the type of the entity. 0 for wish, 1 for focus area",
 				"options": {
-					"unsigned": true,
-					"notnull": true
+					"notnull": true,
+					"length": 1,
+					"default": 0
 				}
 			},
 			{
 				"name": "cr_status",
-				"comment": "The ID of the status of the wish, configured in $wgCommunityRequestsStatuses",
+				"comment": "The ID of the status of the entity, configured in $wgCommunityRequestsStatuses",
 				"type": "integer",
 				"options": {
 					"unsigned": true,
@@ -31,8 +32,17 @@
 				}
 			},
 			{
+				"name": "cr_wish_type",
+				"comment": "The ID of the type of the wish, configured in $wgCommunityRequestsWishTypes",
+				"type": "integer",
+				"options": {
+					"unsigned": true,
+					"notnull": false
+				}
+			},
+			{
 				"name": "cr_focus_area",
-				"comment": "The focus area the wish belongs to and foreign key to communityrequests_focus_areas.crfa_page",
+				"comment": "The focus area page ID that the wish belongs to",
 				"type": "integer",
 				"options": {
 					"unsigned": true,
@@ -41,16 +51,16 @@
 			},
 			{
 				"name": "cr_actor",
-				"comment": "Actor ID of the author of the wish",
+				"comment": "Actor ID of the author of the entity",
 				"type": "bigint",
 				"options": {
 					"unsigned": true,
-					"notnull": true
+					"notnull": false
 				}
 			},
 			{
 				"name": "cr_vote_count",
-				"comment": "Number of votes for the wish",
+				"comment": "Number of votes for the entity",
 				"type": "integer",
 				"options": {
 					"unsigned": true,
@@ -60,7 +70,7 @@
 			},
 			{
 				"name": "cr_base_lang",
-				"comment": "The base language of the wish from which translations are made",
+				"comment": "The base language of the entity from which translations are made",
 				"type": "binary",
 				"options": {
 					"length": 35,
@@ -69,7 +79,7 @@
 			},
 			{
 				"name": "cr_created",
-				"comment": "Timestamp of the creation of the wish",
+				"comment": "Timestamp of the creation of the entity",
 				"type": "mwtimestamp",
 				"options": {
 					"notnull": true
@@ -77,7 +87,7 @@
 			},
 			{
 				"name": "cr_updated",
-				"comment": "Timestamp of the last update of the wish",
+				"comment": "Timestamp of the last update of the entity",
 				"type": "mwtimestamp",
 				"options": {
 					"notnull": true
@@ -113,99 +123,13 @@
 		"pk": [ "cr_page" ]
 	},
 	{
-		"name": "communityrequests_focus_areas",
-		"comment": "Holds data about the focus areas of community wishes",
+		"name": "communityrequests_translations",
+		"comment": "Holds translations of translatable fields of individual wishes and focus areas",
 		"columns": [
 			{
-				"name": "crfa_page",
-				"comment": "Foreign key to page_id and primary key for the communityrequests_focus_areas table",
+				"name": "crt_entity",
 				"type": "integer",
-				"options": {
-					"unsigned": true,
-					"notnull": true
-				}
-			},
-			{
-				"name": "crfa_status",
-				"comment": "The ID of the status of the focus area, configured in $wgCommunityRequestsStatuses",
-				"type": "integer",
-				"options": {
-					"unsigned": true,
-					"notnull": true
-				}
-			},
-			{
-				"name": "crfa_vote_count",
-				"comment": "Number of votes for the focus area",
-				"type": "integer",
-				"options": {
-					"unsigned": true,
-					"notnull": true,
-					"default": 0
-				}
-			},
-			{
-				"name": "crfa_base_lang",
-				"comment": "The base language of the focus area from which translations are made",
-				"type": "binary",
-				"options": {
-					"length": 35,
-					"notnull": true
-				}
-			},
-			{
-				"name": "crfa_created",
-				"comment": "Timestamp of the creation of the focus area",
-				"type": "mwtimestamp",
-				"options": {
-					"notnull": true
-				}
-			},
-			{
-				"name": "crfa_updated",
-				"comment": "Timestamp of the last update of the focus area",
-				"type": "mwtimestamp",
-				"options": {
-					"notnull": true
-				}
-			}
-		],
-		"indexes": [
-			{
-				"name": "crfa_created",
-				"comment": "Index for sorting focus areas by creation timestamp",
-				"columns": [
-					"crfa_created"
-				],
-				"unique": false
-			},
-			{
-				"name": "crfa_updated",
-				"comment": "Index for sorting focus areas by last updated timestamp",
-				"columns": [
-					"crfa_updated"
-				],
-				"unique": false
-			},
-			{
-				"name": "crfa_vote_count",
-				"comment": "Index for sorting focus areas by vote count",
-				"columns": [
-					"crfa_vote_count"
-				],
-				"unique": false
-			}
-		],
-		"pk": [ "crfa_page" ]
-	},
-	{
-		"name": "communityrequests_wishes_translations",
-		"comment": "Holds translations of translatable fields of individual community wishes",
-		"columns": [
-			{
-				"name": "crt_wish",
-				"type": "integer",
-				"comment": "Foreign key to communityrequests_wishes.cr_page",
+				"comment": "Foreign key to communityrequests_entities.cr_page",
 				"options": {
 					"unsigned": true,
 					"notnull": true
@@ -213,7 +137,7 @@
 			},
 			{
 				"name": "crt_title",
-				"comment": "Translated title of the wish",
+				"comment": "Translated title of the entity",
 				"type": "binary",
 				"options": {
 					"length": 255,
@@ -243,69 +167,12 @@
 		],
 		"pk": [
 			"crt_lang",
-			"crt_wish"
-		]
-	},
-	{
-		"name": "communityrequests_focus_areas_translations",
-		"comment": "Holds translations of translatable fields of focus areas",
-		"columns": [
-			{
-				"name": "crfat_focus_area",
-				"type": "integer",
-				"comment": "Foreign key to communityrequests_focus_areas.crfa_page",
-				"options": {
-					"unsigned": true,
-					"notnull": true
-				}
-			},
-			{
-				"name": "crfat_title",
-				"comment": "Title of the focus area",
-				"type": "binary",
-				"options": {
-					"length": 255,
-					"notnull": true
-				}
-			},
-			{
-				"name": "crfat_short_description",
-				"comment": "Short description of the focus area",
-				"type": "blob",
-				"options": {
-					"length": 16777215,
-					"notnull": true
-				}
-			},
-			{
-				"name": "crfat_lang",
-				"comment": "Language code",
-				"type": "binary",
-				"options": {
-					"length": 35,
-					"notnull": true
-				}
-			}
-		],
-		"indexes": [
-			{
-				"name": "crfat_lang_title",
-				"comment": "Index for searching focus areas by language and title",
-				"columns": [
-					"crfat_lang",
-					"crfat_title"
-				],
-				"unique": false
-			}
-		],
-		"pk": [
-			"crfat_lang",
-			"crfat_focus_area"
+			"crt_entity"
 		]
 	},
 	{
 		"name": "communityrequests_tags",
-		"comment": "Tag IDs associated with community wishes",
+		"comment": "Tag IDs associated with wishlist entities",
 		"columns": [
 			{
 				"name": "crtg_tag",
@@ -314,7 +181,7 @@
 				"options": { "unsigned": true, "notnull": true }
 			},
 			{
-				"name": "crtg_wish",
+				"name": "crtg_entity",
 				"comment": "Foreign key to cr_page",
 				"type": "integer",
 				"options": { "unsigned": true, "notnull": true }
@@ -322,13 +189,13 @@
 		],
 		"indexes": [
 			{
-				"name": "crtg_tag_wish",
+				"name": "crtg_tag_entity",
 				"comment": "Index tag-wish pairs",
-				"columns": [ "crtg_tag", "crtg_wish" ],
+				"columns": [ "crtg_tag", "crtg_entity" ],
 				"unique": false
 			}
 		],
-		"pk": [ "crtg_wish", "crtg_tag" ]
+		"pk": [ "crtg_entity", "crtg_tag" ]
 	},
 	{
 		"name": "communityrequests_counters",

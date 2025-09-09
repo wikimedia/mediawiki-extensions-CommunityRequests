@@ -25,7 +25,9 @@ class SchemaHooks implements LoadExtensionSchemaUpdatesHook {
 		$sqlDir = __DIR__ . '/../../sql';
 		$engine = $updater->getDB()->getType();
 
-		$updater->addExtensionTable( 'communityrequests_wishes',
+		// communityrequests_counters is the one table that's remained unmodified since
+		// the initial implementation, so we use it as the indicator of a first-time install.
+		$updater->addExtensionTable( 'communityrequests_counters',
 			"$sqlDir/$engine/tables-generated.sql" );
 
 		$updater->addExtensionTable( 'communityrequests_tags',
@@ -48,5 +50,12 @@ class SchemaHooks implements LoadExtensionSchemaUpdatesHook {
 			'communityrequests_phab_tasks',
 			"$sqlDir/$engine/patch-communityrequests_phab_tasks-drop-table.sql"
 		);
+
+		// Merge communityrequests_wishes and _focus_areas into communityrequests_entities.
+		$updater->addExtensionTable( 'communityrequests_entities',
+			"$sqlDir/$engine/patch-communityrequests_entities.sql" );
+		// Merge the two translation tables into communityrequests_translations.
+		$updater->addExtensionTable( 'communityrequests_translations',
+			"$sqlDir/$engine/patch-communityrequests_translations.sql" );
 	}
 }

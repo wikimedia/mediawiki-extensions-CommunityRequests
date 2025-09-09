@@ -94,17 +94,16 @@ class NukeWishlist extends Maintenance {
 
 	private function truncateTables(): void {
 		$this->beginTransactionRound( __METHOD__ );
-		$tables = [];
+		$tables = [
+			AbstractWishlistStore::tableName(),
+			AbstractWishlistStore::translationsTableName(),
+		];
 
 		if ( $this->nukeWishes ) {
-			$tables[] = 'communityrequests_wishes';
-			$tables[] = 'communityrequests_wishes_translations';
-			$tables[] = 'communityrequests_tags';
+			$tables[] = AbstractWishlistStore::tagsTableName();
 			$this->resetIdCounter( 'wish' );
 		}
 		if ( $this->nukeFocusAreas ) {
-			$tables[] = 'communityrequests_focus_areas';
-			$tables[] = 'communityrequests_focus_areas_translations';
 			$this->resetIdCounter( 'focus-area' );
 		}
 

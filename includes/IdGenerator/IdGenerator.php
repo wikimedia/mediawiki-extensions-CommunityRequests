@@ -3,6 +3,7 @@ declare( strict_types = 1 );
 
 namespace MediaWiki\Extension\CommunityRequests\IdGenerator;
 
+use MediaWiki\Extension\CommunityRequests\AbstractWishlistStore;
 use RuntimeException;
 
 /**
@@ -11,8 +12,8 @@ use RuntimeException;
  */
 interface IdGenerator {
 
-	public const TYPE_WISH = 0;
-	public const TYPE_FOCUS_AREA = 1;
+	public const TYPE_WISH = AbstractWishlistStore::ENTITY_TYPE_WISH;
+	public const TYPE_FOCUS_AREA = AbstractWishlistStore::ENTITY_TYPE_FOCUS_AREA;
 
 	/**
 	 * @param int $type One of the IdGenerator::TYPE_ constants

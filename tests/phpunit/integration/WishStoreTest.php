@@ -406,4 +406,11 @@ END;
 		$this->assertSame( 'Test title', $wish->getTitle() );
 		$this->assertSame( 'Test description', $wish->getDescription() );
 	}
+
+	public function testGetCount(): void {
+		$this->insertTestWish( 'Community Wishlist/Wishes/W1', 'en' );
+		$this->insertTestWish( 'Community Wishlist/Wishes/W2', 'en' );
+		$this->insertTestFocusArea( 'Community Wishlist/Focus Areas/FA1', 'en' );
+		$this->assertSame( 2, $this->getStore()->getCount() );
+	}
 }

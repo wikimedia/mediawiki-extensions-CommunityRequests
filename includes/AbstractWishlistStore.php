@@ -7,7 +7,6 @@ use InvalidArgumentException;
 use MediaWiki\Content\WikitextContent;
 use MediaWiki\Extension\CommunityRequests\IdGenerator\IdGenerator;
 use MediaWiki\Extension\CommunityRequests\Wish\Wish;
-use MediaWiki\Extension\CommunityRequests\Wish\WishStore;
 use MediaWiki\Extension\Translate\PageTranslation\TranslatablePageParser;
 use MediaWiki\Languages\LanguageFallback;
 use MediaWiki\Page\PageIdentity;
@@ -55,6 +54,10 @@ abstract class AbstractWishlistStore {
 	 */
 	public const FETCH_WIKITEXT_TRANSLATED = 2;
 
+	// Used for the cr_entity_type field in the database.
+	public const ENTITY_TYPE_WISH = 0;
+	public const ENTITY_TYPE_FOCUS_AREA = 1;
+
 	public function __construct(
 		protected IConnectionProvider $dbProvider,
 		protected LanguageFallback $languageFallback,
@@ -78,81 +81,165 @@ abstract class AbstractWishlistStore {
 	abstract public function entityType(): string;
 
 	/**
-	 * Get the table name for the wishlist entity.
+	 * Get the numeric ID for the entity type, as stored in the database.
+	 *
+	 * @return int
+	 */
+	private function entityTypeId(): int {
+		return match ( $this->entityType() ) {
+			'wish' => static::ENTITY_TYPE_WISH,
+			'focus-area' => static::ENTITY_TYPE_FOCUS_AREA,
+			default => throw new RuntimeException( 'Unknown entity type: ' . $this->entityType() ),
+		};
+	}
+
+	/**
+	 * Get the table name for wishlist entities.
 	 *
 	 * @return string
 	 */
-	abstract protected static function tableName(): string;
+	public static function tableName(): string {
+		return 'communityrequests_entities';
+	}
 
 	/**
 	 * Get the field names that should be used in SELECT queries.
 	 *
 	 * @return string[]
 	 */
-	abstract public static function fields(): array;
+	public static function fields(): array {
+		return [
+			'page_namespace',
+			'page_title',
+			static::pageField(),
+			static::entityTypeField(),
+			static::statusField(),
+			static::titleField(),
+			static::actorField(),
+			static::voteCountField(),
+			static::baseLangField(),
+			static::translationLangField(),
+			static::createdField(),
+			static::updatedField(),
+		];
+	}
 
 	/**
 	 * Get the field names for the page field of ::tableName().
 	 *
 	 * @return string
 	 */
-	abstract protected static function pageField(): string;
+	public static function pageField(): string {
+		return 'cr_page';
+	}
 
 	/**
-	 * The field name for the creation timestamp.
+	 * The field name for the entity type.
 	 *
 	 * @return string
 	 */
-	abstract public static function createdField(): string;
+	public static function entityTypeField(): string {
+		return 'cr_entity_type';
+	}
 
 	/**
-	 * The field name for the last updated timestamp.
+	 * The field name for the status of the entity.
 	 *
 	 * @return string
 	 */
-	abstract public static function updatedField(): string;
+	public static function statusField(): string {
+		return 'cr_status';
+	}
+
+	/**
+	 * The field name for the title of the wishlist entity.
+	 *
+	 * @return string
+	 */
+	public static function titleField(): string {
+		return 'crt_title';
+	}
+
+	/**
+	 * The field name for the actor (user) who created the entity.
+	 *
+	 * @return string
+	 */
+	public static function actorField(): string {
+		return 'cr_actor';
+	}
 
 	/**
 	 * The field name for the vote count.
 	 *
 	 * @return string
 	 */
-	abstract public static function voteCountField(): string;
+	public static function voteCountField(): string {
+		return 'cr_vote_count';
+	}
 
 	/**
 	 * The field name for the base language.
 	 *
 	 * @return string
 	 */
-	abstract protected static function baseLangField(): string;
+	public static function baseLangField(): string {
+		return 'cr_base_lang';
+	}
 
 	/**
-	 * The field name for the translated title of the wishlist entity.
+	 * The field name for the creation timestamp.
 	 *
 	 * @return string
 	 */
-	abstract public static function titleField(): string;
+	public static function createdField(): string {
+		return 'cr_created';
+	}
+
+	/**
+	 * The field name for the last updated timestamp.
+	 *
+	 * @return string
+	 */
+	public static function updatedField(): string {
+		return 'cr_updated';
+	}
 
 	/**
 	 * Get the table name for the translations of wishlist entities.
 	 *
 	 * @return string
 	 */
-	abstract protected static function translationsTableName(): string;
+	public static function translationsTableName(): string {
+		return 'communityrequests_translations';
+	}
 
 	/**
 	 * The field name in the translations table that is the foreign key to ::tableName().
 	 *
 	 * @return string
 	 */
-	abstract protected static function translationForeignKey(): string;
+	public static function translationForeignKey(): string {
+		return 'crt_entity';
+	}
 
 	/**
 	 * The field name in the translations table that is the language code.
 	 *
 	 * @return string
 	 */
-	abstract protected static function translationLangField(): string;
+	public static function translationLangField(): string {
+		return 'crt_lang';
+	}
+
+	/**
+	 * The full name of the tags database table.
+	 *
+	 * @return string
+	 */
+	public static function tagsTableName(): string {
+		return 'communityrequests_tags';
+	}
 
 	/**
 	 * Get a single wishlist entity.
@@ -182,7 +269,10 @@ abstract class AbstractWishlistStore {
 				static::translationForeignKey() . ' = ' . static::pageField()
 			)
 			->fields( static::fields() )
-			->where( [ static::pageField() => $page->getId() ] )
+			->where( [
+				static::entityTypeField() => $this->entityTypeId(),
+				static::pageField() => $page->getId(),
+			] )
 			->fetchResultSet();
 		if ( !$data->count() ) {
 			return null;
@@ -195,6 +285,7 @@ abstract class AbstractWishlistStore {
 	 * Get a count of the wishlist entities in the database.
 	 *
 	 * @return int
+	 * @fixme This does not take any filters into account.
 	 */
 	public function getCount(): int {
 		$dbr = $this->dbProvider->getReplicaDatabase();
@@ -202,6 +293,7 @@ abstract class AbstractWishlistStore {
 			->caller( __METHOD__ )
 			->select( 'COUNT(*)' )
 			->from( static::tableName() )
+			->where( [ static::entityTypeField() => $this->entityTypeId() ] )
 			->fetchField();
 	}
 
@@ -256,7 +348,8 @@ abstract class AbstractWishlistStore {
 				null,
 				static::translationForeignKey() . ' = ' . static::pageField() )
 			->fields( static::fields() )
-			->where( $dbr->makeList( [
+			->where( [ static::entityTypeField() => $this->entityTypeId() ] )
+			->andWhere( $dbr->makeList( [
 				static::translationLangField() => $langs,
 				static::translationLangField() . '=' . static::baseLangField()
 			], $dbr::LIST_OR ) )
@@ -274,7 +367,7 @@ abstract class AbstractWishlistStore {
 			// Probably unnecessary, because the API only allows valid tag names through.
 			if ( count( $tagIds ) > 0 ) {
 				// Select wishes with any of the given tags.
-				$select->join( WishStore::tagsTableName(), null, 'crtg_wish = cr_page' )
+				$select->join( static::tagsTableName(), null, 'crtg_entity = cr_page' )
 					->andWhere( [ 'crtg_tag' => $tagIds ] );
 			}
 		}
@@ -511,7 +604,7 @@ abstract class AbstractWishlistStore {
 			->execute();
 		$this->logger->debug(
 			__METHOD__ . ': Saved translations for entity {0} with data {1}',
-			[ $entity->getPage()->__toString(), $dataSet ]
+			[ $entity->getPage()->__toString(), array_merge( $data, $dataSet ) ]
 		);
 	}
 

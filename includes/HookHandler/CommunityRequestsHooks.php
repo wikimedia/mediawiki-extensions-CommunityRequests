@@ -84,7 +84,8 @@ class CommunityRequestsHooks implements
 
 	/**
 	 * Whether the user is allowed to manually edit wish and focus area pages.
-	 * This is set to true when the user is editing a wish or focus area using the special pages.
+	 * This is set to true when the user is editing a wish or focus area using the special pages,
+	 * and in some tests.
 	 */
 	public static bool $allowManualEditing = false;
 

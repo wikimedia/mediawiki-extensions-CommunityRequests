@@ -3,6 +3,7 @@ declare( strict_types = 1 );
 
 namespace MediaWiki\Extension\CommunityRequests\Tests\Integration;
 
+use MediaWiki\Extension\CommunityRequests\HookHandler\CommunityRequestsHooks;
 use MediaWiki\Extension\CommunityRequests\Wish\Wish;
 use MediaWiki\Extension\CommunityRequests\Wish\WishStore;
 use MediaWiki\Tests\Api\ApiTestCase;
@@ -290,7 +291,7 @@ class ApiQueryWishesTest extends ApiTestCase {
 			'baselang' => $params['baselang'] ?? 'en',
 			...$params,
 		];
-
+		CommunityRequestsHooks::$allowManualEditing = true;
 		[ $ret ] = $this->doApiRequestWithToken( $params );
 		return $ret;
 	}

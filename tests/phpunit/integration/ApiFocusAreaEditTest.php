@@ -7,7 +7,6 @@ use MediaWiki\Api\ApiUsageException;
 use MediaWiki\Extension\CommunityRequests\HookHandler\CommunityRequestsHooks;
 use MediaWiki\Tests\Api\ApiTestCase;
 use MediaWiki\Title\Title;
-use MediaWiki\User\User;
 
 /**
  * @group CommunityRequests
@@ -151,9 +150,6 @@ class ApiFocusAreaEditTest extends ApiTestCase {
 	}
 
 	public function testExecuteParsingFailure(): void {
-		// Ensure we have a user to work with.
-		User::createNew( 'TestUser' );
-
 		$params = [
 			'action' => 'focusareaedit',
 			'status' => 'under-review',

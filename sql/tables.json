@@ -331,33 +331,6 @@
 		"pk": [ "crtg_wish", "crtg_tag" ]
 	},
 	{
-		"name": "communityrequests_phab_tasks",
-		"comment": "Phabricator tasks for each community wish",
-		"columns": [
-			{
-				"name": "crpt_task_id",
-				"comment": "Phabricator task ID and primary key for the communityrequests_phab_tasks table",
-				"type": "integer",
-				"options": { "unsigned": true, "notnull": true }
-			},
-			{
-				"name": "crpt_wish",
-				"comment": "Foreign key to cr_page",
-				"type": "integer",
-				"options": { "unsigned": true, "notnull": true }
-			}
-		],
-		"indexes": [
-			{
-				"name": "crpt_task_wish",
-				"comment": "Index task-wish pairs",
-				"columns": [ "crpt_task_id", "crpt_wish" ],
-				"unique": false
-			}
-		],
-		"pk": [ "crpt_wish", "crpt_task_id" ]
-	},
-	{
 		"name": "communityrequests_counters",
 		"comment": "Unique ID generator",
 		"columns": [

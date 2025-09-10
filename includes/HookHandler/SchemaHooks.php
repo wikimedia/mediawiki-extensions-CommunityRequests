@@ -42,5 +42,11 @@ class SchemaHooks implements LoadExtensionSchemaUpdatesHook {
 			'cwt_other_project',
 			"$sqlDir/$engine/patch-communityrequests_wishes_translations-drop-cwt_other_project.sql"
 		);
+
+		// Drop communityrequests_phab_tasks which now lives as a 'wikitext field'.
+		$updater->dropExtensionTable(
+			'communityrequests_phab_tasks',
+			"$sqlDir/$engine/patch-communityrequests_phab_tasks-drop-table.sql"
+		);
 	}
 }

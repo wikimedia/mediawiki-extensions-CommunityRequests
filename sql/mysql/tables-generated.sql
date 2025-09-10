@@ -60,14 +60,6 @@ CREATE TABLE /*_*/communityrequests_tags (
 ) /*$wgDBTableOptions*/;
 
 
-CREATE TABLE /*_*/communityrequests_phab_tasks (
-  crpt_task_id INT UNSIGNED NOT NULL,
-  crpt_wish INT UNSIGNED NOT NULL,
-  INDEX crpt_task_wish (crpt_task_id, crpt_wish),
-  PRIMARY KEY(crpt_wish, crpt_task_id)
-) /*$wgDBTableOptions*/;
-
-
 CREATE TABLE /*_*/communityrequests_counters (
   crc_type TINYINT(1) NOT NULL,
   crc_value INT UNSIGNED NOT NULL,

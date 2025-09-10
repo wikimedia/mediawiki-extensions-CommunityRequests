@@ -69,15 +69,6 @@ CREATE TABLE /*_*/communityrequests_tags (
 CREATE INDEX crtg_tag_wish ON /*_*/communityrequests_tags (crtg_tag, crtg_wish);
 
 
-CREATE TABLE /*_*/communityrequests_phab_tasks (
-  crpt_task_id INTEGER UNSIGNED NOT NULL,
-  crpt_wish INTEGER UNSIGNED NOT NULL,
-  PRIMARY KEY(crpt_wish, crpt_task_id)
-);
-
-CREATE INDEX crpt_task_wish ON /*_*/communityrequests_phab_tasks (crpt_task_id, crpt_wish);
-
-
 CREATE TABLE /*_*/communityrequests_counters (
   crc_type SMALLINT NOT NULL,
   crc_value INTEGER UNSIGNED NOT NULL,

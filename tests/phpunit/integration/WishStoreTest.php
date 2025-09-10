@@ -35,7 +35,6 @@ class WishStoreTest extends MediaWikiIntegrationTestCase {
 			[
 				Wish::PARAM_TITLE => 'Example wish',
 				Wish::PARAM_TAGS => [ 1, 2, 3 ],
-				Wish::PARAM_PHAB_TASKS => [ 123, 456 ],
 				Wish::PARAM_CREATED => '2025-01-01T00:00:00Z',
 			]
 		);
@@ -44,7 +43,6 @@ class WishStoreTest extends MediaWikiIntegrationTestCase {
 		$this->assertInstanceOf( Wish::class, $retrievedWish );
 		$this->assertSame( $page->getId(), $retrievedWish->getPage()->getId() );
 		$this->assertArrayEquals( [ 1, 2, 3 ], $retrievedWish->getTags() );
-		$this->assertArrayEquals( [ 123, 456 ], $retrievedWish->getPhabTasks() );
 		$this->assertSame( '2025-01-01T00:00:00Z', $retrievedWish->getCreated() );
 		$this->assertSame( '2025-01-23T00:00:00Z', $retrievedWish->getUpdated() );
 	}

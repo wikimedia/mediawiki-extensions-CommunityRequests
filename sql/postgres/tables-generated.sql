@@ -69,15 +69,6 @@ CREATE TABLE communityrequests_tags (
 CREATE INDEX crtg_tag_wish ON communityrequests_tags (crtg_tag, crtg_wish);
 
 
-CREATE TABLE communityrequests_phab_tasks (
-  crpt_task_id INT NOT NULL,
-  crpt_wish INT NOT NULL,
-  PRIMARY KEY(crpt_wish, crpt_task_id)
-);
-
-CREATE INDEX crpt_task_wish ON communityrequests_phab_tasks (crpt_task_id, crpt_wish);
-
-
 CREATE TABLE communityrequests_counters (
   crc_type SMALLINT NOT NULL,
   crc_value INT NOT NULL,

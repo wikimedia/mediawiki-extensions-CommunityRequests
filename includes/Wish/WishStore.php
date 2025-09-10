@@ -225,29 +225,24 @@ class WishStore extends AbstractWishlistStore {
 		);
 
 		$this->saveTranslations( $wish, $dbw );
-		$this->saveTagsAndPhabTasks( $wish, $dbw );
+		$this->saveTags( $wish, $dbw );
 
 		$dbw->endAtomic( __METHOD__ );
 	}
 
 	/**
-	 * Save the tags and Phabricator tasks associated with a wish.
+	 * Save the tags associated with a wish.
 	 *
 	 * @param Wish $wish The wish to save.
 	 * @param IDatabase $dbw The database connection.
 	 */
-	private function saveTagsAndPhabTasks( Wish $wish, IDatabase $dbw ): void {
+	private function saveTags( Wish $wish, IDatabase $dbw ): void {
 		$queryMetadata = [
 			[
 				'table' => 'communityrequests_tags',
 				'key' => 'crtg_tag',
 				'foreignKey' => 'crtg_wish',
 				'wishMethod' => 'getTags',
-			], [
-				'table' => 'communityrequests_phab_tasks',
-				'key' => 'crpt_task_id',
-				'foreignKey' => 'crpt_wish',
-				'wishMethod' => 'getPhabTasks',
 			]
 		];
 
@@ -304,7 +299,6 @@ class WishStore extends AbstractWishlistStore {
 	): array {
 		// Fetch tags for all wishes in one go, and then the same for Phab tasks.
 		$tagsByPage = $this->getTagsForWishes( $dbr, array_keys( $entityDataByPage ) );
-		$phabTasksByPage = $this->getPhabTasksForWishes( $dbr, array_keys( $entityDataByPage ) );
 
 		$wishes = [];
 		foreach ( $rows as $row ) {
@@ -324,7 +318,6 @@ class WishStore extends AbstractWishlistStore {
 					// TODO: refactor to fetch page ID in the main query.
 					Wish::PARAM_FOCUS_AREA => Title::newFromID( (int)$row->cr_focus_area ),
 					Wish::PARAM_TAGS => $tagsByPage[$row->cr_page] ?? [],
-					Wish::PARAM_PHAB_TASKS => $phabTasksByPage[$row->cr_page] ?? [],
 					Wish::PARAM_VOTE_COUNT => (int)$row->cr_vote_count,
 					Wish::PARAM_CREATED => $row->cr_created,
 					Wish::PARAM_UPDATED => $row->cr_updated,
@@ -332,6 +325,7 @@ class WishStore extends AbstractWishlistStore {
 					// "Virtual" fields that only exist when querying for wikitext.
 					Wish::PARAM_DESCRIPTION => $row->crt_description ?? null,
 					Wish::PARAM_AUDIENCE => $row->crt_audience ?? null,
+					Wish::PARAM_PHAB_TASKS => Wish::getPhabTasksFromCsv( $row->crt_tasks ?? '' ),
 				]
 			);
 		}
@@ -366,38 +360,10 @@ class WishStore extends AbstractWishlistStore {
 		return $tagsByWish;
 	}
 
-	/**
-	 * Get the Phabricator tasks associated with the given wishes.
-	 *
-	 * @param IReadableDatabase $dbr The database connection.
-	 * @param array<int> $pageIds The page/wish IDs of the wishes.
-	 * @return array<int> The IDs of the tasks associated with the wishes, keyed by wish ID.
-	 */
-	private function getPhabTasksForWishes( IReadableDatabase $dbr, array $pageIds ): array {
-		if ( !count( $pageIds ) ) {
-			return [];
-		}
-		$phabTasks = $dbr->newSelectQueryBuilder()
-			->caller( __METHOD__ )
-			->table( 'communityrequests_phab_tasks' )
-			->fields( [ 'crpt_wish', 'crpt_task_id' ] )
-			->where( [ 'crpt_wish' => $pageIds ] )
-			->fetchResultSet();
-
-		// Group by wish ID.
-		$phabTasksByWish = [];
-		foreach ( $phabTasks as $task ) {
-			$phabTasksByWish[$task->crpt_wish][] = (int)$task->crpt_task_id;
-		}
-
-		return $phabTasksByWish;
-	}
-
 	/** @inheritDoc */
 	public function delete( AbstractWishlistEntity $entity, array $assocData = [] ): IDatabase {
 		return parent::delete( $entity, [
-			'communityrequests_tags' => 'crtg_wish',
-			'communityrequests_phab_tasks' => 'crpt_wish'
+			'communityrequests_tags' => 'crtg_wish'
 		] );
 	}
 
@@ -412,6 +378,8 @@ class WishStore extends AbstractWishlistStore {
 			Wish::PARAM_TITLE => 'crt_title',
 			Wish::PARAM_DESCRIPTION => 'crt_description',
 			Wish::PARAM_AUDIENCE => 'crt_audience',
+			// We are using this field as a virtual field even though is it not translatable
+			Wish::PARAM_PHAB_TASKS => 'crt_tasks',
 		];
 	}
 
@@ -420,6 +388,7 @@ class WishStore extends AbstractWishlistStore {
 		return [
 			Wish::PARAM_DESCRIPTION,
 			Wish::PARAM_AUDIENCE,
+			Wish::PARAM_PHAB_TASKS
 		];
 	}
 

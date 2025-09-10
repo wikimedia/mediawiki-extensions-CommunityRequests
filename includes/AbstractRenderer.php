@@ -206,10 +206,17 @@ abstract class AbstractRenderer implements MessageLocalizer {
 
 		// We need to wait for the full parser pass to complete to ensure all votes are counted.
 		// Add a strip marker for the vote count to be added later in CommunityRequestsHooks::onParserAfterTidy().
-		$out .= Html::openElement( 'p' ) . self::VOTING_STRIP_MARKER . ' ';
-		$out .= $votingEnabled ?
-			$this->msg( "communityrequests-{$this->entityType}-voting-info-open" )->escaped() :
-			$this->msg( "communityrequests-{$this->entityType}-voting-info-closed" )->escaped();
+		$out .= Html::openElement( 'p' );
+		if ( !$this->isDefaultStatus() ) {
+			$out .= self::VOTING_STRIP_MARKER . ' ';
+		}
+		if ( $votingEnabled ) {
+			$out .= $this->msg( "communityrequests-{$this->entityType}-voting-info-open" )->escaped();
+		} elseif ( $this->isDefaultStatus() ) {
+			$out .= $this->msg( "communityrequests-{$this->entityType}-voting-info-default" )->escaped();
+		} else {
+			$out .= $this->msg( "communityrequests-{$this->entityType}-voting-info-closed" )->escaped();
+		}
 		$out .= Html::closeElement( 'p' );
 
 		$basePage = $this->config->getCanonicalEntityPageRef( $this->parser->getPage() );
@@ -230,8 +237,8 @@ abstract class AbstractRenderer implements MessageLocalizer {
 			}
 		}
 
-		// Transclude the /Votes subpage if it exists.
-		if ( $basePage ) {
+		// Transclude the /Votes subpage if it exists and the status is not the default status.
+		if ( !$this->isDefaultStatus() && $basePage ) {
 			$voteSubpagePath = Title::newFromPageReference( $basePage )->getPrefixedDBkey()
 				. $this->config->getVotesPageSuffix();
 			$voteSubpageTitle = Title::newFromText( $voteSubpagePath );
@@ -374,5 +381,15 @@ abstract class AbstractRenderer implements MessageLocalizer {
 				$this->parser->internalParse( '{{#translation:}}' );
 			$this->parser->getOutput()->addCategory( $translationCategory );
 		}
+	}
+
+	/**
+	 * Check if the current entity status matches the default status from configuration
+	 *
+	 * @return bool
+	 */
+	private function isDefaultStatus(): bool {
+		$status = $this->getArg( AbstractWishlistEntity::PARAM_STATUS, '' );
+		return $this->config->getStatuses()[$status]['default'] ?? false;
 	}
 }

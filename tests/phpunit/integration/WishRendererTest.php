@@ -89,7 +89,7 @@ END;
 		$wish = $this->insertTestWish(
 			'Community Wishlist/Wishes/W123',
 			'en',
-			[ 'title' => '<translate>Test wish</translate>' ]
+			[ 'title' => '<translate>Test wish</translate>', 'status' => 'in-progress' ]
 		);
 		$this->insertPage(
 			$wish->getPage()->getDBkey() . $this->config->getVotesPageSuffix(),
@@ -104,7 +104,7 @@ END;
 		$wishDe = $this->insertTestWish(
 			'Community Wishlist/Wishes/W123',
 			'de',
-			[ Wish::PARAM_BASE_LANG => 'en' ]
+			[ Wish::PARAM_BASE_LANG => 'en', 'status' => 'in-progress' ]
 		);
 		$wikiPageDe = $wikiPageFactory->newFromTitle(
 			Title::newFromPageReference( $wishDe->getTranslationSubpage() )

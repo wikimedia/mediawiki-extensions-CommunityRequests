@@ -114,6 +114,7 @@
 	"communityrequests-wish-voting-info-open": "Bu dilek tamamlanana kadar oylamaya açık. Aşağıdaki düğmeyi kullanarak desteğinizi gösterebilirsiniz.",
 	"communityrequests-wish-voting-info-closed": "Bu dileği desteklemek şu anda devre dışı.",
 	"communityrequests-wish-voting-not-logged-in": "Bu dileği desteklemek için lütfen giriş yapın",
+	"communityrequests-voting-no-js": "Üzgünüz, Topluluk Dilek Listesi'nde oy kullanabilmek için JavaScript gereklidir.",
 	"communityrequests-wish-voters-heading": "Bu dileğin destekçileri",
 	"communityrequests-wish-no-votes": "Henüz destekçi yok.",
 	"communityrequests-wishes-table-caption": "Dilek listesi",

@@ -115,6 +115,7 @@
 	"communityrequests-wish-voting-info-open": "Die Abstimmung für diesen Wunsch ist bis zu seiner Erfüllung geöffnet. Zeige deine Unterstützung über die Schaltfläche unten.",
 	"communityrequests-wish-voting-info-closed": "Die Unterstützung dieses Wunsches ist derzeit deaktiviert.",
 	"communityrequests-wish-voting-not-logged-in": "Bitte melde dich an, um diesen Wunsch zu unterstützen",
+	"communityrequests-voting-no-js": "JavaScript ist erforderlich, um in der Community-Wunschliste abzustimmen.",
 	"communityrequests-wish-voters-heading": "Unterstützer dieses Wunsches",
 	"communityrequests-wish-no-votes": "Bisher keine Unterstützer.",
 	"communityrequests-wishes-table-caption": "Liste der Wünsche",

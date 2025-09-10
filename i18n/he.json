@@ -116,6 +116,7 @@
 	"communityrequests-wish-voting-info-open": "הצבעה למשאלה הזאת פתוחה עד להשלמתה. אפשר להביע את תמיכתך באמצעות הכפתור למטה.",
 	"communityrequests-wish-voting-info-closed": "תמיכה במשאלה הזאת מושבתת כעת.",
 	"communityrequests-wish-voting-not-logged-in": "נא להיכנס לחשבון כדי לתמוך במשאלה הזאת",
+	"communityrequests-voting-no-js": "מצטערים, נדרש JavaScript כדי להצביע ברשימת משאלות הקהילה.",
 	"communityrequests-wish-voters-heading": "התומכים במשאלה הזאת",
 	"communityrequests-wish-no-votes": "אין תומכים עדיין.",
 	"communityrequests-wishes-table-caption": "רשימת משאלות",

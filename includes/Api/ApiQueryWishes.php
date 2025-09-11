@@ -123,12 +123,15 @@ class ApiQueryWishes extends ApiQueryBase {
 					Title::newFromPageIdentity( $focusAreaPage ),
 					'crfa'
 				);
-				// TODO: Include this in the WishStore::getAll() query.
+				// Focus area title is queried separately
+				// in order to not join between the CommunityRequests tables and core.
 				$focusArea = $this->focusAreaStore->get(
 					$focusAreaPage,
 					$params[Wish::PARAM_LANG] ?? $this->getLanguage()->getCode()
 				);
-				$wishData['focusareatitle'] = $focusArea->getTitle();
+				if ( $focusArea ) {
+					$wishData['focusareatitle'] = $focusArea->getTitle();
+				}
 			}
 
 			$result->addValue( [ 'query', $this->getModuleName() ], null, $wishData );

@@ -3,6 +3,7 @@ declare( strict_types = 1 );
 
 namespace MediaWiki\Extension\CommunityRequests\Tests\Integration;
 
+use MediaWiki\Api\ApiUsageException;
 use MediaWiki\Extension\CommunityRequests\HookHandler\CommunityRequestsHooks;
 use MediaWiki\Extension\CommunityRequests\Wish\Wish;
 use MediaWiki\Extension\CommunityRequests\Wish\WishStore;
@@ -299,6 +300,38 @@ class ApiQueryWishesTest extends ApiTestCase {
 		];
 	}
 
+	/**
+	 * @dataProvider provideExecuteFilterByFocusArea
+	 */
+	public function testExecuteFilterByFocusArea( ?string $crwfocusareas, int $count, bool $exception = false ): void {
+		// Two unassigned wishes.
+		$this->createTestWishWithApi();
+		$this->createTestWishWithApi();
+		// One assigned to an existing FA.
+		$this->createTestFocusAreaWithApi();
+		$this->createTestWishWithApi( [ Wish::PARAM_FOCUS_AREA => 'FA1' ] );
+		// One assigned to a non-existing FA.
+		$this->createTestWishWithApi( [ Wish::PARAM_FOCUS_AREA => 'FA100' ] );
+		if ( $exception ) {
+			$this->expectException( ApiUsageException::class );
+		}
+		[ $ret ] = $this->doApiRequest( [
+			'action' => 'query',
+			'list' => 'communityrequests-wishes',
+			'crwfocusareas' => $crwfocusareas,
+		] );
+		$this->assertCount( $count, $ret['query']['communityrequests-wishes'] );
+	}
+
+	public function provideExecuteFilterByFocusArea(): array {
+		return [
+			[ 'crwfocusareas' => null, 'count' => 4 ],
+			[ 'crwfocusareas' => 'FA1', 'count' => 1 ],
+			[ 'crwfocusareas' => 'FA1|FA100', 'count' => 0, 'exception' => true ],
+			[ 'crwfocusareas' => 'FA100', 'count' => 0, 'exception' => true ],
+		];
+	}
+
 	private function createTestWishWithApi( $params = [] ): array {
 		$params = [
 			'action' => 'wishedit',
@@ -313,6 +346,23 @@ class ApiQueryWishesTest extends ApiTestCase {
 			'created' => $params['created'] ?? '2023-10-01T00:00:00Z',
 			'baselang' => $params['baselang'] ?? 'en',
 			...$params,
+		];
+		CommunityRequestsHooks::$allowManualEditing = true;
+		[ $ret ] = $this->doApiRequestWithToken( $params );
+		return $ret;
+	}
+
+	private function createTestFocusAreaWithApi(): array {
+		$params = [
+			'action' => 'focusareaedit',
+			'status' => 'under-review',
+			'title' => 'My test focus area',
+			'description' => '[[Test]] {{description}}',
+			'shortdescription' => 'Short [[desc]]',
+			'owners' => "* Community Tech\n* Editing",
+			'volunteers' => "* [[User:Volunteer1]]\n* [[User:Volunteer2]]",
+			'created' => '2025-09-11T12:00:00Z',
+			'baselang' => 'en',
 		];
 		CommunityRequestsHooks::$allowManualEditing = true;
 		[ $ret ] = $this->doApiRequestWithToken( $params );

@@ -22,6 +22,7 @@
 	"apierror-focusareaedit-notafocusarea": "{{doc-apierror}}",
 	"apierror-focusareaedit-nopermission": "{{doc-apierror}}",
 	"apierror-wishlist-entity-parse": "{{doc-apierror}}",
+	"apierror-querywishes-invalidfocusareas": "{{doc-apierror}}",
 	"apihelp-focusareaedit-summary": "{{doc-apihelp-summary|focusareaedit}}",
 	"apihelp-focusareaedit-param-focusarea": "{{doc-apihelp-param|focusareaedit|focusarea}}",
 	"apihelp-focusareaedit-param-status": "{{doc-apihelp-param|focusareaedit|status}}",

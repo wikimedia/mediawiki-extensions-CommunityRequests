@@ -18,6 +18,41 @@ class FocusAreaStore extends AbstractWishlistStore {
 		return 'focus-area';
 	}
 
+	/**
+	 * Get wiki page IDs from focus area wikitext values.
+	 *
+	 * @param string[] $focusAreas List of 'FAn' ID values.
+	 * @return int[]
+	 */
+	public function getPageIdsFromWikitextValues( array $focusAreas ): array {
+		// Get full page titles for all the given focus areas.
+		$focusAreaPages = [];
+		foreach ( $focusAreas as $faName ) {
+			$faId = $this->getIdFromInput( $faName );
+			if ( $faId ) {
+				$focusAreaPage = $this->config->getFocusAreaPageRefFromWikitextVal( (string)$faId );
+				if ( $focusAreaPage ) {
+					$focusAreaPages[] = $focusAreaPage->getDBkey();
+				}
+			}
+		}
+		if ( count( $focusAreaPages ) === 0 ) {
+			return [];
+		}
+		// Then use these to find the page IDs.
+		$prefixRef = $this->config->getFocusAreaPageRefFromWikitextVal( 'FA1' );
+		$focusAreaPageIdsQuery = $this->dbProvider->getReplicaDatabase()
+			->newSelectQueryBuilder()
+			->caller( __METHOD__ )
+			->table( 'page' )
+			->fields( 'page_id' )
+			->where( [
+				'page_namespace' => $prefixRef->getNamespace(),
+				'page_title' => $focusAreaPages
+			] );
+		return $focusAreaPageIdsQuery->fetchFieldValues();
+	}
+
 	// Saving focus areas.
 
 	/** @inheritDoc */

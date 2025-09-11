@@ -296,6 +296,32 @@ abstract class AbstractWishlistStore {
 	}
 
 	/**
+	 * Apply filters to a database query.
+	 * Child classes should override this to add whatever filters they need.
+	 *
+	 * @param IReadableDatabase $dbr
+	 * @param SelectQueryBuilder $select
+	 * @param mixed[] $filters
+	 * @return SelectQueryBuilder
+	 */
+	protected function applyFilters(
+		IReadableDatabase $dbr,
+		SelectQueryBuilder $select,
+		array $filters
+	): SelectQueryBuilder {
+		if ( isset( $filters[Wish::PARAM_STATUSES] ) && $filters[Wish::PARAM_STATUSES] ) {
+			$statusIds = [];
+			foreach ( $this->config->getStatuses() as $statusName => $statusInfo ) {
+				if ( in_array( $statusName, $filters[Wish::PARAM_STATUSES] ) ) {
+					$statusIds[] = $statusInfo['id'];
+				}
+			}
+			$select->andWhere( [ 'cr_status' => $statusIds ] );
+		}
+		return $select;
+	}
+
+	/**
 	 * Get a sorted list of wishlist entities in the given language.
 	 *
 	 * @param string $lang Requested language code.
@@ -354,54 +380,8 @@ abstract class AbstractWishlistStore {
 			// Leave room for the fallback languages.
 			->limit( $limit * ( count( $langs ) + 1 ) );
 
-		if ( isset( $filters[Wish::PARAM_TAGS] ) && $this->entityType() === 'wish' ) {
-			$tagIds = [];
-			foreach ( $this->config->getNavigationTags() as $tagName => $tagInfo ) {
-				if ( in_array( $tagName, $filters[Wish::PARAM_TAGS] ) ) {
-					$tagIds[] = $tagInfo['id'];
-				}
-			}
-			// Probably unnecessary, because the API only allows valid tag names through.
-			if ( count( $tagIds ) > 0 ) {
-				// Select wishes with any of the given tags.
-				$select->join( static::tagsTableName(), null, 'crtg_entity = cr_page' )
-					->andWhere( [ 'crtg_tag' => $tagIds ] );
-			}
-		}
-
-		if ( isset( $filters[Wish::PARAM_STATUSES] ) && $filters[Wish::PARAM_STATUSES] ) {
-			$statusIds = [];
-			foreach ( $this->config->getStatuses() as $statusName => $statusInfo ) {
-				if ( in_array( $statusName, $filters[Wish::PARAM_STATUSES] ) ) {
-					$statusIds[] = $statusInfo['id'];
-				}
-			}
-			$select->andWhere( [ 'cr_status' => $statusIds ] );
-		}
-
-		if ( isset( $filters[Wish::PARAM_FOCUS_AREAS] ) && $filters[Wish::PARAM_FOCUS_AREAS] ) {
-			$focusAreaPages = [];
-			foreach ( $filters[Wish::PARAM_FOCUS_AREAS] as $faName ) {
-				$faId = $this->getIdFromInput( $faName );
-				if ( $faId ) {
-					$focusAreaPage = $this->config->getFocusAreaPageRefFromWikitextVal( (string)$faId );
-					if ( $focusAreaPage ) {
-						$focusAreaPages[] = $focusAreaPage->getDBkey();
-					}
-				}
-			}
-			if ( count( $focusAreaPages ) > 0 ) {
-				// Get the namespace from the prefix.
-				$prefixRef = $this->config->getFocusAreaPageRefFromWikitextVal( 'FA1' );
-				$focusAreaPageIdsQuery = $dbr->newSelectQueryBuilder()
-					->caller( __METHOD__ )
-					->table( 'page' )
-					->fields( 'page_id' )
-					->where( [ 'page_namespace' => $prefixRef->getNamespace(), 'page_title' => $focusAreaPages ] );
-				$focusAreaPageIds = $focusAreaPageIdsQuery->fetchFieldValues();
-				$select->andWhere( [ 'cr_focus_area' => $focusAreaPageIds ] );
-			}
-		}
+		// Apply filters, in this class and optionally its two children.
+		$select = $this->applyFilters( $dbr, $select, $filters );
 
 		if ( $offset ) {
 			$conds = [];

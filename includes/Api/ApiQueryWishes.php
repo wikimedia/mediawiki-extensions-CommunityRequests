@@ -54,8 +54,14 @@ class ApiQueryWishes extends ApiQueryBase {
 		$filterArg = array_filter( [
 			Wish::PARAM_TAGS => $params[Wish::PARAM_TAGS] ?? null,
 			Wish::PARAM_STATUSES => $params[Wish::PARAM_STATUSES] ?? null,
-			Wish::PARAM_FOCUS_AREAS => $params[Wish::PARAM_FOCUS_AREAS] ?? null,
 		] );
+		if ( isset( $params[Wish::PARAM_FOCUS_AREAS] ) ) {
+			$faPageIds = $this->focusAreaStore->getPageIdsFromWikitextValues( $params[Wish::PARAM_FOCUS_AREAS] );
+			if ( count( $faPageIds ) !== count( $params[Wish::PARAM_FOCUS_AREAS] ) ) {
+				$this->dieWithError( 'apierror-querywishes-invalidfocusareas' );
+			}
+			$filterArg['focus_area_page_ids'] = $faPageIds;
+		}
 
 		$wikitextFields = array_intersect( $params['prop'], $this->store->getWikitextFields() );
 		$wishes = $this->store->getAll(

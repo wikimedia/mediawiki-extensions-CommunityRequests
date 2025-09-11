@@ -24,6 +24,7 @@ use Psr\Log\LoggerInterface;
 use Wikimedia\Rdbms\IConnectionProvider;
 use Wikimedia\Rdbms\IDatabase;
 use Wikimedia\Rdbms\IReadableDatabase;
+use Wikimedia\Rdbms\SelectQueryBuilder;
 
 /**
  * WishStore is responsible for all database operations related to wishes.
@@ -238,6 +239,38 @@ class WishStore extends AbstractWishlistStore {
 				->caller( __METHOD__ )
 				->execute();
 		}
+	}
+
+	/** @inheritDoc */
+	protected function applyFilters(
+		IReadableDatabase $dbr,
+		SelectQueryBuilder $select,
+		array $filters
+	): SelectQueryBuilder {
+		$select = parent::applyFilters( $dbr, $select, $filters );
+
+		if ( isset( $filters[Wish::PARAM_TAGS] ) ) {
+			$tagIds = [];
+			foreach ( $this->config->getNavigationTags() as $tagName => $tagInfo ) {
+				if ( in_array( $tagName, $filters[Wish::PARAM_TAGS] ) ) {
+					$tagIds[] = $tagInfo['id'];
+				}
+			}
+			// Probably unnecessary, because the API only allows valid tag names through.
+			if ( count( $tagIds ) > 0 ) {
+				// Select wishes with any of the given tags.
+				$select->join( self::tagsTableName(), null, 'crtg_entity = cr_page' )
+					->andWhere( [ 'crtg_tag' => $tagIds ] );
+			}
+		}
+
+		// The focus area page IDs have already been fetched in ApiQueryWishes
+		// and are passed here as page IDs.
+		if ( isset( $filters['focus_area_page_ids'] ) && $filters['focus_area_page_ids'] ) {
+			$select->andWhere( [ 'cr_focus_area' => $filters['focus_area_page_ids'] ] );
+		}
+
+		return $select;
 	}
 
 	/** @inheritDoc */

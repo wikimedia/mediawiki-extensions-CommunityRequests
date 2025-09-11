@@ -18,6 +18,7 @@ use MediaWiki\Title\TitleFormatter;
 use MediaWiki\Title\TitleParser;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
+use stdClass;
 use Wikimedia\Rdbms\IConnectionProvider;
 use Wikimedia\Rdbms\IDatabase;
 use Wikimedia\Rdbms\IReadableDatabase;
@@ -109,8 +110,6 @@ abstract class AbstractWishlistStore {
 	 */
 	public static function fields(): array {
 		return [
-			'page_namespace',
-			'page_title',
 			static::pageField(),
 			static::entityTypeField(),
 			static::statusField(),
@@ -262,7 +261,6 @@ abstract class AbstractWishlistStore {
 		$data = $dbr->newSelectQueryBuilder()
 			->caller( __METHOD__ )
 			->table( static::tableName() )
-			->join( 'page', null, [ static::pageField() . ' = page_id' ] )
 			->join(
 				static::translationsTableName(),
 				null,
@@ -342,7 +340,6 @@ abstract class AbstractWishlistStore {
 		$select = $dbr->newSelectQueryBuilder()
 			->caller( __METHOD__ )
 			->table( static::tableName() )
-			->join( 'page', null, [ static::pageField() . ' = page_id' ] )
 			->join(
 				static::translationsTableName(),
 				null,
@@ -411,8 +408,7 @@ abstract class AbstractWishlistStore {
 			foreach ( $orderPrecedence as $field ) {
 				$conds[$field] = match ( $field ) {
 					// Timestamp
-					static::createdField() => $offset[1],
-					static::updatedField() => $offset[1],
+					static::createdField(), static::updatedField() => $offset[1],
 					// Integer
 					static::voteCountField() => $offset[2],
 					// String (title)
@@ -469,70 +465,50 @@ abstract class AbstractWishlistStore {
 		string $sort = self::SORT_DESC,
 		array $orderPrecedence = [],
 	): array {
+		if ( $resultWrapper->count() === 0 ) {
+			return [];
+		}
+
 		$fallbackLangs = $lang === null ? [] : array_unique( [
 			$lang,
 			...$this->languageFallback->getAll( $lang ),
 		] );
 
-		$rows = [];
+		// Do a first pass that just collects the page IDs.
+		$pageIds = [];
+		foreach ( $resultWrapper as $row ) {
+			$pageIds[] = (int)$row->{static::pageField()};
+		}
+		// Fetch page titles and namespaces for those IDs.
+		// This is done in a separate query since we can't join on the page table on the
+		// WMF installation because our DB lives in different cluster than Core (T404124).
+		$pagesTitleNsByIds = $this->getPageTitleNsFromIds( $pageIds );
+
 		// Group the result set by entity page ID and language.
 		$entityDataByPage = [];
 		foreach ( $resultWrapper as $entityData ) {
-			$pageId = (int)$entityData->{ static::pageField() };
-			$langCode = $entityData->{ static::translationLangField() };
-
-			// Fetch wikitext fields if requested.
-			if ( $fetchWikitext ) {
-				// For self::FETCH_WIKITEXT_RAW
-				$translationPageId = $pageId;
-				// Use a PegeReference for logging.
-				$translationPageRef = PageReferenceValue::localReference(
-					(int)$entityData->page_namespace,
-					$entityData->page_title
-				);
-
-				// For self::FETCH_WIKITEXT_TRANSLATED, use the page ID of the translation subpage.
-				if ( $fetchWikitext === self::FETCH_WIKITEXT_TRANSLATED ) {
-					$translationPageRef = PageReferenceValue::localReference(
-						(int)$entityData->page_namespace,
-						$entityData->page_title . '/' . $entityData->{static::baseLangField()}
-					);
-					$translationPageId = $this->pageStore->getPageByReference( $translationPageRef )?->getId()
-						// If the translation subpage is missing, fallback to the base page.
-						?? $translationPageId;
-				}
-
-				// Fetch wikitext data from the page and merge it into the row.
-				$wikitextData = $this->getDataFromPageId( $translationPageId );
-				foreach ( $this->getExtTranslateFields() as $field => $property ) {
-					// Strip <translate> tags for self::FETCH_WIKITEXT_TRANSLATED,
-					// in case $translationPageId is the base page (translation subpage missing).
-					if ( $fetchWikitext === self::FETCH_WIKITEXT_TRANSLATED &&
-						isset( $wikitextData[$field] ) &&
-						$this->translatablePageParser?->containsMarkup( $wikitextData[$field] )
-					) {
-						$this->logger->debug(
-							__METHOD__ . ': Stripping <translate> tags from field {0} of entity {1}',
-							[ $field, $translationPageRef->__toString() ]
-						);
-						$wikitextData[$field] = $this->translatablePageParser->cleanupTags( $wikitextData[$field] );
-					}
-
-					$entityData->$property = $wikitextData[$field] ?? '';
-				}
-
-				$this->logger->debug(
-					__METHOD__ . ': Fetched wikitext for entity {0} lang {1} with data {2}',
-					[ $translationPageRef->__toString(), $lang, $wikitextData ]
-				);
+			$pageId = (int)$entityData->{static::pageField()};
+			// Shouldn't happen under normal conditions, but tests may create entities without
+			// a corresponding page, for example. This short-circuiting is essentially doing what
+			// the JOIN on the page table would do (filtering out rows without a matching page).
+			if ( !isset( $pagesTitleNsByIds[$pageId] ) ) {
+				continue;
 			}
+			$langCode = $entityData->{static::translationLangField()};
+			$entityData->page_namespace = (int)$pagesTitleNsByIds[$pageId]->page_namespace;
+			$entityData->page_title = $pagesTitleNsByIds[$pageId]->page_title;
 
+			// Add in the wikitext fields if requested.
+			if ( $fetchWikitext !== self::FETCH_WIKITEXT_NONE ) {
+				$this->setWikitextFieldsForDbResult( $entityData, $fetchWikitext );
+			}
 			$entityDataByPage[$pageId][$langCode] = $entityData;
 		}
 
+		$rows = [];
 		foreach ( $entityDataByPage as $entityDataByLang ) {
 			// All rows will have the same base language.
-			$baseLang = reset( $entityDataByLang )->{ static::baseLangField() };
+			$baseLang = reset( $entityDataByLang )->{static::baseLangField()};
 			// This will be overridden if a user-preferred language is found.
 			$row = $entityDataByLang[$baseLang];
 
@@ -564,6 +540,66 @@ abstract class AbstractWishlistStore {
 			$this->dbProvider->getReplicaDatabase(),
 			$rows,
 			$entityDataByPage
+		);
+	}
+
+	private function getPageTitleNsFromIds( array $pageIds ): array {
+		$pageData = $this->dbProvider->getReplicaDatabase()
+			->newSelectQueryBuilder()
+			->caller( __METHOD__ )
+			->table( 'page' )
+			->fields( [ 'page_id', 'page_namespace', 'page_title' ] )
+			->where( [ 'page_id' => $pageIds ] )
+			->fetchResultSet();
+		$pageDataById = [];
+		foreach ( $pageData as $pageRow ) {
+			$pageDataById[(int)$pageRow->page_id] = $pageRow;
+		}
+		return $pageDataById;
+	}
+
+	private function setWikitextFieldsForDbResult( stdClass &$entityData, int $fetchWikitext ): void {
+		// For self::FETCH_WIKITEXT_RAW
+		$translationPageId = (int)$entityData->{static::pageField()};
+		// Use a PegeReference for logging.
+		$translationPageRef = PageReferenceValue::localReference(
+			(int)$entityData->page_namespace,
+			$entityData->page_title
+		);
+
+		// For self::FETCH_WIKITEXT_TRANSLATED, use the page ID of the translation subpage.
+		if ( $fetchWikitext === self::FETCH_WIKITEXT_TRANSLATED ) {
+			$translationPageRef = PageReferenceValue::localReference(
+				(int)$entityData->page_namespace,
+				$entityData->page_title . '/' . $entityData->{static::baseLangField()}
+			);
+			$translationPageId = $this->pageStore->getPageByReference( $translationPageRef )?->getId()
+				// If the translation subpage is missing, fallback to the base page.
+				?? $translationPageId;
+		}
+
+		// Fetch wikitext data from the page and merge it into the row.
+		$wikitextData = $this->getDataFromPageId( $translationPageId );
+		foreach ( $this->getExtTranslateFields() as $field => $property ) {
+			// Strip <translate> tags for self::FETCH_WIKITEXT_TRANSLATED,
+			// in case $translationPageId is the base page (translation subpage missing).
+			if ( $fetchWikitext === self::FETCH_WIKITEXT_TRANSLATED &&
+				isset( $wikitextData[$field] ) &&
+				$this->translatablePageParser?->containsMarkup( $wikitextData[$field] )
+			) {
+				$this->logger->debug(
+					__METHOD__ . ': Stripping <translate> tags from field {0} of entity {1}',
+					[ $field, $translationPageRef->__toString() ]
+				);
+				$wikitextData[$field] = $this->translatablePageParser->cleanupTags( $wikitextData[$field] );
+			}
+
+			$entityData->$property = $wikitextData[$field] ?? '';
+		}
+
+		$this->logger->debug(
+			__METHOD__ . ': Fetched wikitext for entity {0} lang {1} with data {2}',
+			[ $translationPageRef->__toString(), $entityData->{static::translationLangField()}, $wikitextData ]
 		);
 	}
 

@@ -28,7 +28,7 @@ class SqlIdGenerator implements IdGenerator {
 	 * @inheritDoc
 	 */
 	public function getNewId( int $type ): int {
-		$database = $this->dbProvider->getPrimaryDatabase();
+		$database = $this->dbProvider->getPrimaryDatabase( 'virtual-communityrequests' );
 		return $this->generateNewId( $database, $type );
 	}
 

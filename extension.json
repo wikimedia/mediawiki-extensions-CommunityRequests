@@ -49,6 +49,9 @@
 	"ExtensionMessagesFiles": {
 		"CommunityRequestsAlias": "CommunityRequests.i18n.alias.php"
 	},
+	"DatabaseVirtualDomains": [
+		"virtual-communityrequests"
+	],
 	"Hooks": {
 		"ChangeTagsListActive": "main",
 		"ListDefinedTags": "main",

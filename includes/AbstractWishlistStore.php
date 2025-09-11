@@ -257,7 +257,7 @@ abstract class AbstractWishlistStore {
 			return null;
 		}
 
-		$dbr = $this->dbProvider->getReplicaDatabase();
+		$dbr = $this->dbProvider->getReplicaDatabase( 'virtual-communityrequests' );
 		$data = $dbr->newSelectQueryBuilder()
 			->caller( __METHOD__ )
 			->table( static::tableName() )
@@ -286,7 +286,7 @@ abstract class AbstractWishlistStore {
 	 * @fixme This does not take any filters into account.
 	 */
 	public function getCount(): int {
-		$dbr = $this->dbProvider->getReplicaDatabase();
+		$dbr = $this->dbProvider->getReplicaDatabase( 'virtual-communityrequests' );
 		return (int)$dbr->newSelectQueryBuilder()
 			->caller( __METHOD__ )
 			->select( 'COUNT(*)' )
@@ -320,7 +320,7 @@ abstract class AbstractWishlistStore {
 		array $filters = self::FILTER_NONE,
 		int $fetchWikitext = self::FETCH_WIKITEXT_NONE,
 	): array {
-		$dbr = $this->dbProvider->getReplicaDatabase();
+		$dbr = $this->dbProvider->getReplicaDatabase( 'virtual-communityrequests' );
 		$langs = array_unique( [
 			$lang,
 			...$this->languageFallback->getAll( $lang ),
@@ -537,7 +537,7 @@ abstract class AbstractWishlistStore {
 		}
 
 		return $this->getEntitiesFromDbResult(
-			$this->dbProvider->getReplicaDatabase(),
+			$this->dbProvider->getReplicaDatabase( 'virtual-communityrequests' ),
 			$rows,
 			$entityDataByPage
 		);
@@ -655,7 +655,7 @@ abstract class AbstractWishlistStore {
 	 * @return IDatabase
 	 */
 	public function delete( AbstractWishlistEntity $entity, array $assocData = [] ): IDatabase {
-		$dbw = $this->dbProvider->getPrimaryDatabase();
+		$dbw = $this->dbProvider->getPrimaryDatabase( 'virtual-communityrequests' );
 		$dbw->startAtomic( __METHOD__ );
 
 		// First delete translations.

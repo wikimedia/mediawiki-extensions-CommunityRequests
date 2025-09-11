@@ -27,35 +27,41 @@ class SchemaHooks implements LoadExtensionSchemaUpdatesHook {
 
 		// communityrequests_counters is the one table that's remained unmodified since
 		// the initial implementation, so we use it as the indicator of a first-time install.
-		$updater->addExtensionTable( 'communityrequests_counters',
-			"$sqlDir/$engine/tables-generated.sql" );
+		$updater->addExtensionUpdateOnVirtualDomain( [
+			'virtual-communityrequests', 'addTable', 'communityrequests_counters',
+			"$sqlDir/$engine/tables-generated.sql", true
+		] );
 
-		$updater->addExtensionTable( 'communityrequests_tags',
-			"$sqlDir/$engine/patch-communityrequests_projects_tags.sql" );
-		$updater->addExtensionField(
-			'communityrequests_tags',
-			'crtg_tag',
-			"$sqlDir/$engine/patch-communityrequests_wishes_tags-key-renames.sql"
-		);
+		$updater->addExtensionUpdateOnVirtualDomain( [
+			'virtual-communityrequests', 'addTable', 'communityrequests_tags',
+			"$sqlDir/$engine/patch-communityrequests_projects_tags.sql", true
+		] );
+		$updater->addExtensionUpdateOnVirtualDomain( [
+			'virtual-communityrequests', 'addField', 'communityrequests_tags', 'crtg_tag',
+			"$sqlDir/$engine/patch-communityrequests_wishes_tags-key-renames.sql", true
+		] );
 
 		// Drop cwt_other_project which now lives as a 'wikitext field'.
-		$updater->dropExtensionField(
-			'communityrequests_wishes_translations',
-			'cwt_other_project',
-			"$sqlDir/$engine/patch-communityrequests_wishes_translations-drop-cwt_other_project.sql"
-		);
+		$updater->addExtensionUpdateOnVirtualDomain( [
+			'virtual-communityrequests', 'dropField', 'communityrequests_wishes_translations', 'cwt_other_project',
+			"$sqlDir/$engine/patch-communityrequests_wishes_translations-drop-cwt_other_project.sql", true
+		] );
 
 		// Drop communityrequests_phab_tasks which now lives as a 'wikitext field'.
-		$updater->dropExtensionTable(
-			'communityrequests_phab_tasks',
-			"$sqlDir/$engine/patch-communityrequests_phab_tasks-drop-table.sql"
-		);
+		$updater->addExtensionUpdateOnVirtualDomain( [
+			'virtual-communityrequests', 'dropTable', 'communityrequests_phab_tasks',
+			"$sqlDir/$engine/patch-communityrequests_phab_tasks-drop-table.sql", true
+		] );
 
 		// Merge communityrequests_wishes and _focus_areas into communityrequests_entities.
-		$updater->addExtensionTable( 'communityrequests_entities',
-			"$sqlDir/$engine/patch-communityrequests_entities.sql" );
+		$updater->addExtensionUpdateOnVirtualDomain( [
+			'virtual-communityrequests', 'addTable', 'communityrequests_entities',
+			"$sqlDir/$engine/patch-communityrequests_entities.sql", true
+		] );
 		// Merge the two translation tables into communityrequests_translations.
-		$updater->addExtensionTable( 'communityrequests_translations',
-			"$sqlDir/$engine/patch-communityrequests_translations.sql" );
+		$updater->addExtensionUpdateOnVirtualDomain( [
+			'virtual-communityrequests', 'addTable', 'communityrequests_translations',
+			"$sqlDir/$engine/patch-communityrequests_translations.sql", true
+		] );
 	}
 }

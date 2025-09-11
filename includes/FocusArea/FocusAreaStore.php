@@ -33,7 +33,7 @@ class FocusAreaStore extends AbstractWishlistStore {
 		}
 		$focusArea = $entity;
 
-		$dbw = $this->dbProvider->getPrimaryDatabase();
+		$dbw = $this->dbProvider->getPrimaryDatabase( 'virtual-communityrequests' );
 		$dbw->startAtomic( __METHOD__ );
 
 		$data = [

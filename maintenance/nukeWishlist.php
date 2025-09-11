@@ -50,8 +50,8 @@ class NukeWishlist extends Maintenance {
 	/** @inheritDoc */
 	public function execute() {
 		$this->dbw = $this->getServiceContainer()
-			->getDBLoadBalancer()
-			->getMaintenanceConnectionRef( DB_PRIMARY );
+			->getConnectionProvider()
+			->getPrimaryDatabase( 'virtual-communityrequests' );
 		$this->config = $this->getServiceContainer()->get( 'CommunityRequests.WishlistConfig' );
 		$this->authority = new UltimateAuthority(
 			User::newSystemUser( User::MAINTENANCE_SCRIPT_USER, [ 'steal' => true ] )
@@ -125,16 +125,19 @@ class NukeWishlist extends Maintenance {
 	}
 
 	private function deletePagesWithPrefix( TitleValue $prefix, AbstractWishlistStore $store ): void {
+		// NOTE: We don't use $this->dbw because it uses the 'virtual-communityrequests'
+		// connection which does not have access to Core tables like 'page'.
+		$dbw = $this->getPrimaryDB();
 		$entityName = $store->entityType();
-		$qb = $this->dbw->newSelectQueryBuilder()
+		$qb = $dbw->newSelectQueryBuilder()
 			->select( [ 'page_id', 'page_namespace', 'page_title' ] )
 			->from( 'page' )
 			->where( [
 				'page_namespace' => $prefix->getNamespace(),
-				$this->dbw->expr(
+				$dbw->expr(
 					'page_title',
 					IExpression::LIKE,
-					new LikeValue( $prefix->getDBkey(), $this->dbw->anyString() )
+					new LikeValue( $prefix->getDBkey(), $dbw->anyString() )
 				)
 			] )
 			->caller( __METHOD__ );

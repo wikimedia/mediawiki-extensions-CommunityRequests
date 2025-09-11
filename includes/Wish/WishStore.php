@@ -112,7 +112,7 @@ class WishStore extends AbstractWishlistStore {
 		}
 		$wish = $entity;
 
-		$dbw = $this->dbProvider->getPrimaryDatabase();
+		$dbw = $this->dbProvider->getPrimaryDatabase( 'virtual-communityrequests' );
 		$dbw->startAtomic( __METHOD__ );
 
 		// @phan-suppress-next-line PhanTypeMismatchArgumentNullable Proposer is checked and not null

@@ -116,6 +116,7 @@
 	"communityrequests-wish-voting-info-open": "التصويت لهذه الأمنية مفتوح حتى اكتمالها. عبّر عن دعمك باستخدام الزر أدناه.",
 	"communityrequests-wish-voting-info-closed": "دعم هذه الرغبة معطل حاليا.",
 	"communityrequests-wish-voting-not-logged-in": "يرجى تسجيل الدخول لدعم هذه الرغبة",
+	"communityrequests-voting-no-js": "عذراً، يلزم استخدام JavaScript للتصويت في قائمة أمنيات المجتمع.",
 	"communityrequests-wish-voters-heading": "مؤيدو هذه الرغبة",
 	"communityrequests-wish-no-votes": "لا يوجد مؤيدين حتى الآن.",
 	"communityrequests-wishes-table-caption": "قائمة الرغبات",

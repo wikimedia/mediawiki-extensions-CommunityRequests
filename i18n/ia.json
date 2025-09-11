@@ -114,6 +114,7 @@
 	"communityrequests-wish-voting-info-open": "Le votation pro iste desiro es aperte usque a su termination. Monstra tu appoio usante le button infra.",
 	"communityrequests-wish-voting-info-closed": "Le appoio de iste desiro es actualmente disactivate.",
 	"communityrequests-wish-voting-not-logged-in": "Per favor aperi session pro appoiar iste desiro",
+	"communityrequests-voting-no-js": "JavaScript es necessari pro poter votar in le Lista de desiros del communitate.",
 	"communityrequests-wish-voters-heading": "Appoiantes de iste desiro",
 	"communityrequests-wish-no-votes": "Necun appoiante ancora.",
 	"communityrequests-wishes-table-caption": "Lista de desiros",

@@ -123,6 +123,7 @@
 	"communityrequests-wish-voting-info-open": "Le vote pour ce souhait est ouvert jusqu’à sa réalisation. Montrez votre soutien en cliquant sur le bouton ci-dessous.",
 	"communityrequests-wish-voting-info-closed": "Le soutien à ce souhait est actuellement désactivé.",
 	"communityrequests-wish-voting-not-logged-in": "Veuillez vous connecter pour soutenir ce souhait",
+	"communityrequests-voting-no-js": "Désolés, JavaScript est requis pour voter dans la liste de souhaits de la communauté.",
 	"communityrequests-wish-voters-heading": "Soutiens de ce souhait",
 	"communityrequests-wish-no-votes": "Pas encore de soutiens.",
 	"communityrequests-wishes-table-caption": "Liste de souhaits",

@@ -172,6 +172,27 @@ class MigrateFromGadget extends Maintenance {
 					return $m[1] . $this->getNewStatus();
 				},
 			],
+			'projects' => [
+				'/^(\| *projects *= *)(.+)$/m',
+				static function ( $m ) {
+					$projectsValue = trim( $m[2] );
+					if ( $projectsValue === '' ) {
+						return '';
+					}
+
+					$allowedProjects = [ 'wikidata', 'wikisource', 'wiktionary' ];
+					$projects = array_map( 'trim', explode( ',', strtolower( $projectsValue ) ) );
+					$filteredProjects = array_filter( $projects, static function ( $project ) use ( $allowedProjects ) {
+						return in_array( $project, $allowedProjects );
+					} );
+
+					if ( !$filteredProjects ) {
+						return '';
+					}
+
+					return '| tags = ' . implode( ', ', $filteredProjects );
+				},
+			],
 			// Don't complain if the focus area was empty
 			'silence area' => [
 				'/^\| *area *= *$/m',

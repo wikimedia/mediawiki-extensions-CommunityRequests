@@ -558,10 +558,10 @@ abstract class AbstractWishlistStore {
 		return $pageDataById;
 	}
 
-	private function setWikitextFieldsForDbResult( stdClass &$entityData, int $fetchWikitext ): void {
+	private function setWikitextFieldsForDbResult( stdClass $entityData, int $fetchWikitext ): void {
 		// For self::FETCH_WIKITEXT_RAW
 		$translationPageId = (int)$entityData->{static::pageField()};
-		// Use a PegeReference for logging.
+		// Use a PageReference for logging.
 		$translationPageRef = PageReferenceValue::localReference(
 			(int)$entityData->page_namespace,
 			$entityData->page_title

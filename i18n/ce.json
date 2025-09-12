@@ -33,6 +33,7 @@
 	"communityrequests-wishtype-unknown-label-short": "Хууш дац",
 	"communityrequests-wishtype-error": "Дехар до, лаамийн тайпа схьахаржа.",
 	"communityrequests-tags-label": "Тегаш",
+	"communityrequests-tags-description": "Хьайн лаамца уггаре а дика йогӀуш йолу тегаш схьахаржа.",
 	"communityrequests-audience-label": "Хьалха хьакхалуш болу декъашхой",
 	"communityrequests-audience-description": "Дийца, муьлхачу декъашхойн тобана а, муьлхачу хьолашкахь а уггаре а боккха Ӏаткъам хаалур бу",
 	"communityrequests-audience-error": "ХӀокху меттиган маьӀна йазде ($1 а, $2 а йукъахь {{PLURAL:$2|хьаьрк}}).",
@@ -113,6 +114,7 @@
 	"communityrequests-wish-voting-info-open": "ХӀара лаам чекхбаллалц кхаж таса йиш йу. ГӀоде цуьна лахахь йолчу нуьйдин тӀе а таӀийна.",
 	"communityrequests-wish-voting-info-closed": "ХӀокху лаамна гӀодар карарчу хенахь дӀакъевлина ду.",
 	"communityrequests-wish-voting-not-logged-in": "Дехар до, цу лаамна гӀодан авторизаци йе.",
+	"communityrequests-voting-no-js": "Бехк ма билла, JavaScript оьшу кхаж таса йукъараллин лаамийн могӀамехь.",
 	"communityrequests-wish-voters-heading": "Оцу лаамийн агӀончаш",
 	"communityrequests-wish-no-votes": "Цкъачунна агӀончаш бац.",
 	"communityrequests-wishes-table-caption": "Лаамийн могӀам",
@@ -179,6 +181,7 @@
 	"group-community-wishlist-manager": "Йукъараллин лаамийн могӀаман менеджер",
 	"group-community-wishlist-manager-member": "Йукъараллин лаамийн могӀаман {{GENDER:$1|менеджер}}",
 	"communityrequests-cant-manually-edit": "ХӀара йукъараллин лаамийн могӀаман агӀо хийца йеза [[$1|тӀеэцаран форма]] лелош.",
+	"communityrequests-missing-wish": "И лаам бац. Хьан таро йу [{{fullurl:{{#Special:Log}}|page={{FULLPAGENAMEE}}}} гергара журналаш леха], иза мича йахана хаа, йа [[$1|керла лаам кхолла]].",
 	"communityrequests-missing-focus-area": "ХӀокху фокусан меттиг йац. Хьан йиш йу [{{fullurl:{{#Special:Log}}|page={{FULLPAGENAMEE}}}} гергара журналаш леха], иза мича йахана хаа, йа [[$1|керла фокусан меттиг кхолла]].",
 	"communityrequests-wishlist-machine-translation": "[[$1|Йукъараллин лаамийн могӀам]] чохь авто машенан гочдар дӀахӀоттаде."
 }

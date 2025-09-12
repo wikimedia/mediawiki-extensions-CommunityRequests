@@ -1,8 +1,9 @@
 const {
 	CommunityRequestsWishPagePrefix,
-	CommunityRequestsFocusAreaPagePrefix
+	CommunityRequestsFocusAreaPagePrefix,
+	CommunityRequestsTags
 } = require( './config.json' );
-
+const tagsConfig = CommunityRequestsTags.navigation;
 /**
  * Utility functions for Community Requests.
  */
@@ -36,6 +37,45 @@ class Util {
 			return entityTitleQuery.textContent.trim();
 		}
 		return this.getPageName();
+	}
+
+	/**
+		 * Get the localized tag label based on its value.
+		 *
+		 * @param {string} value
+		 * @return {string|null } Tag label, or null if not found
+	*/
+	static getTagLabel( value ) {
+		if ( Object.prototype.hasOwnProperty.call( tagsConfig, value ) ) {
+			// Messages are configurable but by default will include:
+			// * communityrequests-tag-admins
+			// * communityrequests-tag-bots-gadgets
+			// * communityrequests-tag-categories
+			// * communityrequests-tag-citations
+			// * communityrequests-tag-editing
+			// * communityrequests-tag-ios
+			// * communityrequests-tag-android
+			// * communityrequests-tag-mobile-web
+			// * communityrequests-tag-multimedia-commons
+			// * communityrequests-tag-newcomers
+			// * communityrequests-tag-notifications
+			// * communityrequests-tag-patrolling
+			// * communityrequests-tag-reading
+			// * communityrequests-tag-search
+			// * communityrequests-tag-talk-pages
+			// * communityrequests-tag-templates
+			// * communityrequests-tag-translation
+			// * communityrequests-tag-watchlist-rc
+			// * communityrequests-tag-wikidata
+			// * communityrequests-tag-wikisource
+			// * communityrequests-tag-wiktionary
+			return mw.msg(
+				tagsConfig[ value ].label ?
+					tagsConfig[ value ].label :
+					`communityrequests-tag-${ value }`
+			);
+		}
+		return null;
 	}
 
 	/**

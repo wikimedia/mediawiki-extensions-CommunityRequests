@@ -36,37 +36,12 @@
 const { defineComponent, nextTick, ref } = require( 'vue' );
 const { CdxField, CdxMultiselectLookup } = require( '../codex.js' );
 const { CommunityRequestsTags } = require( '../common/config.json' );
-const tagsConfig = CommunityRequestsTags.navigation;
+const Util = require( '../common/Util.js' );
 const tagsList = [];
-for ( const value in tagsConfig ) {
-	if ( Object.prototype.hasOwnProperty.call( tagsConfig, value ) ) {
-		// Messages are configurable but by default will include:
-		// * communityrequests-tag-admins
-		// * communityrequests-tag-bots-gadgets
-		// * communityrequests-tag-categories
-		// * communityrequests-tag-citations
-		// * communityrequests-tag-editing
-		// * communityrequests-tag-ios
-		// * communityrequests-tag-android
-		// * communityrequests-tag-mobile-web
-		// * communityrequests-tag-multimedia-commons
-		// * communityrequests-tag-newcomers
-		// * communityrequests-tag-notifications
-		// * communityrequests-tag-patrolling
-		// * communityrequests-tag-reading
-		// * communityrequests-tag-search
-		// * communityrequests-tag-talk-pages
-		// * communityrequests-tag-templates
-		// * communityrequests-tag-translation
-		// * communityrequests-tag-watchlist-rc
-		// * communityrequests-tag-wikidata
-		// * communityrequests-tag-wikisource
-		// * communityrequests-tag-wiktionary
-		const label = mw.msg(
-			tagsConfig[ value ].label ?
-				tagsConfig[ value ].label :
-				`communityrequests-tag-${ value }`
-		);
+let label = '';
+for ( const value in CommunityRequestsTags.navigation ) {
+	label = Util.getTagLabel( value );
+	if ( label ) {
 		tagsList.push( { value, label } );
 	}
 }

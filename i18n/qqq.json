@@ -83,6 +83,7 @@
 	"communityrequests-wish-focus-area-heading": "Heading for the 'focus area' section of wish pages.",
 	"communityrequests-wish-type-heading": "Heading for the 'type' section of wish pages. Similar to {{msg-mw|communityrequests-wishtype-label}} which is used on the form field for the same content.",
 	"communityrequests-tags-heading": "Heading for the 'tags' section of wish pages. Similar to {{msg-mw|communityrequests-tags-label}} which is used on the form field for the same content.",
+	"communityrequests-tags-more": "Link text shown on wishes page in the tags column when a wish has more than 3 tags.\n\nParameters:\n* $1 — Number of tags beyond 3 in a wish.",
 	"communityrequests-tag-admins": "A keyword or phrase used for categorization and filtering of wishes.",
 	"communityrequests-tag-bots-gadgets": "A keyword or phrase used for categorization and filtering of wishes.",
 	"communityrequests-tag-categories": "A keyword or phrase used for categorization and filtering of wishes.",

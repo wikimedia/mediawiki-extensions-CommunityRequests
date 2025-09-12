@@ -34,6 +34,20 @@
 			</a>
 			<span v-else>{{ $i18n( 'communityrequests-focus-area-unassigned' ).text() }}</span>
 		</template>
+		<template #item-tags="{ item, row }">
+			<span v-for="( tag, index ) in item.slice( 0, showTagLimit )" :key="index">
+				<cdx-info-chip :status="wishStatusStyle( tag )">
+					{{ Util.getTagLabel( tag ) }}
+				</cdx-info-chip>
+			</span>
+			<a
+				v-if="item.length > showTagLimit"
+				class="ext-communityrequests-wishes--more-tags-link"
+				:href="mw.Title.makeTitle( row.crwns, row.crwtitle ).getUrl()"
+			>
+				{{ $i18n( 'communityrequests-tags-more', item.length - showTagLimit ).text() }}
+			</a>
+		</template>
 		<template #item-status="{ item }">
 			<cdx-info-chip :status="wishStatusStyle( item )">
 				{{ wishStatus( item ) }}
@@ -60,6 +74,7 @@ const { defineComponent, computed, nextTick, ref, ComputedRef, Ref } = require( 
 const { CdxInfoChip, CdxMessage, CdxTable } = require( '../codex.js' );
 const { formatDate } = require( 'mediawiki.DateFormatter' );
 const { CommunityRequestsStatuses, CommunityRequestsWishPagePrefix } = require( '../common/config.json' );
+const Util = require( '../common/Util.js' );
 const api = new mw.Api();
 
 /**
@@ -103,6 +118,11 @@ const columnsConfig = {
 		label: mw.msg( 'communityrequests-wishes-projects-header' ),
 		allowSort: true
 	},
+	tags: {
+		id: 'tags',
+		label: mw.msg( 'communityrequests-wishes-tags-header' ),
+		allowSort: false
+	},
 	votecount: {
 		id: 'votecount',
 		label: mw.msg( 'communityrequests-wishes-votecount-header' ),
@@ -144,6 +164,7 @@ module.exports = exports = defineComponent( {
 		const columns = ref( [
 			columnsConfig.title,
 			columnsConfig.focusarea,
+			columnsConfig.tags,
 			columnsConfig.votecount,
 			columnsConfig.created,
 			columnsConfig.status
@@ -393,7 +414,9 @@ module.exports = exports = defineComponent( {
 			onLoadMore,
 			wishStatus,
 			wishStatusStyle,
-			getLangAttr
+			getLangAttr,
+			Util,
+			showTagLimit: 3
 		};
 	}
 } );
@@ -407,5 +430,8 @@ module.exports = exports = defineComponent( {
 // Hide the "last page" button until T401027 is resolved.
 .cdx-button.cdx-table-pager__button-last {
 	display: none;
+}
+.ext-communityrequests-wishes--more-tags-link {
+	white-space: nowrap;
 }
 </style>

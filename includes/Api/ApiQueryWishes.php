@@ -148,7 +148,7 @@ class ApiQueryWishes extends ApiQueryBase {
 			$result->addValue(
 				[ 'query', "{$this->getModuleName()}-metadata" ],
 				'count',
-				$this->store->getCount()
+				$this->store->getCount( $filterArg )
 			);
 		}
 

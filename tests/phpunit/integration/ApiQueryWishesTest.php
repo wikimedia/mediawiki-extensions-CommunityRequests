@@ -288,8 +288,11 @@ class ApiQueryWishesTest extends ApiTestCase {
 			'action' => 'query',
 			'list' => 'communityrequests-wishes',
 			'crwtags' => $crwtags,
+			'crwcount' => true,
 		] );
 		$this->assertCount( $count, $ret['query']['communityrequests-wishes'] );
+		// Also check that the returned count matches the actual count.
+		$this->assertSame( $count, $ret['query']['communityrequests-wishes-metadata']['count'] );
 	}
 
 	public function provideExecuteFilterByTag(): array {

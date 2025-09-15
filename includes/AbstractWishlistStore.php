@@ -282,17 +282,17 @@ abstract class AbstractWishlistStore {
 	/**
 	 * Get a count of the wishlist entities in the database.
 	 *
+	 * @param array $filters Filters to apply to the query. Keys can be 'tags', 'statuses', or 'focusareas'.
 	 * @return int
-	 * @fixme This does not take any filters into account.
 	 */
-	public function getCount(): int {
+	public function getCount( array $filters = self::FILTER_NONE ): int {
 		$dbr = $this->dbProvider->getReplicaDatabase( 'virtual-communityrequests' );
-		return (int)$dbr->newSelectQueryBuilder()
+		$select = $dbr->newSelectQueryBuilder()
 			->caller( __METHOD__ )
 			->select( 'COUNT(*)' )
 			->from( static::tableName() )
-			->where( [ static::entityTypeField() => $this->entityTypeId() ] )
-			->fetchField();
+			->where( [ static::entityTypeField() => $this->entityTypeId() ] );
+		return (int)$this->applyFilters( $dbr, $select, $filters )->fetchField();
 	}
 
 	/**

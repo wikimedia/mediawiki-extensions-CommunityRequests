@@ -259,8 +259,13 @@ class WishStore extends AbstractWishlistStore {
 			// Probably unnecessary, because the API only allows valid tag names through.
 			if ( count( $tagIds ) > 0 ) {
 				// Select wishes with any of the given tags.
-				$select->join( self::tagsTableName(), null, 'crtg_entity = cr_page' )
-					->andWhere( [ 'crtg_tag' => $tagIds ] );
+				$subquery = $dbr->buildSelectSubquery(
+					self::tagsTableName(),
+					'*',
+					[ 'crtg_entity = cr_page', 'crtg_tag' => $tagIds ],
+					__METHOD__
+				);
+				$select->andWhere( "EXISTS $subquery" );
 			}
 		}
 

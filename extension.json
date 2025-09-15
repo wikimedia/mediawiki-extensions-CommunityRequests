@@ -322,6 +322,7 @@
 				{
 					"name": "common/config.json",
 					"config": [
+						"CommunityRequestsTags",
 						"CommunityRequestsWishPagePrefix",
 						"CommunityRequestsVotesPageSuffix"
 					]

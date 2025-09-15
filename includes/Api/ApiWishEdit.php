@@ -43,7 +43,7 @@ class ApiWishEdit extends ApiWishlistEntityBase {
 			$this->params[Wish::PARAM_BASE_LANG],
 			[
 				...$this->params,
-				Wish::PARAM_TAGS => implode( ',', $this->params[Wish::PARAM_TAGS] ),
+				Wish::PARAM_TAGS => implode( ',', $this->params[Wish::PARAM_TAGS] ?? [] ),
 				Wish::PARAM_PHAB_TASKS => implode( ',', $this->params[Wish::PARAM_PHAB_TASKS] ?? [] ),
 			],
 			$this->config,

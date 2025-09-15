@@ -66,15 +66,15 @@ class ApiWishEditTest extends ApiTestCase {
 		$expected['wishedit'] ??= [];
 		$expected['wishedit'] += $params;
 
-		// Main body of the response.
+		// Main body of the response. Optional parameters have a blank string as the default.
 		$this->assertSame( $expected['wishedit']['title'], $ret['wishedit']['title'] );
 		$this->assertSame( $expected['wishedit']['status'], $ret['wishedit']['status'] );
 		$this->assertSame( $expected['wishedit']['type'], $ret['wishedit']['type'] );
-		$this->assertSame( $expected['wishedit']['focusarea'], $ret['wishedit']['focusarea'] );
+		$this->assertSame( $expected['wishedit']['focusarea'] ?? '', $ret['wishedit']['focusarea'] ?? '' );
 		$this->assertSame( $expected['wishedit']['description'], $ret['wishedit']['description'] );
-		$this->assertSame( $expected['wishedit']['tags'], $ret['wishedit']['tags'] );
-		$this->assertSame( $expected['wishedit']['audience'], $ret['wishedit']['audience'] );
-		$this->assertSame( $expected['wishedit']['phabtasks'], $ret['wishedit']['phabtasks'] );
+		$this->assertSame( $expected['wishedit']['tags'] ?? '', $ret['wishedit']['tags'] ?? '' );
+		$this->assertSame( $expected['wishedit']['audience'] ?? '', $ret['wishedit']['audience'] ?? '' );
+		$this->assertSame( $expected['wishedit']['phabtasks'] ?? '', $ret['wishedit']['phabtasks'] ?? '' );
 		$this->assertSame( $expected['wishedit']['proposer'], $ret['wishedit']['proposer'] );
 		$this->assertSame( $expected['wishedit']['created'], $ret['wishedit']['created'] );
 		$this->assertTrue(
@@ -211,6 +211,28 @@ class ApiWishEditTest extends ApiTestCase {
 					]
 				],
 				"Publishing the wish \"Test Wish\""
+			],
+			'no tags' => [
+				[
+					'status' => 'under-review',
+					'title' => 'Test Wish',
+					'description' => 'This is a test wish.',
+					'type' => 'feature',
+					// No tags
+					'proposer' => 'TestUser',
+					'created' => '2023-10-01T12:00:00Z',
+					'baselang' => 'en',
+				],
+				[
+					'wishedit' => [
+						'focusarea' => '',
+						'tags' => [],
+						'phabtasks' => [],
+						'new' => true,
+						'baselang' => 'en',
+					]
+				],
+				'Publishing the wish "Test Wish"'
 			]
 		];
 	}

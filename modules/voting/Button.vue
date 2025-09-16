@@ -36,7 +36,7 @@
 		:primary-action="primaryAction"
 		:default-action="defaultAction"
 		@primary="onPrimaryAction"
-		@default="open = false"
+		@default="onDefaultAction"
 	>
 		<cdx-field
 			:disabled="submitting"
@@ -205,12 +205,20 @@ module.exports = exports = defineComponent( {
 				const purgeRes = await ( new mw.Api() ).post( postArgs );
 				location.href = mw.util.getUrl( purgeRes.purge[ 0 ].title ) + '#Voting';
 				location.reload();
-			} ).catch( ( _e, { errors } ) => {
-				submitStatus.value = 'error';
-				submitMessages.value = { error: errors[ 0 ].text };
-			} ).always( () => {
-				submitting.value = false;
-			} );
+			} ).catch( apiErrorHandler )
+				.always( () => {
+					submitting.value = false;
+				} );
+		}
+		/**
+		 * Close and reset the form.
+		 */
+		async function onDefaultAction() {
+			open.value = false;
+			submitting.value = false;
+			submitStatus.value = 'default';
+			submitMessages.value = {};
+			comment.value = '';
 		}
 		/**
 		 * Get the name of the Translate 'source' page for this page.
@@ -277,7 +285,7 @@ module.exports = exports = defineComponent( {
 		 * @return {Promise<string>}
 		 */
 		async function loadVotes() {
-			const response = await api.get( {
+			return api.get( {
 				action: 'query',
 				titles: votesPageName,
 				prop: 'revisions',
@@ -287,17 +295,39 @@ module.exports = exports = defineComponent( {
 				assert: 'user',
 				format: 'json',
 				formatversion: 2
-			} );
+			} ).then( ( response ) => {
+				const page = response.query && response.query.pages ?
+					response.query.pages[ 0 ] : {};
 
-			const page = response.query && response.query.pages ?
-				response.query.pages[ 0 ] : {};
+				if ( page.missing ) {
+					return '';
+				}
+				curtimestamp = response.curtimestamp;
+				basetimestamp = page.revisions[ 0 ].timestamp;
+				return page.revisions[ 0 ].slots.main.content;
+			} ).catch( apiErrorHandler );
+		}
 
-			if ( page.missing ) {
-				return '';
+		/**
+		 * Handler used when catching API request errors.
+		 *
+		 * @param {string} code
+		 * @param {Object} response
+		 * @return {string}
+		 */
+		function apiErrorHandler( code, response ) {
+			let errorMessage = mw.msg( 'communityrequests-support-error' );
+			if ( response && response.error && response.error.info ) {
+				errorMessage = response.error.info;
+			} else if ( response && response.errors && response.errors[ 0 ] ) {
+				errorMessage = response.errors[ 0 ].text;
+			} else {
+				mw.log.error( response );
 			}
-			curtimestamp = response.curtimestamp;
-			basetimestamp = page.revisions[ 0 ].timestamp;
-			return page.revisions[ 0 ].slots.main.content;
+			submitStatus.value = 'error';
+			submitMessages.value = { error: errorMessage };
+			submitting.value = false;
+			return '';
 		}
 
 		// Lifecycle hooks
@@ -315,19 +345,20 @@ module.exports = exports = defineComponent( {
 		return {
 			cdxIconCheck,
 			comment,
+			copyrightWarning: mw.config.get( 'copyrightWarning' ),
 			defaultAction,
-			dialogTitle,
 			dialogClass,
+			dialogTitle,
 			hasVoted,
 			isWishPage: Util.isWishPage(),
+			onDefaultAction,
 			onPrimaryAction,
 			open,
 			primaryAction,
 			showVotedMessage,
-			submitting,
-			submitStatus,
 			submitMessages,
-			copyrightWarning: mw.config.get( 'copyrightWarning' )
+			submitStatus,
+			submitting
 		};
 	}
 } );

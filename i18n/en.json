@@ -58,6 +58,7 @@
 	"communityrequests-support": "Support",
 	"communityrequests-supported": "Already supported",
 	"communityrequests-unsupport-focus-area": "Remove your support vote",
+	"communityrequests-support-error": "An error occurred and your support was not able to be recorded.",
 	"communityrequests-error-required-fields": "Missing required {{PLURAL:$2|field|fields}}: $1",
 	"communityrequests-status": "Status",
 	"communityrequests-status-draft": "Draft",

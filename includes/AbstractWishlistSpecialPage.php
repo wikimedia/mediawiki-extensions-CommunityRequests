@@ -223,7 +223,7 @@ abstract class AbstractWishlistSpecialPage extends FormSpecialPage {
 		try {
 			$this->logger->debug(
 				__METHOD__ . ': Executing API {0} for entity ID {1} with data {2}',
-				[ $action, $this->entityId, $data ]
+				[ $action, $this->entityId, json_encode( $data ) ]
 			);
 			$api->execute();
 		} catch ( ApiUsageException $e ) {

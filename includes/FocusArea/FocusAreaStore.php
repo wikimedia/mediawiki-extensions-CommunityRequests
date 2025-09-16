@@ -98,7 +98,7 @@ class FocusAreaStore extends AbstractWishlistStore {
 
 		$this->logger->debug(
 			__METHOD__ . ': Saved focus area {0} with data {1}',
-			[ $focusArea->getPage()->__toString(), array_merge( $data, $dataSet ) ]
+			[ $focusArea->getPage()->__toString(), json_encode( array_merge( $data, $dataSet ) ) ]
 		);
 
 		$this->saveTranslations( $focusArea, $dbw );

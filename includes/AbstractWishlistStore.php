@@ -579,7 +579,11 @@ abstract class AbstractWishlistStore {
 
 		$this->logger->debug(
 			__METHOD__ . ': Fetched wikitext for entity {0} lang {1} with data {2}',
-			[ $translationPageRef->__toString(), $entityData->{static::translationLangField()}, $wikitextData ]
+			[
+				$translationPageRef->__toString(),
+				$entityData->{static::translationLangField()},
+				json_encode( $wikitextData )
+			]
 		);
 	}
 
@@ -620,7 +624,7 @@ abstract class AbstractWishlistStore {
 			->execute();
 		$this->logger->debug(
 			__METHOD__ . ': Saved translations for entity {0} with data {1}',
-			[ $entity->getPage()->__toString(), array_merge( $data, $dataSet ) ]
+			[ $entity->getPage()->__toString(), json_encode( array_merge( $data, $dataSet ) ) ]
 		);
 	}
 

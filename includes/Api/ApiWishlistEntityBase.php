@@ -10,6 +10,7 @@ use MediaWiki\Context\DerivativeContext;
 use MediaWiki\Extension\CommunityRequests\AbstractWishlistEntity;
 use MediaWiki\Extension\CommunityRequests\AbstractWishlistStore;
 use MediaWiki\Extension\CommunityRequests\WishlistConfig;
+use MediaWiki\Page\PageIdentity;
 use MediaWiki\Request\DerivativeRequest;
 use MediaWiki\Status\Status;
 use MediaWiki\Title\Title;
@@ -42,24 +43,57 @@ abstract class ApiWishlistEntityBase extends ApiBase {
 		}
 
 		$this->params = $this->extractRequestParams();
-		$title = $this->getWishlistEntityTitle();
 
-		if ( !$title ) {
-			$this->dieWithError( [ 'apierror-invalidtitle', wfEscapeWikiText( $this->params['wish'] ) ] );
-		} elseif ( !$title->canExist() ) {
-			$this->dieWithError( 'apierror-pagecannotexist' );
+		// We use a dummy title for validations to avoid prematurely generating a new ID.
+		$dummyEntity = $this->getEntity(
+			Title::newFromText( $this->store->getPagePrefix() . '99999999' ),
+			$this->params
+		);
+
+		// Confirm we can parse and then re-create the same wikitext.
+		$wikitext = $dummyEntity->toWikitext( $this->config );
+		$validateEntity = $this->getEntity(
+			$dummyEntity->getPage(),
+			(array)$this->store->getDataFromWikitextContent( $wikitext ),
+		);
+		if ( $wikitext->getText() !== $validateEntity->toWikitext( $this->config )->getText() ) {
+			$this->dieWithError( 'apierror-wishlist-entity-parse' );
 		}
 
-		$this->title = $title;
-		$this->getErrorFormatter()->setContextTitle( $this->title );
+		// Validations passed; Now we can safely generate a new ID.
+		if ( isset( $this->params[static::entityParam()] ) ) {
+			$title = Title::newFromText(
+				$this->store->getPagePrefix() .
+				$this->store->getIdFromInput( $this->params[static::entityParam()] )
+			);
+		} else {
+			$id = $this->store->getNewId();
+			$title = Title::newFromText( $this->store->getPagePrefix() . $id );
+		}
+		$entity = $this->getEntity( $title, $this->params );
 
-		$this->executeWishlistEntity();
+		$saveStatus = $this->save(
+			$entity,
+			$this->params['token'],
+			$this->params[AbstractWishlistEntity::PARAM_BASE_REV_ID] ?? null
+		);
+
+		if ( $saveStatus->isOK() === false ) {
+			$this->dieWithError( $saveStatus->getMessages()[0] );
+		}
+
+		$resultData = $saveStatus->getValue()->getResultData()['edit'];
+		// API adds the 'title' key to the result data, but we want to use static::entityParam().
+		$resultData[static::entityParam()] = $resultData['title'];
+		unset( $resultData['title'] );
+		// 'newtimestamp' should be 'updated'.
+		if ( isset( $resultData['newtimestamp'] ) ) {
+			$resultData[AbstractWishlistEntity::PARAM_UPDATED] = $resultData['newtimestamp'];
+			unset( $resultData['newtimestamp'] );
+		}
+		$ret = $resultData + $entity->toArray( $this->config );
+		$this->getResult()->addValue( null, $this->getModuleName(), $ret );
 	}
-
-	/**
-	 * Constructs the AbstractWishlistEntity, calls ::save(), and adds to the ApiResult.
-	 */
-	abstract protected function executeWishlistEntity(): void;
 
 	/**
 	 * Save a wishlist item to the wiki through ApiEditPage.
@@ -78,7 +112,7 @@ abstract class ApiWishlistEntityBase extends ApiBase {
 	): StatusValue {
 		$apiParams = [
 			'action' => 'edit',
-			'title' => $this->title->getPrefixedDBkey(),
+			'title' => Title::newFromPageIdentity( $entity->getPage() )->getPrefixedDBkey(),
 			'text' => $entity->toWikitext( $this->config )->getText(),
 			'summary' => $this->getEditSummary( $entity ),
 			'token' => $token,
@@ -92,8 +126,6 @@ abstract class ApiWishlistEntityBase extends ApiBase {
 		$context->setRequest( new DerivativeRequest( $this->getRequest(), $apiParams ) );
 		$api = new ApiMain( $context, true );
 
-		// TODO: make use of EditFilterMergedContent hook to impose our own edit checks
-		//   (Status will show up in SpecialFormPage) Such as a missing proposer or invalid creation date.
 		try {
 			$api->execute();
 		} catch ( ApiUsageException $e ) {
@@ -103,11 +135,25 @@ abstract class ApiWishlistEntityBase extends ApiBase {
 	}
 
 	/**
-	 * Get the title of the wishlist entity based on the provided parameters.
+	 * The API parameter name for the entity. Either 'wish' or 'focusarea'.
 	 *
-	 * @return ?Title
+	 * @return string
 	 */
-	abstract protected function getWishlistEntityTitle(): ?Title;
+	abstract protected static function entityParam(): string;
+
+	/**
+	 * Create a new entity built using AbstractWishlistStore::newFromWikitextParams()
+	 * with the provided $params.
+	 *
+	 * The arguments are necessary so we can first run validations with a dummy title
+	 * before generating a new ID or using the real title. The $identity and $params will
+	 * either be dummy data or the actual title and $this->params.
+	 *
+	 * @param PageIdentity $identity
+	 * @param array $params
+	 * @return AbstractWishlistEntity
+	 */
+	abstract protected function getEntity( PageIdentity $identity, array $params ): AbstractWishlistEntity;
 
 	/**
 	 * Get the edit summary for a wishlist item.

@@ -256,4 +256,56 @@ class ApiWishEditTest extends ApiTestCase {
 		$this->expectApiErrorCode( 'wishlist-entity-parse' );
 		$this->doApiRequestWithToken( $params );
 	}
+
+	public function testExecuteParsingFailureAndIdGeneration(): void {
+		// Ensure we have a user to work with.
+		User::createNew( 'TestUser' );
+		CommunityRequestsHooks::$allowManualEditing = true;
+
+		// Create an initial valid wish with the API to ensure the ID generation increments.
+		$params = [
+			'action' => 'wishedit',
+			'status' => 'under-review',
+			'title' => 'Initial Wish',
+			'description' => 'This is a test wish.',
+			'type' => 'feature',
+			'proposer' => 'TestUser',
+			'created' => '2023-10-01T12:00:00Z',
+			'baselang' => 'en',
+		];
+		[ $ret ] = $this->doApiRequestWithToken( $params );
+		$this->assertSame( 'Community Wishlist/Wishes/W1', $ret['wishedit']['wish'] );
+
+		// Now attempt to create a wish that will fail parsing due to stray pipe characters.
+		$params = [
+			'action' => 'wishedit',
+			'status' => 'under-review',
+			'title' => 'Test Wish 2',
+			'description' => 'This is a | test wish with stray pipes',
+			'type' => 'feature',
+			'proposer' => 'TestUser',
+			'created' => '2023-10-01T12:00:00Z',
+			'baselang' => 'en',
+		];
+
+		try {
+			$this->doApiRequestWithToken( $params );
+		} catch ( ApiUsageException ) {
+			// Expected exception due to parsing failure.
+		}
+
+		// Create another valid wish and ensure the ID has incremented correctly.
+		$params = [
+			'action' => 'wishedit',
+			'status' => 'under-review',
+			'title' => 'Another Wish',
+			'description' => 'This is another test wish.',
+			'type' => 'feature',
+			'proposer' => 'TestUser',
+			'created' => '2023-10-01T12:00:00Z',
+			'baselang' => 'en',
+		];
+		[ $ret ] = $this->doApiRequestWithToken( $params );
+		$this->assertSame( 'Community Wishlist/Wishes/W2', $ret['wishedit']['wish'] );
+	}
 }

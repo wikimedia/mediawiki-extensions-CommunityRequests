@@ -133,9 +133,9 @@ class ApiFocusAreaEditTest extends ApiTestCase {
 	public function testExecuteNoPermission(): void {
 		$this->expectException( ApiUsageException::class );
 		$this->expectExceptionMessage(
-			'You do not have permission to create or edit focus areas in the Community Wishlist.'
+			"You don't have permission to manage the Community Wishlist without restrictions."
 		);
-		$this->expectApiErrorCode( 'focusareaedit-nopermission' );
+		$this->expectApiErrorCode( 'permissiondenied' );
 		$this->doApiRequestWithToken( [
 			'action' => 'focusareaedit',
 			'status' => 'under-review',

@@ -10,11 +10,10 @@ use MediaWiki\Extension\CommunityRequests\AbstractWishlistStore;
 use MediaWiki\Extension\CommunityRequests\Wish\Wish;
 use MediaWiki\Extension\CommunityRequests\Wish\WishStore;
 use MediaWiki\Extension\CommunityRequests\WishlistConfig;
+use MediaWiki\Page\PageIdentity;
 use MediaWiki\ParamValidator\TypeDef\UserDef;
-use MediaWiki\Title\Title;
 use MediaWiki\Title\TitleParser;
 use MediaWiki\User\UserFactory;
-use RuntimeException;
 use Wikimedia\ParamValidator\ParamValidator;
 use Wikimedia\ParamValidator\TypeDef\StringDef;
 
@@ -32,69 +31,24 @@ class ApiWishEdit extends ApiWishlistEntityBase {
 	}
 
 	/** @inheritDoc */
-	protected function executeWishlistEntity(): void {
-		if ( !$this->config->isWishPage( $this->title ) ) {
-			$this->dieWithError( 'apierror-wishedit-notawish' );
-		}
+	protected static function entityParam(): string {
+		return 'wish';
+	}
 
-		$wish = Wish::newFromWikitextParams(
-			$this->title,
-			// Edits are only made to the base language page.
-			$this->params[Wish::PARAM_BASE_LANG],
-			[
-				...$this->params,
-				Wish::PARAM_TAGS => implode( ',', $this->params[Wish::PARAM_TAGS] ?? [] ),
-				Wish::PARAM_PHAB_TASKS => implode( ',', $this->params[Wish::PARAM_PHAB_TASKS] ?? [] ),
-			],
+	/** @inheritDoc */
+	protected function getEntity( PageIdentity $identity, array $params ): Wish {
+		return Wish::newFromWikitextParams(
+			$identity,
+			$params[Wish::PARAM_BASE_LANG],
+			$this->store->normalizeArrayValues( $params, WishStore::ARRAY_DELIMITER_WIKITEXT ),
 			$this->config,
-			$this->userFactory->newFromName( $this->params[Wish::PARAM_PROPOSER] ),
+			$this->userFactory->newFromName( $params[Wish::PARAM_PROPOSER] ),
 		);
-
-		// Confirm we can parse and then re-create the same wikitext.
-		$wikitext = $wish->toWikitext( $this->config );
-		$validateWish = Wish::newFromWikitextParams(
-			$wish->getPage(),
-			$wish->getBaseLang(),
-			(array)$this->store->getDataFromWikitextContent( $wikitext ),
-			$this->config,
-			$wish->getProposer(),
-		);
-		if ( $wikitext->getText() !== $validateWish->toWikitext( $this->config )->getText() ) {
-			$this->dieWithError( 'apierror-wishlist-entity-parse' );
-		}
-
-		$saveStatus = $this->save(
-			$wish,
-			$this->params['token'],
-			$this->params[Wish::PARAM_BASE_REV_ID] ?? null
-		);
-
-		if ( $saveStatus->isOK() === false ) {
-			$this->dieWithError( $saveStatus->getMessages()[0] );
-		}
-
-		$resultData = $saveStatus->getValue()->getResultData()['edit'];
-		// ApiEditPage adds the 'title' key to the result data, but we want to use 'wish'.
-		$resultData['wish'] = $resultData['title'];
-		unset( $resultData['title'] );
-		// 'newtimestamp' should be 'updated'.
-		if ( isset( $resultData['newtimestamp'] ) ) {
-			$resultData[Wish::PARAM_UPDATED] = $resultData['newtimestamp'];
-			unset( $resultData['newtimestamp'] );
-		}
-		$ret = [
-			...$wish->toArray( $this->config ),
-			...$resultData
-		];
-		$this->getResult()->addValue( null, $this->getModuleName(), $ret );
 	}
 
 	/** @inheritDoc */
 	public function getEditSummary( AbstractWishlistEntity $entity ): string {
-		if ( !$entity instanceof Wish ) {
-			throw new RuntimeException( 'Expected a Wish object but got a ' . get_class( $entity ) );
-		}
-
+		'@phan-var Wish $entity';
 		$summary = trim( $this->params['wish'] ?? '' ) ? $this->editSummarySave() : $this->editSummaryPublish();
 
 		// If there are Phabricator tasks, add them to the edit summary.
@@ -126,24 +80,10 @@ class ApiWishEdit extends ApiWishlistEntityBase {
 	}
 
 	/** @inheritDoc */
-	protected function getWishlistEntityTitle(): Title {
-		if ( isset( $this->params['wish'] ) ) {
-			return Title::newFromText(
-				$this->config->getWishPagePrefix() .
-				$this->store->getIdFromInput( $this->params['wish'] )
-			);
-		} else {
-			// If this is a new wish, generate a new ID and page title.
-			$id = $this->store->getNewId();
-			return Title::newFromText( $this->config->getWishPagePrefix() . $id );
-		}
-	}
-
-	/** @inheritDoc */
 	public function getAllowedParams() {
 		// NOTE: Keys should match the Wish::PARAM_* constants where possible.
 		return [
-			'wish' => [ ParamValidator::PARAM_TYPE => 'string' ],
+			static::entityParam() => [ ParamValidator::PARAM_TYPE => 'string' ],
 			Wish::PARAM_STATUS => [
 				ParamValidator::PARAM_TYPE => array_keys( $this->config->getStatuses() ),
 				ParamValidator::PARAM_REQUIRED => true,

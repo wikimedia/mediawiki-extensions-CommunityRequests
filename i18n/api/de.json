@@ -21,6 +21,7 @@
 	"apierror-focusareaedit-notafocusarea": "Die Seite, die du bearbeiten möchtest, ist kein gültiger Schwerpunktbereich.",
 	"apierror-focusareaedit-nopermission": "Du bist nicht berechtigt, Schwerpunktbereiche in der Community-Wunschliste zu erstellen oder zu bearbeiten.",
 	"apierror-wishlist-entity-parse": "Die Wunschlisten-Entität konnte nicht geparst werden. Sie enthält möglicherweise ungültigen Wikitext. Stelle sicher, dass der Wikitext keine überflüssigen Pipe-Zeichen (<code>|</code>) enthält.",
+	"apierror-querywishes-invalidfocusareas": "Alle oder einige der angegebenen Schwerpunkt-IDs sind ungültig.",
 	"apihelp-focusareaedit-summary": "Erstelle oder aktualisiere einen Schwerpunktbereich in der Community-Wunschliste.",
 	"apihelp-focusareaedit-param-focusarea": "Der zu aktualisierende Schwerpunktbereich. Dies kann entweder der vollständige Seitentitel, eine vorangestellte Schwerpunktbereichs-ID (z. B. „FA123“) oder die Schwerpunktbereichs-ID als Ganzzahl sein. Lasse das Feld leer, um einen neuen Schwerpunktbereich zu erstellen.",
 	"apihelp-focusareaedit-param-status": "Der Status des Schwerpunktbereichs.",

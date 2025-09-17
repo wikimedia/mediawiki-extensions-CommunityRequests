@@ -60,7 +60,7 @@ class ApiQueryWishes extends ApiQueryBase {
 			if ( count( $faPageIds ) !== count( $params[Wish::PARAM_FOCUS_AREAS] ) ) {
 				$this->dieWithError( 'apierror-querywishes-invalidfocusareas' );
 			}
-			$filterArg['focus_area_page_ids'] = $faPageIds;
+			$filterArg[WishStore::FILTER_FOCUS_AREAS] = $faPageIds;
 		}
 
 		$wikitextFields = array_intersect( $params['prop'], $this->store->getWikitextFields() );

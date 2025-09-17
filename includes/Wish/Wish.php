@@ -228,15 +228,9 @@ class Wish extends AbstractWishlistEntity {
 	 * @return int[]
 	 */
 	public static function getTagsFromCsv( string $csvTags, WishlistConfig $config ): array {
-		// @phan-suppress-next-line PhanTypeMismatchReturn
-		return array_values(
-			array_filter(
-				array_map(
-					static fn ( $name ) => $config->getTagIdFromWikitextVal( $name ),
-					explode( self::VALUE_ARRAY_DELIMITER, $csvTags )
-				),
-				static fn ( $id ) => $id !== null
-			)
+		return static::getFromCsv(
+			$csvTags,
+			static fn ( $name ) => $config->getTagIdFromWikitextVal( $name )
 		);
 	}
 
@@ -247,15 +241,31 @@ class Wish extends AbstractWishlistEntity {
 	 * @return int[] The task IDs.
 	 */
 	public static function getPhabTasksFromCsv( string $csvTasks ): array {
-		$tasks = [];
-		$taskIds = explode( WishStore::ARRAY_DELIMITER_WIKITEXT, $csvTasks );
-		foreach ( $taskIds as $id ) {
-			$matches = [];
-			preg_match( '/^T?(\d+)$/', trim( $id ), $matches );
-			if ( isset( $matches[1] ) ) {
-				$tasks[] = (int)$matches[1];
-			}
+		return static::getFromCsv(
+			$csvTasks,
+			static fn ( $id ) => preg_match( '/^T?(\d+)$/', trim( $id ), $matches ) ?
+				( $matches[1] ? (int)$matches[1] : null ) :
+				null
+		);
+	}
+
+	/**
+	 * Generic helper to parse a comma-separated wikitext value into an array of values using a mapping function.
+	 *
+	 * @param string $csv The comma-separated wikitext value.
+	 * @param callable $mapFunc A function that takes individual values and returns them mapped to the desired type.
+	 * @return int[] The array of IDs.
+	 */
+	public static function getFromCsv( string $csv, callable $mapFunc ): array {
+		if ( trim( $csv ) === '' ) {
+			return [];
 		}
-		return $tasks;
+		return array_values( array_filter(
+			array_map(
+				$mapFunc,
+				explode( self::VALUE_ARRAY_DELIMITER, $csv )
+			),
+			static fn ( $id ) => $id !== null
+		) );
 	}
 }

@@ -246,7 +246,7 @@ class WishlistConfigTest extends MediaWikiUnitTestCase {
 		$this->assertSame( 0, $this->config->getStatusIdFromWikitextVal( 'open' ) );
 		$this->assertSame( 1, $this->config->getStatusIdFromWikitextVal( 'closed' ) );
 		$this->assertSame( 2, $this->config->getStatusIdFromWikitextVal( 'unknown' ) );
-		$this->assertSame( 2, $this->config->getStatusIdFromWikitextVal( 'bogus' ) );
+		$this->assertNull( $this->config->getStatusIdFromWikitextVal( 'bogus' ) );
 	}
 
 	public function testGetStatusLabelFromWikitextVal(): void {

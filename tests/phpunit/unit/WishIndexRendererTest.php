@@ -81,6 +81,9 @@ class WishIndexRendererTest extends AbstractWishlistEntityTest {
 					'sort' => 'created',
 					'dir' => 'descending',
 					'limit' => 10,
+					'statuses' => [],
+					'tags' => [],
+					'focusareas' => [],
 				]
 			],
 			[
@@ -90,6 +93,9 @@ class WishIndexRendererTest extends AbstractWishlistEntityTest {
 					'sort' => 'title',
 					'dir' => 'ascending',
 					'limit' => 5,
+					'statuses' => [],
+					'tags' => [],
+					'focusareas' => [],
 				]
 			],
 			[
@@ -99,6 +105,9 @@ class WishIndexRendererTest extends AbstractWishlistEntityTest {
 					'sort' => '&lt;script&gt;foobar&lt;/script&gt;',
 					'dir' => 'descending',
 					'limit' => 20,
+					'statuses' => [],
+					'tags' => [],
+					'focusareas' => [],
 				]
 			],
 			[
@@ -113,8 +122,30 @@ class WishIndexRendererTest extends AbstractWishlistEntityTest {
 					'sort' => 'created',
 					'dir' => 'descending',
 					'limit' => 10,
+					'statuses' => [],
+					'tags' => [],
+					'focusareas' => [],
 				]
 			],
+			[
+				[
+					'lang' => 'es',
+					'sort' => 'votecount',
+					'dir' => 'ascending',
+					'statuses' => 'under-review, unsupported ,,declined',
+					'tags' => 'admins,editing,ios',
+					'focusareas' => 'FA1,FA2',
+				],
+				[
+					'lang' => 'es',
+					'sort' => 'votecount',
+					'dir' => 'ascending',
+					'limit' => 10,
+					'statuses' => [ 'under-review', 'unsupported', 'declined' ],
+					'tags' => [ 'admins', 'editing', 'ios' ],
+					'focusareas' => [ 'FA1', 'FA2' ],
+				]
+			]
 		];
 	}
 }

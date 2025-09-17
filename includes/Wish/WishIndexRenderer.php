@@ -28,6 +28,26 @@ class WishIndexRenderer extends AbstractRenderer {
 			'sort' => $this->getSafeArg( 'sort', 'created' ),
 			'dir' => $this->getSafeArg( 'dir', 'descending' ),
 			'limit' => intval( $this->getSafeArg( 'limit', 10 ) ),
+			Wish::PARAM_STATUSES => Wish::getFromCsv(
+				$this->getSafeArg( Wish::PARAM_STATUSES, '' ),
+				function ( $val ) {
+					$val = trim( $val );
+					return $this->config->getStatuses()[$val] ?? false ? $val : null;
+				}
+			),
+			Wish::PARAM_TAGS => Wish::getFromCsv(
+				$this->getSafeArg( Wish::PARAM_TAGS, '' ),
+				function ( $val ) {
+					$val = trim( $val );
+					return $this->config->getNavigationTags()[$val] ?? false ? $val : null;
+				}
+			),
+			Wish::PARAM_FOCUS_AREAS => Wish::getFromCsv(
+				$this->getSafeArg( Wish::PARAM_FOCUS_AREAS, '' ),
+				static fn ( $fa ) => preg_match( '/^(?:FA)?(\d+)$/', trim( $fa ), $matches ) ?
+					'FA' . (int)$matches[1] :
+					null
+			),
 		] );
 		$output->addModules( [ 'ext.communityrequests.wish-index' ] );
 

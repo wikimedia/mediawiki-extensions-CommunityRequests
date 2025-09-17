@@ -114,7 +114,14 @@ class FocusAreaRenderer extends AbstractRenderer {
 			$this->msg( 'communityrequests-focus-area-wishes-description-3' )->text()
 		);
 
-		// TODO: implement wishes table somewhere else and re-use it here.
+		$out .= $this->parser->recursiveTagParse(
+			'{{#CommunityRequests: wish-index' .
+			'|focusareas=' . $this->config->getEntityWikitextVal( $this->parser->getPage() ) .
+			'|sort=created' .
+			'|dir=descending' .
+			'|limit=10' .
+			'}}'
+		);
 
 		// Teams and affiliates section.
 		$owners = $this->getArg( FocusArea::PARAM_OWNERS, '' );

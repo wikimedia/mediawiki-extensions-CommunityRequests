@@ -468,10 +468,13 @@ class WishlistConfig {
 	 * Get the ID of a status from its wikitext value.
 	 *
 	 * @param string $status
-	 * @return int The ID of the status.
+	 * @return ?int The ID of the status, or null if not found.
 	 */
-	public function getStatusIdFromWikitextVal( string $status ): int {
-		return $this->getIdFromWikitextVal( $status, $this->statuses );
+	public function getStatusIdFromWikitextVal( string $status ): ?int {
+		$status = trim( $status );
+		return isset( $this->statuses[$status] ) ?
+			$this->getIdFromWikitextVal( $status, $this->statuses ) :
+			null;
 	}
 
 	/**

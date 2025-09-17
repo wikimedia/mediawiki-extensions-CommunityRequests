@@ -146,7 +146,10 @@ module.exports = exports = defineComponent( {
 		lang: { type: String, default: mw.config.get( 'wgContentLanguage' ) },
 		sort: { type: String, default: 'created' },
 		dir: { type: String, default: 'descending' },
-		limit: { type: Number, default: 10 }
+		limit: { type: Number, default: 10 },
+		statuses: { type: Array, default: () => [] },
+		tags: { type: Array, default: () => [] },
+		focusareas: { type: Array, default: () => [] }
 	},
 	setup( props ) {
 		// Reactive properties
@@ -158,12 +161,13 @@ module.exports = exports = defineComponent( {
 		 */
 		const columns = ref( [
 			columnsConfig.title,
-			columnsConfig.focusarea,
-			columnsConfig.tags,
+			// Hide columns that will only have one value.
+			props.focusareas.length === 1 ? null : columnsConfig.focusarea,
+			props.tags.length === 1 ? null : columnsConfig.tags,
 			columnsConfig.votecount,
 			columnsConfig.created,
 			columnsConfig.status
-		] );
+		].filter( ( column ) => !!column ) );
 
 		/**
 		 * Data for the table.
@@ -282,6 +286,15 @@ module.exports = exports = defineComponent( {
 				crwlimit: limit.value,
 				crwcount: 1
 			};
+			if ( props.statuses.length ) {
+				params.crwstatuses = props.statuses.join( '|' );
+			}
+			if ( props.tags.length ) {
+				params.crwtags = props.tags.join( '|' );
+			}
+			if ( props.focusareas.length ) {
+				params.crwfocusareas = props.focusareas.join( '|' );
+			}
 			if ( currentContinueValue ) {
 				params.crwcontinue = currentContinueValue;
 			}

@@ -6,7 +6,6 @@ namespace MediaWiki\Extension\CommunityRequests;
 use InvalidArgumentException;
 use MediaWiki\Content\WikitextContent;
 use MediaWiki\Extension\CommunityRequests\IdGenerator\IdGenerator;
-use MediaWiki\Extension\CommunityRequests\Wish\Wish;
 use MediaWiki\Extension\Translate\PageTranslation\TranslatablePageParser;
 use MediaWiki\Languages\LanguageFallback;
 use MediaWiki\Page\PageIdentity;
@@ -35,6 +34,7 @@ abstract class AbstractWishlistStore {
 	public const SORT_ASC = SelectQueryBuilder::SORT_ASC;
 	public const SORT_DESC = SelectQueryBuilder::SORT_DESC;
 	public const FILTER_NONE = [];
+	public const FILTER_FOCUS_AREAS = 'focus_area_page_ids';
 
 	public const ARRAY_DELIMITER_WIKITEXT = ',';
 	public const ARRAY_DELIMITER_API = '|';
@@ -309,10 +309,12 @@ abstract class AbstractWishlistStore {
 		SelectQueryBuilder $select,
 		array $filters
 	): SelectQueryBuilder {
-		if ( isset( $filters[Wish::PARAM_STATUSES] ) && $filters[Wish::PARAM_STATUSES] ) {
+		if ( isset( $filters[AbstractWishlistEntity::PARAM_STATUSES] ) &&
+			$filters[AbstractWishlistEntity::PARAM_STATUSES]
+		) {
 			$statusIds = [];
 			foreach ( $this->config->getStatuses() as $statusName => $statusInfo ) {
-				if ( in_array( $statusName, $filters[Wish::PARAM_STATUSES] ) ) {
+				if ( in_array( $statusName, $filters[AbstractWishlistEntity::PARAM_STATUSES] ) ) {
 					$statusIds[] = $statusInfo['id'];
 				}
 			}

@@ -271,8 +271,8 @@ class WishStore extends AbstractWishlistStore {
 
 		// The focus area page IDs have already been fetched in ApiQueryWishes
 		// and are passed here as page IDs.
-		if ( isset( $filters['focus_area_page_ids'] ) && $filters['focus_area_page_ids'] ) {
-			$select->andWhere( [ 'cr_focus_area' => $filters['focus_area_page_ids'] ] );
+		if ( isset( $filters[self::FILTER_FOCUS_AREAS] ) && $filters[self::FILTER_FOCUS_AREAS] ) {
+			$select->andWhere( [ 'cr_focus_area' => $filters[self::FILTER_FOCUS_AREAS] ] );
 		}
 
 		return $select;

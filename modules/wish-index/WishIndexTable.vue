@@ -23,16 +23,11 @@
 			>
 				{{ item }}
 			</a>
-		</template>
-		<template #item-focusarea="{ item, row }">
-			<a
-				v-if="item"
-				class="ext-communityrequests-wishes--focusarea-link"
-				:href="mw.Title.makeTitle( row.crfans, row.crfatitle ).getUrl()"
-			>
-				{{ row.focusareatitle }}
-			</a>
-			<span v-else>{{ $i18n( 'communityrequests-focus-area-unassigned' ).text() }}</span>
+			<div class="ext-communityrequests-wishes--focusarea-text">
+				<!-- eslint-disable-next-line vue/no-v-html -->
+				<span v-if="row.crfatitle" v-html="wishIsInFocusAreaHTML( row )"></span>
+				<span v-else>{{ $i18n( 'communityrequests-focus-area-unassigned' ).text() }}</span>
+			</div>
 		</template>
 		<template #item-tags="{ item, row }">
 			<span v-for="( tag, index ) in item.slice( 0, showTagLimit )" :key="index">
@@ -106,12 +101,13 @@ const columnsConfig = {
 	},
 	title: {
 		id: 'title',
-		label: mw.msg( 'communityrequests-wishes-title-header' ),
+		label: mw.msg( 'communityrequests-wishes-title-and-focusarea-header' ),
 		allowSort: true
 	},
-	focusarea: {
-		id: 'focusarea',
-		label: mw.msg( 'communityrequests-wishes-focusarea-header' )
+	projects: {
+		id: 'projects',
+		label: mw.msg( 'communityrequests-wishes-projects-header' ),
+		allowSort: true
 	},
 	tags: {
 		id: 'tags',
@@ -162,7 +158,6 @@ module.exports = exports = defineComponent( {
 		const columns = ref( [
 			columnsConfig.title,
 			// Hide columns that will only have one value.
-			props.focusareas.length === 1 ? null : columnsConfig.focusarea,
 			props.tags.length === 1 ? null : columnsConfig.tags,
 			columnsConfig.votecount,
 			columnsConfig.created,
@@ -355,6 +350,19 @@ module.exports = exports = defineComponent( {
 		}
 
 		/**
+		 * Get the focus area text, which includes an HTML link to focus area page.
+		 *
+		 * @param {Object} row
+		 * @return {string}
+		 */
+		function wishIsInFocusAreaHTML( row ) {
+			const focusAreaLink = document.createElement( 'a' );
+			focusAreaLink.href = mw.Title.makeTitle( row.crfans, row.crfatitle ).getUrl();
+			focusAreaLink.textContent = row.focusareatitle;
+			return mw.message( 'communityrequests-wishes-in-focusarea-text', focusAreaLink ).parse();
+		}
+
+		/**
 		 * Get the localized status label for a wish.
 		 *
 		 * @param {string} status
@@ -420,6 +428,7 @@ module.exports = exports = defineComponent( {
 			formatDate,
 			onUpdateSort,
 			onLoadMore,
+			wishIsInFocusAreaHTML,
 			wishStatus,
 			wishStatusStyle,
 			getLangAttr,
@@ -431,6 +440,8 @@ module.exports = exports = defineComponent( {
 </script>
 
 <style lang="less">
+@import 'mediawiki.skin.variables.less';
+
 // Hide the pagination size selector; Codex does not handle it correctly with server pagination.
 .cdx-table-pager__start {
 	display: none;
@@ -441,5 +452,9 @@ module.exports = exports = defineComponent( {
 }
 .ext-communityrequests-wishes--more-tags-link {
 	white-space: nowrap;
+}
+
+.ext-communityrequests-wishes--title-link {
+	font-weight: @font-weight-bold;
 }
 </style>

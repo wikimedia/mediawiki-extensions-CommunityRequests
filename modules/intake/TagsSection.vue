@@ -87,6 +87,9 @@ module.exports = exports = defineComponent( {
 			if ( selection.value !== null ) {
 				emit( 'update:tags', selection.value );
 			}
+			// Reset the search value and menu. T404767.
+			inputValue.value = '';
+			menuItems.value = tagsList;
 		}
 
 		/**

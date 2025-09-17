@@ -272,6 +272,16 @@ module.exports = exports = defineComponent( {
 				formDisabled.value = false;
 
 				if ( !validateForm() ) {
+					nextTick( () => {
+						// Scrolling to `cdx-message--error` is merely future-proofing to
+						// ensure the user sees the error message, wherever it may be.
+						const firstError = document.querySelector( '.cdx-message--error' );
+						if ( firstError ) {
+							// Guard against there not being any parent fieldset.
+							const firstErrorFieldset = firstError.closest( '.cdx-field' );
+							( firstErrorFieldset || firstError ).scrollIntoView( { behavior: 'smooth' } );
+						}
+					} );
 					return;
 				}
 

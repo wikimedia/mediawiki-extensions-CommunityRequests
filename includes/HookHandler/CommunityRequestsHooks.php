@@ -55,7 +55,6 @@ use MediaWiki\User\User;
 use MessageSpecifier;
 use Psr\Log\LoggerInterface;
 
-// phpcs:disable MediaWiki.NamingConventions.LowerCamelFunctionsName.FunctionName
 class CommunityRequestsHooks implements
 	BeforePageDisplayHook,
 	ChangeTagsListActiveHook,
@@ -156,7 +155,7 @@ class CommunityRequestsHooks implements
 	 *
 	 * @param RecentChange $rc
 	 */
-	public function onRecentChange_Save( $rc ) {
+	public function onRecentChange_save( $rc ) {
 		$request = RequestContext::getMain()->getRequest();
 		if ( $request->getSession()->get( self::SESSION_KEY ) ) {
 			$rc->addTags( self::WISHLIST_CHANGE_TAG );

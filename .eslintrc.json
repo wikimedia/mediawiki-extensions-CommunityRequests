@@ -16,5 +16,8 @@
 	"globals": {
 		"global": "writable",
 		"ve": "readonly"
+	},
+	"rules": {
+		"jsdoc/check-alignment": "error"
 	}
 }

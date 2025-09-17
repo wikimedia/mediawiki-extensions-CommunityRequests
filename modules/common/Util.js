@@ -40,11 +40,11 @@ class Util {
 	}
 
 	/**
-		 * Get the localized tag label based on its value.
-		 *
-		 * @param {string} value
-		 * @return {string|null } Tag label, or null if not found
-	*/
+	 * Get the localized tag label based on its value.
+	 *
+	 * @param {string} value
+	 * @return {string|null } Tag label, or null if not found
+	 */
 	static getTagLabel( value ) {
 		if ( Object.prototype.hasOwnProperty.call( tagsConfig, value ) ) {
 			// Messages are configurable but by default will include:

@@ -91,6 +91,7 @@
 	"communityrequests-wish-focus-area-heading": "Domaine d’action assigné",
 	"communityrequests-wish-type-heading": "Type de souhait",
 	"communityrequests-tags-heading": "Balises",
+	"communityrequests-tags-more": "+ $1 {{PLURAL:$1|autre|autres}}",
 	"communityrequests-tag-admins": "Administrateurs et patrouilleurs",
 	"communityrequests-tag-bots-gadgets": "Bots et gadgets",
 	"communityrequests-tag-categories": "Catégories",

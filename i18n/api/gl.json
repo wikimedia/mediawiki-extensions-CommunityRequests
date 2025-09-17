@@ -21,6 +21,7 @@
 	"apierror-focusareaedit-notafocusarea": "A páxina que intentas editar non é unha área de enfoque válida.",
 	"apierror-focusareaedit-nopermission": "Non tes permiso para creares ou editares as áreas de enfoque que están na lista de desexos da comunidade.",
 	"apierror-wishlist-entity-parse": "Non se pode analizar a entidade da lista de desexos. Se cadra contén texto wiki non válido. Asegúrate de que non haxa caracteres de barra vertical estraños (<code>|</code>) no texto wiki.",
+	"apierror-querywishes-invalidfocusareas": "Todos ou algúns dos identificadores da área de enfoque indicados non son válidos.",
 	"apihelp-focusareaedit-summary": "Crea ou actualiza unha área de enfoque na lista de desexos da comunidade.",
 	"apihelp-focusareaedit-param-focusarea": "A área de enfoque a actualizar. Isto pode ser o título completo da páxina, un identificador de área de enfoque co prefixo (por exemplo, \"FA123\") ou o identificador da área de enfoque como un enteiro. Déixao en branco para creares unha área de enfoque nova.",
 	"apihelp-focusareaedit-param-status": "O estado da área de enfoque.",

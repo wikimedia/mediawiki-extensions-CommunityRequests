@@ -276,7 +276,7 @@ module.exports = exports = defineComponent( {
 		function alreadyVoted( votesWikitext ) {
 			const escapedUsername = mw.util.escapeRegExp( mw.config.get( 'wgUserName' ) );
 			// eslint-disable-next-line security/detect-non-literal-regexp
-			const regex = new RegExp( 'username\\s*=\\s*' + escapedUsername );
+			const regex = new RegExp( 'username\\s*=\\s*' + escapedUsername + '\\s*(?=[|}]|$)' );
 			return votesWikitext.match( regex ) !== null;
 		}
 		/**

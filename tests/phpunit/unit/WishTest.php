@@ -46,7 +46,7 @@ class WishTest extends AbstractWishlistEntityTest {
 				],
 				<<<"END"
 {{#CommunityRequests: wish
-| status = submitted
+| status = unsupported
 | type = change
 | title = Improve search functionality
 | focusarea = \n| description = Make [[search]] results more relevant and faster.
@@ -89,7 +89,7 @@ END
 					Wish::PARAM_VOTE_COUNT => 3,
 				],
 				[
-					Wish::PARAM_STATUS => 'submitted',
+					Wish::PARAM_STATUS => 'unsupported',
 					Wish::PARAM_TYPE => 'change',
 					Wish::PARAM_TITLE => 'Improve search functionality',
 					Wish::PARAM_FOCUS_AREA => '',
@@ -116,7 +116,7 @@ END
 					Wish::PARAM_VOTE_COUNT => 1,
 				],
 				[
-					Wish::PARAM_STATUS => 'archived',
+					Wish::PARAM_STATUS => 'declined',
 					Wish::PARAM_TYPE => 'bug',
 					Wish::PARAM_TITLE => 'Fix all the bugs ever created',
 					Wish::PARAM_FOCUS_AREA => '',
@@ -159,7 +159,7 @@ END
 			[
 				[
 					Wish::PARAM_TITLE => 'Improve search functionality',
-					Wish::PARAM_STATUS => 'submitted',
+					Wish::PARAM_STATUS => 'unsupported',
 					Wish::PARAM_DESCRIPTION => 'Make [[search]] results more relevant and faster.',
 					Wish::PARAM_TYPE => 'change',
 					Wish::PARAM_TAGS => 'admins, multimedia  , newcomers,bogus',
@@ -183,7 +183,7 @@ END
 			[
 				[
 					Wish::PARAM_TITLE => 'Fix all the bugs ever created',
-					Wish::PARAM_STATUS => 'archived',
+					Wish::PARAM_STATUS => 'declined',
 					Wish::PARAM_DESCRIPTION => 'Fix everything.',
 					Wish::PARAM_TYPE => 'bug',
 					Wish::PARAM_TAGS => '',

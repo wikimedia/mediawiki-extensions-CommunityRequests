@@ -46,7 +46,7 @@ class FocusAreaTest extends AbstractWishlistEntityTest {
 				],
 				<<<"END"
 {{#CommunityRequests: focus-area
-| status = submitted
+| status = unsupported
 | title = Improve search functionality
 | description = Make [[search]] results more relevant and faster.
 | shortdescription = [[Search]] improvements
@@ -83,7 +83,7 @@ END
 					FocusArea::PARAM_VOTE_COUNT => 42,
 				],
 				[
-					FocusArea::PARAM_STATUS => 'submitted',
+					FocusArea::PARAM_STATUS => 'unsupported',
 					FocusArea::PARAM_TITLE => 'Improve search functionality',
 					FocusArea::PARAM_DESCRIPTION => null,
 					FocusArea::PARAM_SHORT_DESCRIPTION => '',
@@ -121,7 +121,7 @@ END
 			[
 				[
 					FocusArea::PARAM_TITLE => 'Improve search functionality',
-					FocusArea::PARAM_STATUS => 'submitted',
+					FocusArea::PARAM_STATUS => 'unsupported',
 					FocusArea::PARAM_DESCRIPTION => 'Make [[search]] results more relevant and faster.',
 					FocusArea::PARAM_SHORT_DESCRIPTION => '[[Search]] improvements',
 					FocusArea::PARAM_OWNERS => '[[Community Tech]]',
@@ -141,7 +141,7 @@ END
 			[
 				[
 					FocusArea::PARAM_TITLE => 'Fix all the bugs ever created',
-					FocusArea::PARAM_STATUS => 'archived',
+					FocusArea::PARAM_STATUS => 'declined',
 					FocusArea::PARAM_DESCRIPTION => 'Fix everything.',
 					FocusArea::PARAM_SHORT_DESCRIPTION => '',
 					FocusArea::PARAM_CREATED => '2023-10-01T12:00:00Z',

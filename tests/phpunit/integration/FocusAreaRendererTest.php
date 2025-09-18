@@ -27,7 +27,7 @@ class FocusAreaRendererTest extends MediaWikiIntegrationTestCase {
 	public function testCreateFocusAreaFromWikiPage(): void {
 		$wikitext = <<<END
 {{#CommunityRequests: focus-area
-|status = open
+|status = in-progress
 |title = Test Focus Area
 |shortdescription = A brief description of the focus area.
 |created = 2023-10-01T12:00:00Z
@@ -43,7 +43,7 @@ END;
 
 		$focusArea = $this->getStore()->get( $ret['title'], 'en', FocusAreaStore::FETCH_WIKITEXT_TRANSLATED );
 		$this->assertSame( $ret['id'], $focusArea->getPage()->getId() );
-		$this->assertSame( $this->config->getStatusIdFromWikitextVal( 'open' ), $focusArea->getStatus() );
+		$this->assertSame( $this->config->getStatusIdFromWikitextVal( 'in-progress' ), $focusArea->getStatus() );
 		$this->assertSame( 'Test Focus Area', $focusArea->getTitle() );
 		$this->assertSame( 'A brief description of the focus area.', $focusArea->getShortDescription() );
 		$this->assertSame( '2023-10-01T12:00:00Z', $focusArea->getCreated() );

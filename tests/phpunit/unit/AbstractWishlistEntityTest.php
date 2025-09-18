@@ -63,8 +63,10 @@ class AbstractWishlistEntityTest extends MediaWikiUnitTestCase {
 				]
 			],
 			WishlistConfig::STATUSES => [
-				'submitted' => [ 'id' => 1 ],
-				'archived' => [ 'id' => 6 ],
+				'under-review' => [ 'id' => 0, 'default' => true, 'voting' => false ],
+				'unsupported' => [ 'id' => 1 ],
+				'declined' => [ 'id' => 6, 'voting' => false ],
+				'in-progress' => [ 'id' => 7 ],
 			],
 			WishlistConfig::VOTES_PAGE_SUFFIX => '',
 			WishlistConfig::WISH_VOTING_ENABLED => true,

@@ -113,11 +113,6 @@ const columnsConfig = {
 		id: 'focusarea',
 		label: mw.msg( 'communityrequests-wishes-focusarea-header' )
 	},
-	projects: {
-		id: 'projects',
-		label: mw.msg( 'communityrequests-wishes-projects-header' ),
-		allowSort: true
-	},
 	tags: {
 		id: 'tags',
 		label: mw.msg( 'communityrequests-wishes-tags-header' ),

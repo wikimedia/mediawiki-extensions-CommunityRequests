@@ -22,6 +22,7 @@
 	"apierror-focusareaedit-notafocusarea": "הדף שניסית לערוך אינו תחום מיקוד תקין.",
 	"apierror-focusareaedit-nopermission": "אין לך הרשאה ליצור או לערוך תחומי מיקוד ברשימת משאלות הקהילה.",
 	"apierror-wishlist-entity-parse": "לא ניתן לפענח את ישות רשימת המשאלות. ייתכן שהיא מכילה קוד ויקי בלתי־תקין. נא לוודא שאין תווי קו ניצב מיותרים (<code>|</code>) בקוד הוויקי.",
+	"apierror-querywishes-invalidfocusareas": "כל מזהי תחומי המיקוד שסופקו או חלק מהם אינם תקינים.",
 	"apihelp-focusareaedit-summary": "יצירה או עדכון של תחום מיקוד ברשימת משאלות הקהילה.",
 	"apihelp-focusareaedit-param-focusarea": "תחום המיקוד לעדכון. אפשר לכתוב כאן את כותרת הדף המלאה, מזהה תחום מיקוד עם תחילים (למשל \"FA123\") או מזהה תחום המיקוד כמספר שלם. יש להשאיר את זה ריק כדי ליצור תחום מיקוד חדש.",
 	"apihelp-focusareaedit-param-status": "מצב תחום המיקוד.",

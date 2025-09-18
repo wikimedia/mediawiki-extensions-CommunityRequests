@@ -59,7 +59,7 @@
 	"communityrequests-support": "Primary button label in the voting dialog window. It describes an action: \"Express support for a wish, vote for a wish\".",
 	"communityrequests-supported": "Button label shown on the (disabled) voting button if someone's already voted.",
 	"communityrequests-unsupport-focus-area": "Button label on the button with which to remove a vote.",
-	"communityrequests-support-error": "Error message shown in the voting dialog when an unknown error occurs (e.g. connection failure) when the user clicks the support button (which uses {{msg|communityrequests-support}}). Only shown if no better message is found.",
+	"communityrequests-support-error": "Error message shown in the voting dialog when an unknown error occurs (e.g. connection failure) when the user clicks the support button (which uses {{msg-mw|communityrequests-support}}). Only shown if no better message is found.",
 	"communityrequests-error-required-fields": "Error message for required fields.\n\nParameters:\n* $1 — List of missing fields\n*$2 - total number of missing fields",
 	"communityrequests-status": "Label for the 'Status' field in the intake form.",
 	"communityrequests-status-draft": "Label for a status chip.",

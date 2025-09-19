@@ -10,6 +10,7 @@ use MediaWiki\Extension\CommunityRequests\WishlistConfig;
 use MediaWiki\Page\PageReference;
 use MediaWiki\Page\PageReferenceValue;
 use MediaWiki\Parser\ParserFactory;
+use MediaWiki\Revision\RevisionRecord;
 use MediaWiki\Revision\RevisionStore;
 use MediaWiki\Title\Title;
 use MediaWiki\User\UserFactory;
@@ -34,9 +35,7 @@ class VoteStore {
 	 * @throws RuntimeException If the content type is not WikitextContent
 	 */
 	public function getAll( AbstractWishlistEntity $entity ): array {
-		$revRecord = $this->revisionStore->getRevisionByTitle(
-			Title::castFromPageReference( $this->votesPageRef( $entity ) )->toPageIdentity()
-		);
+		$revRecord = $this->getRevRecord( $entity );
 		if ( !$revRecord ) {
 			return [];
 		}
@@ -84,12 +83,13 @@ class VoteStore {
 	}
 
 	/**
-	 * Save a vote. If a vote by the same user already exists, it will be replaced.
+	 * Get the wikitext for the votes subpage with the given vote added.
+	 * If a vote by the same user already exists, it will be replaced.
 	 *
 	 * @param Vote $vote
-	 * @return string The new, raw wikitext for the votes subpage.
+	 * @return array The raw wikitext for the votes subpage we want to update, and the current revision ID.
 	 */
-	public function getWikitextWithVoteAdded( Vote $vote ): string {
+	public function getWikitextWithVoteAdded( Vote $vote ): array {
 		$allVotes = $this->getAll( $vote->getEntity() );
 		$found = false;
 		foreach ( $allVotes as $i => $existingVote ) {
@@ -106,7 +106,10 @@ class VoteStore {
 		foreach ( $allVotes as $v ) {
 			$contentText .= $v->toWikitext()->getText();
 		}
-		return trim( $contentText );
+		return [
+			trim( $contentText ),
+			$this->getRevRecord( $vote->getEntity() )?->getId() ?? 0,
+		];
 	}
 
 	/**
@@ -115,10 +118,10 @@ class VoteStore {
 	 *
 	 * @param AbstractWishlistEntity $entity
 	 * @param UserIdentity $user
-	 * @return string The new, raw wikitext for the votes subpage.
+	 * @return array The raw wikitext for the votes subpage we want to update, and the current revision ID.
 	 * @throws RuntimeException If the content type is not WikitextContent
 	 */
-	public function getWikitextWithVoteRemoved( AbstractWishlistEntity $entity, UserIdentity $user ): string {
+	public function getWikitextWithVoteRemoved( AbstractWishlistEntity $entity, UserIdentity $user ): array {
 		$allVotes = $this->getAll( $entity );
 		$allVotes = array_filter(
 			$allVotes,
@@ -128,21 +131,36 @@ class VoteStore {
 		foreach ( $allVotes as $v ) {
 			$contentText .= $v->toWikitext()->getText();
 		}
-		return trim( $contentText );
+		return [
+			trim( $contentText ),
+			$this->getRevRecord( $entity )?->getId() ?? 0,
+		];
 	}
 
-	private function votesPageRef( AbstractWishlistEntity $entity ): PageReference {
-		return PageReferenceValue::localReference(
-			$entity->getPage()->getNamespace(),
-			$entity->getPage()->getDBkey() . $this->config->getVotesPageSuffix()
-		);
-	}
-
+	/**
+	 * Extract vote data from a wikitext string.
+	 *
+	 * @param WikitextContent|string $content
+	 * @return array|null Associative array of vote data, or null if parsing failed.
+	 */
 	public function getDataFromWikitext( WikitextContent|string $content ): ?array {
 		if ( $content instanceof WikitextContent ) {
 			$content = $content->getText();
 		}
 		return ( new ArgumentExtractor( $this->parserFactory ) )
 			->getFuncArgs( 'communityrequests', 'vote', $content );
+	}
+
+	private function getRevRecord( AbstractWishlistEntity $entity ): ?RevisionRecord {
+		return $this->revisionStore->getRevisionByTitle(
+			Title::castFromPageReference( $this->getVotesPageRef( $entity ) )->toPageIdentity()
+		);
+	}
+
+	private function getVotesPageRef( AbstractWishlistEntity $entity ): PageReference {
+		return PageReferenceValue::localReference(
+			$entity->getPage()->getNamespace(),
+			$entity->getPage()->getDBkey() . $this->config->getVotesPageSuffix()
+		);
 	}
 }

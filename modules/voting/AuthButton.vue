@@ -17,7 +17,7 @@ const { defineComponent } = require( 'vue' );
 const Util = require( '../common/Util.js' );
 
 module.exports = exports = defineComponent( {
-	name: 'AuthVotingButton',
+	name: 'AuthButton',
 	setup() {
 		const userLoginUrl = mw.util.getUrl(
 			'Special:UserLogin', { returnto: mw.config.get( 'wgPageName' ) }

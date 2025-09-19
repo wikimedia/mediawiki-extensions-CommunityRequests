@@ -16,6 +16,8 @@ jest.mock( '../../modules/common/config.json', () => {
 mw.confirmCloseWindow = jest.fn();
 mw.config.set = jest.fn();
 
+HTMLElement.prototype.scrollIntoView = jest.fn();
+
 /**
  * Mock for the calls to Core's $i18n plugin which returns a mw.Message object.
  *
@@ -57,6 +59,7 @@ function mockMwConfigGet( config = {} ) {
 			wgUserLanguage: 'en',
 			wgUserName: 'ExampleUser',
 			wgCanonicalSpecialPageName: false,
+			crVoteData: null,
 			intakeFocusAreas: {},
 			intakeId: null,
 			intakeTitleMaxChars: 255,

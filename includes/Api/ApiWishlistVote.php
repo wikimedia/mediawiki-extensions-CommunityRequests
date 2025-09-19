@@ -3,10 +3,10 @@ declare( strict_types = 1 );
 
 namespace MediaWiki\Extension\CommunityRequests\Api;
 
-use MediaWiki\Api\ApiBase;
 use MediaWiki\Api\ApiMain;
 use MediaWiki\Extension\CommunityRequests\AbstractWishlistEntity;
 use MediaWiki\Extension\CommunityRequests\FocusArea\FocusAreaStore;
+use MediaWiki\Extension\CommunityRequests\HookHandler\CommunityRequestsHooks;
 use MediaWiki\Extension\CommunityRequests\Vote\Vote;
 use MediaWiki\Extension\CommunityRequests\Vote\VoteStore;
 use MediaWiki\Extension\CommunityRequests\Wish\WishStore;
@@ -64,12 +64,16 @@ class ApiWishlistVote extends ApiWishlistEditBase {
 			$newVote = new Vote( $entity, $this->getUser(), $this->params[Vote::PARAM_COMMENT] ?? '' );
 			// Validate we can parse the wikitext back to the same vote.
 			$this->doParserValidation( $newVote, $entity );
-			$wikitext = $this->store->getWikitextWithVoteAdded( $newVote );
+			[ $wikitext, $baseRevId ] = $this->store->getWikitextWithVoteAdded( $newVote );
 			$summary = $existingVote ? 'update' : 'add';
+			$sessionValue = $existingVote ?
+				CommunityRequestsHooks::SESSION_VALUE_VOTE_UPDATED :
+				CommunityRequestsHooks::SESSION_VALUE_VOTE_ADDED;
 		} else {
 			// Remove vote
-			$wikitext = $this->store->getWikitextWithVoteRemoved( $entity, $this->getUser() );
+			[ $wikitext, $baseRevId ] = $this->store->getWikitextWithVoteRemoved( $entity, $this->getUser() );
 			$summary = 'remove';
+			$sessionValue = CommunityRequestsHooks::SESSION_VALUE_VOTE_REMOVED;
 		}
 
 		// Messages used here include:
@@ -86,7 +90,7 @@ class ApiWishlistVote extends ApiWishlistEditBase {
 			$wikitext,
 			$summary,
 			$this->params['token'],
-			$this->params[Vote::PARAM_BASE_REV_ID] ?? null,
+			$baseRevId
 		);
 
 		if ( $saveStatus->isOK() === false ) {
@@ -103,7 +107,11 @@ class ApiWishlistVote extends ApiWishlistEditBase {
 		}
 		$this->getResult()->addValue( null, $this->getModuleName(), $resultData );
 
-		// Purge the cache of the entity page and applicable translation subpage.
+		// Set session variable so the edit is tagged in CommunityRequestsHooks::onRecentChange_save(),
+		// and a post-edit notice is shown by the ext.communityrequests.voting module.
+		$this->getRequest()->getSession()->set( CommunityRequestsHooks::SESSION_KEY, $sessionValue );
+
+		// Purge the cache of the entity page so the vote count updates.
 		$this->wikiPageFactory->newFromTitle( $entityTitle )->doPurge();
 	}
 
@@ -133,10 +141,6 @@ class ApiWishlistVote extends ApiWishlistEditBase {
 			Vote::PARAM_ACTION => [
 				ParamValidator::PARAM_TYPE => [ 'add', 'remove' ],
 				ParamValidator::PARAM_DEFAULT => 'add',
-			],
-			Vote::PARAM_BASE_REV_ID => [
-				ParamValidator::PARAM_TYPE => 'integer',
-				ApiBase::PARAM_HELP_MSG => 'apihelp-edit-param-baserevid',
 			],
 		];
 	}

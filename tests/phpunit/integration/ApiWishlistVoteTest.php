@@ -3,6 +3,7 @@ declare( strict_types = 1 );
 
 namespace MediaWiki\Extension\CommunityRequests\Tests\Integration;
 
+use MediaWiki\Extension\CommunityRequests\HookHandler\CommunityRequestsHooks;
 use MediaWiki\Extension\CommunityRequests\Vote\VoteStore;
 use MediaWiki\Extension\CommunityRequests\Wish\WishStore;
 use MediaWiki\Tests\Api\ApiTestCase;
@@ -113,5 +114,19 @@ class ApiWishlistVoteTest extends ApiTestCase {
 			'comment' => 'My comment',
 			'voteaction' => 'add',
 		], null, $this->mockAnonNullAuthority() );
+	}
+
+	public function testTagEdits(): void {
+		$this->insertTestWish( $this->config->getWishPagePrefix() . '123', 'en' );
+		[ ,, $sessionData ] = $this->doApiRequestWithToken( [
+			'action' => 'wishlistvote',
+			'entity' => 'W123',
+			'comment' => 'My comment',
+			'voteaction' => 'add',
+		] );
+		$this->assertSame(
+			CommunityRequestsHooks::SESSION_VALUE_VOTE_ADDED,
+			$sessionData[CommunityRequestsHooks::SESSION_KEY] ?? null
+		);
 	}
 }

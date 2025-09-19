@@ -17,6 +17,8 @@ use MediaWiki\Extension\CommunityRequests\AbstractWishlistStore;
 use MediaWiki\Extension\CommunityRequests\EntityFactory;
 use MediaWiki\Extension\CommunityRequests\FocusArea\FocusAreaStore;
 use MediaWiki\Extension\CommunityRequests\RendererFactory;
+use MediaWiki\Extension\CommunityRequests\Vote\Vote;
+use MediaWiki\Extension\CommunityRequests\Vote\VoteStore;
 use MediaWiki\Extension\CommunityRequests\Wish\WishStore;
 use MediaWiki\Extension\CommunityRequests\WishlistConfig;
 use MediaWiki\Extension\Translate\MessageLoading\MessageHandle;
@@ -35,6 +37,7 @@ use MediaWiki\Output\Hook\BeforePageDisplayHook;
 use MediaWiki\Page\Article;
 use MediaWiki\Page\Hook\BeforeDisplayNoArticleTextHook;
 use MediaWiki\Page\PageIdentity;
+use MediaWiki\Page\PageReference;
 use MediaWiki\Page\ProperPageIdentity;
 use MediaWiki\Page\WikiPageFactory;
 use MediaWiki\Parser\Parser;
@@ -55,6 +58,7 @@ use MediaWiki\User\Options\UserOptionsManager;
 use MediaWiki\User\User;
 use MessageSpecifier;
 use Psr\Log\LoggerInterface;
+use Wikimedia\Rdbms\IDBAccessObject;
 
 class CommunityRequestsHooks implements
 	BeforePageDisplayHook,
@@ -74,8 +78,13 @@ class CommunityRequestsHooks implements
 
 	public const WISHLIST_CHANGE_TAG = 'community-wishlist';
 	public const PREF_MACHINETRANSLATION = 'usemachinetranslation';
-	public const SESSION_KEY = 'communityrequests-intake';
+	public const SESSION_KEY = 'communityrequests';
 	protected const EXT_DATA_KEY = AbstractRenderer::EXT_DATA_KEY;
+	public const SESSION_VALUE_ENTITY_CREATED = 'entity-created';
+	public const SESSION_VALUE_ENTITY_UPDATED = 'entity-updated';
+	public const SESSION_VALUE_VOTE_ADDED = 'vote-added';
+	public const SESSION_VALUE_VOTE_UPDATED = 'vote-updated';
+	public const SESSION_VALUE_VOTE_REMOVED = 'vote-removed';
 	protected bool $translateInstalled;
 	protected bool $pageLanguageUseDB;
 	private RendererFactory $rendererFactory;
@@ -93,6 +102,7 @@ class CommunityRequestsHooks implements
 		protected readonly WishlistConfig $config,
 		WishStore $wishStore,
 		FocusAreaStore $focusAreaStore,
+		private readonly VoteStore $voteStore,
 		private readonly EntityFactory $entityFactory,
 		LinkRenderer $linkRenderer,
 		private readonly PermissionManager $permissionManager,
@@ -282,15 +292,14 @@ class CommunityRequestsHooks implements
 		}
 
 		// Post-edit success message.
-		// TODO: Possibly replace with the leaner mediawiki.codex.messagebox.styles module.
-		//   Though this would mean the message can't be dismissable.
 		if ( $this->config->isWishOrFocusAreaPage( $out->getTitle() ) &&
 			$out->getRequest()->getSession()->get( self::SESSION_KEY )
 		) {
 			$postEditVal = $out->getRequest()->getSession()->get( self::SESSION_KEY );
 			$out->getRequest()->getSession()->remove( self::SESSION_KEY );
-			$out->addJsConfigVars( 'intakePostEdit', $postEditVal );
-			$out->addModules( 'ext.communityrequests.intake' );
+			$out->addJsConfigVars( 'crPostEdit', $postEditVal );
+			// The post-edit message is shown in the voting module.
+			$out->addModules( 'ext.communityrequests.voting' );
 		}
 
 		// Voting module.
@@ -299,6 +308,31 @@ class CommunityRequestsHooks implements
 			( $this->config->isFocusAreaVotingEnabled() && $this->config->isFocusAreaPage( $out->getTitle() ) )
 		) {
 			$out->addModules( 'ext.communityrequests.voting' );
+
+			// If the user is logged in, determine if they have already voted on this entity.
+			if ( $out->getUser()->isRegistered() ) {
+				$entityStore = $this->getStoreForTitle( $out->getTitle() );
+				$entity = $entityStore->get( $this->getCanonicalEntityPage( $out->getTitle() ) );
+				if ( !$entity ) {
+					// This should not happen, but bail out gracefully if it does.
+					$this->logger->error(
+						__METHOD__ . ': Could not load entity for page {0}',
+						[ $out->getTitle()->toPageIdentity()->__toString() ]
+					);
+					return;
+				}
+				$votesSubpageRef = $this->config->getVotesPageRefForEntity( $entity->getPage() );
+				'@phan-var PageReference $votesSubpageRef';
+				$votesSubpage = Title::newFromPageReference( $votesSubpageRef );
+				$userVoteData = $this->voteStore->getForUser( $entity, $out->getUser() )
+					?->toArray( $this->config )
+					?? [ Vote::PARAM_ENTITY => $this->config->getEntityWikitextVal( $entity->getPage() ) ];
+				$userVoteData[Vote::PARAM_BASE_REV_ID] = $votesSubpage->getLatestRevID( IDBAccessObject::READ_LATEST );
+				// Not used by the Vue app. Remove to avoid runtime warnings about extraneous props.
+				unset( $userVoteData[Vote::PARAM_TIMESTAMP] );
+				unset( $userVoteData[Vote::PARAM_BASE_REV_ID] );
+				$out->addJsConfigVars( 'crVoteData', $userVoteData );
+			}
 		}
 
 		// Machine translation module.

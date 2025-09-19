@@ -74,14 +74,14 @@ class VoteStoreTest extends MediaWikiIntegrationTestCase {
 	public function testGetWikitextWithVoteAdded(): void {
 		$wish = $this->insertTestWishWithVotes();
 		$newVote1 = new Vote( $wish, User::createNew( 'UserD' ), 'Another vote!', '2025-04-04T12:00:00Z' );
-		$wikitext = $this->voteStore->getWikitextWithVoteAdded( $newVote1 );
+		[ $wikitext ] = $this->voteStore->getWikitextWithVoteAdded( $newVote1 );
 		$this->assertStringContainsString(
 			'{{#CommunityRequests:vote|username=UserD|comment=Another vote!|timestamp=2025-04-04T12:00:00Z}}',
 			$wikitext
 		);
 		// Adding a vote for a user who already voted should replace their old vote.
 		$newVote2 = new Vote( $wish, $this->userObjs[2], 'Modifying my vote', '2025-05-05T12:00:00Z' );
-		$wikitext = $this->voteStore->getWikitextWithVoteAdded( $newVote2 );
+		[ $wikitext ] = $this->voteStore->getWikitextWithVoteAdded( $newVote2 );
 		$this->assertStringContainsString(
 			'{{#CommunityRequests:vote|username=UserC|comment=Modifying my vote|timestamp=2025-05-05T12:00:00Z}}',
 			$wikitext
@@ -90,7 +90,7 @@ class VoteStoreTest extends MediaWikiIntegrationTestCase {
 
 	public function testGetWikitextWithVoteRemoved(): void {
 		$wish = $this->insertTestWishWithVotes();
-		$wikitext = $this->voteStore->getWikitextWithVoteRemoved( $wish, $this->userObjs[1] );
+		[ $wikitext ] = $this->voteStore->getWikitextWithVoteRemoved( $wish, $this->userObjs[1] );
 		$this->assertSame(
 			"{{#CommunityRequests:vote|username=UserA|comment=First vote!|timestamp=2025-01-01T12:00:00Z}}\n" .
 				'{{#CommunityRequests:vote|username=UserC|comment=|timestamp=2025-03-03T12:00:00Z}}',

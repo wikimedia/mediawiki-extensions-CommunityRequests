@@ -240,8 +240,8 @@ abstract class AbstractRenderer implements MessageLocalizer {
 			// Container for the voting button added by JavaScript.
 			$out .= Html::element( 'div', [ 'class' => 'ext-communityrequests-voting' ] );
 			// Noscript fallback message.
-			$out .= Html::rawElement( 'p', [],
-				Html::element( 'noscript', [],
+			$out .= Html::rawElement( 'noscript', [],
+				Html::element( 'p', [ 'class' => 'error' ],
 					$this->msg( 'communityrequests-voting-no-js' )->text()
 				)
 			);
@@ -259,9 +259,16 @@ abstract class AbstractRenderer implements MessageLocalizer {
 				. $this->config->getVotesPageSuffix();
 			$voteSubpageTitle = Title::newFromText( $voteSubpagePath );
 			if ( $voteSubpageTitle->exists() ) {
-				$out .= $this->parser->recursiveTagParse( '{{:' . $voteSubpagePath . '}}' );
+				$voteSubpageContent = $this->parser->recursiveTagParse( '{{:' . $voteSubpagePath . '}}' );
+				if ( $voteSubpageContent ) {
+					$out .= Html::element(
+						'div',
+						[ 'class' => 'mw-heading mw-heading3' ],
+						$this->msg( 'communityrequests-wish-voters-heading' )->text()
+					);
+				}
+				$out .= $voteSubpageContent;
 				// Add template dependency to ensure the votes subpage is kept up to date.
-				// FIXME: this doesn't appear to create a row in templatelinks?
 				$this->parser->getOutput()->addTemplate(
 					$voteSubpageTitle,
 					$voteSubpageTitle->getId(),

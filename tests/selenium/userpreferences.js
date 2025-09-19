@@ -4,7 +4,7 @@ import * as Util from 'wdio-mediawiki/Util';
 class UserPreferences {
 	async setPreferences( preferences ) {
 		await BlankPage.open();
-		Util.waitForModuleState( 'mediawiki.base' );
+		await Util.waitForModuleState( 'mediawiki.base' );
 		return await browser.execute( ( prefs ) => mw.loader.using( 'mediawiki.api' ).then(
 			() => new mw.Api().saveOptions( prefs )
 		), preferences );

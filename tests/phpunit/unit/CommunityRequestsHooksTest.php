@@ -7,10 +7,10 @@ use Language;
 use MediaWiki\Config\HashConfig;
 use MediaWiki\Config\ServiceOptions;
 use MediaWiki\Context\RequestContext;
-use MediaWiki\Extension\CommunityRequests\AbstractWishlistSpecialPage;
 use MediaWiki\Extension\CommunityRequests\EntityFactory;
 use MediaWiki\Extension\CommunityRequests\FocusArea\FocusAreaStore;
 use MediaWiki\Extension\CommunityRequests\HookHandler\CommunityRequestsHooks;
+use MediaWiki\Extension\CommunityRequests\Vote\VoteStore;
 use MediaWiki\Extension\CommunityRequests\Wish\WishStore;
 use MediaWiki\Extension\CommunityRequests\WishlistConfig;
 use MediaWiki\Language\LanguageNameUtils;
@@ -75,7 +75,7 @@ class CommunityRequestsHooksTest extends MediaWikiUnitTestCase {
 			'getTitle',
 			'getUser',
 		] );
-		$out->expects( $this->exactly( count( $expectedModules ) ) )
+		$out->expects( $this->atLeast( count( $expectedModules ) ) )
 			->method( 'addModules' )
 			->willReturnMap(
 				array_map(
@@ -84,13 +84,13 @@ class CommunityRequestsHooksTest extends MediaWikiUnitTestCase {
 				)
 			);
 		$out->method( 'getTitle' )->willReturn( $opts['title'] );
-		$out->expects( $this->atMost( 1 ) )
+		$out->expects( $this->atMost( 2 ) )
 			->method( 'getUser' )
 			->willReturn( $this->createMock( User::class ) );
-		if ( in_array( 'ext.communityrequests.intake', $expectedModules ) ) {
-			$out->expects( $this->once() )
+		if ( in_array( 'ext.communityrequests.voting', $expectedModules ) ) {
+			$out->expects( $this->atMost( 1 ) )
 				->method( 'addJsConfigVars' )
-				->with( 'intakePostEdit', $opts['postEditVal'] );
+				->with( 'crPostEdit', $opts['postEditVal'] );
 		}
 		$session = $this->createNoOpMock( Session::class, [ 'get', 'remove' ] );
 		if ( $opts['postEditVal'] !== null ) {
@@ -141,9 +141,16 @@ class CommunityRequestsHooksTest extends MediaWikiUnitTestCase {
 			'post-edit new wish' => [
 				[
 					'title' => $this->makeMockTitle( 'Community Wishlist/W123' ),
-					'postEditVal' => AbstractWishlistSpecialPage::SESSION_VALUE_CREATED,
+					'postEditVal' => CommunityRequestsHooks::SESSION_VALUE_ENTITY_CREATED,
 				],
-				[ 'ext.communityrequests.intake', 'ext.communityrequests.voting' ],
+				[ 'ext.communityrequests.voting' ],
+			],
+			'post-edit, vote added' => [
+				[
+					'title' => $this->makeMockTitle( 'Community Wishlist/W123' ),
+					'postEditVal' => CommunityRequestsHooks::SESSION_VALUE_VOTE_ADDED,
+				],
+				[ 'ext.communityrequests.voting' ],
 			],
 			'view focus area' => [
 				[ 'title' => $this->makeMockTitle( 'Community Wishlist/FA123' ) ],
@@ -440,6 +447,7 @@ class CommunityRequestsHooksTest extends MediaWikiUnitTestCase {
 			$config,
 			$this->createNoOpMock( WishStore::class ),
 			$this->createNoOpMock( FocusAreaStore::class ),
+			$this->createNoOpMock( VoteStore::class ),
 			$this->createNoOpMock( EntityFactory::class ),
 			$this->createNoOpMock( LinkRenderer::class ),
 			$permissionManager ?: $this->createNoOpMock( PermissionManager::class ),

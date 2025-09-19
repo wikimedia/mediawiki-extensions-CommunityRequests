@@ -76,6 +76,7 @@
 				"CommunityRequests.WishlistConfig",
 				"CommunityRequests.WishStore",
 				"CommunityRequests.FocusAreaStore",
+				"CommunityRequests.VoteStore",
 				"CommunityRequests.EntityFactory",
 				"LinkRenderer",
 				"PermissionManager",
@@ -231,7 +232,6 @@
 						"CommunityRequestsHomepage",
 						"CommunityRequestsWishCategory",
 						"CommunityRequestsWishPagePrefix",
-						"CommunityRequestsWishIndexPage",
 						"CommunityRequestsFocusAreaPagePrefix",
 						"CommunityRequestsTags",
 						"CommunityRequestsStatuses",
@@ -286,14 +286,8 @@
 				"communityrequests-audience-error",
 				"communityrequests-status",
 				"communityrequests-close",
-				"communityrequests-create-success",
-				"communityrequests-edit-success",
-				"communityrequests-focus-area-create-success",
-				"communityrequests-focus-area-edit-success",
-				"communityrequests-view-all-wishes",
 				"communityrequests-intake-focus-area",
 				"communityrequests-focus-area-unassigned",
-				"communityrequests-view-all-focus-areas",
 				"communityrequests-intake-focus-area"
 			],
 			"factory": "\\MediaWiki\\Extension\\CommunityRequests\\Wish\\SpecialWishlistIntake::addResourceLoaderMessages"
@@ -335,28 +329,20 @@
 				"CdxButton",
 				"CdxDialog",
 				"CdxField",
-				"CdxIcon",
-				"CdxTextArea",
-				"CdxMessage"
+				"CdxTextArea"
 			],
 			"packageFiles": [
 				"voting/init.js",
 				"common/Util.js",
 				"voting/AuthButton.vue",
-				"voting/Button.vue",
+				"voting/VotingButton.vue",
 				{
 					"name": "common/config.json",
 					"config": [
+						"CommunityRequestsFocusAreaIndexPage",
 						"CommunityRequestsTags",
-						"CommunityRequestsWishPagePrefix",
-						"CommunityRequestsVotesPageSuffix"
-					]
-				},
-				{
-					"name": "voting/icons.json",
-					"callback": "MediaWiki\\ResourceLoader\\CodexModule::getIcons",
-					"callbackParam": [
-						"cdxIconCheck"
+						"CommunityRequestsWishIndexPage",
+						"CommunityRequestsWishPagePrefix"
 					]
 				}
 			],
@@ -368,17 +354,31 @@
 			],
 			"messages": [
 				"cancel",
+				"communityrequests-edit-support",
+				"communityrequests-focus-area-already-supported",
+				"communityrequests-focus-area-create-success",
+				"communityrequests-focus-area-edit-success",
 				"communityrequests-focus-area-voting-not-logged-in",
 				"communityrequests-optional-comment",
+				"communityrequests-remove-support",
+				"communityrequests-remove-support-no",
+				"communityrequests-remove-support-prompt",
+				"communityrequests-remove-support-yes",
 				"communityrequests-support",
 				"communityrequests-support-dialog-title",
 				"communityrequests-support-error",
 				"communityrequests-support-focus-area",
 				"communityrequests-support-focus-area-confirmed",
+				"communityrequests-support-removed",
+				"communityrequests-support-updated",
 				"communityrequests-support-wish",
 				"communityrequests-support-wish-confirmed",
-				"communityrequests-wish-voting-not-logged-in",
-				"communityrequests-supported"
+				"communityrequests-view-all-focus-areas",
+				"communityrequests-view-all-wishes",
+				"communityrequests-wish-already-supported",
+				"communityrequests-wish-create-success",
+				"communityrequests-wish-edit-success",
+				"communityrequests-wish-voting-not-logged-in"
 			]
 		},
 		"ext.communityrequests.wish-index": {

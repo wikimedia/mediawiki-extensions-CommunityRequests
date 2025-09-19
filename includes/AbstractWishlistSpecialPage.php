@@ -23,9 +23,6 @@ use Psr\Log\LoggerInterface;
 
 abstract class AbstractWishlistSpecialPage extends FormSpecialPage {
 
-	public const SESSION_VALUE_CREATED = 'created';
-	public const SESSION_VALUE_UPDATED = 'updated';
-
 	protected Title $pageTitle;
 	protected ?int $entityId = null;
 
@@ -238,7 +235,9 @@ abstract class AbstractWishlistSpecialPage extends FormSpecialPage {
 		// Set session variables to show post-edit messages.
 		$this->getRequest()->getSession()->set(
 			CommunityRequestsHooks::SESSION_KEY,
-			$this->entityId === null ? self::SESSION_VALUE_CREATED : self::SESSION_VALUE_UPDATED
+			$this->entityId === null ?
+				CommunityRequestsHooks::SESSION_VALUE_ENTITY_CREATED :
+				CommunityRequestsHooks::SESSION_VALUE_ENTITY_UPDATED
 		);
 		// Redirect to entity page.
 		$this->getOutput()->redirect( $this->pageTitle->getFullURL() );

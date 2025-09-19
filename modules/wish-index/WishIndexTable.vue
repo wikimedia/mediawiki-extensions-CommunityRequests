@@ -17,13 +17,20 @@
 	>
 		<template #item-title="{ item, row }">
 			<a
-				class="ext-communityrequests-wishes--title-link"
 				:href="mw.Title.makeTitle( row.crwns, row.crwtitle ).getUrl()"
 				:lang="getLangAttr( row )"
 			>
-				{{ item }}
+				<span v-if="focusareas.length === 1">
+					{{ item }}
+				</span>
+				<span v-else class="ext-communityrequests-wishes--title-link">
+					{{ item }}
+				</span>
 			</a>
-			<div class="ext-communityrequests-wishes--focusarea-text">
+			<div
+				v-if="focusareas.length !== 1"
+				class="ext-communityrequests-wishes--focusarea-text"
+			>
 				<!-- eslint-disable-next-line vue/no-v-html -->
 				<span v-html="wishIsInFocusAreaHTML( row )"></span>
 			</div>
@@ -84,47 +91,6 @@ const api = new mw.Api();
  * @see https://doc.wikimedia.org/codex/latest/components/types-and-constants.html#tablepaginationsizeoption
  */
 
-/**
- * Table columns configuration.
- *
- * @type {Object<TableColumn>}
- */
-const columnsConfig = {
-	status: {
-		id: 'status',
-		label: mw.msg( 'communityrequests-wishes-status-header' )
-	},
-	type: {
-		id: 'type',
-		label: mw.msg( 'communityrequests-wishes-type-header' )
-	},
-	title: {
-		id: 'title',
-		label: mw.msg( 'communityrequests-wishes-title-and-focusarea-header' ),
-		allowSort: true
-	},
-	tags: {
-		id: 'tags',
-		label: mw.msg( 'communityrequests-wishes-tags-header' ),
-		allowSort: false
-	},
-	votecount: {
-		id: 'votecount',
-		label: mw.msg( 'communityrequests-wishes-votecount-header' ),
-		allowSort: true
-	},
-	created: {
-		id: 'created',
-		label: mw.msg( 'communityrequests-wishes-created-header' ),
-		allowSort: true
-	},
-	updated: {
-		id: 'updated',
-		label: mw.msg( 'communityrequests-wishes-updated-header' ),
-		allowSort: true
-	}
-};
-
 module.exports = exports = defineComponent( {
 	name: 'WishIndexTable',
 	components: {
@@ -142,6 +108,48 @@ module.exports = exports = defineComponent( {
 		focusareas: { type: Array, default: () => [] }
 	},
 	setup( props ) {
+		/**
+		 * Table columns configuration.
+		 *
+		 * @type {Object<TableColumn>}
+		 */
+		const columnsConfig = {
+			status: {
+				id: 'status',
+				label: mw.msg( 'communityrequests-wishes-status-header' )
+			},
+			type: {
+				id: 'type',
+				label: mw.msg( 'communityrequests-wishes-type-header' )
+			},
+			title: {
+				id: 'title',
+				label: props.focusareas.length === 1 ?
+					mw.msg( 'communityrequests-wishes-title-header' ) :
+					mw.msg( 'communityrequests-wishes-title-and-focusarea-header' ),
+				allowSort: true
+			},
+			tags: {
+				id: 'tags',
+				label: mw.msg( 'communityrequests-wishes-tags-header' )
+			},
+			votecount: {
+				id: 'votecount',
+				label: mw.msg( 'communityrequests-wishes-votecount-header' ),
+				allowSort: true
+			},
+			created: {
+				id: 'created',
+				label: mw.msg( 'communityrequests-wishes-created-header' ),
+				allowSort: true
+			},
+			updated: {
+				id: 'updated',
+				label: mw.msg( 'communityrequests-wishes-updated-header' ),
+				allowSort: true
+			}
+		};
+
 		// Reactive properties
 
 		/**
@@ -356,7 +364,9 @@ module.exports = exports = defineComponent( {
 				focusAreaLabel.href = mw.Title.makeTitle( row.crfans, row.crfatitle ).getUrl();
 				focusAreaLabel.textContent = row.focusareatitle;
 			} else {
-				focusAreaLabel = mw.message( 'communityrequests-focus-area-unassigned' ).escaped();
+				focusAreaLabel = document.createElement( 'span' );
+				focusAreaLabel.className = 'ext-communityrequests-wishes--focusarea-unassigned';
+				focusAreaLabel.textContent = mw.message( 'communityrequests-focus-area-unassigned' ).escaped();
 			}
 			return mw.message( 'communityrequests-wishes-in-focusarea-text', focusAreaLabel ).parse();
 		}
@@ -453,7 +463,17 @@ module.exports = exports = defineComponent( {
 	white-space: nowrap;
 }
 
-.ext-communityrequests-wishes--title-link {
-	font-weight: @font-weight-bold;
+.ext-communityrequests-wishes {
+	&--title-link {
+		font-weight: @font-weight-bold;
+	}
+
+	&--focusarea-text {
+		color: @color-subtle;
+	}
+
+	&--focusarea-unassigned {
+		color: @color-icon-notice;
+	}
 }
 </style>

@@ -207,7 +207,12 @@ class MigrateFromGadget extends Maintenance {
 				$this->getOption( 'focus-area-prefix', 'Community_Wishlist/Focus_areas/' )
 			);
 			$newAreaPrefix = $this->focusAreaStore->getPagePrefix();
-			$focusAreas = $this->getPagesWithPrefix( $oldAreaPrefix, $newAreaPrefix );
+			$focusAreas = array_filter(
+				$this->getPagesWithPrefix( $oldAreaPrefix, $newAreaPrefix ), function ( $title ) {
+					// Exclude /Votes subpages as they'll be handled when each parent page is done.
+					return !str_ends_with( $title, $this->wishConfig->getVotesPageSuffix() );
+				}
+			);
 		}
 		if ( $this->hasOption( 'focus-area' ) ) {
 			$focusAreas[] = $this->normalizeTitleInput( $this->getOption( 'focus-area' ) );
@@ -289,11 +294,29 @@ class MigrateFromGadget extends Maintenance {
 	}
 
 	/**
+	 * Migrate a focus area's `/Votes` subpage in its new location (the old page will have already
+	 * been moved along with its parent).
+	 *
+	 * @param Title $newTitle The focus area's new title.
+	 */
+	private function migrateVotesSubpage( Title $newTitle ): void {
+		$votesDestTitle = Title::newFromText( $newTitle->getDBkey() . $this->wishConfig->getVotesPageSuffix() );
+		if ( !$votesDestTitle->exists() ) {
+			return;
+		}
+		$votesReplacement = [
+			'~{{Community Wishlist/Support~',
+			'{{#CommunityRequests: vote',
+		];
+		$this->doConversionEdit( [ 'func' => $votesReplacement ], $votesDestTitle );
+	}
+
+	/**
 	 * Find pages in the main namespace matching the given prefix, but not
 	 * matching another prefix
 	 *
 	 * @param string $prefix The prefix in DB key form
-	 * @param string $excludePrefix
+	 * @param string $excludePrefix The prefix to exclude, in config form (i.e. with spaces)
 	 * @return string[]
 	 */
 	private function getPagesWithPrefix( string $prefix, string $excludePrefix ) {
@@ -316,7 +339,7 @@ class MigrateFromGadget extends Maintenance {
 					'page_title',
 					IExpression::NOT_LIKE,
 					new LikeValue(
-						$excludePrefix,
+						str_replace( ' ', '_', $excludePrefix ),
 						$dbr->anyString()
 					)
 				),
@@ -382,6 +405,7 @@ class MigrateFromGadget extends Maintenance {
 			}
 		}
 		$this->doConversionEdit( $replacements, $editTitle );
+		$this->migrateVotesSubpage( $editTitle );
 	}
 
 	/**
@@ -491,6 +515,7 @@ class MigrateFromGadget extends Maintenance {
 		}
 
 		$this->doConversionEdit( $replacements, $editTitle );
+		$this->migrateVotesSubpage( $editTitle );
 	}
 
 	/**

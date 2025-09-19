@@ -44,7 +44,7 @@ title=Community_Wishlist/Wishes/W1
 <p>This is a <a href="/wiki/Test" title="Test">test</a> This is a test template for parser tests.
 </p>
 </div><div class="mw-heading mw-heading3">Assigned focus area</div><div class="ext-communityrequests-wish--focus-area">
-<p>Focus area: Unassigned
+<p>Unassigned
 </p>
 </div><div class="mw-heading mw-heading3">Type of wish</div><div class="ext-communityrequests-wish--wish-type">System change</div><div class="mw-heading mw-heading3">Tags</div><div class="ext-communityrequests-wish--tags">Multimedia and Commons, Wikisource</div><div class="mw-heading mw-heading3">Affected users</div><div class="ext-communityrequests-wish--audience">
 <p><a href="/wiki/Test" title="Test">Test</a> audience
@@ -76,7 +76,7 @@ title=Community_Wishlist/Wishes/W2
 <p>This is a wish without voting.
 </p>
 </div><div class="mw-heading mw-heading3">Assigned focus area</div><div class="ext-communityrequests-wish--focus-area">
-<p>Focus area: Unassigned
+<p>Unassigned
 </p>
 </div><div class="mw-heading mw-heading3">Type of wish</div><div class="ext-communityrequests-wish--wish-type">System change</div><div class="mw-heading mw-heading3">Tags</div><div class="ext-communityrequests-wish--tags">Multimedia and Commons, Wikisource</div><div class="mw-heading mw-heading3">Affected users</div><div class="ext-communityrequests-wish--audience">
 <p>Example audience
@@ -108,7 +108,7 @@ title=Community_Wishlist/Wishes/W2
 <p>This is a wish without voting.
 </p>
 </div><div class="mw-heading mw-heading3">Assigned focus area</div><div class="ext-communityrequests-wish--focus-area">
-<p>Focus area: Unassigned
+<p>Unassigned
 </p>
 </div><div class="mw-heading mw-heading3">Type of wish</div><div class="ext-communityrequests-wish--wish-type">System change</div><div class="mw-heading mw-heading3">Tags</div><div class="ext-communityrequests-wish--tags">Multimedia and Commons, Wikisource</div><div class="mw-heading mw-heading3">Affected users</div><div class="ext-communityrequests-wish--audience">
 <p>Example audience

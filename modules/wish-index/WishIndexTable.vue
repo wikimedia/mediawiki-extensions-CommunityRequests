@@ -25,8 +25,7 @@
 			</a>
 			<div class="ext-communityrequests-wishes--focusarea-text">
 				<!-- eslint-disable-next-line vue/no-v-html -->
-				<span v-if="row.crfatitle" v-html="wishIsInFocusAreaHTML( row )"></span>
-				<span v-else>{{ $i18n( 'communityrequests-focus-area-unassigned' ).text() }}</span>
+				<span v-html="wishIsInFocusAreaHTML( row )"></span>
 			</div>
 		</template>
 		<template #item-tags="{ item, row }">
@@ -102,11 +101,6 @@ const columnsConfig = {
 	title: {
 		id: 'title',
 		label: mw.msg( 'communityrequests-wishes-title-and-focusarea-header' ),
-		allowSort: true
-	},
-	projects: {
-		id: 'projects',
-		label: mw.msg( 'communityrequests-wishes-projects-header' ),
 		allowSort: true
 	},
 	tags: {
@@ -356,10 +350,15 @@ module.exports = exports = defineComponent( {
 		 * @return {string}
 		 */
 		function wishIsInFocusAreaHTML( row ) {
-			const focusAreaLink = document.createElement( 'a' );
-			focusAreaLink.href = mw.Title.makeTitle( row.crfans, row.crfatitle ).getUrl();
-			focusAreaLink.textContent = row.focusareatitle;
-			return mw.message( 'communityrequests-wishes-in-focusarea-text', focusAreaLink ).parse();
+			let focusAreaLabel;
+			if ( row.crfatitle ) {
+				focusAreaLabel = document.createElement( 'a' );
+				focusAreaLabel.href = mw.Title.makeTitle( row.crfans, row.crfatitle ).getUrl();
+				focusAreaLabel.textContent = row.focusareatitle;
+			} else {
+				focusAreaLabel = mw.message( 'communityrequests-focus-area-unassigned' ).escaped();
+			}
+			return mw.message( 'communityrequests-wishes-in-focusarea-text', focusAreaLabel ).parse();
 		}
 
 		/**

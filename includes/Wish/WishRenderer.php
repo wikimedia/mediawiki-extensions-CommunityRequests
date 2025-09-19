@@ -109,11 +109,6 @@ class WishRenderer extends AbstractRenderer {
 		);
 
 		// Tags.
-		$tagsHeading = Html::element(
-			'div',
-			[ 'class' => 'mw-heading mw-heading3' ],
-			$this->msg( 'communityrequests-tags-heading' )->text()
-		);
 		$tagLabels = array_map( function ( $wikitextVal ) {
 			$label = $this->config->getTagLabelFromWikitextVal( $wikitextVal );
 			if ( $label === null ) {
@@ -122,8 +117,19 @@ class WishRenderer extends AbstractRenderer {
 			}
 			return $this->msg( $label )->text();
 		}, array_filter( explode( WishStore::ARRAY_DELIMITER_WIKITEXT, $this->getArg( Wish::PARAM_TAGS, '' ) ) ) );
-		// @phan-suppress-next-line SecurityCheck-DoubleEscaped
-		$tags = $this->getDiv( 'tags', $language->commaList( array_filter( $tagLabels ) ) );
+
+		$tags = '';
+		$tagsHeading = '';
+		if ( count( $tagLabels ) > 0 ) {
+			$tagsHeading = Html::element(
+				'div',
+				[ 'class' => 'mw-heading mw-heading3' ],
+				$this->msg( 'communityrequests-tags-heading' )->text()
+			);
+
+			// @phan-suppress-next-line SecurityCheck-DoubleEscaped
+			$tags = $this->getDiv( 'tags', $language->commaList( array_filter( $tagLabels ) ) );
+		}
 
 		// Audience.
 		$audienceHeading = Html::element(

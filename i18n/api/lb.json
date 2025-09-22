@@ -15,8 +15,6 @@
 	"apihelp-wishedit-param-phabtasks": "Eng Lëscht vun de Phabricator-Aufgaben-IDen (z.&nbsp;B. „T1234“).",
 	"apihelp-wishedit-param-proposer": "De Benotzer, deen de Wonsch virgeschloen huet.",
 	"apihelp-wishedit-param-created": "Den Datum an d'Auerzäit, wou de Wonsch ugeluecht gouf.",
-	"apierror-wishedit-notawish": "D'Säit, déi Dir ännere wëllt, ass kee gültege Wonsch.",
-	"apierror-focusareaedit-notafocusarea": "D'Säit, déi Dir ännere wëllt, ass kee gültege Fokusberäich.",
 	"apihelp-query+communityrequests-wishes-paramvalue-prop-status": "Status vum Wonsch",
 	"apihelp-query+communityrequests-wishes-paramvalue-prop-type": "Den Typ vum Wonsch",
 	"apihelp-query+communityrequests-wishes-paramvalue-prop-title": "Titel vum Wonsch",

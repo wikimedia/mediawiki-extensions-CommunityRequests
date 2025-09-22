@@ -3,7 +3,8 @@
 		"authors": [
 			"Amire80",
 			"Neriah",
-			"YaronSh"
+			"YaronSh",
+			"מ. רובין"
 		]
 	},
 	"communityrequests-desc": "מערכת לניהול הצעות ובקשות טכניות של קהילת ויקי.",
@@ -122,12 +123,14 @@
 	"communityrequests-voting-no-js": "מצטערים, נדרש JavaScript כדי להצביע ברשימת משאלות הקהילה.",
 	"communityrequests-wish-voters-heading": "התומכים במשאלה הזאת",
 	"communityrequests-wish-no-votes": "אין תומכים עדיין.",
-	"communityrequests-wishes-table-caption": "רשימת משאלות",
-	"communityrequests-wishes-status-header": "מצב",
-	"communityrequests-wishes-type-header": "סוג",
-	"communityrequests-wishes-title-header": "כותרת",
 	"communityrequests-wishes-focusarea-header": "תחום מיקוד",
+	"communityrequests-wishes-in-focusarea-text": "תחום מיקוד:‬ ‫$1",
+	"communityrequests-wishes-status-header": "מצב",
+	"communityrequests-wishes-table-caption": "רשימת משאלות",
 	"communityrequests-wishes-tags-header": "תגים",
+	"communityrequests-wishes-title-header": "כותרת",
+	"communityrequests-wishes-title-and-focusarea-header": "כותרת ותחום מיקוד",
+	"communityrequests-wishes-type-header": "סוג",
 	"communityrequests-wishes-votecount-header": "קולות",
 	"communityrequests-wishes-created-header": "נוצר",
 	"communityrequests-wishes-updated-header": "תאריך עדכון",

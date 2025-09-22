@@ -36,6 +36,7 @@ use MediaWiki\Page\Article;
 use MediaWiki\Page\Hook\BeforeDisplayNoArticleTextHook;
 use MediaWiki\Page\PageIdentity;
 use MediaWiki\Page\ProperPageIdentity;
+use MediaWiki\Page\WikiPageFactory;
 use MediaWiki\Parser\Parser;
 use MediaWiki\Permissions\Authority;
 use MediaWiki\Permissions\Hook\GetUserPermissionsErrorsExpensiveHook;
@@ -99,6 +100,7 @@ class CommunityRequestsHooks implements
 		private readonly UserOptionsManager $userOptionsManager,
 		private readonly LoggerInterface $logger,
 		Config $mainConfig,
+		private readonly WikiPageFactory $wikiPageFactory,
 		?ExtensionRegistry $extensionRegistry = null
 	) {
 		$extensionRegistry ??= ExtensionRegistry::getInstance();
@@ -345,6 +347,12 @@ class CommunityRequestsHooks implements
 			[ $title->toPageIdentity()->__toString(), json_encode( $data ) ]
 		);
 		$store->save( $entity );
+
+		// (T404748) Update parser cache to ensure displayed content reflects content language
+		if ( $this->translateInstalled ) {
+			$wikiPage = $this->wikiPageFactory->newFromTitle( $title );
+			$wikiPage->updateParserCache();
+		}
 	}
 
 	/**

@@ -18,6 +18,7 @@ use MediaWiki\Linker\LinkRenderer;
 use MediaWiki\MainConfigNames;
 use MediaWiki\Output\OutputPage;
 use MediaWiki\Page\Article;
+use MediaWiki\Page\WikiPageFactory;
 use MediaWiki\Permissions\PermissionManager;
 use MediaWiki\Registration\ExtensionRegistry;
 use MediaWiki\Request\WebRequest;
@@ -32,8 +33,8 @@ use MediaWiki\Tests\Unit\MockServiceDependenciesTrait;
 use MediaWiki\Tests\Unit\Permissions\MockAuthorityTrait;
 use MediaWiki\Title\TitleFormatter;
 use MediaWiki\Title\TitleParser;
+use MediaWiki\User\Options\UserOptionsManager;
 use MediaWiki\User\User;
-use MediaWiki\User\UserOptionsManager;
 use MediaWikiUnitTestCase;
 use MockTitleTrait;
 use Psr\Log\NullLogger;
@@ -446,6 +447,7 @@ class CommunityRequestsHooksTest extends MediaWikiUnitTestCase {
 			$userOptionsManager ?: $this->createNoOpMock( UserOptionsManager::class ),
 			new NullLogger(),
 			$mainConfig,
+			$this->createNoOpMock( WikiPageFactory::class ),
 			$extensionRegistry
 		);
 	}

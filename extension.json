@@ -82,7 +82,8 @@
 				"SpecialPageFactory",
 				"UserOptionsManager",
 				"CommunityRequests.Logger",
-				"MainConfig"
+				"MainConfig",
+				"WikiPageFactory"
 			]
 		},
 		"schema": {

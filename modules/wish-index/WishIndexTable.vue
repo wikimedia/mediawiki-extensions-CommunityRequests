@@ -36,11 +36,11 @@
 			</div>
 		</template>
 		<template #item-tags="{ item, row }">
-			<span v-for="( tag, index ) in item.slice( 0, showTagLimit )" :key="index">
+			<div v-for="( tag, index ) in item.slice( 0, showTagLimit )" :key="index" class="ext-communityrequests-wishes--tag">
 				<cdx-info-chip :status="wishStatusStyle( tag )">
 					{{ Util.getTagLabel( tag ) }}
 				</cdx-info-chip>
-			</span>
+			</div>
 			<a
 				v-if="item.length > showTagLimit"
 				class="ext-communityrequests-wishes--more-tags-link"
@@ -459,6 +459,15 @@ module.exports = exports = defineComponent( {
 .cdx-button.cdx-table-pager__button-last {
 	display: none;
 }
+
+.ext-communityrequests-wishes--tag {
+	display: inline-block;
+
+	.cdx-info-chip {
+		margin: 0 @spacing-25 @spacing-25 0;
+	}
+}
+
 .ext-communityrequests-wishes--more-tags-link {
 	white-space: nowrap;
 }

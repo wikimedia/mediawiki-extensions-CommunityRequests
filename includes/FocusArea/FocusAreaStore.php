@@ -8,6 +8,7 @@ use MediaWiki\DAO\WikiAwareEntity;
 use MediaWiki\Extension\CommunityRequests\AbstractWishlistEntity;
 use MediaWiki\Extension\CommunityRequests\AbstractWishlistStore;
 use MediaWiki\Extension\CommunityRequests\IdGenerator\IdGenerator;
+use MediaWiki\Extension\CommunityRequests\Wish\WishStore;
 use MediaWiki\Page\PageIdentityValue;
 use Wikimedia\Rdbms\IReadableDatabase;
 
@@ -21,10 +22,15 @@ class FocusAreaStore extends AbstractWishlistStore {
 	/**
 	 * Get wiki page IDs from focus area wikitext values.
 	 *
-	 * @param string[] $focusAreas List of 'FAn' ID values.
-	 * @return int[]
+	 * @param string[] $focusAreas List of 'FAn' ID values and optionally 'unassigned'.
+	 * @return mixed[] The page IDs, with null representing unassigned.
 	 */
 	public function getPageIdsFromWikitextValues( array $focusAreas ): array {
+		$includeUnassigned = in_array( WishStore::FOCUS_AREA_UNASSIGNED, array_map( 'strtolower', $focusAreas ) );
+		if ( $includeUnassigned && count( $focusAreas ) === 1 ) {
+			// Only unassigned, return early.
+			return [ null ];
+		}
 		// Get full page titles for all the given focus areas.
 		$focusAreaPages = [];
 		foreach ( $focusAreas as $faName ) {
@@ -36,21 +42,25 @@ class FocusAreaStore extends AbstractWishlistStore {
 				}
 			}
 		}
-		if ( count( $focusAreaPages ) === 0 ) {
-			return [];
+		$faIds = [];
+		if ( count( $focusAreaPages ) > 0 ) {
+			// Then use these to find the page IDs.
+			$prefixRef = $this->config->getFocusAreaPageRefFromWikitextVal( 'FA1' );
+			$focusAreaPageIdsQuery = $this->dbProvider->getReplicaDatabase()
+				->newSelectQueryBuilder()
+				->caller( __METHOD__ )
+				->table( 'page' )
+				->fields( 'page_id' )
+				->where( [
+					'page_namespace' => $prefixRef->getNamespace(),
+					'page_title' => $focusAreaPages
+				] );
+			$faIds = $focusAreaPageIdsQuery->fetchFieldValues();
 		}
-		// Then use these to find the page IDs.
-		$prefixRef = $this->config->getFocusAreaPageRefFromWikitextVal( 'FA1' );
-		$focusAreaPageIdsQuery = $this->dbProvider->getReplicaDatabase()
-			->newSelectQueryBuilder()
-			->caller( __METHOD__ )
-			->table( 'page' )
-			->fields( 'page_id' )
-			->where( [
-				'page_namespace' => $prefixRef->getNamespace(),
-				'page_title' => $focusAreaPages
-			] );
-		return $focusAreaPageIdsQuery->fetchFieldValues();
+		if ( $includeUnassigned ) {
+			$faIds[] = null;
+		}
+		return $faIds;
 	}
 
 	// Saving focus areas.

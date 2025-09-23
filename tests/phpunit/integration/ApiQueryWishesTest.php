@@ -332,6 +332,9 @@ class ApiQueryWishesTest extends ApiTestCase {
 			[ 'crwfocusareas' => 'FA1', 'count' => 1 ],
 			[ 'crwfocusareas' => 'FA1|FA100', 'count' => 0, 'exception' => true ],
 			[ 'crwfocusareas' => 'FA100', 'count' => 0, 'exception' => true ],
+			[ 'crwfocusareas' => 'Unassigned', 'count' => 3 ],
+			[ 'crwfocusareas' => 'invalid|unassigned', 'count' => 0, 'exception' => true ],
+			[ 'crwfocusareas' => 'FA1|unassigned', 'count' => 4 ],
 		];
 	}
 

@@ -33,7 +33,7 @@
 	"apihelp-query+communityrequests-wishes-param-lang": "The language code to filter wishes by.",
 	"apihelp-query+communityrequests-wishes-param-tags": "Limit results to wishes with at least one of the specified tags.",
 	"apihelp-query+communityrequests-wishes-param-statuses": "Limit results to only those wishes with one of these statuses.",
-	"apihelp-query+communityrequests-wishes-param-focusareas": "Limit results to only those wishes in one of these focus areas, identified by wikitext value (i.e. 'FAx' where x is an integer).",
+	"apihelp-query+communityrequests-wishes-param-focusareas": "Limit results to only those wishes in one of these focus areas, identified by wikitext value (i.e. 'FAx' where x is an integer) or the special value 'unassigned' for wishes with no focus area set.",
 	"apihelp-query+communityrequests-wishes-param-prop": "The wish properties to get.",
 	"apihelp-query+communityrequests-wishes-param-sort": "The wish property to sort by.",
 	"apihelp-query+communityrequests-wishes-param-dir": "The direction to sort by.",

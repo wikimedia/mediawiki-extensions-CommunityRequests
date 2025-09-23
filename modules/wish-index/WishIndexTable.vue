@@ -464,7 +464,7 @@ module.exports = exports = defineComponent( {
 	display: inline-block;
 
 	.cdx-info-chip {
-		margin: 0 @spacing-25 @spacing-25 0;
+		margin: 0 @spacing-50 @spacing-50 0;
 	}
 }
 

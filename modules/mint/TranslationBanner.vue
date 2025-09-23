@@ -34,7 +34,7 @@
 
 <script>
 const { ref, computed, defineComponent, onMounted } = require( 'vue' );
-const { CdxMessage, CdxProgressBar, CdxToggleSwitch } = require( '@wikimedia/codex' );
+const { CdxMessage, CdxProgressBar, CdxToggleSwitch } = require( '../codex.js' );
 const { cdxIconRobot } = require( './icons.json' );
 const storage = require( 'mediawiki.storage' ).local;
 const storageName = 'wishlist-intake-translation-enabled';

@@ -289,6 +289,12 @@
 			"factory": "\\MediaWiki\\Extension\\CommunityRequests\\Wish\\SpecialWishlistIntake::addResourceLoaderMessages"
 		},
 		"ext.communityrequests.mint": {
+			"class": "MediaWiki\\ResourceLoader\\CodexModule",
+			"codexComponents": [
+				"CdxMessage",
+				"CdxProgressBar",
+				"CdxToggleSwitch"
+			],
 			"packageFiles": [
 				"mint/init.js",
 				"mint/TranslationBanner.vue",
@@ -303,7 +309,6 @@
 			],
 			"dependencies": [
 				"vue",
-				"@wikimedia/codex",
 				"mediawiki.language.names",
 				"mediawiki.storage"
 			],
@@ -315,6 +320,15 @@
 			]
 		},
 		"ext.communityrequests.voting": {
+			"class": "MediaWiki\\ResourceLoader\\CodexModule",
+			"codexComponents": [
+				"CdxButton",
+				"CdxDialog",
+				"CdxField",
+				"CdxIcon",
+				"CdxTextArea",
+				"CdxMessage"
+			],
 			"packageFiles": [
 				"voting/init.js",
 				"common/Util.js",
@@ -338,7 +352,6 @@
 			],
 			"dependencies": [
 				"vue",
-				"@wikimedia/codex",
 				"mediawiki.language.names",
 				"mediawiki.storage",
 				"mediawiki.user"

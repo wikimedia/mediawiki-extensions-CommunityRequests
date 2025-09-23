@@ -60,7 +60,7 @@
 
 <script>
 const { defineComponent, computed, onBeforeMount, ref, ComputedRef, Ref } = require( 'vue' );
-const { CdxButton, CdxDialog, CdxField, CdxIcon, CdxTextArea, CdxMessage } = require( '@wikimedia/codex' );
+const { CdxButton, CdxDialog, CdxField, CdxIcon, CdxTextArea, CdxMessage } = require( '../codex.js' );
 const { cdxIconCheck } = require( './icons.json' );
 const Util = require( '../common/Util.js' );
 const { CommunityRequestsVotesPageSuffix } = require( '../common/config.json' );

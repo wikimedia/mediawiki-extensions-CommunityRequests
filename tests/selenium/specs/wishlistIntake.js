@@ -1,11 +1,9 @@
-'use strict';
-
-const UserPreferences = require( '../userpreferences.js' );
-const IntakePage = require( '../pageobjects/wishlistintake.page.js' );
-const ViewWishPage = require( '../pageobjects/viewwish.page.js' );
-const LoginPage = require( 'wdio-mediawiki/LoginPage.js' );
-const Api = require( 'wdio-mediawiki/Api.js' );
-const { config } = require( '../../../extension.json' );
+import UserPreferences from '../userpreferences.js';
+import IntakePage from '../pageobjects/wishlistintake.page.js';
+import ViewWishPage from '../pageobjects/viewwish.page.js';
+import LoginPage from 'wdio-mediawiki/LoginPage.js';
+import * as Api from 'wdio-mediawiki/Api.js';
+import { config } from '../../../extension.json';
 
 describe( 'WishlistIntake wish submission', () => {
 
@@ -88,7 +86,7 @@ describe( 'WishlistIntake wish submission', () => {
 			`Author: ${ browser.options.capabilities[ 'mw:user' ] } (talk)`
 		);
 
-		const bot = await Api.bot();
+		const bot = await Api.mwbot();
 		await bot.delete( pageTitle, 'Test cleanup' ).catch( ( e ) => {
 			console.error( e );
 		} );

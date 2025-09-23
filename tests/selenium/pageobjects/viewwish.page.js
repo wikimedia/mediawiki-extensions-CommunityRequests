@@ -1,6 +1,4 @@
-'use strict';
-
-const Page = require( 'wdio-mediawiki/Page.js' );
+import Page from 'wdio-mediawiki/Page.js';
 
 class ViewWishPage extends Page {
 	get successMessage() {
@@ -40,4 +38,4 @@ class ViewWishPage extends Page {
 	}
 }
 
-module.exports = new ViewWishPage();
+export default new ViewWishPage();

@@ -1,7 +1,5 @@
-'use strict';
-
-const BlankPage = require( 'wdio-mediawiki/BlankPage' ),
-	Util = require( 'wdio-mediawiki/Util' );
+import BlankPage from 'wdio-mediawiki/BlankPage';
+import * as Util from 'wdio-mediawiki/Util';
 
 class UserPreferences {
 	async setPreferences( preferences ) {
@@ -20,4 +18,4 @@ class UserPreferences {
 	}
 }
 
-module.exports = new UserPreferences();
+export default new UserPreferences();

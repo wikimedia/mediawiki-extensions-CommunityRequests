@@ -1,6 +1,4 @@
-'use strict';
-
-const Page = require( 'wdio-mediawiki/Page' );
+import Page from 'wdio-mediawiki/Page';
 
 class WishlistIntakePage extends Page {
 
@@ -61,4 +59,4 @@ class WishlistIntakePage extends Page {
 	}
 }
 
-module.exports = new WishlistIntakePage();
+export default new WishlistIntakePage();

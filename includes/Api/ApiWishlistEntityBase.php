@@ -16,6 +16,7 @@ use MediaWiki\Status\Status;
 use MediaWiki\Title\Title;
 use MediaWiki\Title\TitleParser;
 use StatusValue;
+use Throwable;
 
 /**
  * Common logic between ApiWishEdit and ApiFocusAreaEdit.
@@ -52,11 +53,19 @@ abstract class ApiWishlistEntityBase extends ApiBase {
 
 		// Confirm we can parse and then re-create the same wikitext.
 		$wikitext = $dummyEntity->toWikitext( $this->config );
-		$validateEntity = $this->getEntity(
-			$dummyEntity->getPage(),
-			(array)$this->store->getDataFromWikitextContent( $wikitext ),
-		);
-		if ( $wikitext->getText() !== $validateEntity->toWikitext( $this->config )->getText() ) {
+		$validationsPassed = false;
+		try {
+			$validateEntity = $this->getEntity(
+				$dummyEntity->getPage(),
+				(array)$this->store->getDataFromWikitextContent( $wikitext ),
+			);
+			if ( $wikitext->getText() === $validateEntity->toWikitext( $this->config )->getText() ) {
+				$validationsPassed = true;
+			}
+		} catch ( Throwable ) {
+			// Ignore and fail validations.
+		}
+		if ( !$validationsPassed ) {
 			$this->dieWithError( 'apierror-wishlist-entity-parse' );
 		}
 

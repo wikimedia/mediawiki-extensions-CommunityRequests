@@ -149,19 +149,33 @@ class ApiFocusAreaEditTest extends ApiTestCase {
 		], null, $this->getTestUser()->getUser() );
 	}
 
-	public function testExecuteParsingFailure(): void {
-		$params = [
+	/**
+	 * @dataProvider provideTestExecuteParsingFailure
+	 */
+	public function testExecuteParsingFailure( $params ): void {
+		$params = array_merge( [
 			'action' => 'focusareaedit',
 			'status' => 'under-review',
 			'title' => 'My test focus area',
 			'description' => 'This is a valid description',
-			'shortdescription' => 'This is a | test short desc with stray pipes',
+			'shortdescription' => 'This is a test short desc',
 			'owners' => "* Community Tech\n* Editing",
 			'volunteers' => "* [[User:Volunteer1]]\n* [[User:Volunteer2]]",
 			'created' => '2023-10-01T12:00:00Z',
 			'baselang' => 'en',
-		];
+		], $params );
 		$this->expectApiErrorCode( 'wishlist-entity-parse' );
 		$this->doApiRequestWithToken( $params );
+	}
+
+	public function provideTestExecuteParsingFailure(): array {
+		return [
+			'stray pipe in shortdescription' => [
+				[ 'shortdescription' => 'This is a | test short desc with stray pipes' ]
+			],
+			'stray pipe in owners' => [
+				[ 'owners' => "* [[Community Tech|Community" ]
+			],
+		];
 	}
 }

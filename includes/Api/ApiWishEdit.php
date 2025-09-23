@@ -39,7 +39,7 @@ class ApiWishEdit extends ApiWishlistEntityBase {
 	protected function getEntity( PageIdentity $identity, array $params ): Wish {
 		return Wish::newFromWikitextParams(
 			$identity,
-			$params[Wish::PARAM_BASE_LANG],
+			$params[Wish::PARAM_BASE_LANG] ?? '',
 			$this->store->normalizeArrayValues( $params, WishStore::ARRAY_DELIMITER_WIKITEXT ),
 			$this->config,
 			$this->userFactory->newFromName( $params[Wish::PARAM_PROPOSER] ),

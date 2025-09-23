@@ -28,7 +28,7 @@ class ApiFocusAreaEdit extends ApiWishlistEntityBase {
 	protected function getEntity( PageIdentity $identity, array $params ): FocusArea {
 		return FocusArea::newFromWikitextParams(
 			$identity,
-			$params[FocusArea::PARAM_BASE_LANG],
+			$params[FocusArea::PARAM_BASE_LANG] ?? '',
 			$this->store->normalizeArrayValues( $params, FocusAreaStore::ARRAY_DELIMITER_WIKITEXT ),
 			$this->config
 		);

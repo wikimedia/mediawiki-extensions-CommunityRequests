@@ -1,0 +1,49 @@
+!! options
+version=2
+!! end
+
+!! article
+Community_Wishlist/Focus_areas/FA1
+!! text
+{{#CommunityRequests: focus-area
+|title = Test focus area
+|status = in-progress
+|shortdescription = This is a short description test focus area.
+|owners = [[Community Tech]]
+|volunteers = [[User:Admin|Admin]]
+|created = 2023-10-01T12:00:00Z
+|baselang = en
+|description = This is a description [[test]] {{focus area}}.
+}}
+!! end
+
+!! article
+Community_Wishlist/Focus_areas/FA2
+!! text
+{{#CommunityRequests: focus-area
+|title = Otra area
+|status = unsupported
+|shortdescription = Descripcion corta [[ejemplo]].
+|owners = [[Community Tech]]
+|volunteers = [[User:Tester|Tester]]
+|created = 2024-10-01T12:00:00Z
+|baselang = es
+|description = Este es una [[prueba]] {{focus area}}.
+}}
+!! end
+
+!! test
+Example focus area index
+!! options
+title=Community_Wishlist/Focus_areas
+language=qqx
+!! wikitext
+{{#CommunityRequests:focus-area-index
+|lang=en
+|sort=title
+|dir=desc
+|limit=20
+}}
+!! html
+<div class="ext-communityrequests-focus-area-index"><div class="cdx-card ext-communityrequests-focus-area-card"><div class="cdx-card__text"><div><span class="cdx-info-chip ext-communityrequests-focus-area-index--status cdx-info-chip--notice"><span class="cdx-info-chip__text">(communityrequests-status-in-progress)</span></span></div><div class="cdx-card__text__title ext-communityrequests-focus-area-card__title">Test focus area</div><div class="cdx-card__text__description">This is a short description test focus area.</div><div class="cdx-card__text__supporting-text"><b>(communityrequests-focus-area-supported)</b>(word-separator)<a href="/wiki/Community_Wishlist/Focus_areas/FA1" title="Community Wishlist/Focus areas/FA1">(communityrequests-focus-area-supported-val: 0)</a></div><div class="cdx-card__text__supporting-text"><a href="/wiki/Community_Wishlist/Focus_areas/FA1" title="Community Wishlist/Focus areas/FA1">(communityrequests-focus-area-view-wishes)</a></div></div></div><div class="cdx-card ext-communityrequests-focus-area-card"><div class="cdx-card__text"><div><span class="cdx-info-chip ext-communityrequests-focus-area-index--status cdx-info-chip--notice"><span class="cdx-info-chip__text">(communityrequests-status-unsupported)</span></span></div><div class="cdx-card__text__title ext-communityrequests-focus-area-card__title">Otra area</div><div class="cdx-card__text__description">Descripcion corta <a href="/index.php?title=Ejemplo&amp;action=edit&amp;redlink=1" class="new" title="(red-link-title: Ejemplo)">ejemplo</a>.</div><div class="cdx-card__text__supporting-text"><b>(communityrequests-focus-area-supported)</b>(word-separator)<a href="/wiki/Community_Wishlist/Focus_areas/FA2" title="Community Wishlist/Focus areas/FA2">(communityrequests-focus-area-supported-val: 0)</a></div><div class="cdx-card__text__supporting-text"><a href="/wiki/Community_Wishlist/Focus_areas/FA2" title="Community Wishlist/Focus areas/FA2">(communityrequests-focus-area-view-wishes)</a></div></div></div></div>
+!! end

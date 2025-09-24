@@ -18,6 +18,7 @@
 	"apihelp-wishedit-param-created": "Le data e hora de creation del desiro.",
 	"apihelp-wishedit-param-baselang": "Le lingua de base del desiro a partir del qual se face le traductiones.",
 	"apierror-wishlist-entity-parse": "Le entitate del lista de desiros non pote esser processate. Illo pote continer wikitexto non valide. Assecura te que le wikitexto non contine characteres de tubo extranee (<code>|</code>).",
+	"apierror-querywishes-invalidfocusareas": "Le IDs de area de interesse fornite, o un parte de illos, non es valide.",
 	"apihelp-focusareaedit-summary": "Crear o actualisar un area de interesse in le Lista de desiros del communitate.",
 	"apihelp-focusareaedit-param-focusarea": "Le area de interesse a actualisar. Isto pote esser le titulo complete del pagina, un ID de areas de interesse con prefixo (p.ex. “FA123”), o le ID del area de interesse como numero integre. Lassa vacue pro crear un nove area de interesse.",
 	"apihelp-focusareaedit-param-status": "Le stato del area de interesse.",

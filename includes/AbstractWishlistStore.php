@@ -422,8 +422,6 @@ abstract class AbstractWishlistStore {
 			$select->fetchResultSet(),
 			$lang,
 			$fetchWikitext,
-			$sortDir,
-			$orderPrecedence,
 		);
 		return array_slice( $entities, 0, $limit );
 	}
@@ -459,8 +457,6 @@ abstract class AbstractWishlistStore {
 		IResultWrapper $resultWrapper,
 		?string $lang,
 		int $fetchWikitext = self::FETCH_WIKITEXT_NONE,
-		string $sort = self::SORT_DESC,
-		array $orderPrecedence = [],
 	): array {
 		if ( $resultWrapper->count() === 0 ) {
 			return [];
@@ -483,6 +479,8 @@ abstract class AbstractWishlistStore {
 
 		// Group the result set by entity page ID and language.
 		$entityDataByPage = [];
+		// Also store their original order, for later re-sorting.
+		$originalOrder = [];
 		foreach ( $resultWrapper as $entityData ) {
 			$pageId = (int)$entityData->{static::pageField()};
 			// Shouldn't happen under normal conditions, but tests may create entities without
@@ -500,6 +498,7 @@ abstract class AbstractWishlistStore {
 				$this->setWikitextFieldsForDbResult( $entityData, $fetchWikitext );
 			}
 			$entityDataByPage[$pageId][$langCode] = $entityData;
+			$originalOrder[$pageId . $langCode] = true;
 		}
 
 		$rows = [];
@@ -522,25 +521,21 @@ abstract class AbstractWishlistStore {
 			if ( !$row ) {
 				$row = $entityDataByLang[ $baseLang ] ?? $firstRow;
 			}
-			$rows[] = $row;
+			// Array key here matches what's used in $originalOrder above.
+			$rows[$row->{static::pageField()} . $row->{static::translationLangField()}] = $row;
 		}
 
 		// Re-sort $rows to match the original order of the result set.
-		if ( $orderPrecedence ) {
-			usort( $rows, static function ( $a, $b ) use ( $orderPrecedence, $sort ) {
-				$sorterArrayA = array_map( static fn ( $field ) => $a->$field, $orderPrecedence );
-				$sorterArrayB = array_map( static fn ( $field ) => $b->$field, $orderPrecedence );
-				$comparison = $sorterArrayA <=> $sorterArrayB;
-				if ( $comparison !== 0 ) {
-					return $sort === self::SORT_DESC ? -$comparison : $comparison;
-				}
-				return 0;
-			} );
+		$sortedRows = [];
+		foreach ( $originalOrder as $originalKey => $o ) {
+			if ( isset( $rows[$originalKey] ) ) {
+				$sortedRows[] = $rows[$originalKey];
+			}
 		}
 
 		return $this->getEntitiesFromDbResult(
 			$this->dbProvider->getReplicaDatabase( 'virtual-communityrequests' ),
-			$rows,
+			$sortedRows,
 			$entityDataByPage
 		);
 	}

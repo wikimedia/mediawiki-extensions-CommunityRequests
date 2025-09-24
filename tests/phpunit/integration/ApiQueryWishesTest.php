@@ -141,13 +141,17 @@ class ApiQueryWishesTest extends ApiTestCase {
 			'crwsort' => 'title',
 			'crwdir' => 'ascending',
 			'crwlang' => 'fr',
-			'crlimit' => 3,
+			'crwlimit' => 3,
 		] );
 		$this->assertCount( 3, $ret['query'][$queryKey] );
 		$this->assertSame( 'A French translation', $ret['query'][$queryKey][0]['title'] );
 		$this->assertSame( 'Test Wish A', $ret['query'][$queryKey][1]['title'] );
 		$this->assertSame( 'Test Wish C', $ret['query'][$queryKey][2]['title'] );
 
+		$this->createTestWishWithApi( [
+			'title' => 'A fine wish',
+			'created' => '2023-12-01T00:00:00Z',
+		] );
 		[ $ret ] = $this->doApiRequest( [
 			'action' => 'query',
 			'list' => 'communityrequests-wishes',
@@ -155,10 +159,54 @@ class ApiQueryWishesTest extends ApiTestCase {
 			'crwdir' => 'descending',
 			'crwlang' => 'fr',
 		] );
-		$this->assertCount( 3, $ret['query'][$queryKey] );
+		$this->assertCount( 4, $ret['query'][$queryKey] );
 		$this->assertSame( 'Test Wish C', $ret['query'][$queryKey][0]['title'] );
 		$this->assertSame( 'Test Wish A', $ret['query'][$queryKey][1]['title'] );
-		$this->assertSame( 'A French translation', $ret['query'][$queryKey][2]['title'] );
+		$this->assertSame( 'A fine wish', $ret['query'][$queryKey][2]['title'] );
+		$this->assertSame( 'A French translation', $ret['query'][$queryKey][3]['title'] );
+	}
+
+	/**
+	 * @dataProvider provideExecuteSortByTitleCaseInsensitive
+	 */
+	public function testExecuteSortByTitleCaseInsensitive( $titles, $dir, $expectedResult ): void {
+		foreach ( $titles as $title ) {
+			$this->createTestWishWithApi( [ 'title' => $title ] );
+		}
+		[ $ret ] = $this->doApiRequest( [
+			'action' => 'query',
+			'list' => 'communityrequests-wishes',
+			'crwsort' => 'title',
+			'crwdir' => $dir,
+			'crwlimit' => 3,
+		] );
+		$result = [];
+		foreach ( $ret['query']['communityrequests-wishes'] as $res ) {
+			$result[] = $res['title'];
+		}
+		$this->assertArrayEquals( $expectedResult, $result );
+	}
+
+	public function provideExecuteSortByTitleCaseInsensitive(): array {
+		$titles = [
+			'Walrus',
+			'aardvark',
+			'Aardvark',
+			'AArdvark',
+			'walrus',
+		];
+		return [
+			[
+				'titles' => $titles,
+				'dir' => 'descending',
+				'result' => [ 'Walrus', 'walrus', 'aardvark' ],
+			],
+			[
+				'titles' => $titles,
+				'dir' => 'ascending',
+				'result' => [ 'Walrus', 'AArdvark', 'Aardvark' ],
+			],
+		];
 	}
 
 	public function testExecuteWithContinue(): void {

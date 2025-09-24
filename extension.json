@@ -405,7 +405,8 @@
 				"communityrequests-status-prioritized",
 				"communityrequests-status-in-progress",
 				"communityrequests-status-done",
-				"communityrequests-tags-more"
+				"communityrequests-tags-more",
+				"quotation-marks"
 			],
 			"factory": "\\MediaWiki\\Extension\\CommunityRequests\\Wish\\SpecialWishlistIntake::addResourceLoaderMessages"
 		}

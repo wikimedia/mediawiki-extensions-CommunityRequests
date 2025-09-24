@@ -123,7 +123,7 @@ class WishRenderer extends AbstractRenderer {
 		if ( count( $tagLabels ) > 0 ) {
 			$tagsHeading = Html::element(
 				'div',
-				[ 'class' => 'mw-heading mw-heading3' ],
+				[ 'class' => 'mw-heading mw-heading3', 'id' => 'tags' ],
 				$this->msg( 'communityrequests-tags-heading' )->text()
 			);
 

@@ -44,7 +44,10 @@
 			<a
 				v-if="item.length > showTagLimit"
 				class="ext-communityrequests-wishes--more-tags-link"
-				:href="mw.Title.makeTitle( row.crwns, row.crwtitle ).getUrl()"
+				:href="mw.Title.makeTitle( row.crwns, row.crwtitle ).getUrl() + '#tags'"
+				:title="mw.language.listToText( item.slice( showTagLimit ).map(
+					( t ) => mw.msg( 'quotation-marks', Util.getTagLabel( t ) )
+				) )"
 			>
 				{{ $i18n( 'communityrequests-tags-more', item.length - showTagLimit ).text() }}
 			</a>

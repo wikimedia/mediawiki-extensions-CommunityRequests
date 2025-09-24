@@ -219,13 +219,13 @@ class ApiQueryWishesTest extends ApiTestCase {
 
 		// Create a wish in French.
 		$this->insertTestWish(
-			'Community Wishlist/Wishes/W1',
+			'Community Wishlist/W1',
 			'fr',
 			[ Wish::PARAM_TITLE => '<translate>Original French title</translate>' ],
 		);
 		// Add an English translation.
 		$this->insertTestWish(
-			'Community Wishlist/Wishes/W1',
+			'Community Wishlist/W1',
 			'en',
 			[
 				Wish::PARAM_TITLE => 'Title in English',
@@ -240,7 +240,7 @@ class ApiQueryWishesTest extends ApiTestCase {
 		] );
 		$wishesFr = $ret['query']['communityrequests-wishes'];
 		$this->assertCount( 1, $wishesFr );
-		$this->assertSame( 'Community Wishlist/Wishes/W1', $wishesFr[0]['crwtitle'] );
+		$this->assertSame( 'Community Wishlist/W1', $wishesFr[0]['crwtitle'] );
 		$this->assertSame( 'Original French title', $wishesFr[0][Wish::PARAM_TITLE] );
 
 		[ $ret ] = $this->doApiRequest( [
@@ -250,14 +250,14 @@ class ApiQueryWishesTest extends ApiTestCase {
 		] );
 		$wishesEn = $ret['query']['communityrequests-wishes'];
 		$this->assertCount( 1, $wishesEn );
-		$this->assertSame( 'Community Wishlist/Wishes/W1/en', $wishesEn[0]['crwtitle'] );
+		$this->assertSame( 'Community Wishlist/W1/en', $wishesEn[0]['crwtitle'] );
 		$this->assertSame( 'Title in English', $wishesEn[0][Wish::PARAM_TITLE] );
 	}
 
 	public function testExecuteNoTranslateTagsReturned(): void {
 		$this->markTestSkippedIfExtensionNotLoaded( 'Translate' );
 		$this->insertTestWish(
-			'Community Wishlist/Wishes/W1',
+			'Community Wishlist/W1',
 			'en',
 			[
 				Wish::PARAM_TITLE => '<translate>Translatable title</translate>',

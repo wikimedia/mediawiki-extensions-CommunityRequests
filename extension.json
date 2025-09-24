@@ -440,7 +440,7 @@
 		},
 		"CommunityRequestsWishPagePrefix": {
 			"description": "Prefixed page title (including the namespace) of wishes. The wish ID will be appended to this.",
-			"value": "Community Wishlist/Wishes/W"
+			"value": "Community Wishlist/W"
 		},
 		"CommunityRequestsWishIndexPage": {
 			"description": "The title of the page to use as the index for all wishes.",
@@ -474,7 +474,7 @@
 		},
 		"CommunityRequestsFocusAreaPagePrefix": {
 			"description": "Prefixed page title (including the namespace) of focus areas. The focus area ID will be appended to this.",
-			"value": "Community Wishlist/Focus areas/FA"
+			"value": "Community Wishlist/FA"
 		},
 		"CommunityRequestsFocusAreaIndexPage": {
 			"description": "The title of the page to use as the index for all focus areas.",

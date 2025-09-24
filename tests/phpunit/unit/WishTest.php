@@ -139,7 +139,7 @@ END
 	 */
 	public function testNewFromWikitextParams( $wikitextParams, $expected ): void {
 		$wish = Wish::newFromWikitextParams(
-			$this->makeMockTitle( 'Community Wishlist/Wishes/W123' ),
+			$this->makeMockTitle( 'Community Wishlist/W123' ),
 			'en',
 			$wikitextParams,
 			$this->config,
@@ -227,26 +227,26 @@ END
 		$wishEn = $this->getTestWish( [] );
 		$wishFr = $this->getTestWish( [ Wish::PARAM_BASE_LANG => 'en' ], 'fr' );
 		$this->assertSame(
-			'Community_Wishlist/Wishes/W123',
+			'Community_Wishlist/W123',
 			$wishEn->getPage()->getDBkey()
 		);
 		$this->assertSame(
-			'Community_Wishlist/Wishes/W123/en',
+			'Community_Wishlist/W123/en',
 			$wishEn->getTranslationSubpage()->getDBkey()
 		);
 		$this->assertSame(
-			'Community_Wishlist/Wishes/W123',
+			'Community_Wishlist/W123',
 			$wishFr->getPage()->getDBkey()
 		);
 		$this->assertSame(
-			'Community_Wishlist/Wishes/W123/fr',
+			'Community_Wishlist/W123/fr',
 			$wishFr->getTranslationSubpage()->getDBkey()
 		);
 	}
 
 	private function getTestWish( array $wishData, string $lang = 'en' ): Wish {
 		return new Wish(
-			$this->makeMockTitle( 'Community Wishlist/Wishes/W123' ),
+			$this->makeMockTitle( 'Community Wishlist/W123' ),
 			$lang,
 			$this->mockRegisteredUltimateAuthority()->getUser(),
 			$wishData

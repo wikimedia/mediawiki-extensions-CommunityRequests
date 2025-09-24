@@ -22,7 +22,7 @@ With missing arugments
 !! test
 Example vote
 !! options
-title=Community_Wishlist/Wishes/W1/Votes
+title=Community_Wishlist/W1/Votes
 !! wikitext
 {{#CommunityRequests: vote
 |username = TestUser

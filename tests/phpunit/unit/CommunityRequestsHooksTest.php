@@ -60,7 +60,7 @@ class CommunityRequestsHooksTest extends MediaWikiUnitTestCase {
 				'enabled' => true,
 				'wishVotingEnabled' => true,
 				'focusAreaVotingEnabled' => true,
-				'title' => $this->makeMockTitle( 'Community Wishlist/Wishes/W123' ),
+				'title' => $this->makeMockTitle( 'Community Wishlist/W123' ),
 				'postEditVal' => null,
 				'prefersMachineTranslation' => false,
 			],
@@ -120,9 +120,9 @@ class CommunityRequestsHooksTest extends MediaWikiUnitTestCase {
 			WishlistConfig::ENABLED => $opts['enabled'],
 			WishlistConfig::WISH_VOTING_ENABLED => $opts['wishVotingEnabled'],
 			WishlistConfig::FOCUS_AREA_VOTING_ENABLED => $opts['focusAreaVotingEnabled'],
-			WishlistConfig::WISH_PAGE_PREFIX => 'Community Wishlist/Wishes/W',
-			WishlistConfig::FOCUS_AREA_PAGE_PREFIX => 'Community Wishlist/Focus areas/FA',
-			WishlistConfig::WISH_INDEX_PAGE => 'Community Wishlist/Wishes',
+			WishlistConfig::WISH_PAGE_PREFIX => 'Community Wishlist/W',
+			WishlistConfig::FOCUS_AREA_PAGE_PREFIX => 'Community Wishlist/FA',
+			WishlistConfig::WISH_INDEX_PAGE => 'Community Wishlist',
 			WishlistConfig::FOCUS_AREA_INDEX_PAGE => 'Community Wishlist/Focus areas',
 		], null, $userOptionsManager );
 		$handler->onBeforePageDisplay( $out, $this->createNoOpMock( Skin::class ) );
@@ -140,25 +140,25 @@ class CommunityRequestsHooksTest extends MediaWikiUnitTestCase {
 			],
 			'post-edit new wish' => [
 				[
-					'title' => $this->makeMockTitle( 'Community Wishlist/Wishes/W123' ),
+					'title' => $this->makeMockTitle( 'Community Wishlist/W123' ),
 					'postEditVal' => AbstractWishlistSpecialPage::SESSION_VALUE_CREATED,
 				],
 				[ 'ext.communityrequests.intake', 'ext.communityrequests.voting' ],
 			],
 			'view focus area' => [
-				[ 'title' => $this->makeMockTitle( 'Community Wishlist/Focus areas/FA123' ) ],
+				[ 'title' => $this->makeMockTitle( 'Community Wishlist/FA123' ) ],
 				[ 'ext.communityrequests.voting' ],
 			],
 			'view wish, voting disabled' => [
 				[
-					'title' => $this->makeMockTitle( 'Community Wishlist/Wishes/W123' ),
+					'title' => $this->makeMockTitle( 'Community Wishlist/W123' ),
 					'wishVotingEnabled' => false,
 				],
 				[],
 			],
 			'view wish, prefers machine translation' => [
 				[
-					'title' => $this->makeMockTitle( 'Community Wishlist/Wishes/W123' ),
+					'title' => $this->makeMockTitle( 'Community Wishlist/W123' ),
 					'prefersMachineTranslation' => true,
 				],
 				[ 'ext.communityrequests.voting', 'ext.communityrequests.mint' ],
@@ -175,7 +175,7 @@ class CommunityRequestsHooksTest extends MediaWikiUnitTestCase {
 	): void {
 		$opts = array_merge(
 			[
-				'title' => $this->makeMockTitle( 'Community Wishlist/Wishes/W123' ),
+				'title' => $this->makeMockTitle( 'Community Wishlist/W123' ),
 				'isRegistered' => true,
 				'canEdit' => true,
 				'canManuallyEdit' => false,
@@ -214,9 +214,9 @@ class CommunityRequestsHooksTest extends MediaWikiUnitTestCase {
 			] );
 		$handler = $this->getHandler(
 			[
-				WishlistConfig::WISH_PAGE_PREFIX => 'Community Wishlist/Wishes/W',
+				WishlistConfig::WISH_PAGE_PREFIX => 'Community Wishlist/W',
 				WishlistConfig::VOTES_PAGE_SUFFIX => '/Votes',
-				WishlistConfig::FOCUS_AREA_PAGE_PREFIX => 'Community Wishlist/Focus areas/FA',
+				WishlistConfig::FOCUS_AREA_PAGE_PREFIX => 'Community Wishlist/FA',
 			],
 			$permissionManager,
 			null,
@@ -239,12 +239,12 @@ class CommunityRequestsHooksTest extends MediaWikiUnitTestCase {
 				[ 'view', 've-edit', 'edit', 'history' ],
 			],
 			[
-				[ 'title' => $this->makeMockTitle( 'Community Wishlist/Focus areas/FA123' ) ],
+				[ 'title' => $this->makeMockTitle( 'Community Wishlist/FA123' ) ],
 				[ 'view', 'history' ],
 			],
 			[
 				[
-					'title' => $this->makeMockTitle( 'Community Wishlist/Focus areas/FA123' ),
+					'title' => $this->makeMockTitle( 'Community Wishlist/FA123' ),
 					'canManage' => true,
 				],
 				[ 'view', 'wishlist-edit', 'history' ],
@@ -274,7 +274,7 @@ class CommunityRequestsHooksTest extends MediaWikiUnitTestCase {
 	): void {
 		$opts = array_merge(
 			[
-				'title' => $this->makeMockTitle( 'Community Wishlist/Wishes/W123' ),
+				'title' => $this->makeMockTitle( 'Community Wishlist/W123' ),
 				'action' => 'edit',
 				'canManuallyEdit' => true,
 				'allowManualEditing' => false,
@@ -301,8 +301,8 @@ class CommunityRequestsHooksTest extends MediaWikiUnitTestCase {
 		CommunityRequestsHooks::$allowManualEditing = $opts['allowManualEditing'];
 		$handler = $this->getHandler(
 			[
-				WishlistConfig::WISH_PAGE_PREFIX => 'Community Wishlist/Wishes/W',
-				WishlistConfig::FOCUS_AREA_PAGE_PREFIX => 'Community Wishlist/Focus areas/FA',
+				WishlistConfig::WISH_PAGE_PREFIX => 'Community Wishlist/W',
+				WishlistConfig::FOCUS_AREA_PAGE_PREFIX => 'Community Wishlist/FA',
 			],
 			$permissionManager
 		);
@@ -345,7 +345,7 @@ class CommunityRequestsHooksTest extends MediaWikiUnitTestCase {
 			],
 			[
 				[
-					'title' => $this->makeMockTitle( 'Community Wishlist/Focus areas/FA123' ),
+					'title' => $this->makeMockTitle( 'Community Wishlist/FA123' ),
 					'canManuallyEdit' => false,
 				],
 				false,
@@ -364,11 +364,11 @@ class CommunityRequestsHooksTest extends MediaWikiUnitTestCase {
 	public function testBeforeDisplayNoArticleText(): void {
 		$handler = $this->getHandler(
 			[
-				WishlistConfig::WISH_PAGE_PREFIX => 'Community Wishlist/Wishes/W',
-				WishlistConfig::FOCUS_AREA_PAGE_PREFIX => 'Community Wishlist/Focus areas/FA',
+				WishlistConfig::WISH_PAGE_PREFIX => 'Community Wishlist/W',
+				WishlistConfig::FOCUS_AREA_PAGE_PREFIX => 'Community Wishlist/FA',
 			]
 		);
-		$testTitle = $this->makeMockTitle( 'Community Wishlist/Wishes/W9999' );
+		$testTitle = $this->makeMockTitle( 'Community Wishlist/W9999' );
 		$language = $this->createNoOpMock( Language::class, [ 'getDir', 'getHtmlCode' ] );
 		$language->expects( $this->once() )
 			->method( 'getDir' )

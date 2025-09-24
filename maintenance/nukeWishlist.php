@@ -150,6 +150,13 @@ class NukeWishlist extends Maintenance {
 			}
 
 			$page = PageIdentityValue::localIdentity( (int)$row->page_id, (int)$row->page_namespace, $row->page_title );
+
+			if ( $this->config->isWishOrFocusAreaIndexPage( $page ) ) {
+				// Skip index pages and any translation subpages.
+				$this->output( "Skipping entity index page: {$page->getDBkey()}\n" );
+				continue;
+			}
+
 			$entity = null;
 			try {
 				$entity = $store->get( $page );

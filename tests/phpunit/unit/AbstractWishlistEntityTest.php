@@ -35,7 +35,7 @@ class AbstractWishlistEntityTest extends MediaWikiUnitTestCase {
 				'change' => [ 'id' => 2 ],
 			],
 			WishlistConfig::FOCUS_AREA_CATEGORY => '',
-			WishlistConfig::FOCUS_AREA_PAGE_PREFIX => 'Community Wishlist/Focus Areas/',
+			WishlistConfig::FOCUS_AREA_PAGE_PREFIX => 'Community Wishlist/FA',
 			WishlistConfig::FOCUS_AREA_INDEX_PAGE => '',
 			WishlistConfig::TAGS => [
 				'navigation' => [

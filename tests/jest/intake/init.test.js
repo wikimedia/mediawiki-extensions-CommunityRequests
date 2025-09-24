@@ -16,7 +16,7 @@ describe( 'Intake init', () => {
 	it( 'should show a post-edit success message after creating a new wish', () => {
 		mockMwConfigGet( {
 			wgAction: 'view',
-			wgPageName: 'Community Wishlist/Wishes/W1',
+			wgPageName: 'Community Wishlist/W1',
 			intakePostEdit: 'created'
 		} );
 		jest.requireActual( '../../../modules/intake/init.js' );
@@ -27,7 +27,7 @@ describe( 'Intake init', () => {
 	it( 'should show a post-edit success message after editing a new wish', () => {
 		mockMwConfigGet( {
 			wgAction: 'view',
-			wgPageName: 'Community Wishlist/Wishes/W1',
+			wgPageName: 'Community Wishlist/W1',
 			intakePostEdit: 'updated'
 		} );
 		jest.requireActual( '../../../modules/intake/init.js' );
@@ -38,7 +38,7 @@ describe( 'Intake init', () => {
 	it( 'should show a post-edit success message after creating a new focus area', () => {
 		mockMwConfigGet( {
 			wgAction: 'view',
-			wgPageName: 'Community Wishlist/Focus areas/FA1',
+			wgPageName: 'Community Wishlist/FA1',
 			intakePostEdit: 'created'
 		} );
 		jest.requireActual( '../../../modules/intake/init.js' );
@@ -49,7 +49,7 @@ describe( 'Intake init', () => {
 	it( 'should show a post-edit success message after editing a focus area', () => {
 		mockMwConfigGet( {
 			wgAction: 'view',
-			wgPageName: 'Community Wishlist/Focus areas/FA1',
+			wgPageName: 'Community Wishlist/FA1',
 			intakePostEdit: 'updated'
 		} );
 		jest.requireActual( '../../../modules/intake/init.js' );

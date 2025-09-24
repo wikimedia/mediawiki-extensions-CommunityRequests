@@ -118,7 +118,7 @@ class SpecialWishlistIntakeTest extends SpecialPageTestBase {
 |description = This is a [[test]] {{wish}}.
 }}
 END;
-		$this->insertPage( 'Community Wishlist/Wishes/W1', $wikitext );
+		$this->insertPage( 'Community Wishlist/W1', $wikitext );
 		$this->executeSpecialPage( 'W1', null, 'en', $user );
 		$this->expectNotToPerformAssertions();
 	}
@@ -139,7 +139,7 @@ END;
 |description = <translate>This is a [[test]] {{wish}}.</translate>
 }}
 END;
-		$ret = $this->insertPage( 'Community Wishlist/Wishes/W1', $wikitext );
+		$ret = $this->insertPage( 'Community Wishlist/W1', $wikitext );
 		$this->markForTranslation( $ret['title'] );
 
 		$sp = $this->newSpecialPage();

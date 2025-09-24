@@ -87,7 +87,7 @@ END;
 	public function testVoteCountRendering() {
 		$wikiPageFactory = $this->getServiceContainer()->getWikiPageFactory();
 		$wish = $this->insertTestWish(
-			'Community Wishlist/Wishes/W123',
+			'Community Wishlist/W123',
 			'en',
 			[ 'title' => '<translate>Test wish</translate>', 'status' => 'in-progress' ]
 		);
@@ -102,7 +102,7 @@ END;
 		$this->assertStringContainsString( '<b>2 supporters</b>', $parserOutput->getRawText() );
 
 		$wishDe = $this->insertTestWish(
-			'Community Wishlist/Wishes/W123',
+			'Community Wishlist/W123',
 			'de',
 			[ Wish::PARAM_BASE_LANG => 'en', 'status' => 'in-progress' ]
 		);
@@ -117,7 +117,7 @@ END;
 	// phpcs:enable Generic.Files.LineLength.TooLong
 
 	public function testChangePageLanguage(): void {
-		$wish = $this->insertTestWish( 'Community Wishlist/Wishes/W123', 'fr' );
+		$wish = $this->insertTestWish( 'Community Wishlist/W123', 'fr' );
 		$this->assertSame( 'fr', Title::newFromPageIdentity( $wish->getPage() )->getPageLanguage()->getCode() );
 	}
 }

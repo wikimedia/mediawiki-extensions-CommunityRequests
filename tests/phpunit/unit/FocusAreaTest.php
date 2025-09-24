@@ -102,7 +102,7 @@ END
 	 */
 	public function testNewFromWikitextParams( $wikitextParams, $expected ): void {
 		$focusArea = FocusArea::newFromWikitextParams(
-			$this->makeMockTitle( 'Community Wishlist/Focus areas/FA123' ),
+			$this->makeMockTitle( 'Community Wishlist/FA123' ),
 			'en',
 			$wikitextParams,
 			$this->config
@@ -161,7 +161,7 @@ END
 
 	private function getTestFocusArea( array $focusAreaData ): FocusArea {
 		return new FocusArea(
-			$this->makeMockTitle( 'Community Wishlist/Focus areas/FA123' ),
+			$this->makeMockTitle( 'Community Wishlist/FA123' ),
 			'en',
 			$focusAreaData
 		);

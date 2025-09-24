@@ -25,7 +25,7 @@ Empty wish parser tag
 !! test
 Example wish
 !! options
-title=Community_Wishlist/Wishes/W1
+title=Community_Wishlist/W1
 !! wikitext
 {{#CommunityRequests: wish
 |title = Test Wish
@@ -58,7 +58,7 @@ title=Community_Wishlist/Wishes/W1
 !! test
 Example wish with declined status
 !! options
-title=Community_Wishlist/Wishes/W2
+title=Community_Wishlist/W2
 !! wikitext
 {{#CommunityRequests: wish
 |title = Test Wish with Voting Disabled
@@ -90,7 +90,7 @@ title=Community_Wishlist/Wishes/W2
 !! test
 Example wish with done status
 !! options
-title=Community_Wishlist/Wishes/W2
+title=Community_Wishlist/W2
 !! wikitext
 {{#CommunityRequests: wish
 |title = Test Wish with Voting Disabled
@@ -122,7 +122,7 @@ title=Community_Wishlist/Wishes/W2
 !! test
 Missing proposer and created timestamp
 !! options
-title=Community_Wishlist/Wishes/W3
+title=Community_Wishlist/W3
 !! wikitext
 {{#CommunityRequests: wish
 |title = Wish without proposer
@@ -141,7 +141,7 @@ title=Community_Wishlist/Wishes/W3
 !! test
 Example wish in Hebrew and with no tasks
 !! options
-title=Community_Wishlist/Wishes/W4
+title=Community_Wishlist/W4
 language=qqx
 !! wikitext
 {{#CommunityRequests: wish

@@ -26,7 +26,7 @@ class FocusAreaStoreTest extends MediaWikiIntegrationTestCase {
 
 	public function testSaveAndGetFocusArea(): void {
 		ConvertibleTimestamp::setFakeTime( '2025-01-23T00:00:00Z' );
-		$page = $this->getExistingTestPage( 'Community Wishlist/Focus areas/FA123' );
+		$page = $this->getExistingTestPage( 'Community Wishlist/FA123' );
 		$focusArea = new FocusArea(
 			$page,
 			'en',
@@ -48,7 +48,7 @@ class FocusAreaStoreTest extends MediaWikiIntegrationTestCase {
 	}
 
 	public function testSaveWithNoPage(): void {
-		$fauxPage = Title::newFromText( 'Community Wishlist/Focus areas/FA111' );
+		$fauxPage = Title::newFromText( 'Community Wishlist/FA111' );
 		$wish = new FocusArea(
 			$fauxPage,
 			'en',
@@ -60,7 +60,7 @@ class FocusAreaStoreTest extends MediaWikiIntegrationTestCase {
 	}
 
 	public function testSaveWishWithNoTitle(): void {
-		$title = $this->getExistingTestPage( 'Community Wishlist/Focus areas/FA123' )->getTitle();
+		$title = $this->getExistingTestPage( 'Community Wishlist/FA123' )->getTitle();
 		$focusArea = new FocusArea( $title, 'en', [ FocusArea::PARAM_TITLE => '' ] );
 		$this->expectException( InvalidArgumentException::class );
 		$this->expectExceptionMessage( 'Focus areas must have a title!' );

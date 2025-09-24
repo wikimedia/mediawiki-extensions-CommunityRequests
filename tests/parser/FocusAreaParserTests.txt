@@ -12,7 +12,7 @@ Empty focus area parser tag
 !! test
 Example focus area
 !! options
-title=Community_Wishlist/Focus_areas/FA1
+title=Community_Wishlist/FA1
 !! wikitext
 {{#CommunityRequests: focus-area
 |title = Test focus area
@@ -40,7 +40,7 @@ title=Community_Wishlist/Focus_areas/FA1
 !! test
 Example focus area with declined status
 !! options
-title=Community_Wishlist/Focus_areas/FA2
+title=Community_Wishlist/FA2
 !! wikitext
 {{#CommunityRequests: focus-area
 |title=Test Wish with Voting Disabled
@@ -69,7 +69,7 @@ title=Community_Wishlist/Focus_areas/FA2
 !! test
 Example focus area with done status
 !! options
-title=Community_Wishlist/Focus_areas/FA2
+title=Community_Wishlist/FA2
 !! wikitext
 {{#CommunityRequests: focus-area
 |title=Test Wish with Voting Disabled
@@ -98,7 +98,7 @@ title=Community_Wishlist/Focus_areas/FA2
 !! test
 Missing created timestamp
 !! options
-title=Community_Wishlist/Focus_areas/FA3
+title=Community_Wishlist/FA3
 !! wikitext
 {{#CommunityRequests: focus-area
 |title=Focus area without created timestamp

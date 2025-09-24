@@ -274,7 +274,7 @@ class ApiWishEditTest extends ApiTestCase {
 			'baselang' => 'en',
 		];
 		[ $ret ] = $this->doApiRequestWithToken( $params );
-		$this->assertSame( 'Community Wishlist/Wishes/W1', $ret['wishedit']['wish'] );
+		$this->assertSame( 'Community Wishlist/W1', $ret['wishedit']['wish'] );
 
 		// Now attempt to create a wish that will fail parsing due to stray pipe characters.
 		$params = [
@@ -306,6 +306,6 @@ class ApiWishEditTest extends ApiTestCase {
 			'baselang' => 'en',
 		];
 		[ $ret ] = $this->doApiRequestWithToken( $params );
-		$this->assertSame( 'Community Wishlist/Wishes/W2', $ret['wishedit']['wish'] );
+		$this->assertSame( 'Community Wishlist/W2', $ret['wishedit']['wish'] );
 	}
 }

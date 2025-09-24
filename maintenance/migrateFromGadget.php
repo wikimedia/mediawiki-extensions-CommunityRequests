@@ -335,14 +335,7 @@ class MigrateFromGadget extends Maintenance {
 						$dbr->anyString()
 					)
 				),
-				$dbr->expr(
-					'page_title',
-					IExpression::NOT_LIKE,
-					new LikeValue(
-						str_replace( ' ', '_', $excludePrefix ),
-						$dbr->anyString()
-					)
-				),
+				"page_title NOT REGEXP '" . str_replace( ' ', '_', $excludePrefix ) . "[[:digit:]]+'"
 			] )
 			// Roughly order by creation timestamp so that wish IDs will be in
 			// ascending order of creation

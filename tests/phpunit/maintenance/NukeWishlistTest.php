@@ -29,8 +29,8 @@ class NukeWishlistTest extends MaintenanceBaseTestCase {
 	}
 
 	public function testExecuteWithNoWishes(): void {
-		$this->getExistingTestPage( 'Community Wishlist/Wishes/W2' );
-		$this->getExistingTestPage( 'Community Wishlist/Wishes/W50' );
+		$this->getExistingTestPage( 'Community Wishlist/W2' );
+		$this->getExistingTestPage( 'Community Wishlist/W50' );
 		$this->newSelectQueryBuilder()
 			->select( 'COUNT(*)' )
 			->from( AbstractWishlistStore::tableName() )
@@ -42,12 +42,12 @@ class NukeWishlistTest extends MaintenanceBaseTestCase {
 	public function testExecute(): void {
 		$proposer = $this->getTestUser()->getUser()->getName();
 		$this->insertPage(
-			Title::newFromText( 'Community Wishlist/Wishes/W1' ),
+			Title::newFromText( 'Community Wishlist/W1' ),
 			"{{#CommunityRequests: wish | title=My first wish | proposer = $proposer " .
 				"| created=2025-06-25T12:59:59Z | baselang=en}}"
 		);
 		$this->insertPage(
-			Title::newFromText( 'Community Wishlist/Wishes/W2' ),
+			Title::newFromText( 'Community Wishlist/W2' ),
 			"{{#CommunityRequests: wish | title=My second wish | proposer=$proposer " .
 				"| created=2025-06-25T12:59:59Z | baselang=en}}"
 		);

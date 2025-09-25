@@ -171,7 +171,7 @@ class WishStore extends AbstractWishlistStore {
 
 		$this->logger->debug(
 			__METHOD__ . ': Saved wish {0} with data {1}',
-			[ $wish->getPage()->__toString(), $dataSet ]
+			[ $wish->getPage()->__toString(), json_encode( array_merge( $data, $dataSet ) ) ]
 		);
 
 		$this->saveTranslations( $wish, $dbw );

@@ -50,6 +50,8 @@
 	"communityrequests-close": "Image alt text for the close icon shown on the post-edit banner.",
 	"communityrequests-publish": "Form submission button label for new wishes.",
 	"communityrequests-save": "Form submission button label for existing wishes.",
+	"communityrequests-focus-area-publish": "Form submission button label for new focus areas.",
+	"communityrequests-focus-area-save": "Form submission button label for existing focus areas.",
 	"communityrequests-support-dialog-title": "Title of voting dialog window.\n\nParameters:\n* $1 – Title of the wish or focus area.",
 	"communityrequests-support-focus-area": "Button label for the voting button on focus area pages.",
 	"communityrequests-support-focus-area-confirmed": "Message shown after voting for a focus area.",

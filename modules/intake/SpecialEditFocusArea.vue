@@ -90,8 +90,8 @@
 
 		<footer-section
 			:exists="exists"
-			:publish-msg="$i18n( 'publishpage' ).text()"
-			:save-msg="$i18n( 'savechanges' ).text()"
+			:publish-msg="$i18n( 'communityrequests-focus-area-publish' ).text()"
+			:save-msg="$i18n( 'communityrequests-focus-area-save' ).text()"
 			:return-to="returnTo"
 			:form-error="formError"
 			:form-error-msg="formErrorMsg"
@@ -218,11 +218,11 @@ module.exports = exports = defineComponent( {
 		 */
 		const isWishlistManager = Util.isWishlistManager();
 		/**
-		 * Whether the wish already exists (is being edited) or is a new wish.
+		 * Whether the focus area already exists (is being edited) or is a new focus area.
 		 *
 		 * @type {boolean}
 		 */
-		const exists = Util.isWishEdit();
+		const exists = Util.isFocusAreaEdit();
 		/**
 		 * URL to return to after the form is submitted.
 		 *

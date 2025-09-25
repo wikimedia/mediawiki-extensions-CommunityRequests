@@ -49,6 +49,8 @@
 	"communityrequests-close": "Close",
 	"communityrequests-publish": "Publish wish",
 	"communityrequests-save": "Save changes",
+	"communityrequests-focus-area-publish": "Publish focus area",
+	"communityrequests-focus-area-save": "Save changes",
 	"communityrequests-support-dialog-title": "Support \"$1\"",
 	"communityrequests-support-focus-area": "Support focus area",
 	"communityrequests-support-focus-area-confirmed": "You have voted in support of this focus area.",

@@ -12,6 +12,7 @@
 		:pagination-size-default="limit"
 		:pagination-size-options="paginationSizeOptions"
 		:pending="pending"
+		ref="table"
 		@update:sort="onUpdateSort"
 		@load-more="onLoadMore"
 	>
@@ -154,6 +155,11 @@ module.exports = exports = defineComponent( {
 		};
 
 		// Reactive properties
+		/**
+		 * Used to access public methods in the CdxTable component like onFirst().
+		 * @type {Ref}
+		 */
+		const table = ref();
 
 		/**
 		 * Currently displayed columns.
@@ -328,6 +334,8 @@ module.exports = exports = defineComponent( {
 		 */
 		function onUpdateSort( newSort ) {
 			tableSort.value = newSort;
+			// Jump to the first page
+			table.value.onFirst();
 			fetchWishes();
 		}
 
@@ -434,6 +442,7 @@ module.exports = exports = defineComponent( {
 			tableSort,
 			error,
 			pending,
+			table,
 			totalWishCount,
 			paginationSizeOptions,
 			mw,

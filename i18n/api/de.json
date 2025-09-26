@@ -33,7 +33,7 @@
 	"apihelp-query+communityrequests-wishes-param-lang": "Der Sprachcode, nach dem Wünsche gefiltert werden.",
 	"apihelp-query+communityrequests-wishes-param-tags": "Beschränke die Ergebnisse auf Wünsche mit mindestens einer der angegebenen Markierungen.",
 	"apihelp-query+communityrequests-wishes-param-statuses": "Beschränke die Ergebnisse auf die Wünsche mit einem dieser Status.",
-	"apihelp-query+communityrequests-wishes-param-focusareas": "Beschränke die Ergebnisse auf die Wünsche in einem dieser Schwerpunktbereiche, die durch den Wikitext-Wert identifiziert werden (z. B. „FAx“, wobei x eine Ganzzahl ist).",
+	"apihelp-query+communityrequests-wishes-param-focusareas": "Beschränke die Ergebnisse auf die Wünsche in einem dieser Schwerpunktbereiche, die durch den Wikitext-Wert identifiziert werden (z. B. „FAx“, wobei x eine Ganzzahl ist) oder den speziellen Wert „unassigned“ für Wünsche, für die kein Schwerpunktbereich festgelegt wurde.",
 	"apihelp-query+communityrequests-wishes-param-prop": "Die Eigenschaften des Wunsches holen.",
 	"apihelp-query+communityrequests-wishes-param-sort": "Die Wunscheigenschaft, nach der sortiert werden soll.",
 	"apihelp-query+communityrequests-wishes-param-dir": "Die Sortierrichtung.",

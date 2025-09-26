@@ -1,9 +1,12 @@
 {
 	"@metadata": {
 		"authors": [
-			"Naitsa"
+			"Naitsa",
+			"Steenth"
 		]
 	},
+	"communityrequests-focus-area-publish": "Udgiv fokusområde",
+	"communityrequests-focus-area-save": "Gem ændringer",
 	"communityrequests-wish-voting-info": "Dette ønske har i øjeblikket '''$1 {{PLURAL:$2|støtter|støtter}}'''.",
 	"communityrequests-wish-voting-not-logged-in": "Log venligst ind for at støtte dette ønske",
 	"communityrequests-wish-no-votes": "Ingen støtter endnu."

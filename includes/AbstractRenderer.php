@@ -248,7 +248,7 @@ abstract class AbstractRenderer implements MessageLocalizer {
 			// Noscript fallback message.
 			$out .= Html::rawElement( 'p', [],
 				Html::element( 'noscript', [],
-					$this->msg( 'communityrequests-wish-voting-no-js' )->text()
+					$this->msg( 'communityrequests-voting-no-js' )->text()
 				)
 			);
 			if ( $basePage ) {

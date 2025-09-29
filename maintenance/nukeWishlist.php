@@ -4,18 +4,17 @@ declare( strict_types = 1 );
 namespace MediaWiki\Extension\CommunityRequests\Maintenance;
 
 use MediaWiki\Extension\CommunityRequests\AbstractWishlistStore;
-use MediaWiki\Extension\CommunityRequests\FocusArea\FocusAreaStore;
 use MediaWiki\Extension\CommunityRequests\IdGenerator\IdGenerator;
-use MediaWiki\Extension\CommunityRequests\Wish\WishStore;
 use MediaWiki\Extension\CommunityRequests\WishlistConfig;
 use MediaWiki\Maintenance\Maintenance;
+use MediaWiki\Page\DeletePageFactory;
 use MediaWiki\Page\PageIdentityValue;
 use MediaWiki\Permissions\UltimateAuthority;
-use MediaWiki\Title\TitleValue;
+use MediaWiki\Title\TitleParser;
 use MediaWiki\User\User;
-use Throwable;
 use Wikimedia\Rdbms\IExpression;
 use Wikimedia\Rdbms\IMaintainableDatabase;
+use Wikimedia\Rdbms\IResultWrapper;
 use Wikimedia\Rdbms\LikeValue;
 
 // @codeCoverageIgnoreStart
@@ -33,6 +32,9 @@ require_once "$IP/maintenance/Maintenance.php";
 class NukeWishlist extends Maintenance {
 
 	private IMaintainableDatabase $dbw;
+	private DeletePageFactory $deletePageFactory;
+	private TitleParser $titleParser;
+	private AbstractWishlistStore $store;
 	private WishlistConfig $config;
 	private UltimateAuthority $authority;
 	private bool $nukeWishes = false;
@@ -44,52 +46,60 @@ class NukeWishlist extends Maintenance {
 		$this->addDescription( 'Delete all wishlist data and related artifacts.' );
 		$this->addOption( 'wishes', 'Only delete wishes and related data.' );
 		$this->addOption( 'focus-areas', 'Only delete focus areas and related data.' );
+		$this->addOption( 'legacy', 'Only delete wishlist pages under the old page prefix '
+			. ' instead of $wgCommunityRequestsWishPagePrefix.'
+		);
+		$this->addOption( 'dry-run', 'Do not actually delete anything, just show what would be done.' );
 		$this->requireExtension( 'CommunityRequests' );
+	}
+
+	private function initServices(): void {
+		$services = $this->getServiceContainer();
+		$this->deletePageFactory = $services->getDeletePageFactory();
+		$this->titleParser = $services->getTitleParser();
+		$this->config = $services->get( 'CommunityRequests.WishlistConfig' );
+		$this->dbw = $services->getConnectionProvider()->getPrimaryDatabase( 'virtual-communityrequests' );
 	}
 
 	/** @inheritDoc */
 	public function execute() {
-		$this->dbw = $this->getServiceContainer()
-			->getConnectionProvider()
-			->getPrimaryDatabase( 'virtual-communityrequests' );
-		$this->config = $this->getServiceContainer()->get( 'CommunityRequests.WishlistConfig' );
 		$this->authority = new UltimateAuthority(
 			User::newSystemUser( User::MAINTENANCE_SCRIPT_USER, [ 'steal' => true ] )
 		);
 
+		$this->initServices();
+
 		if ( $this->hasOption( 'wishes' ) ) {
 			$this->nukeWishes = true;
-			$this->nukeWishes();
-		} elseif ( $this->hasOption( 'focus-areas' ) ) {
-			$this->nukeFocusAreas = true;
-			$this->nukeFocusAreas();
-		} else {
-			$this->nukeWishes = true;
-			$this->nukeFocusAreas = true;
-			$this->nukeWishes();
-			$this->nukeFocusAreas();
+			$this->nukeFocusAreas = false;
+			$this->store = $this->getServiceContainer()->get( 'CommunityRequests.WishStore' );
+			$this->nukeEntities();
+			if ( !$this->hasOption( 'legacy' ) ) {
+				$this->truncateTables();
+			}
 		}
-		$this->truncateTables();
+		if ( $this->hasOption( 'focus-areas' ) ) {
+			$this->nukeWishes = false;
+			$this->nukeFocusAreas = true;
+			$this->store = $this->getServiceContainer()->get( 'CommunityRequests.FocusAreaStore' );
+			$this->nukeEntities();
+			if ( !$this->hasOption( 'legacy' ) ) {
+				$this->truncateTables();
+			}
+		}
+		if ( !$this->nukeWishes && !$this->nukeFocusAreas ) {
+			$this->showHelp();
+			$this->fatalError( 'You must specify either --wishes or --focus-areas option.' );
+		}
 
 		$this->output( "Nuke wishlist operation completed successfully.\n" );
 	}
 
-	private function nukeWishes(): void {
-		/** @var WishStore $wishStore */
-		$wishStore = $this->getServiceContainer()->get( 'CommunityRequests.WishStore' );
-		$prefix = $this->getServiceContainer()->getTitleParser()->parseTitle( $this->config->getWishPagePrefix() );
-
-		$this->output( "Deleting all wishes and related data...\n" );
-		$this->deletePagesWithPrefix( $prefix, $wishStore );
-	}
-
-	private function nukeFocusAreas(): void {
-		/** @var FocusAreaStore $focusAreaStore */
-		$focusAreaStore = $this->getServiceContainer()->get( 'CommunityRequests.FocusAreaStore' );
-		$prefix = $this->getServiceContainer()->getTitleParser()->parseTitle( $this->config->getFocusAreaPagePrefix() );
-
-		$this->output( "Deleting all focus areas and related data...\n" );
-		$this->deletePagesWithPrefix( $prefix, $focusAreaStore );
+	private function nukeEntities(): void {
+		$this->output( "Deleting all {$this->store->entityType()} pages and related data...\n" );
+		$count = $this->deletePages( NS_MAIN );
+		$this->output( "$count {$this->store->entityType()} page(s) and their related data have been deleted.\n" );
+		$this->deleteTranslationNsPages();
 	}
 
 	private function truncateTables(): void {
@@ -101,20 +111,26 @@ class NukeWishlist extends Maintenance {
 
 		if ( $this->nukeWishes ) {
 			$tables[] = AbstractWishlistStore::tagsTableName();
-			$this->resetIdCounter( 'wish' );
 		}
-		if ( $this->nukeFocusAreas ) {
-			$this->resetIdCounter( 'focus-area' );
-		}
+		$this->resetIdCounter();
 
 		foreach ( $tables as $table ) {
+			if ( $this->hasOption( 'dry-run' ) ) {
+				$this->output( "Would truncate table: $table\n" );
+				continue;
+			}
 			$this->dbw->truncateTable( $table, __METHOD__ );
 			$this->output( "Truncated table: $table\n" );
 		}
 		$this->commitTransactionRound( __METHOD__ );
 	}
 
-	private function resetIdCounter( string $type ): void {
+	private function resetIdCounter(): void {
+		$type = $this->nukeWishes ? 'wish' : 'focus-area';
+		if ( $this->hasOption( 'dry-run' ) ) {
+			$this->output( "Would reset ID counters for $type.\n" );
+			return;
+		}
 		$this->dbw->newUpdateQueryBuilder()
 			->table( 'communityrequests_counters' )
 			->set( [ 'crc_value' => 0 ] )
@@ -124,75 +140,107 @@ class NukeWishlist extends Maintenance {
 		$this->output( "Reset ID counters for $type.\n" );
 	}
 
-	private function deletePagesWithPrefix( TitleValue $prefix, AbstractWishlistStore $store ): void {
-		// NOTE: We don't use $this->dbw because it uses the 'virtual-communityrequests'
-		// connection which does not have access to Core tables like 'page'.
-		$dbw = $this->getPrimaryDB();
-		$entityName = $store->entityType();
-		$qb = $dbw->newSelectQueryBuilder()
-			->select( [ 'page_id', 'page_namespace', 'page_title' ] )
-			->from( 'page' )
-			->where( [
-				'page_namespace' => $prefix->getNamespace(),
-				$dbw->expr(
-					'page_title',
-					IExpression::LIKE,
-					new LikeValue( $prefix->getDBkey(), $dbw->anyString() )
-				)
-			] )
-			->caller( __METHOD__ );
+	/**
+	 * Delete all pages in the Translation namespace related to the given entity type.
+	 */
+	private function deleteTranslationNsPages(): void {
+		$this->output( "Deleting translation namespace pages...\n" );
+		$count = $this->deletePages( NS_TRANSLATIONS );
+		$this->output( "$count {$this->store->entityType()} translation pages deleted.\n" );
+	}
+
+	private function deletePages( int $nsId ): int {
+		$rows = $this->getPages( $nsId );
 
 		$count = 0;
-		do {
-			$row = $qb->fetchRow();
-			if ( $row === false ) {
-				break;
-			}
-
+		foreach ( $rows as $row ) {
 			$page = PageIdentityValue::localIdentity( (int)$row->page_id, (int)$row->page_namespace, $row->page_title );
 
 			if ( $this->config->isWishOrFocusAreaIndexPage( $page ) ) {
 				// Skip index pages and any translation subpages.
-				$this->output( "Skipping entity index page: {$page->getDBkey()}\n" );
 				continue;
 			}
 
-			$entity = null;
-			try {
-				$entity = $store->get( $page );
-			} catch ( Throwable $e ) {
-				$this->output(
-					"Failed to retrieve $entityName for page {$page->getDBkey()}: " . $e->getMessage() . "\n"
-				);
-			}
+			$entity = $this->store->get( $page );
 
-			$this->output( "Deleting $entityName page: {$page->getDBkey()}\n" );
-
-			$deletePage = $this->getServiceContainer()
-				->getDeletePageFactory()
-				->newDeletePage( $page, $this->authority );
-			$status = $deletePage->deleteIfAllowed( 'CommunityRequests nukeWishlist maintenance script' );
-			if ( !$status->isOK() ) {
-				$this->fatalError(
-					"Failed to delete page {$page->getDBkey()}: " .
-					wfMessage( $status->getMessages()[0] )->text()
-				);
-			}
-
-			if ( $entity ) {
-				$store->delete( $entity );
+			if ( $this->hasOption( 'dry-run' ) ) {
+				$this->output( "Would delete page: {$page->__toString()}\n" );
 			} else {
-				$this->output( "No $entityName found for page {$page->getDBkey()}, skipping related data deletion.\n" );
+				$this->output( "Deleting page: {$page->__toString()}\n" );
+
+				$deletePage = $this->deletePageFactory->newDeletePage( $page, $this->authority );
+				$status = $deletePage->deleteIfAllowed( 'CommunityRequests nukeWishlist maintenance script' );
+				if ( !$status->isOK() ) {
+					$this->fatalError(
+						"Failed to delete page {$page->__toString()}: " .
+						wfMessage( $status->getMessages()[0] )->text()
+					);
+				}
+
+				if ( $entity ) {
+					$this->store->delete( $entity );
+				} elseif ( $this->config->isWishOrFocusAreaPage( $page ) ) {
+					$this->output(
+						"No entity found for page {$page->__toString()}, skipping related data deletion.\n"
+					);
+				}
 			}
 
 			$count++;
 			if ( $count % $this->getBatchSize() === 0 ) {
-				$this->output( "Deleted $count $entityName pages so far...\n" );
+				$this->output( "Deleted $count pages so far...\n" );
 				$this->commitTransactionRound( __METHOD__ );
 			}
-		} while ( true );
+		}
 
-		$this->output( "$count $entityName page(s) and their related data have been deleted.\n" );
+		return $count;
+	}
+
+	/**
+	 * Find pages in the main namespace matching the given prefix, but not
+	 * matching another prefix
+	 */
+	private function getPages( int $nsId ): IResultWrapper {
+		$prefix = $this->titleParser->parseTitle( $this->nukeWishes
+			? $this->config->getWishPagePrefix()
+			: $this->config->getFocusAreaPagePrefix()
+		)->getDBkey();
+		$legacyPath = $this->nukeWishes ? 'Community_Wishlist/Wishes/' : 'Community_Wishlist/Focus_areas/';
+		$excludePrefix = $this->titleParser->parseTitle( $legacyPath )->getDBkey();
+		$dbr = $this->getDB( DB_REPLICA );
+		$wherePrefix = "page_title REGEXP '" . $prefix . "[[:digit:]]+'";
+		$whereExcludePrefix = $dbr->expr(
+			'page_title',
+			IExpression::NOT_LIKE,
+			new LikeValue(
+				$excludePrefix,
+				$dbr->anyString()
+			)
+		);
+		if ( $this->getOption( 'legacy' ) ) {
+			$wherePrefix = $dbr->expr(
+				'page_title',
+				IExpression::LIKE,
+				new LikeValue(
+					$excludePrefix,
+					$dbr->anyString()
+				)
+			);
+			$whereExcludePrefix = "page_title NOT REGEXP '" . $prefix . "[[:digit:]]+'";
+		}
+		return $dbr->newSelectQueryBuilder()
+			->select( [ 'page_id', 'page_namespace', 'page_title' ] )
+			->from( 'page' )
+			->where( [
+				'page_namespace' => $nsId,
+				$wherePrefix,
+				$whereExcludePrefix,
+			] )
+			// Roughly order by creation timestamp so that wish IDs will be in
+			// ascending order of creation
+			->orderBy( 'page_id' )
+			->caller( __METHOD__ )
+			->fetchResultSet();
 	}
 }
 

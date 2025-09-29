@@ -34,7 +34,7 @@
 	"apihelp-query+communityrequests-wishes-param-lang": "קוד השפה שיש לסנן לפיו את המשאלות.",
 	"apihelp-query+communityrequests-wishes-param-tags": "להגביל את התוצאות למשאלות עם לפחות אחת מהתגים שצוינו.",
 	"apihelp-query+communityrequests-wishes-param-statuses": "להגביל את התוצאות רק למשאלות עם אחד מהמצבים האלה.",
-	"apihelp-query+communityrequests-wishes-param-focusareas": "להגביל את התוצאות רק למשאלות באחד מתחומי המיקוד האלה, המזוהים על־ידי ערך קוד הוויקי (למשל 'FAx' כאשר x הוא מספר שלם).",
+	"apihelp-query+communityrequests-wishes-param-focusareas": "להגביל את התוצאות רק למשאלות באחד מתחומי המיקוד האלה, המזוהים על־ידי ערך קוד הוויקי (למשל \"FAx\" כאשר x הוא מספר שלם) או לערך המיוחד \"unassigned\" עבור משאלות שלא מוגדר להן תחום מיקוד.",
 	"apihelp-query+communityrequests-wishes-param-prop": "אילו מאפייני משאלה לקבל.",
 	"apihelp-query+communityrequests-wishes-param-sort": "לפי אילו מאפייני משאלה למיין.",
 	"apihelp-query+communityrequests-wishes-param-dir": "באיזה כיוון למיין.",

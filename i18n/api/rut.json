@@ -1,0 +1,8 @@
+{
+	"@metadata": {
+		"authors": [
+			"Marphy 123"
+		]
+	},
+	"apihelp-query+communityrequests-wishes-param-focusareas": "Limit results to only those wishes in one of these focus areas, identified by wikitext value (i.e. 'FAx' where x is an integer) or the special value 'unassigned' for wishes with no focus area set."
+}

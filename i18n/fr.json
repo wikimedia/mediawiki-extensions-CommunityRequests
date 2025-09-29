@@ -8,6 +8,7 @@
 			"Goombiis",
 			"JLTRY",
 			"Mahabarata",
+			"Marphy 123",
 			"McDutchie",
 			"SleaY",
 			"WillyM"
@@ -58,6 +59,8 @@
 	"communityrequests-close": "Fermer",
 	"communityrequests-publish": "Publier le souhait",
 	"communityrequests-save": "Enregistrer les modifications",
+	"communityrequests-focus-area-publish": "Publier un domaine d'intérêt",
+	"communityrequests-focus-area-save": "Enregistrer les modifications",
 	"communityrequests-support-dialog-title": "Soutenir « $1 »",
 	"communityrequests-support-focus-area": "Soutenir ce domaine d'action",
 	"communityrequests-support-focus-area-confirmed": "Vous avez voté en faveur de ce domaine d’action.",

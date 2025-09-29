@@ -33,7 +33,7 @@
 	"apihelp-query+communityrequests-wishes-param-lang": "De taalcode waarop wensen moeten worden gefilterd.",
 	"apihelp-query+communityrequests-wishes-param-tags": "Beperk de resultaten tot wensen met ten minste één van de opgegeven labels.",
 	"apihelp-query+communityrequests-wishes-param-statuses": "Beperk de resultaten tot alleen de wensen met een van deze statussen.",
-	"apihelp-query+communityrequests-wishes-param-focusareas": "Beperk de resultaten tot alleen de wensen in een van deze aandachtsgebieden, aan de hand van de wikitekstwaarde (d.w.z. ‘FAx’ waarbij x een geheel getal is).",
+	"apihelp-query+communityrequests-wishes-param-focusareas": "Beperk de resultaten tot alleen de wensen in een van deze aandachtsgebieden, aan de hand van de wikitekstwaarde (d.w.z. ‘FAx’ waarbij x een geheel getal is) of de speciale waarde ‘unassigned’ (niet toegewezen) voor wensen waarvoor geen aandachtsgebied is ingesteld.",
 	"apihelp-query+communityrequests-wishes-param-prop": "De wens-eigenschappen om op te vragen.",
 	"apihelp-query+communityrequests-wishes-param-sort": "De wens-eigenschap om op te sorteren.",
 	"apihelp-query+communityrequests-wishes-param-dir": "De sorteerrichting.",

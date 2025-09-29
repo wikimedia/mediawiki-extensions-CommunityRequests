@@ -112,6 +112,7 @@ class MigrateFromGadget extends Maintenance {
 		// Check if status-csv is required
 		$processingWishes = $this->hasOption( 'wishes' ) || $this->hasOption( 'wish' );
 		if ( $processingWishes && !$this->hasOption( 'status-csv' ) ) {
+			$this->showHelp();
 			$this->fatalError( "The --status-csv option is required when using --wishes or --wish\n" );
 		}
 
@@ -131,6 +132,16 @@ class MigrateFromGadget extends Maintenance {
 			'baselang' => [
 				'/^}}$/m',
 				"| baselang = en\n}}",
+			],
+			// 'short_description' is now 'shortdescription'
+			'short_description' => [
+				'/\| *short_description *=/',
+				'| shortdescription =',
+			],
+			// Remove <languages/> tag if present
+			'languages' => [
+				'/<noinclude> *<languages *\/> *<\/noinclude>/',
+				'',
 			],
 		];
 		$wishReplacements = [
@@ -159,9 +170,9 @@ class MigrateFromGadget extends Maintenance {
 				function ( $m ) {
 					$id = $this->getFocusAreaDisplayIdByTitle( trim( $m[2] ) );
 					if ( $id !== null ) {
-						return $m[1] . $id;
+						return "| focusarea = $id";
 					} else {
-						return $m[0];
+						return '| focusarea = ';
 					}
 				},
 			],
@@ -172,15 +183,20 @@ class MigrateFromGadget extends Maintenance {
 					return $m[1] . $this->getNewStatus();
 				},
 			],
+			// Map applicable projects to tags
 			'projects' => [
 				'/^(\| *projects *= *)(.+)$/m',
 				static function ( $m ) {
-					$projectsValue = trim( $m[2] );
+					$projectsValue = str_replace(
+						'commons',
+						'multimedia',
+						strtolower( trim( $m[2] ) )
+					);
 					if ( $projectsValue === '' ) {
 						return '';
 					}
 
-					$allowedProjects = [ 'wikidata', 'wikisource', 'wiktionary' ];
+					$allowedProjects = [ 'wikidata', 'wikisource', 'wiktionary', 'multimedia' ];
 					$projects = array_map( 'trim', explode( ',', strtolower( $projectsValue ) ) );
 					$filteredProjects = array_filter( $projects, static function ( $project ) use ( $allowedProjects ) {
 						return in_array( $project, $allowedProjects );
@@ -192,6 +208,11 @@ class MigrateFromGadget extends Maintenance {
 
 					return '| tags = ' . implode( ', ', $filteredProjects );
 				},
+			],
+			// Remove 'otherproject' field
+			'otherproject' => [
+				'/^(\| *otherproject *= *.*)$/m',
+				'',
 			],
 			// Don't complain if the focus area was empty
 			'silence area' => [
@@ -246,6 +267,7 @@ class MigrateFromGadget extends Maintenance {
 			$done = true;
 		}
 		if ( !$done ) {
+			$this->showHelp();
 			$this->fatalError( "No target specified.\n" );
 		}
 	}

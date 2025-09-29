@@ -94,7 +94,7 @@ class FocusAreaRenderer extends AbstractRenderer {
 		// Wishes.
 		$out .= Html::element(
 			'div',
-			[ 'class' => 'mw-heading mw-heading2' ],
+			[ 'class' => 'mw-heading mw-heading2', 'id' => self::LINK_FRAGMENT_WISHES ],
 			$this->msg( 'communityrequests-focus-area-wishes-list' )->text()
 		);
 		$out .= $this->getDiv(

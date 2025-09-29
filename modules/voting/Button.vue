@@ -203,6 +203,7 @@ module.exports = exports = defineComponent( {
 				// Purge the cache and reload the page.
 				const postArgs = { action: 'purge', titles: mw.config.get( 'wgPageName' ) };
 				const purgeRes = await ( new mw.Api() ).post( postArgs );
+				// This fragment is also in includes/AbstractRenderer.php
 				location.href = mw.util.getUrl( purgeRes.purge[ 0 ].title ) + '#Voting';
 				location.reload();
 			} ).catch( apiErrorHandler )

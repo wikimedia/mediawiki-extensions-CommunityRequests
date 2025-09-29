@@ -44,22 +44,29 @@ class FocusAreaIndexRenderer extends AbstractRenderer {
 			'@phan-var FocusArea $focusArea';
 			$faLinkTarget = Title::newFromPageReference( $focusArea->getPage() );
 
+			// Status
 			$statusChipHtml = Html::openElement( 'div' ) .
 				$this->getStatusChipHtml(
 					$this->config->getStatusWikitextValFromId( $focusArea->getStatus() )
 				) .
 				Html::closeElement( 'div' );
 
-			$title = Html::element(
+			// Title, with link
+			$titleHtml = Html::rawElement(
 				'div',
 				[ 'class' => 'cdx-card__text__title ext-communityrequests-focus-area-card__title' ],
-				$focusArea->getTitle()
+				$this->linkRenderer->makeKnownLink( $faLinkTarget, $focusArea->getTitle() )
 			);
+
+			// Description
 			$descriptionHtml = Html::rawElement(
 				'div',
 				[ 'class' => 'cdx-card__text__description' ],
 				$this->parser->recursiveTagParse( $focusArea->getShortDescription() )
 			);
+
+			// Link to wishes
+			$faLinkTarget->setFragment( '#' . self::LINK_FRAGMENT_WISHES );
 			$linkHtml = $this->linkRenderer->makeKnownLink(
 				$faLinkTarget,
 				// The strip marker should not be escaped.
@@ -70,23 +77,28 @@ class FocusAreaIndexRenderer extends AbstractRenderer {
 				[ 'class' => 'cdx-card__text__supporting-text' ],
 				$linkHtml
 			);
+
+			// Link to votes
+			$faLinkTarget->setFragment( '#' . self::LINK_FRAGMENT_VOTING );
 			$supportingTextHtml = Html::rawElement(
 				'div',
 				[ 'class' => 'cdx-card__text__supporting-text' ],
 				Html::element( 'b', [], $this->msg( 'communityrequests-focus-area-supported' )->text() ) .
 				$this->msg( 'word-separator' )->escaped() .
-				$this->getFocusAreaLink(
-					$focusArea->getPage()->getDBkey(),
+				$this->linkRenderer->makeKnownLink(
+					$faLinkTarget,
 					$this->msg(
 						'communityrequests-focus-area-supported-val',
 						$focusArea->getVoteCount()
 					)->text()
 				)
 			);
+
+			// Put it all together
 			$cardHtml = Html::rawElement(
 				'div',
 				[ 'class' => 'cdx-card__text' ],
-				$statusChipHtml . $title . $descriptionHtml . $supportingTextHtml . $linkWrapperHtml
+				$statusChipHtml . $titleHtml . $descriptionHtml . $supportingTextHtml . $linkWrapperHtml
 			);
 			$outputHTML .= Html::rawElement(
 				'div',

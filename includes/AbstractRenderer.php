@@ -24,6 +24,9 @@ abstract class AbstractRenderer implements MessageLocalizer {
 	public const ERROR_TRACKING_CATEGORY = 'communityrequests-error-category';
 	public const EXT_DATA_KEY = 'CommunityRequests-ext-data';
 	public const VOTING_STRIP_MARKER = Parser::MARKER_PREFIX . "-communityrequests-voting-" . Parser::MARKER_SUFFIX;
+	// This fragment is also in modules/voting/Button.vue
+	public const LINK_FRAGMENT_VOTING = 'Voting';
+	public const LINK_FRAGMENT_WISHES = 'Wishes';
 
 	/** @var string This is overridden by subclasses to give the entity type */
 	protected string $entityType = '';
@@ -211,7 +214,7 @@ abstract class AbstractRenderer implements MessageLocalizer {
 
 		$out = Html::element(
 			'div',
-			[ 'class' => 'mw-heading mw-heading2', 'id' => 'Voting' ],
+			[ 'class' => 'mw-heading mw-heading2', 'id' => self::LINK_FRAGMENT_VOTING ],
 			// Messages used here:
 			// * communityrequests-focus-area-voting
 			// * communityrequests-wish-voting

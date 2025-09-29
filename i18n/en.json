@@ -146,7 +146,7 @@
 	"communityrequests-focus-area-supported": "Supported by:",
 	"communityrequests-focus-area-supported-val": "$1 {{PLURAL:$2|person|people}}",
 	"communityrequests-focus-area-owners-label": "Owners:",
-	"communityrequests-focus-area-view-wishes": "View wishes in this area",
+	"communityrequests-focus-area-view-wishes": "View $1 {{PLURAL:$2|wish|wishes}} in this area",
 	"communityrequests-focus-area-wishes-list": "Wishes in this focus area",
 	"communityrequests-focus-area-wishes-description-1": "Below is a list of wishes that have informed this focus area. More wishes may be added to this table over time.",
 	"communityrequests-focus-area-wishes-description-2": "Voting for the focus area is not a guarantee that each wish will be explicitly delivered; rather, the wishes are suggestive of the problem at large.",

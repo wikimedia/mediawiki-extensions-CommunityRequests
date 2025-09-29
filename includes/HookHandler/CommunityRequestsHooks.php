@@ -478,33 +478,58 @@ class CommunityRequestsHooks implements
 	}
 
 	/**
-	 * Replace the voting strip marker with a message containing the vote count.
+	 * Replace the vote- and wish-count strip markers with messages containing the counts.
 	 *
 	 * @param Parser $parser
 	 * @param string &$text
 	 */
 	public function onParserAfterTidy( $parser, &$text ) {
-		if ( !$this->config->isEnabled() || !$this->config->isWishOrFocusAreaPage( $parser->getPage() ) ) {
+		if ( !$this->config->isEnabled() ) {
 			return;
 		}
 		$data = $parser->getOutput()->getExtensionData( self::EXT_DATA_KEY );
-		if ( !$data ) {
+		if ( !$data
+			|| ( !isset( $data[AbstractWishlistEntity::PARAM_ENTITY_TYPE] )
+				&& !isset( $data[AbstractWishlistEntity::PARAM_WISH_COUNT] )
+		) ) {
 			return;
 		}
 
-		$voteCount = intval( $data[AbstractWishlistEntity::PARAM_VOTE_COUNT] ?? 0 );
-		$this->logger->debug(
-			__METHOD__ . ': Replacing voting strip marker in {0} with vote count {1}',
-			[ $parser->getPage()->__toString(), $voteCount ]
-		);
-		$text = str_replace(
-			AbstractRenderer::VOTING_STRIP_MARKER,
-			$parser->msg( "communityrequests-{$data[AbstractWishlistEntity::PARAM_ENTITY_TYPE]}-voting-info" )
-				->numParams( $voteCount )
-				->params( $voteCount )
-				->parse(),
-			$text
-		);
+		// Vote counts on wish and focus area pages.
+		if ( isset( $data[AbstractWishlistEntity::PARAM_ENTITY_TYPE] ) ) {
+			$voteCount = intval( $data[ AbstractWishlistEntity::PARAM_VOTE_COUNT ] ?? 0 );
+			$this->logger->debug(
+				__METHOD__ . ': Replacing voting strip marker in {0} with vote count {1}',
+				[
+					$parser->getPage()->__toString(),
+					$voteCount
+				]
+			);
+			$text = str_replace(
+				AbstractRenderer::VOTING_STRIP_MARKER,
+				// Messages used here:
+				// * communityrequests-focus-area-voting-info
+				// * communityrequests-wish-voting-info
+				$parser->msg( "communityrequests-{$data[AbstractWishlistEntity::PARAM_ENTITY_TYPE]}-voting-info" )
+					->numParams( $voteCount )
+					->params( $voteCount )
+					->parse(),
+				$text
+			);
+		}
+
+		// Wish counts.
+		if ( isset( $data[AbstractWishlistEntity::PARAM_WISH_COUNT] ) ) {
+			$this->logger->debug(
+				__METHOD__ . ': Replacing wish count strip markers in {0} with wish counts',
+				[ $parser->getPage()->__toString() ]
+			);
+			foreach ( $data[AbstractWishlistEntity::PARAM_WISH_COUNT] as $faPageId => $wishCount ) {
+				$wishCountFormatted = $parser->getTargetLanguage()->formatNum( $wishCount );
+				$msg = $parser->msg( 'communityrequests-focus-area-view-wishes', $wishCountFormatted, $wishCount );
+				$text = str_replace( AbstractRenderer::getWishCountStripMarker( $faPageId ), $msg->parse(), $text );
+			}
+		}
 	}
 
 	/**

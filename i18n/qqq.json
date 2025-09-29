@@ -147,7 +147,7 @@
 	"communityrequests-focus-area-supported": "Label for number of supporters of a focus area.",
 	"communityrequests-focus-area-supported-val": "Value for number of supporters.\n\nParameters:\n* $1 — Formatted number of supporters.\n* $2 — Unformatted integer number of supporters, to determine plural grammar.",
 	"communityrequests-focus-area-owners-label": "Label for the list of owners of a focus area.",
-	"communityrequests-focus-area-view-wishes": "Link text shown on focus area cards, linking to the focus area's page.",
+	"communityrequests-focus-area-view-wishes": "Link text shown on focus area cards, linking to the focus area's page.\n\nParameters:\n* $1 — Formatted number of wishes.\n* $2 — Unformatted integer number of wishes, to determine plural grammar.",
 	"communityrequests-focus-area-wishes-list": "Link text shown on focus area cards, linking to the focus area's page.",
 	"communityrequests-focus-area-wishes-description-1": "Description of the focus area wishes list on a focus area page.",
 	"communityrequests-focus-area-wishes-description-2": "Description of the focus area wishes list on a focus area page.",

@@ -4,7 +4,10 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CommunityRequests\FocusArea;
 
 use MediaWiki\Extension\CommunityRequests\AbstractRenderer;
+use MediaWiki\Extension\CommunityRequests\AbstractWishlistEntity;
 use MediaWiki\Html\Html;
+use MediaWiki\Title\Title;
+use Wikimedia\HtmlArmor\HtmlArmor;
 
 class FocusAreaIndexRenderer extends AbstractRenderer {
 	protected string $entityType = 'focus-area-index';
@@ -33,9 +36,13 @@ class FocusAreaIndexRenderer extends AbstractRenderer {
 			[],
 			$this->focusAreaStore::FETCH_WIKITEXT_TRANSLATED
 		);
-
+		// Add wish counts, for later replacement in CommunityRequestsHooks::onParserAfterTidy().
+		$this->parser->getOutput()->setExtensionData( self::EXT_DATA_KEY, [
+			AbstractWishlistEntity::PARAM_WISH_COUNT => $this->focusAreaStore->getWishCounts()
+		] );
 		foreach ( $focusAreas as $focusArea ) {
 			'@phan-var FocusArea $focusArea';
+			$faLinkTarget = Title::newFromPageReference( $focusArea->getPage() );
 
 			$statusChipHtml = Html::openElement( 'div' ) .
 				$this->getStatusChipHtml(
@@ -53,9 +60,10 @@ class FocusAreaIndexRenderer extends AbstractRenderer {
 				[ 'class' => 'cdx-card__text__description' ],
 				$this->parser->recursiveTagParse( $focusArea->getShortDescription() )
 			);
-			$linkHtml = $this->getFocusAreaLink(
-				$focusArea->getPage()->getDBkey(),
-				$this->msg( 'communityrequests-focus-area-view-wishes' )->text()
+			$linkHtml = $this->linkRenderer->makeKnownLink(
+				$faLinkTarget,
+				// The strip marker should not be escaped.
+				new HtmlArmor( self::getWishCountStripMarker( $focusArea->getPage()->getId() ) )
 			);
 			$linkWrapperHtml = Html::rawElement(
 				'div',

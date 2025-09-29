@@ -24,6 +24,7 @@ abstract class AbstractWishlistEntity {
 	// These aren't parser function parameters, but are used in APIs and extension data.
 	public const PARAM_LANG = 'lang';
 	public const PARAM_VOTE_COUNT = 'votecount';
+	public const PARAM_WISH_COUNT = 'wishcount';
 	public const PARAM_UPDATED = 'updated';
 	public const PARAM_BASE_REV_ID = 'baserevid';
 	public const PARAM_ENTITY_TYPE = 'entitytype';

@@ -63,6 +63,30 @@ class FocusAreaStore extends AbstractWishlistStore {
 		return $faIds;
 	}
 
+	/**
+	 * Get total wish counts per focus area.
+	 *
+	 * @return int[] Keys are focus area page IDs, values are unformatted integer counts of wishes.
+	 */
+	public function getWishCounts(): array {
+		$results = $this->dbProvider->getReplicaDatabase()
+			->newSelectQueryBuilder()
+			->caller( __METHOD__ )
+			->table( self::tableName(), 'fa' )
+			->leftJoin( WishStore::tableName(), 'w', 'fa.cr_page = w.cr_focus_area' )
+			->fields( [
+				'faPageId' => 'fa.cr_page',
+				'wishCount' => 'COUNT(w.cr_page)'
+			] )
+			->groupBy( 'fa.cr_page' )
+			->fetchResultSet();
+		$out = [];
+		foreach ( $results as $res ) {
+			$out[ $res->faPageId ] = (int)$res->wishCount;
+		}
+		return $out;
+	}
+
 	// Saving focus areas.
 
 	/** @inheritDoc */

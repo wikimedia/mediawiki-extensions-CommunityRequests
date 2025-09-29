@@ -64,6 +64,16 @@ abstract class AbstractRenderer implements MessageLocalizer {
 	}
 
 	/**
+	 * Get a parser strip marker for a focus area card's wish count message.
+	 *
+	 * @param int $pageId
+	 * @return string
+	 */
+	public static function getWishCountStripMarker( int $pageId ): string {
+		return Parser::MARKER_PREFIX . "-communityrequests-wishcount-$pageId-" . Parser::MARKER_SUFFIX;
+	}
+
+	/**
 	 * Get the associative array of parser function arguments
 	 * indexed by the names given in the source.
 	 *
@@ -202,6 +212,9 @@ abstract class AbstractRenderer implements MessageLocalizer {
 		$out = Html::element(
 			'div',
 			[ 'class' => 'mw-heading mw-heading2', 'id' => 'Voting' ],
+			// Messages used here:
+			// * communityrequests-focus-area-voting
+			// * communityrequests-wish-voting
 			$this->msg( "communityrequests-{$this->entityType}-voting" )->text()
 		);
 		$out .= Html::openElement( 'div', [ 'class' => "ext-communityrequests-{$this->entityType}--voting" ] );
@@ -212,6 +225,13 @@ abstract class AbstractRenderer implements MessageLocalizer {
 		if ( !$this->isDefaultStatus() ) {
 			$out .= self::VOTING_STRIP_MARKER . ' ';
 		}
+		// Messages used in the following block:
+		// * communityrequests-focus-area-voting-info-open
+		// * communityrequests-focus-area-voting-info-default
+		// * communityrequests-focus-area-voting-info-closed
+		// * communityrequests-wish-voting-info-open
+		// * communityrequests-wish-voting-info-default
+		// * communityrequests-wish-voting-info-closed
 		if ( $votingEnabled ) {
 			$out .= $this->msg( "communityrequests-{$this->entityType}-voting-info-open" )->escaped();
 		} elseif ( $this->isDefaultStatus() ) {

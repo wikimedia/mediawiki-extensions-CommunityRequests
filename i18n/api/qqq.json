@@ -2,7 +2,8 @@
 	"@metadata": {
 		"authors": [
 			"Amire80",
-			"McDutchie"
+			"McDutchie",
+			"MusikAnimal"
 		]
 	},
 	"apihelp-wishedit-summary": "{{doc-apihelp-summary|wishedit}}",
@@ -19,6 +20,9 @@
 	"apihelp-wishedit-param-created": "{{doc-apihelp-param|wishedit|created}}",
 	"apihelp-wishedit-param-baselang": "{{doc-apihelp-param|wishedit|baselang}}",
 	"apierror-wishlist-entity-parse": "{{doc-apierror}}",
+	"apierror-wishlist-vote-parse": "{{doc-apierror}}",
+	"apierror-wishlist-vote-login-required": "{{doc-apierror}}",
+	"apierror-wishlist-entity-invalid": "{{doc-apierror}}",
 	"apierror-querywishes-invalidfocusareas": "{{doc-apierror}}",
 	"apihelp-focusareaedit-summary": "{{doc-apihelp-summary|focusareaedit}}",
 	"apihelp-focusareaedit-param-focusarea": "{{doc-apihelp-param|focusareaedit|focusarea}}",
@@ -30,6 +34,10 @@
 	"apihelp-focusareaedit-param-volunteers": "{{doc-apihelp-param|focusareaedit|volunteers}}",
 	"apihelp-focusareaedit-param-created": "{{doc-apihelp-param|focusareaedit|created}}",
 	"apihelp-focusareaedit-param-baselang": "{{doc-apihelp-param|focusareaedit|baselang}}",
+	"apihelp-wishlistvote-summary": "{{doc-apihelp-summary|wishlistvote}}",
+	"apihelp-wishlistvote-param-entity": "{{doc-apihelp-param|wishlistvote|entity}}",
+	"apihelp-wishlistvote-param-comment": "{{doc-apihelp-param|wishlistvote|comment}}",
+	"apihelp-wishlistvote-param-voteaction": "{{doc-apihelp-param|wishlistvote|voteaction}}",
 	"apihelp-query+communityrequests-wishes-summary": "{{doc-apihelp-summary|query+wishes}}",
 	"apihelp-query+communityrequests-wishes-param-lang": "{{doc-apihelp-param|query+wishes|lang}}",
 	"apihelp-query+communityrequests-wishes-param-tags": "{{doc-apihelp-param|query+wishes|tags}}",

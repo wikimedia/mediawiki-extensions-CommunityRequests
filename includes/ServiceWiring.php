@@ -7,6 +7,7 @@ use MediaWiki\Extension\CommunityRequests\FocusArea\FocusAreaStore;
 use MediaWiki\Extension\CommunityRequests\IdGenerator\IdGenerator;
 use MediaWiki\Extension\CommunityRequests\IdGenerator\SqlIdGenerator;
 use MediaWiki\Extension\CommunityRequests\IdGenerator\UpsertSqlIdGenerator;
+use MediaWiki\Extension\CommunityRequests\Vote\VoteStore;
 use MediaWiki\Extension\CommunityRequests\Wish\WishStore;
 use MediaWiki\Extension\CommunityRequests\WishlistConfig;
 use MediaWiki\Logger\LoggerFactory;
@@ -49,6 +50,14 @@ return [
 	},
 	'CommunityRequests.Logger' => static function (): LoggerInterface {
 		return LoggerFactory::getInstance( 'communityrequests' );
+	},
+	'CommunityRequests.VoteStore' => static function ( MediaWikiServices $services ): VoteStore {
+		return new VoteStore(
+			$services->getUserFactory(),
+			$services->getRevisionStore(),
+			$services->getParserFactory(),
+			$services->get( 'CommunityRequests.WishlistConfig' )
+		);
 	},
 	'CommunityRequests.WishlistConfig' => static function ( MediaWikiServices $services ): WishlistConfig {
 		return new WishlistConfig(

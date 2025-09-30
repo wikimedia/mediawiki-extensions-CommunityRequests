@@ -16,6 +16,7 @@ use MediaWiki\User\User;
  * @group Database
  * @covers \MediaWiki\Extension\CommunityRequests\Api\ApiWishEdit
  * @covers \MediaWiki\Extension\CommunityRequests\Api\ApiWishlistEntityBase
+ * @covers \MediaWiki\Extension\CommunityRequests\Api\ApiWishlistEditBase
  * @covers \MediaWiki\Extension\CommunityRequests\HookHandler\CommunityRequestsHooks
  */
 class ApiWishEditTest extends ApiTestCase {

@@ -195,5 +195,8 @@
 	"communityrequests-cant-manually-edit": "Editing of this Community Wishlist page must be done using [[$1|the intake form]].",
 	"communityrequests-missing-wish": "This wish does not exist. You can [{{fullurl:{{#Special:Log}}|page={{FULLPAGENAMEE}}}} search the related logs] to find out where it went, or [[$1|create a new wish]].",
 	"communityrequests-missing-focus-area": "This focus area does not exist. You can [{{fullurl:{{#Special:Log}}|page={{FULLPAGENAMEE}}}} search the related logs] to find out where it went, or [[$1|create a new focus area]].",
-	"communityrequests-wishlist-machine-translation": "Enable automatic machine translation in the [[$1|Community Wishlist]]."
+	"communityrequests-wishlist-machine-translation": "Enable automatic machine translation in the [[$1|Community Wishlist]].",
+	"communityrequests-vote-add-summary": "Adding support vote",
+	"communityrequests-vote-update-summary": "Updating support vote",
+	"communityrequests-vote-remove-summary": "Removing support vote"
 }

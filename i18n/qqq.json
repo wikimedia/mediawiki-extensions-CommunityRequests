@@ -196,5 +196,8 @@
 	"communityrequests-cant-manually-edit": "Error message shown when a user tries to manually edit a wish or focus area, but does not have the right to do so.\n\nParameters:\n* $1 — The title of the Special page which should be used instead.",
 	"communityrequests-missing-wish": "Message shown when attempting to access a wish that does not exist. This can happen if a wish is deleted and clients are not made aware of this.\n\nParameters:\n* $1 — The page title to create a new wish.",
 	"communityrequests-missing-focus-area": "Message shown when attempting to access a focus area that does not exist. This can happen if a focus area is deleted and clients are not made aware of this.\n\nParameters:\n* $1 — The page title to create a new focus area.",
-	"communityrequests-wishlist-machine-translation": "Used in [[Special:Preferences]], tab \"User profile\" ({{int:prefs-personal}})."
+	"communityrequests-wishlist-machine-translation": "Used in [[Special:Preferences]], tab \"User profile\" ({{int:prefs-personal}}).",
+	"communityrequests-vote-add-summary": "Edit summary for adding a vote using the voting dialog. If the user added a comment, {{msg-mw|colon-separator}} and the comment will be appended to the message.",
+	"communityrequests-vote-update-summary": "Edit summary for updating a vote using the voting dialog. If the user added a comment, {{msg-mw|colon-separator}} and the comment will be appended to the message.",
+	"communityrequests-vote-remove-summary": "Edit summary for removing a vote using the voting dialog."
 }

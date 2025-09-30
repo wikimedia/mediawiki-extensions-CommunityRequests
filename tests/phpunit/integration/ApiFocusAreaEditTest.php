@@ -13,6 +13,7 @@ use MediaWiki\Title\Title;
  * @group Database
  * @covers \MediaWiki\Extension\CommunityRequests\Api\ApiFocusAreaEdit
  * @covers \MediaWiki\Extension\CommunityRequests\Api\ApiWishlistEntityBase
+ * @covers \MediaWiki\Extension\CommunityRequests\Api\ApiWishlistEditBase
  * @covers \MediaWiki\Extension\CommunityRequests\HookHandler\CommunityRequestsHooks
  */
 class ApiFocusAreaEditTest extends ApiTestCase {

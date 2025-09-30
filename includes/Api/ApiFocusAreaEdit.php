@@ -54,21 +54,6 @@ class ApiFocusAreaEdit extends ApiWishlistEntityBase {
 	}
 
 	/** @inheritDoc */
-	public function needsToken() {
-		return 'csrf';
-	}
-
-	/** @inheritDoc */
-	public function isInternal() {
-		return true;
-	}
-
-	/** @inheritDoc */
-	public function isWriteMode() {
-		return true;
-	}
-
-	/** @inheritDoc */
 	public function getAllowedParams() {
 		// NOTE: Keys should match the FocusArea::PARAM_* constants where possible.
 		return [

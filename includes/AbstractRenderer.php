@@ -257,6 +257,13 @@ abstract class AbstractRenderer implements MessageLocalizer {
 			$voteSubpageTitle = Title::newFromText( $voteSubpagePath );
 			if ( $voteSubpageTitle->exists() ) {
 				$out .= $this->parser->recursiveTagParse( '{{:' . $voteSubpagePath . '}}' );
+				// Add template dependency to ensure the votes subpage is kept up to date.
+				// FIXME: this doesn't appear to create a row in templatelinks?
+				$this->parser->getOutput()->addTemplate(
+					$voteSubpageTitle,
+					$voteSubpageTitle->getId(),
+					$voteSubpageTitle->getLatestRevID()
+				);
 			} else {
 				// Make sure the entity page is updated when the votes subpage is created.
 				$this->parser->getOutput()->addTemplate( $voteSubpageTitle, 0, 0 );

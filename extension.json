@@ -141,6 +141,16 @@
 				"CommunityRequests.FocusAreaStore",
 				"TitleParser"
 			]
+		},
+		"wishlistvote": {
+			"class": "MediaWiki\\Extension\\CommunityRequests\\Api\\ApiWishlistVote",
+			"services": [
+				"WikiPageFactory",
+				"CommunityRequests.VoteStore",
+				"CommunityRequests.WishStore",
+				"CommunityRequests.FocusAreaStore",
+				"CommunityRequests.WishlistConfig"
+			]
 		}
 	},
 	"AvailableRights": [

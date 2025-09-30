@@ -12,6 +12,7 @@ use MediaWiki\Extension\Translate\PageTranslation\TranslatablePageMarker;
 use MediaWiki\Extension\Translate\PageTranslation\TranslatablePageSettings;
 use MediaWiki\Linker\LinkTarget;
 use MediaWiki\MainConfigNames;
+use MediaWiki\MediaWikiServices;
 use MediaWiki\Page\PageIdentity;
 use MediaWiki\Title\Title;
 use MediaWiki\User\User;
@@ -204,7 +205,10 @@ trait WishlistTestTrait {
 	 */
 	abstract protected function getTestUser( $groups = [] );
 
-	/** @see \MediaWikiIntegrationTestCase::getServiceContainer */
+	/**
+	 * @return MediaWikiServices
+	 * @see \MediaWikiIntegrationTestCase::getServiceContainer
+	 */
 	abstract public function getServiceContainer();
 
 	/** @see \MediaWikiIntegrationTestCase::runJobs */

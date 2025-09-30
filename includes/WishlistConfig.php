@@ -399,6 +399,22 @@ class WishlistConfig {
 	}
 
 	/**
+	 * Get a PageReference to a wish page given the wikitext value.
+	 *
+	 * @param string $val The wikitext value, e.g. "W1".
+	 * @return ?PageReference The PageReference for the wish, or null if not valid.
+	 */
+	public function getWishPageRefFromWikitextVal( string $val ): ?PageReference {
+		try {
+			$titleValue = $this->titleParser->parseTitle( $this->wishPagePrefix .
+				trim( preg_replace( '/[^0-9]/', '', $val ) ) );
+		} catch ( MalformedTitleException | TypeError ) {
+			return null;
+		}
+		return PageReferenceValue::localReference( $titleValue->getNamespace(), $titleValue->getDBkey() );
+	}
+
+	/**
 	 * Get a PageReference to a focus area page given the wikitext value.
 	 *
 	 * @param string $val The wikitext value, e.g. "FA1".
@@ -412,6 +428,45 @@ class WishlistConfig {
 			return null;
 		}
 		return PageReferenceValue::localReference( $titleValue->getNamespace(), $titleValue->getDBkey() );
+	}
+
+	/**
+	 * Get a PageReference to either a wish or focus area page given the wikitext value.
+	 *
+	 * @param string $val The wikitext value, e.g. "W1" or "FA1".
+	 * @return ?PageReference The PageReference for the wish or focus area, or null if not valid.
+	 */
+	public function getEntityPageRefFromWikitextVal( string $val ): ?PageReference {
+		$val = trim( $val );
+		if ( !preg_match( '/[0-9]+$/', $val ) || is_numeric( $val ) ) {
+			return null;
+		}
+		$wishPageRef = $this->getWishPageRefFromWikitextVal( $val );
+		if ( $wishPageRef && str_ends_with( $wishPageRef->getDBkey(), $val ) ) {
+			return $wishPageRef;
+		}
+		$focusAreaPageRef = $this->getFocusAreaPageRefFromWikitextVal( $val );
+		if ( $focusAreaPageRef && str_ends_with( $focusAreaPageRef->getDBkey(), $val ) ) {
+			return $focusAreaPageRef;
+		}
+		return null;
+	}
+
+	/**
+	 * Get a PageReference to the votes page given an entity page reference.
+	 *
+	 * @param PageReference $entityRef
+	 * @return ?PageReference The PageReference for the votes page, or null if invalid.
+	 */
+	public function getVotesPageRefForEntity( PageReference $entityRef ): ?PageReference {
+		$entityRef = $this->getCanonicalEntityPageRef( $entityRef );
+		if ( !$this->isWishOrFocusAreaPage( $entityRef ) ) {
+			return null;
+		}
+		return PageReferenceValue::localReference(
+			$entityRef->getNamespace(),
+			$entityRef->getDBkey() . $this->votesPageSuffix
+		);
 	}
 
 	// IDs and labels from wikitext values

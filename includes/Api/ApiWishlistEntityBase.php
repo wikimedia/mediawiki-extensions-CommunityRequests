@@ -3,16 +3,11 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CommunityRequests\Api;
 
-use MediaWiki\Api\ApiBase;
 use MediaWiki\Api\ApiMain;
-use MediaWiki\Api\ApiUsageException;
-use MediaWiki\Context\DerivativeContext;
 use MediaWiki\Extension\CommunityRequests\AbstractWishlistEntity;
 use MediaWiki\Extension\CommunityRequests\AbstractWishlistStore;
 use MediaWiki\Extension\CommunityRequests\WishlistConfig;
 use MediaWiki\Page\PageIdentity;
-use MediaWiki\Request\DerivativeRequest;
-use MediaWiki\Status\Status;
 use MediaWiki\Title\Title;
 use MediaWiki\Title\TitleParser;
 use StatusValue;
@@ -22,28 +17,23 @@ use Throwable;
  * Common logic between ApiWishEdit and ApiFocusAreaEdit.
  * These are internal APIs for editing wishlist entities.
  */
-abstract class ApiWishlistEntityBase extends ApiBase {
+abstract class ApiWishlistEntityBase extends ApiWishlistEditBase {
 
 	protected Title $title;
-	protected array $params;
 
 	public function __construct(
 		ApiMain $main,
 		string $name,
-		protected readonly WishlistConfig $config,
+		WishlistConfig $config,
 		protected readonly AbstractWishlistStore $store,
 		protected readonly TitleParser $titleParser
 	) {
-		parent::__construct( $main, $name );
+		parent::__construct( $main, $name, $config );
 	}
 
 	/** @inheritDoc */
 	public function execute() {
-		if ( !$this->config->isEnabled() ) {
-			$this->dieWithError( 'communityrequests-disabled' );
-		}
-
-		$this->params = $this->extractRequestParams();
+		parent::execute();
 
 		// We use a dummy title for validations to avoid prematurely generating a new ID.
 		$dummyEntity = $this->getEntity(
@@ -110,37 +100,16 @@ abstract class ApiWishlistEntityBase extends ApiBase {
 	 * @param AbstractWishlistEntity $entity
 	 * @param string $token
 	 * @param int|null $baseRevId
-	 * @param array $tags
 	 * @return StatusValue
 	 */
-	protected function save(
-		AbstractWishlistEntity $entity,
-		string $token,
-		?int $baseRevId = null,
-		array $tags = []
-	): StatusValue {
-		$apiParams = [
-			'action' => 'edit',
-			'title' => Title::newFromPageIdentity( $entity->getPage() )->getPrefixedDBkey(),
-			'text' => $entity->toWikitext( $this->config )->getText(),
-			'summary' => $this->getEditSummary( $entity ),
-			'token' => $token,
-			'baserevid' => $baseRevId,
-			'tags' => implode( '|', $tags ),
-			'errorformat' => 'html',
-			'notminor' => true,
-		];
-
-		$context = new DerivativeContext( $this->getContext() );
-		$context->setRequest( new DerivativeRequest( $this->getRequest(), $apiParams ) );
-		$api = new ApiMain( $context, true );
-
-		try {
-			$api->execute();
-		} catch ( ApiUsageException $e ) {
-			return $e->getStatusValue();
-		}
-		return Status::newGood( $api->getResult() );
+	protected function save( AbstractWishlistEntity $entity, string $token, ?int $baseRevId = null ): StatusValue {
+		return $this->saveInternal(
+			Title::newFromPageIdentity( $entity->getPage() )->getPrefixedDBkey(),
+			$entity->toWikitext( $this->config )->getText(),
+			$this->getEditSummary( $entity ),
+			$token,
+			$baseRevId
+		);
 	}
 
 	/**
@@ -185,19 +154,4 @@ abstract class ApiWishlistEntityBase extends ApiBase {
 	 * @return string
 	 */
 	abstract protected function editSummarySave(): string;
-
-	/** @inheritDoc */
-	public function needsToken() {
-		return 'csrf';
-	}
-
-	/** @inheritDoc */
-	public function isInternal() {
-		return true;
-	}
-
-	/** @inheritDoc */
-	public function isWriteMode() {
-		return true;
-	}
 }

@@ -146,6 +146,7 @@ class WishlistConfigTest extends MediaWikiUnitTestCase {
 		$this->assertTrue( $this->config->isWishOrFocusAreaPage( $this->makeMockTitle( 'Community Wishlist/W123' ) ) );
 		$this->assertTrue( $this->config->isWishOrFocusAreaPage( $this->makeMockTitle( 'Community Wishlist/FA123' ) ) );
 
+		$this->assertFalse( $this->config->isWishPage( $this->makeMockTitle( '123' ) ) );
 		$this->assertFalse( $this->config->isWishPage( $this->makeMockTitle( 'W123' ) ) );
 		$this->assertTrue( $this->config->isWishPage( $this->makeMockTitle( 'Community Wishlist/W123' ) ) );
 		$this->assertTrue( $this->config->isWishPage( $this->makeMockTitle( 'Community Wishlist/W123/fr' ) ) );
@@ -281,6 +282,61 @@ class WishlistConfigTest extends MediaWikiUnitTestCase {
 			$this->config->getEntityWikitextVal( $this->makeMockTitle( 'Community Wishlist/W123/Votes' ) )
 		);
 		$this->assertNull( $this->config->getEntityWikitextVal( $this->makeMockTitle( 'Bogus' ) ) );
+	}
+
+	public function testGetEntityPageRefFromWikitextVal(): void {
+		$this->assertSame(
+			'Community_Wishlist/W123',
+			$this->config->getEntityPageRefFromWikitextVal( 'W123' )->getDBkey()
+		);
+		$this->assertSame(
+			'Community_Wishlist/FA123',
+			$this->config->getEntityPageRefFromWikitextVal( ' FA123 ' )->getDBkey()
+		);
+		$this->assertSame(
+			'Community_Wishlist/W123',
+			$this->config->getEntityPageRefFromWikitextVal( 'Community_Wishlist/W123' )->getDBkey()
+		);
+		$this->assertSame(
+			'Community_Wishlist/FA123',
+			$this->config->getEntityPageRefFromWikitextVal( 'Community_Wishlist/FA123' )->getDBkey()
+		);
+		$this->assertNull( $this->config->getEntityPageRefFromWikitextVal( 'bogus' ) );
+		$this->assertNull( $this->config->getEntityPageRefFromWikitextVal( 'Community_Wishlist/WWW123' ) );
+		$this->assertNull( $this->config->getEntityPageRefFromWikitextVal( 'Community_Wishlist/FA' ) );
+		$this->assertNull( $this->config->getEntityPageRefFromWikitextVal( 'Community_Wishlist/123' ) );
+		$this->assertNull( $this->config->getEntityPageRefFromWikitextVal( '123' ) );
+		$this->assertNull( $this->config->getEntityPageRefFromWikitextVal( '' ) );
+	}
+
+	public function testGetVotesPageRefForEntity(): void {
+		$this->assertSame(
+			'Community_Wishlist/W123/Votes',
+			$this->config->getVotesPageRefForEntity(
+				$this->makeMockTitle( 'Community Wishlist/W123' )
+			)->getDBkey()
+		);
+		$this->assertSame(
+			'Community_Wishlist/FA123/Votes',
+			$this->config->getVotesPageRefForEntity(
+				$this->makeMockTitle( 'Community Wishlist/FA123' )
+			)->getDBkey()
+		);
+		$this->assertSame(
+			'Community_Wishlist/W123/Votes',
+			$this->config->getVotesPageRefForEntity(
+				$this->makeMockTitle( 'Community Wishlist/W123/fr' )
+			)->getDBkey()
+		);
+		$this->assertNull(
+			$this->config->getVotesPageRefForEntity(
+				$this->makeMockTitle( 'Community Wishlist/W123/Votes' )
+			)
+		);
+		$this->assertNull( $this->config->getVotesPageRefForEntity( $this->makeMockTitle( 'Bogus' ) ) );
+		$this->assertNull( $this->config->getVotesPageRefForEntity(
+			$this->makeMockTitle( 'Community Wishlist/W123/fr-fake' )
+		) );
 	}
 
 	public function testGetCanonicalEntityPageRef(): void {

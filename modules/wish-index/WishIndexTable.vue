@@ -1,5 +1,6 @@
 <template>
 	<cdx-table
+		ref="table"
 		:caption="$i18n( 'communityrequests-wishes-table-caption' ).text()"
 		:columns="columns"
 		:data="data"
@@ -12,7 +13,6 @@
 		:pagination-size-default="limit"
 		:pagination-size-options="paginationSizeOptions"
 		:pending="pending"
-		ref="table"
 		@update:sort="onUpdateSort"
 		@load-more="onLoadMore"
 	>
@@ -37,7 +37,11 @@
 			</div>
 		</template>
 		<template #item-tags="{ item, row }">
-			<div v-for="( tag, index ) in item.slice( 0, showTagLimit )" :key="index" class="ext-communityrequests-wishes--tag">
+			<div
+				v-for="( tag, index ) in item.slice( 0, showTagLimit )"
+				:key="index"
+				class="ext-communityrequests-wishes--tag"
+			>
 				<cdx-info-chip :status="wishStatusStyle( tag )">
 					{{ Util.getTagLabel( tag ) }}
 				</cdx-info-chip>
@@ -157,6 +161,7 @@ module.exports = exports = defineComponent( {
 		// Reactive properties
 		/**
 		 * Used to access public methods in the CdxTable component like onFirst().
+		 *
 		 * @type {Ref}
 		 */
 		const table = ref();

@@ -14,7 +14,7 @@
 			<span v-else>{{ publishMsg }}</span>
 		</cdx-button>
 		<a
-			:href="returnTo"
+			:href="returnToUrl"
 			class="cdx-button cdx-button--fake-button--enabled
 				cdx-button--weight-quiet ext-communityrequests-intake__cancel"
 		>
@@ -52,9 +52,17 @@ module.exports = exports = defineComponent( {
 		formErrorMsg: { type: String, default: '' }
 	},
 	emits: [ 'submit' ],
-	setup() {
+	setup( props ) {
+		let returnToUrl = props.returnTo;
+		// Override returnTo if `returnto` param is present
+		const urlParams = new URLSearchParams( location.search );
+		if ( urlParams.get( 'returnto' ) ) {
+			returnToUrl = mw.util.getUrl( urlParams.get( 'returnto' ) );
+		}
 		return {
-			copyrightWarning: mw.config.get( 'copyrightWarning' )
+			copyrightWarning: mw.config.get( 'copyrightWarning' ),
+			returnToUrl
+
 		};
 	}
 } );

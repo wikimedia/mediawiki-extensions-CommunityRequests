@@ -147,7 +147,7 @@
 	"communityrequests-focus-area-supported": "Unterstützt von:",
 	"communityrequests-focus-area-supported-val": "$1 {{PLURAL:$2|Person|Personen}}",
 	"communityrequests-focus-area-owners-label": "Besitzer:",
-	"communityrequests-focus-area-view-wishes": "Wünsche aus diesem Bereich ansehen",
+	"communityrequests-focus-area-view-wishes": "$1 {{PLURAL:$2|Wunsch|Wünsche}} in diesem Bereich anzeigen",
 	"communityrequests-focus-area-wishes-list": "Wünsche in diesem Schwerpunktbereich",
 	"communityrequests-focus-area-wishes-description-1": "Nachfolgend findest du eine Liste der Wünsche, die diesem Schwerpunkt zugrunde liegen. Im Laufe der Zeit können weitere Wünsche hinzugefügt werden.",
 	"communityrequests-focus-area-wishes-description-2": "Die Abstimmung über den Schwerpunktbereich ist keine Garantie dafür, dass jeder Wunsch explizit erfüllt wird; vielmehr geben die Wünsche Hinweise auf das Gesamtproblem.",

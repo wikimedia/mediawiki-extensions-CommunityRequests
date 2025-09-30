@@ -1,0 +1,12 @@
+{
+	"@metadata": {
+		"authors": [
+			"Eduardoaddad"
+		]
+	},
+	"apihelp-query+communityrequests-wishes-paramvalue-prop-description": "Descrição do desejo",
+	"apihelp-query+communityrequests-wishes-paramvalue-sort-created": "Ordenar por data de criação",
+	"apihelp-query+communityrequests-wishes-paramvalue-sort-updated": "Ordenar pela data da última atualização",
+	"apihelp-query+communityrequests-wishes-paramvalue-sort-votecount": "Ordenar por número de apoios",
+	"apihelp-query+communityrequests-wishes-paramvalue-sort-title": "Ordenar por título"
+}

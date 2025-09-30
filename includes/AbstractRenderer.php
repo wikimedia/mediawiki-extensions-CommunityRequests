@@ -271,7 +271,7 @@ abstract class AbstractRenderer implements MessageLocalizer {
 				$out .= $this->parser->recursiveTagParse( '{{:' . $voteSubpagePath . '}}' );
 			} else {
 				// Make sure the entity page is updated when the votes subpage is created.
-				$this->parser->getOutput()->addExistenceDependency( $voteSubpageTitle );
+				$this->parser->getOutput()->addTemplate( $voteSubpageTitle, 0, 0 );
 			}
 		}
 

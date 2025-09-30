@@ -5,6 +5,7 @@ namespace MediaWiki\Extension\CommunityRequests\Tests\Integration;
 
 use MediaWiki\Extension\CommunityRequests\Wish\Wish;
 use MediaWiki\Extension\CommunityRequests\Wish\WishStore;
+use MediaWiki\Page\WikiPage;
 use MediaWiki\Title\Title;
 use MediaWikiIntegrationTestCase;
 
@@ -89,7 +90,7 @@ END;
 		$wish = $this->insertTestWish(
 			'Community Wishlist/W123',
 			'en',
-			[ 'title' => '<translate>Test wish</translate>', 'status' => 'in-progress' ]
+			[ 'title' => '<translate>Test wish</translate>', Wish::PARAM_STATUS => 'in-progress' ]
 		);
 		$this->insertPage(
 			$wish->getPage()->getDBkey() . $this->config->getVotesPageSuffix(),
@@ -104,7 +105,7 @@ END;
 		$wishDe = $this->insertTestWish(
 			'Community Wishlist/W123',
 			'de',
-			[ Wish::PARAM_BASE_LANG => 'en', 'status' => 'in-progress' ]
+			[ Wish::PARAM_BASE_LANG => 'en', Wish::PARAM_STATUS => 'in-progress' ]
 		);
 		$wikiPageDe = $wikiPageFactory->newFromTitle(
 			Title::newFromPageReference( $wishDe->getTranslationSubpage() )
@@ -114,10 +115,26 @@ END;
 		$this->assertStringContainsString( '<b>2 Unterstützer</b>', $parserOutputDe->getRawText() );
 	}
 
-	// phpcs:enable Generic.Files.LineLength.TooLong
-
 	public function testChangePageLanguage(): void {
 		$wish = $this->insertTestWish( 'Community Wishlist/W123', 'fr' );
 		$this->assertSame( 'fr', Title::newFromPageIdentity( $wish->getPage() )->getPageLanguage()->getCode() );
+	}
+
+	public function testRenderAfterVotesPageCreation(): void {
+		$wish = $this->insertTestWish( 'Community Wishlist/W123', 'en', [
+			Wish::PARAM_STATUS => 'prioritized',
+		] );
+		$this->insertPage(
+			$wish->getPage()->getDBkey() . $this->config->getVotesPageSuffix(),
+			'{{#CommunityRequests:vote|username=TestUser1|timestamp=2023-10-01T12:00:00Z' .
+			"|comment=The very first vote!}}\n"
+		);
+		$this->runJobs();
+		/** @var WikiPage $wikiPage */
+		$wikiPage = $this->getServiceContainer()
+			->getWikiPageFactory()
+			->newFromTitle( $wish->getPage() );
+		$parserText = $wikiPage->getParserOutput()->getContentHolderText();
+		$this->assertStringContainsString( 'The very first vote!', $parserText );
 	}
 }

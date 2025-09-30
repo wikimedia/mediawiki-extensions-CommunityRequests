@@ -351,6 +351,7 @@ class CommunityRequestsHooks implements
 		// (T404748) Update parser cache to ensure displayed content reflects content language
 		if ( $this->translateInstalled ) {
 			$wikiPage = $this->wikiPageFactory->newFromTitle( $title );
+			$wikiPage->doPurge();
 			$wikiPage->updateParserCache();
 		}
 	}

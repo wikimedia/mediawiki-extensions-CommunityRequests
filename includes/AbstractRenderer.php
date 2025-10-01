@@ -373,8 +373,8 @@ abstract class AbstractRenderer implements MessageLocalizer {
 					$label ?: $entity->getTitle()
 				);
 			} else {
-				// Not found -- just show plain text
-				return htmlspecialchars( $focusAreaArg, ENT_NOQUOTES );
+				// Not found, show unassigned
+				return $this->msg( 'communityrequests-focus-area-unassigned' )->escaped();
 			}
 		} else {
 			return $this->msg( 'communityrequests-focus-area-unassigned' )->escaped();

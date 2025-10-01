@@ -57,21 +57,30 @@ END;
 		$this->assertSame( '2023-10-01T12:00:00Z', $wish->getCreated() );
 	}
 
-	public function testTrackingCategories(): void {
+	public function testCategories(): void {
 		$this->markTestSkippedIfExtensionNotLoaded( 'Translate' );
 
 		$wishTitle = Title::newFromText( $this->config->getWishPagePrefix() . '123' );
-		$this->insertTestWish( $wishTitle, 'en', [ Wish::PARAM_TITLE => '<translate>Test title</translate>' ] );
+		$this->insertTestWish( $wishTitle, 'fr', [
+			Wish::PARAM_TITLE => '<translate>Test title</translate>',
+			Wish::PARAM_TAGS => 'multimedia,notifications',
+		] );
 		$categories = array_keys( $wishTitle->getParentCategories() );
 		$this->assertContains( 'Category:Community_Wishlist/Wishes', $categories );
-		$this->assertNotContains( 'Category:Community_Wishlist/Wishes/en', $categories );
+		$this->assertNotContains( 'Category:Community_Wishlist/Wishes/fr', $categories );
+		$this->assertContains( 'Category:Community_Wishlist/Wishes/Multimedia_and_Commons', $categories );
+		$this->assertContains( 'Category:Community_Wishlist/Wishes/Notifications', $categories );
 		$this->assertNotContains( 'Category:Pages_with_Community_Wishlist_errors', $categories );
 		// Add translation
-		$wishDe = $this->insertTestWish( $wishTitle, 'de', [ Wish::PARAM_BASE_LANG => 'en' ] );
+		$wishDe = $this->insertTestWish( $wishTitle, 'de', [
+			Wish::PARAM_BASE_LANG => 'en', Wish::PARAM_TAGS => 'multimedia,notifications',
+		] );
 		$categories = array_keys(
 			Title::newFromPageReference( $wishDe->getTranslationSubpage() )->getParentCategories()
 		);
 		$this->assertContains( 'Category:Community_Wishlist/Wishes/de', $categories );
+		$this->assertContains( 'Category:Community_Wishlist/Wishes/Multimedia_and_Commons/de', $categories );
+		$this->assertContains( 'Category:Community_Wishlist/Wishes/Notifications/de', $categories );
 
 		// Invalid wish (missing title)
 		$invalidTitle = Title::newFromText( $this->config->getWishPagePrefix() . '124' );

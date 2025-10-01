@@ -52,16 +52,19 @@ class WishlistConfigTest extends MediaWikiUnitTestCase {
 					'navigation' => [
 						'admins' => [
 							'id' => 0,
-							'category' => 'Category:Community Wishlist/Admins and stewards',
+							// NOTE: The NS prefix in the value would require mocking NamespaceInfo.
+							// AbstractRenderer::addTranslationCategory() will correctly strip
+							// the "Category:" prefix that would normally be present here.
+							'category' => 'Community Wishlist/Admins and stewards',
 						],
 						'botsgadgets' => [
 							'id' => 1,
-							'category' => 'Category:Community Wishlist/Bots and gadgets',
+							'category' => 'Community Wishlist/Bots and gadgets',
 							'label' => 'communityrequests-tag-bots-gadgets',
 						],
 						'editing' => [
 							'id' => 2,
-							'category' => 'Category:Community Wishlist/Editing',
+							'category' => 'Community Wishlist/Editing',
 						],
 					]
 				],
@@ -240,6 +243,13 @@ class WishlistConfigTest extends MediaWikiUnitTestCase {
 			$this->config->getTagLabelFromWikitextVal( 'botsgadgets' )
 		);
 		$this->assertNull( $this->config->getTagLabelFromWikitextVal( 'bogus' ) );
+	}
+
+	public function testGetTagCategoryFromWikitextVal(): void {
+		$this->assertSame(
+			'Community_Wishlist/Admins_and_stewards',
+			$this->config->getTagCategoryFromWikitextVal( 'admins' )
+		);
 	}
 
 	public function testGetStatusIdFromWikitextVal(): void {

@@ -99,14 +99,22 @@ class WishRenderer extends AbstractRenderer {
 		);
 
 		// Tags.
-		$tagLabels = array_map( function ( $wikitextVal ) {
-			$label = $this->config->getTagLabelFromWikitextVal( $wikitextVal );
+		$tagsArgs = array_filter(
+			explode( WishStore::ARRAY_DELIMITER_WIKITEXT, $this->getArg( Wish::PARAM_TAGS, '' ) )
+		);
+		$tagLabels = [];
+		foreach ( $tagsArgs as $tag ) {
+			$label = $this->config->getTagLabelFromWikitextVal( $tag );
 			if ( $label === null ) {
 				$this->parser->addTrackingCategory( self::ERROR_TRACKING_CATEGORY );
-				return null;
+				continue;
 			}
-			return $this->msg( $label )->text();
-		}, array_filter( explode( WishStore::ARRAY_DELIMITER_WIKITEXT, $this->getArg( Wish::PARAM_TAGS, '' ) ) ) );
+			$tagLabels[] = $this->msg( $label )->text();
+			$tagCategory = $this->config->getTagCategoryFromWikitextVal( $tag );
+			if ( $tagCategory ) {
+				$this->addTranslationCategory( $tagCategory );
+			}
+		}
 
 		$tags = '';
 		$tagsHeading = '';

@@ -465,6 +465,24 @@ class WishlistConfig {
 	}
 
 	/**
+	 * Get the category associated with a tag from its wikitext value.
+	 * For use with ParserOutput::addCategory().
+	 *
+	 * @param string $tag
+	 * @return string|null In DBkey format, or null if not found.
+	 * @throws ConfigException
+	 */
+	public function getTagCategoryFromWikitextVal( string $tag ): ?string {
+		$tag = trim( $tag );
+		$category = $this->navigationTags[$tag]['category'] ?? null;
+		if ( $category === null ) {
+			throw new ConfigException( "Tag '$tag' or its category not found in configuration." );
+		}
+		// Don't include the namespace prefix in the category name.
+		return $this->titleParser->parseTitle( $category )->getDBkey();
+	}
+
+	/**
 	 * Get the ID of a status from its wikitext value.
 	 *
 	 * @param string $status

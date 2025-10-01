@@ -399,14 +399,22 @@ abstract class AbstractRenderer implements MessageLocalizer {
 	 *
 	 * @param string $key The message key for the category name
 	 */
-	protected function addTrackingCategory( $key ): void {
+	protected function addTrackingCategory( string $key ): void {
 		$this->parser->addTrackingCategory( $key );
+		$this->addTranslationCategory(
+			$this->msg( $key )->inLanguage( $this->config->siteLanguage )->text()
+		);
+	}
 
-		// If Extension:Translate is installed, we want to add categories for
-		// translation subpages per convention; see https://w.wiki/FDXd
+	/**
+	 * If Extension:Translate is installed, we want to add categories for
+	 * translation subpages per convention; see https://w.wiki/FDXd
+	 *
+	 * @param string $category
+	 */
+	protected function addTranslationCategory( string $category ): void {
 		if ( in_array( 'translation', $this->parser->getFunctionHooks() ) ) {
-			$translationCategory = $this->msg( $key )->inLanguage( $this->config->siteLanguage ) .
-				$this->parser->internalParse( '{{#translation:}}' );
+			$translationCategory = $category . $this->parser->internalParse( '{{#translation:}}' );
 			$this->parser->getOutput()->addCategory( $translationCategory );
 		}
 	}

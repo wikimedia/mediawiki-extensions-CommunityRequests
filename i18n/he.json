@@ -149,7 +149,7 @@
 	"communityrequests-focus-area-supported": "נתמך על־ידי:",
 	"communityrequests-focus-area-supported-val": "{{PLURAL:$1|אדם אחד|$2 אנשים}}",
 	"communityrequests-focus-area-owners-label": "בעלים:",
-	"communityrequests-focus-area-view-wishes": "הצגת משאלות בתחום הזה",
+	"communityrequests-focus-area-view-wishes": "הצגת {{PLURAL:$2|משאלה|$1 משאלות}} בתחום הזה",
 	"communityrequests-focus-area-wishes-list": "משאלות בתחום המיקוד הזה",
 	"communityrequests-focus-area-wishes-description-1": "להלן רשימה של משאלות שהשפיעו על תחום המיקוד הזה. משאלות נוספות עשויות להתווסף לטבלה הזאת עם הזמן.",
 	"communityrequests-focus-area-wishes-description-2": "הצבעה בעד תחום המיקוד אינה ערובה לכך שכל משאלה תמומש במפורש; מדויק יותר לומר שהמשאלות מרמזות על הבעיה בכללותה.",

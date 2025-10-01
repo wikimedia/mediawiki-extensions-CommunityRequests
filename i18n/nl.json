@@ -147,7 +147,7 @@
 	"communityrequests-focus-area-supported": "Gesteund door:",
 	"communityrequests-focus-area-supported-val": "$1 {{PLURAL:$2|persoon|personen}}",
 	"communityrequests-focus-area-owners-label": "Eigenaars:",
-	"communityrequests-focus-area-view-wishes": "Wensen in dit gebied bekijken",
+	"communityrequests-focus-area-view-wishes": "$1 wens{{PLURAL:$2||en}} in dit gebied bekijken",
 	"communityrequests-focus-area-wishes-list": "Wensen in dit aandachtsgebied",
 	"communityrequests-focus-area-wishes-description-1": "Hieronder staat een lijst met wensen die aan dit aandachtsgebied ten grondslag liggen. Mogelijk worden er in de loop van de tijd nog meer wensen aan deze tabel toegevoegd.",
 	"communityrequests-focus-area-wishes-description-2": "Door op het aandachtsgebied te stemmen wordt niet gegarandeerd dat elke wens als zodanig wordt vervuld. De wensen worden vooral als aanwijzingen voor het grotere probleem opgevat.",

@@ -152,7 +152,7 @@
 	"communityrequests-focus-area-supported": "Soutenu par :",
 	"communityrequests-focus-area-supported-val": "$1 {{PLURAL:$2|personne|personnes}}",
 	"communityrequests-focus-area-owners-label": "Propriétaires :",
-	"communityrequests-focus-area-view-wishes": "Voir les souhaits dans ce domaine",
+	"communityrequests-focus-area-view-wishes": "Voir $1 {{PLURAL:$2|souhait|souhaits}} dans ce domaine",
 	"communityrequests-focus-area-wishes-list": "Souhaits dans ce domaine d'action",
 	"communityrequests-focus-area-wishes-description-1": "Vous trouverez ci-dessous une liste des souhaits qui ont guidé ce domaine d’action. D’autres souhaits pourraient y être ajoutés au fil du temps.",
 	"communityrequests-focus-area-wishes-description-2": "Le fait de voter pour le domaine d’action ne garantit pas que chaque souhait sera explicitement exaucé ; les souhaits suggèrent plutôt le problème dans son ensemble.",

@@ -146,7 +146,7 @@
 	"communityrequests-focus-area-supported": "Apoiada por:",
 	"communityrequests-focus-area-supported-val": "$1 {{PLURAL:$2|persoa|persoas}}",
 	"communityrequests-focus-area-owners-label": "Propiedade de:",
-	"communityrequests-focus-area-view-wishes": "Consultar os desexos nesta área",
+	"communityrequests-focus-area-view-wishes": "Consultar $1 {{PLURAL:$2|desexo|desexos}} nesta área",
 	"communityrequests-focus-area-wishes-list": "Desexos nesta área de enfoque",
 	"communityrequests-focus-area-wishes-description-1": "A continuación móstrase unha lista de desexos que serviron de base para esta área de enfoque. Poderíanse engadir máis desexos a esta táboa co tempo.",
 	"communityrequests-focus-area-wishes-description-2": "Votar pola área de enfoque non garante que cada desexo se cumpra explicitamente; máis ben, os desexos suxiren o problema en xeral.",

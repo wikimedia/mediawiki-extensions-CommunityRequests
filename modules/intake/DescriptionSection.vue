@@ -154,6 +154,10 @@ module.exports = exports = defineComponent( {
 		/* XXX: doesn't appear to be a Codex token for this */
 		transition-duration: 0.25s;
 
+		.ve-ce-contentBranchNode {
+			overflow-wrap: break-word;
+		}
+
 		&:has( > .ve-ce-surface-focused ) {
 			border: @border-progressive;
 			box-sizing: border-box;

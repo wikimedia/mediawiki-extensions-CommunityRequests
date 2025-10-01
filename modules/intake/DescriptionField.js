@@ -207,6 +207,14 @@ class DescriptionField {
 		this.$veWrapper.append( this.target.$element );
 		this.$textarea.hide();
 
+		// Set the width to match that of the containing form.
+		const form = document.getElementById( 'ext-communityrequests-intake-form' );
+		const resizeHandler = () => {
+			this.surface.$element.css( 'max-width', form.offsetWidth + 'px' );
+		};
+		$( this.surface.getElementWindow() ).on( { resize: resizeHandler } );
+		resizeHandler();
+
 		this.setPending( false );
 	}
 

@@ -554,11 +554,13 @@ abstract class AbstractWishlistStore {
 		if ( $fetchWikitext === self::FETCH_WIKITEXT_TRANSLATED ) {
 			$translationPageRef = PageReferenceValue::localReference(
 				(int)$entityData->page_namespace,
-				$entityData->page_title . '/' . $entityData->{static::baseLangField()}
+				$entityData->page_title . '/' . $entityData->{static::translationLangField()}
 			);
-			$translationPageId = $this->pageStore->getPageByReference( $translationPageRef )?->getId()
-				// If the translation subpage is missing, fallback to the base page.
-				?? $translationPageId;
+			$translationPage = $this->pageStore->getPageByReference( $translationPageRef );
+			if ( $translationPage ) {
+				// If the translation subpage exists, use it, otherwise fallback to the base page.
+				$translationPageId = $translationPage->getId();
+			}
 		}
 
 		// Fetch wikitext data from the page and merge it into the row.

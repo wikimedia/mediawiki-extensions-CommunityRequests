@@ -329,7 +329,7 @@ class CommunityRequestsHooks implements
 			return;
 		}
 		$data = $linksUpdate->getParserOutput()->getExtensionData( self::EXT_DATA_KEY );
-		if ( !$data ) {
+		if ( !$data || !isset( $data[AbstractWishlistEntity::PARAM_ENTITY_TYPE] ) ) {
 			return;
 		}
 		$store = $this->stores[$data[AbstractWishlistEntity::PARAM_ENTITY_TYPE]];

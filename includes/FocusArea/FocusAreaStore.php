@@ -69,7 +69,7 @@ class FocusAreaStore extends AbstractWishlistStore {
 	 * @return int[] Keys are focus area page IDs, values are unformatted integer counts of wishes.
 	 */
 	public function getWishCounts(): array {
-		$results = $this->dbProvider->getReplicaDatabase()
+		$results = $this->dbProvider->getReplicaDatabase( 'virtual-communityrequests' )
 			->newSelectQueryBuilder()
 			->caller( __METHOD__ )
 			->table( self::tableName(), 'fa' )

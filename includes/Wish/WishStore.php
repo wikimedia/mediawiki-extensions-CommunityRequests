@@ -116,8 +116,11 @@ class WishStore extends AbstractWishlistStore {
 		$dbw = $this->dbProvider->getPrimaryDatabase( 'virtual-communityrequests' );
 		$dbw->startAtomic( __METHOD__ );
 
-		// @phan-suppress-next-line PhanTypeMismatchArgumentNullable Proposer is checked and not null
-		$proposer = $wish->getProposer() ? $this->actorNormalization->findActorId( $wish->getProposer(), $dbw ) : null;
+		$proposer = $wish->getProposer() ? $this->actorNormalization->findActorId(
+			// @phan-suppress-next-line PhanTypeMismatchArgumentNullable Proposer is checked and not null
+			$wish->getProposer(),
+			$this->dbProvider->getReplicaDatabase()
+		) : null;
 		$created = $wish->getCreated();
 
 		if ( !$proposer || !$created ) {

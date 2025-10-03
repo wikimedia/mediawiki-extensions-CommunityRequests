@@ -18,14 +18,14 @@ class FocusAreaRenderer extends AbstractRenderer {
 	 * @return string HTML
 	 */
 	public function render(): string {
-		if ( !$this->config->isEnabled()
-			|| !$this->config->isFocusAreaPage( $this->parser->getPage() ) ) {
+		if ( !$this->config->isEnabled() || !$this->config->isFocusAreaPage( $this->parser->getPage() ) ) {
 			return '';
 		}
 		$args = $this->getArgs();
 		$args[FocusArea::PARAM_DESCRIPTION] ??= '';
 
 		$this->addTrackingCategory( self::FOCUS_AREA_TRACKING_CATEGORY );
+		$this->parser->getOptions()->setSuppressSectionEditLinks();
 
 		// Add tracking category for missing critical data.
 		$requiredFields = [

@@ -19,13 +19,12 @@ class WishRenderer extends AbstractRenderer {
 	 * @return string HTML
 	 */
 	public function render(): string {
-		if ( !$this->config->isEnabled()
-			|| !$this->config->isWishPage( $this->parser->getPage() )
-		) {
+		if ( !$this->config->isEnabled() || !$this->config->isWishPage( $this->parser->getPage() ) ) {
 			return '';
 		}
 
 		$this->addTrackingCategory( self::WISH_TRACKING_CATEGORY );
+		$this->parser->getOptions()->setSuppressSectionEditLinks();
 
 		$args = $this->getArgs();
 

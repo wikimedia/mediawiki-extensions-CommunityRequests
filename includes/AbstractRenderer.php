@@ -187,31 +187,6 @@ abstract class AbstractRenderer implements MessageLocalizer {
 		);
 	}
 
-	protected function getFakeButton( Title $title, string $msgKey, string $icon ): string {
-		return Html::rawElement(
-			'a',
-			[
-				'href' => $title->getLocalURL(),
-				'class' => [
-					'cdx-button',
-					'cdx-button--fake-button',
-					'cdx-button--fake-button--enabled',
-					'cdx-button--action-default',
-					'cdx-button--weight-normal',
-					'cdx-button--enabled'
-				],
-				'role' => 'button',
-			],
-			Html::element(
-				'span',
-				[
-					'class' => [ 'cdx-button__icon', "ext-communityrequests-{$this->entityType}--$icon" ],
-					'aria-hidden' => 'true',
-				],
-			) . $this->msg( $msgKey )->escaped()
-		);
-	}
-
 	/**
 	 * Get the HTML for the voting section of a wish or focus area page.
 	 *

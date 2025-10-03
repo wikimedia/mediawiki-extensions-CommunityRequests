@@ -51,7 +51,7 @@ title=Community_Wishlist/W1
 |baselang = en
 |description = This is a [[test]] {{wish}}.}}
 !! html
-<div class="ext-communityrequests-wish"><div class="mw-heading mw-heading2">Description</div><div class="ext-communityrequests-wish--description">
+<p><a href="/wiki/Community_Wishlist/Wishes" title="Community Wishlist/Wishes">View all wishes.</a></p><div class="ext-communityrequests-wish"><div class="mw-heading mw-heading2">Description</div><div class="ext-communityrequests-wish--description">
 <p>This is a <a href="/wiki/Test" title="Test">test</a> This is a test template for parser tests.
 </p>
 </div><div class="mw-heading mw-heading3">Assigned focus area</div><div class="ext-communityrequests-wish--focus-area">
@@ -83,7 +83,7 @@ title=Community_Wishlist/W2
 |baselang = en
 |description = This is a wish without voting.}}
 !! html
-<div class="ext-communityrequests-wish"><div class="mw-heading mw-heading2">Description</div><div class="ext-communityrequests-wish--description">
+<p><a href="/wiki/Community_Wishlist/Wishes" title="Community Wishlist/Wishes">View all wishes.</a></p><div class="ext-communityrequests-wish"><div class="mw-heading mw-heading2">Description</div><div class="ext-communityrequests-wish--description">
 <p>This is a wish without voting.
 </p>
 </div><div class="mw-heading mw-heading3">Assigned focus area</div><div class="ext-communityrequests-wish--focus-area">
@@ -115,7 +115,7 @@ title=Community_Wishlist/W2
 |baselang = en
 |description = This is a wish without voting.}}
 !! html
-<div class="ext-communityrequests-wish"><div class="mw-heading mw-heading2">Description</div><div class="ext-communityrequests-wish--description">
+<p><a href="/wiki/Community_Wishlist/Wishes" title="Community Wishlist/Wishes">View all wishes.</a></p><div class="ext-communityrequests-wish"><div class="mw-heading mw-heading2">Description</div><div class="ext-communityrequests-wish--description">
 <p>This is a wish without voting.
 </p>
 </div><div class="mw-heading mw-heading3">Assigned focus area</div><div class="ext-communityrequests-wish--focus-area">
@@ -164,7 +164,7 @@ language=qqx
 |baselang = he
 |description = זהו [[test]] {{wish}}}}
 !! html
-<div class="ext-communityrequests-wish"><div class="mw-heading mw-heading2">(communityrequests-wish-description-heading)</div><div class="ext-communityrequests-wish--description">
+<p><a href="/wiki/Community_Wishlist/Wishes" title="Community Wishlist/Wishes">(communityrequests-view-all-wishes)</a></p><div class="ext-communityrequests-wish"><div class="mw-heading mw-heading2">(communityrequests-wish-description-heading)</div><div class="ext-communityrequests-wish--description">
 <p>זהו <a href="/wiki/Test" title="Test">test</a> This is a test template for parser tests
 </p>
 </div><div class="mw-heading mw-heading3">(communityrequests-wish-focus-area-heading)</div><div class="ext-communityrequests-wish--focus-area">

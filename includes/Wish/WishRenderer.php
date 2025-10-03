@@ -5,7 +5,6 @@ namespace MediaWiki\Extension\CommunityRequests\Wish;
 
 use MediaWiki\Extension\CommunityRequests\AbstractRenderer;
 use MediaWiki\Html\Html;
-use MediaWiki\Registration\ExtensionRegistry;
 use MediaWiki\Title\TitleValue;
 
 class WishRenderer extends AbstractRenderer {
@@ -61,10 +60,7 @@ class WishRenderer extends AbstractRenderer {
 		// Cache the wish data for storage after the links update.
 		$this->parser->getOutput()->setExtensionData( self::EXT_DATA_KEY, $args );
 
-		$languageLinks = ExtensionRegistry::getInstance()->isLoaded( 'Translate' ) ?
-			$this->parser->recursiveTagParse( '<languages/>' ) : '';
-
-		return $languageLinks . $this->renderWishInternal( $args );
+		return $this->getEntityTopSection() . $this->renderWishInternal( $args );
 	}
 
 	private function renderWishInternal( array $args ): string {

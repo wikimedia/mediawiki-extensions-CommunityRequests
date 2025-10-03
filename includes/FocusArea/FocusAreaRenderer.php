@@ -5,7 +5,6 @@ namespace MediaWiki\Extension\CommunityRequests\FocusArea;
 
 use MediaWiki\Extension\CommunityRequests\AbstractRenderer;
 use MediaWiki\Html\Html;
-use MediaWiki\Registration\ExtensionRegistry;
 
 class FocusAreaRenderer extends AbstractRenderer {
 	public const FOCUS_AREA_TRACKING_CATEGORY = 'communityrequests-focus-area-category';
@@ -49,10 +48,7 @@ class FocusAreaRenderer extends AbstractRenderer {
 		$this->logger->debug( __METHOD__ . ": Rendering focus area. {0}", [ json_encode( $args ) ] );
 		$this->parser->getOutput()->setExtensionData( self::EXT_DATA_KEY, $args );
 
-		$languageLinks = ExtensionRegistry::getInstance()->isLoaded( 'Translate' ) ?
-			$this->parser->recursiveTagParse( '<languages/>' ) : '';
-
-		return $languageLinks . $this->renderFocusAreaInternal( $args );
+		return $this->getEntityTopSection() . $this->renderFocusAreaInternal( $args );
 	}
 
 	private function renderFocusAreaInternal( array $args ): string {

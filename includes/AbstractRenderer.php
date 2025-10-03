@@ -12,6 +12,7 @@ use MediaWiki\Parser\CoreTagHooks;
 use MediaWiki\Parser\Parser;
 use MediaWiki\Parser\PPFrame;
 use MediaWiki\Parser\PPNode;
+use MediaWiki\Registration\ExtensionRegistry;
 use MediaWiki\Title\Title;
 use MessageLocalizer;
 use Psr\Log\LoggerInterface;
@@ -396,6 +397,29 @@ abstract class AbstractRenderer implements MessageLocalizer {
 		} else {
 			return $this->msg( 'communityrequests-focus-area-unassigned' )->escaped();
 		}
+	}
+
+	/**
+	 * Get the wikitext to output at the top of an entity page (the languages list, and link to the index page).
+	 *
+	 * @return string
+	 */
+	protected function getEntityTopSection() {
+		$languageLinks = ExtensionRegistry::getInstance()->isLoaded( 'Translate' ) ?
+			$this->parser->recursiveTagParse( '<languages/>' ) : '';
+		$backLink = '';
+		if ( $this->config->isWishPage( $this->parser->getPage() ) ) {
+			$backLink .= $this->linkRenderer->makeKnownLink(
+				Title::newFromText( $this->config->getWishIndexPage() ),
+				$this->parser->msg( 'communityrequests-view-all-wishes' )->text()
+			);
+		} else {
+			$backLink .= $this->linkRenderer->makeKnownLink(
+				Title::newFromText( $this->config->getFocusAreaIndexPage() ),
+				$this->parser->msg( 'communityrequests-view-all-focus-areas' )->text()
+			);
+		}
+		return $languageLinks . $backLink;
 	}
 
 	/**

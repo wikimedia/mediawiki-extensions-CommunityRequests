@@ -5,5 +5,6 @@
 		]
 	},
 	"communityrequests-focus-area-publish": "Kisika ya bo ke tulaka dikebi na kubasisa",
-	"communityrequests-focus-area-save": "Bumba Bansoba"
+	"communityrequests-focus-area-save": "Bumba Bansoba",
+	"communityrequests-focus-area-view-wishes": "View $1 {{PLURAL:$2|wish|wishes}} in this area"
 }

@@ -144,7 +144,7 @@
 	"communityrequests-focus-area-supported": "Appoiate per:",
 	"communityrequests-focus-area-supported-val": "$1 persona{{PLURAL:$2||s}}",
 	"communityrequests-focus-area-owners-label": "Proprietarios:",
-	"communityrequests-focus-area-view-wishes": "Vider desiros in iste area",
+	"communityrequests-focus-area-view-wishes": "Vider $1 desiro{{PLURAL:$2||s}} in iste area",
 	"communityrequests-focus-area-wishes-list": "Desiros in iste area de interese",
 	"communityrequests-focus-area-wishes-description-1": "Infra se trova in lista de desiros que ha informate iste area de interesse. Plus desiros pote esser addite a iste tabella in le curso del tempore.",
 	"communityrequests-focus-area-wishes-description-2": "Votar pro le area de interesse non es un garantia que cata desiro essera explicitemente realisate; plus tosto, le desiros suggere como resolver le problema in general.",

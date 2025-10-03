@@ -146,7 +146,7 @@
 	"communityrequests-focus-area-supported": "Destekleyenler:",
 	"communityrequests-focus-area-supported-val": "$1 {{PLURAL:$2|kişi}}",
 	"communityrequests-focus-area-owners-label": "Sahipler:",
-	"communityrequests-focus-area-view-wishes": "Bu alandaki dilekleri görüntüle",
+	"communityrequests-focus-area-view-wishes": "Bu alandaki $1 {{PLURAL:$2|dileği}} görüntüle",
 	"communityrequests-focus-area-wishes-list": "Bu odak alanındaki dilekler",
 	"communityrequests-focus-area-wishes-description-1": "Aşağıda, bu odak alanını şekillendiren dileklerin bir listesi bulunmaktadır. Zamanla bu tabloya daha fazla dilek eklenebilir.",
 	"communityrequests-focus-area-wishes-description-2": "Odak alanına oy verilmesi, her dileğin açıkça yerine getirileceğinin garantisi değildir; aksine, dilekler genel olarak sorunun ne olduğunu gösterir.",

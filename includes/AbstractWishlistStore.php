@@ -491,9 +491,9 @@ abstract class AbstractWishlistStore {
 		$rows = [];
 		foreach ( $entityDataByPage as $entityDataByLang ) {
 			// All rows will have the same base language.
-			$baseLang = reset( $entityDataByLang )->{static::baseLangField()};
-			// This will be overridden if a user-preferred language is found.
-			$row = $entityDataByLang[$baseLang];
+			$firstRow = reset( $entityDataByLang );
+			$baseLang = $firstRow->{static::baseLangField()};
+			$row = null;
 
 			// Find the first row with a matching language.
 			foreach ( $fallbackLangs as $fallbackLang ) {
@@ -503,6 +503,11 @@ abstract class AbstractWishlistStore {
 				}
 			}
 
+			// If no row in the given language (or any of its fallback langauges) was found,
+			// default to the base language or otherwise the first row.
+			if ( !$row ) {
+				$row = $entityDataByLang[ $baseLang ] ?? $firstRow;
+			}
 			$rows[] = $row;
 		}
 

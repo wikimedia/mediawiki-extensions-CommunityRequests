@@ -451,7 +451,7 @@ abstract class AbstractRenderer implements MessageLocalizer {
 			$this->msg( 'parentheses', $entityPageStr )
 		);
 		$this->parser->getOutput()->setDisplayTitle(
-			$titleSpan . $entityIdSpan
+			"$titleSpan $entityIdSpan"
 		);
 		CoreTagHooks::indicator(
 			$this->getStatusChipHtml(),

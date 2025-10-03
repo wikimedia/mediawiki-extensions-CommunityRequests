@@ -137,7 +137,10 @@ abstract class AbstractRenderer implements MessageLocalizer {
 
 		$statusLabel = $this->config->getStatusLabelFromWikitextVal( $wikitextVal );
 		if ( $statusLabel === null ) {
-			$statusLabel = 'communityrequests-status-unknown';
+			$statusLabel = array_find(
+				$this->config->getStatuses(),
+				static fn ( $status ) => $status['default'] ?? false
+			)['label'] ?? 'communityrequests-status-unknown';
 			$this->parser->addTrackingCategory( self::ERROR_TRACKING_CATEGORY );
 		}
 
@@ -150,6 +153,16 @@ abstract class AbstractRenderer implements MessageLocalizer {
 			Html::element(
 				'span',
 				[ 'class' => 'cdx-info-chip__text' ],
+				// Messages that may be used here:
+				// * communityrequests-status-under-review
+				// * communityrequests-status-unsupported
+				// * communityrequests-status-declined
+				// * communityrequests-status-community-opportunity
+				// * communityrequests-status-long-term-opportunity
+				// * communityrequests-status-near-term-opportunity
+				// * communityrequests-status-prioritized
+				// * communityrequests-status-in-progress
+				// * communityrequests-status-done
 				$this->msg( $statusLabel )->text()
 			)
 		);

@@ -108,6 +108,7 @@ class CommunityRequestsHooks implements
 		$this->translateInstalled = $extensionRegistry->isLoaded( 'Translate' );
 		$this->rendererFactory = new RendererFactory(
 			$config,
+			$wishStore,
 			$focusAreaStore,
 			$this->logger,
 			$linkRenderer

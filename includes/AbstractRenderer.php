@@ -5,6 +5,7 @@ namespace MediaWiki\Extension\CommunityRequests;
 
 use MediaWiki\EditPage\EditPage;
 use MediaWiki\Extension\CommunityRequests\FocusArea\FocusAreaStore;
+use MediaWiki\Extension\CommunityRequests\Wish\WishStore;
 use MediaWiki\Html\Html;
 use MediaWiki\Linker\LinkRenderer;
 use MediaWiki\Parser\CoreTagHooks;
@@ -36,6 +37,7 @@ abstract class AbstractRenderer implements MessageLocalizer {
 
 	/**
 	 * @param WishlistConfig $config
+	 * @param WishStore $wishStore
 	 * @param FocusAreaStore $focusAreaStore
 	 * @param LoggerInterface $logger
 	 * @param LinkRenderer $linkRenderer
@@ -45,6 +47,7 @@ abstract class AbstractRenderer implements MessageLocalizer {
 	 */
 	public function __construct(
 		protected readonly WishlistConfig $config,
+		protected readonly WishStore $wishStore,
 		protected readonly FocusAreaStore $focusAreaStore,
 		protected readonly LoggerInterface $logger,
 		protected readonly LinkRenderer $linkRenderer,

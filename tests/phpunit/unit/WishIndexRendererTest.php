@@ -6,6 +6,7 @@ namespace MediaWiki\Extension\CommunityRequests\Tests\Integration;
 use MediaWiki\Extension\CommunityRequests\FocusArea\FocusAreaStore;
 use MediaWiki\Extension\CommunityRequests\Tests\Unit\AbstractWishlistEntityTest;
 use MediaWiki\Extension\CommunityRequests\Wish\WishIndexRenderer;
+use MediaWiki\Extension\CommunityRequests\Wish\WishStore;
 use MediaWiki\Language\Language;
 use MediaWiki\Linker\LinkRenderer;
 use MediaWiki\Parser\Parser;
@@ -61,6 +62,7 @@ class WishIndexRendererTest extends AbstractWishlistEntityTest {
 
 		$renderer = new WishIndexRenderer(
 			$this->config,
+			$this->createNoOpMock( WishStore::class ),
 			$this->createNoOpMock( FocusAreaStore::class ),
 			$this->createNoOpMock( LoggerInterface::class ),
 			$this->createNoOpMock( LinkRenderer::class ),

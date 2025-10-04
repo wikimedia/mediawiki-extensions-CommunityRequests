@@ -9,6 +9,7 @@ use MediaWiki\Extension\CommunityRequests\FocusArea\FocusAreaStore;
 use MediaWiki\Extension\CommunityRequests\Vote\VoteRenderer;
 use MediaWiki\Extension\CommunityRequests\Wish\WishIndexRenderer;
 use MediaWiki\Extension\CommunityRequests\Wish\WishRenderer;
+use MediaWiki\Extension\CommunityRequests\Wish\WishStore;
 use MediaWiki\Html\Html;
 use MediaWiki\Linker\LinkRenderer;
 use MediaWiki\Parser\Parser;
@@ -22,6 +23,7 @@ class RendererFactory {
 
 	public function __construct(
 		private readonly WishlistConfig $config,
+		private readonly WishStore $wishStore,
 		private readonly FocusAreaStore $focusAreaStore,
 		private readonly LoggerInterface $logger,
 		private readonly LinkRenderer $linkRenderer,
@@ -71,6 +73,7 @@ class RendererFactory {
 	): ?AbstractRenderer {
 		$constructorArgs = [
 			$this->config,
+			$this->wishStore,
 			$this->focusAreaStore,
 			$this->logger,
 			$this->linkRenderer,

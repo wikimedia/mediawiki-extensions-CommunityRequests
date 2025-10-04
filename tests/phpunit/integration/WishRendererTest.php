@@ -5,7 +5,7 @@ namespace MediaWiki\Extension\CommunityRequests\Tests\Integration;
 
 use MediaWiki\Extension\CommunityRequests\Wish\Wish;
 use MediaWiki\Extension\CommunityRequests\Wish\WishStore;
-use MediaWiki\Page\WikiPage;
+use MediaWiki\Page\WikiPageFactory;
 use MediaWiki\Title\Title;
 use MediaWikiIntegrationTestCase;
 
@@ -21,6 +21,10 @@ class WishRendererTest extends MediaWikiIntegrationTestCase {
 
 	protected function getStore(): WishStore {
 		return $this->getServiceContainer()->get( 'CommunityRequests.WishStore' );
+	}
+
+	protected function getWikiPageFactory(): WikiPageFactory {
+		return $this->getServiceContainer()->getWikiPageFactory();
 	}
 
 	/**
@@ -101,7 +105,6 @@ END;
 	 * @covers \MediaWiki\Extension\CommunityRequests\AbstractRenderer::getVotingSection
 	 */
 	public function testVoteCountRendering() {
-		$wikiPageFactory = $this->getServiceContainer()->getWikiPageFactory();
 		$wish = $this->insertTestWish(
 			'Community Wishlist/W123',
 			'en',
@@ -112,7 +115,7 @@ END;
 			"{{#CommunityRequests:vote|username=TestUser1|timestamp=2023-10-01T12:00:00Z|comment=First vote}}\n" .
 				"{{#CommunityRequests:vote|username=TestUser2|timestamp=2023-10-01T12:00:00Z|comment=Second vote}}\n"
 		);
-		$wikiPage = $wikiPageFactory->newFromTitle( $wish->getPage() );
+		$wikiPage = $this->getWikiPageFactory()->newFromTitle( $wish->getPage() );
 		$wikiPage->updateParserCache();
 		$parserOutput = $wikiPage->getParserOutput();
 		$this->assertStringContainsString( '<b>2 supporters</b>', $parserOutput->getRawText() );
@@ -122,7 +125,7 @@ END;
 			'de',
 			[ Wish::PARAM_BASE_LANG => 'en', Wish::PARAM_STATUS => 'in-progress' ]
 		);
-		$wikiPageDe = $wikiPageFactory->newFromTitle(
+		$wikiPageDe = $this->getWikiPageFactory()->newFromTitle(
 			Title::newFromPageReference( $wishDe->getTranslationSubpage() )
 		);
 		$wikiPageDe->updateParserCache();
@@ -145,11 +148,23 @@ END;
 			"|comment=The very first vote!}}\n"
 		);
 		$this->runJobs();
-		/** @var WikiPage $wikiPage */
-		$wikiPage = $this->getServiceContainer()
-			->getWikiPageFactory()
-			->newFromTitle( $wish->getPage() );
+		$wikiPage = $this->getWikiPageFactory()->newFromTitle( $wish->getPage() );
 		$parserText = $wikiPage->getParserOutput()->getContentHolderText();
 		$this->assertStringContainsString( 'The very first vote!', $parserText );
+	}
+
+	public function testInvalidProposer(): void {
+		$wishTitle = Title::newFromText( 'Community Wishlist/W123' );
+		$wish = $this->insertTestWish( $wishTitle, 'en', [
+			Wish::PARAM_PROPOSER => 'NonExistentUser',
+		] );
+		$this->assertNull( $wish );
+		$wikiPage = $this->getWikiPageFactory()->newFromTitle( $wishTitle );
+		$parserText = $wikiPage->getParserOutput()->getContentHolderText();
+		$this->assertStringContainsString( '"NonExistentUser" is not a valid user.', $parserText );
+		$this->assertContains(
+			'Category:Pages_with_Community_Wishlist_errors',
+			array_keys( $wishTitle->getParentCategories() )
+		);
 	}
 }

@@ -15,6 +15,18 @@ Template:Wish
 This is a test template for parser tests
 !! end
 
+!! article
+User:Maintenance script
+!! text
+Prevent red links in parser tests
+!! end
+
+!! article
+User talk:Maintenance script
+!! text
+Prevent red links in parser tests
+!! end
+
 !! test
 Empty wish parser tag
 !! wikitext
@@ -36,7 +48,7 @@ title=Community_Wishlist/W1
 |otherproject = Some other project
 |phabtasks = T123,T456
 |created = 2023-10-01T12:00:00Z
-|proposer = Admin
+|proposer = Maintenance script
 |baselang = en
 |description = This is a [[test]] {{wish}}.}}
 !! html
@@ -52,7 +64,7 @@ title=Community_Wishlist/W1
 </div><div class="mw-heading mw-heading3">Phabricator tasks</div><div class="ext-communityrequests-wish--phabtasks">
 <p><a href="http://example.org/wiki/phab:T123" class="extiw" title="phab:T123">T123</a>, <a href="http://example.org/wiki/phab:T456" class="extiw" title="phab:T456">T456</a>
 </p>
-</div><div class="mw-heading mw-heading3">Other details</div><ul><li class="ext-communityrequests-wish--created">Created: 12:00, 1 October 2023</li><li class="ext-communityrequests-wish--updated">Last updated: 00:02, 1 January 1970</li><li class="ext-communityrequests-wish--proposer">Author: <a href="/index.php?title=User:Admin&amp;action=edit&amp;redlink=1" class="new" title="User:Admin (page does not exist)">Admin</a> (<a href="/index.php?title=User_talk:Admin&amp;action=edit&amp;redlink=1" class="new" title="User talk:Admin (page does not exist)">talk</a>)</li></ul><div class="mw-heading mw-heading2" id="Voting">Voting</div><div class="ext-communityrequests-wish--voting"><p>This wish currently has <b>0 supporters</b>. Voting for this wish is open until it is completed. Show your support using the button below.</p><div class="ext-communityrequests-voting"></div><p><noscript>Sorry, JavaScript is required to vote in the Community Wishlist.</noscript></p></div></div>
+</div><div class="mw-heading mw-heading3">Other details</div><ul><li class="ext-communityrequests-wish--created">Created: 12:00, 1 October 2023</li><li class="ext-communityrequests-wish--updated">Last updated: 00:02, 1 January 1970</li><li class="ext-communityrequests-wish--proposer">Author: <a href="/wiki/User:Maintenance_script" title="User:Maintenance script">Maintenance script</a> (<a href="/wiki/User_talk:Maintenance_script" title="User talk:Maintenance script">talk</a>)</li></ul><div class="mw-heading mw-heading2" id="Voting">Voting</div><div class="ext-communityrequests-wish--voting"><p>This wish currently has <b>0 supporters</b>. Voting for this wish is open until it is completed. Show your support using the button below.</p><div class="ext-communityrequests-voting"></div><p><noscript>Sorry, JavaScript is required to vote in the Community Wishlist.</noscript></p></div></div>
 !! end
 
 !! test
@@ -68,7 +80,7 @@ title=Community_Wishlist/W2
 |tags = multimedia,wikisource
 |phabtasks = T123,T456
 |created = 2023-10-01T12:00:00Z
-|proposer = Admin
+|proposer = Maintenance script
 |baselang = en
 |description = This is a wish without voting.}}
 !! html
@@ -84,7 +96,7 @@ title=Community_Wishlist/W2
 </div><div class="mw-heading mw-heading3">Phabricator tasks</div><div class="ext-communityrequests-wish--phabtasks">
 <p><a href="http://example.org/wiki/phab:T123" class="extiw" title="phab:T123">T123</a>, <a href="http://example.org/wiki/phab:T456" class="extiw" title="phab:T456">T456</a>
 </p>
-</div><div class="mw-heading mw-heading3">Other details</div><ul><li class="ext-communityrequests-wish--created">Created: 12:00, 1 October 2023</li><li class="ext-communityrequests-wish--updated">Last updated: 00:02, 1 January 1970</li><li class="ext-communityrequests-wish--proposer">Author: <a href="/index.php?title=User:Admin&amp;action=edit&amp;redlink=1" class="new" title="User:Admin (page does not exist)">Admin</a> (<a href="/index.php?title=User_talk:Admin&amp;action=edit&amp;redlink=1" class="new" title="User talk:Admin (page does not exist)">talk</a>)</li></ul><div class="mw-heading mw-heading2" id="Voting">Voting</div><div class="ext-communityrequests-wish--voting"><p>This wish currently has <b>0 supporters</b>. Supporting this wish is currently disabled.</p></div></div>
+</div><div class="mw-heading mw-heading3">Other details</div><ul><li class="ext-communityrequests-wish--created">Created: 12:00, 1 October 2023</li><li class="ext-communityrequests-wish--updated">Last updated: 00:02, 1 January 1970</li><li class="ext-communityrequests-wish--proposer">Author: <a href="/wiki/User:Maintenance_script" title="User:Maintenance script">Maintenance script</a> (<a href="/wiki/User_talk:Maintenance_script" title="User talk:Maintenance script">talk</a>)</li></ul><div class="mw-heading mw-heading2" id="Voting">Voting</div><div class="ext-communityrequests-wish--voting"><p>This wish currently has <b>0 supporters</b>. Supporting this wish is currently disabled.</p></div></div>
 !! end
 
 !! test
@@ -100,7 +112,7 @@ title=Community_Wishlist/W2
 |tags = multimedia,wikisource
 |phabtasks = T123,T456
 |created = 2023-10-01T12:00:00Z
-|proposer = Admin
+|proposer = Maintenance script
 |baselang = en
 |description = This is a wish without voting.}}
 !! html
@@ -116,7 +128,7 @@ title=Community_Wishlist/W2
 </div><div class="mw-heading mw-heading3">Phabricator tasks</div><div class="ext-communityrequests-wish--phabtasks">
 <p><a href="http://example.org/wiki/phab:T123" class="extiw" title="phab:T123">T123</a>, <a href="http://example.org/wiki/phab:T456" class="extiw" title="phab:T456">T456</a>
 </p>
-</div><div class="mw-heading mw-heading3">Other details</div><ul><li class="ext-communityrequests-wish--created">Created: 12:00, 1 October 2023</li><li class="ext-communityrequests-wish--updated">Last updated: 00:02, 1 January 1970</li><li class="ext-communityrequests-wish--proposer">Author: <a href="/index.php?title=User:Admin&amp;action=edit&amp;redlink=1" class="new" title="User:Admin (page does not exist)">Admin</a> (<a href="/index.php?title=User_talk:Admin&amp;action=edit&amp;redlink=1" class="new" title="User talk:Admin (page does not exist)">talk</a>)</li></ul><div class="mw-heading mw-heading2" id="Voting">Voting</div><div class="ext-communityrequests-wish--voting"><p>This wish currently has <b>0 supporters</b>. Supporting this wish is currently disabled.</p></div></div>
+</div><div class="mw-heading mw-heading3">Other details</div><ul><li class="ext-communityrequests-wish--created">Created: 12:00, 1 October 2023</li><li class="ext-communityrequests-wish--updated">Last updated: 00:02, 1 January 1970</li><li class="ext-communityrequests-wish--proposer">Author: <a href="/wiki/User:Maintenance_script" title="User:Maintenance script">Maintenance script</a> (<a href="/wiki/User_talk:Maintenance_script" title="User talk:Maintenance script">talk</a>)</li></ul><div class="mw-heading mw-heading2" id="Voting">Voting</div><div class="ext-communityrequests-wish--voting"><p>This wish currently has <b>0 supporters</b>. Supporting this wish is currently disabled.</p></div></div>
 !! end
 
 !! test
@@ -152,7 +164,7 @@ language=qqx
 |tags = multimedia,wikisource
 |otherproject = פרויקט אחר כלשהו
 |created = 2023-10-01T12:00:00Z
-|proposer = Admin
+|proposer = Maintenance script
 |baselang = he
 |description = זהו [[test]] {{wish}}}}
 !! html
@@ -165,5 +177,5 @@ language=qqx
 </div><div class="mw-heading mw-heading3">(communityrequests-wish-type-heading)</div><div class="ext-communityrequests-wish--wish-type">(communityrequests-wishtype-change-label)</div><div class="mw-heading mw-heading3" id="tags">(communityrequests-tags-heading)</div><div class="ext-communityrequests-wish--tags">(communityrequests-tag-multimedia-commons)(comma-separator)(communityrequests-tag-wikisource)</div><div class="mw-heading mw-heading3">(communityrequests-wish-audience-heading)</div><div class="ext-communityrequests-wish--audience">
 <p>קהל לדוגמה
 </p>
-</div><div class="mw-heading mw-heading3">(communityrequests-wish-other-details-heading)</div><ul><li class="ext-communityrequests-wish--created">(communityrequests-wish-created: 12:00, 1 (october) 2023)</li><li class="ext-communityrequests-wish--updated">(communityrequests-wish-updated: 00:02, 1 (january) 1970)</li><li class="ext-communityrequests-wish--proposer">(communityrequests-wish-proposer: (signature: Admin, Admin))</li></ul><div class="mw-heading mw-heading2" id="Voting">(communityrequests-wish-voting)</div><div class="ext-communityrequests-wish--voting"><p>(communityrequests-wish-voting-info: 0, 0) (communityrequests-wish-voting-info-closed)</p></div></div>
+</div><div class="mw-heading mw-heading3">(communityrequests-wish-other-details-heading)</div><ul><li class="ext-communityrequests-wish--created">(communityrequests-wish-created: 12:00, 1 (october) 2023)</li><li class="ext-communityrequests-wish--updated">(communityrequests-wish-updated: 00:02, 1 (january) 1970)</li><li class="ext-communityrequests-wish--proposer">(communityrequests-wish-proposer: (signature: Maintenance script, Maintenance script))</li></ul><div class="mw-heading mw-heading2" id="Voting">(communityrequests-wish-voting)</div><div class="ext-communityrequests-wish--voting"><p>(communityrequests-wish-voting-info: 0, 0) (communityrequests-wish-voting-info-closed)</p></div></div>
 !! end

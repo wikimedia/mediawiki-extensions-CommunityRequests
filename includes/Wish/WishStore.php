@@ -116,11 +116,9 @@ class WishStore extends AbstractWishlistStore {
 		$dbw = $this->dbProvider->getPrimaryDatabase( 'virtual-communityrequests' );
 		$dbw->startAtomic( __METHOD__ );
 
-		$proposer = $wish->getProposer() ? $this->actorNormalization->findActorId(
-			// @phan-suppress-next-line PhanTypeMismatchArgumentNullable Proposer is checked and not null
-			$wish->getProposer(),
-			$this->dbProvider->getReplicaDatabase()
-		) : null;
+		$proposer = $wish->getProposer() ?
+			$this->getActorId( $wish->getProposer()->getName() ) :
+			null;
 		$created = $wish->getCreated();
 
 		if ( !$proposer || !$created ) {
@@ -359,6 +357,16 @@ class WishStore extends AbstractWishlistStore {
 	/** @inheritDoc */
 	public function getNewId(): int {
 		return $this->idGenerator->getNewId( IdGenerator::TYPE_WISH );
+	}
+
+	/**
+	 * Get the actor ID for the given username.
+	 *
+	 * @param string $username The username to look up.
+	 * @return ?int The actor ID, or null if no such user exists.
+	 */
+	public function getActorId( string $username ): ?int {
+		return $this->actorNormalization->findActorIdByName( $username, $this->dbProvider->getReplicaDatabase() );
 	}
 
 	/** @inheritDoc */

@@ -20,7 +20,9 @@ class WishIndexRenderer extends AbstractRenderer {
 			return '';
 		}
 
-		$this->parser->addTrackingCategory( self::TRACKING_CATEGORY );
+		if ( $this->config->isWishIndexPage( $this->parser->getPage() ) ) {
+			$this->parser->addTrackingCategory( self::TRACKING_CATEGORY );
+		}
 
 		$output = $this->parser->getOutput();
 		$output->setJsConfigVar( 'wishesData', [

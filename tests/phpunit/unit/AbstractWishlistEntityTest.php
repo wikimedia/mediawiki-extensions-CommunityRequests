@@ -26,17 +26,17 @@ class AbstractWishlistEntityTest extends MediaWikiUnitTestCase {
 		parent::setUp();
 		$serviceOptions = new ServiceOptions( WishlistConfig::CONSTRUCTOR_OPTIONS, [
 			WishlistConfig::ENABLED => true,
-			WishlistConfig::HOMEPAGE => '',
-			WishlistConfig::WISH_CATEGORY => '',
-			WishlistConfig::WISH_PAGE_PREFIX => '',
-			WishlistConfig::WISH_INDEX_PAGE => '',
+			WishlistConfig::HOMEPAGE => 'Community Wishlist',
+			WishlistConfig::WISH_CATEGORY => 'Category:Community Wishlist',
+			WishlistConfig::WISH_PAGE_PREFIX => 'Community Wishlist/W',
+			WishlistConfig::WISH_INDEX_PAGE => 'Community Wishlist/Wishes',
 			WishlistConfig::WISH_TYPES => [
 				'bug' => [ 'id' => 1 ],
 				'change' => [ 'id' => 2 ],
 			],
-			WishlistConfig::FOCUS_AREA_CATEGORY => '',
+			WishlistConfig::FOCUS_AREA_CATEGORY => 'Category:Community Wishlist/Focus areas',
 			WishlistConfig::FOCUS_AREA_PAGE_PREFIX => 'Community Wishlist/FA',
-			WishlistConfig::FOCUS_AREA_INDEX_PAGE => '',
+			WishlistConfig::FOCUS_AREA_INDEX_PAGE => 'Community Wishlist/Focus areas',
 			WishlistConfig::TAGS => [
 				'navigation' => [
 					'admins' => [ 'id' => 0 ],
@@ -68,7 +68,7 @@ class AbstractWishlistEntityTest extends MediaWikiUnitTestCase {
 				'declined' => [ 'id' => 6, 'voting' => false ],
 				'in-progress' => [ 'id' => 7 ],
 			],
-			WishlistConfig::VOTES_PAGE_SUFFIX => '',
+			WishlistConfig::VOTES_PAGE_SUFFIX => '/Votes',
 			WishlistConfig::WISH_VOTING_ENABLED => true,
 			WishlistConfig::FOCUS_AREA_VOTING_ENABLED => true,
 			MainConfigNames::LanguageCode => 'en',

@@ -383,15 +383,22 @@ abstract class AbstractRenderer implements MessageLocalizer {
 
 	/**
 	 * Add a tracking category with the specified message key.
-	 * If Extension:Translate is installed, also add a category for the translation subpage.
+	 * If Extension:Translate is installed and this is a translation subpage,
+	 * use a category for the translation subpage instead.
 	 *
 	 * @param string $key The message key for the category name
 	 */
 	protected function addTrackingCategory( string $key ): void {
-		$this->parser->addTrackingCategory( $key );
-		$this->addTranslationCategory(
-			$this->msg( $key )->inLanguage( $this->config->siteLanguage )->text()
-		);
+		$parserPage = $this->parser->getPage();
+		$isBasePage = $parserPage !== null &&
+			$this->config->getCanonicalEntityPageRef( $parserPage )->isSamePageAs( $parserPage );
+		if ( $isBasePage ) {
+			$this->parser->addTrackingCategory( $key );
+		} else {
+			$this->addTranslationCategory(
+				$this->msg( $key )->inLanguage( $this->config->siteLanguage )->text()
+			);
+		}
 	}
 
 	/**

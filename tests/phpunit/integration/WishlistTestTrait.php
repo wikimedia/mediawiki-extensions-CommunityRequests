@@ -103,7 +103,7 @@ trait WishlistTestTrait {
 			FocusArea::PARAM_TITLE => 'Test Focus Area',
 			FocusArea::PARAM_DESCRIPTION => 'This is a test focus area.',
 			FocusArea::PARAM_SHORT_DESCRIPTION => 'Short description',
-			FocusArea::PARAM_STATUS => 'open',
+			FocusArea::PARAM_STATUS => 'in-progress',
 			FocusArea::PARAM_OWNERS => 'tbd',
 			FocusArea::PARAM_VOLUNTEERS => 'tbd',
 			FocusArea::PARAM_CREATED => '2025-01-01T00:00:00Z',

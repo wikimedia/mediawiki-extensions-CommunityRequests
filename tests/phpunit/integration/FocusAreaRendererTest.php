@@ -3,6 +3,7 @@ declare( strict_types = 1 );
 
 namespace MediaWiki\Extension\CommunityRequests\Tests\Integration;
 
+use MediaWiki\Extension\CommunityRequests\FocusArea\FocusArea;
 use MediaWiki\Extension\CommunityRequests\FocusArea\FocusAreaStore;
 use MediaWiki\Title\Title;
 use MediaWikiIntegrationTestCase;
@@ -50,9 +51,9 @@ END;
 	}
 
 	/**
-	 * @dataProvider provideTestTrackingCategories
+	 * @dataProvider provideTestErrorCategory
 	 */
-	public function testTrackingCategories( string $wikitext, bool $shouldBeInCategory ): void {
+	public function testErrorCategory( string $wikitext, bool $shouldBeInCategory ): void {
 		$ret = $this->insertPage(
 			Title::newFromText( $this->config->getFocusAreaPagePrefix() . '123' ),
 			$wikitext,
@@ -68,7 +69,7 @@ END;
 	}
 
 	// phpcs:disable Generic.Files.LineLength.TooLong
-	public static function provideTestTrackingCategories(): array {
+	public static function provideTestErrorCategory(): array {
 		return [
 			'valid focus area' => [
 				'{{#CommunityRequests: focus-area | title=Valid FA | status=under-review | created=2023-10-01T12:00:00Z | baselang=en | description=A valid FA}}',
@@ -83,5 +84,32 @@ END;
 				true,
 			],
 		];
+	}
+
+	// phpcs:enable Generic.Files.LineLength.TooLong
+
+	public function testTrackingCategories(): void {
+		$this->markTestSkippedIfExtensionNotLoaded( 'Translate' );
+
+		$focusAreaTitle = Title::newFromText( $this->config->getFocusAreaPagePrefix() . '456' );
+		$this->insertTestFocusArea( $focusAreaTitle, 'fr', [
+			FocusArea::PARAM_TITLE => '<translate>Test Focus Area</translate>',
+		] );
+		$categories = array_keys( $focusAreaTitle->getParentCategories() );
+		$this->assertContains( 'Category:Community_Wishlist/Focus_areas', $categories );
+		$this->assertNotContains( 'Category:Community_Wishlist/Focus_areas/fr', $categories );
+		$this->assertNotContains( 'Category:Pages_with_Community_Wishlist_errors', $categories );
+		// Add translation
+		$focusAreaDe = $this->insertTestFocusArea( $focusAreaTitle, 'de', [
+			FocusArea::PARAM_TITLE => 'Test Focus Area auf Deutsch',
+			FocusArea::PARAM_BASE_LANG => 'fr',
+		] );
+		$categories = array_keys(
+			Title::newFromPageReference( $focusAreaDe->getTranslationSubpage() )->getParentCategories()
+		);
+		$this->assertNotContains( 'Category:Community_Wishlist/Focus_areas', $categories );
+		$this->assertContains( 'Category:Community_Wishlist/Focus_areas/de', $categories );
+		$this->assertNotContains( 'Category:Pages_with_Community_Wishlist_errors', $categories );
+		$this->assertNotContains( 'Category:Community_Wishlist', $categories );
 	}
 }

@@ -71,23 +71,29 @@ END;
 		$this->assertContains( 'Category:Community_Wishlist/Wishes/Multimedia_and_Commons', $categories );
 		$this->assertContains( 'Category:Community_Wishlist/Wishes/Notifications', $categories );
 		$this->assertNotContains( 'Category:Pages_with_Community_Wishlist_errors', $categories );
+		$this->assertNotContains( 'Category:Community_Wishlist', $categories );
 		// Add translation
 		$wishDe = $this->insertTestWish( $wishTitle, 'de', [
-			Wish::PARAM_BASE_LANG => 'en', Wish::PARAM_TAGS => 'multimedia,notifications',
+			Wish::PARAM_TITLE => 'Test title auf Deutsch',
+			Wish::PARAM_TAGS => 'multimedia,notifications',
+			Wish::PARAM_BASE_LANG => 'fr',
 		] );
 		$categories = array_keys(
 			Title::newFromPageReference( $wishDe->getTranslationSubpage() )->getParentCategories()
 		);
+		$this->assertNotContains( 'Category:Community_Wishlist/Wishes', $categories );
 		$this->assertContains( 'Category:Community_Wishlist/Wishes/de', $categories );
 		$this->assertContains( 'Category:Community_Wishlist/Wishes/Multimedia_and_Commons/de', $categories );
 		$this->assertContains( 'Category:Community_Wishlist/Wishes/Notifications/de', $categories );
+		$this->assertNotContains( 'Category:Community_Wishlist', $categories );
 
-		// Invalid wish (missing title)
+		// Add new wish with a missing title
 		$invalidTitle = Title::newFromText( $this->config->getWishPagePrefix() . '124' );
 		$this->insertTestWish( $invalidTitle, 'en', [ Wish::PARAM_TITLE => '' ] );
 		$categories = array_keys( $invalidTitle->getParentCategories() );
 		$this->assertContains( 'Category:Community_Wishlist/Wishes', $categories );
 		$this->assertContains( 'Category:Pages_with_Community_Wishlist_errors', $categories );
+		$this->assertNotContains( 'Category:Community_Wishlist', $categories );
 	}
 
 	/**

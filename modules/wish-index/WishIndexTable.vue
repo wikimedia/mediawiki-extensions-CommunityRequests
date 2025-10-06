@@ -330,6 +330,13 @@ module.exports = exports = defineComponent( {
 			// Fire the wikipage.content hook to trigger dynamic updates, such as MinT translations.
 			await nextTick();
 			mw.hook( 'wikipage.content' ).fire( mw.util.$content.find( '#mw-content-text' ) );
+
+			// If a section header is being linked to, re-scroll to it after
+			// fetching the wish table etc and possibly changing the page height.
+			const linkedSection = document.getElementById( window.location.hash.slice( 1 ) );
+			if ( linkedSection ) {
+				linkedSection.scrollIntoView();
+			}
 		}
 
 		/**

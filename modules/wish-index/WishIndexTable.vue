@@ -333,9 +333,12 @@ module.exports = exports = defineComponent( {
 
 			// If a section header is being linked to, re-scroll to it after
 			// fetching the wish table etc and possibly changing the page height.
-			const linkedSection = document.getElementById( window.location.hash.slice( 1 ) );
-			if ( linkedSection ) {
-				linkedSection.scrollIntoView();
+			const hashId = window.location.hash.slice( 1 );
+			if ( hashId ) {
+				const linkedSection = document.getElementById( hashId );
+				if ( linkedSection ) {
+					linkedSection.scrollIntoView();
+				}
 			}
 		}
 

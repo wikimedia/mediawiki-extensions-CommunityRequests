@@ -49,7 +49,6 @@ class CommunityRequestsHooksTest extends MediaWikiUnitTestCase {
 	use MockServiceDependenciesTrait;
 	use MockAuthorityTrait;
 	use MockTitleTrait;
-	use MockServiceDependenciesTrait;
 
 	/**
 	 * @dataProvider provideOnBeforePageDisplay
@@ -68,6 +67,7 @@ class CommunityRequestsHooksTest extends MediaWikiUnitTestCase {
 		);
 
 		$out = $this->createNoOpMock( OutputPage::class, [
+			'addBodyClasses',
 			'addJsConfigVars',
 			'addModules',
 			'addModuleStyles',
@@ -75,6 +75,8 @@ class CommunityRequestsHooksTest extends MediaWikiUnitTestCase {
 			'getTitle',
 			'getUser',
 		] );
+		$out->expects( $this->atMost( 1 ) )
+			->method( 'addBodyClasses' );
 		$out->expects( $this->atLeast( count( $expectedModules ) ) )
 			->method( 'addModules' )
 			->willReturnMap(

@@ -66,7 +66,8 @@
 		"ParserAfterTidy": "main",
 		"getUserPermissionsErrorsExpensive": "main",
 		"BeforeDisplayNoArticleText": "main",
-		"GetPreferences": "main"
+		"GetPreferences": "main",
+		"ShowSearchHit": "search"
 	},
 	"HookHandlers": {
 		"main": {
@@ -89,6 +90,16 @@
 		"schema": {
 			"class": "MediaWiki\\Extension\\CommunityRequests\\HookHandler\\SchemaHooks",
 			"factory": "MediaWiki\\Extension\\CommunityRequests\\HookHandler\\SchemaHooks::newFromGlobalState"
+		},
+		"search": {
+			"class": "MediaWiki\\Extension\\CommunityRequests\\HookHandler\\SearchHooks",
+			"services": [
+				"CommunityRequests.WishlistConfig",
+				"CommunityRequests.WishStore",
+				"CommunityRequests.FocusAreaStore",
+				"CommunityRequests.Logger",
+				"TitleFormatter"
+			]
 		}
 	},
 	"SpecialPages": {

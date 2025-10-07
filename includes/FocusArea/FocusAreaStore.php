@@ -66,20 +66,26 @@ class FocusAreaStore extends AbstractWishlistStore {
 	/**
 	 * Get total wish counts per focus area.
 	 *
-	 * @return int[] Keys are focus area page IDs, values are unformatted integer counts of wishes.
+	 * @param FocusArea|null $focusArea If given, only return the count for this focus area.
+	 * @return int|int[] Wish count if given a $focusArea, or an associative array where
+	 *   keys are focus area page IDs, values are unformatted integer counts of wishes.
 	 */
-	public function getWishCounts(): array {
-		$results = $this->dbProvider->getReplicaDatabase( 'virtual-communityrequests' )
+	public function getWishCounts( ?FocusArea $focusArea = null ): int|array {
+		$select = $this->dbProvider->getReplicaDatabase( 'virtual-communityrequests' )
 			->newSelectQueryBuilder()
 			->caller( __METHOD__ )
 			->table( self::tableName(), 'fa' )
 			->leftJoin( WishStore::tableName(), 'w', 'fa.cr_page = w.cr_focus_area' )
-			->fields( [
+			->fields( $focusArea ? 'COUNT(w.cr_page)' : [
 				'faPageId' => 'fa.cr_page',
 				'wishCount' => 'COUNT(w.cr_page)'
 			] )
-			->groupBy( 'fa.cr_page' )
-			->fetchResultSet();
+			->groupBy( 'fa.cr_page' );
+		if ( $focusArea ) {
+			$select->where( [ 'fa.cr_page' => $focusArea->getPage()->getId() ] );
+			return (int)$select->fetchField();
+		}
+		$results = $select->fetchResultSet();
 		$out = [];
 		foreach ( $results as $res ) {
 			$out[ $res->faPageId ] = (int)$res->wishCount;

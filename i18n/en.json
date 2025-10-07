@@ -216,5 +216,7 @@
 	"communityrequests-wishlist-machine-translation": "Enable automatic machine translation in the [[$1|Community Wishlist]].",
 	"communityrequests-vote-add-summary": "Adding support vote",
 	"communityrequests-vote-update-summary": "Updating support vote",
-	"communityrequests-vote-remove-summary": "Removing support vote"
+	"communityrequests-vote-remove-summary": "Removing support vote",
+	"communityrequests-wish-count": "$1 {{PLURAL:$2|wish|wishes}}",
+	"communityrequests-vote-count": "$1 {{PLURAL:$2|supporter|supporters}}"
 }

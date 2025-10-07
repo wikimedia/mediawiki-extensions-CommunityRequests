@@ -1,0 +1,40 @@
+{
+	"@metadata": {
+		"authors": [
+			"Eduardoaddad"
+		]
+	},
+	"communityrequests-desc": "Um sistema de gerenciamento de sugestões e solicitações técnicas de uma comunidade wiki.",
+	"communityrequests-edit-with-form": "Editar com formulário",
+	"communityrequests-description": "Descreva o seu problema",
+	"communityrequests-description-description": "Explique detalhadamente o desejo ou problema que você está abordando.",
+	"communityrequests-wishtype-feature-label": "Solicitação de recurso",
+	"communityrequests-wishtype-bug-label": "Relatório de erro",
+	"communityrequests-wishtype-bug-description": "Você deseja que um problema ou erro seja corrigido com os recursos existentes.",
+	"communityrequests-wishtype-change-label": "Mudança no sistema",
+	"communityrequests-wishtype-unknown-label": "Não tenho certeza ou não sei",
+	"communityrequests-wishtype-unknown-label-short": "Desconhecido",
+	"communityrequests-wishtype-error": "Selecione um tipo de desejo.",
+	"communityrequests-close": "Fechar",
+	"communityrequests-publish": "Publicar desejo",
+	"communityrequests-save": "Salvar alterações",
+	"communityrequests-optional-comment": "Comentário opcional",
+	"communityrequests-support": "Suporte",
+	"communityrequests-supported": "Já suportado",
+	"communityrequests-unsupport-focus-area": "Retire seu voto de apoio",
+	"communityrequests-status-open": "Aberto",
+	"communityrequests-status-in-progress": "Em progresso",
+	"communityrequests-status-delivered": "Entregado",
+	"communityrequests-status-blocked": "Bloqueado",
+	"communityrequests-status-archived": "Arquivado",
+	"communityrequests-status-unknown": "Desconhecido",
+	"communityrequests-wish-description-heading": "Descrição",
+	"communityrequests-wish-audience-heading": "Usuários afetados",
+	"communityrequests-wish-other-details-heading": "Outros detalhes",
+	"communityrequests-wishes-type-header": "Tipo",
+	"communityrequests-wishes-status-header": "Status",
+	"communityrequests-focus-area-unassigned": "Não atribuído",
+	"communityrequests-submit-wish": "Enviar desejo",
+	"communityrequests-form-loading": "Carregando formulário de registro...",
+	"communityrequests-focus-area-voting": "Votação"
+}

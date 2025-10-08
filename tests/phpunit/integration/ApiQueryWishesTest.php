@@ -254,6 +254,51 @@ class ApiQueryWishesTest extends ApiTestCase {
 		$this->assertSame( 'Title in English', $wishesEn[0][Wish::PARAM_TITLE] );
 	}
 
+	public function testExecuteWithManyWishes(): void {
+		$this->markTestSkippedIfExtensionNotLoaded( 'Translate' );
+
+		// Create a bunch of wishes in French and add English translations.
+		$numWishes = 3;
+		for ( $i = 1; $i <= $numWishes; $i++ ) {
+			$this->insertTestWish(
+				"Community Wishlist/W$i",
+				'fr',
+				[ Wish::PARAM_TITLE => "<translate>Original French title $i</translate>" ],
+			);
+			$this->insertTestWish(
+				"Community Wishlist/W$i",
+				'en',
+				[
+					Wish::PARAM_TITLE => "Title in English $i",
+					Wish::PARAM_BASE_LANG => 'fr'
+				],
+			);
+		}
+
+		// Verify the English translations exist in the DB.
+		$count = $this->getDb()->newSelectQueryBuilder()
+			->select( 'COUNT(*)' )
+			->from( WishStore::translationsTableName() )
+			->where( [ WishStore::translationLangField() => 'en' ] );
+		$this->assertSame( $numWishes, (int)$count->fetchField() );
+
+		// Request one wish in English.
+		[ $ret ] = $this->doApiRequest( [
+			'action' => 'query',
+			'list' => 'communityrequests-wishes',
+			'crwlang' => 'en',
+			'crwcount' => true,
+			'crwsort' => 'title',
+			'crwdir' => 'ascending',
+			'crwlimit' => 1,
+		] );
+		$wishesEn = $ret['query']['communityrequests-wishes'];
+
+		$this->assertCount( 1, $wishesEn );
+		$this->assertSame( 'Community Wishlist/W1/en', $wishesEn[0]['crwtitle'] );
+		$this->assertSame( 'Title in English 1', $wishesEn[0][Wish::PARAM_TITLE] );
+	}
+
 	public function testExecuteNoTranslateTagsReturned(): void {
 		$this->markTestSkippedIfExtensionNotLoaded( 'Translate' );
 		$this->insertTestWish(

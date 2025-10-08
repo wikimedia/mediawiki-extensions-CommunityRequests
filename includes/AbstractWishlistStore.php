@@ -363,8 +363,8 @@ abstract class AbstractWishlistStore {
 		};
 
 		$sortDir = in_array( strtolower( $sort ), [ 'ascending', 'asc' ] ) ?
-				static::SORT_ASC :
-				static::SORT_DESC;
+			static::SORT_ASC :
+			static::SORT_DESC;
 
 		$select = $dbr->newSelectQueryBuilder()
 			->caller( __METHOD__ )
@@ -377,7 +377,21 @@ abstract class AbstractWishlistStore {
 			->where( [ static::entityTypeField() => $this->entityTypeId() ] )
 			->andWhere( $dbr->makeList( [
 				static::translationLangField() => $langs,
-				static::translationLangField() . '=' . static::baseLangField()
+				$dbr->makeList( [
+					static::translationLangField() . '=' . static::baseLangField(),
+					'NOT EXISTS (' .
+						$dbr->newSelectQueryBuilder()
+							->select( '1' )
+							->from( static::translationsTableName(), 'transinner' )
+							->where( [
+								'transinner.' . static::translationLangField() => $langs,
+								'transinner.' . static::translationForeignKey() . '=' . static::pageField()
+							] )
+							->limit( 1 )
+							->caller( __METHOD__ )
+							->getSQL()
+						. ')'
+				], $dbr::LIST_AND )
 			], $dbr::LIST_OR ) )
 			->orderBy( $orderPrecedence, $sortDir )
 			// Leave room for the fallback languages.

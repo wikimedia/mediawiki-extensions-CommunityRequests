@@ -61,6 +61,8 @@ abstract class AbstractWishlistSpecialPage extends FormSpecialPage {
 				$this->showErrorPage( $pageTitle );
 				return;
 			}
+
+			$this->getSkin()->setRelevantTitle( $pageTitle );
 		}
 
 		$this->getOutput()->addModules( 'ext.communityrequests.intake' );

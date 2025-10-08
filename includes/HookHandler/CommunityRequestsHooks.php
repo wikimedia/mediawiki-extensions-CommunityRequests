@@ -418,7 +418,7 @@ class CommunityRequestsHooks implements
 	 * @param array &$links
 	 */
 	public function onSkinTemplateNavigation__Universal( $sktemplate, &$links ): void {
-		if ( !$this->config->isEnabled() || !$this->config->isWishOrFocusAreaPage( $sktemplate->getTitle() ) ) {
+		if ( !$this->config->isEnabled() || !$this->isEntityPageOrEditPage( $sktemplate->getTitle() ) ) {
 			return;
 		}
 
@@ -433,14 +433,9 @@ class CommunityRequestsHooks implements
 	 * @param array &$links
 	 */
 	private function updateEditLinks( SkinTemplate $sktemplate, array &$links ): void {
-		// Check edit permission first, to short-circuit and avoid additional DB queries.
-		if ( !$this->permissionManager->quickUserCan( 'edit', $sktemplate->getUser(), $sktemplate->getTitle() ) ) {
-			return;
-		}
-
 		// If the page doesn't exist, don't show any edit tabs. We do this even for privileged users,
 		// as manual creation of entity pages could cause data integrity issues.
-		if ( !$sktemplate->getTitle()->exists() ) {
+		if ( !$sktemplate->getTitle()->isSpecialPage() && !$sktemplate->getTitle()->exists() ) {
 			unset( $links['views']['edit'], $links['views']['ve-edit'] );
 			return;
 		}
@@ -463,6 +458,7 @@ class CommunityRequestsHooks implements
 		$wishlistEditTab = [
 			'text' => $sktemplate->msg( 'communityrequests-edit-with-form' )->text(),
 			'icon' => 'edit',
+			'class' => $sktemplate->getTitle()->isSpecialPage() ? 'selected' : '',
 			'href' => $this->specialPageFactory->getPage(
 				$this->config->isWishPage( $sktemplate->getTitle() ) ? 'WishlistIntake' : 'EditFocusArea'
 			)?->getPageTitle( $this->config->getEntityWikitextVal( $sktemplate->getTitle() ) )
@@ -578,7 +574,7 @@ class CommunityRequestsHooks implements
 	 * @return bool
 	 */
 	public function onGetUserPermissionsErrorsExpensive( $title, $user, $action, &$result ): bool {
-		if ( !$this->config->isEnabled() || !$this->config->isWishOrFocusAreaPage( $title ) ) {
+		if ( !$this->config->isEnabled() || !$this->isEntityPageOrEditPage( $title ) ) {
 			return true;
 		}
 		if ( $action !== 'edit' ) {
@@ -674,5 +670,14 @@ class CommunityRequestsHooks implements
 			],
 			'section' => 'personal/i18n',
 		];
+	}
+
+	private function isEntityPageOrEditPage( PageIdentity $identity ): bool {
+		return $this->config->isWishOrFocusAreaPage( $identity ) || (
+			$identity->getNamespace() === NS_SPECIAL && (
+				str_starts_with( $identity->getDBkey(), 'WishlistIntake' ) ||
+				str_starts_with( $identity->getDBkey(), 'EditFocusArea' )
+			)
+		);
 	}
 }

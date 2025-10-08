@@ -184,7 +184,6 @@ class CommunityRequestsHooksTest extends MediaWikiUnitTestCase {
 			[
 				'title' => $this->makeMockTitle( 'Community Wishlist/W123' ),
 				'isRegistered' => true,
-				'canEdit' => true,
 				'canManuallyEdit' => false,
 				'canManage' => false,
 				'tabs' => [
@@ -208,11 +207,7 @@ class CommunityRequestsHooksTest extends MediaWikiUnitTestCase {
 		$skinTemplate->expects( $this->atMost( 1 ) )
 			->method( 'msg' )
 			->willReturnCallback( [ new FakeQqxMessageLocalizer(), 'msg' ] );
-		$permissionManager = $this->createNoOpMock( PermissionManager::class, [ 'quickUserCan', 'userHasRight' ] );
-		$permissionManager->expects( $this->atMost( 1 ) )
-			->method( 'quickUserCan' )
-			->with( 'edit', $user, $opts['title'] )
-			->willReturn( $opts['canEdit'] );
+		$permissionManager = $this->createNoOpMock( PermissionManager::class, [ 'userHasRight' ] );
 		$permissionManager->expects( $this->any() )
 			->method( 'userHasRight' )
 			->willReturnMap( [
@@ -237,34 +232,59 @@ class CommunityRequestsHooksTest extends MediaWikiUnitTestCase {
 
 	public function provideUpdateEditLinks(): array {
 		return [
-			[
+			'default' => [
 				[],
 				[ 'view', 'wishlist-edit', 'history' ],
 			],
-			[
-				[ 'canEdit' => false ],
-				[ 'view', 've-edit', 'edit', 'history' ],
-			],
-			[
+			'focus area, default perms' => [
 				[ 'title' => $this->makeMockTitle( 'Community Wishlist/FA123' ) ],
 				[ 'view', 'history' ],
 			],
-			[
+			'focus area, can manage' => [
 				[
 					'title' => $this->makeMockTitle( 'Community Wishlist/FA123' ),
 					'canManage' => true,
 				],
 				[ 'view', 'wishlist-edit', 'history' ],
 			],
-			[
+			'wish, default perms' => [
+				[ 'title' => $this->makeMockTitle( 'Community Wishlist/W123' ) ],
+				[ 'view', 'wishlist-edit', 'history' ],
+			],
+			'wish, can manually edit' => [
+				[
+					'title' => $this->makeMockTitle( 'Community Wishlist/W123' ),
+					'canManuallyEdit' => true,
+				],
+				[ 'view', 've-edit', 'edit', 'wishlist-edit', 'history' ],
+			],
+			'not a wish or FA' => [
 				[ 'title' => $this->makeMockTitle( 'Not a wish or FA' ) ],
 				[ 'view', 've-edit', 'edit', 'history' ],
 			],
-			[
+			'Special:WishlistIntake/W1, default perms' => [
+				[ 'title' => $this->makeMockTitle( 'Special:WishlistIntake/W1', [ 'namespace' => NS_SPECIAL ] ) ],
+				[ 'view', 'wishlist-edit', 'history' ],
+			],
+			'Special:WishlistIntake/W1, can manually edit' => [
+				[
+					'title' => $this->makeMockTitle( 'Special:WishlistIntake/W1', [ 'namespace' => NS_SPECIAL ] ),
+					'canManuallyEdit' => true,
+				],
+				[ 'view', 've-edit', 'edit', 'wishlist-edit', 'history' ],
+			],
+			'Special:EditFocusArea/FA1, can manage' => [
+				[
+					'title' => $this->makeMockTitle( 'Special:EditFocusArea/FA1', [ 'namespace' => NS_SPECIAL ] ),
+					'canManage' => true,
+				],
+				[ 'view', 'wishlist-edit', 'history' ],
+			],
+			'only view tab beforehand' => [
 				[ 'tabs' => [ 'view' => [] ] ],
 				[ 'view', 'wishlist-edit' ],
 			],
-			[
+			'no applicable tabs beforehand' => [
 				[ 'tabs' => [ 'foo' => [], 'bar' => [] ] ],
 				[ 'foo', 'bar', 'wishlist-edit' ],
 			]

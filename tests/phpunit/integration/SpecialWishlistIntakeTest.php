@@ -3,6 +3,8 @@ declare( strict_types = 1 );
 
 namespace MediaWiki\Extension\CommunityRequests\Tests\Integration;
 
+use MediaWiki\Context\DerivativeContext;
+use MediaWiki\Context\RequestContext;
 use MediaWiki\Exception\UserNotLoggedIn;
 use MediaWiki\Extension\CommunityRequests\AbstractWishlistStore;
 use MediaWiki\Extension\CommunityRequests\Wish\SpecialWishlistIntake;
@@ -132,5 +134,16 @@ class SpecialWishlistIntakeTest extends SpecialPageTestBase {
 			'<translate><!--T:3--> Example audience</translate>',
 			$vars['intakeData'][Wish::PARAM_AUDIENCE]
 		);
+	}
+
+	public function testSetRelevantTitle(): void {
+		$this->insertTestWish( 'Community Wishlist/W1', 'en' );
+		$sp = $this->newSpecialPage();
+		$context = new DerivativeContext( RequestContext::getMain() );
+		$context->setUser( $this->getTestUser()->getUser() );
+		$context->setTitle( $sp->getPageTitle( 'W1' ) );
+		$sp->setContext( $context );
+		$sp->execute( 'W1' );
+		$this->assertSame( 'Community Wishlist/W1', $sp->getSkin()->getRelevantTitle()->getPrefixedText() );
 	}
 }

@@ -49,6 +49,8 @@
 	"communityrequests-close": "Clauder",
 	"communityrequests-publish": "Publicar desiro",
 	"communityrequests-save": "Salveguardar modificationes",
+	"communityrequests-focus-area-publish": "Publicar area de interesse",
+	"communityrequests-focus-area-save": "Salveguardar modificationes",
 	"communityrequests-support-dialog-title": "Appoiar “$1”",
 	"communityrequests-support-focus-area": "Appoiar le area de interesse",
 	"communityrequests-support-focus-area-confirmed": "Tu ha votate in appoio de iste area de interesse.",
@@ -60,6 +62,7 @@
 	"communityrequests-unsupport-focus-area": "Retirar tu voto de appoio",
 	"communityrequests-support-error": "Un error ha occurrite. Non esseva possibile registrar tu appoio.",
 	"communityrequests-error-required-fields": "Campo{{PLURAL:$2||s}} obligatori mancante: $1",
+	"communityrequests-error-invalid-proposer": "“$1” non es un usator valide.",
 	"communityrequests-status": "Stato",
 	"communityrequests-status-draft": "Provisori",
 	"communityrequests-status-submitted": "Submittite",
@@ -189,5 +192,8 @@
 	"communityrequests-cant-manually-edit": "Le modification de iste pagina del Lista de desiros del communitate debe esser effectuate usante [[$1|le formulario de admission]].",
 	"communityrequests-missing-wish": "Iste desiro non existe. Tu pote [{{fullurl:{{#Special:Log}}|page={{FULLPAGENAMEE}}}} cercar in le registros pertinente] pro discoperir ubi illo ha vadite, o [[$1|crear un nove desiro]].",
 	"communityrequests-missing-focus-area": "Iste area de interesse non existe. Tu pote [{{fullurl:{{#Special:Log}}|page={{FULLPAGENAMEE}}}} cercar in le registros pertinente] pro discoperir ubi illo ha vadite, o [[$1|crear un nove area de interesse]].",
-	"communityrequests-wishlist-machine-translation": "Activar le traduction machinal automatisate in le [[$1|Lista de desiros del communitate]]."
+	"communityrequests-wishlist-machine-translation": "Activar le traduction machinal automatisate in le [[$1|Lista de desiros del communitate]].",
+	"communityrequests-vote-add-summary": "Voto de appoio addite",
+	"communityrequests-vote-update-summary": "Voto de appoio actualisate",
+	"communityrequests-vote-remove-summary": "Voto de appoio removite"
 }

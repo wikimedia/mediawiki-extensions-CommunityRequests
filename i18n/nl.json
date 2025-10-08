@@ -192,5 +192,8 @@
 	"communityrequests-cant-manually-edit": "Deze pagina van de Gezamenlijke verlanglijst moet worden bewerkt met behulp van [[$1|het intakeformulier]].",
 	"communityrequests-missing-wish": "Deze wens bestaat niet. U kunt [{{fullurl:{{#Special:Log}}|page={{FULLPAGENAMEE}}}} de betrokken logboeken doorzoeken] om te achterhalen waar hij is gebleven, of [[$1|een nieuwe wens aanmaken]].",
 	"communityrequests-missing-focus-area": "Dit aandachtsgebied bestaat niet. U kunt [{{fullurl:{{#Special:Log}}|page={{FULLPAGENAMEE}}}} de betrokken logboeken doorzoeken] om te achterhalen waar het is gebleven, of [[$1|een nieuw aandachtsgebied maken]].",
-	"communityrequests-wishlist-machine-translation": "Automatische machinevertaling in de [[$1|Gezamenlijke wensenlijst]] inschakelen."
+	"communityrequests-wishlist-machine-translation": "Automatische machinevertaling in de [[$1|Gezamenlijke wensenlijst]] inschakelen.",
+	"communityrequests-vote-add-summary": "Steunstem toegevoegd",
+	"communityrequests-vote-update-summary": "Steunstem bijgewerkt",
+	"communityrequests-vote-remove-summary": "Steunstem verwijderd"
 }

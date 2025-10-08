@@ -148,7 +148,7 @@
 	"communityrequests-focus-area-supported": "بدعم من:",
 	"communityrequests-focus-area-supported-val": "$1 {{PLURAL:$2|شخص|أشخاص}}",
 	"communityrequests-focus-area-owners-label": "المالك:",
-	"communityrequests-focus-area-view-wishes": "عرض الرغبات في هذه المنطقة",
+	"communityrequests-focus-area-view-wishes": "عرض $1 {{PLURAL:$2|رغبة|رغبات}} في هذه المنطقة",
 	"communityrequests-focus-area-wishes-list": "التمنيات في هذا المجال التركيز",
 	"communityrequests-focus-area-wishes-description-1": "فيما يلي قائمة بالرغبات التي أثرت في هذا المجال. قد تُضاف المزيد من الرغبات إلى هذا الجدول مع مرور الوقت.",
 	"communityrequests-focus-area-wishes-description-2": "إن التصويت على مجال التركيز لا يعد ضمانة بأن كل رغبة سوف يتم تحقيقها بشكل صريح؛ بل إن الرغبات تشير إلى المشكلة على نطاق واسع.",

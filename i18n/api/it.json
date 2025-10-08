@@ -10,6 +10,7 @@
 	"apihelp-wishedit-param-type": "Il tipo di desiderio.",
 	"apihelp-wishedit-param-proposer": "L'utente che ha proposto il desiderio.",
 	"apihelp-wishedit-param-created": "La data e l'ora in cui è stato creato il desiderio.",
+	"apihelp-wishlistvote-param-voteaction": "L'azione da eseguire.",
 	"apihelp-query+communityrequests-wishes-paramvalue-prop-status": "Stato del desiderio",
 	"apihelp-query+communityrequests-wishes-paramvalue-prop-type": "Il tipo di desiderio",
 	"apihelp-query+communityrequests-wishes-paramvalue-prop-title": "Titolo del desiderio",

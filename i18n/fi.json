@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Minilammas",
 			"Samoasambia"
 		]
 	},
@@ -38,6 +39,7 @@
 	"communityrequests-close": "Sulje",
 	"communityrequests-publish": "Julkaise toive",
 	"communityrequests-save": "Tallenna muutokset",
+	"communityrequests-focus-area-save": "Tallenna muutokset",
 	"communityrequests-support-dialog-title": "Tue painopistealuetta ”$1”",
 	"communityrequests-support-focus-area": "Tue painopistealuetta",
 	"communityrequests-support-focus-area-confirmed": "Olet äänestänyt tämän painopistealueen puolesta.",

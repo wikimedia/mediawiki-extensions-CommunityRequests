@@ -63,6 +63,7 @@
 	"communityrequests-unsupport-focus-area": "Entferne deine Unterstützung",
 	"communityrequests-support-error": "Es ist ein Fehler aufgetreten und deine Unterstützung konnte nicht erfasst werden.",
 	"communityrequests-error-required-fields": "{{PLURAL:$2|Erforderliches Feld fehlt|Erforderliche Felder fehlen}}: $1",
+	"communityrequests-error-invalid-proposer": "„$1“ ist kein gültiger Benutzername.",
 	"communityrequests-status": "Status",
 	"communityrequests-status-draft": "Entwurf",
 	"communityrequests-status-submitted": "Eingereicht",
@@ -192,5 +193,8 @@
 	"communityrequests-cant-manually-edit": "Die Bearbeitung dieser Community-Wunschliste-Seite muss mithilfe des [[$1|Formulars]] erfolgen.",
 	"communityrequests-missing-wish": "Dieser Wunsch existiert nicht. Du kannst [{{fullurl:{{#Special:Log}}|page={{FULLPAGENAMEE}}}} die zugehörigen Logbücher durchsuchen], um herauszufinden, was damit passiert ist, oder [[$1|einen neuen Wunsch erstellen]].",
 	"communityrequests-missing-focus-area": "Dieser Schwerpunktbereich existiert nicht. Du kannst  [{{fullurl:{{#Special:Log}}|page={{FULLPAGENAMEE}}}} die zugehörigen Logbücher durchsuchen], um herauszufinden, was damit passiert ist, oder [[$1|einen neuen Schwerpunktbereich erstellen]].",
-	"communityrequests-wishlist-machine-translation": "Aktiviere die automatische maschinelle Übersetzung in der [[$1|Community-Wunschliste]]."
+	"communityrequests-wishlist-machine-translation": "Aktiviere die automatische maschinelle Übersetzung in der [[$1|Community-Wunschliste]].",
+	"communityrequests-vote-add-summary": "Unterstützungsstimme hinzufügen",
+	"communityrequests-vote-update-summary": "Unterstützungsstimme aktualisieren",
+	"communityrequests-vote-remove-summary": "Unterstützungsstimme entfernen"
 }

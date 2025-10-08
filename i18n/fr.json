@@ -59,7 +59,7 @@
 	"communityrequests-close": "Fermer",
 	"communityrequests-publish": "Publier le souhait",
 	"communityrequests-save": "Enregistrer les modifications",
-	"communityrequests-focus-area-publish": "Publier un domaine d'intérêt",
+	"communityrequests-focus-area-publish": "Publier une zone d'action",
 	"communityrequests-focus-area-save": "Enregistrer les modifications",
 	"communityrequests-support-dialog-title": "Soutenir « $1 »",
 	"communityrequests-support-focus-area": "Soutenir ce domaine d'action",
@@ -72,6 +72,7 @@
 	"communityrequests-unsupport-focus-area": "Retirez votre vote de soutien",
 	"communityrequests-support-error": "Une erreur s'est produite et votre support n'a pas pu être enregistré.",
 	"communityrequests-error-required-fields": "{{PLURAL:$2|Champ manquant|Champs manquants}} requis : $1",
+	"communityrequests-error-invalid-proposer": "« $1 » n’est pas un nom d’utilisateur valide.",
 	"communityrequests-status": "État",
 	"communityrequests-status-draft": "Ébauche",
 	"communityrequests-status-submitted": "Soumis",
@@ -201,5 +202,8 @@
 	"communityrequests-cant-manually-edit": "La modification de cette page de liste de souhaits de la communauté doit être effectuée à l’aide du [[$1|formulaire d’admission]].",
 	"communityrequests-missing-wish": "Ce souhait n'existe pas. Vous pouvez [{{fullurl:{{#Special:Log}}|page={{FULLPAGENAMEE}}}} chercher dans les journaux associés] pour voir si des actions y sont associé, ou [[$1|créer un nouveau souhait]].",
 	"communityrequests-missing-focus-area": "Ce domaine d'intérêt n'existe pas. Vous pouvez [{{fullurl:{{#Special:Log}}|page={{FULLPAGENAMEE}}}} chercher dans les journaux associés] pour voir si des actions y sont associé, ou [[$1|créer un nouveau domaine d'intérêt]].",
-	"communityrequests-wishlist-machine-translation": "Activer la traduction automatique dans la [[$1|liste de souhaits de la communauté]]."
+	"communityrequests-wishlist-machine-translation": "Activer la traduction automatique dans la [[$1|liste de souhaits de la communauté]].",
+	"communityrequests-vote-add-summary": "Ajout d'un vote de soutien",
+	"communityrequests-vote-update-summary": "Mise à jour du vote de soutien",
+	"communityrequests-vote-remove-summary": "Retirez votre vote de soutien"
 }

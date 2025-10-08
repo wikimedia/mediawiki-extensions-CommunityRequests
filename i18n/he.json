@@ -65,6 +65,7 @@
 	"communityrequests-unsupport-focus-area": "הסרת הצבעת התמיכה שלך",
 	"communityrequests-support-error": "אירעה שגיאה ולא היה אפשר לרשום את התמיכה שלך.",
 	"communityrequests-error-required-fields": "{{PLURAL:$2|חסר שדה נדרש|חסרים שדות נדרשים}}: $1",
+	"communityrequests-error-invalid-proposer": "\"$1\" אינו משתמש תקין.",
 	"communityrequests-status": "מצב",
 	"communityrequests-status-draft": "טיוטה",
 	"communityrequests-status-submitted": "הוגש",
@@ -194,5 +195,8 @@
 	"communityrequests-cant-manually-edit": "יש לערוך את דף רשימת משאלות הקהילה באמצעות [[$1|טופס הקליטה]].",
 	"communityrequests-missing-wish": "המשאלה הזאת אינה קיימת. אפשר [{{fullurl:{{#Special:Log}}|page={{FULLPAGENAMEE}}}} לחפש ביומנים הקשורים] כדי למצוא לאן היא הלכה או [[$1|ליצור משאלה חדשה]].",
 	"communityrequests-missing-focus-area": "תחום המיקוד אינו קיים. אפשר [{{fullurl:{{#Special:Log}}|page={{FULLPAGENAMEE}}}} לחפש ביומנים הקשורים] כדי למצוא לאן הוא הלך או [[$1|ליצור תחום מיקום חדש]].",
-	"communityrequests-wishlist-machine-translation": "להפעיל תרגום מכונה אוטומטי ב[[$1|רשימת משאלות הקהילה]]."
+	"communityrequests-wishlist-machine-translation": "להפעיל תרגום מכונה אוטומטי ב[[$1|רשימת משאלות הקהילה]].",
+	"communityrequests-vote-add-summary": "הוספת הצבעת תמיכה",
+	"communityrequests-vote-update-summary": "עדכון הצבעת תמיכה",
+	"communityrequests-vote-remove-summary": "הסרת הצבעת תמיכה"
 }

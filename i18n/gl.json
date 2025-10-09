@@ -62,6 +62,7 @@
 	"communityrequests-unsupport-focus-area": "Eliminar o voto de apoio",
 	"communityrequests-support-error": "Produciuse un erro e non se puido gravar o teu apoio.",
 	"communityrequests-error-required-fields": "{{PLURAL:$2|Falta un campo obrigatorio|Faltan varios campos obrigatorios}}: $1",
+	"communityrequests-error-invalid-proposer": "«$1» non é un usuario válido.",
 	"communityrequests-status": "Estado",
 	"communityrequests-status-draft": "Borrador",
 	"communityrequests-status-submitted": "Enviado",

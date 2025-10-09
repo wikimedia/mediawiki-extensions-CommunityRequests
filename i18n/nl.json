@@ -63,6 +63,7 @@
 	"communityrequests-unsupport-focus-area": "Uw steunstem verwijderen",
 	"communityrequests-support-error": "Er is een fout opgetreden en uw steun kon niet worden geregistreerd.",
 	"communityrequests-error-required-fields": "{{PLURAL:$2|Dit vereiste veld ontbreekt|Deze vereiste velden ontbreken}}: $1",
+	"communityrequests-error-invalid-proposer": "“$1” is geen bestaande gebruiker.",
 	"communityrequests-status": "Status",
 	"communityrequests-status-draft": "Concept",
 	"communityrequests-status-submitted": "Ingediend",

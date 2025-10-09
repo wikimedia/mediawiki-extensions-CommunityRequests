@@ -17,6 +17,7 @@
 	"communityrequests-save": "Сачувај измене",
 	"communityrequests-focus-area-save": "Сачувај измене",
 	"communityrequests-support-wish": "Подржи жељу",
+	"communityrequests-error-invalid-proposer": "„$1” је непостојећи корисник.",
 	"communityrequests-status": "Статус",
 	"communityrequests-status-draft": "Нацрт",
 	"communityrequests-status-blocked": "Блокирано",

@@ -70,6 +70,7 @@
 	"communityrequests-support-error": "An error occurred and your support was not able to be recorded.",
 	"communityrequests-error-required-fields": "Missing required {{PLURAL:$2|field|fields}}: $1",
 	"communityrequests-error-invalid-proposer": "\"$1\" is not a valid user.",
+	"communityrequests-error-invalid-type": "\"$1\" is not a valid wish type.",
 	"communityrequests-status": "Status",
 	"communityrequests-status-draft": "Draft",
 	"communityrequests-status-submitted": "Submitted",

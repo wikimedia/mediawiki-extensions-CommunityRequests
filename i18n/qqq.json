@@ -71,6 +71,7 @@
 	"communityrequests-support-error": "Error message shown in the voting dialog when an unknown error occurs (e.g. connection failure) when the user clicks the support button (which uses {{msg-mw|communityrequests-support}}). Only shown if no better message is found.",
 	"communityrequests-error-required-fields": "Error message for required fields.\n\nParameters:\n* $1 — List of missing fields\n*$2 - total number of missing fields",
 	"communityrequests-error-invalid-proposer": "Error message shown when the proposer field contains an invalid username.",
+	"communityrequests-error-invalid-type": "Error message shown when the wish type field contains an invalid or unrecognized type value.\n\nParameters:\n* $1 — The invalid type value that was provided",
 	"communityrequests-status": "Label for the 'Status' field in the intake form.",
 	"communityrequests-status-draft": "Label for a status chip.",
 	"communityrequests-status-submitted": "Label for a status chip. An adjective or a passive participle that describes a wish.",

@@ -157,6 +157,40 @@ title=Community_Wishlist/W3
 !! end
 
 !! test
+Invalid type
+!! options
+title=Community_Wishlist/W3
+language=qqx
+!! wikitext
+{{#CommunityRequests: wish
+|title = Wish without proposer
+|status = under-review
+|type = invalid type
+|audience = Example audience
+|projects = commons,wikisource
+|otherproject = Some other project
+|created = 2023-10-01T12:00:00Z
+|proposer = Maintenance script
+|phabtasks = T123,T456
+|baselang = en
+|description = This is a wish with an invalid type.}}
+!! html
+<p><a href="/wiki/Community_Wishlist/Wishes" title="Community Wishlist/Wishes">(communityrequests-view-all-wishes)</a></p><div class="ext-communityrequests-wish"><div class="mw-heading mw-heading2">(communityrequests-wish-description-heading)</div><div class="ext-communityrequests-wish--description">
+<p>This is a wish with an invalid type.
+</p>
+</div><div class="mw-heading mw-heading3">(communityrequests-wish-focus-area-heading)</div><div class="ext-communityrequests-wish--focus-area">
+<p>(communityrequests-focus-area-unassigned)
+</p>
+</div><div class="mw-heading mw-heading3">(communityrequests-wish-type-heading)</div><div class="ext-communityrequests-wish--wish-type">(communityrequests-wishtype-unknown-label)</div><div class="mw-heading mw-heading3">(communityrequests-wish-audience-heading)</div><div class="ext-communityrequests-wish--audience">
+<p>Example audience
+</p>
+</div><div class="mw-heading mw-heading3">(communityrequests-wish-phabricator-heading)</div><div class="ext-communityrequests-wish--phabtasks">
+<p><a href="http://example.org/wiki/phab:T123" class="extiw" title="phab:T123">T123</a>(comma-separator)<a href="http://example.org/wiki/phab:T456" class="extiw" title="phab:T456">T456</a>
+</p>
+</div><div class="mw-heading mw-heading3">(communityrequests-wish-other-details-heading)</div><ul><li class="ext-communityrequests-wish--created">(communityrequests-wish-created: 12:00, 1 (october) 2023)</li><li class="ext-communityrequests-wish--updated">(communityrequests-wish-updated: 00:02, 1 (january) 1970)</li><li class="ext-communityrequests-wish--proposer">(communityrequests-wish-proposer: (signature: Maintenance script, Maintenance script))</li></ul><div class="mw-heading mw-heading2" id="Voting">(communityrequests-wish-voting)</div><div class="ext-communityrequests-wish--voting"><p>(communityrequests-wish-voting-info-default)</p></div></div>
+!! end
+
+!! test
 Example wish in Hebrew and with no tasks
 !! options
 title=Community_Wishlist/W4

@@ -32,7 +32,7 @@ class WishRenderer extends AbstractRenderer {
 			Wish::PARAM_CREATED,
 			Wish::PARAM_TITLE,
 			Wish::PARAM_PROPOSER,
-			Wish::PARAM_BASE_LANG,
+			Wish::PARAM_BASE_LANG
 		];
 
 		$missingFields = $this->validateArguments( $args, $requiredFields );
@@ -98,12 +98,37 @@ class WishRenderer extends AbstractRenderer {
 			[ 'class' => 'mw-heading mw-heading3' ],
 			$this->msg( 'communityrequests-wish-type-heading' )->text()
 		);
-		$wishType = $this->getDiv(
-			'wish-type',
-			$this->msg(
-				$this->config->getWishTypeLabelFromWikitextVal( $this->getArg( Wish::PARAM_TYPE, '' ) ) . '-label'
-			)->text()
-		);
+
+		$typeArg = $this->getArg( Wish::PARAM_TYPE, '' );
+		$typeLabel = $this->config->getWishTypeLabelFromWikitextVal( $typeArg );
+
+		if ( $typeLabel === null ) {
+			$this->parser->addTrackingCategory( self::ERROR_TRACKING_CATEGORY );
+			if ( $this->parser->getOptions()->getIsPreview() ) {
+				// In preview mode, if the type is invalid, we want to show the invalid type
+				// so that the user can correct it.
+				$wishType = Html::element(
+					'span',
+					[ 'class' => 'error' ],
+					$this->msg( 'communityrequests-error-invalid-type', $typeArg )->text()
+				);
+			} else {
+				$wishType = $this->getDiv(
+					'wish-type',
+					$this->msg( 'communityrequests-wishtype-unknown-label' )->text()
+				);
+			}
+		} else {
+			// Messages used in the following block:
+			// * communityrequests-wishtype-feature-label
+			// * communityrequests-wishtype-bug-label
+			// * communityrequests-wishtype-change-label
+			// * communityrequests-wishtype-unknown-label
+			$wishType = $this->getDiv(
+				'wish-type',
+				$this->msg( $typeLabel . '-label' )->text()
+			);
+		}
 
 		// Tags.
 		$tagsArgs = array_filter(

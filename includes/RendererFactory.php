@@ -10,7 +10,6 @@ use MediaWiki\Extension\CommunityRequests\Vote\VoteRenderer;
 use MediaWiki\Extension\CommunityRequests\Wish\WishIndexRenderer;
 use MediaWiki\Extension\CommunityRequests\Wish\WishRenderer;
 use MediaWiki\Extension\CommunityRequests\Wish\WishStore;
-use MediaWiki\Html\Html;
 use MediaWiki\Linker\LinkRenderer;
 use MediaWiki\Parser\Parser;
 use MediaWiki\Parser\PPFrame;
@@ -47,12 +46,17 @@ class RendererFactory {
 				'isHTML' => true
 			];
 		} else {
-			$this->addTrackingCategory( $parser, AbstractRenderer::ERROR_TRACKING_CATEGORY );
-			return Html::element(
-				'span',
-				[ 'class' => 'error' ],
-				"No such CommunityRequests entity type"
+			$errorRenderer = new WishRenderer(
+				$this->config,
+				$this->wishStore,
+				$this->focusAreaStore,
+				$this->logger,
+				$this->linkRenderer,
+				$parser,
+				$frame,
+				$args
 			);
+			return $errorRenderer->getErrorMessage( 'communityrequests-unknown-parser-function', $entityType );
 		}
 	}
 

@@ -17,6 +17,7 @@ use MediaWiki\Title\Title;
 use MessageLocalizer;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
+use Wikimedia\Message\MessageValue;
 
 /**
  * The base class for wish/focus area parser function implementations
@@ -81,6 +82,33 @@ abstract class AbstractRenderer implements MessageLocalizer {
 	}
 
 	/**
+	 * Get an error message to display, add it to the parser warnings, and add the page to the error tracking category.
+	 *
+	 * @param string $msg The message name.
+	 * @param array|string $params The message parameter (if not an array) or parameters.
+	 * @param string $element The HTML element with which to wrap the error message.
+	 * @param bool $track Whether to add the page to the error tracking category and add a parser warning.
+	 *
+	 * @return string The error HTML.
+	 */
+	public function getErrorMessage(
+		string $msg, array|string $params, string $element = 'span', bool $track = true
+	): string {
+		if ( $track ) {
+			$this->parser->addTrackingCategory( self::ERROR_TRACKING_CATEGORY );
+			if ( !is_array( $params ) ) {
+				$params = [ $params ];
+			}
+			$this->parser->getOutput()->addWarningMsgVal( MessageValue::new( $msg, $params ) );
+		}
+		return Html::element(
+			$element,
+			[ 'class' => 'error' ],
+			$this->msg( $msg, $params )->text()
+		);
+	}
+
+	/**
 	 * Get the associative array of parser function arguments
 	 * indexed by the names given in the source.
 	 *
@@ -141,16 +169,17 @@ abstract class AbstractRenderer implements MessageLocalizer {
 
 		$statusEntityType = $this->rendererType === 'wish' ? 'wish' : 'focus-area';
 		$statusMsg = $this->config->getStatusLabelFromWikitextVal( $statusEntityType, $wikitextVal );
+		$error = '';
 		if ( $statusMsg === null ) {
 			$defaultStatus = $this->config->getDefaultStatusWikitextVal();
 			$statusMsg = "communityrequests-status-{$this->rendererType}-{$defaultStatus}";
-			$this->parser->addTrackingCategory( self::ERROR_TRACKING_CATEGORY );
+			$error = $this->getErrorMessage( 'communityrequests-error-invalid-status', $wikitextVal );
 		}
 
 		$style = $this->config->getStatuses()[$wikitextVal]['style'] ?? 'notice';
 		$cssClass .= " cdx-info-chip--$style";
 
-		return Html::rawElement(
+		return $error . Html::rawElement(
 			'span',
 			[ 'class' => $cssClass ],
 			Html::element(
@@ -254,9 +283,7 @@ abstract class AbstractRenderer implements MessageLocalizer {
 			$out .= Html::element( 'div', [ 'class' => 'ext-communityrequests-voting' ] );
 			// Noscript fallback message.
 			$out .= Html::rawElement( 'noscript', [],
-				Html::element( 'p', [ 'class' => 'error' ],
-					$this->msg( 'communityrequests-voting-no-js' )->text()
-				)
+				$this->getErrorMessage( 'communityrequests-voting-no-js', [], 'p', false )
 			);
 			if ( $basePage ) {
 				$this->parser->getOutput()->setJsConfigVar(

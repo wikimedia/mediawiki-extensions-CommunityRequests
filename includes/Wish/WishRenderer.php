@@ -43,12 +43,7 @@ class WishRenderer extends AbstractRenderer {
 		// Validate the proposer.
 		$proposerActorId = $this->wishStore->getActorId( $args[Wish::PARAM_PROPOSER] );
 		if ( $proposerActorId === null ) {
-			$this->parser->addTrackingCategory( self::ERROR_TRACKING_CATEGORY );
-			return Html::element(
-				'span',
-				[ 'class' => 'error' ],
-				$this->msg( 'communityrequests-error-invalid-proposer', $args[Wish::PARAM_PROPOSER] )->text()
-			);
+			return $this->getErrorMessage( 'communityrequests-error-invalid-proposer', $args[Wish::PARAM_PROPOSER] );
 		}
 
 		// These need to be set here because we need them for display in ::renderWishInternal().

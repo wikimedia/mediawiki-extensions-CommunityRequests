@@ -595,6 +595,10 @@
 					"voting": false,
 					"default": true
 				},
+				"accepted": {
+					"id": 9,
+					"label": "communityrequests-status-accepted"
+				},
 				"unsupported": {
 					"id": 1,
 					"label": "communityrequests-status-unsupported"

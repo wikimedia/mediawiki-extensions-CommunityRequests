@@ -74,6 +74,7 @@
 	"communityrequests-status-archived": "Label for a status chip. An adjective or a passive participle that describes a wish.",
 	"communityrequests-status-unknown": "Label for a status chip.",
 	"communityrequests-status-under-review": "Label for a status chip. Status for wishes/focus areas that are being reviewed.",
+	"communityrequests-status-accepted": "Label for a status chip. Status for wishes/focus areas that has been accepted for voting.",
 	"communityrequests-status-unsupported": "Label for a status chip. Status for wishes/focus areas that are unsupported.",
 	"communityrequests-status-declined": "Label for a status chip. Status for wishes/focus areas that have been declined.",
 	"communityrequests-status-community-opportunity": "Label for a status chip. Status for wishes/focus areas that are a community opportunity.",

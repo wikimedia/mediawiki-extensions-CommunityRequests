@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"Brettchenweber"
+			"Brettchenweber",
+			"McDutchie"
 		]
 	},
 	"apihelp-wishedit-summary": "Erstellen oder aktualisieren eines Wunsches in der Community-Wunschliste.",
@@ -20,7 +21,7 @@
 	"apierror-wishlist-entity-parse": "Die Wunschlisten-Entität konnte nicht geparst werden. Sie enthält möglicherweise ungültigen Wikitext. Stelle sicher, dass der Wikitext keine überflüssigen Pipe-Zeichen (<code>|</code>) enthält.",
 	"apierror-wishlist-vote-parse": "Die Wunschlisten-Stimme konnte nicht analysiert werden. Sie enthält möglicherweise ungültigen Wikitext. Bitte stelle sicher, dass der Wikitext keine überflüssigen Pipe-Zeichen (<code>|</code>) enthält.",
 	"apierror-wishlist-vote-login-required": "Du musst angemeldet sein, um für einen Wunsch oder Schwerpunktbereich abzustimmen.",
-	"apierror-wishlist-entity-invalid": "Die angegebene Wunschliste ist ungültig oder nicht existiert.",
+	"apierror-wishlist-entity-invalid": "Die angegebene Wunschlistenentität ist ungültig oder existiert nicht.",
 	"apierror-querywishes-invalidfocusareas": "Alle oder einige der angegebenen Schwerpunkt-IDs sind ungültig.",
 	"apihelp-focusareaedit-summary": "Erstelle oder aktualisiere einen Schwerpunktbereich in der Community-Wunschliste.",
 	"apihelp-focusareaedit-param-focusarea": "Der zu aktualisierende Schwerpunktbereich. Dies kann entweder der vollständige Seitentitel, eine vorangestellte Schwerpunktbereichs-ID (z. B. „FA123“) oder die Schwerpunktbereichs-ID als Ganzzahl sein. Lasse das Feld leer, um einen neuen Schwerpunktbereich zu erstellen.",

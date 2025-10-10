@@ -410,6 +410,7 @@
 			],
 			"messages": [
 				"communityrequests-wishes-table-caption",
+				"communityrequests-wishes-table-empty",
 				"communityrequests-wishes-status-header",
 				"communityrequests-wishes-type-header",
 				"communityrequests-wishes-in-focusarea-text",

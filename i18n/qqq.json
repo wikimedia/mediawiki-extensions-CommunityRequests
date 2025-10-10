@@ -135,6 +135,7 @@
 	"communityrequests-wishes-in-focusarea-text": "Text shown for the focus area in a wish in the 'title and focus area' column. This message is shown beneath the title of the wish.\n\nParameter:\n* $1 — The linked focus area name, or if unassigned the {{msg-mw|communityrequests-focus-area-unassigned}} message.",
 	"communityrequests-wishes-status-header": "Table column header for the 'status' column.",
 	"communityrequests-wishes-table-caption": "Caption for the table of wishes on the 'all wishes' page.",
+	"communityrequests-wishes-table-empty": "Message shown in the wishes' table when it is empty.",
 	"communityrequests-wishes-tags-header": "Table column header for the 'tags' column.",
 	"communityrequests-wishes-title-header": "Table column header for the 'title' column.",
 	"communityrequests-wishes-title-and-focusarea-header": "Table column header for the 'title' and 'focus area' column.",

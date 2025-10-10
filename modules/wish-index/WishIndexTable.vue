@@ -7,7 +7,7 @@
 		:sort="tableSort"
 		:hide-caption="true"
 		:show-vertical-borders="true"
-		:paginate="true"
+		:paginate="data.length > 0"
 		:server-pagination="true"
 		:total-rows="totalWishCount"
 		:pagination-size-default="limit"
@@ -16,6 +16,7 @@
 		@update:sort="onUpdateSort"
 		@load-more="onLoadMore"
 	>
+		<template #empty-state>{{ $i18n( 'communityrequests-wishes-table-empty' ).text() }}</template>
 		<template #item-title="{ item, row }">
 			<a
 				:href="mw.Title.makeTitle( row.crwns, row.crwtitle ).getUrl()"

@@ -11,6 +11,7 @@ use MediaWiki\Extension\CommunityRequests\HookHandler\CommunityRequestsHooks;
 use MediaWiki\Html\Html;
 use MediaWiki\HTMLForm\HTMLForm;
 use MediaWiki\MediaWikiServices;
+use MediaWiki\Page\PageIdentity;
 use MediaWiki\Registration\ExtensionRegistry;
 use MediaWiki\Request\DerivativeRequest;
 use MediaWiki\ResourceLoader as RL;
@@ -23,7 +24,6 @@ use Psr\Log\LoggerInterface;
 
 abstract class AbstractWishlistSpecialPage extends FormSpecialPage {
 
-	protected Title $pageTitle;
 	protected ?int $entityId = null;
 
 	/** @inheritDoc */
@@ -48,15 +48,19 @@ abstract class AbstractWishlistSpecialPage extends FormSpecialPage {
 		$this->requireNamedUser( 'communityrequests-please-log-in' );
 
 		$this->entityId = $this->store->getIdFromInput( $entityId );
-		$this->pageTitle = Title::newFromText( $this->store->getPagePrefix() . $this->entityId );
 
-		// Redirect to "view source" (action=edit) if the user does not have permission to edit.
-		if ( !$this->getUser()->probablyCan( 'edit', $this->pageTitle ) ) {
-			$this->getOutput()->redirect( $this->pageTitle->getEditURL() );
-		}
+		if ( $this->entityId ) {
+			$pageTitle = Title::newFromText( $this->store->getPagePrefix() . $this->entityId );
 
-		if ( $this->entityId && !$this->loadExistingEntity( $this->entityId ) ) {
-			return;
+			// Redirect to "view source" (action=edit) if the user does not have permission to edit.
+			if ( !$this->getUser()->probablyCan( 'edit', $pageTitle ) ) {
+				$this->getOutput()->redirect( $pageTitle->getEditURL() );
+			}
+
+			if ( !$this->loadExistingEntity( $this->entityId, $pageTitle ) ) {
+				$this->showErrorPage( $pageTitle );
+				return;
+			}
 		}
 
 		$this->getOutput()->addModules( 'ext.communityrequests.intake' );
@@ -105,18 +109,12 @@ abstract class AbstractWishlistSpecialPage extends FormSpecialPage {
 	 * Load an existing entity (wish or focus area) from the store.
 	 *
 	 * @param int $entityId
-	 * @param ?Title $title Ignore; for unit tests only.
+	 * @param PageIdentity $pageTitle
 	 * @return bool True if the entity was found and loaded, false otherwise.
 	 */
-	public function loadExistingEntity( int $entityId, ?Title $title = null ): bool {
-		$entity = $this->store->get(
-			$title ?? $this->pageTitle,
-			null,
-			AbstractWishlistStore::FETCH_WIKITEXT_RAW,
-		);
-
+	public function loadExistingEntity( int $entityId, PageIdentity $pageTitle ): bool {
+		$entity = $this->store->get( $pageTitle, null, AbstractWishlistStore::FETCH_WIKITEXT_RAW );
 		if ( !$entity ) {
-			$this->showErrorPage();
 			return false;
 		}
 
@@ -124,8 +122,6 @@ abstract class AbstractWishlistSpecialPage extends FormSpecialPage {
 			'intakeId' => $entityId,
 			'intakeData' => $entity->toArray( $this->config ),
 		] );
-
-		$this->entityId = $entityId;
 
 		return true;
 	}
@@ -156,7 +152,7 @@ abstract class AbstractWishlistSpecialPage extends FormSpecialPage {
 	 * Error page to show when the entity (wish or focus area) is not found.
 	 * Implementations should use OutputPage::showErrorPage().
 	 */
-	abstract protected function showErrorPage(): void;
+	abstract protected function showErrorPage( Title $title ): void;
 
 	/**
 	 * Get and preload VE modules depending on the skin and loaded extensions.
@@ -230,7 +226,7 @@ abstract class AbstractWishlistSpecialPage extends FormSpecialPage {
 			return $e->getStatusValue();
 		}
 
-		$this->pageTitle = Title::newFromText( $api->getResult()->getResultData()[$action][$path] );
+		$title = Title::newFromText( $api->getResult()->getResultData()[$action][$path] );
 
 		// Set session variables to show post-edit messages.
 		$this->getRequest()->getSession()->set(
@@ -240,7 +236,7 @@ abstract class AbstractWishlistSpecialPage extends FormSpecialPage {
 				CommunityRequestsHooks::SESSION_VALUE_ENTITY_UPDATED
 		);
 		// Redirect to entity page.
-		$this->getOutput()->redirect( $this->pageTitle->getFullURL() );
+		$this->getOutput()->redirect( $title->getFullURL() );
 
 		return Status::newGood( $api->getResult() );
 	}

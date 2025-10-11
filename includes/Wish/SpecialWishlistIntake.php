@@ -8,6 +8,7 @@ use MediaWiki\Extension\CommunityRequests\FocusArea\FocusArea;
 use MediaWiki\Extension\CommunityRequests\FocusArea\FocusAreaStore;
 use MediaWiki\Extension\CommunityRequests\WishlistConfig;
 use MediaWiki\Message\Message;
+use MediaWiki\Title\Title;
 use MediaWiki\Title\TitleParser;
 use MediaWiki\User\UserFactory;
 use Psr\Log\LoggerInterface;
@@ -73,11 +74,11 @@ class SpecialWishlistIntake extends AbstractWishlistSpecialPage {
 	}
 
 	/** @inheritDoc */
-	protected function showErrorPage(): void {
+	protected function showErrorPage( Title $title ): void {
 		$this->getOutput()->showErrorPage(
 			'communityrequests-wishlistintake',
 			'communityrequests-wish-not-found',
-			[ $this->pageTitle->getPrefixedText() ],
+			[ $title->getPrefixedText() ],
 			$this->config->getHomepage()
 		);
 	}

@@ -41,11 +41,11 @@ class SpecialEditFocusArea extends AbstractWishlistSpecialPage {
 	}
 
 	/** @inheritDoc */
-	protected function showErrorPage(): void {
+	protected function showErrorPage( Title $title ): void {
 		$this->getOutput()->showErrorPage(
 			'communityrequests-editfocusarea',
 			'communityrequests-focus-area-not-found',
-			[ $this->pageTitle->getPrefixedText() ],
+			[ $title->getPrefixedText() ],
 			$this->config->getHomepage()
 		);
 	}

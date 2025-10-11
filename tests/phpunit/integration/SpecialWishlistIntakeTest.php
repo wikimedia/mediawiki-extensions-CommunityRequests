@@ -7,7 +7,6 @@ use MediaWiki\Exception\UserNotLoggedIn;
 use MediaWiki\Extension\CommunityRequests\AbstractWishlistStore;
 use MediaWiki\Extension\CommunityRequests\Wish\SpecialWishlistIntake;
 use MediaWiki\Extension\CommunityRequests\Wish\Wish;
-use MediaWiki\Title\Title;
 use SpecialPageTestBase;
 
 /**
@@ -121,7 +120,7 @@ class SpecialWishlistIntakeTest extends SpecialPageTestBase {
 		$pageId = $wish->getPage()->getId();
 
 		$sp = $this->newSpecialPage();
-		$sp->loadExistingEntity( $pageId, Title::newFromPageIdentity( $wish->getPage() ) );
+		$sp->loadExistingEntity( $pageId, $wish->getPage() );
 		$vars = $sp->getOutput()->getJsConfigVars();
 		$this->assertSame( $vars['intakeId'], $pageId );
 		$this->assertSame( '<translate><!--T:1--> Test Wish</translate>', $vars['intakeData'][Wish::PARAM_TITLE] );

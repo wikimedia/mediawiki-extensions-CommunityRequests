@@ -112,7 +112,7 @@ class VoteStoreTest extends MediaWikiIntegrationTestCase {
 	}
 
 	private function insertTestWishWithVotes(): Wish {
-		$wish = $this->insertTestWish( $this->config->getWishPagePrefix() . '123', 'en' );
+		$wish = $this->insertTestWish();
 		$vote1 = new Vote( $wish, $this->userObjs[0], 'First vote!', '2025-01-01T12:00:00Z' );
 		$vote2 = new Vote( $wish, $this->userObjs[1], 'Second vote!', '2025-02-02T12:00:00Z' );
 		$vote3 = new Vote( $wish, $this->userObjs[2], '', '2025-03-03T12:00:00Z' );

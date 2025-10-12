@@ -32,27 +32,16 @@ class WishRendererTest extends MediaWikiIntegrationTestCase {
 	 */
 	public function testCreateWishFromWikiPage(): void {
 		$user = $this->getTestUser()->getUser();
-		$wikitext = <<<END
-{{#CommunityRequests: wish
-|title = Test Wish
-|status = in-progress
-|type = change
-|tags = multimedia
-|created = 2023-10-01T12:00:00Z
-|proposer = {$user->getName()}
-|baselang = en
-|This is a [[test]] {{wish}}.}}
-END;
-		$ret = $this->insertPage(
-			Title::newFromText( $this->config->getWishPagePrefix() . '123' ),
-			$wikitext,
-			NS_MAIN,
-			$user
-		);
+		$wish = $this->insertTestWish( null, 'en', [
+			Wish::PARAM_TYPE => 'change',
+			Wish::PARAM_STATUS => 'in-progress',
+			Wish::PARAM_TITLE => 'Test Wish',
+			Wish::PARAM_DESCRIPTION => 'This is a [[test]] {{wish}}.',
+			Wish::PARAM_TAGS => 'multimedia',
+			Wish::PARAM_CREATED => '2023-10-01T12:00:00Z',
+			Wish::PARAM_PROPOSER => $user->getName(),
+		] );
 
-		/** @var Wish $wish */
-		$wish = $this->getStore()->get( $ret['title'] );
-		$this->assertSame( $ret['id'], $wish->getPage()->getId() );
 		$this->assertSame( 'Test Wish', $wish->getTitle() );
 		$this->assertSame( $this->config->getStatusIdFromWikitextVal( 'in-progress' ), $wish->getStatus() );
 		$this->assertSame( $this->config->getWishTypeIdFromWikitextVal( 'change' ), $wish->getType() );

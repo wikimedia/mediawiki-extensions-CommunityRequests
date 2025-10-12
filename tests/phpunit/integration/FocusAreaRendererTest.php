@@ -26,24 +26,13 @@ class FocusAreaRendererTest extends MediaWikiIntegrationTestCase {
 	 * Test that a focus area can be created from a wiki page.
 	 */
 	public function testCreateFocusAreaFromWikiPage(): void {
-		$wikitext = <<<END
-{{#CommunityRequests: focus-area
-|status = in-progress
-|title = Test Focus Area
-|shortdescription = A brief description of the focus area.
-|created = 2023-10-01T12:00:00Z
-|baselang = en
-|description = Focus on improving the user experience.}}
-END;
-		$ret = $this->insertPage(
-			Title::newFromText( $this->config->getFocusAreaPagePrefix() . '123' ),
-			$wikitext,
-			NS_MAIN,
-			$this->getTestUser()->getUser()
-		);
-
-		$focusArea = $this->getStore()->get( $ret['title'], 'en', FocusAreaStore::FETCH_WIKITEXT_TRANSLATED );
-		$this->assertSame( $ret['id'], $focusArea->getPage()->getId() );
+		$focusArea = $this->insertTestFocusArea( null, 'en', [
+			FocusArea::PARAM_TITLE => 'Test Focus Area',
+			FocusArea::PARAM_STATUS => 'in-progress',
+			FocusArea::PARAM_SHORT_DESCRIPTION => 'A brief description of the focus area.',
+			FocusArea::PARAM_CREATED => '2023-10-01T12:00:00Z',
+		] );
+		$this->assertGreaterThan( 0, $focusArea->getPage()->getId() );
 		$this->assertSame( $this->config->getStatusIdFromWikitextVal( 'in-progress' ), $focusArea->getStatus() );
 		$this->assertSame( 'Test Focus Area', $focusArea->getTitle() );
 		$this->assertSame( 'A brief description of the focus area.', $focusArea->getShortDescription() );

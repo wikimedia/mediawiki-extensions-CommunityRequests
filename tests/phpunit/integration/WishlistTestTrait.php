@@ -19,6 +19,7 @@ use MediaWiki\User\User;
 use MessageLocalizer;
 use PHPUnit\Framework\MockObject\MockBuilder;
 use PHPUnit\Framework\TestCase;
+use TestUser;
 use Wikimedia\ObjectCache\EmptyBagOStuff;
 use Wikimedia\Rdbms\IDBAccessObject;
 
@@ -50,7 +51,8 @@ trait WishlistTestTrait {
 	 * Any fields containing <translate> will cause the page
 	 * to be marked for translation, and for jobs to be ran.
 	 *
-	 * @param Title|string $wishPage Root page for the wish.
+	 * @param Title|string|null $wishPage Root page for the wish.
+	 *   null to use an auto-generated title.
 	 * @param string $lang Either the base language (for new wishes),
 	 *   or the language of the translation (for translated wishes).
 	 * @param array $data Be sure to specify PARAM_BASE_LANG if $lang is different.
@@ -59,8 +61,9 @@ trait WishlistTestTrait {
 	 * @return ?Wish
 	 */
 	protected function insertTestWish(
-		Title|string $wishPage,
-		string $lang,
+		// phpcs:ignore MediaWiki.Usage.NullableType.ExplicitNullableTypes -- false positive
+		Title|string|null $wishPage = null,
+		string $lang = 'en',
 		array $data = [],
 		bool $markForTranslation = true,
 	): ?Wish {
@@ -86,7 +89,8 @@ trait WishlistTestTrait {
 	 * Any fields containing <translate> will cause the page
 	 * to be marked for translation, and for jobs to be ran.
 	 *
-	 * @param Title|string $focusAreaPage Root page for the focus area.
+	 * @param Title|string|null $focusAreaPage Root page for the focus area.
+	 *   null to use an auto-generated title.
 	 * @param string $lang Either the base language (for new wishes),
 	 *   or the language of the translation (for translated wishes).
 	 * @param array $data Be sure to specify PARAM_BASE_LANG if $lang is different.
@@ -95,8 +99,9 @@ trait WishlistTestTrait {
 	 * @return ?FocusArea
 	 */
 	protected function insertTestFocusArea(
-		Title|string $focusAreaPage,
-		string $lang,
+		// phpcs:ignore MediaWiki.Usage.NullableType.ExplicitNullableTypes -- false positive
+		Title|string|null $focusAreaPage = null,
+		string $lang = 'en',
 		array $data = [],
 		bool $markForTranslation = true,
 	): ?FocusArea {
@@ -115,16 +120,20 @@ trait WishlistTestTrait {
 	}
 
 	private function insertTestEntity(
-		Title|string $title,
-		string $lang,
+		// phpcs:ignore MediaWiki.Usage.NullableType.ExplicitNullableTypes -- false positive
+		Title|string|null $title = null,
+		string $lang = 'en',
 		array $data = [],
 		array $defaultData = [],
 		bool $markForTranslation = true,
 	): ?AbstractWishlistEntity {
-		if ( is_string( $title ) ) {
+		if ( $title === null ) {
+			$id = $this->getStore()->getNewId();
+			$title = Title::newFromText( $this->getStore()->getPagePrefix() . $id );
+		} elseif ( is_string( $title ) ) {
 			$title = Title::newFromText( $title );
 		}
-		if ( $this->getServiceContainer()->get( 'CommunityRequests.WishlistConfig' )->isFocusAreaPage( $title ) ) {
+		if ( $this->config->isFocusAreaPage( $title ) ) {
 			$entityType = 'focus-area';
 			$class = FocusArea::class;
 		} else {
@@ -157,14 +166,16 @@ trait WishlistTestTrait {
 		$newTitle = Title::newFromText( $ret['title']->getFullText() );
 		$this->assertSame( $lang, $newTitle->getPageLanguage()->getCode() );
 
+		$fetchMethod = AbstractWishlistStore::FETCH_WIKITEXT_RAW;
 		$translateInstalled = $this->getServiceContainer()
 			->getExtensionRegistry()
 			->isLoaded( 'Translate' );
 		if ( $shouldMarkForTranslation && $translateInstalled ) {
 			$this->markForTranslation( $ret['title'] );
+			$fetchMethod = AbstractWishlistStore::FETCH_WIKITEXT_TRANSLATED;
 		}
 
-		return $this->getStore()->get( $title, $lang );
+		return $this->getStore()->get( $title, $lang, $fetchMethod );
 	}
 
 	/**
@@ -201,6 +212,7 @@ trait WishlistTestTrait {
 
 	/**
 	 * @param string|string[] $groups
+	 * @return TestUser
 	 * @see \MediaWikiIntegrationTestCase::getTestUser
 	 */
 	abstract protected function getTestUser( $groups = [] );

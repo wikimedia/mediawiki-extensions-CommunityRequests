@@ -34,7 +34,7 @@ class ApiWishlistVoteTest extends ApiTestCase {
 	}
 
 	public function testAddNewVote(): void {
-		$wish = $this->insertTestWish( $this->config->getWishPagePrefix() . '123', 'en' );
+		$wish = $this->insertTestWish( $this->config->getWishPagePrefix() . '123' );
 		[ $ret ] = $this->doApiRequestWithToken( [
 			'action' => 'wishlistvote',
 			'entity' => 'W123',
@@ -52,7 +52,7 @@ class ApiWishlistVoteTest extends ApiTestCase {
 	}
 
 	public function testUpdateVote(): void {
-		$this->insertTestWish( $this->config->getWishPagePrefix() . '123', 'en' );
+		$this->insertTestWish( $this->config->getWishPagePrefix() . '123' );
 		ConvertibleTimestamp::setFakeTime( '2025-01-01T12:00:00Z', 1 );
 		[ $ret ] = $this->doApiRequestWithToken( [
 			'action' => 'wishlistvote',
@@ -75,7 +75,7 @@ class ApiWishlistVoteTest extends ApiTestCase {
 	}
 
 	public function testRemoveVote(): void {
-		$wish = $this->insertTestWish( $this->config->getWishPagePrefix() . '123', 'en' );
+		$wish = $this->insertTestWish( $this->config->getWishPagePrefix() . '123' );
 		[ $ret ] = $this->doApiRequestWithToken( [
 			'action' => 'wishlistvote',
 			'entity' => 'W123',
@@ -95,7 +95,7 @@ class ApiWishlistVoteTest extends ApiTestCase {
 	}
 
 	public function testAddVoteWithParsingFailure(): void {
-		$this->insertTestWish( $this->config->getWishPagePrefix() . '123', 'en' );
+		$this->insertTestWish( $this->config->getWishPagePrefix() . '123' );
 		$this->expectApiErrorCode( 'wishlist-vote-parse' );
 		$this->doApiRequestWithToken( [
 			'action' => 'wishlistvote',
@@ -106,7 +106,7 @@ class ApiWishlistVoteTest extends ApiTestCase {
 	}
 
 	public function testAddVoteLoggedOut(): void {
-		$this->insertTestWish( $this->config->getWishPagePrefix() . '123', 'en' );
+		$this->insertTestWish( $this->config->getWishPagePrefix() . '123' );
 		$this->expectApiErrorCode( 'notloggedin' );
 		$this->doApiRequestWithToken( [
 			'action' => 'wishlistvote',
@@ -117,7 +117,7 @@ class ApiWishlistVoteTest extends ApiTestCase {
 	}
 
 	public function testTagEdits(): void {
-		$this->insertTestWish( $this->config->getWishPagePrefix() . '123', 'en' );
+		$this->insertTestWish( $this->config->getWishPagePrefix() . '123' );
 		[ ,, $sessionData ] = $this->doApiRequestWithToken( [
 			'action' => 'wishlistvote',
 			'entity' => 'W123',

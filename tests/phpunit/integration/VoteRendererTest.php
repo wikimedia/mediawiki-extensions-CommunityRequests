@@ -26,7 +26,7 @@ class VoteRendererTest extends MediaWikiIntegrationTestCase {
 		$this->store = $this->getServiceContainer()->get( 'CommunityRequests.WishStore' );
 
 		$wishTitleStr = $this->config->getWishPagePrefix() . '123';
-		$wish = $this->insertTestWish( $wishTitleStr, 'en' );
+		$wish = $this->insertTestWish( $wishTitleStr );
 		$this->assertSame( 0, $wish->getVoteCount() );
 
 		$this->insertVotes( $wishTitleStr, 3 );
@@ -39,7 +39,7 @@ class VoteRendererTest extends MediaWikiIntegrationTestCase {
 		$this->store = $this->getServiceContainer()->get( 'CommunityRequests.FocusAreaStore' );
 
 		$focusAreaTitleStr = $this->config->getFocusAreaPagePrefix() . '123';
-		$focusArea = $this->insertTestFocusArea( $focusAreaTitleStr, 'en' );
+		$focusArea = $this->insertTestFocusArea( $focusAreaTitleStr );
 		$this->assertSame( 0, $focusArea->getVoteCount() );
 
 		$this->insertVotes( $focusAreaTitleStr, 3 );
@@ -52,7 +52,7 @@ class VoteRendererTest extends MediaWikiIntegrationTestCase {
 		$this->store = $this->getServiceContainer()->get( 'CommunityRequests.WishStore' );
 
 		$wishTitleStr = $this->config->getWishPagePrefix() . '123';
-		$wish = $this->insertTestWish( $wishTitleStr, 'en' );
+		$wish = $this->insertTestWish( $wishTitleStr );
 		$this->assertSame( 0, $wish->getVoteCount() );
 
 		$this->store->save(
@@ -76,7 +76,7 @@ class VoteRendererTest extends MediaWikiIntegrationTestCase {
 		$this->store = $this->getServiceContainer()->get( 'CommunityRequests.WishStore' );
 
 		$wishTitleStr = $this->config->getWishPagePrefix() . '123';
-		$wish = $this->insertTestWish( $wishTitleStr, 'en' );
+		$wish = $this->insertTestWish( $wishTitleStr );
 		$this->assertSame( 0, $wish->getVoteCount() );
 
 		$this->insertVotes( $wishTitleStr, 5 );
@@ -99,7 +99,7 @@ class VoteRendererTest extends MediaWikiIntegrationTestCase {
 		$this->store = $this->getServiceContainer()->get( 'CommunityRequests.FocusAreaStore' );
 
 		$focusAreaTitleStr = $this->config->getFocusAreaPagePrefix() . '123';
-		$focusArea = $this->insertTestFocusArea( $focusAreaTitleStr, 'en' );
+		$focusArea = $this->insertTestFocusArea( $focusAreaTitleStr );
 		$this->assertSame( 0, $focusArea->getVoteCount() );
 
 		$this->insertVotes( $focusAreaTitleStr, 5 );

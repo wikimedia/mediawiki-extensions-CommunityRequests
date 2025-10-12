@@ -24,9 +24,6 @@
 		"communityrequests-wish-category",
 		"communityrequests-focus-area-category"
 	],
-	"AutoloadClasses": {
-		"MediaWiki\\Extension\\CommunityRequests\\Maintenance\\NukeWishlist": "maintenance/nukeWishlist.php"
-	},
 	"AutoloadNamespaces": {
 		"MediaWiki\\Extension\\CommunityRequests\\": "includes/"
 	},
@@ -34,6 +31,7 @@
 		"MediaWiki\\Extension\\CommunityRequests\\Tests\\": "tests/phpunit/"
 	},
 	"TestAutoloadClasses": {
+		"MediaWiki\\Extension\\CommunityRequests\\Maintenance\\NukeWishlist": "maintenance/nukeWishlist.php",
 		"MediaWiki\\Extension\\CommunityRequests\\Tests\\Integration\\WishlistTestTrait": "tests/phpunit/integration/WishlistTestTrait.php",
 		"MediaWiki\\Extension\\CommunityRequests\\Tests\\Unit\\AbstractWishlistEntityTest": "tests/phpunit/unit/AbstractWishlistEntityTest.php"
 	},

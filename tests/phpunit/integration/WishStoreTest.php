@@ -408,9 +408,9 @@ END;
 	}
 
 	public function testGetCount(): void {
-		$this->insertTestWish( 'Community Wishlist/W1', 'en' );
-		$this->insertTestWish( 'Community Wishlist/W2', 'en' );
-		$this->insertTestFocusArea( 'Community Wishlist/FA1', 'en' );
+		$this->insertTestWish();
+		$this->insertTestWish();
+		$this->insertTestFocusArea();
 		$this->assertSame( 2, $this->getStore()->getCount() );
 	}
 }

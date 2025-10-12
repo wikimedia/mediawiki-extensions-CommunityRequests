@@ -7,7 +7,7 @@ use MediaWiki\Exception\UserNotLoggedIn;
 use MediaWiki\Extension\CommunityRequests\AbstractWishlistStore;
 use MediaWiki\Extension\CommunityRequests\Wish\SpecialWishlistIntake;
 use MediaWiki\Extension\CommunityRequests\Wish\Wish;
-use MediaWiki\User\User;
+use MediaWiki\Title\Title;
 use SpecialPageTestBase;
 
 /**
@@ -102,58 +102,36 @@ class SpecialWishlistIntakeTest extends SpecialPageTestBase {
 	}
 
 	public function testEditExistingThrowsNoException(): void {
-		$user = User::createNew( 'TestUser' );
-
-		$wikitext = <<<END
-{{#CommunityRequests: wish
-|title = Test Wish
-|status = prioritized
-|type = change
-|audience = Example audience
-|tags = multimedia,wikisource
-|phabtasks = T123,T456
-|created = 2023-10-01T12:00:00Z
-|proposer = TestUser
-|baselang = en
-|description = This is a [[test]] {{wish}}.
-}}
-END;
-		$this->insertPage( 'Community Wishlist/W1', $wikitext );
-		$this->executeSpecialPage( 'W1', null, 'en', $user );
+		$wish = $this->insertTestWish();
+		$this->resetCount();
+		$this->executeSpecialPage( $wish->getPage()->getId(), null, 'en', $wish->getProposer() );
 		$this->expectNotToPerformAssertions();
 	}
 
 	public function testEditExistingHasTranslateTags(): void {
-		User::createNew( 'TestUser' );
-		$wikitext = <<<END
-{{#CommunityRequests: wish
-|title = <translate>Test Wish</translate>
-|status = prioritized
-|type = change
-|audience = <translate>Example audience</translate>
-|tags = multimedia,wikisource
-|phabtasks = T123,T456
-|created = 2023-10-01T12:00:00Z
-|proposer = TestUser
-|baselang = en
-|description = <translate>This is a [[test]] {{wish}}.</translate>
-}}
-END;
-		$ret = $this->insertPage( 'Community Wishlist/W1', $wikitext );
-		$this->markForTranslation( $ret['title'] );
+		$wish = $this->insertTestWish(
+			'Community Wishlist/W1',
+			'en',
+			[
+				Wish::PARAM_TITLE => '<translate>Test Wish</translate>',
+				Wish::PARAM_DESCRIPTION => '<translate>This is a [[test]] {{wish}}.</translate>',
+				Wish::PARAM_AUDIENCE => '<translate>Example audience</translate>',
+			]
+		);
+		$pageId = $wish->getPage()->getId();
 
 		$sp = $this->newSpecialPage();
-		$sp->loadExistingEntity( $ret['id'], $ret['title'] );
+		$sp->loadExistingEntity( $pageId, Title::newFromPageIdentity( $wish->getPage() ) );
 		$vars = $sp->getOutput()->getJsConfigVars();
-		$this->assertSame( $vars['intakeId'], $ret['id'] );
+		$this->assertSame( $vars['intakeId'], $pageId );
 		$this->assertSame( '<translate><!--T:1--> Test Wish</translate>', $vars['intakeData'][Wish::PARAM_TITLE] );
 		$this->assertSame(
-			'<translate><!--T:2--> Example audience</translate>',
-			$vars['intakeData'][Wish::PARAM_AUDIENCE]
+			'<translate><!--T:2--> This is a [[test]] {{wish}}.</translate>',
+			$vars['intakeData'][Wish::PARAM_DESCRIPTION]
 		);
 		$this->assertSame(
-			'<translate><!--T:3--> This is a [[test]] {{wish}}.</translate>',
-			$vars['intakeData'][Wish::PARAM_DESCRIPTION]
+			'<translate><!--T:3--> Example audience</translate>',
+			$vars['intakeData'][Wish::PARAM_AUDIENCE]
 		);
 	}
 }

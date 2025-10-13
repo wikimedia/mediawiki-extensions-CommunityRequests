@@ -8,8 +8,8 @@
 	"communityrequests-edit-with-form": "Redaguoti naudojant formą",
 	"communityrequests-title-label": "Pavadinimas",
 	"communityrequests-phabricator-label": "Phabricator užduotys",
-	"communityrequests-create-success": "Jūsų pageidavimas pateiktas.",
-	"communityrequests-edit-success": "Jūsų pageidavimas išsaugotas.",
+	"communityrequests-wish-create-success": "Jūsų pageidavimas pateiktas.",
+	"communityrequests-wish-edit-success": "Jūsų pageidavimas išsaugotas.",
 	"communityrequests-wish-proposer": "Autorius: $1",
 	"communityrequests-wish-voting": "Balsavimas",
 	"communityrequests-focus-area-description": "Aprašymas"

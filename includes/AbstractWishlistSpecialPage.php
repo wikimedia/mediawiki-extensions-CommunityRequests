@@ -39,7 +39,7 @@ abstract class AbstractWishlistSpecialPage extends FormSpecialPage {
 	}
 
 	/** @inheritDoc */
-	public function execute( $entityId ) {
+	public function execute( $par ) {
 		if ( !$this->config->isEnabled() ) {
 			$this->setHeaders();
 			$this->getOutput()->addWikiMsg( 'communityrequests-disabled' );
@@ -47,7 +47,13 @@ abstract class AbstractWishlistSpecialPage extends FormSpecialPage {
 		}
 		$this->requireNamedUser( 'communityrequests-please-log-in' );
 
-		$this->entityId = $this->store->getIdFromInput( $entityId );
+		$this->entityId = $this->store->getIdFromInput( $par );
+
+		// Show error for an invalid entity ID.
+		if ( $par && !$this->entityId ) {
+			$this->showErrorPage( Title::newFromTextThrow( $this->store->getPagePrefix() . $par ) );
+			return;
+		}
 
 		if ( $this->entityId ) {
 			$pageTitle = Title::newFromText( $this->store->getPagePrefix() . $this->entityId );
@@ -57,6 +63,7 @@ abstract class AbstractWishlistSpecialPage extends FormSpecialPage {
 				$this->getOutput()->redirect( $pageTitle->getEditURL() );
 			}
 
+			// Show error for a non-existing (but valid) entity ID.
 			if ( !$this->loadExistingEntity( $this->entityId, $pageTitle ) ) {
 				$this->showErrorPage( $pageTitle );
 				return;
@@ -77,7 +84,7 @@ abstract class AbstractWishlistSpecialPage extends FormSpecialPage {
 			'copyrightWarning' => EditPage::getCopyrightWarning( $this->getFullTitle(), 'parse', $this->getContext() ),
 		] );
 
-		parent::execute( (string)$entityId );
+		parent::execute( (string)$par );
 	}
 
 	/**

@@ -78,7 +78,7 @@ class SpecialWishlistIntake extends AbstractWishlistSpecialPage {
 		$this->getOutput()->showErrorPage(
 			'communityrequests-wishlistintake',
 			'communityrequests-wish-not-found',
-			[ $title->getPrefixedText() ],
+			[ $title->getPrefixedText(), $title->getSubpageText() ],
 			$this->config->getHomepage()
 		);
 	}

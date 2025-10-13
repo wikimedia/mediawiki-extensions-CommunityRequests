@@ -93,13 +93,19 @@ class SpecialWishlistIntakeTest extends SpecialPageTestBase {
 		$this->executeSpecialPage();
 	}
 
-	public function testNotFound(): void {
-		[ $html ] = $this->executeSpecialPage( '12345', null, null, $this->getTestUser()->getAuthority() );
-		$this->assertStringContainsString(
-			'communityrequests-wish-not-found',
-			$html,
-			'Should show error page when wish is not found'
-		);
+	/**
+	 * @dataProvider provideNotFoundOrInvalid
+	 */
+	public function testNotFoundOrInvalid( $subpage, $testDescription ): void {
+		[ $html ] = $this->executeSpecialPage( $subpage, null, null, $this->getTestUser()->getAuthority() );
+		$this->assertStringContainsString( 'communityrequests-wish-not-found', $html, $testDescription );
+	}
+
+	public static function provideNotFoundOrInvalid(): array {
+		return [
+			[ '12345', 'Should show error page when wish is not found' ],
+			[ 'Not_an_ID', 'Should show error page when wish ID is invalid' ],
+		];
 	}
 
 	public function testEditExistingThrowsNoException(): void {

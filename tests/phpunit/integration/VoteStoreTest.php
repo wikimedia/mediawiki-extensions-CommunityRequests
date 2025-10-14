@@ -101,14 +101,29 @@ class VoteStoreTest extends MediaWikiIntegrationTestCase {
 	public function testGetDataFromWikitext(): void {
 		$data = $this->voteStore->getDataFromWikitext(
 			new WikitextContent(
-				"{{#CommunityRequests:vote|username=UserA|comment=First vote!|timestamp=2025-01-01T12:00:00Z}}\n"
+				"{{#CommunityRequests:vote|username=UserA|comment=First vote!\n\nMultiple lines" .
+					"|timestamp=2025-01-01T12:00:00Z}}\n"
 			)
 		);
 		$this->assertSame( [
 			Vote::PARAM_USERNAME => 'UserA',
-			Vote::PARAM_COMMENT => 'First vote!',
+			Vote::PARAM_COMMENT => "First vote!\n\nMultiple lines",
 			Vote::PARAM_TIMESTAMP => '2025-01-01T12:00:00Z',
 		], $data );
+	}
+
+	public function testVoteWithMultipleLines(): void {
+		$wish = $this->insertTestWish();
+		$vote1 = new Vote( $wish, $this->userObjs[0], "Line 1\nLine 2\n\nLine 3" );
+		$vote2 = new Vote( $wish, $this->userObjs[1], "\n\nThis should not replace the first vote\n\n" );
+		$this->insertPage(
+			$wish->getPage()->getDBkey() . $this->config->getVotesPageSuffix(),
+			$vote1->toWikitext()->getText() . $vote2->toWikitext()->getText()
+		);
+		$votes = $this->voteStore->getAll( $wish );
+		$this->assertCount( 2, $votes );
+		$this->assertSame( "Line 1\nLine 2\n\nLine 3", $votes[0]->getComment() );
+		$this->assertSame( 'This should not replace the first vote', $votes[1]->getComment() );
 	}
 
 	private function insertTestWishWithVotes(): Wish {

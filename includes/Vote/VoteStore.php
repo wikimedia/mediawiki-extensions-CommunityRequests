@@ -43,8 +43,9 @@ class VoteStore {
 		if ( !$content instanceof WikitextContent ) {
 			throw new RuntimeException( 'Invalid content type for Votes subpage' );
 		}
-		return array_filter( array_map(
+		return array_values( array_filter( array_map(
 			function ( string $row ) use ( $entity ) {
+				$row = "{{#CommunityRequests:vote" . $row;
 				$data = $this->getDataFromWikitext( $row );
 				if ( !$data ) {
 					return null;
@@ -60,8 +61,8 @@ class VoteStore {
 					$data[Vote::PARAM_TIMESTAMP]
 				);
 			},
-			explode( "\n", $content->getText() )
-		) );
+			preg_split( "/\{\{\s*#CommunityRequests\s*:\s*vote/", $content->getText() )
+		) ) );
 	}
 
 	/**

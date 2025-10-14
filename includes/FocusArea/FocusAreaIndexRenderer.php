@@ -10,7 +10,7 @@ use MediaWiki\Title\Title;
 use Wikimedia\HtmlArmor\HtmlArmor;
 
 class FocusAreaIndexRenderer extends AbstractRenderer {
-	protected string $entityType = 'focus-area-index';
+	protected string $rendererType = 'focus-area-index';
 
 	/**
 	 * Render {{#CommunityRequests: focus-area-index}}

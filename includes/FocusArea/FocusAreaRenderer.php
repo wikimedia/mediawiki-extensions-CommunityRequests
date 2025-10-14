@@ -9,7 +9,7 @@ use MediaWiki\Html\Html;
 class FocusAreaRenderer extends AbstractRenderer {
 	public const FOCUS_AREA_TRACKING_CATEGORY = 'communityrequests-focus-area-category';
 
-	protected string $entityType = 'focus-area';
+	protected string $rendererType = 'focus-area';
 
 	/**
 	 * Render {{#CommunityRequests: focus-area}}

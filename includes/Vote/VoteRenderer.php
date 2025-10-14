@@ -9,7 +9,7 @@ use MediaWiki\Page\PageReference;
 
 class VoteRenderer extends AbstractRenderer {
 
-	protected string $entityType = 'vote';
+	protected string $rendererType = 'vote';
 
 	public function render(): string {
 		if ( !$this->config->isWishOrFocusAreaPage( $this->parser->getPage() ) &&

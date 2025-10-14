@@ -8,7 +8,7 @@ use MediaWiki\Html\Html;
 
 class WishIndexRenderer extends AbstractRenderer {
 
-	protected string $entityType = 'wish-index';
+	protected string $rendererType = 'wish-index';
 
 	/**
 	 * Render {{#CommunityRequests: wishes}}

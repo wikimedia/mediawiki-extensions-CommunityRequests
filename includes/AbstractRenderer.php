@@ -30,8 +30,8 @@ abstract class AbstractRenderer implements MessageLocalizer {
 	public const LINK_FRAGMENT_VOTING = 'Voting';
 	public const LINK_FRAGMENT_WISHES = 'Wishes';
 
-	/** @var string This is overridden by subclasses to give the entity type */
-	protected string $entityType = '';
+	/** @var string This is overridden by subclasses to give the renderer type. It should match what's used in RendererFactory. */
+	protected string $rendererType = '';
 
 	/** @var string[]|null Lazy-initialized key-value pairs from the parser */
 	private ?array $args = null;
@@ -115,7 +115,7 @@ abstract class AbstractRenderer implements MessageLocalizer {
 	protected function getDiv( string $field, string $text ): string {
 		return Html::element(
 			'div',
-			[ 'class' => "ext-communityrequests-{$this->entityType}--$field" ],
+			[ 'class' => "ext-communityrequests-{$this->rendererType}--$field" ],
 			$text
 		);
 	}
@@ -123,7 +123,7 @@ abstract class AbstractRenderer implements MessageLocalizer {
 	protected function getDivRaw( string $field, string $html ): string {
 		return Html::rawElement(
 			'div',
-			[ 'class' => "ext-communityrequests-{$this->entityType}--$field" ],
+			[ 'class' => "ext-communityrequests-{$this->rendererType}--$field" ],
 			"\n$html\n"
 		);
 	}
@@ -135,7 +135,7 @@ abstract class AbstractRenderer implements MessageLocalizer {
 	 * @return string HTML for status chip
 	 */
 	protected function getStatusChipHtml( ?string $wikitextVal = null ): string {
-		$cssClass = "cdx-info-chip ext-communityrequests-{$this->entityType}--status";
+		$cssClass = "cdx-info-chip ext-communityrequests-{$this->rendererType}--status";
 
 		$wikitextVal ??= $this->getArgs()[ AbstractWishlistEntity::PARAM_STATUS ] ?? '';
 
@@ -182,7 +182,7 @@ abstract class AbstractRenderer implements MessageLocalizer {
 	protected function getListItem( string $field, string $param ): string {
 		return Html::rawElement(
 			'li',
-			[ 'class' => "ext-communityrequests-{$this->entityType}--$field" ],
+			[ 'class' => "ext-communityrequests-{$this->rendererType}--$field" ],
 			// Messages used here include:
 			// * communityrequests-wish-created
 			// * communityrequests-wish-updated
@@ -210,9 +210,9 @@ abstract class AbstractRenderer implements MessageLocalizer {
 			// Messages used here:
 			// * communityrequests-focus-area-voting
 			// * communityrequests-wish-voting
-			$this->msg( "communityrequests-{$this->entityType}-voting" )->text()
+			$this->msg( "communityrequests-{$this->rendererType}-voting" )->text()
 		);
-		$out .= Html::openElement( 'div', [ 'class' => "ext-communityrequests-{$this->entityType}--voting" ] );
+		$out .= Html::openElement( 'div', [ 'class' => "ext-communityrequests-{$this->rendererType}--voting" ] );
 
 		// We need to wait for the full parser pass to complete to ensure all votes are counted.
 		// Add a strip marker for the vote count to be added later in CommunityRequestsHooks::onParserAfterTidy().
@@ -228,11 +228,11 @@ abstract class AbstractRenderer implements MessageLocalizer {
 		// * communityrequests-wish-voting-info-default
 		// * communityrequests-wish-voting-info-closed
 		if ( $votingEnabled ) {
-			$out .= $this->msg( "communityrequests-{$this->entityType}-voting-info-open" )->escaped();
+			$out .= $this->msg( "communityrequests-{$this->rendererType}-voting-info-open" )->escaped();
 		} elseif ( $this->isDefaultStatus() ) {
-			$out .= $this->msg( "communityrequests-{$this->entityType}-voting-info-default" )->escaped();
+			$out .= $this->msg( "communityrequests-{$this->rendererType}-voting-info-default" )->escaped();
 		} else {
-			$out .= $this->msg( "communityrequests-{$this->entityType}-voting-info-closed" )->escaped();
+			$out .= $this->msg( "communityrequests-{$this->rendererType}-voting-info-closed" )->escaped();
 		}
 		$out .= Html::closeElement( 'p' );
 
@@ -473,7 +473,7 @@ abstract class AbstractRenderer implements MessageLocalizer {
 	protected function setDisplayTitleAndIndicator(): void {
 		$titleSpan = Html::element(
 			'span',
-			[ 'class' => "ext-communityrequests-{$this->entityType}--title" ],
+			[ 'class' => "ext-communityrequests-{$this->rendererType}--title" ],
 			$this->getArg( AbstractWishlistEntity::PARAM_TITLE, '' )
 		);
 		$pageRef = $this->parser->getPage();
@@ -483,7 +483,7 @@ abstract class AbstractRenderer implements MessageLocalizer {
 		$entityPageStr = Title::newFromPageReference( $pageRef )->getPrefixedText();
 		$entityIdSpan = Html::element(
 			'span',
-			[ 'class' => "ext-communityrequests-{$this->entityType}--id" ],
+			[ 'class' => "ext-communityrequests-{$this->rendererType}--id" ],
 			$this->msg( 'parentheses', $entityPageStr )
 		);
 		$this->parser->getOutput()->setDisplayTitle(
@@ -491,7 +491,7 @@ abstract class AbstractRenderer implements MessageLocalizer {
 		);
 		CoreTagHooks::indicator(
 			$this->getStatusChipHtml(),
-			[ 'name' => "{$this->entityType}-status" ],
+			[ 'name' => "{$this->rendererType}-status" ],
 			$this->parser,
 			$this->frame
 		);

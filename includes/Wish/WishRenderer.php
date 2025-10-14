@@ -11,7 +11,7 @@ use MediaWiki\Title\TitleValue;
 class WishRenderer extends AbstractRenderer {
 	public const WISH_TRACKING_CATEGORY = 'communityrequests-wish-category';
 
-	protected string $entityType = 'wish';
+	protected string $rendererType = 'wish';
 
 	/**
 	 * Render {{#CommunityRequests: wish}}

@@ -288,7 +288,7 @@
 				"communityrequests-focus-area-unassigned",
 				"communityrequests-intake-focus-area"
 			],
-			"factory": "\\MediaWiki\\Extension\\CommunityRequests\\Wish\\SpecialWishlistIntake::addResourceLoaderMessages"
+			"factory": "\\MediaWiki\\Extension\\CommunityRequests\\WishlistMessageLoader::addDynamicMessages"
 		},
 		"ext.communityrequests.mint": {
 			"class": "MediaWiki\\ResourceLoader\\CodexModule",
@@ -432,21 +432,12 @@
 				"communityrequests-wishes-votecount-header",
 				"communityrequests-wishes-created-header",
 				"communityrequests-wishes-updated-header",
-				"communityrequests-status-under-review",
-				"communityrequests-status-unsupported",
-				"communityrequests-status-declined",
-				"communityrequests-status-community-opportunity",
-				"communityrequests-status-long-term-opportunity",
-				"communityrequests-status-near-term-opportunity",
-				"communityrequests-status-prioritized",
-				"communityrequests-status-in-progress",
-				"communityrequests-status-done",
 				"communityrequests-tags-more",
 				"quotation-marks",
 				"communityrequests-tags-label",
 				"communityrequests-update-label"
 			],
-			"factory": "\\MediaWiki\\Extension\\CommunityRequests\\Wish\\SpecialWishlistIntake::addResourceLoaderMessages"
+			"factory": "\\MediaWiki\\Extension\\CommunityRequests\\WishlistMessageLoader::addDynamicMessages"
 		}
 	},
 	"config": {

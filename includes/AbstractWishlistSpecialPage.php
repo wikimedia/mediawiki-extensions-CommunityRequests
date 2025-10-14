@@ -10,11 +10,9 @@ use MediaWiki\EditPage\EditPage;
 use MediaWiki\Extension\CommunityRequests\HookHandler\CommunityRequestsHooks;
 use MediaWiki\Html\Html;
 use MediaWiki\HTMLForm\HTMLForm;
-use MediaWiki\MediaWikiServices;
 use MediaWiki\Page\PageIdentity;
 use MediaWiki\Registration\ExtensionRegistry;
 use MediaWiki\Request\DerivativeRequest;
-use MediaWiki\ResourceLoader as RL;
 use MediaWiki\SpecialPage\FormSpecialPage;
 use MediaWiki\Status\Status;
 use MediaWiki\Title\Title;
@@ -85,33 +83,6 @@ abstract class AbstractWishlistSpecialPage extends FormSpecialPage {
 		] );
 
 		parent::execute( (string)$par );
-	}
-
-	/**
-	 * Add configurable messages to the ResourceLoader module.
-	 *
-	 * @param array $moduleConfig
-	 * @return RL\Module
-	 */
-	public static function addResourceLoaderMessages( array $moduleConfig ): RL\Module {
-		$config = MediaWikiServices::getInstance()->getMainConfig();
-		$messages = [];
-		foreach ( $config->get( 'CommunityRequestsWishTypes' ) as $type ) {
-			$messages[] = $type['label'] . '-label';
-			$messages[] = $type['label'] . '-description';
-		}
-		foreach ( $config->get( 'CommunityRequestsTags' ) as $tagGroup ) {
-			foreach ( $tagGroup as $tag => $tagConfig ) {
-				$messages[] = $tagConfig['label'] ?? "communityrequests-tag-$tag";
-			}
-		}
-		foreach ( $config->get( 'CommunityRequestsStatuses' ) as $status ) {
-			$messages[] = $status['label'];
-		}
-
-		$moduleConfig['messages'] = array_merge( $moduleConfig['messages'], $messages );
-		$class = $moduleConfig['class'] ?? RL\FileModule::class;
-		return new $class( $moduleConfig );
 	}
 
 	/**

@@ -31,7 +31,19 @@ class WishIndexRendererTest extends AbstractWishlistEntityTest {
 	public function testJsVars( array $args, array $expectedJsVars ): void {
 		$output = $this->createNoOpMock( ParserOutput::class, [ 'setJsConfigVar', 'addModules' ] );
 		$output->expects( $this->atMost( 2 ) )
-			->method( 'setJsConfigVar' );
+			->method( 'setJsConfigVar' )
+			->willReturnCallback( function ( $key, $data ) use ( $expectedJsVars ) {
+				if ( $key === 'wishesData' ) {
+					$this->assertSame( $expectedJsVars, $data );
+				} elseif ( $key === 'focusareasData' ) {
+					$this->assertSame( [
+						'unassigned' => '(communityrequests-focus-area-unassigned)',
+						'FA1' => 'The first focus area',
+					], $data );
+				} else {
+					$this->fail( "Unexpected js config var key: $key" );
+				}
+			} );
 
 		$language = $this->createNoOpMock( Language::class, [ 'getCode' ] );
 		$language->expects( $this->atMost( 2 ) )
@@ -54,13 +66,12 @@ class WishIndexRendererTest extends AbstractWishlistEntityTest {
 			->with( WishIndexRenderer::TRACKING_CATEGORY );
 		$parser->expects( $this->atMost( 1 ) )
 			->method( 'msg' )
-			->with( 'communityrequests-focus-area-unassigned' )
 			->willReturnCallback( [ new FakeQqxMessageLocalizer(), 'msg' ] );
-		$focusAreaStore = $this->createNoOpMock( FocusAreaStore::class, [ 'getFormattedArray' ] );
+		$focusAreaStore = $this->createNoOpMock( FocusAreaStore::class, [ 'getTitlesByEntityWikitextVal' ] );
 		$focusAreaStore->expects( $this->atMost( 1 ) )
-			->method( 'getFormattedArray' )
+			->method( 'getTitlesByEntityWikitextVal' )
 			->with( 'en' )
-			->willReturn( [ 'unassigned' => 'Unassigned' ] );
+			->willReturn( [ 'FA1' => 'The first focus area' ] );
 
 		$childFrame = $this->createNoOpMock( PPFrame::class, [ 'getArguments' ] );
 		$childFrame->expects( $this->once() )

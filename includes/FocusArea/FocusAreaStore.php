@@ -88,12 +88,13 @@ class FocusAreaStore extends AbstractWishlistStore {
 	}
 
 	/**
-	 * Get a focus areas Array where the key is the entity ID.
+	 * Get the titles of all focus areas keyed by their entity ID as wikitext values,
+	 *  i.e. [ 'FA1' => 'The first focus area', ... ]
 	 *
 	 * @param string $lang
 	 * @return string[]
 	 */
-	public function getFormattedArray( string $lang ) {
+	public function getTitlesByEntityWikitextVal( string $lang ): array {
 		// Fetch focus area titles and wikitext values.
 		/** @var FocusArea[] $focusAreas */
 		$focusAreas = $this->getAll(

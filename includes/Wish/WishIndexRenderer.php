@@ -26,7 +26,7 @@ class WishIndexRenderer extends AbstractRenderer {
 
 		$output = $this->parser->getOutput();
 
-		$showFilters = boolval( $this->getArgs()[ Wish::PARAM_SHOW_FILTERS ] ?? false );
+		$showFilters = boolval( $this->getArgs()[Wish::PARAM_SHOW_FILTERS] ?? false );
 		$output->setJsConfigVar( 'wishesData', [
 			'lang' => $this->getSafeArg( 'lang', $this->parser->getTargetLanguage()->getCode() ),
 			'sort' => $this->getSafeArg( 'sort', 'created' ),
@@ -60,7 +60,7 @@ class WishIndexRenderer extends AbstractRenderer {
 				[
 					WishStore::FOCUS_AREA_UNASSIGNED =>
 						$this->msg( 'communityrequests-focus-area-unassigned' )->escaped()
-				] + $this->focusAreaStore->getFormattedArray( $this->parser->getTargetLanguage()->getCode() )
+				] + $this->focusAreaStore->getTitlesByEntityWikitextVal( $this->parser->getTargetLanguage()->getCode() )
 			);
 		}
 

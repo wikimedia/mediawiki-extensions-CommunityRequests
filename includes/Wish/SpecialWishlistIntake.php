@@ -49,7 +49,7 @@ class SpecialWishlistIntake extends AbstractWishlistSpecialPage {
 
 		$this->getOutput()->setSubtitle( $this->msg( 'communityrequests-form-subtitle' ) );
 
-		$focusAreaData = $this->focusAreaStore->getFormattedArray(
+		$focusAreaData = $this->focusAreaStore->getTitlesByEntityWikitextVal(
 			$this->getLanguage()->getCode(),
 		);
 

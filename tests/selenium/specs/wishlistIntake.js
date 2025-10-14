@@ -77,7 +77,7 @@ describe( 'WishlistIntake wish submission', () => {
 			'This is a test description.'
 		);
 		await expect( await ViewWishPage.wishType.getText() ).toBe( 'Feature request' );
-		await expect( await ViewWishPage.tags.getText() ).toBe( 'Admins and patrollers' );
+		await expect( await ViewWishPage.tags.getText() ).toBe( 'Admins and stewards' );
 		await expect( ( await ViewWishPage.audience.getText() ).trim() ).toBe(
 			'This is a test audience'
 		);

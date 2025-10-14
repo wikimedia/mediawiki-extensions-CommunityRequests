@@ -162,6 +162,7 @@ module.exports = exports = defineComponent( {
 		};
 
 		// Reactive properties
+
 		/**
 		 * Used to access public methods in the CdxTable component like onFirst().
 		 *
@@ -176,8 +177,7 @@ module.exports = exports = defineComponent( {
 		 */
 		const columns = ref( [
 			columnsConfig.title,
-			// Hide columns that will only have one value.
-			props.tags.length === 1 ? null : columnsConfig.tags,
+			columnsConfig.tags,
 			columnsConfig.votecount,
 			columnsConfig.created,
 			columnsConfig.status
@@ -455,9 +455,14 @@ module.exports = exports = defineComponent( {
 		fetchWishes();
 
 		watch( () => [ props.focusareas, props.statuses, props.tags ], () => {
-			// Ensure the wishlist is updated when the tags prop changes.
+			// Ensure the wishlist is updated when filter props change.
 			fetchWishes();
-		}, { deep: true } );
+
+			// Update column label for title/focus area if needed.
+			columnsConfig.title.label = props.focusareas.length === 1 ?
+				mw.msg( 'communityrequests-wishes-title-header' ) :
+				mw.msg( 'communityrequests-wishes-title-and-focusarea-header' );
+		} );
 
 		return {
 			columns,

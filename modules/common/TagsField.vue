@@ -35,8 +35,8 @@
 <script>
 const { defineComponent, nextTick, ref, watch } = require( 'vue' );
 const { CdxField, CdxMultiselectLookup } = require( '../codex.js' );
-const { CommunityRequestsTags } = require( '../common/config.json' );
-const Util = require( '../common/Util.js' );
+const { CommunityRequestsTags } = require( './config.json' );
+const Util = require( './Util.js' );
 const tagsList = [];
 let label = '';
 for ( const value in CommunityRequestsTags.navigation ) {
@@ -47,7 +47,7 @@ for ( const value in CommunityRequestsTags.navigation ) {
 }
 
 module.exports = exports = defineComponent( {
-	name: 'TagsSection',
+	name: 'TagsField',
 	components: {
 		CdxField,
 		CdxMultiselectLookup

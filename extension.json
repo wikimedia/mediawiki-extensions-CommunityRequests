@@ -211,10 +211,10 @@
 				"intake/FocusAreaSection.vue",
 				"intake/FooterSection.vue",
 				"intake/PhabricatorTasks.vue",
-				"intake/TagsSection.vue",
 				"intake/StatusSection.vue",
 				"intake/WishTypeSection.vue",
 				"common/Util.js",
+				"common/TagsField.vue",
 				{
 					"name": "intake/icons.json",
 					"callback": "MediaWiki\\ResourceLoader\\CodexModule::getIcons",
@@ -398,12 +398,13 @@
 				"wish-index/WishIndexFilters.vue",
 				"wish-index/WishIndexTable.vue",
 				"common/Util.js",
-				"intake/TagsSection.vue",
+				"common/TagsField.vue",
 				{
 					"name": "common/config.json",
 					"config": [
 						"CommunityRequestsStatuses",
 						"CommunityRequestsTags",
+						"CommunityRequestsWishIndexPage",
 						"CommunityRequestsWishPagePrefix"
 					]
 				}

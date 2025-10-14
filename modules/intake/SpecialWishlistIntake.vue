@@ -39,11 +39,11 @@
 			:status="typeStatus"
 			@update:type="$event => ( wish.type = $event )"
 		></wish-type-section>
-		<tags-section
+		<tags-field
 			v-model:tags="wish.tags"
 			:optional-label="true"
 			:show-description="true"
-		></tags-section>
+		></tags-field>
 		<audience-section
 			v-model:audience="wish.audience"
 			:status="audienceStatus"
@@ -93,7 +93,7 @@ const Util = require( '../common/Util.js' );
 const StatusSection = require( './StatusSection.vue' );
 const FocusAreaSection = require( './FocusAreaSection.vue' );
 const WishTypeSection = require( './WishTypeSection.vue' );
-const TagsSection = require( './TagsSection.vue' );
+const TagsField = require( '../common/TagsField.vue' );
 const DescriptionSection = require( './DescriptionSection.vue' );
 const AudienceSection = require( './AudienceSection.vue' );
 const PhabricatorTasks = require( './PhabricatorTasks.vue' );
@@ -117,7 +117,7 @@ module.exports = exports = defineComponent( {
 		FocusAreaSection,
 		FooterSection,
 		PhabricatorTasks,
-		TagsSection,
+		TagsField,
 		StatusSection,
 		WishTypeSection
 	},

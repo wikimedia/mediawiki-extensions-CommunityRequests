@@ -57,7 +57,10 @@ title=Community_Wishlist/W1
 </div><div class="mw-heading mw-heading3">Assigned focus area</div><div class="ext-communityrequests-wish--focus-area">
 <p>Unassigned
 </p>
-</div><div class="mw-heading mw-heading3">Type of wish</div><div class="ext-communityrequests-wish--wish-type">System change</div><div class="mw-heading mw-heading3" id="tags">Tags</div><div class="ext-communityrequests-wish--tags">Multimedia and Commons, Wikisource</div><div class="mw-heading mw-heading3">Affected users</div><div class="ext-communityrequests-wish--audience">
+</div><div class="mw-heading mw-heading3">Type of wish</div><div class="ext-communityrequests-wish--wish-type">System change</div><div class="mw-heading mw-heading3" id="tags">Tags</div><div class="ext-communityrequests-wish--tags">
+<p><a href="/index.php?title=Community_Wishlist/Wishes&amp;tags=multimedia" title="Community Wishlist/Wishes">Multimedia and Commons</a>, <a href="/index.php?title=Community_Wishlist/Wishes&amp;tags=wikisource" title="Community Wishlist/Wishes">Wikisource</a>
+</p>
+</div><div class="mw-heading mw-heading3">Affected users</div><div class="ext-communityrequests-wish--audience">
 <p><a href="/wiki/Test" title="Test">Test</a> audience
 </p>
 </div><div class="mw-heading mw-heading3">Phabricator tasks</div><div class="ext-communityrequests-wish--phabtasks">
@@ -89,7 +92,10 @@ title=Community_Wishlist/W2
 </div><div class="mw-heading mw-heading3">Assigned focus area</div><div class="ext-communityrequests-wish--focus-area">
 <p>Unassigned
 </p>
-</div><div class="mw-heading mw-heading3">Type of wish</div><div class="ext-communityrequests-wish--wish-type">System change</div><div class="mw-heading mw-heading3" id="tags">Tags</div><div class="ext-communityrequests-wish--tags">Multimedia and Commons, Wikisource</div><div class="mw-heading mw-heading3">Affected users</div><div class="ext-communityrequests-wish--audience">
+</div><div class="mw-heading mw-heading3">Type of wish</div><div class="ext-communityrequests-wish--wish-type">System change</div><div class="mw-heading mw-heading3" id="tags">Tags</div><div class="ext-communityrequests-wish--tags">
+<p><a href="/index.php?title=Community_Wishlist/Wishes&amp;tags=multimedia" title="Community Wishlist/Wishes">Multimedia and Commons</a>, <a href="/index.php?title=Community_Wishlist/Wishes&amp;tags=wikisource" title="Community Wishlist/Wishes">Wikisource</a>
+</p>
+</div><div class="mw-heading mw-heading3">Affected users</div><div class="ext-communityrequests-wish--audience">
 <p>Example audience
 </p>
 </div><div class="mw-heading mw-heading3">Phabricator tasks</div><div class="ext-communityrequests-wish--phabtasks">
@@ -121,7 +127,10 @@ title=Community_Wishlist/W2
 </div><div class="mw-heading mw-heading3">Assigned focus area</div><div class="ext-communityrequests-wish--focus-area">
 <p>Unassigned
 </p>
-</div><div class="mw-heading mw-heading3">Type of wish</div><div class="ext-communityrequests-wish--wish-type">System change</div><div class="mw-heading mw-heading3" id="tags">Tags</div><div class="ext-communityrequests-wish--tags">Multimedia and Commons, Wikisource</div><div class="mw-heading mw-heading3">Affected users</div><div class="ext-communityrequests-wish--audience">
+</div><div class="mw-heading mw-heading3">Type of wish</div><div class="ext-communityrequests-wish--wish-type">System change</div><div class="mw-heading mw-heading3" id="tags">Tags</div><div class="ext-communityrequests-wish--tags">
+<p><a href="/index.php?title=Community_Wishlist/Wishes&amp;tags=multimedia" title="Community Wishlist/Wishes">Multimedia and Commons</a>, <a href="/index.php?title=Community_Wishlist/Wishes&amp;tags=wikisource" title="Community Wishlist/Wishes">Wikisource</a>
+</p>
+</div><div class="mw-heading mw-heading3">Affected users</div><div class="ext-communityrequests-wish--audience">
 <p>Example audience
 </p>
 </div><div class="mw-heading mw-heading3">Phabricator tasks</div><div class="ext-communityrequests-wish--phabtasks">
@@ -170,7 +179,10 @@ language=qqx
 </div><div class="mw-heading mw-heading3">(communityrequests-wish-focus-area-heading)</div><div class="ext-communityrequests-wish--focus-area">
 <p>(communityrequests-focus-area-unassigned)
 </p>
-</div><div class="mw-heading mw-heading3">(communityrequests-wish-type-heading)</div><div class="ext-communityrequests-wish--wish-type">(communityrequests-wishtype-change-label)</div><div class="mw-heading mw-heading3" id="tags">(communityrequests-tags-heading)</div><div class="ext-communityrequests-wish--tags">(communityrequests-tag-multimedia-commons)(comma-separator)(communityrequests-tag-wikisource)</div><div class="mw-heading mw-heading3">(communityrequests-wish-audience-heading)</div><div class="ext-communityrequests-wish--audience">
+</div><div class="mw-heading mw-heading3">(communityrequests-wish-type-heading)</div><div class="ext-communityrequests-wish--wish-type">(communityrequests-wishtype-change-label)</div><div class="mw-heading mw-heading3" id="tags">(communityrequests-tags-heading)</div><div class="ext-communityrequests-wish--tags">
+<p><a href="/index.php?title=Community_Wishlist/Wishes&amp;tags=multimedia" title="Community Wishlist/Wishes">(communityrequests-tag-multimedia-commons)</a>(comma-separator)<a href="/index.php?title=Community_Wishlist/Wishes&amp;tags=wikisource" title="Community Wishlist/Wishes">(communityrequests-tag-wikisource)</a>
+</p>
+</div><div class="mw-heading mw-heading3">(communityrequests-wish-audience-heading)</div><div class="ext-communityrequests-wish--audience">
 <p>קהל לדוגמה
 </p>
 </div><div class="mw-heading mw-heading3">(communityrequests-wish-other-details-heading)</div><ul><li class="ext-communityrequests-wish--created">(communityrequests-wish-created: 12:00, 1 (october) 2023)</li><li class="ext-communityrequests-wish--updated">(communityrequests-wish-updated: 00:02, 1 (january) 1970)</li><li class="ext-communityrequests-wish--proposer">(communityrequests-wish-proposer: (signature: Maintenance script, Maintenance script))</li></ul><div class="mw-heading mw-heading2" id="Voting">(communityrequests-wish-voting)</div><div class="ext-communityrequests-wish--voting"><p>(communityrequests-wish-voting-info: 0, 0) (communityrequests-wish-voting-info-closed)</p></div></div>

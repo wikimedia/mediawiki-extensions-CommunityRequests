@@ -5,10 +5,10 @@
 		</template>
 		<form class="ext-communityrequests-wishes--filters">
 			<div class="ext-communityrequests-wishes--filters-fields">
-				<tags-section
+				<tags-field
 					v-model:tags="filters.tags"
 					:clear-field="clearFilters"
-				></tags-section>
+				></tags-field>
 				<statuses-filter
 					v-model:statuses="filters.statuses"
 					:clear-field="clearFilters"
@@ -39,11 +39,11 @@
 </template>
 
 <script>
-const { defineComponent, nextTick, reactive, ref, Ref } = require( 'vue' );
+const { defineComponent, nextTick, reactive, ref, Reactive, Ref } = require( 'vue' );
 const { CdxAccordion, CdxButton } = require( '../codex.js' );
 const FocusAreasFilter = require( './FocusAreasFilter.vue' );
 const StatusesFilter = require( './StatusesFilter.vue' );
-const TagsSection = require( '../intake/TagsSection.vue' );
+const TagsField = require( '../common/TagsField.vue' );
 
 module.exports = exports = defineComponent( {
 	name: 'WishIndexFilters',
@@ -52,29 +52,34 @@ module.exports = exports = defineComponent( {
 		CdxButton,
 		FocusAreasFilter,
 		StatusesFilter,
-		TagsSection
+		TagsField
 	},
 	props: {
 		// eslint-disable-next-line vue/no-unused-properties -- Used in a mixin
-		focusareas: { type: Array, default: () => [] },
+		tags: { type: Array, default: () => [] },
 		// eslint-disable-next-line vue/no-unused-properties -- Used in a mixin
 		statuses: { type: Array, default: () => [] },
 		// eslint-disable-next-line vue/no-unused-properties -- Used in a mixin
-		tags: { type: Array, default: () => [] }
+		focusareas: { type: Array, default: () => [] }
 	},
 	emits: [ 'submit' ],
 	setup( props, { emit } ) {
 		/**
 		 * Reactive object representing the filters being set.
 		 *
-		 * @type {Ref<Object>}
+		 * @type {Reactive<Object>}
 		 */
 		const filters = reactive( Object.assign( {}, props ) );
+
+		/**
+		 * Flag to clear all filter fields.
+		 *
+		 * @type {Ref<boolean>}
+		 */
 		const clearFilters = ref( false );
 
 		/**
-		 * Clear all filter fields
-		 *
+		 * Clear all filter fields.
 		 */
 		function onClearAllFilters() {
 			clearFilters.value = true;

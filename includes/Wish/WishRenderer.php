@@ -5,6 +5,7 @@ namespace MediaWiki\Extension\CommunityRequests\Wish;
 
 use MediaWiki\Extension\CommunityRequests\AbstractRenderer;
 use MediaWiki\Html\Html;
+use MediaWiki\Title\Title;
 use MediaWiki\Title\TitleValue;
 
 class WishRenderer extends AbstractRenderer {
@@ -108,31 +109,36 @@ class WishRenderer extends AbstractRenderer {
 		$tagsArgs = array_filter(
 			explode( WishStore::ARRAY_DELIMITER_WIKITEXT, $this->getArg( Wish::PARAM_TAGS, '' ) )
 		);
-		$tagLabels = [];
+		$wishIndexTitle = Title::newFromText( $this->config->getWishIndexPage() );
+		$tagLinks = [];
 		foreach ( $tagsArgs as $tag ) {
 			$label = $this->config->getTagLabelFromWikitextVal( $tag );
 			if ( $label === null ) {
 				$this->parser->addTrackingCategory( self::ERROR_TRACKING_CATEGORY );
 				continue;
 			}
-			$tagLabels[] = $this->msg( $label )->text();
+			$tagLinks[] = $this->linkRenderer->makePreloadedLink(
+				$wishIndexTitle,
+				$this->msg( $label )->text(),
+				[],
+				[],
+				[ 'tags' => $tag ]
+			);
+			$this->msg( $label )->text();
 			$tagCategory = $this->config->getTagCategoryFromWikitextVal( $tag );
 			if ( $tagCategory ) {
 				$this->addTranslationCategory( $tagCategory );
 			}
 		}
-
-		$tags = '';
+		$tagsHtml = '';
 		$tagsHeading = '';
-		if ( count( $tagLabels ) > 0 ) {
+		if ( count( $tagLinks ) > 0 ) {
 			$tagsHeading = Html::element(
 				'div',
 				[ 'class' => 'mw-heading mw-heading3', 'id' => 'tags' ],
 				$this->msg( 'communityrequests-tags-heading' )->text()
 			);
-
-			// @phan-suppress-next-line SecurityCheck-DoubleEscaped
-			$tags = $this->getDiv( 'tags', $language->commaList( array_filter( $tagLabels ) ) );
+			$tagsHtml = $this->getDivRaw( 'tags', $language->commaList( array_filter( $tagLinks ) ) );
 		}
 
 		// Audience.
@@ -206,7 +212,7 @@ class WishRenderer extends AbstractRenderer {
 			$descHeading . $descHtml .
 			$focusAreaHeading . $focusArea .
 			$wishTypeHeading . $wishType .
-			$tagsHeading . $tags .
+			$tagsHeading . $tagsHtml .
 			$audienceHeading . $audienceHtml .
 			$tasksHeading . $tasksHtml .
 			$detailsHeading . $detailsHtml .

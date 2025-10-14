@@ -7,6 +7,7 @@
 	>
 		<status-section
 			v-model:status="focusArea.status"
+			entity-type="focus-area"
 			@update:status="formChanged = true"
 		></status-section>
 		<input

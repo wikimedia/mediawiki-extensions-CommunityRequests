@@ -597,46 +597,36 @@
 			"value": {
 				"under-review": {
 					"id": 0,
-					"label": "communityrequests-status-under-review",
 					"voting": false,
 					"default": true
 				},
 				"accepted": {
-					"id": 9,
-					"label": "communityrequests-status-accepted"
+					"id": 9
 				},
 				"unsupported": {
-					"id": 1,
-					"label": "communityrequests-status-unsupported"
+					"id": 1
 				},
 				"declined": {
 					"id": 2,
-					"label": "communityrequests-status-declined",
 					"voting": false
 				},
 				"community-opportunity": {
-					"id": 3,
-					"label": "communityrequests-status-community-opportunity"
+					"id": 3
 				},
 				"long-term-opportunity": {
-					"id": 4,
-					"label": "communityrequests-status-long-term-opportunity"
+					"id": 4
 				},
 				"near-term-opportunity": {
-					"id": 5,
-					"label": "communityrequests-status-near-term-opportunity"
+					"id": 5
 				},
 				"prioritized": {
-					"id": 6,
-					"label": "communityrequests-status-prioritized"
+					"id": 6
 				},
 				"in-progress": {
-					"id": 7,
-					"label": "communityrequests-status-in-progress"
+					"id": 7
 				},
 				"done": {
 					"id": 8,
-					"label": "communityrequests-status-done",
 					"voting": false,
 					"style": "success"
 				}

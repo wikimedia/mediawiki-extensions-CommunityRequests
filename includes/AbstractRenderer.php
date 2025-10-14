@@ -139,12 +139,11 @@ abstract class AbstractRenderer implements MessageLocalizer {
 
 		$wikitextVal ??= $this->getArgs()[ AbstractWishlistEntity::PARAM_STATUS ] ?? '';
 
-		$statusLabel = $this->config->getStatusLabelFromWikitextVal( $wikitextVal );
-		if ( $statusLabel === null ) {
-			$statusLabel = array_find(
-				$this->config->getStatuses(),
-				static fn ( $status ) => $status['default'] ?? false
-			)['label'] ?? 'communityrequests-status-unknown';
+		$statusEntityType = $this->rendererType === 'wish' ? 'wish' : 'focus-area';
+		$statusMsg = $this->config->getStatusLabelFromWikitextVal( $statusEntityType, $wikitextVal );
+		if ( $statusMsg === null ) {
+			$defaultStatus = $this->config->getDefaultStatusWikitextVal();
+			$statusMsg = "communityrequests-status-{$this->rendererType}-{$defaultStatus}";
 			$this->parser->addTrackingCategory( self::ERROR_TRACKING_CATEGORY );
 		}
 
@@ -158,16 +157,27 @@ abstract class AbstractRenderer implements MessageLocalizer {
 				'span',
 				[ 'class' => 'cdx-info-chip__text' ],
 				// Messages that may be used here:
-				// * communityrequests-status-under-review
-				// * communityrequests-status-unsupported
-				// * communityrequests-status-declined
-				// * communityrequests-status-community-opportunity
-				// * communityrequests-status-long-term-opportunity
-				// * communityrequests-status-near-term-opportunity
-				// * communityrequests-status-prioritized
-				// * communityrequests-status-in-progress
-				// * communityrequests-status-done
-				$this->msg( $statusLabel )->text()
+				// * communityrequests-status-wish-under-review
+				// * communityrequests-status-wish-accepted
+				// * communityrequests-status-wish-unsupported
+				// * communityrequests-status-wish-declined
+				// * communityrequests-status-wish-community-opportunity
+				// * communityrequests-status-wish-long-term-opportunity
+				// * communityrequests-status-wish-near-term-opportunity
+				// * communityrequests-status-wish-prioritized
+				// * communityrequests-status-wish-in-progress
+				// * communityrequests-status-wish-done
+				// * communityrequests-status-focus-area-under-review
+				// * communityrequests-status-focus-area-accepted
+				// * communityrequests-status-focus-area-unsupported
+				// * communityrequests-status-focus-area-declined
+				// * communityrequests-status-focus-area-community-opportunity
+				// * communityrequests-status-focus-area-long-term-opportunity
+				// * communityrequests-status-focus-area-near-term-opportunity
+				// * communityrequests-status-focus-area-prioritized
+				// * communityrequests-status-focus-area-in-progress
+				// * communityrequests-status-focus-area-done
+				$this->msg( $statusMsg )->text()
 			)
 		);
 	}

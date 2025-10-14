@@ -155,6 +155,21 @@ class WishlistConfig {
 	// Helpers
 
 	/**
+	 * Get the wikitext value for the default status.
+	 * This is either the one with `default: true` or the first in the list if no default is configured.
+	 *
+	 * @return string Wikitext value.
+	 */
+	public function getDefaultStatusWikitextVal(): string {
+		foreach ( $this->statuses as $statusVal => $statusInfo ) {
+			if ( $statusInfo['default'] ?? false ) {
+				return $statusVal;
+			}
+		}
+		return array_keys( $this->statuses )[0];
+	}
+
+	/**
 	 * Get the list of statuses that are eligible for voting.
 	 *
 	 * @return array Full config of statuses, keyed by wikitext value.
@@ -551,14 +566,18 @@ class WishlistConfig {
 	}
 
 	/**
-	 * Get the label of a status from its wikitext value.
+	 * Get the message name for a status from its wikitext value.
 	 *
+	 * @param string $entityType Either 'wish' or 'focus-area'.
 	 * @param string $status
 	 * @return ?string The label of the status, or null if not found.
 	 */
-	public function getStatusLabelFromWikitextVal( string $status ): ?string {
-		$status = trim( $status );
-		return $this->statuses[$status]['label'] ?? null;
+	public function getStatusLabelFromWikitextVal( string $entityType, string $status ): ?string {
+		$statusKey = trim( $status );
+		if ( !isset( $this->statuses[ $statusKey ] ) ) {
+			return null;
+		}
+		return "communityrequests-status-$entityType-$statusKey";
 	}
 
 	/**

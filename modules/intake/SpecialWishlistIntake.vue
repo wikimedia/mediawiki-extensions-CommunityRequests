@@ -8,6 +8,7 @@
 		<status-section
 			v-if="isWishlistManager"
 			v-model:status="wish.status"
+			entity-type="wish"
 			@update:status="formChanged = true"
 		></status-section>
 		<input

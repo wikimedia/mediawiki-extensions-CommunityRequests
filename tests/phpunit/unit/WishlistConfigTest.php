@@ -71,16 +71,13 @@ class WishlistConfigTest extends MediaWikiUnitTestCase {
 				WishlistConfig::STATUSES => [
 					'open' => [
 						'id' => 0,
-						'label' => 'status-open',
 					],
 					'closed' => [
 						'id' => 1,
-						'label' => 'status-closed',
 						'voting' => false,
 					],
 					'unknown' => [
 						'id' => 2,
-						'label' => 'status-unknown',
 						'default' => true
 					]
 				],
@@ -123,11 +120,9 @@ class WishlistConfigTest extends MediaWikiUnitTestCase {
 		$expected = [
 			'open' => [
 				'id' => 0,
-				'label' => 'status-open',
 			],
 			'unknown' => [
 				'id' => 2,
-				'label' => 'status-unknown',
 				'default' => true
 			]
 		];
@@ -261,10 +256,67 @@ class WishlistConfigTest extends MediaWikiUnitTestCase {
 	}
 
 	public function testGetStatusLabelFromWikitextVal(): void {
-		$this->assertSame( 'status-open', $this->config->getStatusLabelFromWikitextVal( 'open' ) );
-		$this->assertSame( 'status-closed', $this->config->getStatusLabelFromWikitextVal( 'closed' ) );
-		$this->assertSame( 'status-unknown', $this->config->getStatusLabelFromWikitextVal( 'unknown' ) );
-		$this->assertNull( $this->config->getStatusLabelFromWikitextVal( 'bogus' ) );
+		$this->assertSame(
+			'communityrequests-status-wish-open',
+			$this->config->getStatusLabelFromWikitextVal( 'wish', 'open' )
+		);
+		$this->assertSame(
+			'communityrequests-status-wish-closed',
+			$this->config->getStatusLabelFromWikitextVal( 'wish', 'closed' )
+		);
+		$this->assertSame(
+			'communityrequests-status-focus-area-unknown',
+			$this->config->getStatusLabelFromWikitextVal( 'focus-area', 'unknown' )
+		);
+		$this->assertNull( $this->config->getStatusLabelFromWikitextVal( 'wish', 'bogus' ) );
+	}
+
+	/**
+	 * @dataProvider provideGetDefaultStatusWikitextVal
+	 */
+	public function testGetDefaultStatusWikitextVal( array $statuses, string $expected ) {
+		$config = new WishlistConfig(
+			new ServiceOptions( WishlistConfig::CONSTRUCTOR_OPTIONS, [
+				WishlistConfig::ENABLED => true,
+				WishlistConfig::HOMEPAGE => '',
+				WishlistConfig::WISH_CATEGORY => '',
+				WishlistConfig::WISH_PAGE_PREFIX => '',
+				WishlistConfig::WISH_INDEX_PAGE => '',
+				WishlistConfig::WISH_TYPES => [],
+				WishlistConfig::FOCUS_AREA_CATEGORY => '',
+				WishlistConfig::FOCUS_AREA_PAGE_PREFIX => '',
+				WishlistConfig::FOCUS_AREA_INDEX_PAGE => '',
+				WishlistConfig::TAGS => null,
+				WishlistConfig::STATUSES => $statuses,
+				WishlistConfig::VOTES_PAGE_SUFFIX => '',
+				WishlistConfig::WISH_VOTING_ENABLED => true,
+				WishlistConfig::FOCUS_AREA_VOTING_ENABLED => true,
+				MainConfigNames::LanguageCode => '',
+			] ),
+			$this->createMock( TitleParser::class ),
+			$this->createMock( TitleFormatter::class ),
+			$this->createMock( LanguageNameUtils::class )
+		);
+		$this->assertSame( $expected, $config->getDefaultStatusWikitextVal() );
+	}
+
+	public static function provideGetDefaultStatusWikitextVal(): array {
+		return [
+			'one status, no default' => [
+				[
+					'onestatus' => [ 'id' => 0 ]
+				],
+				'onestatus',
+			],
+			'multiple statuses, 2nd is default' => [
+				[
+					'onestatus' => [ 'id' => 2 ],
+					'twostatus' => [ 'id' => 4, 'default' => true ],
+					'threestatus' => [ 'id' => 0 ],
+				],
+				'twostatus',
+			],
+		];
 	}
 
 	public function testGetEntityWikitextVal(): void {

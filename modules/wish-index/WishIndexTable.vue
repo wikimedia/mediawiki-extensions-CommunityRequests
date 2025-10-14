@@ -62,7 +62,7 @@
 		</template>
 		<template #item-status="{ item }">
 			<cdx-info-chip :status="wishStatusStyle( item )">
-				{{ wishStatus( item ) }}
+				{{ Util.wishStatus( item ) }}
 			</cdx-info-chip>
 		</template>
 		<template #item-created="{ item }">
@@ -401,25 +401,6 @@ module.exports = exports = defineComponent( {
 		}
 
 		/**
-		 * Get the localized status label for a wish.
-		 *
-		 * @param {string} status
-		 * @return {string}
-		 */
-		function wishStatus( status ) {
-			// Messages used here include:
-			// * communityrequests-status-draft
-			// * communityrequests-status-submitted
-			// * communityrequests-status-open
-			// * communityrequests-status-in-progress
-			// * communityrequests-status-delivered
-			// * communityrequests-status-blocked
-			// * communityrequests-status-archived
-			// * communityrequests-status-unknown
-			return mw.message( `communityrequests-status-${ status }` ).text();
-		}
-
-		/**
 		 * Get the style for the status chip.
 		 *
 		 * @param {string} status
@@ -478,7 +459,6 @@ module.exports = exports = defineComponent( {
 			onUpdateSort,
 			onLoadMore,
 			wishIsInFocusAreaHTML,
-			wishStatus,
 			wishStatusStyle,
 			getLangAttr,
 			Util,

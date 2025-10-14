@@ -37,19 +37,19 @@ class WishlistMessageLoaderTest extends MediaWikiIntegrationTestCase {
 			'CommunityRequestsStatuses' => [
 				'draft' => [
 					'id' => 0,
-					'label' => 'communityrequests-status-draft'
 				],
 				'submitted' => [
 					'id' => 1,
-					'label' => 'communityrequests-status-accepted'
 				]
 			],
 		] );
 
 		$actual = WishlistMessageLoader::addDynamicMessages( [ 'messages' => [] ] );
 		$this->assertArrayEquals( [
-			'communityrequests-status-accepted',
-			'communityrequests-status-draft',
+			'communityrequests-status-focus-area-draft',
+			'communityrequests-status-focus-area-submitted',
+			'communityrequests-status-wish-draft',
+			'communityrequests-status-wish-submitted',
 			'communityrequests-tag-admins',
 			'communityrequests-tag-bots-gadgets',
 			'communityrequests-wishtype-bug-description',

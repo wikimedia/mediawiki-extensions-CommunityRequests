@@ -24,8 +24,12 @@ class WishlistMessageLoader {
 				$messages[] = $tagConfig['label'] ?? "communityrequests-tag-$tag";
 			}
 		}
-		foreach ( $config->get( 'CommunityRequestsStatuses' ) as $status ) {
-			$messages[] = $status['label'];
+
+		// Build status messages for focus areas and wishes. Half won't be needed, but we use the same module for both.
+		foreach ( [ 'wish', 'focus-area' ] as $entityType ) {
+			foreach ( $config->get( 'CommunityRequestsStatuses' ) as $status => $statusInfo ) {
+				$messages[] = 'communityrequests-status-' . $entityType . '-' . $status;
+			}
 		}
 
 		$moduleConfig['messages'] = array_merge( $moduleConfig['messages'], $messages );

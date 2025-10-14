@@ -31,17 +31,10 @@
 const { defineComponent, nextTick, ref, watch } = require( 'vue' );
 const { CdxField, CdxMultiselectLookup } = require( '../codex.js' );
 const { CommunityRequestsStatuses } = require( '../common/config.json' );
+const Util = require( '../common/Util.js' );
 const statusesList = Object.keys( CommunityRequestsStatuses )
 	.map( ( status ) => ( {
-		// Messages are configurable. By default, they include:
-		// * communityrequests-status-draft
-		// * communityrequests-status-submitted
-		// * communityrequests-status-open
-		// * communityrequests-status-in-progress
-		// * communityrequests-status-delivered
-		// * communityrequests-status-blocked
-		// * communityrequests-status-archived
-		label: mw.msg( CommunityRequestsStatuses[ status ].label ),
+		label: Util.wishStatus( status ),
 		value: status
 	} ) );
 

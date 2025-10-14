@@ -40,6 +40,27 @@ class Util {
 	}
 
 	/**
+	 * Get the localized status label for a wish.
+	 *
+	 * @param {string} status
+	 * @return {string}
+	 */
+	static wishStatus( status ) {
+		// Messages used here include:
+		// * communityrequests-status-wish-under-review
+		// * communityrequests-status-wish-accepted
+		// * communityrequests-status-wish-unsupported
+		// * communityrequests-status-wish-declined
+		// * communityrequests-status-wish-community-opportunity
+		// * communityrequests-status-wish-long-term-opportunity
+		// * communityrequests-status-wish-near-term-opportunity
+		// * communityrequests-status-wish-prioritized
+		// * communityrequests-status-wish-in-progress
+		// * communityrequests-status-wish-done
+		return mw.message( `communityrequests-status-wish-${ status }` ).text();
+	}
+
+	/**
 	 * Get the localized tag label based on its value.
 	 *
 	 * @param {string} value

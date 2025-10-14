@@ -23,7 +23,8 @@ module.exports = exports = defineComponent( {
 		CdxSelect
 	},
 	props: {
-		status: { type: String, required: true }
+		status: { type: String, required: true },
+		entityType: { type: String, required: true }
 	},
 	emits: [
 		'update:status'
@@ -44,14 +45,21 @@ module.exports = exports = defineComponent( {
 		const statusOptions = Object.keys( CommunityRequestsStatuses )
 			.map( ( status ) => ( {
 				// Messages are configurable. By default, they include:
-				// * communityrequests-status-draft
-				// * communityrequests-status-submitted
-				// * communityrequests-status-open
-				// * communityrequests-status-in-progress
-				// * communityrequests-status-delivered
-				// * communityrequests-status-blocked
-				// * communityrequests-status-archived
-				label: mw.msg( CommunityRequestsStatuses[ status ].label ),
+				// * communityrequests-status-wish-draft
+				// * communityrequests-status-wish-submitted
+				// * communityrequests-status-wish-open
+				// * communityrequests-status-wish-in-progress
+				// * communityrequests-status-wish-delivered
+				// * communityrequests-status-wish-blocked
+				// * communityrequests-status-wish-archived
+				// * communityrequests-status-focus-area-draft
+				// * communityrequests-status-focus-area-submitted
+				// * communityrequests-status-focus-area-open
+				// * communityrequests-status-focus-area-in-progress
+				// * communityrequests-status-focus-area-delivered
+				// * communityrequests-status-focus-area-blocked
+				// * communityrequests-status-focus-area-archived
+				label: mw.msg( 'communityrequests-status-' + props.entityType + '-' + status ),
 				value: status
 			} ) );
 

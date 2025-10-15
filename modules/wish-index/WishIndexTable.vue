@@ -110,7 +110,7 @@ module.exports = exports = defineComponent( {
 		CdxTable
 	},
 	props: {
-		lang: { type: String, default: mw.config.get( 'wgContentLanguage' ) },
+		lang: { type: String, default: mw.config.get( 'wgUserLanguage' ) },
 		sort: { type: String, default: 'created' },
 		dir: { type: String, default: 'descending' },
 		limit: { type: Number, default: 10 },

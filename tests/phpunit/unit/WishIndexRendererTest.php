@@ -4,11 +4,13 @@ declare( strict_types=1 );
 namespace MediaWiki\Extension\CommunityRequests\Tests\Unit;
 
 use MediaWiki\Extension\CommunityRequests\FocusArea\FocusAreaStore;
+use MediaWiki\Extension\CommunityRequests\Wish\Wish;
 use MediaWiki\Extension\CommunityRequests\Wish\WishIndexRenderer;
 use MediaWiki\Extension\CommunityRequests\Wish\WishStore;
 use MediaWiki\Language\Language;
 use MediaWiki\Linker\LinkRenderer;
 use MediaWiki\Parser\Parser;
+use MediaWiki\Parser\ParserOptions;
 use MediaWiki\Parser\ParserOutput;
 use MediaWiki\Parser\PPFrame;
 use MediaWiki\Tests\Unit\FakeQqxMessageLocalizer;
@@ -48,15 +50,23 @@ class WishIndexRendererTest extends AbstractWishlistEntityTest {
 		$language->expects( $this->atMost( 2 ) )
 			->method( 'getCode' )
 			->willReturn( 'en' );
+		$parserOptions = $this->createNoOpMock( ParserOptions::class, [ 'getUserLangObj' ] );
+		$parserOptions->method( 'getUserLangObj' )
+			->willReturn( $language );
 		$parser = $this->createNoOpMock( Parser::class, [
-			'getPage', 'getOutput', 'addTrackingCategory', 'getTargetLanguage', 'msg',
+			'getPage', 'getOptions', 'getOutput', 'addTrackingCategory', 'getTargetLanguage', 'msg',
 		] );
-		$parser->expects( $this->atMost( 1 ) )
+		$parser->expects( $this->atMost( 2 ) )
 			->method( 'getPage' )
 			->willReturn( $this->makeMockTitle( 'Community Wishlist/Wishes' )->toPageIdentity() );
 		$parser->expects( $this->once() )
 			->method( 'getOutput' )
 			->willReturn( $output );
+		if ( $args[Wish::PARAM_SHOW_FILTERS] ?? false ) {
+			$parser->expects( $this->exactly( 2 ) )
+				->method( 'getOptions' )
+				->willReturn( $parserOptions );
+		}
 		$parser->expects( $this->atMost( 2 ) )
 			->method( 'getTargetLanguage' )
 			->willReturn( $language );
@@ -99,7 +109,6 @@ class WishIndexRendererTest extends AbstractWishlistEntityTest {
 			[
 				[],
 				[
-					'lang' => 'en',
 					'sort' => 'created',
 					'dir' => 'descending',
 					'limit' => 10,
@@ -112,7 +121,6 @@ class WishIndexRendererTest extends AbstractWishlistEntityTest {
 			[
 				[ 'lang' => '  de ', 'sort' => 'title', 'dir' => 'ascending', 'limit' => 5, 'showfilters' => 0 ],
 				[
-					'lang' => 'de',
 					'sort' => 'title',
 					'dir' => 'ascending',
 					'limit' => 5,
@@ -124,14 +132,12 @@ class WishIndexRendererTest extends AbstractWishlistEntityTest {
 			],
 			[
 				[
-					'lang' => 'fr',
 					'sort' => '<script>foobar</script>',
 					'dir' => 'descending',
 					'limit' => 20,
 					'showfilters' => '1'
 				],
 				[
-					'lang' => 'fr',
 					'sort' => '&lt;script&gt;foobar&lt;/script&gt;',
 					'dir' => 'descending',
 					'limit' => 20,
@@ -149,7 +155,6 @@ class WishIndexRendererTest extends AbstractWishlistEntityTest {
 					'limit' => '',
 				],
 				[
-					'lang' => 'en',
 					'sort' => 'created',
 					'dir' => 'descending',
 					'limit' => 10,
@@ -169,7 +174,6 @@ class WishIndexRendererTest extends AbstractWishlistEntityTest {
 					'focusareas' => 'FA1,FA2',
 				],
 				[
-					'lang' => 'es',
 					'sort' => 'votecount',
 					'dir' => 'ascending',
 					'limit' => 10,

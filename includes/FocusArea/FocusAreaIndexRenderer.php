@@ -28,7 +28,7 @@ class FocusAreaIndexRenderer extends AbstractRenderer {
 
 		/** @var FocusArea[] $focusAreas */
 		$focusAreas = $this->focusAreaStore->getAll(
-			$this->getArg( 'lang', $this->parser->getContentLanguage()->getCode() ),
+			$this->getArg( 'lang', $this->parser->getOptions()->getUserLangObj()->getCode() ),
 			$this->getArg( 'sort', 'created' ),
 			$this->getArg( 'dir', 'descending' ),
 			intval( $this->getArg( 'limit', 10 ) ),

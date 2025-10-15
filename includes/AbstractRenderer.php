@@ -68,7 +68,8 @@ abstract class AbstractRenderer implements MessageLocalizer {
 
 	/** @inheritDoc */
 	public function msg( $key, ...$params ) {
-		return $this->parser->msg( $key, ...$params );
+		return $this->parser->msg( $key, ...$params )
+			->inLanguage( $this->parser->getOptions()->getUserLangObj() );
 	}
 
 	/**

@@ -1,10 +1,9 @@
 <?php
 declare( strict_types=1 );
 
-namespace MediaWiki\Extension\CommunityRequests\Tests\Integration;
+namespace MediaWiki\Extension\CommunityRequests\Tests\Unit;
 
 use MediaWiki\Extension\CommunityRequests\FocusArea\FocusAreaStore;
-use MediaWiki\Extension\CommunityRequests\Tests\Unit\AbstractWishlistEntityTest;
 use MediaWiki\Extension\CommunityRequests\Wish\WishIndexRenderer;
 use MediaWiki\Extension\CommunityRequests\Wish\WishStore;
 use MediaWiki\Language\Language;

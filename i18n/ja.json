@@ -6,14 +6,7 @@
 			"Omotecho"
 		]
 	},
-	"communityrequests-status-draft": "下書き",
-	"communityrequests-status-submitted": "投稿済",
-	"communityrequests-status-open": "オープン",
-	"communityrequests-status-in-progress": "進行中",
-	"communityrequests-status-delivered": "完了",
-	"communityrequests-status-blocked": "ブロック済",
-	"communityrequests-status-archived": "アーカイブ済",
-	"communityrequests-status-unknown": "不明",
+	"communityrequests-status-wish-in-progress": "進行中",
 	"communityrequests-edit-wish": "要望を編集",
 	"communityrequests-discuss-wish": "この要望について話し合う",
 	"communityrequests-wish-description-heading": "説明",

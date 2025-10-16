@@ -2,14 +2,7 @@
 	"@metadata": {
 		"authors": []
 	},
-	"communityrequests-status-draft": "Utkast",
-	"communityrequests-status-submitted": "Inskickad",
-	"communityrequests-status-open": "Öppen",
-	"communityrequests-status-in-progress": "Pågående",
-	"communityrequests-status-delivered": "Levererad",
-	"communityrequests-status-blocked": "Blockerad",
-	"communityrequests-status-archived": "Arkiverad",
-	"communityrequests-status-unknown": "Okänd",
+	"communityrequests-status-wish-in-progress": "Pågående",
 	"communityrequests-edit-wish": "Redigera önskan",
 	"communityrequests-discuss-wish": "Diskutera den här önskan",
 	"communityrequests-wish-description-heading": "Beskrivning",

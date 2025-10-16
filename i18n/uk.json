@@ -4,14 +4,7 @@
 			"Ата"
 		]
 	},
-	"communityrequests-status-draft": "Чернетка",
-	"communityrequests-status-submitted": "Подано",
-	"communityrequests-status-open": "Відкрито",
-	"communityrequests-status-in-progress": "У процесі",
-	"communityrequests-status-delivered": "Виконано",
-	"communityrequests-status-blocked": "Заблоковано",
-	"communityrequests-status-archived": "Архівовано",
-	"communityrequests-status-unknown": "Невідомо",
+	"communityrequests-status-wish-in-progress": "У процесі",
 	"communityrequests-edit-wish": "Редагувати побажання",
 	"communityrequests-discuss-wish": "Обговорити це побажання",
 	"communityrequests-wish-description-heading": "Опис",

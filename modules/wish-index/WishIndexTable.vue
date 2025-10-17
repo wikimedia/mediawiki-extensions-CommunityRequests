@@ -330,9 +330,9 @@ module.exports = exports = defineComponent( {
 
 			pending.value = false;
 
-			// Fire the wikipage.content hook to trigger dynamic updates, such as MinT translations.
+			// Fire the wikipage.content hook to trigger dynamic updates in the wishlist, such as MinT translations.
 			await nextTick();
-			mw.hook( 'wikipage.content' ).fire( mw.util.$content.find( '#mw-content-text' ) );
+			mw.hook( 'wikipage.content' ).fire( mw.util.$content.find( '.ext-communityrequests-wishes' ) );
 
 			// If a section header is being linked to, re-scroll to it after
 			// fetching the wish table etc and possibly changing the page height.

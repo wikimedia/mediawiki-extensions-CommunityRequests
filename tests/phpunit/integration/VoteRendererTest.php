@@ -95,6 +95,24 @@ class VoteRendererTest extends MediaWikiIntegrationTestCase {
 		$this->assertSame( 5, $wish->getVoteCount() );
 	}
 
+	public function testCountResetToZero(): void {
+		$this->store = $this->getServiceContainer()->get( 'CommunityRequests.WishStore' );
+
+		$wishTitleStr = $this->config->getWishPagePrefix() . '123';
+		$wish = $this->insertTestWish( $wishTitleStr );
+		$this->assertSame( 0, $wish->getVoteCount() );
+
+		$this->insertVotes( $wishTitleStr, 3 );
+
+		$wish = $this->store->get( Title::newFromText( $wishTitleStr ), 'en' );
+		$this->assertSame( 3, $wish->getVoteCount() );
+
+		$this->insertVotes( $wishTitleStr, 0 );
+
+		$wish = $this->store->get( Title::newFromText( $wishTitleStr ), 'en' );
+		$this->assertSame( 0, $wish->getVoteCount() );
+	}
+
 	public function testFocusAreaUpdateShouldNotWipeCount(): void {
 		$this->store = $this->getServiceContainer()->get( 'CommunityRequests.FocusAreaStore' );
 

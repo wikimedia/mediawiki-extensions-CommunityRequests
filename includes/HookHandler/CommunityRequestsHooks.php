@@ -360,23 +360,47 @@ class CommunityRequestsHooks implements
 	 * @param mixed $ticket
 	 */
 	public function onLinksUpdateComplete( $linksUpdate, $ticket ) {
-		if ( !$this->config->isEnabled() ) {
-			return;
-		}
-		$data = $linksUpdate->getParserOutput()->getExtensionData( self::EXT_DATA_KEY );
-		if ( !$data || !isset( $data[AbstractWishlistEntity::PARAM_ENTITY_TYPE] ) ) {
-			return;
-		}
-		$store = $this->stores[$data[AbstractWishlistEntity::PARAM_ENTITY_TYPE]];
 		$title = $linksUpdate->getTitle();
+		if ( !$this->config->isEnabled() ||
+			( !$this->config->isWishOrFocusAreaPage( $title ) && !$this->config->isVotesPage( $title ) )
+		) {
+			return;
+		}
+
+		$canonicalPage = $this->getCanonicalEntityPage( $title );
+		$data = $linksUpdate->getParserOutput()->getExtensionData( self::EXT_DATA_KEY );
+
 		// If this a /Votes page, we need to reload the full entity data.
 		if ( $this->config->isVotesPage( $title ) ) {
+			if ( !$data || !isset( $data[AbstractWishlistEntity::PARAM_ENTITY_TYPE] ) ) {
+				// at this point is either a wish or focus area page
+				$entityType = $this->config->isWishPage( $canonicalPage ) ? 'wish' : 'focus-area';
+
+				// lang doesn't matter for votes updates but for correctness lets use the base language
+				$baseLang = Title::castFromPageIdentity( $canonicalPage )->getPageLanguage()->getCode();
+
+				// Reset votes count to zero if no data is present
+				$data = [
+					AbstractWishlistEntity::PARAM_ENTITY_TYPE => $entityType,
+					AbstractWishlistEntity::PARAM_VOTE_COUNT => 0,
+					AbstractWishlistEntity::PARAM_LANG => $baseLang,
+				];
+			}
+
+			$store = $this->stores[$data[AbstractWishlistEntity::PARAM_ENTITY_TYPE]];
+
 			$data = $store->normalizeArrayValues( array_merge(
-				$store->get( $this->getCanonicalEntityPage( $title ) )->toArray( $this->config ),
+				$store->get( $canonicalPage )->toArray( $this->config ),
 				$data
 			), AbstractWishlistStore::ARRAY_DELIMITER_WIKITEXT );
 		}
-		$entity = $this->entityFactory->createFromParserData( $data, $this->getCanonicalEntityPage( $title ) );
+
+		if ( !$data || !isset( $data[AbstractWishlistEntity::PARAM_ENTITY_TYPE] ) ) {
+			return;
+		}
+
+		$store ??= $this->stores[$data[AbstractWishlistEntity::PARAM_ENTITY_TYPE]];
+		$entity = $this->entityFactory->createFromParserData( $data, $canonicalPage );
 		$this->logger->debug(
 			__METHOD__ . ': Saving {0} with data: {1}',
 			[ $title->toPageIdentity()->__toString(), json_encode( $data ) ]

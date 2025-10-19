@@ -34,7 +34,7 @@ title=Community_Wishlist/FA1
 </div><div class="mw-heading mw-heading3">Community members</div><div class="ext-communityrequests-focus-area--volunteers">
 <p><a href="/index.php?title=User:Admin&amp;action=edit&amp;redlink=1" class="new" title="User:Admin (page does not exist)">Admin</a>
 </p>
-</div><div class="mw-heading mw-heading2" id="Voting">Voting</div><div class="ext-communityrequests-focus-area--voting"><p>This focus area currently has <b>0 supporters</b>. Voting for this focus area is open until it is completed.</p><div class="ext-communityrequests-voting"></div><noscript><p class="error">Sorry, JavaScript is required to vote in the Community Wishlist.</p></noscript></div></div>
+</div><div class="mw-heading mw-heading2" id="Voting">Voting</div><div class="ext-communityrequests-focus-area--voting mw-notalk"><p>This focus area currently has <b>0 supporters</b>. Voting for this focus area is open until it is completed.</p><div class="ext-communityrequests-voting"></div><noscript><p class="error">Sorry, JavaScript is required to vote in the Community Wishlist.</p></noscript></div></div>
 !! end
 
 !! test
@@ -63,7 +63,7 @@ title=Community_Wishlist/FA2
 </div><div class="mw-heading mw-heading3">Community members</div><div class="ext-communityrequests-focus-area--volunteers">
 <p><a href="/index.php?title=User:Admin&amp;action=edit&amp;redlink=1" class="new" title="User:Admin (page does not exist)">Admin</a>
 </p>
-</div><div class="mw-heading mw-heading2" id="Voting">Voting</div><div class="ext-communityrequests-focus-area--voting"><p>This focus area currently has <b>0 supporters</b>. Supporting this focus area is currently disabled.</p></div></div>
+</div><div class="mw-heading mw-heading2" id="Voting">Voting</div><div class="ext-communityrequests-focus-area--voting mw-notalk"><p>This focus area currently has <b>0 supporters</b>. Supporting this focus area is currently disabled.</p></div></div>
 !! end
 
 !! test
@@ -92,7 +92,7 @@ title=Community_Wishlist/FA2
 </div><div class="mw-heading mw-heading3">Community members</div><div class="ext-communityrequests-focus-area--volunteers">
 <p><a href="/index.php?title=User:Admin&amp;action=edit&amp;redlink=1" class="new" title="User:Admin (page does not exist)">Admin</a>
 </p>
-</div><div class="mw-heading mw-heading2" id="Voting">Voting</div><div class="ext-communityrequests-focus-area--voting"><p>This focus area currently has <b>0 supporters</b>. Supporting this focus area is currently disabled.</p></div></div>
+</div><div class="mw-heading mw-heading2" id="Voting">Voting</div><div class="ext-communityrequests-focus-area--voting mw-notalk"><p>This focus area currently has <b>0 supporters</b>. Supporting this focus area is currently disabled.</p></div></div>
 !! end
 
 !! test

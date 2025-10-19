@@ -222,7 +222,9 @@ abstract class AbstractRenderer implements MessageLocalizer {
 			// * communityrequests-wish-voting
 			$this->msg( "communityrequests-{$this->rendererType}-voting" )->text()
 		);
-		$out .= Html::openElement( 'div', [ 'class' => "ext-communityrequests-{$this->rendererType}--voting" ] );
+		$out .= Html::openElement( 'div', [
+			'class' => "ext-communityrequests-{$this->rendererType}--voting mw-notalk"
+		] );
 
 		// We need to wait for the full parser pass to complete to ensure all votes are counted.
 		// Add a strip marker for the vote count to be added later in CommunityRequestsHooks::onParserAfterTidy().

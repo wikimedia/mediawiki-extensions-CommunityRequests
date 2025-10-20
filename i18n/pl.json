@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"Msz2001"
+			"Msz2001",
+			"Zuzannazuzanna"
 		]
 	},
 	"communityrequests-desc": "System zarządzania technicznymi sugestiami i prośbami społeczności wiki.",
@@ -84,5 +85,6 @@
 	"communityrequests-translation-switch": "Przetłumacz automatycznie za pomocą [https://www.mediawiki.org/wiki/Special:MyLanguage/MinT narzędzia do tłumaczenia maszynowego Wikimedia].",
 	"communityrequests-translation-progress": "Przetłumaczono $1 z $2 {{PLURAL:$2|części}} tekstu.",
 	"communityrequests-translation-errors": "Wystąpił błąd:",
-	"communityrequests-disabled": "Ta funkcjonalność listy życzeń społeczności jest obecnie wyłączona."
+	"communityrequests-disabled": "Ta funkcjonalność listy życzeń społeczności jest obecnie wyłączona.",
+	"communityrequests-wish-count": "$1 {{PLURAL:$2| życzenie|życzenia}}"
 }

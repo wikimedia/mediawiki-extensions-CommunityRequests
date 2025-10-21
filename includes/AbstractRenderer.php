@@ -274,10 +274,11 @@ abstract class AbstractRenderer implements MessageLocalizer {
 			if ( $voteSubpageTitle->exists() ) {
 				$voteSubpageContent = $this->parser->recursiveTagParse( '{{:' . $voteSubpagePath . '}}' );
 				if ( $voteSubpageContent ) {
+
 					$out .= Html::element(
 						'div',
 						[ 'class' => 'mw-heading mw-heading3' ],
-						$this->msg( 'communityrequests-wish-voters-heading' )->text()
+						$this->msg( "communityrequests-{$this->rendererType}-voters-heading" )->text()
 					);
 				}
 				$out .= $voteSubpageContent;

@@ -215,5 +215,7 @@
 	"communityrequests-wishlist-machine-translation": "להפעיל תרגום מכונה אוטומטי ב[[$1|רשימת משאלות הקהילה]].",
 	"communityrequests-vote-add-summary": "הוספת הצבעת תמיכה",
 	"communityrequests-vote-update-summary": "עדכון הצבעת תמיכה",
-	"communityrequests-vote-remove-summary": "הסרת הצבעת תמיכה"
+	"communityrequests-vote-remove-summary": "הסרת הצבעת תמיכה",
+	"communityrequests-wish-count": "{{PLURAL:$2|משאלה אחת|$1 משאלות}}",
+	"communityrequests-vote-count": "{{PLURAL:$2|תומך אחד|$1 תומכים}}"
 }

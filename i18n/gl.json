@@ -212,5 +212,7 @@
 	"communityrequests-wishlist-machine-translation": "Activar a tradución automática na [[$1|lista de desexos da comunidade]].",
 	"communityrequests-vote-add-summary": "Adición dun voto de apoio",
 	"communityrequests-vote-update-summary": "Actualización dun voto de apoio",
-	"communityrequests-vote-remove-summary": "Eliminación dun voto de apoio"
+	"communityrequests-vote-remove-summary": "Eliminación dun voto de apoio",
+	"communityrequests-wish-count": "$1 {{PLURAL:$2|desexo|desexos}}",
+	"communityrequests-vote-count": "$1 {{PLURAL:$2|incondicional|incondicionais}}"
 }

@@ -213,5 +213,7 @@
 	"communityrequests-wishlist-machine-translation": "Automatische machinevertaling in de [[$1|Gezamenlijke wensenlijst]] inschakelen.",
 	"communityrequests-vote-add-summary": "Steunstem toegevoegd",
 	"communityrequests-vote-update-summary": "Steunstem bijgewerkt",
-	"communityrequests-vote-remove-summary": "Steunstem verwijderd"
+	"communityrequests-vote-remove-summary": "Steunstem verwijderd",
+	"communityrequests-wish-count": "$1 wens{{PLURAL:$2||en}}",
+	"communityrequests-vote-count": "$1 voorstander{{PLURAL:$2||s}}"
 }

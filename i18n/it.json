@@ -114,5 +114,6 @@
 	"communityrequests-translation-progress": "{{PLURAL:$1|Tradotta|Tradotte}} $1 di $2 {{PLURAL:$2|parte|parti}} di testo.",
 	"communityrequests-translation-errors": "Si è verificato un errore:",
 	"communityrequests-support-label": "Supporto",
-	"communityrequests-vote-remove-summary": "Rimozione del voto di supporto"
+	"communityrequests-vote-remove-summary": "Rimozione del voto di supporto",
+	"communityrequests-vote-count": "$1 {{PLURAL:$2|sostenitore|sostenitori}}"
 }

@@ -6,6 +6,7 @@ namespace MediaWiki\Extension\CommunityRequests\Tests\Integration;
 use MediaWiki\Api\ApiUsageException;
 use MediaWiki\Extension\CommunityRequests\AbstractWishlistStore;
 use MediaWiki\Extension\CommunityRequests\HookHandler\PermissionHooks;
+use MediaWiki\Extension\CommunityRequests\Wish\Wish;
 use MediaWiki\Extension\CommunityRequests\Wish\WishStore;
 use MediaWiki\MainConfigNames;
 use MediaWiki\Tests\Api\ApiTestCase;
@@ -460,5 +461,33 @@ class ApiWishEditTest extends ApiTestCase {
 				null,
 			],
 		];
+	}
+
+	/**
+	 * Test that a vote is added for the proposer when a new wish is created.
+	 *
+	 * @return void
+	 */
+	public function testProposerVoteIsSaved(): void {
+		PermissionHooks::$allowManualEditing = true;
+		$user = $this->getTestUser()->getUser();
+		$params = [
+			'action' => 'wishedit',
+			Wish::PARAM_TITLE => 'Test Wish',
+			Wish::PARAM_DESCRIPTION => 'This is a test wish.',
+			Wish::PARAM_AUDIENCE => 'everyone',
+			Wish::PARAM_STATUS => 'under-review',
+			Wish::PARAM_TYPE => 'change',
+			Wish::PARAM_TAGS => '',
+			Wish::PARAM_PHAB_TASKS => '',
+			Wish::PARAM_CREATED => '2025-10-21T00:00:00Z',
+			Wish::PARAM_PROPOSER => $user->getName(),
+			Wish::PARAM_BASE_LANG => 'en',
+		];
+		[ $ret ] = $this->doApiRequestWithToken( $params, null, $user );
+		$this->assertSame( 'Community Wishlist/W1', $ret['wishedit']['wish'] );
+		$this->assertArrayHasKey( 'wishlistvote', $ret );
+		$votesPage = Title::newFromText( 'Community Wishlist/W1/Votes' );
+		$this->assertTrue( $votesPage->exists() );
 	}
 }

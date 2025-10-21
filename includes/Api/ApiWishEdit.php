@@ -7,7 +7,7 @@ use MediaWiki\Api\ApiBase;
 use MediaWiki\Api\ApiMain;
 use MediaWiki\Content\Transform\ContentTransformer;
 use MediaWiki\Extension\CommunityRequests\AbstractWishlistEntity;
-use MediaWiki\Extension\CommunityRequests\AbstractWishlistStore;
+use MediaWiki\Extension\CommunityRequests\Vote\VoteStore;
 use MediaWiki\Extension\CommunityRequests\Wish\Wish;
 use MediaWiki\Extension\CommunityRequests\Wish\WishStore;
 use MediaWiki\Extension\CommunityRequests\WishlistConfig;
@@ -15,6 +15,7 @@ use MediaWiki\Extension\Translate\PageTranslation\TranslatablePageParser;
 use MediaWiki\Page\PageIdentity;
 use MediaWiki\Page\WikiPageFactory;
 use MediaWiki\ParamValidator\TypeDef\UserDef;
+use MediaWiki\Title\Title;
 use MediaWiki\Title\TitleParser;
 use MediaWiki\User\UserFactory;
 use Psr\Log\LoggerInterface;
@@ -29,7 +30,8 @@ class ApiWishEdit extends ApiWishlistEntityBase {
 		WishlistConfig $config,
 		LoggerInterface $logger,
 		WikiPageFactory $wikiPageFactory,
-		AbstractWishlistStore $store,
+		WishStore $store,
+		private VoteStore $voteStore,
 		TitleParser $titleParser,
 		ContentTransformer $transformer,
 		protected readonly UserFactory $userFactory,
@@ -44,6 +46,32 @@ class ApiWishEdit extends ApiWishlistEntityBase {
 	/** @inheritDoc */
 	protected static function entityParam(): string {
 		return 'wish';
+	}
+
+	/** @inheritDoc */
+	public function execute() {
+		parent::execute();
+
+		$wisheditResult = $this->getResult()->getResultData();
+		$wishId = $this->store->getIdFromInput( $wisheditResult['wishedit']['wish'] );
+
+		// Don't save proposer's vote when editing an existing wish,
+		// or if the proposer is not the current user.
+		$isNew = $wisheditResult['wishedit']['new'] ?? false;
+		$userIsProposer = $wisheditResult['wishedit']['proposer'] === $this->getUser()->getName();
+		if ( !$isNew || !$userIsProposer ) {
+			$this->logger->debug(
+				__METHOD__ . ': Not auto-creating a vote as the user is not the proposer',
+				[ $wishId, json_encode( $wisheditResult['wishedit'] ) ]
+			);
+			return;
+		}
+
+		$entityPageRef = $this->config->getEntityPageRefFromWikitextVal( 'W' . $wishId );
+		if ( $entityPageRef ) {
+			$wish = $this->getEntity( Title::newFromPageReference( $entityPageRef ), $this->params );
+			$this->saveVote( $wish, $this->voteStore );
+		}
 	}
 
 	/** @inheritDoc */

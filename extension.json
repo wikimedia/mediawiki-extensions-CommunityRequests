@@ -198,6 +198,7 @@
 				"CommunityRequests.Logger",
 				"WikiPageFactory",
 				"CommunityRequests.WishStore",
+				"CommunityRequests.VoteStore",
 				"TitleParser",
 				"ContentTransformer",
 				"UserFactory"

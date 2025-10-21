@@ -28,7 +28,7 @@ class ApiQueryWishes extends ApiQueryBase {
 		ApiQuery $queryModule,
 		string $moduleName,
 		private readonly WishlistConfig $config,
-		private readonly LoggerInterface $logger,
+		protected readonly LoggerInterface $logger,
 		private readonly WishStore $store,
 		private readonly FocusAreaStore $focusAreaStore,
 		private readonly ExtensionRegistry $extensionRegistry,

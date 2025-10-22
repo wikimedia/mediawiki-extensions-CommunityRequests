@@ -344,6 +344,20 @@ class WishlistConfig {
 	}
 
 	/**
+	 * Get the language code from a translation subpage PageReference.
+	 *
+	 * @param PageReference $page
+	 * @return ?string Language code
+	 */
+	public function getLanguageFromPage( PageReference $page ): ?string {
+		$parts = explode( '/', $page->getDBkey() );
+		$subpage = end( $parts );
+		return count( $parts ) > 1 && $this->languageNameUtils->isKnownLanguageTag( $subpage )
+			? $subpage
+			: null;
+	}
+
+	/**
 	 * Check if the given PageReference is the wish index page.
 	 *
 	 * @param ?PageReference $reference

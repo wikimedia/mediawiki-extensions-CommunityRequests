@@ -18,6 +18,7 @@ use Wikimedia\Timestamp\ConvertibleTimestamp;
  * @covers \MediaWiki\Extension\CommunityRequests\Wish\WishStore
  * @covers \MediaWiki\Extension\CommunityRequests\AbstractWishlistStore
  * @covers \MediaWiki\Extension\CommunityRequests\EntityFactory
+ * @covers \MediaWiki\Extension\CommunityRequests\HookHandler\CommunityRequestsHooks
  */
 class WishStoreTest extends MediaWikiIntegrationTestCase {
 	use WishlistTestTrait;
@@ -471,5 +472,35 @@ END;
 		$this->insertPage( $wish->getPage(), $wikitext );
 		$updatedWish = $this->getStore()->get( $wish->getPage() );
 		$this->assertSame( 'en', $updatedWish->getBaseLang() );
+	}
+
+	public function testEntityGetsDeletedOnPageDelete(): void {
+		// Wish in site language.
+		$wishEn = $this->insertTestWish( null, 'en',
+			[ Wish::PARAM_TITLE => '<translate>Test wish</translate>' ]
+		);
+		// French translation.
+		$this->insertTestWish( $wishEn->getPage()->getDBkey(), 'fr', [ Wish::PARAM_BASE_LANG => 'en' ] );
+		// Sanity check; Wish count should still be 1.
+		$this->assertSame( 1, $this->getStore()->getCount() );
+		// Wish in Spanish.
+		$wishEs = $this->insertTestWish( null, 'es' );
+		// Sanity checks.
+		$this->assertSame( 2, $this->getStore()->getCount() );
+		$this->assertNotNull( $this->getStore()->get( $wishEs->getPage(), 'es' ) );
+		// Sanity check.
+		$this->assertTrue( Title::newFromPageIdentity( $wishEs->getPage() )->exists() );
+		// Delete the Spanish wish page.
+		$this->deletePage( $wishEs->getPage() );
+		// Spanish should be no more.
+		$this->assertNull( $this->getStore()->get( $wishEs->getPage() ) );
+		$this->assertNull( $this->getStore()->get( $wishEs->getPage(), 'es' ) );
+		$this->assertSame( 1, $this->getStore()->getCount() );
+		// Delete the English wish page.
+		$this->deletePage( $wishEn->getPage() );
+		// English and French should be no more.
+		$this->assertNull( $this->getStore()->get( $wishEn->getPage(), 'en' ) );
+		$this->assertNull( $this->getStore()->get( $wishEn->getPage(), 'fr' ) );
+		$this->assertSame( 0, $this->getStore()->getCount() );
 	}
 }

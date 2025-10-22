@@ -674,39 +674,58 @@ abstract class AbstractWishlistStore {
 	 * Delete a wish or focus area and all its associated data.
 	 * Called from CommunityRequestsHooks::onPageDeleteComplete().
 	 *
-	 * @param AbstractWishlistEntity $entity
+	 * @param int $pageId
+	 * @param string $lang
 	 * @param array $assocData Associated data to be deleted when the wish or focus area
 	 *   is deleted entirely (and not just one of its translations). Keys are table names,
 	 *   values are the foreign key field names in those tables that point to the page ID.
 	 * @return IDatabase
 	 */
-	public function delete( AbstractWishlistEntity $entity, array $assocData = [] ): IDatabase {
+	public function delete( int $pageId, string $lang, array $assocData = [] ): IDatabase {
 		$dbw = $this->dbProvider->getPrimaryDatabase( 'virtual-communityrequests' );
 		$dbw->startAtomic( __METHOD__ );
 
-		// First delete translations.
-		$delTranslations = $dbw->newDeleteQueryBuilder()
-			->deleteFrom( static::translationsTableName() )
-			->where( [ static::translationForeignKey() => $entity->getPage()->getId() ] );
+		// First, check if we're deleting the base language by fetching the entity.
+		$baseLang = $dbw->newSelectQueryBuilder()
+			->select( static::baseLangField() )
+			->from( static::tableName() )
+			->where( [ static::pageField() => $pageId ] )
+			->caller( __METHOD__ )
+			->fetchField();
 
-		// Delete only for the given language, if not the base language.
-		if ( $entity->getLang() !== $entity->getBaseLang() ) {
-			$delTranslations->andWhere( [ static::translationLangField() => $entity->getLang() ] );
-		}
+		if ( $baseLang === $lang ) {
+			// Delete the base entity if we're deleting the base language.
+			$dbw->newDeleteQueryBuilder()
+				->deleteFrom( static::tableName() )
+				->where( [ static::pageField() => $pageId ] )
+				->caller( __METHOD__ )
+				->execute();
 
-		$delTranslations->caller( __METHOD__ )
-			->execute();
+			// Delete all translations for this entity.
+			$dbw->newDeleteQueryBuilder()
+				->deleteFrom( static::translationsTableName() )
+				->where( [ static::translationForeignKey() => $pageId ] )
+				->caller( __METHOD__ )
+				->execute();
 
-		// Delete everything else if we're dealing with the base language.
-		if ( $entity->isBaseLang() ) {
-			$assocData[static::tableName()] = static::pageField();
+			// Delete all associated data.
 			foreach ( $assocData as $table => $foreignKey ) {
 				$dbw->newDeleteQueryBuilder()
 					->deleteFrom( $table )
-					->where( [ $foreignKey => $entity->getPage()->getId() ] )
+					->where( [ $foreignKey => $pageId ] )
 					->caller( __METHOD__ )
 					->execute();
 			}
+		} else {
+			// Only delete the translation for the given language.
+			$dbw->newDeleteQueryBuilder()
+				->deleteFrom( static::translationsTableName() )
+				->where( [
+					static::translationForeignKey() => $pageId,
+					static::translationLangField() => $lang
+				] )
+				->caller( __METHOD__ )
+				->execute();
 		}
 
 		$dbw->endAtomic( __METHOD__ );

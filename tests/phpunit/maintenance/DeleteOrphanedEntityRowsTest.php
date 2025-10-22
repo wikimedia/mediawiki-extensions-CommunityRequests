@@ -38,8 +38,11 @@ class DeleteOrphanedEntityRowsTest extends MaintenanceBaseTestCase {
 		$wikiPage1 = $this->getServiceContainer()->getWikiPageFactory()
 			->newFromID( $wish1->getPage()->getId() );
 		$this->assertTrue( $wikiPage1->exists() );
-		$this->deletePage( $wikiPage1 );
-		$this->assertFalse( $wikiPage1->exists() );
+		$this->getDb()->delete(
+			'page',
+			[ 'page_id' => $wikiPage1->getId() ],
+			__METHOD__
+		);
 
 		// Count is wrong now.
 		$this->assertSame( 2, $this->getStore()->getCount() );

@@ -348,8 +348,8 @@ class WishStore extends AbstractWishlistStore {
 	}
 
 	/** @inheritDoc */
-	public function delete( AbstractWishlistEntity $entity, array $assocData = [] ): IDatabase {
-		return parent::delete( $entity, [
+	public function delete( $pageId, $lang, array $assocData = [] ): IDatabase {
+		return parent::delete( $pageId, $lang, [
 			static::tagsTableName() => 'crtg_entity',
 		] );
 	}

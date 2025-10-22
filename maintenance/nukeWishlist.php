@@ -178,7 +178,7 @@ class NukeWishlist extends Maintenance {
 				}
 
 				if ( $entity ) {
-					$this->store->delete( $entity );
+					$this->store->delete( $entity->getPage()->getId(), $entity->getBaseLang() );
 				} elseif ( $this->config->isWishOrFocusAreaPage( $page ) ) {
 					$this->output(
 						"No entity found for page {$page->__toString()}, skipping related data deletion.\n"

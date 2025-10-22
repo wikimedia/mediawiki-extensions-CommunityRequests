@@ -25,6 +25,7 @@ use MediaWiki\Linker\LinkRenderer;
 use MediaWiki\Logging\ManualLogEntry;
 use MediaWiki\MainConfigNames;
 use MediaWiki\Page\PageIdentity;
+use MediaWiki\Page\PageStoreRecord;
 use MediaWiki\Page\ProperPageIdentity;
 use MediaWiki\Page\WikiPageFactory;
 use MediaWiki\Parser\Parser;
@@ -188,15 +189,22 @@ class CommunityRequestsHooks implements
 		if ( !$this->config->isEnabled() || !$this->config->isWishOrFocusAreaPage( $page ) ) {
 			return;
 		}
-		$store = $this->getStoreForPage( $page );
-		$entity = $store->get(
-			$this->getCanonicalEntityPage( $page ),
-			Title::castFromPageIdentity( $page )->getPageLanguage()->getCode()
-		);
-		if ( $entity ) {
-			$store->delete( $entity );
-			$this->logger->debug( __METHOD__ . ': Deleted entity {0}', [ $entity->getPage()->__toString() ] );
+
+		// First try to use the DB language of the deleted page.
+		$lang = $page instanceof PageStoreRecord ? $page->getLanguage() : null;
+		// Then try to infer from the page title.
+		$lang ??= $this->config->getLanguageFromPage( $page );
+		// Then fallback to using a Title object, which should be the site default language.
+		$lang ??= Title::castFromPageIdentity( $page )->getPageLanguage()->getCode();
+		if ( !$lang ) {
+			$this->logger->error( __METHOD__ . ": Could not determine language for deleted page $page" );
+			return;
 		}
+
+		$canonicalPage = $this->getCanonicalEntityPage( $page );
+		$store = $this->getStoreForPage( $page );
+		$store->delete( $canonicalPage->getId(), $lang );
+		$this->logger->debug( __METHOD__ . ': Deleted entity {0}', [ $page->__toString() ] );
 	}
 
 	/**

@@ -89,7 +89,7 @@
 /* eslint-disable vue/no-unused-properties */
 const { computed, defineComponent, nextTick, onMounted, reactive, ref, ComputedRef, Ref } = require( 'vue' );
 const { CdxField } = require( '../codex.js' );
-const { CommunityRequestsHomepage, CommunityRequestsStatuses } = require( '../common/config.json' );
+const { CommunityRequestsHomepage, CommunityRequestsWishIndexPage, CommunityRequestsStatuses } = require( '../common/config.json' );
 const Util = require( '../common/Util.js' );
 const StatusSection = require( './StatusSection.vue' );
 const FocusAreaSection = require( './FocusAreaSection.vue' );
@@ -225,8 +225,9 @@ module.exports = exports = defineComponent( {
 		 */
 		const returnTo = mw.util.getUrl( exists ?
 			Util.getWishPageTitleFromId( mw.config.get( 'intakeId' ) ) :
-			CommunityRequestsHomepage
+			CommunityRequestsWishIndexPage
 		);
+
 		/**
 		 * The <form> element.
 		 *

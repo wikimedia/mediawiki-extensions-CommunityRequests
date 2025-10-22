@@ -73,5 +73,18 @@
 	"communityrequests-focus-area-supported-val": "$1 {{PLURAL:$2|व्यक्ति|लोग}}",
 	"communityrequests-focus-area-owners-label": "मालिक:",
 	"communityrequests-focus-area-view-wishes": "इस क्षेत्र में इच्छाएँ देखें",
-	"communityrequests-focus-area-wishes-list": "इस फ़ोकस क्षेत्र में इच्छाएँ"
+	"communityrequests-focus-area-wishes-list": "इस फ़ोकस क्षेत्र में इच्छाएँ",
+	"communityrequests-focus-area-th-wish": "इच्छा",
+	"communityrequests-focus-area-stakeholders": "दल और संबद्ध निकाय",
+	"communityrequests-focus-area-owners": "मालिक",
+	"communityrequests-focus-area-volunteers": "समुदाय के सदस्य",
+	"communityrequests-focus-area-voting": "मतदान",
+	"communityrequests-focus-area-voting-not-logged-in": "इस फ़ोकस क्षेत्र का समर्थन करने के लिए कृपया लॉग-इन करें",
+	"communityrequests-focus-area-voters-heading": "इस क्षेत्र के समर्थक",
+	"communityrequests-focus-area-no-votes": "अभी तक कोई समर्थक नहीं।",
+	"communityrequests-translation-translatable": "इस पृष्ठ में ऐसा टेक्स्ट शामिल है जो $1 में नहीं है।",
+	"communityrequests-translation-switch": "[https://www.mediawiki.org/wiki/Special:MyLanguage/MinT विकिमीडिया के मशीन अनुवाद उपकरण] की मदद से स्वचालित रूप से अनुवादित करें।",
+	"communityrequests-translation-progress": "टेक्स्ट के $2 {{PLURAL:$2|हिस्से|हिस्सों}} में से $1 अनुवादित।",
+	"communityrequests-translation-errors": "एक त्रुटि हुई:",
+	"communityrequests-disabled": "सामुदायिक इच्छासूची की कार्यक्षमता इस समय अक्षम है।"
 }

@@ -2,10 +2,14 @@
 	"@metadata": {
 		"authors": [
 			"Ykhwong",
-			"Bisang"
+			"Bisang",
+			"YeBoy371"
 		]
 	},
+	"communityrequests-wishtype-feature-label": "기능 요청",
 	"communityrequests-wishtype-unknown-label-short": "알 수 없음",
+	"communityrequests-close": "닫기",
+	"communityrequests-support": "찬성",
 	"communityrequests-status": "상태",
 	"communityrequests-translation-translatable": "이 문서에는 $1로 되어 있지 않은 문구가 포함되어 있습니다."
 }

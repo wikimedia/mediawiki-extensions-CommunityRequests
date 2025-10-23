@@ -76,6 +76,9 @@ class DescriptionField {
 		if ( veModules.includes( 'ext.citoid.visualEditor' ) ) {
 			ve.ui.toolFactory.register( ve.ui.CitoidInspectorTool );
 		}
+		if ( veModules.includes( 'ext.CodeMirror.v6.visualEditor' ) ) {
+			ve.ui.toolFactory.register( ve.ui.CodeMirrorTool );
+		}
 
 		ve.init.mw.Platform.static.initializedPromise
 			.catch( () => {
@@ -132,11 +135,9 @@ class DescriptionField {
 	}
 
 	get toolbarGroups() {
+		let toolbarGroups;
 		if ( Util.isMobile() ) {
-			// The following is identical to ve.init.mw.MobileArticleTarget.static.toolbarGroups.
-			// We don't reference it because we don't want to load all of the
-			// ext.visualEditor.mobileArticleTarget module and its dependencies.
-			return [
+			toolbarGroups = [
 				// History
 				{
 					name: 'history',
@@ -151,10 +152,10 @@ class DescriptionField {
 					title: OO.ui.deferMsg( 'visualeditor-toolbar-style-tooltip' ),
 					label: OO.ui.deferMsg( 'visualeditor-toolbar-style-tooltip' ),
 					invisibleLabel: true,
-					include: [ { group: 'textStyle' }, 'language', 'clear' ],
+					include: [ { group: 'textStyle' }, 'language', 'clear', 'codeMirror' ],
 					forceExpand: [ 'bold', 'italic', 'clear' ],
 					promote: [ 'bold', 'italic' ],
-					demote: [ 'strikethrough', 'code', 'underline', 'language', 'clear' ]
+					demote: [ 'strikethrough', 'code', 'underline', 'language', 'clear', 'codeMirror' ]
 				},
 				// Link
 				{
@@ -162,8 +163,14 @@ class DescriptionField {
 					include: [ 'link' ]
 				}
 			];
+		} else {
+			toolbarGroups = ve.init.mw.Target.static.toolbarGroups;
+			toolbarGroups.push( {
+				name: 'codeMirror',
+				include: [ 'codeMirror' ]
+			} );
 		}
-		return ve.init.mw.Target.static.toolbarGroups;
+		return toolbarGroups;
 	}
 
 	/**
@@ -198,6 +205,7 @@ class DescriptionField {
 				}
 			]
 		} );
+		this.target.constructor.static.name = 'communityRequestsIntake';
 
 		// Add initial content.
 		await this.setSurface( this.content, mode );

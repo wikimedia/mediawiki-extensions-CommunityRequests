@@ -165,6 +165,9 @@ abstract class AbstractWishlistSpecialPage extends FormSpecialPage {
 		if ( $extRegistry->isLoaded( 'Translate' ) ) {
 			$modules[] = 'ext.translate.ve';
 		}
+		if ( $extRegistry->isLoaded( 'CodeMirror' ) ) {
+			$modules[] = 'ext.CodeMirror.v6.visualEditor';
+		}
 		$this->getOutput()->addModules( $modules );
 		return $modules;
 	}

@@ -15,7 +15,8 @@
 	},
 	"suggests": {
 		"extensions": {
-			"Translate": "*"
+			"Translate": "*",
+			"CodeMirror": "*"
 		}
 	},
 	"TrackingCategories": [

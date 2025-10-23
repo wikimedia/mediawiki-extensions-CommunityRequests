@@ -7,5 +7,5 @@
 	},
 	"communityrequests-close": "Затваряне",
 	"communityrequests-tag-wikidata": "Уикиданни",
-	"communityrequests-wish-proposer": "Автор"
+	"communityrequests-wish-proposer": "Автор: $1"
 }

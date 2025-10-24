@@ -213,6 +213,7 @@
 	"group-community-wishlist-manager-member": "Community Wishlist {{GENDER:$1|manager}}",
 	"grouppage-community-wishlist-manager": "{{ns:project}}:Community Wishlist managers",
 	"communityrequests-cant-manually-edit": "Editing of this Community Wishlist page must be done using [[$1|the intake form]].",
+	"communityrequests-cant-manually-edit-votes": "Voting on this Wishlist entity must be done using the [[$1|voting form]].",
 	"communityrequests-missing-wish": "This wish does not exist. You can [{{fullurl:{{#Special:Log}}|page={{FULLPAGENAMEE}}}} search the related logs] to find out where it went, or [[$1|create a new wish]].",
 	"communityrequests-missing-focus-area": "This focus area does not exist. You can [{{fullurl:{{#Special:Log}}|page={{FULLPAGENAMEE}}}} search the related logs] to find out where it went, or [[$1|create a new focus area]].",
 	"communityrequests-wishlist-machine-translation": "Enable automatic machine translation in the [[$1|Community Wishlist]].",

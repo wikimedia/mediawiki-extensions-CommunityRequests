@@ -450,7 +450,7 @@ class CommunityRequestsHooksTest extends MediaWikiUnitTestCase {
 			WishlistConfig::FOCUS_AREA_INDEX_PAGE => '',
 			WishlistConfig::TAGS => [],
 			WishlistConfig::STATUSES => [],
-			WishlistConfig::VOTES_PAGE_SUFFIX => '',
+			WishlistConfig::VOTES_PAGE_SUFFIX => '/Votes',
 			WishlistConfig::WISH_VOTING_ENABLED => true,
 			WishlistConfig::FOCUS_AREA_VOTING_ENABLED => true,
 			MainConfigNames::LanguageCode => 'en',

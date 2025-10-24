@@ -215,6 +215,7 @@
 	"group-community-wishlist-manager-member": "{{doc-group|community-wishlist-manager|member}}",
 	"grouppage-community-wishlist-manager": "{{doc-group|community-wishlist-manager|page}}",
 	"communityrequests-cant-manually-edit": "Error message shown when a user tries to manually edit a wish or focus area, but does not have the right to do so.\n\nParameters:\n* $1 — The title of the Special page which should be used instead.",
+	"communityrequests-cant-manually-edit-votes": "Error message shown when a user tries to manually edit the votes page, but does not have the right to do so.\n\nParameters:\n* $1 — The title of the entity page which should be used instead to cast their vote.",
 	"communityrequests-missing-wish": "Message shown when attempting to access a wish that does not exist. This can happen if a wish is deleted and clients are not made aware of this.\n\nParameters:\n* $1 — The page title to create a new wish.",
 	"communityrequests-missing-focus-area": "Message shown when attempting to access a focus area that does not exist. This can happen if a focus area is deleted and clients are not made aware of this.\n\nParameters:\n* $1 — The page title to create a new focus area.",
 	"communityrequests-wishlist-machine-translation": "Used in [[Special:Preferences]], tab \"User profile\" ({{int:prefs-personal}}).",

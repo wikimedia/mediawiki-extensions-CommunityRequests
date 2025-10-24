@@ -85,6 +85,10 @@ class ApiWishlistVote extends ApiWishlistEditBase {
 			$summary .= $this->msg( 'colon-separator' )->text() . $this->params[Vote::PARAM_COMMENT];
 		}
 
+		// Skip permission checks in CommunityRequestsHooks::onGetUserPermissionsErrorsExpensive()
+		CommunityRequestsHooks::$allowManualEditing = true;
+
+		// Save the updated votes page.
 		$saveStatus = $this->saveInternal(
 			$entityTitle->getPrefixedDBkey() . $this->config->getVotesPageSuffix(),
 			$wikitext,
@@ -94,6 +98,7 @@ class ApiWishlistVote extends ApiWishlistEditBase {
 		);
 
 		if ( $saveStatus->isOK() === false ) {
+			CommunityRequestsHooks::$allowManualEditing = false;
 			$this->dieWithError( $saveStatus->getMessages()[0] );
 		}
 

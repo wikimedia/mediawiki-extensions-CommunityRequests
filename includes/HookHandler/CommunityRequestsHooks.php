@@ -593,7 +593,7 @@ class CommunityRequestsHooks implements
 			return true;
 		}
 
-		// If $allowManualEditing is set, it means the user is editing a wish or focus area using the form.
+		// If $allowManualEditing is set, it means the user is editing an entity or vote using a form or API.
 		if ( self::$allowManualEditing ) {
 			return true;
 		}
@@ -605,13 +605,30 @@ class CommunityRequestsHooks implements
 			// Conditionally show messages based on rights or page existence (T403505).
 
 			if ( !$userHasRight || !$title->exists() ) {
-				// Message instructing users to use the Special page form.
-				$result[] = [
-					'communityrequests-cant-manually-edit',
-					$this->specialPageFactory->getPage(
-						$this->config->isWishPage( $title ) ? 'WishlistIntake' : 'EditFocusArea'
-					)->getPageTitle( $this->config->getEntityWikitextVal( $title ) ),
-				];
+				if ( $this->config->isVotesPage( $title ) ) {
+					$canonicalEntityPage = $this->config->getEntityPageRefFromVotesPage( $title );
+					if ( !$canonicalEntityPage ) {
+						// This should not happen, but bail out gracefully if it does.
+						$this->logger->error(
+							__METHOD__ . ': Could not determine canonical entity page for votes page {0}',
+							[ $title->toPageIdentity()->__toString() ]
+						 );
+						return true;
+					}
+					// Message instructing users to use Vote form on the entity page.
+					$result[] = [
+						'communityrequests-cant-manually-edit-votes',
+						Title::newFromPageReference( $canonicalEntityPage )
+					];
+				} else {
+					// Message instructing users to use the Special page form.
+					$result[] = [
+						'communityrequests-cant-manually-edit',
+						$this->specialPageFactory->getPage(
+							$this->config->isWishPage( $title ) ? 'WishlistIntake' : 'EditFocusArea'
+						)->getPageTitle( $this->config->getEntityWikitextVal( $title ) ),
+					];
+				}
 			}
 			if ( !$userHasRight ) {
 				// Standard message listing the user groups that are allowed to manually edit.
@@ -685,7 +702,8 @@ class CommunityRequestsHooks implements
 	}
 
 	private function isEntityPageOrEditPage( PageIdentity $identity ): bool {
-		return $this->config->isWishOrFocusAreaPage( $identity ) || (
+		return $this->config->isWishOrFocusAreaPage( $identity ) ||
+			$this->config->isVotesPage( $identity ) || (
 			$identity->getNamespace() === NS_SPECIAL && (
 				str_starts_with( $identity->getDBkey(), 'WishlistIntake' ) ||
 				str_starts_with( $identity->getDBkey(), 'EditFocusArea' )

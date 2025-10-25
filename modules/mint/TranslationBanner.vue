@@ -169,52 +169,66 @@ module.exports = exports = defineComponent( {
 		 * @param {string} targetLang
 		 */
 		async function setTranslatableNodes( content, targetLang ) {
-			const parserOutput = content.querySelector( '.mw-parser-output' );
-			if ( parserOutput === null ) {
+			// We need to translate nodes in the header and those in the mw-parser-output area
+			const parserOutputs = content.querySelectorAll( '.mw-body-header, .mw-parser-output' );
+
+			if ( parserOutputs === null ) {
 				return;
 			}
 
-			const supportedLangs = await getSupportedLangs( targetLang );
-			// Find all text nodes that are in a different language to the interface language.
-			const walker = document.createTreeWalker(
-				parserOutput,
-				NodeFilter.SHOW_TEXT,
-				( node ) => {
-					// Skip empty nodes, and everything in the <languages /> bar.
-					if ( node.nodeValue.trim() === '' ||
-						node.parentElement.closest( '.mw-pt-languages' )
-					) {
-						return NodeFilter.FILTER_SKIP;
-					}
-					const lang = node.parentElement.closest( '[lang]' ).lang;
-					// Skip if they're the same language.
-					if ( lang === targetLang ||
-						// Skip style elements.
-						node.parentElement instanceof HTMLStyleElement ||
-						// Skip if any parent has `.translate-no`. T161486.
-						// @todo Fix this to permit `.translate-yes` to be inside a `.translate-no`.
-						node.parentElement.closest( '.translate-no' )
-					) {
-						return NodeFilter.FILTER_SKIP;
-					}
-					// Check if the source lang can be translated to the target lang.
-					if ( !supportedLangs.includes( lang ) ) {
-						return NodeFilter.FILTER_SKIP;
-					}
-					// Save the parent lang on the node
-					// for easier access when sending it for translation.
-					node.lang = lang;
-					return NodeFilter.FILTER_ACCEPT;
-				}
-			);
-
-			// Get all nodes.
-			let n = walker.nextNode();
 			const nodes = [];
-			while ( n ) {
-				nodes.push( n );
-				n = walker.nextNode();
-			}
+			const contentLang = mw.config.get( 'wgContentLanguage' );
+			const supportedLangs = await getSupportedLangs( targetLang );
+
+			parserOutputs.forEach( ( parserOutput ) => {
+				// Find all text nodes that are in a different language to the interface language.
+				const walker = document.createTreeWalker(
+					parserOutput,
+					NodeFilter.SHOW_TEXT,
+					( node ) => {
+						// Skip empty nodes, and everything in the <languages /> bar.
+						if ( node.nodeValue.trim() === '' ||
+							node.parentElement.closest( '.mw-pt-languages' )
+						) {
+							return NodeFilter.FILTER_SKIP;
+						}
+						// If the ancestor language is not the same as the content language
+						// then the source language should be the ancestor lang;
+						// otherwise, use the content language.
+						const lang = node.parentElement.closest( '[lang]' ).lang !== contentLang ?
+							node.parentElement.closest( '[lang]' ).lang :
+							contentLang;
+
+						// Skip if they're the same language.
+						if ( lang === targetLang ||
+							// Skip style elements.
+							node.parentElement instanceof HTMLStyleElement ||
+							// Skip if any parent has `.translate-no`. T161486.
+							// @todo Fix this to permit `.translate-yes`
+							// to be inside a `.translate-no`.
+							node.parentElement.closest( '.translate-no' )
+						) {
+							return NodeFilter.FILTER_SKIP;
+						}
+						// Check if the source lang can be translated to the target lang.
+						if ( !supportedLangs.includes( contentLang ) ) {
+							return NodeFilter.FILTER_SKIP;
+						}
+						// Save the lang on the node
+						// for easier access when sending it for translation.
+						node.lang = lang;
+						return NodeFilter.FILTER_ACCEPT;
+					}
+				);
+
+				// Get all nodes.
+				let n = walker.nextNode();
+
+				while ( n ) {
+					nodes.push( n );
+					n = walker.nextNode();
+				}
+			} );
 			translatableNodes.value = nodes;
 		}
 
@@ -256,10 +270,10 @@ module.exports = exports = defineComponent( {
 		}
 
 		// Lifecycle hooks
-
 		onMounted( () => {
-			mw.hook( 'wikipage.content' ).add( async ( $content ) => {
-				await setTranslatableNodes( $content[ 0 ], props.targetLang );
+			mw.hook( 'wikipage.content' ).add( async () => {
+				// We need to translate some nodes in the element with id "content"
+				await setTranslatableNodes( mw.util.$content[ 0 ], props.targetLang );
 
 				if ( enabled.value ) {
 					await onToggle();

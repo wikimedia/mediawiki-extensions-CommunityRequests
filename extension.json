@@ -15,8 +15,7 @@
 	},
 	"suggests": {
 		"extensions": {
-			"Translate": "*",
-			"WikimediaMessages": "*"
+			"Translate": "*"
 		}
 	},
 	"TrackingCategories": [

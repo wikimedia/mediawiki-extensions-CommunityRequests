@@ -1,6 +1,5 @@
 !! options
 version=2
-requirements=extension:WikimediaMessages
 !! end
 
 !! article
@@ -28,7 +27,7 @@ Prevent red links in parser tests
 !! end
 
 !! test
-Empty wish parser tag
+Empty wish parser function
 !! wikitext
 {{#CommunityRequests: wish}}
 !! html

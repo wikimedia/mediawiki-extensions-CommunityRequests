@@ -375,11 +375,13 @@ class CommunityRequestsHooks implements
 			}
 
 			$store = $this->stores[$data[AbstractWishlistEntity::PARAM_ENTITY_TYPE]];
-
-			$data = $store->normalizeArrayValues( array_merge(
-				$store->get( $canonicalPage )->toArray( $this->config ),
-				$data
-			), AbstractWishlistStore::ARRAY_DELIMITER_WIKITEXT );
+			$entity = $store->get( $canonicalPage );
+			// Guard against the potential for editing the /Votes page of a non-existent entity.
+			$data = $entity ?
+				$store->normalizeArrayValues(
+					array_merge( $entity->toArray( $this->config ), $data ),
+					AbstractWishlistStore::ARRAY_DELIMITER_WIKITEXT
+				) : null;
 		}
 
 		if ( !$data || !isset( $data[AbstractWishlistEntity::PARAM_ENTITY_TYPE] ) ) {

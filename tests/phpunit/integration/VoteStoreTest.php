@@ -126,6 +126,14 @@ class VoteStoreTest extends MediaWikiIntegrationTestCase {
 		$this->assertSame( 'This should not replace the first vote', $votes[1]->getComment() );
 	}
 
+	public function testVoteWithNoEntityThrowsNoException(): void {
+		$this->insertPage(
+			'Community Wishlist/W123/Votes',
+			"{{#CommunityRequests:vote|username=UserA|comment=Vote without entity|timestamp=2025-06-06T12:00:00Z}}"
+		);
+		$this->expectNotToPerformAssertions();
+	}
+
 	private function insertTestWishWithVotes(): Wish {
 		$wish = $this->insertTestWish();
 		$vote1 = new Vote( $wish, $this->userObjs[0], 'First vote!', '2025-01-01T12:00:00Z' );

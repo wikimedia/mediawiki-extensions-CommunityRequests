@@ -72,6 +72,8 @@
 	"communityrequests-error-required-fields": "Missing required {{PLURAL:$2|field|fields}}: $1",
 	"communityrequests-error-invalid-proposer": "\"$1\" is not a valid user.",
 	"communityrequests-error-invalid-type": "\"$1\" is not a valid wish type.",
+	"communityrequests-error-invalid-entity-id": "No entity found with ID \"$1\".",
+	"communityrequests-error-invalid-entity-field": "The 'field' parameter must be one of: $1",
 	"communityrequests-status": "Status",
 	"communityrequests-status-wish-under-review": "Under review",
 	"communityrequests-status-wish-accepted": "Accepted",

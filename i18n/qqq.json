@@ -74,6 +74,8 @@
 	"communityrequests-error-required-fields": "Error message for required fields.\n\nParameters:\n* $1 — List of missing fields\n*$2 - total number of missing fields",
 	"communityrequests-error-invalid-proposer": "Error message shown when the proposer field contains an invalid username.",
 	"communityrequests-error-invalid-type": "Error message shown when the wish type field contains an invalid or unrecognized type value.\n\nParameters:\n* $1 — The invalid type value that was provided",
+	"communityrequests-error-invalid-entity-id": "Error message shown when an entity ID is invalid.\n\nParameters:\n* $1 — The invalid entity ID that was provided.",
+	"communityrequests-error-invalid-entity-field": "Error message shown when the 'data' parser function is given an invalid 'field' parameter.\n\nParameters:\n* $1 — List of valid fields.",
 	"communityrequests-status": "Label for the 'Status' field in the intake form.",
 	"communityrequests-status-wish-under-review": "Label for a status chip. An adjective or a passive participle that describes a wish that has been submitted but not yet triaged.\n\nSimilar to {{msg-mw|Communityrequests-status-focus-area-under-review}}, but this one is for wishes.",
 	"communityrequests-status-wish-accepted": "Label for a status chip. An adjective or a passive participle that describes a wish that has been accepted for voting.\n\nSimilar to {{msg-mw|Communityrequests-status-focus-area-accepted}}, but this one is for wishes.",

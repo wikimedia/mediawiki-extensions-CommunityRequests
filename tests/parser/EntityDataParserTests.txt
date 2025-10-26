@@ -1,0 +1,125 @@
+!! options
+version=2
+!! end
+
+!! article
+Community Wishlist/FA1
+!! text
+{{#CommunityRequests: focus-area
+|title = Test focus area
+|status = in-progress
+|shortdescription = This is a short description.
+|owners = [[Community Tech]]
+|volunteers = [[User:Admin|Admin]]
+|created = 2023-10-01T12:00:00Z
+|baselang = en
+|description = This is a description [[test]] {{focus area}}.
+}}
+!! end
+
+!! article
+Community Wishlist/W1
+!! text
+{{#CommunityRequests: wish
+|title = Test Wish
+|status = prioritized
+|focusarea = FA1
+|type = change
+|audience = [[Test]] audience
+|tags = multimedia,wikisource
+|phabtasks = T123,T456
+|created = 2023-10-01T12:00:00Z
+|proposer = Maintenance script
+|baselang = en
+|description = This is a [[test]] {{wish}}.}}
+!! end
+
+!! article
+Community Wishlist/W1/Votes
+!! text
+{{#CommunityRequests: vote
+|username = Maintenance script
+|timestamp = 2023-10-02T10:00:00Z
+|comment = I support this wish!
+}}
+!! end
+
+!! test
+Empty data parser function
+!! wikitext
+{{#CommunityRequests: data}}
+!! html
+<p class="error">Missing required fields: id, field</p>
+!! end
+
+!! test
+Invalid entity ID
+!! wikitext
+{{#CommunityRequests: data|id=BOGUS|field=status}}
+!! html
+<p><span class="error">No entity found with ID "BOGUS".</span>
+</p>
+!! end
+
+!! test
+Non-existent entity
+!! wikitext
+{{#CommunityRequests: data|id=W999|field=status}}
+!! html
+<p><span class="error">The wish <a href="/index.php?title=Community_Wishlist/W999&amp;action=edit&amp;redlink=1" class="new" title="Community Wishlist/W999 (page does not exist)">W999</a> was not found, is not a valid ID, or was not created via <a href="/wiki/Special:WishlistIntake" title="Special:WishlistIntake">Special:WishlistIntake</a>.</span>
+</p>
+!! end
+
+!! test
+Invalid field name
+!! wikitext
+{{#CommunityRequests: data|id=W1|field=bogus}}
+!! html
+<p><span class="error">The 'field' parameter must be one of: status, title, focus_area, proposer, vote_count, title_lang</span>
+</p>
+!! end
+
+!! test
+Status
+!! wikitext
+{{#CommunityRequests: data|id=W1|field=status}}
+!! html
+<p>Prioritized
+</p>
+!! end
+
+!! test
+Title
+!! wikitext
+{{#CommunityRequests: data|id=W1|field=title}}
+!! html
+<p>Test Wish
+</p>
+!! end
+
+!! test
+Focus area
+!! wikitext
+{{#CommunityRequests: data|id=W1|field=focus_area}}
+!! html
+<p>FA1
+</p>
+!! end
+
+!! test
+Proposer
+!! wikitext
+{{#CommunityRequests: data|id=W1|field=proposer}}
+!! html
+<p>Maintenance script
+</p>
+!! end
+
+!! test
+Vote count
+!! wikitext
+{{#CommunityRequests: data|id=W1|field=vote_count}}
+!! html
+<p>1
+</p>
+!! end

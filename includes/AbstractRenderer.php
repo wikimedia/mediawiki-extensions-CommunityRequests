@@ -89,11 +89,16 @@ abstract class AbstractRenderer implements MessageLocalizer {
 	 * @param array|string $params The message parameter (if not an array) or parameters.
 	 * @param string $element The HTML element with which to wrap the error message.
 	 * @param bool $track Whether to add the page to the error tracking category and add a parser warning.
+	 * @param bool $raw Whether to parse the message as raw wikitext (no HTML-escaping).
 	 *
 	 * @return string The error HTML.
 	 */
 	public function getErrorMessage(
-		string $msg, array|string $params, string $element = 'span', bool $track = true
+		string $msg,
+		array|string $params,
+		string $element = 'span',
+		bool $track = true,
+		bool $raw = false,
 	): string {
 		if ( $track ) {
 			$this->parser->addTrackingCategory( self::ERROR_TRACKING_CATEGORY );
@@ -102,11 +107,31 @@ abstract class AbstractRenderer implements MessageLocalizer {
 			}
 			$this->parser->getOutput()->addWarningMsgVal( MessageValue::new( $msg, $params ) );
 		}
-		return Html::element(
-			$element,
-			[ 'class' => 'error' ],
-			$this->msg( $msg, $params )->text()
-		);
+		if ( $raw ) {
+			return Html::rawElement(
+				$element,
+				[ 'class' => 'error' ],
+				$this->msg( $msg, $params )->parse()
+			);
+		}
+		return Html::element( $element, [ 'class' => 'error' ], $this->msg( $msg, $params )->text() );
+	}
+
+	/**
+	 * Get a raw error message to display, without HTML-escaping.
+	 *
+	 * @see self::getErrorMessage()
+	 * @param string $msg
+	 * @param array|string $params
+	 * @param string $element
+	 * @param bool $track
+	 *
+	 * @return string The error HTML.
+	 */
+	public function getErrorMessageRaw(
+		string $msg, array|string $params, string $element = 'span', bool $track = true
+	): string {
+		return $this->getErrorMessage( $msg, $params, $element, $track, true );
 	}
 
 	/**

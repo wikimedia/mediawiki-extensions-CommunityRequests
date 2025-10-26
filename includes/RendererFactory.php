@@ -91,6 +91,7 @@ class RendererFactory {
 			'focus-area' => new FocusAreaRenderer( ...$constructorArgs ),
 			'focus-area-index' => new FocusAreaIndexRenderer( ...$constructorArgs ),
 			'vote' => new VoteRenderer( ...$constructorArgs ),
+			'data' => new EntityDataRenderer( ...$constructorArgs ),
 			default => null,
 		};
 	}

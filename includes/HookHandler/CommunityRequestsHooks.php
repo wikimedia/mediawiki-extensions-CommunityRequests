@@ -21,8 +21,6 @@ use MediaWiki\Extension\CommunityRequests\Vote\Vote;
 use MediaWiki\Extension\CommunityRequests\Vote\VoteStore;
 use MediaWiki\Extension\CommunityRequests\Wish\WishStore;
 use MediaWiki\Extension\CommunityRequests\WishlistConfig;
-use MediaWiki\Extension\Translate\MessageLoading\MessageHandle;
-use MediaWiki\Extension\Translate\Utilities\Utilities;
 use MediaWiki\Hook\LinksUpdateCompleteHook;
 use MediaWiki\Hook\LoginFormValidErrorMessagesHook;
 use MediaWiki\Hook\ParserAfterTidyHook;
@@ -178,23 +176,12 @@ class CommunityRequestsHooks implements
 	/**
 	 * Returns base language page identity for a wish or focus area page.
 	 *
-	 * @todo Replace with the static WishlistConfig::getCanonicalWishlistPage()
 	 * @param PageIdentity $identity
 	 * @return PageIdentity
 	 */
 	public function getCanonicalEntityPage( PageIdentity $identity ): PageIdentity {
-		// Use the base non-translated page (if Translate is installed) or if $identity is a Vote page.
-		if ( ( $this->translateInstalled &&
-			// @phan-suppress-next-line PhanTypeMismatchArgumentNullable
-			Utilities::isTranslationPage( new MessageHandle( Title::castFromPageIdentity( $identity ) ) ) ) ||
-			$this->config->isVotesPage( $identity )
-		) {
-			$basePage = Title::newFromPageIdentity( $identity )->getBaseTitle();
-			if ( $basePage->exists() ) {
-				$identity = $basePage->toPageIdentity();
-			}
-		}
-		return $identity;
+		$pageRef = $this->config->getCanonicalEntityPageRef( $identity );
+		return $pageRef ? Title::newFromPageReference( $pageRef ) : $identity;
 	}
 
 	/**

@@ -380,10 +380,11 @@ class WishlistConfigTest extends MediaWikiUnitTestCase {
 				$this->makeMockTitle( 'Community Wishlist/W123/fr' )
 			)->getDBkey()
 		);
-		$this->assertNull(
+		$this->assertSame(
+			'Community_Wishlist/W123/Votes',
 			$this->config->getVotesPageRefForEntity(
 				$this->makeMockTitle( 'Community Wishlist/W123/Votes' )
-			)
+			)->getDBkey()
 		);
 		$this->assertNull( $this->config->getVotesPageRefForEntity( $this->makeMockTitle( 'Bogus' ) ) );
 		$this->assertNull( $this->config->getVotesPageRefForEntity(
@@ -402,6 +403,12 @@ class WishlistConfigTest extends MediaWikiUnitTestCase {
 			'Community_Wishlist/W123',
 			$this->config->getCanonicalEntityPageRef(
 				PageReferenceValue::localReference( NS_MAIN, 'Community Wishlist/W123' )
+			)->getDBkey()
+		);
+		$this->assertSame(
+			'Community_Wishlist/FA123',
+			$this->config->getCanonicalEntityPageRef(
+				PageReferenceValue::localReference( NS_MAIN, 'Community Wishlist/FA123/Votes' )
 			)->getDBkey()
 		);
 		$this->assertNull(

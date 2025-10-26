@@ -313,7 +313,7 @@ class WishlistConfig {
 
 	/**
 	 * Get a page reference for the canonical entity (no language suffix)
-	 * given an entity page or translation subpage.
+	 * given an entity page, translation subpage, or votes page.
 	 *
 	 * @param ?PageReference $reference
 	 * @return ?PageReference null if the reference is null or not a valid translation subpage,
@@ -322,6 +322,9 @@ class WishlistConfig {
 	public function getCanonicalEntityPageRef( ?PageReference $reference ): ?PageReference {
 		if ( $reference === null ) {
 			return null;
+		}
+		if ( $this->isVotesPage( $reference ) ) {
+			return $this->getEntityPageRefFromVotesPage( $reference );
 		}
 
 		$parts = explode( '/', $reference->getDBkey() );

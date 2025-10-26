@@ -51,11 +51,8 @@
 		"virtual-communityrequests"
 	],
 	"Hooks": {
-		"ChangeTagsListActive": "main",
-		"ListDefinedTags": "main",
 		"LoadExtensionSchemaUpdates": "schema",
 		"LoginFormValidErrorMessages": "main",
-		"RecentChange_save": "main",
 		"BeforePageDisplay": "main",
 		"ParserFirstCallInit": "main",
 		"LinksUpdateComplete": "main",
@@ -66,7 +63,10 @@
 		"getUserPermissionsErrorsExpensive": "main",
 		"BeforeDisplayNoArticleText": "main",
 		"GetPreferences": "main",
-		"ShowSearchHit": "search"
+		"ShowSearchHit": "search",
+		"ChangeTagsListActive": "changeTag",
+		"ListDefinedTags": "changeTag",
+		"RecentChange_save": "changeTag"
 	},
 	"HookHandlers": {
 		"main": {
@@ -84,6 +84,12 @@
 				"CommunityRequests.Logger",
 				"MainConfig",
 				"WikiPageFactory"
+			]
+		},
+		"changeTag": {
+			"class": "MediaWiki\\Extension\\CommunityRequests\\HookHandler\\ChangeTagHooks",
+			"services": [
+				"CommunityRequests.WishlistConfig"
 			]
 		},
 		"schema": {

@@ -4,8 +4,6 @@ declare( strict_types = 1 );
 namespace MediaWiki\Extension\CommunityRequests\HookHandler;
 
 use InvalidArgumentException;
-use MediaWiki\ChangeTags\Hook\ChangeTagsListActiveHook;
-use MediaWiki\ChangeTags\Hook\ListDefinedTagsHook;
 use MediaWiki\Config\Config;
 use MediaWiki\Context\RequestContext;
 use MediaWiki\Deferred\DeferrableUpdate;
@@ -25,7 +23,6 @@ use MediaWiki\Hook\LinksUpdateCompleteHook;
 use MediaWiki\Hook\LoginFormValidErrorMessagesHook;
 use MediaWiki\Hook\ParserAfterTidyHook;
 use MediaWiki\Hook\ParserFirstCallInitHook;
-use MediaWiki\Hook\RecentChange_saveHook;
 use MediaWiki\Hook\SkinTemplateNavigation__UniversalHook;
 use MediaWiki\Html\Html;
 use MediaWiki\Linker\LinkRenderer;
@@ -43,7 +40,6 @@ use MediaWiki\Permissions\Authority;
 use MediaWiki\Permissions\Hook\GetUserPermissionsErrorsExpensiveHook;
 use MediaWiki\Permissions\PermissionManager;
 use MediaWiki\Preferences\Hook\GetPreferencesHook;
-use MediaWiki\RecentChanges\RecentChange;
 use MediaWiki\Registration\ExtensionRegistry;
 use MediaWiki\Revision\RenderedRevision;
 use MediaWiki\Revision\RevisionRecord;
@@ -60,12 +56,9 @@ use Wikimedia\Rdbms\IDBAccessObject;
 
 class CommunityRequestsHooks implements
 	BeforePageDisplayHook,
-	ChangeTagsListActiveHook,
 	LinksUpdateCompleteHook,
-	ListDefinedTagsHook,
 	LoginFormValidErrorMessagesHook,
 	ParserFirstCallInitHook,
-	RecentChange_saveHook,
 	RevisionDataUpdatesHook,
 	SkinTemplateNavigation__UniversalHook,
 	ParserAfterTidyHook,
@@ -74,7 +67,6 @@ class CommunityRequestsHooks implements
 	GetPreferencesHook
 {
 
-	public const WISHLIST_CHANGE_TAG = 'community-wishlist';
 	public const PREF_MACHINETRANSLATION = 'usemachinetranslation';
 	public const SESSION_KEY = 'communityrequests';
 	protected const EXT_DATA_KEY = AbstractRenderer::EXT_DATA_KEY;
@@ -143,33 +135,6 @@ class CommunityRequestsHooks implements
 	public function onLoginFormValidErrorMessages( array &$messages ) {
 		if ( $this->config->isEnabled() ) {
 			$messages[] = 'communityrequests-please-log-in';
-		}
-	}
-
-	/** @inheritDoc */
-	public function onListDefinedTags( &$tags ) {
-		if ( $this->config->isEnabled() ) {
-			$tags[] = self::WISHLIST_CHANGE_TAG;
-		}
-	}
-
-	/** @inheritDoc */
-	public function onChangeTagsListActive( &$tags ) {
-		if ( $this->config->isEnabled() ) {
-			$tags[] = self::WISHLIST_CHANGE_TAG;
-		}
-	}
-
-	/**
-	 * Adds the self::WISHLIST_CHANGE_TAG tag to recent changes
-	 * if the request was made using SpecialWishlistIntake.
-	 *
-	 * @param RecentChange $rc
-	 */
-	public function onRecentChange_save( $rc ) {
-		$request = RequestContext::getMain()->getRequest();
-		if ( $request->getSession()->get( self::SESSION_KEY ) ) {
-			$rc->addTags( self::WISHLIST_CHANGE_TAG );
 		}
 	}
 

@@ -159,12 +159,11 @@ trait WishlistTestTrait {
 			'|' . implode( "\n|", $args ) .
 			"\n}}";
 
-		// Insert and assert existence and language.
+		// Insert and assert existence.
 		$ret = $this->insertPage( $insertTitle, $wikitext );
 		$this->assertGreaterThan( 0, $ret['id'] );
-		$this->runDeferredUpdates();
-		$newTitle = Title::newFromText( $ret['title']->getFullText() );
-		$this->assertSame( $lang, $newTitle->getPageLanguage()->getCode() );
+		// Set the page_lang directly, as insertPage doesn't do this.
+		$this->getStore()->setPageLanguage( $ret['title']->getId(), $lang );
 
 		$fetchMethod = AbstractWishlistStore::FETCH_WIKITEXT_RAW;
 		$translateInstalled = $this->getServiceContainer()

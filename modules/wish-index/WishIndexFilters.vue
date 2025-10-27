@@ -21,13 +21,11 @@
 			<div class="ext-communityrequests-wishes--filters-buttons">
 				<cdx-button
 					weight="quiet"
-					:aria-label="$i18n( 'communityrequests-wishes-filters-clear' ).text()"
 					@click.prevent="onClearAllFilters"
 				>
 					{{ $i18n( 'communityrequests-wishes-filters-clear' ).text() }}
 				</cdx-button>
 				<cdx-button
-					:aria-label="$i18n( 'submit' ).text()"
 					type="submit"
 					@click.prevent="$emit( 'submit', filters )"
 				>

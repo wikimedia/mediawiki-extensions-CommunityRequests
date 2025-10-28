@@ -26,16 +26,6 @@ class WishStoreTest extends MediaWikiIntegrationTestCase {
 		return $this->getServiceContainer()->get( 'CommunityRequests.WishStore' );
 	}
 
-	public function testInsertTestWishPageLang(): void {
-		$wish = $this->insertTestWish();
-		$fetchedLang = $this->getDb()->newSelectQueryBuilder()
-			->select( 'page_lang' )
-			->from( 'page' )
-			->where( [ 'page_id' => $wish->getPage()->getId() ] )
-			->fetchField();
-		$this->assertSame( 'en', $fetchedLang );
-	}
-
 	public function testSaveAndGetWish(): void {
 		ConvertibleTimestamp::setFakeTime( '2025-01-23T00:00:00Z' );
 		$page = $this->getExistingTestPage( 'Community Wishlist/W123' );

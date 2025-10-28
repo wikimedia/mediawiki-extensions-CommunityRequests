@@ -16,6 +16,7 @@
 	},
 	"communityrequests-desc": "Un système de gestion des suggestions et des demandes techniques d'une communauté wiki.",
 	"communityrequests-wish-loading-error": "Une erreur s'est produite lors de l'analyse du texte source du souhait. Il se peut qu'il contienne un texte invalide. Veuillez [$1 rafraîchir] et réessayer, utiliser l'[[$2|éditeur de source]], ou demander de l'aide sur la [[$3|page de discussion]].",
+	"communityrequests-unknown-parser-function": "Le paramètre de fonction d'analyse « $1 » n'est pas valide.",
 	"communityrequests-edit-with-form": "Modifier avec le formulaire",
 	"communityrequests-wishlistintake": "Entrée de la liste de souhaits de la communauté",
 	"communityrequests-editfocusarea": "Gestion des domaines d’action de la liste de souhaits de la communauté",
@@ -102,6 +103,7 @@
 	"communityrequests-status-focus-area-prioritized": "Prioritaire",
 	"communityrequests-status-focus-area-in-progress": "En cours",
 	"communityrequests-status-focus-area-done": "Terminé",
+	"communityrequests-error-invalid-status": "Statut invalide : « $1 »",
 	"communityrequests-edit-wish": "Modifier le souhait",
 	"communityrequests-discuss-wish": "Discutez de ce souhait",
 	"communityrequests-wish-description-heading": "Description",
@@ -222,5 +224,7 @@
 	"communityrequests-wishlist-machine-translation": "Activer la traduction automatique dans la [[$1|liste de souhaits de la communauté]].",
 	"communityrequests-vote-add-summary": "Ajout d'un vote de soutien",
 	"communityrequests-vote-update-summary": "Mise à jour du vote de soutien",
-	"communityrequests-vote-remove-summary": "Retirez votre vote de soutien"
+	"communityrequests-vote-remove-summary": "Retirez votre vote de soutien",
+	"communityrequests-wish-count": "$1 {{PLURAL:$2| souhait|souhaits}}",
+	"communityrequests-vote-count": "$1 {{PLURAL:$2| supporter|supporters}}"
 }

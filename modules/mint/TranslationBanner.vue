@@ -211,7 +211,7 @@ module.exports = exports = defineComponent( {
 							return NodeFilter.FILTER_SKIP;
 						}
 						// Check if the source lang can be translated to the target lang.
-						if ( !supportedLangs.includes( contentLang ) ) {
+						if ( !supportedLangs.includes( lang ) ) {
 							return NodeFilter.FILTER_SKIP;
 						}
 						// Save the lang on the node

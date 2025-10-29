@@ -3,6 +3,7 @@ declare( strict_types = 1 );
 
 namespace MediaWiki\Extension\CommunityRequests\Tests\Integration;
 
+use MediaWiki\Extension\CommunityRequests\AbstractWishlistStore;
 use MediaWiki\Extension\CommunityRequests\HookHandler\CommunityRequestsHooks;
 use MediaWiki\Extension\CommunityRequests\Vote\VoteStore;
 use MediaWiki\Extension\CommunityRequests\Wish\WishStore;
@@ -34,21 +35,41 @@ class ApiWishlistVoteTest extends ApiTestCase {
 	}
 
 	public function testAddNewVote(): void {
-		$wish = $this->insertTestWish( $this->config->getWishPagePrefix() . '123' );
+		// Use a non-English language (T404770)
+		$wish = $this->insertTestWish( $this->config->getWishPagePrefix() . '123', 'es' );
+		// Assert only Spanish translations exist.
+		$availableLangs = $this->getDb()->newSelectQueryBuilder()
+			->select( 'crt_lang' )
+			->from( AbstractWishlistStore::translationsTableName() )
+			->where( [ 'crt_entity' => $wish->getPage()->getId() ] )
+			->fetchFieldValues();
+		$this->assertSame( [ 'es' ], $availableLangs );
+
+		// Add a vote.
 		[ $ret ] = $this->doApiRequestWithToken( [
 			'action' => 'wishlistvote',
 			'entity' => 'W123',
-			'comment' => 'My comment',
+			'comment' => 'Mi comentario',
 			'voteaction' => 'add',
 		] );
+
+		// Vote-related assertions.
 		$this->assertTrue( $ret['wishlistvote']['new'] );
 		$this->assertGreaterThan( 0, $ret['wishlistvote']['pageid'] );
 		$this->assertSame( 'Community Wishlist/W123/Votes', $ret['wishlistvote']['title'] );
 		$this->assertSame( 'W123', $ret['wishlistvote']['entity'] );
 		$this->assertSame( 'add', $ret['wishlistvote']['voteaction'] );
 		$this->assertSame( $this->getTestSysop()->getUser()->getName(), $ret['wishlistvote']['username'] );
-		$this->assertSame( 'My comment', $ret['wishlistvote']['comment'] );
+		$this->assertSame( 'Mi comentario', $ret['wishlistvote']['comment'] );
 		$this->assertNotNull( $this->getVoteStore()->getForUser( $wish, $this->getTestSysop()->getUser() ) );
+
+		// There should still only be Spanish translations.
+		$availableLangs = $this->getDb()->newSelectQueryBuilder()
+			->select( 'crt_lang' )
+			->from( AbstractWishlistStore::translationsTableName() )
+			->where( [ 'crt_entity' => $wish->getPage()->getId() ] )
+			->fetchFieldValues();
+		$this->assertSame( [ 'es' ], $availableLangs );
 	}
 
 	public function testUpdateVote(): void {

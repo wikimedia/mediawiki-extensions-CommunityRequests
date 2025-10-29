@@ -136,7 +136,6 @@ class WishRendererTest extends MediaWikiIntegrationTestCase {
 			'{{#CommunityRequests:vote|username=TestUser1|timestamp=2023-10-01T12:00:00Z' .
 			"|comment=The very first vote!}}\n"
 		);
-		$this->runJobs();
 		$wikiPage = $this->getWikiPageFactory()->newFromTitle( $wish->getPage() );
 		$parserText = $wikiPage->getParserOutput()->getContentHolderText();
 		$this->assertStringContainsString( 'The very first vote!', $parserText );

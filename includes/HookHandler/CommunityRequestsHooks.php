@@ -359,19 +359,18 @@ class CommunityRequestsHooks implements
 
 		// If this a /Votes page, we need to reload the full entity data.
 		if ( $this->config->isVotesPage( $title ) ) {
-			if ( !$data || !isset( $data[AbstractWishlistEntity::PARAM_ENTITY_TYPE] ) ) {
-				// at this point is either a wish or focus area page
+			// Always use the base language for votes pages.
+			$baseLang = Title::castFromPageIdentity( $canonicalPage )->getPageLanguage()->getCode();
+			$data[AbstractWishlistEntity::PARAM_LANG] = $baseLang;
+
+			// The absence of entity type indicates that all votes were removed.
+			if ( is_array( $data ) && !isset( $data[AbstractWishlistEntity::PARAM_ENTITY_TYPE] ) ) {
+				// At this point $canonicalPage is either a wish or focus area.
 				$entityType = $this->config->isWishPage( $canonicalPage ) ? 'wish' : 'focus-area';
 
-				// lang doesn't matter for votes updates but for correctness lets use the base language
-				$baseLang = Title::castFromPageIdentity( $canonicalPage )->getPageLanguage()->getCode();
-
-				// Reset votes count to zero if no data is present
-				$data = [
-					AbstractWishlistEntity::PARAM_ENTITY_TYPE => $entityType,
-					AbstractWishlistEntity::PARAM_VOTE_COUNT => 0,
-					AbstractWishlistEntity::PARAM_LANG => $baseLang,
-				];
+				// Set entity type and reset vote count to zero.
+				$data[AbstractWishlistEntity::PARAM_ENTITY_TYPE] = $entityType;
+				$data[AbstractWishlistEntity::PARAM_VOTE_COUNT] = 0;
 			}
 
 			$store = $this->stores[$data[AbstractWishlistEntity::PARAM_ENTITY_TYPE]];

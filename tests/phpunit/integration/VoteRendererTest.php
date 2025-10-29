@@ -141,7 +141,7 @@ class VoteRendererTest extends MediaWikiIntegrationTestCase {
 	 * @return array
 	 */
 	protected function insertVotes( string $entityPageTitle, int $numVotes ): array {
-		$wikitext = 'No votes yet.';
+		$wikitext = '';
 		for ( $i = 1; $i <= $numVotes; $i++ ) {
 			$wikitext .= <<<END
 {{#CommunityRequests: vote

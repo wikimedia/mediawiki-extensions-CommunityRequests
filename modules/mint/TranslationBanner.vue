@@ -177,9 +177,8 @@ module.exports = exports = defineComponent( {
 			}
 
 			const nodes = [];
-			const contentLang = mw.config.get( 'wgContentLanguage' );
+			const pageContentLang = mw.config.get( 'wgPageContentLanguage' );
 			const supportedLangs = await getSupportedLangs( targetLang );
-
 			parserOutputs.forEach( ( parserOutput ) => {
 				// Find all text nodes that are in a different language to the interface language.
 				const walker = document.createTreeWalker(
@@ -192,15 +191,16 @@ module.exports = exports = defineComponent( {
 						) {
 							return NodeFilter.FILTER_SKIP;
 						}
-						// If the ancestor language is not the same as the content language
+						// If the ancestor language is not the same as the page content language
 						// then the source language should be the ancestor lang;
 						// otherwise, use the content language.
-						const lang = node.parentElement.closest( '[lang]' ).lang !== contentLang ?
-							node.parentElement.closest( '[lang]' ).lang :
-							contentLang;
+						const ancestorLang = node.parentElement.closest( '[lang]' ).lang;
+						const sourceLang = ( ancestorLang !== pageContentLang && ancestorLang !== targetLang ) ?
+							ancestorLang :
+							pageContentLang;
 
 						// Skip if they're the same language.
-						if ( lang === targetLang ||
+						if ( sourceLang === targetLang ||
 							// Skip style elements.
 							node.parentElement instanceof HTMLStyleElement ||
 							// Skip if any parent has `.translate-no`. T161486.
@@ -211,12 +211,12 @@ module.exports = exports = defineComponent( {
 							return NodeFilter.FILTER_SKIP;
 						}
 						// Check if the source lang can be translated to the target lang.
-						if ( !supportedLangs.includes( lang ) ) {
+						if ( !supportedLangs.includes( sourceLang ) ) {
 							return NodeFilter.FILTER_SKIP;
 						}
 						// Save the lang on the node
 						// for easier access when sending it for translation.
-						node.lang = lang;
+						node.lang = sourceLang;
 						return NodeFilter.FILTER_ACCEPT;
 					}
 				);

@@ -6,6 +6,7 @@
 	},
 	"communityrequests-desc": "Bir viki topluluğunun teknik öneri ve isteklerini yönetme sistemi.",
 	"communityrequests-wish-loading-error": "Dilek kaynak metni ayrıştırılırken bir hata oluştu. Geçersiz vikimetin içeriyor olabilir. Lütfen [$1 yenileyin] ve tekrar deneyin, [[$2|kaynak düzenleyici]]yi kullanın ya da [[$3|tartışma sayfası]]nda yardım isteyin.",
+	"communityrequests-unknown-parser-function": "'$1' derleyici işlev değişkeni geçerli değil.",
 	"communityrequests-edit-with-form": "Formla düzenle",
 	"communityrequests-wishlistintake": "Topluluk Dilek Listesi alımı",
 	"communityrequests-editfocusarea": "Topluluk Dilek Listesi odak alanı yönetimi",

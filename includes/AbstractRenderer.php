@@ -537,14 +537,10 @@ abstract class AbstractRenderer implements MessageLocalizer {
 	 * @throws RuntimeException if the entity ID cannot be determined
 	 */
 	protected function setDisplayTitleAndIndicator(): void {
-		// Use the title argument as provided (do not re-parse it here).
-		// We must not escape it because the skin will escape as needed and
-		// Translate may add lang wrapper spans that need to be preserved.
-		$titleHtml = $this->getArg( AbstractWishlistEntity::PARAM_TITLE, '' );
-		$titleSpan = Html::rawElement(
+		$titleSpan = Html::element(
 			'span',
 			[ 'class' => "ext-communityrequests-{$this->rendererType}--title" ],
-			"\n$titleHtml\n"
+			$this->getArg( AbstractWishlistEntity::PARAM_TITLE, '' )
 		);
 		$pageRef = $this->parser->getPage();
 		if ( !$pageRef ) {

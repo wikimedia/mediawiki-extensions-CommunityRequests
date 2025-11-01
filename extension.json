@@ -66,7 +66,8 @@
 		"ShowSearchHit": "search",
 		"ChangeTagsListActive": "changeTag",
 		"ListDefinedTags": "changeTag",
-		"RecentChange_save": "changeTag"
+		"RecentChange_save": "changeTag",
+		"TranslateTitlePageTranslation": "translate"
 	},
 	"HookHandlers": {
 		"main": {
@@ -104,6 +105,12 @@
 				"CommunityRequests.FocusAreaStore",
 				"CommunityRequests.Logger",
 				"TitleFormatter"
+			]
+		},
+		"translate": {
+			"class": "MediaWiki\\Extension\\CommunityRequests\\HookHandler\\TranslateHooks",
+			"services": [
+				"CommunityRequests.WishlistConfig"
 			]
 		}
 	},

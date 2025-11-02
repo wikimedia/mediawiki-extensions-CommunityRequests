@@ -370,14 +370,21 @@ class WishStore extends AbstractWishlistStore {
 	}
 
 	/** @inheritDoc */
-	public function getExtTranslateFields(): array {
+	public function getMappedFields(): array {
 		return [
 			Wish::PARAM_TITLE => self::titleField(),
-			// Wikitext fields.
 			Wish::PARAM_DESCRIPTION => 'crt_description',
 			Wish::PARAM_AUDIENCE => 'crt_audience',
-			// We are using this field as a virtual field even though is it not translatable
 			Wish::PARAM_PHAB_TASKS => 'crt_tasks',
+		];
+	}
+
+	/** @inheritDoc */
+	public function getExtTranslateFields(): array {
+		return [
+			Wish::PARAM_TITLE,
+			Wish::PARAM_DESCRIPTION,
+			Wish::PARAM_AUDIENCE,
 		];
 	}
 

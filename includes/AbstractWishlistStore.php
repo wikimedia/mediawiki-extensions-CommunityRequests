@@ -580,10 +580,11 @@ abstract class AbstractWishlistStore {
 
 		// Fetch wikitext data from the page and merge it into the row.
 		$wikitextData = $this->getDataFromPageId( $translationPageId );
-		foreach ( $this->getExtTranslateFields() as $field => $property ) {
+		foreach ( $this->getMappedFields() as $field => $property ) {
 			// Strip <translate> tags for self::FETCH_WIKITEXT_TRANSLATED,
 			// in case $translationPageId is the base page (translation subpage missing).
 			if ( $fetchWikitext === self::FETCH_WIKITEXT_TRANSLATED &&
+				in_array( $field, $this->getExtTranslateFields() ) &&
 				isset( $wikitextData[$field] ) &&
 				$this->translatablePageParser?->containsMarkup( $wikitextData[$field] )
 			) {
@@ -765,16 +766,23 @@ abstract class AbstractWishlistStore {
 	}
 
 	/**
-	 * Get the fields that either only live in wikitext (not stored in CommunityRequest DB tables),
-	 * or fields that could be tagged for translation with Extension:Translate,
-	 * and thus should be fetched from wikitext instead of the CommunityRequests tables
-	 * when WishStore::getAll() is called with self::FETCH_WIKITEXT_TRANSLATED.
-	 *
-	 * Effectively, any field that could contain <translate> tags should be listed here.
+	 * Get a mapping of translatable or wikitext-only fields to their "virtual" column names
+	 * for easier referencing in subclass implementations of ::getEntitiesFromDbResult().
 	 *
 	 * Keys are AbstractWishlistEntity::PARAM_* constants, and values are database column names
-	 * that are merged into the DB result set. The values may be "virtual" column names for
-	 * easier referencing in the subclass implementation of ::getEntitiesFromDbResult().
+	 * that are merged into the DB result set.
+	 *
+	 * Effectively all ::getExtTranslateFields() and ::getWikitextFields() fields should be
+	 * included here.
+	 *
+	 * @return string[]
+	 */
+	abstract public function getMappedFields(): array;
+
+	/**
+	 * Get the fields that could be tagged for translation with Extension:Translate,
+	 * and thus should be fetched from wikitext instead of the CommunityRequests tables
+	 * when WishStore::getAll() is called with self::FETCH_WIKITEXT_TRANSLATED.
 	 *
 	 * @return string[]
 	 */
@@ -783,8 +791,7 @@ abstract class AbstractWishlistStore {
 	/**
 	 * Fields that ONLY live in wikitext, and not in CommunityRequests DB tables.
 	 *
-	 * This is a subset of getWikitextFields() to aid performance of the API
-	 * by avoiding unnecessary querying of page content.
+	 * This used to aid performance of the API by avoiding unnecessary querying of page content.
 	 *
 	 * @return string[] AbstractWishlistEntity::PARAM_* constants.
 	 */

@@ -211,15 +211,24 @@ class FocusAreaStore extends AbstractWishlistStore {
 		return $this->idGenerator->getNewId( IdGenerator::TYPE_FOCUS_AREA );
 	}
 
-	/** @inheritDoc */
-	public function getExtTranslateFields(): array {
+	public function getMappedFields(): array {
 		return [
 			FocusArea::PARAM_TITLE => static::titleField(),
-			// Wikitext fields.
 			FocusArea::PARAM_DESCRIPTION => 'crfat_description',
 			FocusArea::PARAM_SHORT_DESCRIPTION => 'crfat_short_description',
 			FocusArea::PARAM_OWNERS => 'crfat_owners',
 			FocusArea::PARAM_VOLUNTEERS => 'crfat_volunteers',
+		];
+	}
+
+	/** @inheritDoc */
+	public function getExtTranslateFields(): array {
+		return [
+			FocusArea::PARAM_TITLE,
+			FocusArea::PARAM_DESCRIPTION,
+			FocusArea::PARAM_SHORT_DESCRIPTION,
+			FocusArea::PARAM_OWNERS,
+			FocusArea::PARAM_VOLUNTEERS,
 		];
 	}
 

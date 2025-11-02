@@ -4,6 +4,8 @@ declare( strict_types = 1 );
 namespace MediaWiki\Extension\CommunityRequests\Tests\Integration;
 
 use MediaWiki\Api\ApiUsageException;
+use MediaWiki\Extension\CommunityRequests\AbstractWishlistStore;
+use MediaWiki\Extension\CommunityRequests\FocusArea\FocusAreaStore;
 use MediaWiki\Extension\CommunityRequests\HookHandler\CommunityRequestsHooks;
 use MediaWiki\Tests\Api\ApiTestCase;
 use MediaWiki\Title\Title;
@@ -15,18 +17,19 @@ use MediaWiki\Title\Title;
  * @covers \MediaWiki\Extension\CommunityRequests\Api\ApiWishlistEntityBase
  * @covers \MediaWiki\Extension\CommunityRequests\Api\ApiWishlistEditBase
  * @covers \MediaWiki\Extension\CommunityRequests\HookHandler\CommunityRequestsHooks
+ * @covers \MediaWiki\Extension\CommunityRequests\FocusArea\FocusAreaStore
  */
 class ApiFocusAreaEditTest extends ApiTestCase {
+	use WishlistTestTrait;
+
+	protected function getStore(): AbstractWishlistStore {
+		return $this->getServiceContainer()->get( 'CommunityRequests.FocusAreaStore' );
+	}
 
 	/**
 	 * @dataProvider provideTestExecute
 	 */
-	public function testExecute(
-		array $params,
-		array|string $expected,
-		string $expectedSummary = '',
-		?string $expectedUpdateSummary = null
-	): void {
+	public function testExecute( array $params, array|string $expected, string $expectedSummary = '' ): void {
 		$params['action'] = 'focusareaedit';
 
 		// If $expected is a string, we expect an error message to match it.
@@ -77,16 +80,6 @@ class ApiFocusAreaEditTest extends ApiTestCase {
 			Title::newFromText( $ret['focusareaedit']['focusarea'] )->toPageIdentity()
 		);
 		$this->assertSame( $expectedSummary, $revision->getComment()->text );
-
-		// Make an additional edit and assert the edit summary, if applicable.
-		if ( $expectedUpdateSummary !== null ) {
-			$params['focusarea'] = $ret['focusareaedit']['focusarea'];
-			$params['description'] = 'Updated description';
-			[ $ret ] = $this->doApiRequestWithToken( $params );
-			$this->assertSame( 'Updated description', $ret['focusareaedit']['description'] );
-			$revision = $revLookup->getNextRevision( $revision );
-			$this->assertSame( $expectedUpdateSummary, $revision->getComment()->text );
-		}
 	}
 
 	public static function provideTestExecute(): array {
@@ -114,7 +107,6 @@ class ApiFocusAreaEditTest extends ApiTestCase {
 					]
 				],
 				'Publishing the focus area "My test focus area"',
-				'Updating the focus area "My test focus area"',
 			],
 			'missing title' => [
 				[
@@ -176,6 +168,99 @@ class ApiFocusAreaEditTest extends ApiTestCase {
 			],
 			'stray pipe in owners' => [
 				[ 'owners' => "* [[Community Tech|Community" ]
+			],
+		];
+	}
+
+	/**
+	 * @dataProvider provideGetEditSummary
+	 */
+	public function testGetEditSummary( array $oldParams, array $newParams, string $expectedSummary ): void {
+		$defaultParams = [
+			'action' => 'focusareaedit',
+			'status' => 'under-review',
+			'title' => 'Test Focus Area',
+			'description' => 'This is a test focus area.',
+			'shortdescription' => 'This is a test short desc',
+			'owners' => "* Community Tech\n* Editing",
+			'volunteers' => "* [[User:Volunteer1]]\n* [[User:Volunteer2]]",
+			'created' => '2023-10-01T12:00:00Z',
+			'baselang' => 'en',
+		];
+		$oldParams = array_merge( $defaultParams, $oldParams );
+		$newParams = array_merge( $defaultParams, $newParams );
+
+		CommunityRequestsHooks::$allowManualEditing = true;
+		[ $res ] = $this->doApiRequestWithToken( $oldParams );
+		$oldFocusArea = $this->getStore()->get(
+			Title::newFromText( $res['focusareaedit']['focusarea'] ),
+			null,
+			FocusAreaStore::FETCH_WIKITEXT_TRANSLATED
+		);
+		// If any param value contains <translate>, mark for translation.
+		if ( array_filter( $oldParams, static fn ( $v ) => str_contains( (string)$v, '<translate>' ) ) ) {
+			if ( !$this->getServiceContainer()->getExtensionRegistry()->isLoaded( 'Translate' ) ) {
+				$this->markTestSkipped( 'Translate extension is not installed.' );
+			}
+			$this->markForTranslation( Title::newFromPageIdentity( $oldFocusArea->getPage() ) );
+		}
+
+		$newParams['focusarea'] = $res['focusareaedit']['focusarea'];
+		CommunityRequestsHooks::$allowManualEditing = true;
+		[ $res ] = $this->doApiRequestWithToken( $newParams );
+
+		$revision = $this->getServiceContainer()
+			->getRevisionLookup()
+			->getRevisionById( $res['focusareaedit']['newrevid'] );
+		$this->assertSame( $expectedSummary, $revision->getComment()->text );
+	}
+
+	public function provideGetEditSummary(): array {
+		return [
+			'title changes' => [
+				[ 'title' => 'Old Title' ],
+				[ 'title' => 'New Title' ],
+				'Changed title from "Old Title" to "New Title"',
+			],
+			'status changes' => [
+				[ 'status' => 'under-review' ],
+				[ 'status' => 'prioritized' ],
+				'Changed status from "Under review" to "Prioritized"',
+			],
+			'description changes' => [
+				[ 'description' => 'Old description.' ],
+				[ 'description' => 'New description.' ],
+				'Updated description',
+			],
+			'shortdescription changes' => [
+				[ 'shortdescription' => 'Old short desc' ],
+				[ 'shortdescription' => 'New short desc' ],
+				'Updated short description',
+			],
+			'owners changes' => [
+				[ 'owners' => "* Community Tech" ],
+				[ 'owners' => "* Community Tech\n* Editing" ],
+				'Updated owners',
+			],
+			'volunteers changes' => [
+				[ 'volunteers' => "* [[User:Volunteer1]]" ],
+				[ 'volunteers' => "* [[User:Volunteer1]]\n* [[User:Volunteer2]]" ],
+				'Updated volunteers',
+			],
+			'with translations and multiple changes' => [
+				[
+					'status' => 'under-review',
+					'description' => '<translate>Old description.</translate>',
+					'shortdescription' => '<translate>Unchanged short desc</translate>',
+					'owners' => '<translate>* Community Tech</translate>'
+				],
+				[
+					'status' => 'prioritized',
+					'description' => '<translate>New description.</translate>',
+					'shortdescription' => '<translate>Unchanged short desc</translate>',
+					'owners' => '<translate>* Community Tech\n* Editing</translate>'
+				],
+				'Updated description; Changed status from "Under review" to "Prioritized"; Updated owners',
 			],
 		];
 	}

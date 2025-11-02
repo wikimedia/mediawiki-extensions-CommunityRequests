@@ -147,7 +147,11 @@
 				"CommunityRequests.WishlistConfig",
 				"CommunityRequests.WishStore",
 				"TitleParser",
+				"ContentTransformer",
 				"UserFactory"
+			],
+			"optional_services": [
+				"Translate:TranslatablePageParser"
 			]
 		},
 		"focusareaedit": {
@@ -155,7 +159,11 @@
 			"services": [
 				"CommunityRequests.WishlistConfig",
 				"CommunityRequests.FocusAreaStore",
-				"TitleParser"
+				"TitleParser",
+				"ContentTransformer"
+			],
+			"optional_services": [
+				"Translate:TranslatablePageParser"
 			]
 		},
 		"wishlistvote": {

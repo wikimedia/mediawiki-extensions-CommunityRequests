@@ -6,6 +6,7 @@ namespace MediaWiki\Extension\CommunityRequests\Tests\Integration;
 use MediaWiki\Api\ApiUsageException;
 use MediaWiki\Extension\CommunityRequests\AbstractWishlistStore;
 use MediaWiki\Extension\CommunityRequests\HookHandler\CommunityRequestsHooks;
+use MediaWiki\Extension\CommunityRequests\Wish\WishStore;
 use MediaWiki\MainConfigNames;
 use MediaWiki\Tests\Api\ApiTestCase;
 use MediaWiki\Title\Title;
@@ -18,6 +19,7 @@ use MediaWiki\User\User;
  * @covers \MediaWiki\Extension\CommunityRequests\Api\ApiWishlistEntityBase
  * @covers \MediaWiki\Extension\CommunityRequests\Api\ApiWishlistEditBase
  * @covers \MediaWiki\Extension\CommunityRequests\HookHandler\CommunityRequestsHooks
+ * @covers \MediaWiki\Extension\CommunityRequests\Wish\WishStore
  */
 class ApiWishEditTest extends ApiTestCase {
 	use WishlistTestTrait;
@@ -29,12 +31,7 @@ class ApiWishEditTest extends ApiTestCase {
 	/**
 	 * @dataProvider provideTestExecute
 	 */
-	public function testExecute(
-		array $params,
-		array|string $expected,
-		string $expectedSummary = '',
-		?string $expectedUpdateSummary = null
-	): void {
+	public function testExecute( array $params, array|string $expected, string $expectedSummary = '' ): void {
 		// Ensure we have a user to work with.
 		User::createNew( 'TestUser' );
 
@@ -98,16 +95,6 @@ class ApiWishEditTest extends ApiTestCase {
 				->fetchField();
 			$this->assertSame( $expected['wishedit']['baselang'], $translationLang );
 		}
-
-		// Make an additional edit and assert the edit summary, if applicable.
-		if ( $expectedUpdateSummary !== null ) {
-			$params['wish'] = $ret['wishedit']['wish'];
-			$params['description'] = 'Updated description';
-			[ $ret ] = $this->doApiRequestWithToken( $params );
-			$this->assertSame( 'Updated description', $ret['wishedit']['description'] );
-			$revision = $revLookup->getNextRevision( $revision );
-			$this->assertSame( $expectedUpdateSummary, $revision->getComment()->text );
-		}
 	}
 
 	public static function provideTestExecute(): array {
@@ -139,8 +126,7 @@ class ApiWishEditTest extends ApiTestCase {
 						'new' => true,
 					]
 				],
-				'Publishing the wish "Test Wish" ([[phab:T123|T123]], [[phab:T456|T456]], [[phab:T789|T789]])',
-				'Updating the wish "Test Wish" ([[phab:T123|T123]], [[phab:T456|T456]], [[phab:T789|T789]])'
+				'Publishing the wish "Test Wish" ([[phab:T123|T123]], [[phab:T456|T456]], [[phab:T789|T789]])'
 			],
 			'missing proposer' => [
 				[
@@ -308,5 +294,166 @@ class ApiWishEditTest extends ApiTestCase {
 		];
 		[ $ret ] = $this->doApiRequestWithToken( $params );
 		$this->assertSame( 'Community Wishlist/W2', $ret['wishedit']['wish'] );
+	}
+
+	/**
+	 * @dataProvider provideGetEditSummary
+	 */
+	public function testGetEditSummary( array $oldParams, array $newParams, ?string $expectedSummary ): void {
+		foreach ( [ $oldParams, $newParams ] as $params ) {
+			// Create FAs if needed.
+			if ( $params['focusarea'] ?? false ) {
+				$pageRef = $this->config->getEntityPageRefFromWikitextVal( $params['focusarea'] );
+				$this->insertTestFocusArea( $pageRef->getDBkey() );
+			}
+			// Create users if needed.
+			if ( isset( $params['proposer'] ) ) {
+				User::createNew( $params['proposer'] );
+			}
+			// Create {{reflist}} for testing substitution if needed.
+			if ( str_contains( $params['description'] ?? '', 'reflist' ) ) {
+				$this->insertPage( 'Template:Reflist', '<references/>' );
+			}
+		}
+
+		$defaultParams = [
+			'action' => 'wishedit',
+			'status' => 'under-review',
+			'focusarea' => '',
+			'title' => 'Test Wish',
+			'description' => 'This is a test wish.',
+			'type' => 'feature',
+			'tags' => '',
+			'audience' => '',
+			'phabtasks' => '',
+			'proposer' => $this->getTestSysop()->getUser()->getName(),
+			'created' => '2023-10-01T12:00:00Z',
+			'baselang' => 'en',
+		];
+		$oldParams = array_merge( $defaultParams, $oldParams );
+		$newParams = array_merge( $defaultParams, $newParams );
+
+		CommunityRequestsHooks::$allowManualEditing = true;
+		[ $res ] = $this->doApiRequestWithToken( $oldParams );
+		$oldWish = $this->getStore()->get(
+			Title::newFromText( $res['wishedit']['wish'] ),
+			null,
+			WishStore::FETCH_WIKITEXT_TRANSLATED
+		);
+		// If any param value contains <translate>, mark for translation.
+		if ( array_filter( $oldParams, static fn ( $v ) => str_contains( (string)$v, '<translate>' ) ) ) {
+			if ( !$this->getServiceContainer()->getExtensionRegistry()->isLoaded( 'Translate' ) ) {
+				$this->markTestSkipped( 'Translate extension is not installed.' );
+			}
+			$this->markForTranslation( Title::newFromPageIdentity( $oldWish->getPage() ) );
+		}
+
+		$newParams['wish'] = $res['wishedit']['wish'];
+		CommunityRequestsHooks::$allowManualEditing = true;
+		[ $res ] = $this->doApiRequestWithToken( $newParams );
+
+		if ( $res['wishedit']['nochange'] ?? false ) {
+			$this->assertNull( $expectedSummary, 'Expected no edit summary for no-change edit' );
+			return;
+		}
+		$revision = $this->getServiceContainer()
+			->getRevisionLookup()
+			->getRevisionById( $res['wishedit']['newrevid'] );
+		$this->assertSame( $expectedSummary, $revision->getComment()->text );
+	}
+
+	public function provideGetEditSummary(): array {
+		return [
+			'title change' => [
+				[ 'title' => 'Old Title' ],
+				[ 'title' => 'New Title' ],
+				'Changed title from "Old Title" to "New Title"'
+			],
+			'status change' => [
+				[ 'status' => 'under-review' ],
+				[ 'status' => 'prioritized' ],
+				'Changed status from "Under review" to "Prioritized"'
+			],
+			'description change' => [
+				[ 'description' => 'Old description.' ],
+				[ 'description' => 'New description.' ],
+				'Updated description'
+			],
+			'type change' => [
+				[ 'type' => 'feature' ],
+				[ 'type' => 'bug' ],
+				'Changed type from "Feature request" to "Bug report"'
+			],
+			'focus area change' => [
+				[ 'focusarea' => 'FA1' ],
+				[ 'focusarea' => 'FA2' ],
+				'Changed focus area from "[[Community_Wishlist/FA1|FA1]]" to "[[Community_Wishlist/FA2|FA2]]"'
+			],
+			'new focus area' => [
+				[ 'focusarea' => '' ],
+				[ 'focusarea' => 'FA2' ],
+				'Changed focus area from "Unassigned" to "[[Community_Wishlist/FA2|FA2]]"'
+			],
+			'tags change' => [
+				[ 'tags' => 'multimedia|patrolling|wikidata' ],
+				[ 'tags' => 'multimedia|reading' ],
+				'Added tag: Reading; Removed tags: Patrolling, Wikidata'
+			],
+			'audience change' => [
+				[ 'audience' => 'New editors' ],
+				[ 'audience' => 'Experienced editors' ],
+				'Updated affected users'
+			],
+			'phabtasks change' => [
+				[ 'phabtasks' => 'T123|T456' ],
+				[ 'phabtasks' => 'T789' ],
+				'Added Phabricator task: [[phab:T789|T789]]; ' .
+					'Removed Phabricator tasks: [[phab:T123|T123]], [[phab:T456|T456]]'
+			],
+			'proposer change' => [
+				[ 'proposer' => 'OldUser' ],
+				[ 'proposer' => 'NewUser' ],
+				'Changed proposer from "OldUser" to "NewUser"'
+			],
+			'bunch of changes' => [
+				[
+					'title' => 'Old Title',
+					'focusarea' => 'FA1',
+					'description' => 'Old description.',
+					'status' => 'under-review',
+					'type' => 'feature',
+					'tags' => 'multimedia|patrolling',
+				],
+				[
+					'title' => 'New Title',
+					'focusarea' => '',
+					'description' => 'New description.',
+					'status' => 'in-progress',
+					'type' => 'bug',
+					'tags' => 'reading|wikidata',
+				],
+				'Changed title from "Old Title" to "New Title"; ' .
+					'Updated description; Changed status from "Under review" to "In progress"; ' .
+					'Changed type from "Feature request" to "Bug report"; ' .
+					'Changed focus area from "[[Community_Wishlist/FA1|FA1]]" to "Unassigned"; ' .
+					'Added tags: Reading, Wikidata; Removed tags: Multimedia and Commons, Patrolling'
+			],
+			'with translations' => [
+				[ 'title' => '<translate>Old title</translate>' ],
+				[ 'title' => '<translate>New title</translate>' ],
+				'Changed title from "Old title" to "New title"'
+			],
+			'pre-save transformation' => [
+				[ 'description' => "Line 1.\nLine 2.\n{{subst:reflist}} ~~~" ],
+				[ 'description' => "Line 1.\r\nLine 2.\r\n<references/> " .
+					'[[User:UTSysop|UTSysop]] ([[User talk:UTSysop|talk]])' ],
+				null,
+			],
+			'no changes' => [
+				[],
+				[],
+				null,
+			],
+		];
 	}
 }

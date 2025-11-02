@@ -35,22 +35,13 @@ class ApiFocusAreaEdit extends ApiWishlistEntityBase {
 	}
 
 	/** @inheritDoc */
-	public function getEditSummary( AbstractWishlistEntity $entity ): string {
-		return trim( $this->params['focusarea'] ?? '' ) ? $this->editSummarySave() : $this->editSummaryPublish();
-	}
-
-	/** @inheritDoc */
-	protected function editSummaryPublish(): string {
-		return $this->msg( 'communityrequests-publish-focus-area-summary', $this->params['title'] )
-			->inContentLanguage()
-			->text();
-	}
-
-	/** @inheritDoc */
-	protected function editSummarySave(): string {
-		return $this->msg( 'communityrequests-save-focus-area-summary', $this->params['title'] )
-			->inContentLanguage()
-			->text();
+	protected function getEditSummaryFields( AbstractWishlistEntity $entity ): array {
+		'@phan-var FocusArea $entity';
+		return array_merge( parent::getEditSummaryFields( $entity ), [
+			FocusArea::PARAM_SHORT_DESCRIPTION => null,
+			FocusArea::PARAM_OWNERS => null,
+			FocusArea::PARAM_VOLUNTEERS => null,
+		] );
 	}
 
 	/** @inheritDoc */

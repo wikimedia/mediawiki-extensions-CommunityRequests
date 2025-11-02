@@ -5,11 +5,13 @@ namespace MediaWiki\Extension\CommunityRequests\Api;
 
 use MediaWiki\Api\ApiBase;
 use MediaWiki\Api\ApiMain;
+use MediaWiki\Content\Transform\ContentTransformer;
 use MediaWiki\Extension\CommunityRequests\AbstractWishlistEntity;
 use MediaWiki\Extension\CommunityRequests\AbstractWishlistStore;
 use MediaWiki\Extension\CommunityRequests\Wish\Wish;
 use MediaWiki\Extension\CommunityRequests\Wish\WishStore;
 use MediaWiki\Extension\CommunityRequests\WishlistConfig;
+use MediaWiki\Extension\Translate\PageTranslation\TranslatablePageParser;
 use MediaWiki\Page\PageIdentity;
 use MediaWiki\ParamValidator\TypeDef\UserDef;
 use MediaWiki\Title\TitleParser;
@@ -25,9 +27,11 @@ class ApiWishEdit extends ApiWishlistEntityBase {
 		WishlistConfig $config,
 		AbstractWishlistStore $store,
 		TitleParser $titleParser,
+		ContentTransformer $transformer,
 		protected readonly UserFactory $userFactory,
+		?TranslatablePageParser $translatablePageParser = null,
 	) {
-		parent::__construct( $main, $name, $config, $store, $titleParser );
+		parent::__construct( $main, $name, $config, $store, $titleParser, $transformer, $translatablePageParser );
 	}
 
 	/** @inheritDoc */
@@ -47,36 +51,52 @@ class ApiWishEdit extends ApiWishlistEntityBase {
 	}
 
 	/** @inheritDoc */
-	public function getEditSummary( AbstractWishlistEntity $entity ): string {
+	protected function getEditSummaryFields( /** @var Wish $entity */ AbstractWishlistEntity $entity ): array {
 		'@phan-var Wish $entity';
-		$summary = trim( $this->params['wish'] ?? '' ) ? $this->editSummarySave() : $this->editSummaryPublish();
-
-		// If there are Phabricator tasks, add them to the edit summary.
-		if ( count( $entity->getPhabTasks() ) > 0 ) {
-			$taskLinks = array_map(
-				static fn ( int $taskId ) => "[[phab:T{$taskId}|T{$taskId}]]",
-				$entity->getPhabTasks()
-			);
-			$summary .= ' ' .
-				$this->msg( 'parentheses-start' )->text() .
-				$this->getLanguage()->commaList( $taskLinks ) .
-				$this->msg( 'parentheses-end' )->text();
-		}
-		return $summary;
+		return array_merge( parent::getEditSummaryFields( $entity ), [
+			Wish::PARAM_TYPE => fn ( string $type ) => $this->msg(
+				$this->config->getWishTypeLabelFromWikitextVal( $type ) . '-label'
+			)->inContentLanguage()->text(),
+			Wish::PARAM_FOCUS_AREA => function ( string $focusArea ) {
+				if ( !$focusArea ) {
+					return $this->msg( 'communityrequests-focus-area-unassigned' )->inContentLanguage()->text();
+				}
+				$faPage = $this->config->getEntityPageRefFromWikitextVal( $focusArea );
+				return '[[' . $faPage->getDBkey() . '|' . $focusArea . ']]';
+			},
+			Wish::PARAM_TAGS => function ( array $tags ) {
+				return array_map(
+					fn ( string $tagWikitextVal ) => $this->msg(
+						(string)$this->config->getTagLabelFromWikitextVal( $tagWikitextVal )
+					)->inContentLanguage()->text(),
+					$tags
+				);
+			},
+			Wish::PARAM_AUDIENCE => null,
+			Wish::PARAM_PHAB_TASKS => function ( array $tasks ) {
+				return array_map(
+					static fn ( string $taskId ) => "[[phab:$taskId|$taskId]]",
+					$tasks
+				);
+			},
+			Wish::PARAM_PROPOSER => null,
+		] );
 	}
 
 	/** @inheritDoc */
 	protected function editSummaryPublish(): string {
-		return $this->msg( 'communityrequests-publish-wish-summary', $this->params[Wish::PARAM_TITLE] )
-			->inContentLanguage()
-			->text();
-	}
-
-	/** @inheritDoc */
-	protected function editSummarySave(): string {
-		return $this->msg( 'communityrequests-save-wish-summary', $this->params[Wish::PARAM_TITLE] )
-			->inContentLanguage()
-			->text();
+		$summary = parent::editSummaryPublish();
+		// If there are Phabricator tasks, append them to the edit summary.
+		if ( isset( $this->params[Wish::PARAM_PHAB_TASKS] ) && count( $this->params[Wish::PARAM_PHAB_TASKS] ) ) {
+			return $summary . ' ' .
+				$this->msg( 'parentheses-start' )->inContentLanguage()->text() .
+				$this->getLanguage()->commaList( array_map(
+					static fn ( string $taskId ) => "[[phab:$taskId|$taskId]]",
+					$this->params[Wish::PARAM_PHAB_TASKS]
+				) ) .
+				$this->msg( 'parentheses-end' )->inContentLanguage()->text();
+		}
+		return $summary;
 	}
 
 	/** @inheritDoc */

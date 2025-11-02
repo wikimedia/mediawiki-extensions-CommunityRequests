@@ -540,7 +540,7 @@ abstract class AbstractRenderer implements MessageLocalizer {
 		// Use the title argument as provided (do not re-parse it here).
 		// We must not escape it because the skin will escape as needed and
 		// Translate may add lang wrapper spans that need to be preserved.
-		$titleHtml = $this->getArg( AbstractWishlistEntity::PARAM_TITLE, '' );
+		$titleHtml = $this->getSafeArg( AbstractWishlistEntity::PARAM_TITLE, '' );
 		$titleSpan = Html::rawElement(
 			'span',
 			[ 'class' => "ext-communityrequests-{$this->rendererType}--title" ],

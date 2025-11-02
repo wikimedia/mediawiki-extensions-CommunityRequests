@@ -12,6 +12,7 @@ use MediaWiki\Parser\CoreTagHooks;
 use MediaWiki\Parser\Parser;
 use MediaWiki\Parser\PPFrame;
 use MediaWiki\Parser\PPNode;
+use MediaWiki\Parser\Sanitizer;
 use MediaWiki\Registration\ExtensionRegistry;
 use MediaWiki\Title\Title;
 use MessageLocalizer;
@@ -534,18 +535,10 @@ abstract class AbstractRenderer implements MessageLocalizer {
 	/**
 	 * Set the display title to be the entity title, and add the status chip as an indicator.
 	 *
-	 * @throws RuntimeException if the entity ID cannot be determined
+	 * @throws RuntimeException if the parser page is missing
 	 */
 	protected function setDisplayTitleAndIndicator(): void {
-		// Use the title argument as provided (do not re-parse it here).
-		// We must not escape it because the skin will escape as needed and
-		// Translate may add lang wrapper spans that need to be preserved.
-		$titleHtml = $this->getSafeArg( AbstractWishlistEntity::PARAM_TITLE, '' );
-		$titleSpan = Html::rawElement(
-			'span',
-			[ 'class' => "ext-communityrequests-{$this->rendererType}--title" ],
-			"\n$titleHtml\n"
-		);
+		$titleSpan = $this->getTitleSpan();
 		$pageRef = $this->parser->getPage();
 		if ( !$pageRef ) {
 			throw new RuntimeException( 'Parser page is missing!' );
@@ -565,5 +558,56 @@ abstract class AbstractRenderer implements MessageLocalizer {
 			$this->parser,
 			$this->frame
 		);
+	}
+
+	private function getTitleSpan(): string {
+		$titleUnsafe = $this->getArg( AbstractWishlistEntity::PARAM_TITLE, '' );
+
+		// Template syntax and the like is supposed to be pre-escaped by the forms.
+		// If we see strip markers, use a best-effort title and put the page in the error tracking category.
+		if ( str_contains( $titleUnsafe, Parser::MARKER_PREFIX ) ) {
+			$titleUnsafe = $this->parser->killMarkers( $titleUnsafe );
+			$this->parser->addTrackingCategory( self::ERROR_TRACKING_CATEGORY );
+		}
+
+		$normalizedTitle = Sanitizer::decodeCharReferencesAndNormalize( $titleUnsafe );
+
+		// Extract the 'lang' and 'dir' attributes from the title HTML if present,
+		// which will be re-applied to the title span below.
+		[ $langAttr, $dirAttr ] = $this->getLangAttrsFromTitleHtml( $normalizedTitle );
+
+		// If there were lang/dir attributes, remove the outer <span> so we can re-apply them safely.
+		// Any other <span> will be considered part of the title itself and is preserved.
+		if ( $langAttr || $dirAttr ) {
+			$spanRegex = '/^<span\b[^>]*>(.*?)<\/span>$/i';
+			// Remove the outer <span>.
+			$normalizedTitle = preg_replace( $spanRegex, '$1', $normalizedTitle ) ?: $normalizedTitle;
+			// Do the same for $titleUnsafe, which we want for storage.
+			$titleUnsafe = preg_replace( $spanRegex, '$1', $titleUnsafe ) ?: $titleUnsafe;
+			// Update extension data with the $titleUnsafe for later storage.
+			$extData = $this->parser->getOutput()->getExtensionData( self::EXT_DATA_KEY );
+			$extData[AbstractWishlistEntity::PARAM_TITLE] = $titleUnsafe;
+			$this->parser->getOutput()->setExtensionData( self::EXT_DATA_KEY, $extData );
+		}
+
+		// Show the normalized input as-is, escaped by Html::element().
+		return Html::element(
+			'span',
+			[
+				'class' => "ext-communityrequests-{$this->rendererType}--title",
+				'lang' => $langAttr,
+				'dir' => $dirAttr,
+			],
+			$normalizedTitle
+		);
+	}
+
+	private function getLangAttrsFromTitleHtml( string $titleHtml ): array {
+		$xmlParser = xml_parser_create( 'UTF-8' );
+		xml_parse_into_struct( $xmlParser, $titleHtml, $values );
+		$langAttr = $values[0]['attributes']['LANG'] ?? null;
+		$dirAttr = $values[0]['attributes']['DIR'] ?? null;
+		xml_parser_free( $xmlParser );
+		return [ $langAttr, $dirAttr ];
 	}
 }

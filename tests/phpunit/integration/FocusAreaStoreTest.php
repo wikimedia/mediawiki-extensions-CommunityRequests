@@ -14,6 +14,7 @@ use Wikimedia\Timestamp\ConvertibleTimestamp;
  * @group CommunityRequests
  * @group Database
  * @covers \MediaWiki\Extension\CommunityRequests\FocusArea\FocusAreaStore
+ * @covers \MediaWiki\Extension\CommunityRequests\HookHandler\CommunityRequestsHooks
  * @covers \MediaWiki\Extension\CommunityRequests\AbstractWishlistStore
  * @covers \MediaWiki\Extension\CommunityRequests\EntityFactory
  */
@@ -65,5 +66,17 @@ class FocusAreaStoreTest extends MediaWikiIntegrationTestCase {
 		$this->expectException( InvalidArgumentException::class );
 		$this->expectExceptionMessage( 'Focus areas must have a title!' );
 		$this->getStore()->save( $focusArea );
+	}
+
+	public function testSortingWithNonDefaultLang(): void {
+		$this->insertTestFocusArea( null, 'en', [ FocusArea::PARAM_TITLE => 'The first!' ] );
+		$this->insertTestFocusArea( null, 'es', [ FocusArea::PARAM_TITLE => 'Otra area' ] );
+		$allFAs = $this->getStore()->getAll(
+			'en',
+			FocusAreaStore::titleField(),
+			FocusAreaStore::SORT_DESC
+		);
+		$this->assertSame( 'The first!', $allFAs[0]->getTitle() );
+		$this->assertSame( 'Otra area', $allFAs[1]->getTitle() );
 	}
 }

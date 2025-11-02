@@ -12,8 +12,11 @@ use MediaWikiIntegrationTestCase;
 /**
  * @group CommunityRequests
  * @group Database
+ * @covers \MediaWiki\Extension\CommunityRequests\HookHandler\CommunityRequestsHooks
  * @covers \MediaWiki\Extension\CommunityRequests\Wish\WishRenderer
+ * @covers \MediaWiki\Extension\CommunityRequests\Wish\WishStore
  * @covers \MediaWiki\Extension\CommunityRequests\AbstractRenderer
+ * @covers \MediaWiki\Extension\CommunityRequests\AbstractWishlistStore
  * @covers \MediaWiki\Extension\CommunityRequests\RendererFactory
  */
 class WishRendererTest extends MediaWikiIntegrationTestCase {
@@ -154,5 +157,95 @@ class WishRendererTest extends MediaWikiIntegrationTestCase {
 			'Category:Pages_with_Community_Wishlist_errors',
 			array_keys( $wishTitle->getParentCategories() )
 		);
+	}
+
+	/**
+	 * @dataProvider provideMarkupInTitle
+	 */
+	public function testMarkupInTitle( string $title, string $expectedHtml, string $expectedStorage ): void {
+		if ( str_contains( $title, '{{reflist}}' ) ) {
+			$this->insertPage( 'Template:Reflist', '<references>' );
+		}
+		$wish = $this->insertTestWish( null, 'en', [ Wish::PARAM_TITLE => $title ] );
+		$wikiPage = $this->getWikiPageFactory()->newFromTitle( $wish->getPage() );
+		$this->assertSame( $expectedHtml, $wikiPage->getParserOutput()->getTitleText(), 'HTML assertion failed' );
+		$this->assertSame(
+			$expectedStorage,
+			$this->getStore()->get( $wikiPage )->getTitle(),
+			'Storage assertion failed'
+		);
+	}
+
+	public function provideMarkupInTitle(): array {
+		return [
+			'normal' => [
+				'Normal Title',
+				'<span class="ext-communityrequests-wish--title">Normal Title</span> ' .
+					'<span class="ext-communityrequests-wish--id">(Community Wishlist/W1)</span>',
+				'Normal Title'
+			],
+			'xss' => [
+				'<script>alert("XSS")</script>',
+				'<span class="ext-communityrequests-wish--title">&lt;script>alert("XSS")&lt;/script></span> ' .
+					'<span class="ext-communityrequests-wish--id">(Community Wishlist/W1)</span>',
+				'<script>alert("XSS")</script>'
+			],
+			'valid wikitext tag (<b>)' => [
+				'<b>Bold Title</b>',
+				'<span class="ext-communityrequests-wish--title">&lt;b>Bold Title&lt;/b></span> ' .
+					'<span class="ext-communityrequests-wish--id">(Community Wishlist/W1)</span>',
+				'<b>Bold Title</b>'
+			],
+			'wikilink' => [
+				'[[Main Page|Home]]',
+				'<span class="ext-communityrequests-wish--title">[[Main Page|Home]]</span> ' .
+					'<span class="ext-communityrequests-wish--id">(Community Wishlist/W1)</span>',
+				'[[Main Page|Home]]'
+			],
+			'pre-escaped magic word and template' => [
+				'&#123;&#123;PAGENAME&#125;&#125; &#123;&#123;reflist&#125;&#125;',
+				'<span class="ext-communityrequests-wish--title">{{PAGENAME}} {{reflist}}</span> ' .
+					'<span class="ext-communityrequests-wish--id">(Community Wishlist/W1)</span>',
+				'&#123;&#123;PAGENAME&#125;&#125; &#123;&#123;reflist&#125;&#125;'
+			],
+			'unescaped template' => [
+				'{{reflist}}',
+				'<span class="ext-communityrequests-wish--title">&lt;references></span> ' .
+					'<span class="ext-communityrequests-wish--id">(Community Wishlist/W1)</span>',
+				'<references>'
+			],
+			'Translate tag' => [
+				'<translate>Translated Title</translate>',
+				'<span class="ext-communityrequests-wish--title">Translated Title</span> ' .
+					'<span class="ext-communityrequests-wish--id">(Community Wishlist/W1)</span>',
+				'Translated Title'
+			],
+			'Translate-provided span' => [
+				'<span lang="he" dir="rtl" class="mw-content-rtl">123 משאלה עברית</span>',
+				'<span class="ext-communityrequests-wish--title" lang="he" dir="rtl">123 משאלה עברית</span> ' .
+					'<span class="ext-communityrequests-wish--id">(Community Wishlist/W1)</span>',
+				'123 משאלה עברית'
+			],
+			'span with script' => [
+				'<span onclick="evilFunction()">Click me</span>',
+				'<span class="ext-communityrequests-wish--title">' .
+					'&lt;span onclick="evilFunction()">Click me&lt;/span></span> ' .
+					'<span class="ext-communityrequests-wish--id">(Community Wishlist/W1)</span>',
+				'<span onclick="evilFunction()">Click me</span>'
+			],
+			'span with styles' => [
+				'<span style="color:red; font-size:20px;">Styled Title</span>',
+				'<span class="ext-communityrequests-wish--title">' .
+					'&lt;span style="color:red; font-size:20px;">Styled Title&lt;/span></span> ' .
+					'<span class="ext-communityrequests-wish--id">(Community Wishlist/W1)</span>',
+				'<span style="color:red; font-size:20px;">Styled Title</span>'
+			],
+			'nested Translate tag with template' => [
+				'<span lang="de"><translate>Title with &#123;&#123;reflist&#125;&#125;</translate></span>',
+				'<span class="ext-communityrequests-wish--title" lang="de">Title with {{reflist}}</span> ' .
+					'<span class="ext-communityrequests-wish--id">(Community Wishlist/W1)</span>',
+				'Title with &#123;&#123;reflist&#125;&#125;'
+			],
+		];
 	}
 }

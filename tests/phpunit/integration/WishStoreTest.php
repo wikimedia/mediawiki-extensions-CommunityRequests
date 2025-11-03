@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 namespace MediaWiki\Extension\CommunityRequests\Tests\Integration;
 
 use InvalidArgumentException;
+use MediaWiki\Extension\CommunityRequests\AbstractWishlistEntity;
 use MediaWiki\Extension\CommunityRequests\AbstractWishlistStore;
 use MediaWiki\Extension\CommunityRequests\Wish\Wish;
 use MediaWiki\Extension\CommunityRequests\Wish\WishStore;
@@ -165,6 +166,45 @@ class WishStoreTest extends MediaWikiIntegrationTestCase {
 		$this->assertContainsOnlyInstancesOf( Wish::class, $wishes );
 		$this->assertSame( $wish2->getPage()->getId(), $wishes[0]->getPage()->getId() );
 		$this->assertSame( $wish1->getPage()->getId(), $wishes[1]->getPage()->getId() );
+	}
+
+	public function testGetAllExcludesDeclinedByDefault(): void {
+		// Create wishes with different statuses
+		$this->insertTestWish(
+			'Community Wishlist/W1',
+			'en',
+			[ Wish::PARAM_STATUS => 'under-review' ],
+		);
+		$this->insertTestWish(
+			'Community Wishlist/W2',
+			'en',
+			[ Wish::PARAM_STATUS => 'accepted' ],
+		);
+		$this->insertTestWish(
+			'Community Wishlist/W3',
+			'en',
+			[ Wish::PARAM_STATUS => 'declined' ],
+		);
+		$this->insertTestWish(
+			'Community Wishlist/W4',
+			'en',
+			[ Wish::PARAM_STATUS => 'declined' ],
+		);
+
+		// Without any status filter, declined wishes should be excluded from count
+		$this->assertSame( 2, $this->getStore()->getCount() );
+
+		// When explicitly filtering for declined, it should be included in count
+		$countWithDeclined = $this->getStore()->getCount(
+			[ AbstractWishlistEntity::PARAM_STATUSES => [ 'declined' ] ]
+		);
+		$this->assertSame( 2, $countWithDeclined );
+
+		// When explicitly filtering for all statuses, all should be counted
+		$countAll = $this->getStore()->getCount(
+			[ AbstractWishlistEntity::PARAM_STATUSES => [ 'under-review', 'accepted', 'declined' ] ]
+		);
+		$this->assertSame( 4, $countAll );
 	}
 
 	public function testGetWishesLangFallbacks(): void {

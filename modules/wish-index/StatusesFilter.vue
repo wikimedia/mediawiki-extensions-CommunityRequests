@@ -33,6 +33,7 @@ const { CdxField, CdxMultiselectLookup } = require( '../codex.js' );
 const { CommunityRequestsStatuses } = require( '../common/config.json' );
 const Util = require( '../common/Util.js' );
 const statusesList = Object.keys( CommunityRequestsStatuses )
+	.filter( ( status ) => !CommunityRequestsStatuses[ status ].excluded )
 	.map( ( status ) => ( {
 		label: Util.wishStatus( status ),
 		value: status

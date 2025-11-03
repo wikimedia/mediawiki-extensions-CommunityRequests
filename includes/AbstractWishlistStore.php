@@ -321,6 +321,17 @@ abstract class AbstractWishlistStore {
 				}
 			}
 			$select->andWhere( [ 'cr_status' => $statusIds ] );
+		} else {
+			// if no status filter specified, exclude statuses marked as excluded
+			$nonExcludedStatusIds = [];
+			foreach ( $this->config->getStatuses() as $statusName => $statusInfo ) {
+				if ( empty( $statusInfo['excluded'] ) ) {
+					$nonExcludedStatusIds[] = $statusInfo['id'];
+				}
+			}
+			if ( $nonExcludedStatusIds ) {
+				$select->andWhere( [ 'cr_status' => $nonExcludedStatusIds ] );
+			}
 		}
 		return $select;
 	}

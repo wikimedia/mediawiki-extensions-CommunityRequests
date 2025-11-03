@@ -626,6 +626,7 @@
 				},
 				"declined": {
 					"id": 2,
+					"excluded": true,
 					"voting": false
 				},
 				"community-opportunity": {

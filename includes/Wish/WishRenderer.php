@@ -158,7 +158,7 @@ class WishRenderer extends AbstractRenderer {
 				[ 'class' => 'mw-heading mw-heading3', 'id' => 'tags' ],
 				$this->msg( 'communityrequests-tags-heading' )->text()
 			);
-			$tagsHtml = $this->getDivRaw( 'tags', $language->commaList( array_filter( $tagLinks ) ) );
+			$tagsHtml = $this->getDivRaw( 'tags', $this->commaList( array_filter( $tagLinks ) ) );
 		}
 
 		// Audience.
@@ -199,7 +199,7 @@ class WishRenderer extends AbstractRenderer {
 			);
 			$tasksHtml = $this->getDivRaw(
 				'phabtasks',
-				$language->commaList( array_filter( $tasks ) )
+				$this->commaList( array_filter( $tasks ) )
 			);
 		}
 
@@ -237,6 +237,27 @@ class WishRenderer extends AbstractRenderer {
 			$tasksHeading . $tasksHtml .
 			$detailsHeading . $detailsHtml .
 			$this->getVotingSection( $this->config->isWishVotingEnabled() )
+		);
+	}
+
+	/**
+	 * Take a list of strings and build a locale-friendly comma-separated list,
+	 * using the local comma-separator message. Surround the comma-separator message with
+	 * a .translate-no span so that it is not submitted for translation when using
+	 * MinT (Machine in Translation).
+	 *
+	 * @param string[] $list Array of strings to put in a comma list
+	 * @param-taint $list tainted
+	 * @return string
+	 */
+	private function commaList( array $list ): string {
+		return implode(
+			Html::element(
+				'span',
+				[ 'class' => 'translate-no' ],
+				$this->msg( 'comma-separator' )->text()
+			),
+			$list
 		);
 	}
 }

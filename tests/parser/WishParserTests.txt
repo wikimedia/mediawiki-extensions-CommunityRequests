@@ -57,13 +57,13 @@ title=Community_Wishlist/W1
 <p>Unassigned
 </p>
 </div><div class="mw-heading mw-heading3">Type of wish</div><div class="ext-communityrequests-wish--wish-type">System change</div><div class="mw-heading mw-heading3" id="tags">Tags</div><div class="ext-communityrequests-wish--tags">
-<p><a href="/index.php?title=Community_Wishlist/Wishes&amp;tags=multimedia" title="Community Wishlist/Wishes">Multimedia and Commons</a>, <a href="/index.php?title=Community_Wishlist/Wishes&amp;tags=wikisource" title="Community Wishlist/Wishes">Wikisource</a>
+<p><a href="/index.php?title=Community_Wishlist/Wishes&amp;tags=multimedia" title="Community Wishlist/Wishes">Multimedia and Commons</a><span class="translate-no">, </span><a href="/index.php?title=Community_Wishlist/Wishes&amp;tags=wikisource" title="Community Wishlist/Wishes">Wikisource</a>
 </p>
 </div><div class="mw-heading mw-heading3">Affected users</div><div class="ext-communityrequests-wish--audience">
 <p><a href="/wiki/Test" title="Test">Test</a> audience
 </p>
 </div><div class="mw-heading mw-heading3">Phabricator tasks</div><div class="ext-communityrequests-wish--phabtasks">
-<p><a href="http://example.org/wiki/phab:T123" class="extiw" title="phab:T123">T123</a>, <a href="http://example.org/wiki/phab:T456" class="extiw" title="phab:T456">T456</a>
+<p><a href="http://example.org/wiki/phab:T123" class="extiw" title="phab:T123">T123</a><span class="translate-no">, </span><a href="http://example.org/wiki/phab:T456" class="extiw" title="phab:T456">T456</a>
 </p>
 </div><div class="mw-heading mw-heading3">Other details</div><ul><li class="ext-communityrequests-wish--created">Created: 12:00, 1 October 2023</li><li class="ext-communityrequests-wish--updated">Last updated: 00:02, 1 January 1970</li><li class="ext-communityrequests-wish--proposer">Author: <a href="/wiki/User:Maintenance_script" title="User:Maintenance script">Maintenance script</a> (<a href="/wiki/User_talk:Maintenance_script" title="User talk:Maintenance script">talk</a>)</li></ul><div class="mw-heading mw-heading2" id="Voting">Voting</div><div class="ext-communityrequests-wish--voting mw-notalk"><p>This wish currently has <b>0 supporters</b>. Voting for this wish is open until it is completed.</p><div class="ext-communityrequests-voting"></div><noscript><p class="error">Sorry, JavaScript is required to vote in the Community Wishlist.</p></noscript></div></div>
 !! end
@@ -92,13 +92,13 @@ title=Community_Wishlist/W2
 <p>Unassigned
 </p>
 </div><div class="mw-heading mw-heading3">Type of wish</div><div class="ext-communityrequests-wish--wish-type">System change</div><div class="mw-heading mw-heading3" id="tags">Tags</div><div class="ext-communityrequests-wish--tags">
-<p><a href="/index.php?title=Community_Wishlist/Wishes&amp;tags=multimedia" title="Community Wishlist/Wishes">Multimedia and Commons</a>, <a href="/index.php?title=Community_Wishlist/Wishes&amp;tags=wikisource" title="Community Wishlist/Wishes">Wikisource</a>
+<p><a href="/index.php?title=Community_Wishlist/Wishes&amp;tags=multimedia" title="Community Wishlist/Wishes">Multimedia and Commons</a><span class="translate-no">, </span><a href="/index.php?title=Community_Wishlist/Wishes&amp;tags=wikisource" title="Community Wishlist/Wishes">Wikisource</a>
 </p>
 </div><div class="mw-heading mw-heading3">Affected users</div><div class="ext-communityrequests-wish--audience">
 <p>Example audience
 </p>
 </div><div class="mw-heading mw-heading3">Phabricator tasks</div><div class="ext-communityrequests-wish--phabtasks">
-<p><a href="http://example.org/wiki/phab:T123" class="extiw" title="phab:T123">T123</a>, <a href="http://example.org/wiki/phab:T456" class="extiw" title="phab:T456">T456</a>
+<p><a href="http://example.org/wiki/phab:T123" class="extiw" title="phab:T123">T123</a><span class="translate-no">, </span><a href="http://example.org/wiki/phab:T456" class="extiw" title="phab:T456">T456</a>
 </p>
 </div><div class="mw-heading mw-heading3">Other details</div><ul><li class="ext-communityrequests-wish--created">Created: 12:00, 1 October 2023</li><li class="ext-communityrequests-wish--updated">Last updated: 00:02, 1 January 1970</li><li class="ext-communityrequests-wish--proposer">Author: <a href="/wiki/User:Maintenance_script" title="User:Maintenance script">Maintenance script</a> (<a href="/wiki/User_talk:Maintenance_script" title="User talk:Maintenance script">talk</a>)</li></ul><div class="mw-heading mw-heading2" id="Voting">Voting</div><div class="ext-communityrequests-wish--voting mw-notalk"><p>This wish currently has <b>0 supporters</b>. Supporting this wish is currently disabled.</p></div></div>
 !! end
@@ -127,13 +127,13 @@ title=Community_Wishlist/W2
 <p>Unassigned
 </p>
 </div><div class="mw-heading mw-heading3">Type of wish</div><div class="ext-communityrequests-wish--wish-type">System change</div><div class="mw-heading mw-heading3" id="tags">Tags</div><div class="ext-communityrequests-wish--tags">
-<p><a href="/index.php?title=Community_Wishlist/Wishes&amp;tags=multimedia" title="Community Wishlist/Wishes">Multimedia and Commons</a>, <a href="/index.php?title=Community_Wishlist/Wishes&amp;tags=wikisource" title="Community Wishlist/Wishes">Wikisource</a>
+<p><a href="/index.php?title=Community_Wishlist/Wishes&amp;tags=multimedia" title="Community Wishlist/Wishes">Multimedia and Commons</a><span class="translate-no">, </span><a href="/index.php?title=Community_Wishlist/Wishes&amp;tags=wikisource" title="Community Wishlist/Wishes">Wikisource</a>
 </p>
 </div><div class="mw-heading mw-heading3">Affected users</div><div class="ext-communityrequests-wish--audience">
 <p>Example audience
 </p>
 </div><div class="mw-heading mw-heading3">Phabricator tasks</div><div class="ext-communityrequests-wish--phabtasks">
-<p><a href="http://example.org/wiki/phab:T123" class="extiw" title="phab:T123">T123</a>, <a href="http://example.org/wiki/phab:T456" class="extiw" title="phab:T456">T456</a>
+<p><a href="http://example.org/wiki/phab:T123" class="extiw" title="phab:T123">T123</a><span class="translate-no">, </span><a href="http://example.org/wiki/phab:T456" class="extiw" title="phab:T456">T456</a>
 </p>
 </div><div class="mw-heading mw-heading3">Other details</div><ul><li class="ext-communityrequests-wish--created">Created: 12:00, 1 October 2023</li><li class="ext-communityrequests-wish--updated">Last updated: 00:02, 1 January 1970</li><li class="ext-communityrequests-wish--proposer">Author: <a href="/wiki/User:Maintenance_script" title="User:Maintenance script">Maintenance script</a> (<a href="/wiki/User_talk:Maintenance_script" title="User talk:Maintenance script">talk</a>)</li></ul><div class="mw-heading mw-heading2" id="Voting">Voting</div><div class="ext-communityrequests-wish--voting mw-notalk"><p>This wish currently has <b>0 supporters</b>. Supporting this wish is currently disabled.</p></div></div>
 !! end
@@ -184,7 +184,7 @@ language=qqx
 <p>Example audience
 </p>
 </div><div class="mw-heading mw-heading3">(communityrequests-wish-phabricator-heading)</div><div class="ext-communityrequests-wish--phabtasks">
-<p><a href="http://example.org/wiki/phab:T123" class="extiw" title="phab:T123">T123</a>(comma-separator)<a href="http://example.org/wiki/phab:T456" class="extiw" title="phab:T456">T456</a>
+<p><a href="http://example.org/wiki/phab:T123" class="extiw" title="phab:T123">T123</a><span class="translate-no">(comma-separator)</span><a href="http://example.org/wiki/phab:T456" class="extiw" title="phab:T456">T456</a>
 </p>
 </div><div class="mw-heading mw-heading3">(communityrequests-wish-other-details-heading)</div><ul><li class="ext-communityrequests-wish--created">(communityrequests-wish-created: 12:00, 1 (october) 2023)</li><li class="ext-communityrequests-wish--updated">(communityrequests-wish-updated: 00:02, 1 (january) 1970)</li><li class="ext-communityrequests-wish--proposer">(communityrequests-wish-proposer: (signature: Maintenance script, Maintenance script))</li></ul><div class="mw-heading mw-heading2" id="Voting">(communityrequests-wish-voting)</div><div class="ext-communityrequests-wish--voting mw-notalk"><p>(communityrequests-wish-voting-info-default)</p></div></div>
 !! end
@@ -213,7 +213,7 @@ language=qqx
 <p>(communityrequests-focus-area-unassigned)
 </p>
 </div><div class="mw-heading mw-heading3">(communityrequests-wish-type-heading)</div><div class="ext-communityrequests-wish--wish-type">(communityrequests-wishtype-change-label)</div><div class="mw-heading mw-heading3" id="tags">(communityrequests-tags-heading)</div><div class="ext-communityrequests-wish--tags">
-<p><a href="/index.php?title=Community_Wishlist/Wishes&amp;tags=multimedia" title="Community Wishlist/Wishes">(communityrequests-tag-multimedia-commons)</a>(comma-separator)<a href="/index.php?title=Community_Wishlist/Wishes&amp;tags=wikisource" title="Community Wishlist/Wishes">(communityrequests-tag-wikisource)</a>
+<p><a href="/index.php?title=Community_Wishlist/Wishes&amp;tags=multimedia" title="Community Wishlist/Wishes">(communityrequests-tag-multimedia-commons)</a><span class="translate-no">(comma-separator)</span><a href="/index.php?title=Community_Wishlist/Wishes&amp;tags=wikisource" title="Community Wishlist/Wishes">(communityrequests-tag-wikisource)</a>
 </p>
 </div><div class="mw-heading mw-heading3">(communityrequests-wish-audience-heading)</div><div class="ext-communityrequests-wish--audience">
 <p>קהל לדוגמה

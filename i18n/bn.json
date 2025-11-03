@@ -2,6 +2,7 @@
 	"@metadata": {
 		"authors": [
 			"San1joy23",
+			"আজিজ",
 			"আফতাবুজ্জামান"
 		]
 	},
@@ -41,6 +42,7 @@
 	"communityrequests-support-dialog-title": "\"$1\" সমর্থন করুন",
 	"communityrequests-optional-comment": "ঐচ্ছিক মন্তব্য",
 	"communityrequests-support": "সমর্থন",
+	"communityrequests-error-invalid-entity-id": "\"$1\" আইডি সহ কোনও সত্তা পাওয়া যায়নি।",
 	"communityrequests-status": "স্থিতি",
 	"communityrequests-status-wish-in-progress": "চলমান",
 	"communityrequests-edit-wish": "ইচ্ছা সম্পাদনা করুন",

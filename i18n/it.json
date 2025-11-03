@@ -49,6 +49,8 @@
 	"communityrequests-support-wish-confirmed": "Hai votato a supporto di questo desiderio.",
 	"communityrequests-optional-comment": "Commento facoltativo",
 	"communityrequests-support": "Supporto",
+	"communityrequests-error-invalid-entity-id": "Nessuna entità trovata con ID \"$1\".",
+	"communityrequests-error-invalid-entity-field": "Il parametro 'campo' deve essere uno dei seguenti: $1",
 	"communityrequests-status": "Stato",
 	"communityrequests-status-wish-in-progress": "In corso",
 	"communityrequests-status-focus-area-under-review": "In fase di revisione",

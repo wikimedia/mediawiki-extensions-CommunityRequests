@@ -2,7 +2,8 @@
 	"@metadata": {
 		"authors": [
 			"JorgeElias2302",
-			"McDutchie"
+			"McDutchie",
+			"MarcoAurelio"
 		]
 	},
 	"communityrequests-wish-loading-error": "Se produjo un error al analizar el texto fuente del formulario de deseo. Puede contener wikitexto no válido. Puedes [$1 actualizar la página] e intentar nuevamente, usar el [[$2|editor de código]] o solicitar ayuda en la [[$3|página de discusión]].",
@@ -47,6 +48,7 @@
 	"communityrequests-close": "Cerrar",
 	"communityrequests-publish": "Publica tu deseo",
 	"communityrequests-save": "Guardar los cambios",
+	"communityrequests-support": "A favor",
 	"communityrequests-status-draft": "Borrador",
 	"communityrequests-status-submitted": "Enviado por",
 	"communityrequests-status-open": "Abierto",

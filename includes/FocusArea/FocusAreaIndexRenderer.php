@@ -107,7 +107,7 @@ class FocusAreaIndexRenderer extends AbstractRenderer {
 			);
 		}
 
-		return HTML::rawElement(
+		return Html::rawElement(
 			'div',
 			[ 'class' => 'ext-communityrequests-focus-area-index' ],
 			$outputHTML

@@ -395,7 +395,7 @@ class CommunityRequestsHooks implements
 	 * @param array &$links
 	 */
 	public function onSkinTemplateNavigation__Universal( $sktemplate, &$links ): void {
-		if ( !$this->config->isEnabled() || !$this->isEntityPageOrEditPage( $sktemplate->getTitle() ) ) {
+		if ( !$this->config->isEnabled() || !$this->config->isWishOrFocusAreaPage( $sktemplate->getRelevantTitle() ) ) {
 			return;
 		}
 
@@ -412,7 +412,7 @@ class CommunityRequestsHooks implements
 	private function updateEditLinks( SkinTemplate $sktemplate, array &$links ): void {
 		// If the page doesn't exist, don't show any edit tabs. We do this even for privileged users,
 		// as manual creation of entity pages could cause data integrity issues.
-		if ( !$sktemplate->getTitle()->isSpecialPage() && !$sktemplate->getTitle()->exists() ) {
+		if ( !$sktemplate->getTitle()->isSpecialPage() && !$sktemplate->getRelevantTitle()->exists() ) {
 			unset( $links['views']['edit'], $links['views']['ve-edit'] );
 			return;
 		}
@@ -425,7 +425,7 @@ class CommunityRequestsHooks implements
 		}
 
 		// Focus areas can only be edited by users with the 'manage-wishlist' right.
-		if ( $this->config->isFocusAreaPage( $sktemplate->getTitle() ) &&
+		if ( $this->config->isFocusAreaPage( $sktemplate->getRelevantTitle() ) &&
 			!$this->permissionManager->userHasRight( $sktemplate->getUser(), 'manage-wishlist' )
 		) {
 			$links['views'] = $tabs;
@@ -437,8 +437,8 @@ class CommunityRequestsHooks implements
 			'icon' => 'edit',
 			'class' => $sktemplate->getTitle()->isSpecialPage() ? 'selected' : '',
 			'href' => $this->specialPageFactory->getPage(
-				$this->config->isWishPage( $sktemplate->getTitle() ) ? 'WishlistIntake' : 'EditFocusArea'
-			)?->getPageTitle( $this->config->getEntityWikitextVal( $sktemplate->getTitle() ) )
+				$this->config->isWishPage( $sktemplate->getRelevantTitle() ) ? 'WishlistIntake' : 'EditFocusArea'
+			)?->getPageTitle( $this->config->getEntityWikitextVal( $sktemplate->getRelevantTitle() ) )
 				->getLocalURL()
 		];
 
@@ -465,7 +465,7 @@ class CommunityRequestsHooks implements
 	 * @param array &$links
 	 */
 	private function updateDiscussionLink( SkinTemplate $sktemplate, array &$links ): void {
-		$canonicalPage = $this->getCanonicalEntityPage( $sktemplate->getTitle() );
+		$canonicalPage = $this->getCanonicalEntityPage( $sktemplate->getRelevantTitle() );
 		$talkPage = Title::newFromPageIdentity( $canonicalPage )->getTalkPageIfDefined();
 
 		if ( !$talkPage ) {

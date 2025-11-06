@@ -199,13 +199,18 @@ class CommunityRequestsHooksTest extends MediaWikiUnitTestCase {
 		);
 		$user = $this->createNoOpMock( User::class, [ 'isRegistered' ] );
 		$user->method( 'isRegistered' )->willReturn( $opts['isRegistered'] );
-		$skinTemplate = $this->createNoOpMock( SkinTemplate::class, [ 'getUser', 'getTitle', 'msg' ] );
+		$skinTemplate = $this->createNoOpMock( SkinTemplate::class,
+			[ 'getUser', 'getTitle', 'getRelevantTitle', 'msg' ]
+		);
 		$skinTemplate->expects( $this->any() )
 			->method( 'getUser' )
 			->willReturn( $user );
-		$skinTemplate->expects( $this->atLeastOnce() )
+		$skinTemplate->expects( $this->atMost( 2 ) )
 			->method( 'getTitle' )
 			->willReturn( $opts['title'] );
+		$skinTemplate->expects( $this->atLeastOnce() )
+			->method( 'getRelevantTitle' )
+			->willReturn( $opts['relevantTitle'] ?? $opts['title'] );
 		$skinTemplate->expects( $this->atMost( 1 ) )
 			->method( 'msg' )
 			->willReturnCallback( [ new FakeQqxMessageLocalizer(), 'msg' ] );
@@ -265,12 +270,16 @@ class CommunityRequestsHooksTest extends MediaWikiUnitTestCase {
 				[ 'view', 've-edit', 'edit', 'history' ],
 			],
 			'Special:WishlistIntake/W1, default perms' => [
-				[ 'title' => $this->makeMockTitle( 'Special:WishlistIntake/W1', [ 'namespace' => NS_SPECIAL ] ) ],
+				[
+					'title' => $this->makeMockTitle( 'Special:WishlistIntake/W1', [ 'namespace' => NS_SPECIAL ] ),
+					'relevantTitle' => $this->makeMockTitle( 'Community Wishlist/W1' ),
+				],
 				[ 'view', 'wishlist-edit', 'history' ],
 			],
 			'Special:WishlistIntake/W1, can manually edit' => [
 				[
 					'title' => $this->makeMockTitle( 'Special:WishlistIntake/W1', [ 'namespace' => NS_SPECIAL ] ),
+					'relevantTitle' => $this->makeMockTitle( 'Community Wishlist/W1' ),
 					'canManuallyEdit' => true,
 				],
 				[ 'view', 've-edit', 'edit', 'wishlist-edit', 'history' ],
@@ -278,6 +287,7 @@ class CommunityRequestsHooksTest extends MediaWikiUnitTestCase {
 			'Special:EditFocusArea/FA1, can manage' => [
 				[
 					'title' => $this->makeMockTitle( 'Special:EditFocusArea/FA1', [ 'namespace' => NS_SPECIAL ] ),
+					'relevantTitle' => $this->makeMockTitle( 'Community Wishlist/FA1' ),
 					'canManage' => true,
 				],
 				[ 'view', 'wishlist-edit', 'history' ],

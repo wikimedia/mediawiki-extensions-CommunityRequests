@@ -2,7 +2,8 @@
 	"@metadata": {
 		"authors": [
 			"Amire80",
-			"McDutchie"
+			"McDutchie",
+			"SaldırganSincap"
 		]
 	},
 	"communityrequests-desc": "{{desc|name=CommunityRequests|url=https://www.mediawiki.org/wiki/Special:MyLanguage/Extension:CommunityRequests}}",
@@ -56,7 +57,7 @@
 	"communityrequests-support-dialog-title": "Title of voting dialog window.\n\nParameters:\n* $1 – Title of the wish or focus area.",
 	"communityrequests-support-focus-area": "Button label for the voting button on focus area pages.",
 	"communityrequests-support-focus-area-confirmed": "Message shown after voting for a focus area.",
-	"communityrequests-support-wish": "{{Doc-important|“Support” is a verb, referring to supporting this wish.'''}}\n\nButton label for the voting button on wish pages.",
+	"communityrequests-support-wish": "{{Doc-important|“Support” is a verb, referring to supporting this wish.}}\n\nButton label for the voting button on wish pages.",
 	"communityrequests-support-wish-confirmed": "Message shown after voting for a focus area.",
 	"communityrequests-support-updated": "Message shown after changing a vote.",
 	"communityrequests-support-removed": "Message shown after removing a vote.",

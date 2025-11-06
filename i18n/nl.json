@@ -2,11 +2,13 @@
 	"@metadata": {
 		"authors": [
 			"Mainframe98",
-			"McDutchie"
+			"McDutchie",
+			"Siebrand"
 		]
 	},
 	"communityrequests-desc": "Een systeem voor het beheren van de technische suggesties en verzoeken van een wikigemeenschap.",
 	"communityrequests-wish-loading-error": "Er is een fout opgetreden bij het verwerken van de brontekst van de wens. Er kan ongeldige wikitekst in staan. [$1 Herlaad de pagina] en probeer het opnieuw, gebruik de [[$2|bron-editor]] of vraag om hulp op de [[$3|overlegpagina]].",
+	"communityrequests-unknown-parser-function": "De parserfunctieparameter '$1' is niet geldig.",
 	"communityrequests-edit-with-form": "Bewerken met formulier",
 	"communityrequests-wishlistintake": "Opname in de Gezamenlijke verlanglijst",
 	"communityrequests-editfocusarea": "Beheer aandachtsgebieden Gezamenlijke verlanglijst",
@@ -93,6 +95,7 @@
 	"communityrequests-status-focus-area-prioritized": "Voorrang",
 	"communityrequests-status-focus-area-in-progress": "In uitvoering",
 	"communityrequests-status-focus-area-done": "Klaar",
+	"communityrequests-error-invalid-status": "Ongeldige status: \"$1\"",
 	"communityrequests-edit-wish": "Wens bewerken",
 	"communityrequests-discuss-wish": "Deze wens bespreken",
 	"communityrequests-wish-description-heading": "Beschrijving",

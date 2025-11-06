@@ -2,7 +2,8 @@
 	"@metadata": {
 		"authors": [
 			"JorgeElias2302",
-			"McDutchie"
+			"McDutchie",
+			"MarcoAurelio"
 		]
 	},
 	"communityrequests-wish-loading-error": "Se produjo un error al analizar el texto fuente del formulario de deseo. Puede contener wikitexto no válido. Puedes [$1 actualizar la página] e intentar nuevamente, usar el [[$2|editor de código]] o solicitar ayuda en la [[$3|página de discusión]].",
@@ -28,7 +29,7 @@
 	"communityrequests-audience-label": "Principales usuarios afectados",
 	"communityrequests-audience-description": "Describe a qué grupo de usuarios y situación afectará más esto",
 	"communityrequests-audience-error": "Introduce un valor para este campo (entre $1 y $2 {{PLURAL:$2|caracteres}}).",
-	"communityrequests-phabricator-label": "Tareas de Phabricator (opcional)",
+	"communityrequests-phabricator-label": "Tickets de Phabricator",
 	"communityrequests-phabricator-desc": "Ingresa las ID o URL de tareas de Phabricator.",
 	"communityrequests-phabricator-chip-desc": "Una lista de IDs de tareas de Phabricator.",
 	"communityrequests-wish-create-success": "Tu deseo ha sido publicado.",
@@ -37,7 +38,17 @@
 	"communityrequests-close": "Cerrar",
 	"communityrequests-publish": "Publica tu deseo",
 	"communityrequests-save": "Guardar los cambios",
+	"communityrequests-support": "A favor",
+	"communityrequests-wish-already-supported": "Ya has votado a favor de este deseo.",
+	"communityrequests-remove-support-yes": "Sí",
+	"communityrequests-remove-support-no": "No",
+	"communityrequests-status": "Estado",
+	"communityrequests-status-wish-under-review": "En revisión",
+	"communityrequests-status-wish-accepted": "Aceptado",
+	"communityrequests-status-wish-declined": "Rechazado",
 	"communityrequests-status-wish-in-progress": "En progreso",
+	"communityrequests-status-wish-done": "Hecho",
+	"communityrequests-status-focus-area-under-review": "En revisión",
 	"communityrequests-edit-wish": "Edición de deseo",
 	"communityrequests-wish-description-heading": "Descripción",
 	"communityrequests-wish-focus-area-heading": "Área de enfoque asignada",
@@ -45,9 +56,11 @@
 	"communityrequests-wish-audience-heading": "Usuarios afectados",
 	"communityrequests-wish-phabricator-heading": "Tickets de Phabricator",
 	"communityrequests-wish-other-details-heading": "Otros detalles",
-	"communityrequests-wish-created": "creado",
-	"communityrequests-wish-updated": "Última actualización",
-	"communityrequests-wish-proposer": "Autor",
+	"communityrequests-wish-created": "Creado el: $1",
+	"communityrequests-wish-updated": "Última actualización: $1",
+	"communityrequests-wish-proposer": "Autor: $1",
+	"communityrequests-wish-voting": "Votación",
+	"communityrequests-wish-voting-info": "Este deseo tiene actualmente '''$1 {{PLURAL:$2|voto|votos}} a favor'''.",
 	"communityrequests-wishes-status-header": "Estado",
 	"communityrequests-wishes-type-header": "Tipo"
 }

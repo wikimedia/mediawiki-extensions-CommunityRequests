@@ -86,7 +86,6 @@
 	"communityrequests-translation-errors": "Се појави грешка:",
 	"communityrequests-disabled": "Оваа функција на Барањата на заедницата моментално е оневозможена.",
 	"communityrequests-publish-wish-summary": "Објавување на желбата „$1“",
-	"communityrequests-save-wish-summary": "Поднова на желбата „$1“",
 	"communityrequests-error-category": "Страници со грешки во Желби на заедницата",
 	"communityrequests-error-category-desc": "Страниците во оваа категорија се желби од Желби на заедницата или полиња на задршка што содржат грешки."
 }

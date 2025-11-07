@@ -93,7 +93,5 @@
 	"communityrequests-translation-switch": "Käännä se automaattisesti käyttämällä [https://www.mediawiki.org/wiki/Special:MyLanguage/MinT Wikimedian konekäännöstyökalua].",
 	"communityrequests-translation-errors": "Tapahtui virhe:",
 	"communityrequests-publish-wish-summary": "Julkaistu toive ”$1”",
-	"communityrequests-save-wish-summary": "Päivitetty toivetta ”$1”",
-	"communityrequests-publish-focus-area-summary": "Julkaistu painopistealue ”$1”",
-	"communityrequests-save-focus-area-summary": "Päivitetty painopistealue ”$1”"
+	"communityrequests-publish-focus-area-summary": "Julkaistu painopistealue ”$1”"
 }

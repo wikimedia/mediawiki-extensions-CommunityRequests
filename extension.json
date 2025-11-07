@@ -53,6 +53,7 @@
 	"Hooks": {
 		"BeforeDisplayNoArticleText": "pageDisplay",
 		"BeforePageDisplay": "pageDisplay",
+		"ChangesListInsertArticleLink": "changesList",
 		"ChangeTagsListActive": "changeTag",
 		"GetPreferences": "preferences",
 		"LinksUpdateComplete": "main",
@@ -84,6 +85,16 @@
 				"CommunityRequests.Logger",
 				"MainConfig",
 				"WikiPageFactory"
+			]
+		},
+		"changesList": {
+			"class": "MediaWiki\\Extension\\CommunityRequests\\HookHandler\\ChangesListHooks",
+			"services": [
+				"CommunityRequests.WishlistConfig",
+				"CommunityRequests.WishStore",
+				"CommunityRequests.FocusAreaStore",
+				"TitleFormatter",
+				"CommunityRequests.Logger"
 			]
 		},
 		"changeTag": {

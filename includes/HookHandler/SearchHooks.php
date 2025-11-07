@@ -7,7 +7,6 @@ use MediaWiki\Extension\CommunityRequests\FocusArea\FocusArea;
 use MediaWiki\Extension\CommunityRequests\FocusArea\FocusAreaStore;
 use MediaWiki\Extension\CommunityRequests\Wish\WishStore;
 use MediaWiki\Extension\CommunityRequests\WishlistConfig;
-use MediaWiki\Html\Html;
 use MediaWiki\Search\Hook\ShowSearchHitHook;
 use MediaWiki\Specials\SpecialSearch;
 use MediaWiki\Title\Title;
@@ -15,6 +14,9 @@ use MediaWiki\Title\TitleFormatter;
 use Psr\Log\LoggerInterface;
 use SearchResult;
 
+/**
+ * Hook handlers for customizing search results of wishlist pages.
+ */
 class SearchHooks implements ShowSearchHitHook {
 
 	use WishlistEntityTrait;
@@ -66,32 +68,7 @@ class SearchHooks implements ShowSearchHitHook {
 			return;
 		}
 
-		$this->logger->debug( 'Customizing search result for entity: {0}', [ $entity->getPage() ] );
-
-		$titleSpan = Html::element(
-			'span',
-			[ 'class' => 'ext-communityrequests-entity-link--label' ],
-			$entity->getTitle()
-		);
-		$titleText = $this->titleFormatter->getFullText( $resultTitle );
-		$entityIdSpan = Html::element(
-			'span',
-			[
-				'class' => 'ext-communityrequests-entity-link--id',
-				'style' => 'font-size: 0.85em;',
-			],
-			$searchPage->msg( 'parentheses', $titleText )->text(),
-		);
-
-		// Assign new HTML for the search result with the translated entity title, followed by the full page title.
-		$link = Html::rawElement(
-			'a',
-			[
-				'href' => $resultTitle->getLocalURL(),
-				'title' => $entity->getTitle(),
-			],
-			$titleSpan . ' ' . $entityIdSpan
-		);
+		$link = $this->getEntityLink( $entity, $searchPage );
 
 		// Include wish count for focus areas.
 		if ( $entity instanceof FocusArea ) {

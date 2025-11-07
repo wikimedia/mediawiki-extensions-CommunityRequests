@@ -86,7 +86,7 @@ class SearchHooksTest extends MediaWikiUnitTestCase {
 
 		$this->assertSame(
 			'<a title="Test wish title"><span class="ext-communityrequests-entity-link--label">Test wish title</span>' .
-				' <span class="ext-communityrequests-entity-link--id" style="font-size: 0.85em;">' .
+				' <span class="mw-title ext-communityrequests-entity-link--id" style="font-size: 0.85em;">' .
 				'(parentheses: Community Wishlist/W1)</span></a>',
 			$link
 		);
@@ -147,7 +147,7 @@ class SearchHooksTest extends MediaWikiUnitTestCase {
 		$this->assertSame(
 			'<a title="Test focus area title">' .
 				'<span class="ext-communityrequests-entity-link--label">Test focus area title</span> ' .
-				'<span class="ext-communityrequests-entity-link--id" style="font-size: 0.85em;">' .
+				'<span class="mw-title ext-communityrequests-entity-link--id" style="font-size: 0.85em;">' .
 				'(parentheses: Community Wishlist/W1)</span></a>',
 			$link
 		);

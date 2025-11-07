@@ -11,6 +11,7 @@ use MediaWiki\Extension\CommunityRequests\AbstractWishlistStore;
 use MediaWiki\Extension\CommunityRequests\WishlistConfig;
 use MediaWiki\Extension\Translate\PageTranslation\TranslatablePageParser;
 use MediaWiki\Page\PageIdentity;
+use MediaWiki\Page\WikiPageFactory;
 use MediaWiki\Parser\ParserOptions;
 use MediaWiki\Title\Title;
 use MediaWiki\Title\TitleParser;
@@ -31,12 +32,13 @@ abstract class ApiWishlistEntityBase extends ApiWishlistEditBase {
 		string $name,
 		WishlistConfig $config,
 		LoggerInterface $logger,
+		WikiPageFactory $wikiPageFactory,
 		protected readonly AbstractWishlistStore $store,
 		protected readonly TitleParser $titleParser,
 		protected readonly ContentTransformer $transformer,
 		protected readonly ?TranslatablePageParser $translatablePageParser = null,
 	) {
-		parent::__construct( $main, $name, $config, $logger );
+		parent::__construct( $main, $name, $config, $logger, $wikiPageFactory );
 	}
 
 	/** @inheritDoc */

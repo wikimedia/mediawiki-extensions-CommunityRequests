@@ -13,6 +13,7 @@ use MediaWiki\Extension\CommunityRequests\Wish\WishStore;
 use MediaWiki\Extension\CommunityRequests\WishlistConfig;
 use MediaWiki\Extension\Translate\PageTranslation\TranslatablePageParser;
 use MediaWiki\Page\PageIdentity;
+use MediaWiki\Page\WikiPageFactory;
 use MediaWiki\ParamValidator\TypeDef\UserDef;
 use MediaWiki\Title\TitleParser;
 use MediaWiki\User\UserFactory;
@@ -27,6 +28,7 @@ class ApiWishEdit extends ApiWishlistEntityBase {
 		string $name,
 		WishlistConfig $config,
 		LoggerInterface $logger,
+		WikiPageFactory $wikiPageFactory,
 		AbstractWishlistStore $store,
 		TitleParser $titleParser,
 		ContentTransformer $transformer,
@@ -34,7 +36,8 @@ class ApiWishEdit extends ApiWishlistEntityBase {
 		?TranslatablePageParser $translatablePageParser = null,
 	) {
 		parent::__construct(
-			$main, $name, $config, $logger, $store, $titleParser, $transformer, $translatablePageParser
+			$main, $name, $config, $logger, $wikiPageFactory, $store,
+			$titleParser, $transformer, $translatablePageParser
 		);
 	}
 

@@ -173,6 +173,7 @@
 			"services": [
 				"CommunityRequests.WishlistConfig",
 				"CommunityRequests.Logger",
+				"WikiPageFactory",
 				"CommunityRequests.WishStore",
 				"TitleParser",
 				"ContentTransformer",
@@ -187,6 +188,7 @@
 			"services": [
 				"CommunityRequests.WishlistConfig",
 				"CommunityRequests.Logger",
+				"WikiPageFactory",
 				"CommunityRequests.FocusAreaStore",
 				"TitleParser",
 				"ContentTransformer"

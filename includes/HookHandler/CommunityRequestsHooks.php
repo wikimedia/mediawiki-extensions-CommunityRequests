@@ -39,7 +39,6 @@ use MediaWiki\Parser\Parser;
 use MediaWiki\Permissions\Authority;
 use MediaWiki\Permissions\Hook\GetUserPermissionsErrorsExpensiveHook;
 use MediaWiki\Permissions\PermissionManager;
-use MediaWiki\Preferences\Hook\GetPreferencesHook;
 use MediaWiki\Registration\ExtensionRegistry;
 use MediaWiki\Revision\RenderedRevision;
 use MediaWiki\Revision\RevisionRecord;
@@ -63,11 +62,9 @@ class CommunityRequestsHooks implements
 	SkinTemplateNavigation__UniversalHook,
 	ParserAfterTidyHook,
 	GetUserPermissionsErrorsExpensiveHook,
-	BeforeDisplayNoArticleTextHook,
-	GetPreferencesHook
+	BeforeDisplayNoArticleTextHook
 {
 
-	public const PREF_MACHINETRANSLATION = 'usemachinetranslation';
 	public const SESSION_KEY = 'communityrequests';
 	protected const EXT_DATA_KEY = AbstractRenderer::EXT_DATA_KEY;
 	public const SESSION_VALUE_ENTITY_CREATED = 'entity-created';
@@ -295,7 +292,7 @@ class CommunityRequestsHooks implements
 				$this->config->isWishIndexPage( $out->getTitle() ) ||
 				$this->config->isFocusAreaIndexPage( $out->getTitle() )
 			) &&
-			$this->userOptionsManager->getBoolOption( $out->getUser(), self::PREF_MACHINETRANSLATION )
+			$this->userOptionsManager->getBoolOption( $out->getUser(), PreferencesHooks::PREF_MACHINETRANSLATION )
 		) {
 			$out->addModules( 'ext.communityrequests.mint' );
 		}
@@ -644,26 +641,6 @@ class CommunityRequestsHooks implements
 			);
 
 		return false;
-	}
-
-	/**
-	 * Add preference for machine translations.
-	 *
-	 * @param User $user
-	 * @param array &$preferences
-	 */
-	public function onGetPreferences( $user, &$preferences ) {
-		if ( !$this->config->isEnabled() ) {
-			return;
-		}
-		$preferences[self::PREF_MACHINETRANSLATION] = [
-			'type' => 'toggle',
-			'label-message' => [
-				'communityrequests-wishlist-machine-translation',
-				( $this->translateInstalled ? 'Special:MyLanguage/' : '' ) . $this->config->getHomepage(),
-			],
-			'section' => 'personal/i18n',
-		];
 	}
 
 	private function isEntityPageOrEditPage( PageIdentity $identity ): bool {

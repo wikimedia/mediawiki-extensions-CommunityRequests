@@ -51,23 +51,23 @@
 		"virtual-communityrequests"
 	],
 	"Hooks": {
+		"BeforeDisplayNoArticleText": "main",
+		"BeforePageDisplay": "main",
+		"ChangeTagsListActive": "changeTag",
+		"GetPreferences": "preferences",
+		"LinksUpdateComplete": "main",
+		"ListDefinedTags": "changeTag",
 		"LoadExtensionSchemaUpdates": "schema",
 		"LoginFormValidErrorMessages": "main",
-		"BeforePageDisplay": "main",
-		"ParserFirstCallInit": "main",
-		"LinksUpdateComplete": "main",
 		"PageDeleteComplete": "main",
-		"RevisionDataUpdates": "main",
-		"SkinTemplateNavigation::Universal": "main",
 		"ParserAfterTidy": "main",
-		"getUserPermissionsErrorsExpensive": "main",
-		"BeforeDisplayNoArticleText": "main",
-		"GetPreferences": "main",
-		"ShowSearchHit": "search",
-		"ChangeTagsListActive": "changeTag",
-		"ListDefinedTags": "changeTag",
+		"ParserFirstCallInit": "main",
 		"RecentChange_save": "changeTag",
-		"TranslateTitlePageTranslation": "translate"
+		"RevisionDataUpdates": "main",
+		"ShowSearchHit": "search",
+		"SkinTemplateNavigation::Universal": "main",
+		"TranslateTitlePageTranslation": "translate",
+		"getUserPermissionsErrorsExpensive": "main"
 	},
 	"HookHandlers": {
 		"main": {
@@ -89,6 +89,12 @@
 		},
 		"changeTag": {
 			"class": "MediaWiki\\Extension\\CommunityRequests\\HookHandler\\ChangeTagHooks",
+			"services": [
+				"CommunityRequests.WishlistConfig"
+			]
+		},
+		"preferences": {
+			"class": "MediaWiki\\Extension\\CommunityRequests\\HookHandler\\PreferencesHooks",
 			"services": [
 				"CommunityRequests.WishlistConfig"
 			]

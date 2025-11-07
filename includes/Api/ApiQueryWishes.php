@@ -15,6 +15,7 @@ use MediaWiki\Page\PageIdentity;
 use MediaWiki\Page\PageReferenceValue;
 use MediaWiki\Registration\ExtensionRegistry;
 use MediaWiki\Title\Title;
+use Psr\Log\LoggerInterface;
 use Wikimedia\ParamValidator\ParamValidator;
 use Wikimedia\ParamValidator\TypeDef\IntegerDef;
 
@@ -26,6 +27,7 @@ class ApiQueryWishes extends ApiQueryBase {
 		ApiQuery $queryModule,
 		string $moduleName,
 		private readonly WishlistConfig $config,
+		private readonly LoggerInterface $logger,
 		private readonly WishStore $store,
 		private readonly FocusAreaStore $focusAreaStore,
 		private readonly ExtensionRegistry $extensionRegistry,

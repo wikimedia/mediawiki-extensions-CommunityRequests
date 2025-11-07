@@ -134,6 +134,7 @@
 			"class": "MediaWiki\\Extension\\CommunityRequests\\Api\\ApiQueryWishes",
 			"services": [
 				"CommunityRequests.WishlistConfig",
+				"CommunityRequests.Logger",
 				"CommunityRequests.WishStore",
 				"CommunityRequests.FocusAreaStore",
 				"ExtensionRegistry"
@@ -145,6 +146,7 @@
 			"class": "MediaWiki\\Extension\\CommunityRequests\\Api\\ApiWishEdit",
 			"services": [
 				"CommunityRequests.WishlistConfig",
+				"CommunityRequests.Logger",
 				"CommunityRequests.WishStore",
 				"TitleParser",
 				"ContentTransformer",
@@ -158,6 +160,7 @@
 			"class": "MediaWiki\\Extension\\CommunityRequests\\Api\\ApiFocusAreaEdit",
 			"services": [
 				"CommunityRequests.WishlistConfig",
+				"CommunityRequests.Logger",
 				"CommunityRequests.FocusAreaStore",
 				"TitleParser",
 				"ContentTransformer"
@@ -169,11 +172,12 @@
 		"wishlistvote": {
 			"class": "MediaWiki\\Extension\\CommunityRequests\\Api\\ApiWishlistVote",
 			"services": [
+				"CommunityRequests.WishlistConfig",
+				"CommunityRequests.Logger",
 				"WikiPageFactory",
 				"CommunityRequests.VoteStore",
 				"CommunityRequests.WishStore",
-				"CommunityRequests.FocusAreaStore",
-				"CommunityRequests.WishlistConfig"
+				"CommunityRequests.FocusAreaStore"
 			]
 		}
 	},

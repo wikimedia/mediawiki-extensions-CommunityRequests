@@ -13,6 +13,7 @@ use MediaWiki\Extension\CommunityRequests\Wish\WishStore;
 use MediaWiki\Extension\CommunityRequests\WishlistConfig;
 use MediaWiki\Page\WikiPageFactory;
 use MediaWiki\Title\Title;
+use Psr\Log\LoggerInterface;
 use Wikimedia\ParamValidator\ParamValidator;
 
 class ApiWishlistVote extends ApiWishlistEditBase {
@@ -20,13 +21,14 @@ class ApiWishlistVote extends ApiWishlistEditBase {
 	public function __construct(
 		ApiMain $main,
 		string $name,
+		WishlistConfig $config,
+		LoggerInterface $logger,
 		protected readonly WikiPageFactory $wikiPageFactory,
 		protected readonly VoteStore $store,
 		protected readonly WishStore $wishStore,
 		protected FocusAreaStore $focusAreaStore,
-		WishlistConfig $config
 	) {
-		parent::__construct( $main, $name, $config );
+		parent::__construct( $main, $name, $config, $logger );
 	}
 
 	/** @inheritDoc */

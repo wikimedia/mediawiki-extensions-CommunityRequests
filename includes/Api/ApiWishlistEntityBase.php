@@ -14,6 +14,7 @@ use MediaWiki\Page\PageIdentity;
 use MediaWiki\Parser\ParserOptions;
 use MediaWiki\Title\Title;
 use MediaWiki\Title\TitleParser;
+use Psr\Log\LoggerInterface;
 use StatusValue;
 use Throwable;
 
@@ -29,12 +30,13 @@ abstract class ApiWishlistEntityBase extends ApiWishlistEditBase {
 		ApiMain $main,
 		string $name,
 		WishlistConfig $config,
+		LoggerInterface $logger,
 		protected readonly AbstractWishlistStore $store,
 		protected readonly TitleParser $titleParser,
 		protected readonly ContentTransformer $transformer,
 		protected readonly ?TranslatablePageParser $translatablePageParser = null,
 	) {
-		parent::__construct( $main, $name, $config );
+		parent::__construct( $main, $name, $config, $logger );
 	}
 
 	/** @inheritDoc */

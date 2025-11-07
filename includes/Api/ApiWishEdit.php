@@ -16,6 +16,7 @@ use MediaWiki\Page\PageIdentity;
 use MediaWiki\ParamValidator\TypeDef\UserDef;
 use MediaWiki\Title\TitleParser;
 use MediaWiki\User\UserFactory;
+use Psr\Log\LoggerInterface;
 use Wikimedia\ParamValidator\ParamValidator;
 use Wikimedia\ParamValidator\TypeDef\StringDef;
 
@@ -25,13 +26,16 @@ class ApiWishEdit extends ApiWishlistEntityBase {
 		ApiMain $main,
 		string $name,
 		WishlistConfig $config,
+		LoggerInterface $logger,
 		AbstractWishlistStore $store,
 		TitleParser $titleParser,
 		ContentTransformer $transformer,
 		protected readonly UserFactory $userFactory,
 		?TranslatablePageParser $translatablePageParser = null,
 	) {
-		parent::__construct( $main, $name, $config, $store, $titleParser, $transformer, $translatablePageParser );
+		parent::__construct(
+			$main, $name, $config, $logger, $store, $titleParser, $transformer, $translatablePageParser
+		);
 	}
 
 	/** @inheritDoc */

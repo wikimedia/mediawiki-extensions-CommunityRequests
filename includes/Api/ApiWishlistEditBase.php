@@ -10,6 +10,7 @@ use MediaWiki\Context\DerivativeContext;
 use MediaWiki\Extension\CommunityRequests\WishlistConfig;
 use MediaWiki\Request\DerivativeRequest;
 use MediaWiki\Status\Status;
+use Psr\Log\LoggerInterface;
 use StatusValue;
 
 /**
@@ -23,6 +24,7 @@ class ApiWishlistEditBase extends ApiBase {
 		ApiMain $main,
 		string $name,
 		protected readonly WishlistConfig $config,
+		protected readonly LoggerInterface $logger,
 	) {
 		parent::__construct( $main, $name );
 	}

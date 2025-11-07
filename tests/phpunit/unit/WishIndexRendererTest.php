@@ -14,6 +14,7 @@ use MediaWiki\Parser\ParserOptions;
 use MediaWiki\Parser\ParserOutput;
 use MediaWiki\Parser\PPFrame;
 use MediaWiki\Tests\Unit\FakeQqxMessageLocalizer;
+use MediaWikiUnitTestCase;
 use MockTitleTrait;
 use Psr\Log\LoggerInterface;
 
@@ -22,8 +23,9 @@ use Psr\Log\LoggerInterface;
  * @covers \MediaWiki\Extension\CommunityRequests\Wish\WishIndexRenderer
  * @covers \MediaWiki\Extension\CommunityRequests\RendererFactory
  */
-class WishIndexRendererTest extends AbstractWishlistEntityTest {
+class WishIndexRendererTest extends MediaWikiUnitTestCase {
 
+	use MockWishlistConfigTrait;
 	use MockTitleTrait;
 
 	/**
@@ -91,7 +93,7 @@ class WishIndexRendererTest extends AbstractWishlistEntityTest {
 			->method( 'newChild' )
 			->willReturn( $childFrame );
 		$renderer = new WishIndexRenderer(
-			$this->config,
+			$this->getConfig(),
 			$this->createNoOpMock( WishStore::class ),
 			$focusAreaStore,
 			$this->createNoOpMock( LoggerInterface::class ),

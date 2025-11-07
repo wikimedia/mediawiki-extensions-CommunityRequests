@@ -5,14 +5,16 @@ namespace MediaWiki\Extension\CommunityRequests\Tests\Unit;
 
 use MediaWiki\Extension\CommunityRequests\FocusArea\FocusArea;
 use MediaWiki\Tests\Unit\Permissions\MockAuthorityTrait;
+use MediaWikiUnitTestCase;
 use MockTitleTrait;
 
 /**
  * @group CommunityRequests
  * @covers \MediaWiki\Extension\CommunityRequests\FocusArea\FocusArea
  */
-class FocusAreaTest extends AbstractWishlistEntityTest {
+class FocusAreaTest extends MediaWikiUnitTestCase {
 
+	use MockWishlistConfigTrait;
 	use MockTitleTrait;
 	use MockAuthorityTrait;
 
@@ -24,7 +26,7 @@ class FocusAreaTest extends AbstractWishlistEntityTest {
 
 		$this->assertSame(
 			$expectedWikitext,
-			$focusArea->toWikitext( $this->config )->getText()
+			$focusArea->toWikitext( $this->getConfig() )->getText()
 		);
 	}
 
@@ -66,7 +68,7 @@ END
 	 */
 	public function testToArray( array $focusAreaData, array $expected ): void {
 		$focusArea = $this->getTestFocusArea( $focusAreaData );
-		$this->assertSame( $expected, $focusArea->toArray( $this->config ) );
+		$this->assertSame( $expected, $focusArea->toArray( $this->getConfig() ) );
 	}
 
 	/**
@@ -105,7 +107,7 @@ END
 			$this->makeMockTitle( 'Community Wishlist/FA123' ),
 			'en',
 			$wikitextParams,
-			$this->config
+			$this->getConfig()
 		);
 		$this->assertSame( $expected[FocusArea::PARAM_TITLE], $focusArea->getTitle() );
 		$this->assertSame( $expected[FocusArea::PARAM_STATUS], $focusArea->getStatus() );

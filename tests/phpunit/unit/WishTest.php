@@ -5,6 +5,7 @@ namespace MediaWiki\Extension\CommunityRequests\Tests\Unit;
 
 use MediaWiki\Extension\CommunityRequests\Wish\Wish;
 use MediaWiki\Tests\Unit\Permissions\MockAuthorityTrait;
+use MediaWikiUnitTestCase;
 use MockTitleTrait;
 
 /**
@@ -12,7 +13,9 @@ use MockTitleTrait;
  * @covers \MediaWiki\Extension\CommunityRequests\Wish\Wish
  * @covers \MediaWiki\Extension\CommunityRequests\AbstractWishlistEntity
  */
-class WishTest extends AbstractWishlistEntityTest {
+class WishTest extends MediaWikiUnitTestCase {
+
+	use MockWishlistConfigTrait;
 	use MockTitleTrait;
 	use MockAuthorityTrait;
 
@@ -23,7 +26,7 @@ class WishTest extends AbstractWishlistEntityTest {
 		$wish = $this->getTestWish( $wishData );
 		$this->assertSame(
 			$expectedWikitext,
-			$wish->toWikitext( $this->config )->getText()
+			$wish->toWikitext( $this->getConfig() )->getText()
 		);
 	}
 
@@ -68,7 +71,7 @@ END
 	 */
 	public function testToArray( array $wishData, array $expected ): void {
 		$wish = $this->getTestWish( $wishData );
-		$this->assertSame( $expected, $wish->toArray( $this->config ) );
+		$this->assertSame( $expected, $wish->toArray( $this->getConfig() ) );
 	}
 
 	/**
@@ -142,7 +145,7 @@ END
 			$this->makeMockTitle( 'Community Wishlist/W123' ),
 			'en',
 			$wikitextParams,
-			$this->config,
+			$this->getConfig(),
 			$this->mockRegisteredUltimateAuthority()->getUser(),
 		);
 		$this->assertSame( $expected[Wish::PARAM_TITLE], $wish->getTitle() );
@@ -208,10 +211,10 @@ END
 	}
 
 	public function testGetTagsFromCsv(): void {
-		$this->assertSame( [], Wish::getTagsFromCsv( '', $this->config ) );
+		$this->assertSame( [], Wish::getTagsFromCsv( '', $this->getConfig() ) );
 		$this->assertSame(
 			[ 0, 2, 11 ],
-			Wish::getTagsFromCsv( 'admins,  categories ,, bogus,patrolling', $this->config )
+			Wish::getTagsFromCsv( 'admins,  categories ,, bogus,patrolling', $this->getConfig() )
 		);
 	}
 

@@ -7,23 +7,26 @@ use MediaWiki\Config\ServiceOptions;
 use MediaWiki\Extension\CommunityRequests\WishlistConfig;
 use MediaWiki\Language\LanguageNameUtils;
 use MediaWiki\MainConfigNames;
+use MediaWiki\SpecialPage\SpecialPage;
+use MediaWiki\SpecialPage\SpecialPageFactory;
 use MediaWiki\Tests\Unit\MockServiceDependenciesTrait;
 use MediaWiki\Title\TitleFormatter;
 use MediaWiki\Title\TitleParser;
-use MediaWikiUnitTestCase;
 
 /**
- * @group CommunityRequests
- * @coversNothing
+ * Trait for mocking WishlistConfig in unit tests.
  */
-class AbstractWishlistEntityTest extends MediaWikiUnitTestCase {
+trait MockWishlistConfigTrait {
 
 	use MockServiceDependenciesTrait;
 
-	protected WishlistConfig $config;
-
-	protected function setUp(): void {
-		parent::setUp();
+	/**
+	 * Get a mock WishlistConfig with default or overridden options.
+	 *
+	 * @param array $serviceOptions Options to override the defaults.
+	 * @return WishlistConfig
+	 */
+	protected function getConfig( array $serviceOptions = [] ): WishlistConfig {
 		$serviceOptions = new ServiceOptions( WishlistConfig::CONSTRUCTOR_OPTIONS, [
 			WishlistConfig::ENABLED => true,
 			WishlistConfig::HOMEPAGE => 'Community Wishlist',
@@ -31,8 +34,10 @@ class AbstractWishlistEntityTest extends MediaWikiUnitTestCase {
 			WishlistConfig::WISH_PAGE_PREFIX => 'Community Wishlist/W',
 			WishlistConfig::WISH_INDEX_PAGE => 'Community Wishlist/Wishes',
 			WishlistConfig::WISH_TYPES => [
-				'bug' => [ 'id' => 1 ],
-				'change' => [ 'id' => 2 ],
+				'feature' => [ 'id' => 0, 'label' => 'communityrequests-wishtype-feature' ],
+				'bug' => [ 'id' => 1, 'label' => 'communityrequests-wishtype-bug' ],
+				'change' => [ 'id' => 2, 'label' => 'communityrequests-wishtype-change' ],
+				'unknown' => [ 'id' => 3, 'label' => 'communityrequests-wishtype-unknown' ],
 			],
 			WishlistConfig::FOCUS_AREA_CATEGORY => 'Category:Community Wishlist/Focus areas',
 			WishlistConfig::FOCUS_AREA_PAGE_PREFIX => 'Community Wishlist/FA',
@@ -72,12 +77,43 @@ class AbstractWishlistEntityTest extends MediaWikiUnitTestCase {
 			WishlistConfig::WISH_VOTING_ENABLED => true,
 			WishlistConfig::FOCUS_AREA_VOTING_ENABLED => true,
 			MainConfigNames::LanguageCode => 'en',
+			...$serviceOptions,
 		] );
-		$this->config = new WishlistConfig(
+		return new WishlistConfig(
 			$serviceOptions,
 			$this->newServiceInstance( TitleParser::class, [ 'localInterwikis' => [] ] ),
 			$this->newServiceInstance( TitleFormatter::class, [] ),
-			$this->newServiceInstance( LanguageNameUtils::class, [] ),
+			$this->newServiceInstance( LanguageNameUtils::class, [
+				'options' => new ServiceOptions( LanguageNameUtils::CONSTRUCTOR_OPTIONS, [
+					MainConfigNames::ExtraLanguageNames => [],
+					MainConfigNames::UsePigLatinVariant => false,
+					MainConfigNames::UseXssLanguage => false,
+				] )
+			] ),
 		);
+	}
+
+	/**
+	 * Get a mock SpecialPageFactory with relevant SpecialPages mocked.
+	 *
+	 * @return SpecialPageFactory
+	 */
+	protected function getSpecialPageFactory(): SpecialPageFactory {
+		$specialWishlistIntake = $this->createNoOpMock( SpecialPage::class, [ 'getPageTitle' ] );
+		$specialWishlistIntake->expects( $this->any() )
+			->method( 'getPageTitle' )
+			->willReturn( $this->makeMockTitle( 'WishlistIntake', [ 'namespace' => NS_SPECIAL ] ) );
+		$specialEditFocusArea = $this->createNoOpMock( SpecialPage::class, [ 'getPageTitle' ] );
+		$specialEditFocusArea->expects( $this->any() )
+			->method( 'getPageTitle' )
+			->willReturn( $this->makeMockTitle( 'EditFocusArea', [ 'namespace' => NS_SPECIAL ] ) );
+		$specialPageFactory = $this->createNoOpMock( SpecialPageFactory::class, [ 'getPage' ] );
+		$specialPageFactory->expects( $this->atMost( 1 ) )
+			->method( 'getPage' )
+			->willReturnMap( [
+				[ 'WishlistIntake', $specialWishlistIntake ],
+				[ 'EditFocusArea', $specialEditFocusArea ],
+			] );
+		return $specialPageFactory;
 	}
 }

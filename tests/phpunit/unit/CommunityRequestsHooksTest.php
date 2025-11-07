@@ -5,7 +5,6 @@ namespace MediaWiki\Extension\CommunityRequests\Tests\Unit;
 
 use Language;
 use MediaWiki\Config\HashConfig;
-use MediaWiki\Config\ServiceOptions;
 use MediaWiki\Context\RequestContext;
 use MediaWiki\Extension\CommunityRequests\EntityFactory;
 use MediaWiki\Extension\CommunityRequests\FocusArea\FocusAreaStore;
@@ -13,7 +12,6 @@ use MediaWiki\Extension\CommunityRequests\HookHandler\CommunityRequestsHooks;
 use MediaWiki\Extension\CommunityRequests\Vote\VoteStore;
 use MediaWiki\Extension\CommunityRequests\Wish\WishStore;
 use MediaWiki\Extension\CommunityRequests\WishlistConfig;
-use MediaWiki\Language\LanguageNameUtils;
 use MediaWiki\Linker\LinkRenderer;
 use MediaWiki\MainConfigNames;
 use MediaWiki\Output\OutputPage;
@@ -25,14 +23,10 @@ use MediaWiki\Request\WebRequest;
 use MediaWiki\Session\Session;
 use MediaWiki\Skin\Skin;
 use MediaWiki\Skin\SkinTemplate;
-use MediaWiki\SpecialPage\SpecialPage;
-use MediaWiki\SpecialPage\SpecialPageFactory;
 use MediaWiki\Status\Status;
 use MediaWiki\Tests\Unit\FakeQqxMessageLocalizer;
 use MediaWiki\Tests\Unit\MockServiceDependenciesTrait;
 use MediaWiki\Tests\Unit\Permissions\MockAuthorityTrait;
-use MediaWiki\Title\TitleFormatter;
-use MediaWiki\Title\TitleParser;
 use MediaWiki\User\Options\UserOptionsManager;
 use MediaWiki\User\User;
 use MediaWikiUnitTestCase;
@@ -46,6 +40,7 @@ use Psr\Log\NullLogger;
  */
 class CommunityRequestsHooksTest extends MediaWikiUnitTestCase {
 
+	use MockWishlistConfigTrait;
 	use MockServiceDependenciesTrait;
 	use MockAuthorityTrait;
 	use MockTitleTrait;
@@ -122,10 +117,6 @@ class CommunityRequestsHooksTest extends MediaWikiUnitTestCase {
 			WishlistConfig::ENABLED => $opts['enabled'],
 			WishlistConfig::WISH_VOTING_ENABLED => $opts['wishVotingEnabled'],
 			WishlistConfig::FOCUS_AREA_VOTING_ENABLED => $opts['focusAreaVotingEnabled'],
-			WishlistConfig::WISH_PAGE_PREFIX => 'Community Wishlist/W',
-			WishlistConfig::FOCUS_AREA_PAGE_PREFIX => 'Community Wishlist/FA',
-			WishlistConfig::WISH_INDEX_PAGE => 'Community Wishlist',
-			WishlistConfig::FOCUS_AREA_INDEX_PAGE => 'Community Wishlist/Focus areas',
 		], null, $userOptionsManager );
 		$handler->onBeforePageDisplay( $out, $this->createNoOpMock( Skin::class ) );
 	}
@@ -221,15 +212,7 @@ class CommunityRequestsHooksTest extends MediaWikiUnitTestCase {
 				[ $user, 'manage-wishlist', $opts['canManage'] ],
 				[ $user, 'manually-edit-wishlist', $opts['canManuallyEdit'] ],
 			] );
-		$handler = $this->getHandler(
-			[
-				WishlistConfig::WISH_PAGE_PREFIX => 'Community Wishlist/W',
-				WishlistConfig::VOTES_PAGE_SUFFIX => '/Votes',
-				WishlistConfig::FOCUS_AREA_PAGE_PREFIX => 'Community Wishlist/FA',
-			],
-			$permissionManager,
-			null,
-		);
+		$handler = $this->getHandler( [], $permissionManager );
 
 		$links = [ 'views' => $opts['tabs'] ];
 		$handler->onSkinTemplateNavigation__Universal( $skinTemplate, $links );
@@ -338,13 +321,7 @@ class CommunityRequestsHooksTest extends MediaWikiUnitTestCase {
 			->with( 'manually-edit-wishlist' )
 			->willReturn( $status );
 		CommunityRequestsHooks::$allowManualEditing = $opts['allowManualEditing'];
-		$handler = $this->getHandler(
-			[
-				WishlistConfig::WISH_PAGE_PREFIX => 'Community Wishlist/W',
-				WishlistConfig::FOCUS_AREA_PAGE_PREFIX => 'Community Wishlist/FA',
-			],
-			$permissionManager
-		);
+		$handler = $this->getHandler( [], $permissionManager );
 
 		$result = [];
 		$ret = $handler->onGetUserPermissionsErrorsExpensive(
@@ -448,35 +425,11 @@ class CommunityRequestsHooksTest extends MediaWikiUnitTestCase {
 		?UserOptionsManager $userOptionsManager = null,
 		?ExtensionRegistry $extensionRegistry = null,
 	): CommunityRequestsHooks {
-		$serviceOptions = new ServiceOptions( WishlistConfig::CONSTRUCTOR_OPTIONS, [
-			WishlistConfig::ENABLED => true,
-			WishlistConfig::HOMEPAGE => '',
-			WishlistConfig::WISH_CATEGORY => '',
-			WishlistConfig::WISH_PAGE_PREFIX => '',
-			WishlistConfig::WISH_INDEX_PAGE => '',
-			WishlistConfig::WISH_TYPES => [],
-			WishlistConfig::FOCUS_AREA_CATEGORY => '',
-			WishlistConfig::FOCUS_AREA_PAGE_PREFIX => '',
-			WishlistConfig::FOCUS_AREA_INDEX_PAGE => '',
-			WishlistConfig::TAGS => [],
-			WishlistConfig::STATUSES => [],
-			WishlistConfig::VOTES_PAGE_SUFFIX => '/Votes',
-			WishlistConfig::WISH_VOTING_ENABLED => true,
-			WishlistConfig::FOCUS_AREA_VOTING_ENABLED => true,
-			MainConfigNames::LanguageCode => 'en',
-			...$serviceOptions
-		] );
-		$config = new WishlistConfig(
-			$serviceOptions,
-			$this->newServiceInstance( TitleParser::class, [ 'localInterwikis' => [] ] ),
-			$this->newServiceInstance( TitleFormatter::class, [] ),
-			$this->newServiceInstance( LanguageNameUtils::class, [] ),
-		);
 		$mainConfig = new HashConfig( [ MainConfigNames::PageLanguageUseDB => true ] );
 		$extensionRegistry = $extensionRegistry ?: $this->createNoOpMock( ExtensionRegistry::class, [ 'isLoaded' ] );
 		$extensionRegistry->method( 'isLoaded' )->willReturn( false );
 		return new CommunityRequestsHooks(
-			$config,
+			$this->getConfig( $serviceOptions ),
 			$this->createNoOpMock( WishStore::class ),
 			$this->createNoOpMock( FocusAreaStore::class ),
 			$this->createNoOpMock( VoteStore::class ),
@@ -490,24 +443,5 @@ class CommunityRequestsHooksTest extends MediaWikiUnitTestCase {
 			$this->createNoOpMock( WikiPageFactory::class ),
 			$extensionRegistry
 		);
-	}
-
-	private function getSpecialPageFactory(): SpecialPageFactory {
-		$specialWishlistIntake = $this->createNoOpMock( SpecialPage::class, [ 'getPageTitle' ] );
-		$specialWishlistIntake->expects( $this->any() )
-			->method( 'getPageTitle' )
-			->willReturn( $this->makeMockTitle( 'WishlistIntake', [ 'namespace' => NS_SPECIAL ] ) );
-		$specialEditFocusArea = $this->createNoOpMock( SpecialPage::class, [ 'getPageTitle' ] );
-		$specialEditFocusArea->expects( $this->any() )
-			->method( 'getPageTitle' )
-			->willReturn( $this->makeMockTitle( 'EditFocusArea', [ 'namespace' => NS_SPECIAL ] ) );
-		$specialPageFactory = $this->createNoOpMock( SpecialPageFactory::class, [ 'getPage' ] );
-		$specialPageFactory->expects( $this->atMost( 1 ) )
-			->method( 'getPage' )
-			->willReturnMap( [
-				[ 'WishlistIntake', $specialWishlistIntake ],
-				[ 'EditFocusArea', $specialEditFocusArea ],
-			] );
-		return $specialPageFactory;
 	}
 }

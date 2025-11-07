@@ -21,6 +21,7 @@ use MockTitleTrait;
  */
 class WishlistConfigTest extends MediaWikiUnitTestCase {
 
+	use MockWishlistConfigTrait;
 	use MockServiceDependenciesTrait;
 	use MockTitleTrait;
 
@@ -28,26 +29,10 @@ class WishlistConfigTest extends MediaWikiUnitTestCase {
 
 	protected function setUp(): void {
 		parent::setUp();
-		$this->config = new WishlistConfig(
-			new ServiceOptions( WishlistConfig::CONSTRUCTOR_OPTIONS, [
-				WishlistConfig::ENABLED => true,
-				WishlistConfig::HOMEPAGE => 'Community Wishlist',
+		$this->config = $this->getConfig(
+			[
 				WishlistConfig::WISH_CATEGORY => 'Category:Wishes',
-				WishlistConfig::WISH_PAGE_PREFIX => 'Community Wishlist/W',
-				WishlistConfig::WISH_INDEX_PAGE => 'Community Wishlist/Wishes',
-				WishlistConfig::WISH_TYPES => [
-					'feature' => [
-						'id' => 0,
-						'label' => 'type-feature',
-					],
-					'bug' => [
-						'id' => 1,
-						'label' => 'type-bug',
-					],
-				],
 				WishlistConfig::FOCUS_AREA_CATEGORY => 'Category:Focus areas',
-				WishlistConfig::FOCUS_AREA_PAGE_PREFIX => 'Community Wishlist/FA',
-				WishlistConfig::FOCUS_AREA_INDEX_PAGE => 'Community Wishlist/Focus areas',
 				WishlistConfig::TAGS => [
 					'navigation' => [
 						'admins' => [
@@ -81,20 +66,7 @@ class WishlistConfigTest extends MediaWikiUnitTestCase {
 						'default' => true
 					]
 				],
-				WishlistConfig::VOTES_PAGE_SUFFIX => '/Votes',
-				WishlistConfig::WISH_VOTING_ENABLED => true,
-				WishlistConfig::FOCUS_AREA_VOTING_ENABLED => true,
-				MainConfigNames::LanguageCode => 'en',
-			] ),
-			$this->newServiceInstance( TitleParser::class, [ 'localInterwikis' => [] ] ),
-			$this->newServiceInstance( TitleFormatter::class, [] ),
-			$this->newServiceInstance( LanguageNameUtils::class, [
-				'options' => new ServiceOptions( LanguageNameUtils::CONSTRUCTOR_OPTIONS, [
-					MainConfigNames::ExtraLanguageNames => [],
-					MainConfigNames::UsePigLatinVariant => false,
-					MainConfigNames::UseXssLanguage => false,
-				] )
-			] ),
+			],
 		);
 	}
 
@@ -104,7 +76,7 @@ class WishlistConfigTest extends MediaWikiUnitTestCase {
 		$this->assertSame( 'Category:Wishes', $this->config->getWishCategory() );
 		$this->assertSame( 'Community Wishlist/W', $this->config->getWishPagePrefix() );
 		$this->assertSame( 'Community Wishlist/Wishes', $this->config->getWishIndexPage() );
-		$this->assertSame( [ 'feature', 'bug' ], array_keys( $this->config->getWishTypes() ) );
+		$this->assertSame( [ 'feature', 'bug', 'change', 'unknown' ], array_keys( $this->config->getWishTypes() ) );
 		$this->assertSame( 'Category:Focus areas', $this->config->getFocusAreaCategory() );
 		$this->assertSame( 'Community Wishlist/FA', $this->config->getFocusAreaPagePrefix() );
 		$this->assertSame( 'Community Wishlist/Focus areas', $this->config->getFocusAreaIndexPage() );
@@ -221,8 +193,10 @@ class WishlistConfigTest extends MediaWikiUnitTestCase {
 	}
 
 	public function testGetWishTypeLabelFromWikitextVal(): void {
-		$this->assertSame( 'type-feature', $this->config->getWishTypeLabelFromWikitextVal( 'feature' ) );
-		$this->assertSame( 'type-bug', $this->config->getWishTypeLabelFromWikitextVal( 'bug' ) );
+		$this->assertSame( 'communityrequests-wishtype-feature',
+			$this->config->getWishTypeLabelFromWikitextVal( 'feature' )
+		);
+		$this->assertSame( 'communityrequests-wishtype-bug', $this->config->getWishTypeLabelFromWikitextVal( 'bug' ) );
 		$this->assertNull( $this->config->getWishTypeLabelFromWikitextVal( 'bogus' ) );
 	}
 

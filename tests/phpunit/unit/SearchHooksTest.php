@@ -14,6 +14,7 @@ use MediaWiki\Specials\SpecialSearch;
 use MediaWiki\Tests\Unit\FakeQqxMessageLocalizer;
 use MediaWiki\Title\TitleFormatter;
 use MediaWiki\User\UserIdentity;
+use MediaWikiUnitTestCase;
 use MockTitleTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\NullLogger;
@@ -23,8 +24,9 @@ use RevisionSearchResult;
  * @group CommunityRequests
  * @covers \MediaWiki\Extension\CommunityRequests\HookHandler\SearchHooks
  */
-class SearchHooksTest extends AbstractWishlistEntityTest {
+class SearchHooksTest extends MediaWikiUnitTestCase {
 
+	use MockWishlistConfigTrait;
 	use MockTitleTrait;
 
 	public function testOnShowSearchHitWish(): void {
@@ -50,7 +52,7 @@ class SearchHooksTest extends AbstractWishlistEntityTest {
 			->willReturn( 'Community Wishlist/W1' );
 
 		$handler = new SearchHooks(
-			$this->config,
+			$this->getConfig(),
 			$wishStore,
 			$this->createNoOpMock( FocusAreaStore::class ),
 			new NullLogger(),
@@ -110,7 +112,7 @@ class SearchHooksTest extends AbstractWishlistEntityTest {
 			->willReturn( 'Community Wishlist/W1' );
 
 		$handler = new SearchHooks(
-			$this->config,
+			$this->getConfig(),
 			$this->createNoOpMock( WishStore::class ),
 			$focusAreaStore,
 			new NullLogger(),

@@ -7,13 +7,16 @@ use MediaWiki\Extension\CommunityRequests\AbstractWishlistEntity;
 use MediaWiki\Extension\CommunityRequests\Vote\Vote;
 use MediaWiki\Extension\CommunityRequests\Wish\Wish;
 use MediaWiki\User\UserIdentity;
+use MediaWikiUnitTestCase;
 use MockTitleTrait;
 
 /**
  * @group CommunityRequests
  * @covers \MediaWiki\Extension\CommunityRequests\Vote\Vote
  */
-class VoteTest extends AbstractWishlistEntityTest {
+class VoteTest extends MediaWikiUnitTestCase {
+
+	use MockWishlistConfigTrait;
 	use MockTitleTrait;
 
 	public function testGetters(): void {
@@ -27,7 +30,7 @@ class VoteTest extends AbstractWishlistEntityTest {
 				Wish::PARAM_BASE_LANG => 'en',
 				Wish::PARAM_CREATED => '2025-01-01T00:00:00Z',
 			],
-			$this->config
+			$this->getConfig()
 		);
 		$vote = new Vote(
 			$entity,
@@ -52,7 +55,7 @@ class VoteTest extends AbstractWishlistEntityTest {
 				Wish::PARAM_BASE_LANG => 'en',
 				Wish::PARAM_CREATED => '2025-01-01T00:00:00Z',
 			],
-			$this->config
+			$this->getConfig()
 		);
 		$vote = new Vote(
 			$entity,
@@ -66,7 +69,7 @@ class VoteTest extends AbstractWishlistEntityTest {
 			'comment' => 'This is a comment',
 			'timestamp' => '2025-01-01T12:00:00Z',
 		];
-		$this->assertSame( $expected, $vote->toArray( $this->config ) );
+		$this->assertSame( $expected, $vote->toArray( $this->getConfig() ) );
 	}
 
 	public function testToWikitext() {

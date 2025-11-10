@@ -8,11 +8,15 @@ use MediaWiki\Extension\CommunityRequests\FocusArea\FocusAreaStore;
 use MediaWiki\Extension\CommunityRequests\HookHandler\CommunityRequestsHooks;
 use MediaWiki\Extension\CommunityRequests\HookHandler\PageDisplayHooks;
 use MediaWiki\Extension\CommunityRequests\Vote\VoteStore;
+use MediaWiki\Extension\CommunityRequests\Wish\Wish;
 use MediaWiki\Extension\CommunityRequests\Wish\WishStore;
 use MediaWiki\Extension\CommunityRequests\WishlistConfig;
 use MediaWiki\Language\Language;
+use MediaWiki\Linker\LinkRenderer;
+use MediaWiki\Message\Message;
 use MediaWiki\Output\OutputPage;
 use MediaWiki\Page\Article;
+use MediaWiki\Parser\ParserOutput;
 use MediaWiki\Registration\ExtensionRegistry;
 use MediaWiki\Request\WebRequest;
 use MediaWiki\Session\Session;
@@ -20,6 +24,8 @@ use MediaWiki\Skin\Skin;
 use MediaWiki\Tests\Unit\FakeQqxMessageLocalizer;
 use MediaWiki\Tests\Unit\MockServiceDependenciesTrait;
 use MediaWiki\Tests\Unit\Permissions\MockAuthorityTrait;
+use MediaWiki\Title\NamespaceInfo;
+use MediaWiki\Title\Title;
 use MediaWiki\User\Options\UserOptionsManager;
 use MediaWiki\User\User;
 use MediaWikiUnitTestCase;
@@ -40,7 +46,11 @@ class PageDisplayHooksTest extends MediaWikiUnitTestCase {
 	/**
 	 * @dataProvider provideOnBeforePageDisplay
 	 */
-	public function testOnBeforePageDisplay( array $opts = [], array $expectedModules = [] ): void {
+	public function testOnBeforePageDisplay(
+		array $opts = [],
+		array $expectedModules = [],
+		bool $expectStylesModule = true
+	): void {
 		$opts = array_merge(
 			[
 				'enabled' => true,
@@ -72,6 +82,9 @@ class PageDisplayHooksTest extends MediaWikiUnitTestCase {
 					$expectedModules
 				)
 			);
+		$out->expects( $expectStylesModule ? $this->once() : $this->never() )
+			->method( 'addModuleStyles' )
+			->with( 'ext.communityrequests.styles' );
 		$out->method( 'getTitle' )->willReturn( $opts['title'] );
 		$out->expects( $this->atMost( 2 ) )
 			->method( 'getUser' )
@@ -109,7 +122,7 @@ class PageDisplayHooksTest extends MediaWikiUnitTestCase {
 			WishlistConfig::ENABLED => $opts['enabled'],
 			WishlistConfig::WISH_VOTING_ENABLED => $opts['wishVotingEnabled'],
 			WishlistConfig::FOCUS_AREA_VOTING_ENABLED => $opts['focusAreaVotingEnabled'],
-		], $userOptionsManager );
+		], null, $userOptionsManager );
 		$handler->onBeforePageDisplay( $out, $this->createNoOpMock( Skin::class ) );
 	}
 
@@ -117,11 +130,13 @@ class PageDisplayHooksTest extends MediaWikiUnitTestCase {
 		return [
 			'disabled' => [
 				[ 'enabled' => false ],
-				[]
+				[],
+				false,
 			],
 			'non-wish page' => [
 				[ 'title' => $this->makeMockTitle( 'Some other page' ) ],
 				[],
+				false,
 			],
 			'post-edit new wish' => [
 				[
@@ -154,6 +169,12 @@ class PageDisplayHooksTest extends MediaWikiUnitTestCase {
 					'prefersMachineTranslation' => true,
 				],
 				[ 'ext.communityrequests.voting', 'ext.communityrequests.mint' ],
+			],
+			'view wish talk page' => [
+				[
+					'title' => $this->makeMockTitle( 'Talk:Community Wishlist/W123' ),
+				],
+				[],
 			],
 		];
 	}
@@ -198,20 +219,93 @@ class PageDisplayHooksTest extends MediaWikiUnitTestCase {
 		$handler->onBeforeDisplayNoArticleText( $article );
 	}
 
+	public function testOutputPageParserOutput(): void {
+		$testTitle = $this->makeMockTitle( 'Community Wishlist/W123', [ 'namespace' => NS_TALK ] );
+		$testTitle->method( 'isTalkPage' )->willReturn( true );
+		$wishStore = $this->createNoOpMock( WishStore::class, [ 'get', 'entityType' ] );
+		$wish = $this->createNoOpMock( Wish::class, [ 'getTitle', 'getPage', 'getProposer' ] );
+		$wish->expects( $this->once() )
+			->method( 'getTitle' )
+			->willReturn( 'Test wish title' );
+		$wish->expects( $this->exactly( 2 ) )
+			->method( 'getPage' )
+			->willReturn( $testTitle );
+		$wish->expects( $this->once() )
+			->method( 'getProposer' )
+			->willReturn( $this->createConfiguredMock( User::class, [ 'getName' => 'TestUser' ] ) );
+		$wishStore->expects( $this->once() )
+			->method( 'get' )
+			->willReturn( $wish );
+		$wishStore->expects( $this->once() )
+			->method( 'entityType' )
+			->willReturn( 'wish' );
+		$language = $this->createNoOpMock( Language::class, [ 'getCode' ] );
+		$language->expects( $this->once() )
+			->method( 'getCode' )
+			->willReturn( 'en' );
+		$outputPage = $this->createNoOpMock(
+			OutputPage::class,
+			[ 'getTitle', 'getLanguage', 'msg', 'prependHTML' ]
+		);
+		$outputPage->expects( $this->once() )
+			->method( 'getTitle' )
+			->willReturn( $testTitle );
+		$outputPage->expects( $this->once() )
+			->method( 'getLanguage' )
+			->willReturn( $language );
+		$outputPage->expects( $this->exactly( 3 ) )
+			->method( 'msg' )
+			->willReturn( $this->createConfiguredMock( Message::class, [
+				'rawParams' => $this->createConfiguredMock( Message::class, [
+					'parse' => '[Link to wish]',
+				] ),
+			] ) );
+		$outputPage->expects( $this->once() )
+			->method( 'prependHTML' )
+			->with( $this->identicalTo(
+				'<div class="cdx-message--notice ext-communityrequests-entity-talk-header ' .
+				'cdx-message cdx-message--block"><span class="cdx-message__icon"></span>' .
+				'<div class="cdx-message__content">[Link to wish]</div></div>'
+			) );
+		$parserOutput = $this->createNoOpMock( ParserOutput::class );
+		$linkRenderer = $this->createNoOpMock( LinkRenderer::class, [ 'makeKnownLink' ] );
+		$linkRenderer->expects( $this->once() )
+			->method( 'makeKnownLink' )
+			->willReturn( '[Link to wish]' );
+		$handler = $this->getHandler( [
+			WishlistConfig::WISH_PAGE_PREFIX => 'Community Wishlist/W',
+			WishlistConfig::FOCUS_AREA_PAGE_PREFIX => 'Community Wishlist/FA',
+		], $wishStore, null, $linkRenderer );
+		$handler->onOutputPageParserOutput( $outputPage, $parserOutput );
+	}
+
 	private function getHandler(
-		array $serviceOptions, ?UserOptionsManager $userOptionsManager = null
+		array $serviceOptions,
+		?WishStore $wishStore = null,
+		?UserOptionsManager $userOptionsManager = null,
+		?LinkRenderer $linkRenderer = null,
 	): PageDisplayHooks {
 		$config = $this->getConfig( $serviceOptions );
 		$extensionRegistry = $this->createNoOpMock( ExtensionRegistry::class, [ 'isLoaded' ] );
 		$extensionRegistry->method( 'isLoaded' )->willReturn( false );
-		$userOptionsManager ??= $this->createNoOpMock( UserOptionsManager::class );
+		$namespaceInfo = $this->createNoOpMock( NamespaceInfo::class, [ 'getSubjectPage' ] );
+		$namespaceInfo->method( 'getSubjectPage' )->willReturnCallback(
+			function ( Title $title ) {
+				if ( $title->isTalkPage() ) {
+					return $this->makeMockTitle( $title->getText() );
+				}
+				return $title;
+			}
+		);
 		return new PageDisplayHooks(
 			$config,
-			$this->createNoOpMock( WishStore::class ),
+			$wishStore ?? $this->createNoOpMock( WishStore::class ),
 			$this->createNoOpMock( FocusAreaStore::class ),
 			$this->createNoOpMock( VoteStore::class ),
-			$userOptionsManager,
+			$userOptionsManager ?? $this->createNoOpMock( UserOptionsManager::class ),
 			$this->getSpecialPageFactory(),
+			$namespaceInfo,
+			$linkRenderer ?? $this->createNoOpMock( LinkRenderer::class ),
 			new NullLogger(),
 		);
 	}

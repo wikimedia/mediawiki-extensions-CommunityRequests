@@ -6,23 +6,33 @@ namespace MediaWiki\Extension\CommunityRequests\HookHandler;
 use MediaWiki\Extension\CommunityRequests\FocusArea\FocusAreaStore;
 use MediaWiki\Extension\CommunityRequests\Vote\Vote;
 use MediaWiki\Extension\CommunityRequests\Vote\VoteStore;
+use MediaWiki\Extension\CommunityRequests\Wish\Wish;
 use MediaWiki\Extension\CommunityRequests\Wish\WishStore;
 use MediaWiki\Extension\CommunityRequests\WishlistConfig;
 use MediaWiki\Html\Html;
+use MediaWiki\Linker\LinkRenderer;
 use MediaWiki\Output\Hook\BeforePageDisplayHook;
+use MediaWiki\Output\Hook\OutputPageParserOutputHook;
+use MediaWiki\Output\OutputPage;
 use MediaWiki\Page\Article;
 use MediaWiki\Page\Hook\BeforeDisplayNoArticleTextHook;
 use MediaWiki\Page\PageReference;
 use MediaWiki\SpecialPage\SpecialPageFactory;
+use MediaWiki\Title\NamespaceInfo;
 use MediaWiki\Title\Title;
 use MediaWiki\User\UserOptionsManager;
+use ParserOutput;
 use Psr\Log\LoggerInterface;
 use Wikimedia\Rdbms\IDBAccessObject;
 
 /**
  * Hook handlers involving page display, including adding ResourceLoader modules and JS config vars.
  */
-class PageDisplayHooks implements BeforeDisplayNoArticleTextHook, BeforePageDisplayHook {
+class PageDisplayHooks implements
+	BeforeDisplayNoArticleTextHook,
+	BeforePageDisplayHook,
+	OutputPageParserOutputHook
+{
 
 	use WishlistEntityTrait;
 
@@ -33,6 +43,8 @@ class PageDisplayHooks implements BeforeDisplayNoArticleTextHook, BeforePageDisp
 		private readonly VoteStore $voteStore,
 		private readonly UserOptionsManager $userOptionsManager,
 		private readonly SpecialPageFactory $specialPageFactory,
+		private readonly NamespaceInfo $namespaceInfo,
+		private readonly LinkRenderer $linkRenderer,
 		private readonly LoggerInterface $logger,
 	) {
 	}
@@ -143,5 +155,53 @@ class PageDisplayHooks implements BeforeDisplayNoArticleTextHook, BeforePageDisp
 
 		// Render-blocking CSS.
 		$out->addModuleStyles( 'ext.communityrequests.styles' );
+	}
+
+	/**
+	 * Add a link to the entity page atop talk pages, using the translated entity title as the label (T406993).
+	 *
+	 * @param OutputPage $outputPage
+	 * @param ParserOutput $parserOutput
+	 */
+	public function onOutputPageParserOutput( $outputPage, $parserOutput ): void {
+		$title = $outputPage->getTitle();
+		if ( !$this->config->isEnabled() || !$title->isTalkPage() ) {
+			return;
+		}
+		$subjectTitle = Title::newFromLinkTarget( $this->namespaceInfo->getSubjectPage( $title ) );
+		if ( !$this->config->isWishOrFocusAreaPage( $subjectTitle ) || !$subjectTitle->exists() ) {
+			return;
+		}
+
+		$store = $this->getStoreForPage( $subjectTitle );
+		$entity = $store->get(
+			$this->getCanonicalEntityPage( $subjectTitle ),
+			$outputPage->getLanguage()->getCode()
+		);
+		if ( !$entity ) {
+			$this->logger->error( __METHOD__ . ": Could not load entity from talk page {$title->toPageIdentity()}" );
+			return;
+		}
+
+		$wishLink = $this->linkRenderer->makeKnownLink(
+			$entity->getPage(),
+			$this->config->getEntityWikitextVal( $entity->getPage() ) .
+			$outputPage->msg( 'colon-separator' )->text() .
+			$entity->getTitle(),
+			[ 'class' => 'ext-communityrequests-talk-entity-link' ]
+		);
+		$proposerLink = '';
+		if ( $entity instanceof Wish ) {
+			$proposer = $entity->getProposer()->getName();
+			$proposerLink = $outputPage->msg( 'signature', $proposer, $proposer )->parse();
+		}
+		$outputPage->prependHTML(
+			Html::noticeBox(
+				$outputPage->msg( "communityrequests-{$store->entityType()}-talk-subtitle" )
+					->rawParams( $wishLink, $proposerLink )
+					->parse(),
+				'ext-communityrequests-entity-talk-header'
+			)
+		);
 	}
 }

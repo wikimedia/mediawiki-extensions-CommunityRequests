@@ -235,5 +235,7 @@
 	"communityrequests-vote-update-summary": "Updating support vote",
 	"communityrequests-vote-remove-summary": "Removing support vote",
 	"communityrequests-wish-count": "$1 {{PLURAL:$2|wish|wishes}}",
-	"communityrequests-vote-count": "$1 {{PLURAL:$2|supporter|supporters}}"
+	"communityrequests-vote-count": "$1 {{PLURAL:$2|supporter|supporters}}",
+	"communityrequests-wish-talk-subtitle": "Discussion for $1 proposed by $2",
+	"communityrequests-focus-area-talk-subtitle": "Discussion for $1"
 }

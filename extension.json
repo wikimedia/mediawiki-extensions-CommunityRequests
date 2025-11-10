@@ -59,6 +59,7 @@
 		"ListDefinedTags": "changeTag",
 		"LoadExtensionSchemaUpdates": "schema",
 		"LoginFormValidErrorMessages": "main",
+		"OutputPageParserOutput": "pageDisplay",
 		"PageDeleteComplete": "main",
 		"ParserAfterTidy": "main",
 		"ParserFirstCallInit": "main",
@@ -100,6 +101,8 @@
 				"CommunityRequests.VoteStore",
 				"UserOptionsManager",
 				"SpecialPageFactory",
+				"NamespaceInfo",
+				"LinkRenderer",
 				"CommunityRequests.Logger"
 			]
 		},

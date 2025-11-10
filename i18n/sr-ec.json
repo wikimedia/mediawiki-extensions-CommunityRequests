@@ -66,5 +66,9 @@
 	"communityrequests-focus-area-owners-label": "Власници:",
 	"communityrequests-translation-translatable": "Ова страница садржи текст који није на $1.",
 	"communityrequests-translation-errors": "Дошло је до грешке:",
+	"communityrequests-entity-summary-status-changed": "Промењен статус из „$1“ у „$2“",
+	"communityrequests-entity-summary-title-changed": "Промењен наслов из „$1“ у „$2“",
+	"communityrequests-entity-summary-tags-added": "{{PLURAL:$2|Додата ознака|Додате ознаке}}: $1",
+	"communityrequests-entity-summary-tags-removed": "{{PLURAL:$2|Уклоњена ознака|Уклоњене ознаке}}: $1",
 	"communityrequests-support-label": "Подршка"
 }

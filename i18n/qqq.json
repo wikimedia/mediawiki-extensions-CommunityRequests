@@ -204,7 +204,7 @@
 	"communityrequests-entity-summary-type-changed": "Message used in edit summaries when the type of a wish is changed.\n\nParameters:\n* $1 — The old type value.\n* $2 — The new type value.",
 	"communityrequests-entity-summary-tags-added": "Message used in edit summaries when tags are added to a wish.\n\nParameters:\n* $1 — Comma-separated list of added tags.\n* $2 — Count of added tags for plural grammar.",
 	"communityrequests-entity-summary-tags-removed": "Message used in edit summaries when tags are removed from a wish.\n\nParameters:\n* $1 — Comma-separated list of removed tags.\n* $2 — Count of removed tags for plural grammar.",
-	"communityrequests-entity-summary-audience-updated": "Message used in edit summaries when the 'audience' field of a wish is updated.",
+	"communityrequests-entity-summary-audience-updated": "Message used in edit summaries when the \"audience\" field of a wish is updated.",
 	"communityrequests-entity-summary-phabtasks-added": "Message used in edit summaries when Phabricator tasks are added to a wish.\n\nParameters:\n* $1 — Comma-separated list of added Phabricator task IDs.\n* $2 — Count of added Phabricator task IDs for plural grammar.",
 	"communityrequests-entity-summary-phabtasks-removed": "Message used in edit summaries when Phabricator tasks are removed from a wish.\n\nParameters:\n* $1 — Comma-separated list of removed Phabricator task IDs.\n* $2 — Count of removed Phabricator task IDs for plural grammar.",
 	"communityrequests-entity-summary-proposer-changed": "Message used in edit summaries when the proposer of a wish is changed.\n\nParameters:\n* $1 — The old proposer's username.\n* $2 — The new proposer's username.",

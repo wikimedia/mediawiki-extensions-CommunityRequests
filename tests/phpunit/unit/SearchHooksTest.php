@@ -23,11 +23,17 @@ use RevisionSearchResult;
 /**
  * @group CommunityRequests
  * @covers \MediaWiki\Extension\CommunityRequests\HookHandler\SearchHooks
+ * @covers \MediaWiki\Extension\CommunityRequests\HookHandler\WishlistEntityTrait
  */
 class SearchHooksTest extends MediaWikiUnitTestCase {
 
 	use MockWishlistConfigTrait;
 	use MockTitleTrait;
+
+	protected function tearDown(): void {
+		SearchHooks::clearEntityCache();
+		parent::tearDown();
+	}
 
 	public function testOnShowSearchHitWish(): void {
 		$wishTitle = $this->makeMockTitle( 'Community Wishlist/W1' );

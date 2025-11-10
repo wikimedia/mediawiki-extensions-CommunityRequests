@@ -3,7 +3,6 @@ declare( strict_types = 1 );
 
 namespace MediaWiki\Extension\CommunityRequests\HookHandler;
 
-use MediaWiki\Extension\CommunityRequests\AbstractWishlistEntity;
 use MediaWiki\Extension\CommunityRequests\FocusArea\FocusArea;
 use MediaWiki\Extension\CommunityRequests\FocusArea\FocusAreaStore;
 use MediaWiki\Extension\CommunityRequests\Wish\WishStore;
@@ -18,8 +17,7 @@ use SearchResult;
 
 class SearchHooks implements ShowSearchHitHook {
 
-	/** @var array<int, AbstractWishlistEntity> Cache of loaded entities by page ID */
-	private static array $entities = [];
+	use WishlistEntityTrait;
 
 	public function __construct(
 		private readonly WishlistConfig $config,
@@ -62,19 +60,7 @@ class SearchHooks implements ShowSearchHitHook {
 		}
 		$canonicalTitle = Title::newFromPageReference( $canonicalPageRef );
 
-		if ( isset( static::$entities[$canonicalTitle->getId()] ) ) {
-			$entity = static::$entities[$canonicalTitle->getId()];
-			$this->logger->debug( 'Using cached entity for search result: {0}', [ $entity->getPage() ] );
-		} else {
-			$preferredLangauge = $searchPage->getContext()->getLanguage()->getCode();
-			if ( $this->config->isWishPage( $resultTitle ) ) {
-				$entity = $this->wishStore->get( $canonicalTitle, $preferredLangauge );
-			} else {
-				/** @var FocusArea $entity */
-				$entity = $this->focusAreaStore->get( $canonicalTitle, $preferredLangauge );
-			}
-		}
-
+		$entity = $this->getMaybeCachedEntity( $canonicalTitle, $searchPage->getContext()->getLanguage()->getCode() );
 		if ( !$entity ) {
 			$this->logger->error( 'Search result entity not found: {0}', [ $resultTitle ] );
 			return;
@@ -108,8 +94,7 @@ class SearchHooks implements ShowSearchHitHook {
 		);
 
 		// Include wish count for focus areas.
-		if ( $this->config->isFocusAreaPage( $canonicalTitle ) ) {
-			'@phan-var FocusArea $entity';
+		if ( $entity instanceof FocusArea ) {
 			$wishCount = $this->focusAreaStore->getWishCounts( $entity );
 			$size .= $searchPage->msg( 'comma-separator' )->escaped() .
 				$searchPage->msg( 'communityrequests-wish-count' )

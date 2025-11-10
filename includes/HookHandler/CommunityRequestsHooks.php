@@ -3,7 +3,6 @@ declare( strict_types = 1 );
 
 namespace MediaWiki\Extension\CommunityRequests\HookHandler;
 
-use InvalidArgumentException;
 use MediaWiki\Config\Config;
 use MediaWiki\Context\RequestContext;
 use MediaWiki\Deferred\DeferrableUpdate;
@@ -64,6 +63,7 @@ class CommunityRequestsHooks implements
 	GetUserPermissionsErrorsExpensiveHook,
 	BeforeDisplayNoArticleTextHook
 {
+	use WishlistEntityTrait;
 
 	public const SESSION_KEY = 'communityrequests';
 	protected const EXT_DATA_KEY = AbstractRenderer::EXT_DATA_KEY;
@@ -75,8 +75,6 @@ class CommunityRequestsHooks implements
 	protected bool $translateInstalled;
 	protected bool $pageLanguageUseDB;
 	private RendererFactory $rendererFactory;
-	/** @var AbstractWishlistStore[] */
-	private array $stores;
 
 	/**
 	 * Whether the user is allowed to manually edit wish and focus area pages.
@@ -86,17 +84,17 @@ class CommunityRequestsHooks implements
 	public static bool $allowManualEditing = false;
 
 	public function __construct(
-		protected readonly WishlistConfig $config,
-		WishStore $wishStore,
-		FocusAreaStore $focusAreaStore,
+		private readonly WishlistConfig $config,
+		private readonly WishStore $wishStore,
+		private readonly FocusAreaStore $focusAreaStore,
 		private readonly VoteStore $voteStore,
 		private readonly EntityFactory $entityFactory,
-		LinkRenderer $linkRenderer,
+		private readonly LinkRenderer $linkRenderer,
 		private readonly PermissionManager $permissionManager,
 		private readonly SpecialPageFactory $specialPageFactory,
 		private readonly UserOptionsManager $userOptionsManager,
 		private readonly LoggerInterface $logger,
-		Config $mainConfig,
+		private readonly Config $mainConfig,
 		private readonly WikiPageFactory $wikiPageFactory,
 		?ExtensionRegistry $extensionRegistry = null
 	) {
@@ -110,10 +108,6 @@ class CommunityRequestsHooks implements
 			$this->logger,
 			$linkRenderer
 		);
-		$this->stores = [
-			'wish' => $wishStore,
-			'focus-area' => $focusAreaStore
-		];
 	}
 
 	/** @inheritDoc */
@@ -136,17 +130,6 @@ class CommunityRequestsHooks implements
 	}
 
 	/**
-	 * Returns base language page identity for a wish or focus area page.
-	 *
-	 * @param PageIdentity $identity
-	 * @return PageIdentity
-	 */
-	public function getCanonicalEntityPage( PageIdentity $identity ): PageIdentity {
-		$pageRef = $this->config->getCanonicalEntityPageRef( $identity );
-		return $pageRef ? Title::newFromPageReference( $pageRef ) : $identity;
-	}
-
-	/**
 	 * Set the page language for a wish or focus area page to the base language on initial creation.
 	 *
 	 * @param Title $title
@@ -164,7 +147,7 @@ class CommunityRequestsHooks implements
 			$this->pageLanguageUseDB
 		) {
 			$updates[] = new MWCallableUpdate( function () use ( $title, $renderedRevision, $method ) {
-				$store = $this->getStoreForTitle( $title );
+				$store = $this->getStoreForPage( $title );
 				$parserOutput = $renderedRevision->getSlotParserOutput( SlotRecord::MAIN );
 				$data = $parserOutput->getExtensionData( self::EXT_DATA_KEY );
 
@@ -218,7 +201,7 @@ class CommunityRequestsHooks implements
 		if ( !$this->config->isEnabled() || !$this->config->isWishOrFocusAreaPage( $page ) ) {
 			return;
 		}
-		$store = $this->getStoreForTitle( $page );
+		$store = $this->getStoreForPage( $page );
 		$entity = $store->get(
 			$this->getCanonicalEntityPage( $page ),
 			Title::castFromPageIdentity( $page )->getPageLanguage()->getCode()
@@ -260,7 +243,7 @@ class CommunityRequestsHooks implements
 
 			// If the user is logged in, determine if they have already voted on this entity.
 			if ( $out->getUser()->isRegistered() ) {
-				$entityStore = $this->getStoreForTitle( $out->getTitle() );
+				$entityStore = $this->getStoreForPage( $out->getTitle() );
 				$entity = $entityStore->get( $this->getCanonicalEntityPage( $out->getTitle() ) );
 				if ( !$entity ) {
 					// This should not happen, but bail out gracefully if it does.
@@ -289,8 +272,7 @@ class CommunityRequestsHooks implements
 			// Do static checks first before querying user options.
 			(
 				$this->config->isWishOrFocusAreaPage( $out->getTitle() ) ||
-				$this->config->isWishIndexPage( $out->getTitle() ) ||
-				$this->config->isFocusAreaIndexPage( $out->getTitle() )
+				$this->config->isWishOrFocusAreaIndexPage( $out->getTitle() )
 			) &&
 			$this->userOptionsManager->getBoolOption( $out->getUser(), PreferencesHooks::PREF_MACHINETRANSLATION )
 		) {
@@ -335,7 +317,7 @@ class CommunityRequestsHooks implements
 				$data[AbstractWishlistEntity::PARAM_VOTE_COUNT] = 0;
 			}
 
-			$store = $this->stores[$data[AbstractWishlistEntity::PARAM_ENTITY_TYPE]];
+			$store = $this->getStoreForType( $data[AbstractWishlistEntity::PARAM_ENTITY_TYPE] );
 			$entity = $store->get( $canonicalPage );
 			// Guard against the potential for editing the /Votes page of a non-existent entity.
 			$data = $entity ?
@@ -349,7 +331,7 @@ class CommunityRequestsHooks implements
 			return;
 		}
 
-		$store ??= $this->stores[$data[AbstractWishlistEntity::PARAM_ENTITY_TYPE]];
+		$store ??= $this->getStoreForType( $data[AbstractWishlistEntity::PARAM_ENTITY_TYPE] );
 		$entity = $this->entityFactory->createFromParserData( $data, $canonicalPage );
 		$this->logger->debug(
 			__METHOD__ . ': Saving {0} with data: {1}',
@@ -362,24 +344,6 @@ class CommunityRequestsHooks implements
 			$wikiPage = $this->wikiPageFactory->newFromTitle( $title );
 			$wikiPage->doPurge();
 			$wikiPage->updateParserCache();
-		}
-	}
-
-	/**
-	 * Get a store for the given page title, or throw an exception if the title
-	 * is not under any of the relevant prefixes.
-	 *
-	 * @param PageIdentity $title
-	 * @return AbstractWishlistStore
-	 * @throws InvalidArgumentException
-	 */
-	private function getStoreForTitle( PageIdentity $title ) {
-		if ( $this->config->isWishPage( $title ) ) {
-			return $this->stores['wish'];
-		} elseif ( $this->config->isFocusAreaPage( $title ) ) {
-			return $this->stores['focus-area'];
-		} else {
-			throw new InvalidArgumentException( 'title is not a wish or focus area' );
 		}
 	}
 

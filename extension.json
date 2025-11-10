@@ -51,8 +51,8 @@
 		"virtual-communityrequests"
 	],
 	"Hooks": {
-		"BeforeDisplayNoArticleText": "main",
-		"BeforePageDisplay": "main",
+		"BeforeDisplayNoArticleText": "pageDisplay",
+		"BeforePageDisplay": "pageDisplay",
 		"ChangeTagsListActive": "changeTag",
 		"GetPreferences": "preferences",
 		"LinksUpdateComplete": "main",
@@ -76,12 +76,10 @@
 				"CommunityRequests.WishlistConfig",
 				"CommunityRequests.WishStore",
 				"CommunityRequests.FocusAreaStore",
-				"CommunityRequests.VoteStore",
 				"CommunityRequests.EntityFactory",
 				"LinkRenderer",
 				"PermissionManager",
 				"SpecialPageFactory",
-				"UserOptionsManager",
 				"CommunityRequests.Logger",
 				"MainConfig",
 				"WikiPageFactory"
@@ -91,6 +89,18 @@
 			"class": "MediaWiki\\Extension\\CommunityRequests\\HookHandler\\ChangeTagHooks",
 			"services": [
 				"CommunityRequests.WishlistConfig"
+			]
+		},
+		"pageDisplay": {
+			"class": "MediaWiki\\Extension\\CommunityRequests\\HookHandler\\PageDisplayHooks",
+			"services": [
+				"CommunityRequests.WishlistConfig",
+				"CommunityRequests.WishStore",
+				"CommunityRequests.FocusAreaStore",
+				"CommunityRequests.VoteStore",
+				"UserOptionsManager",
+				"SpecialPageFactory",
+				"CommunityRequests.Logger"
 			]
 		},
 		"preferences": {

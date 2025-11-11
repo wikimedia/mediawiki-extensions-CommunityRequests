@@ -7,6 +7,7 @@ use MediaWiki\Content\WikitextContent;
 use MediaWiki\Extension\CommunityRequests\AbstractWishlistEntity;
 use MediaWiki\Extension\CommunityRequests\WishlistConfig;
 use MediaWiki\Page\PageIdentity;
+use MediaWiki\Parser\Sanitizer;
 use MediaWiki\Title\Title;
 use MediaWiki\User\UserIdentity;
 use MediaWiki\Utils\MWTimestamp;
@@ -141,7 +142,7 @@ class Wish extends AbstractWishlistEntity {
 		return [
 			self::PARAM_STATUS => $config->getStatusWikitextValFromId( $this->status ),
 			self::PARAM_TYPE => $config->getWishTypeWikitextValFromId( $this->type ),
-			self::PARAM_TITLE => $this->title,
+			self::PARAM_TITLE => Sanitizer::decodeCharReferences( $this->title ),
 			self::PARAM_FOCUS_AREA => $config->getEntityWikitextVal( $this->getFocusAreaPage() ) ?: '',
 			self::PARAM_DESCRIPTION => $this->description,
 			self::PARAM_AUDIENCE => $this->audience,
@@ -167,6 +168,7 @@ class Wish extends AbstractWishlistEntity {
 			$value = match ( $param ) {
 				self::PARAM_STATUS => $config->getStatusWikitextValFromId( $this->status ),
 				self::PARAM_TYPE => $config->getWishTypeWikitextValFromId( $this->type ),
+				self::PARAM_TITLE => $this->getTitleSanitizedForWikitext(),
 				self::PARAM_TAGS => array_map(
 					static fn ( $id ) => $config->getTagWikitextValFromId( $id ),
 					$this->tags
@@ -206,7 +208,7 @@ class Wish extends AbstractWishlistEntity {
 		$fields = [
 			self::PARAM_TYPE => $config->getWishTypeIdFromWikitextVal( $params[self::PARAM_TYPE] ?? '' ),
 			self::PARAM_STATUS => $config->getStatusIdFromWikitextVal( $params[self::PARAM_STATUS] ?? '' ),
-			self::PARAM_TITLE => $params[self::PARAM_TITLE] ?? '',
+			self::PARAM_TITLE => Sanitizer::decodeCharReferences( $params[self::PARAM_TITLE] ?? '' ),
 			// TODO: It would be better to avoid use of Title here.
 			self::PARAM_FOCUS_AREA => $faValue ? Title::newFromPageReference( $faValue ) : null,
 			self::PARAM_DESCRIPTION => $params[self::PARAM_DESCRIPTION] ?? '',

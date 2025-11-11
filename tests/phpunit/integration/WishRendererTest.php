@@ -163,8 +163,9 @@ class WishRendererTest extends MediaWikiIntegrationTestCase {
 	 * @dataProvider provideMarkupInTitle
 	 */
 	public function testMarkupInTitle( string $title, string $expectedHtml, string $expectedStorage ): void {
-		if ( str_contains( $title, '{{reflist}}' ) ) {
-			$this->insertPage( 'Template:Reflist', '<references>' );
+		if ( str_contains( $title, '{{gallery}}' ) ) {
+			// Use an example with a Core tag that emits strip markers.
+			$this->insertPage( 'Template:Gallery', '<gallery></gallery>' );
 		}
 		$wish = $this->insertTestWish( null, 'en', [ Wish::PARAM_TITLE => $title ] );
 		$wikiPage = $this->getWikiPageFactory()->newFromTitle( $wish->getPage() );
@@ -202,17 +203,17 @@ class WishRendererTest extends MediaWikiIntegrationTestCase {
 					'<span class="ext-communityrequests-wish--id">(Community Wishlist/W1)</span>',
 				'[[Main Page|Home]]'
 			],
-			'pre-escaped magic word and template' => [
-				'&#123;&#123;PAGENAME&#125;&#125; &#123;&#123;reflist&#125;&#125;',
-				'<span class="ext-communityrequests-wish--title">{{PAGENAME}} {{reflist}}</span> ' .
+			'magic word and template' => [
+				'&#123;&#123;PAGENAME&#125;&#125; &#123;&#123;gallery&#125;&#125;',
+				'<span class="ext-communityrequests-wish--title">{{PAGENAME}} {{gallery}}</span> ' .
 					'<span class="ext-communityrequests-wish--id">(Community Wishlist/W1)</span>',
-				'&#123;&#123;PAGENAME&#125;&#125; &#123;&#123;reflist&#125;&#125;'
+				'{{PAGENAME}} {{gallery}}'
 			],
 			'unescaped template' => [
-				'{{reflist}}',
-				'<span class="ext-communityrequests-wish--title">&lt;references></span> ' .
+				'{{gallery}} improvements',
+				'<span class="ext-communityrequests-wish--title"> improvements</span> ' .
 					'<span class="ext-communityrequests-wish--id">(Community Wishlist/W1)</span>',
-				'<references>'
+				' improvements'
 			],
 			'Translate tag' => [
 				'<translate>Translated Title</translate>',
@@ -222,15 +223,14 @@ class WishRendererTest extends MediaWikiIntegrationTestCase {
 			],
 			'Translate-provided span' => [
 				'<span lang="he" dir="rtl" class="mw-content-rtl">123 משאלה עברית</span>',
-				'<span class="ext-communityrequests-wish--title" lang="he" dir="rtl">123 משאלה עברית</span> ' .
-					'<span class="ext-communityrequests-wish--id">(Community Wishlist/W1)</span>',
+				'<span class="ext-communityrequests-wish--title mw-content-rtl" lang="he" dir="rtl">123 ' .
+					'משאלה עברית</span> <span class="ext-communityrequests-wish--id">(Community Wishlist/W1)</span>',
 				'123 משאלה עברית'
 			],
 			'span with script' => [
 				'<span onclick="evilFunction()">Click me</span>',
-				'<span class="ext-communityrequests-wish--title">' .
-					'&lt;span onclick="evilFunction()">Click me&lt;/span></span> ' .
-					'<span class="ext-communityrequests-wish--id">(Community Wishlist/W1)</span>',
+				'<span class="ext-communityrequests-wish--title">&lt;span onclick="evilFunction()">Click me&lt;/span>' .
+					'</span> <span class="ext-communityrequests-wish--id">(Community Wishlist/W1)</span>',
 				'<span onclick="evilFunction()">Click me</span>'
 			],
 			'span with styles' => [
@@ -241,10 +241,10 @@ class WishRendererTest extends MediaWikiIntegrationTestCase {
 				'<span style="color:red; font-size:20px;">Styled Title</span>'
 			],
 			'nested Translate tag with template' => [
-				'<span lang="de"><translate>Title with &#123;&#123;reflist&#125;&#125;</translate></span>',
-				'<span class="ext-communityrequests-wish--title" lang="de">Title with {{reflist}}</span> ' .
+				'<span lang="de"><translate>Title with &#123;&#123;gallery&#125;&#125;</translate></span>',
+				'<span class="ext-communityrequests-wish--title" lang="de">Title with {{gallery}}</span> ' .
 					'<span class="ext-communityrequests-wish--id">(Community Wishlist/W1)</span>',
-				'Title with &#123;&#123;reflist&#125;&#125;'
+				'Title with {{gallery}}'
 			],
 		];
 	}

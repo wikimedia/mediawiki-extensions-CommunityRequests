@@ -7,6 +7,7 @@ use MediaWiki\Content\WikitextContent;
 use MediaWiki\Page\PageIdentity;
 use MediaWiki\Page\PageReference;
 use MediaWiki\Page\PageReferenceValue;
+use MediaWiki\Parser\Sanitizer;
 
 /**
  * Shared properties and methods for Wish and FocusArea.
@@ -189,6 +190,29 @@ abstract class AbstractWishlistEntity {
 	 * @return WikitextContent
 	 */
 	abstract public function toWikitext( WishlistConfig $config ): WikitextContent;
+
+	/**
+	 * Get the sanitized title for use in wikitext storage, escaping common wikitext
+	 * syntax, stripping out any <translate> tags, and sanitizing everything else.
+	 *
+	 * @return string Safe HTML
+	 */
+	final protected function getTitleSanitizedForWikitext(): string {
+		$ret = Sanitizer::removeSomeTags( $this->title, [
+			'extraTags' => [ 'translate', 'tvar' ],
+			'commentRegex' => '/^T:[0-9]+$/'
+		] );
+		// This is a subset of Sanitizer::safeEncodeAttribute(), which we can't use here because
+		// (a) it would double-escape the HTML, and (b) it relies on the service locator.
+		// Other wikitext syntax not listed doesn't seem to cause problems in titles.
+		return strtr( $ret, [
+			'{' => '&#123;',
+			'}' => '&#125;',
+			'[' => '&#91;',
+			']' => '&#93;',
+			'|' => '&#124;',
+		] );
+	}
 
 	/**
 	 * Create a new wishlist entity instance from the given wikitext parameters.

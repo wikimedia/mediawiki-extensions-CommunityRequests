@@ -8,11 +8,13 @@ use MediaWiki\Extension\CommunityRequests\HookHandler\CommunityRequestsHooks;
 use MediaWiki\Extension\CommunityRequests\Wish\Wish;
 use MediaWiki\Extension\CommunityRequests\Wish\WishStore;
 use MediaWiki\Tests\Api\ApiTestCase;
+use MediaWiki\Title\Title;
 
 /**
  * @group CommunityRequests
  * @group Database
  * @covers \MediaWiki\Extension\CommunityRequests\Api\ApiQueryWishes
+ * @covers \MediaWiki\Extension\CommunityRequests\AbstractRenderer
  * @covers \MediaWiki\Extension\CommunityRequests\AbstractWishlistStore
  */
 class ApiQueryWishesTest extends ApiTestCase {
@@ -429,6 +431,30 @@ class ApiQueryWishesTest extends ApiTestCase {
 			[ 'crwfocusareas' => 'invalid|unassigned', 'count' => 0, 'exception' => true ],
 			[ 'crwfocusareas' => 'FA1|unassigned', 'count' => 4 ],
 		];
+	}
+
+	public function testExecuteWithTitlesContainingMarkup(): void {
+		$this->insertPage( 'Template:Gallery', '<gallery></gallery>' );
+		$this->createTestWishWithApi( [ Wish::PARAM_TITLE => 'Wish with [[Link]] and {{gallery}} and <nowiki/>' ] );
+		[ $ret ] = $this->doApiRequest( [ 'action' => 'query', 'list' => 'communityrequests-wishes' ] );
+		$this->assertCount( 1, $ret['query']['communityrequests-wishes'] );
+		$queriedWish = $ret['query']['communityrequests-wishes'][0];
+		// Uses Wish::toArray(), which decodes HTML entities.
+		$this->assertSame(
+			'Wish with [[Link]] and {{gallery}} and <nowiki/>',
+			$queriedWish['title'],
+			'API output assertion failed'
+		);
+		// Test against the raw wikitext, which should be escaped with HTML entities.
+		$revText = $this->getServiceContainer()->getWikiPageFactory()
+			->newFromTitle( Title::newFromText( $queriedWish['crwtitle'] ) )
+			->getContent()
+			->getText();
+		$this->assertStringContainsString(
+			'Wish with &#91;&#91;Link&#93;&#93; and &#123;&#123;gallery&#125;&#125; and &lt;nowiki/&gt;',
+			$revText,
+			'Wikitext assertion failed'
+		);
 	}
 
 	private function createTestWishWithApi( $params = [] ): array {

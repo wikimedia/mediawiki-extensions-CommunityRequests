@@ -8,6 +8,7 @@ use MediaWiki\Content\WikitextContent;
 use MediaWiki\Extension\CommunityRequests\AbstractWishlistEntity;
 use MediaWiki\Extension\CommunityRequests\WishlistConfig;
 use MediaWiki\Page\PageIdentity;
+use MediaWiki\Parser\Sanitizer;
 use MediaWiki\Utils\MWTimestamp;
 
 /**
@@ -94,7 +95,7 @@ class FocusArea extends AbstractWishlistEntity {
 	public function toArray( WishlistConfig $config, bool $lowerCaseKeyNames = false ): array {
 		return [
 			self::PARAM_STATUS => $config->getStatusWikitextValFromId( $this->status ),
-			self::PARAM_TITLE => $this->title,
+			self::PARAM_TITLE => Sanitizer::decodeCharReferences( $this->title ),
 			self::PARAM_DESCRIPTION => $this->description,
 			self::PARAM_SHORT_DESCRIPTION => $this->shortdescription,
 			self::PARAM_OWNERS => $this->owners,
@@ -112,6 +113,7 @@ class FocusArea extends AbstractWishlistEntity {
 			// Match ID values to their wikitext representations, as defined by site configuration.
 			$value = match ( $param ) {
 				self::PARAM_STATUS => $config->getStatusWikitextValFromId( $this->status ),
+				self::PARAM_TITLE => $this->getTitleSanitizedForWikitext(),
 				self::PARAM_CREATED => MWTimestamp::convert( TS_ISO_8601, $this->created ),
 				default => $this->{ $param },
 			};

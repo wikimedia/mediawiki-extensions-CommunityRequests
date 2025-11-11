@@ -9,13 +9,17 @@ use MediaWiki\Exception\UserNotLoggedIn;
 use MediaWiki\Extension\CommunityRequests\AbstractWishlistStore;
 use MediaWiki\Extension\CommunityRequests\Wish\SpecialWishlistIntake;
 use MediaWiki\Extension\CommunityRequests\Wish\Wish;
+use MediaWiki\Request\FauxRequest;
+use MediaWiki\Title\Title;
 use SpecialPageTestBase;
 
 /**
  * @group Database
  * @covers \MediaWiki\Extension\CommunityRequests\Wish\SpecialWishlistIntake
+ * @covers \MediaWiki\Extension\CommunityRequests\AbstractRenderer
  * @covers \MediaWiki\Extension\CommunityRequests\AbstractWishlistSpecialPage
  * @covers \MediaWiki\Extension\CommunityRequests\AbstractWishlistStore
+ * @covers \MediaWiki\Extension\CommunityRequests\Wish\Wish
  */
 class SpecialWishlistIntakeTest extends SpecialPageTestBase {
 	use WishlistTestTrait;
@@ -94,7 +98,7 @@ class SpecialWishlistIntakeTest extends SpecialPageTestBase {
 	}
 
 	public function testSetRelevantTitle(): void {
-		$this->insertTestWish( 'Community Wishlist/W1', 'en' );
+		$this->insertTestWish( 'Community Wishlist/W1' );
 		$sp = $this->newSpecialPage();
 		$context = new DerivativeContext( RequestContext::getMain() );
 		$context->setUser( $this->getTestUser()->getUser() );
@@ -102,5 +106,37 @@ class SpecialWishlistIntakeTest extends SpecialPageTestBase {
 		$sp->setContext( $context );
 		$sp->execute( 'W1' );
 		$this->assertSame( 'Community Wishlist/W1', $sp->getSkin()->getRelevantTitle()->getPrefixedText() );
+	}
+
+	public function testSubmitTitleNormalization(): void {
+		$fauxRequest = new FauxRequest( [
+			'entitytitle' => '<translate><!--T:1--> Title with {{template}} and <nowiki/></translate>',
+			'status' => 'under-review',
+			'type' => 'bug',
+			'description' => str_repeat( 'Test string ', 10 ),
+			'audience' => 'General public',
+			'proposer' => $this->getTestUser()->getUser()->getName(),
+			'created' => wfTimestampNow(),
+			'baselang' => 'en',
+		], true );
+		RequestContext::getMain()->setRequest( $fauxRequest );
+		$this->executeSpecialPage( '', $fauxRequest, null, $this->getTestUser()->getAuthority() );
+
+		$wish = $this->getStore()->get( Title::newFromText( 'Community Wishlist/W1' ) );
+		$this->assertSame(
+			'Title with {{template}} and <nowiki/>',
+			$wish->getTitle(),
+			'Storage assertion failed'
+		);
+
+		$wikitext = $this->getServiceContainer()->getWikiPageFactory()
+			->newFromTitle( $wish->getPage() )
+			->getContent()
+			->getText();
+		$this->assertStringContainsString(
+			'<translate><!--T:1--> Title with &#123;&#123;template&#125;&#125; and &lt;nowiki/&gt;</translate>',
+			$wikitext,
+			'Wikitext assertion failed'
+		);
 	}
 }

@@ -9,6 +9,8 @@ const crPostEdit = mw.config.get( 'crPostEdit', '' );
 if ( buttonRoot && crVoteData ) {
 	const Vue = require( 'vue' );
 	let VotingButton;
+	// set voting button container HTML dir attr according user interface language
+	buttonRoot.setAttribute( 'dir', Util.isRtl() ? 'rtl' : 'ltr' );
 	if ( mw.user.isNamed() ) {
 		VotingButton = require( './VotingButton.vue' );
 	} else {

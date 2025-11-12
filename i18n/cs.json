@@ -1,6 +1,8 @@
 {
 	"@metadata": {
-		"authors": []
+		"authors": [
+			"Polda18"
+		]
 	},
 	"communityrequests-wish-loading-error": "Při analýze zdrojového textu přání došlo k chybě. Možná obsahuje chybný wikitext. [$1 Obnovte prosím stránku] a zkuste to znovu, použite [[$2|editor zdrojového kódu]] nebo požádejte o pomoc v [[$3|diskusi]].",
 	"communityrequests-edit-with-form": "Editovat pomocí formuláře",
@@ -33,5 +35,19 @@
 	"communityrequests-view-all-wishes": "Zobrazit všechna přání.",
 	"communityrequests-close": "Zavřít",
 	"communityrequests-publish": "Zveřejnit přání",
-	"communityrequests-save": "Uložit změny"
+	"communityrequests-save": "Uložit změny",
+	"communityrequests-entity-summary-status-changed": "Stav změněn z „$1“ na „$2“",
+	"communityrequests-entity-summary-focusarea-changed": "Oblast zaměření změněna z „$1“ na „$2“",
+	"communityrequests-entity-summary-title-changed": "Změněn název z „$1“ na „$2“",
+	"communityrequests-entity-summary-description-updated": "Aktualizován popis",
+	"communityrequests-entity-summary-type-changed": "Změněn typ z „$1“ na „$2“",
+	"communityrequests-entity-summary-tags-added": "{{PLURAL:$2|Přidaný|Přidané}} {{PLURAL:$2|štítek|štítky}}: $1",
+	"communityrequests-entity-summary-tags-removed": "{{PLURAL:$2|Odstraněný|Odstraněné}} {{PLURAL:$2|štítek|štítky}}: $1",
+	"communityrequests-entity-summary-audience-updated": "Aktualizováni dotčení uživatelé",
+	"communityrequests-entity-summary-phabtasks-added": "{{PLURAL:$2|Přidaný|Přidané}} {{PLURAL:$2|úkol Phabricatoru|úkoly Phabricatoru}}: $1",
+	"communityrequests-entity-summary-phabtasks-removed": "{{PLURAL:$2|Odstraněn|Odstraněné}} {{PLURAL:$2|úkol Phabricatoru|úkoly Phabricatoru}}: $1",
+	"communityrequests-entity-summary-proposer-changed": "Navrhovatel změněn z „$1“ na „$2“",
+	"communityrequests-entity-summary-shortdescription-updated": "Aktualizován krátký popis",
+	"communityrequests-entity-summary-owners-updated": "Aktualizováni vlastníci",
+	"communityrequests-entity-summary-volunteers-updated": "Aktualizováni dobrovolníci"
 }

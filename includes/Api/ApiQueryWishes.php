@@ -11,6 +11,7 @@ use MediaWiki\Extension\CommunityRequests\FocusArea\FocusAreaStore;
 use MediaWiki\Extension\CommunityRequests\Wish\Wish;
 use MediaWiki\Extension\CommunityRequests\Wish\WishStore;
 use MediaWiki\Extension\CommunityRequests\WishlistConfig;
+use MediaWiki\Language\LanguageFactory;
 use MediaWiki\Page\PageIdentity;
 use MediaWiki\Page\PageReferenceValue;
 use MediaWiki\Registration\ExtensionRegistry;
@@ -31,6 +32,7 @@ class ApiQueryWishes extends ApiQueryBase {
 		private readonly WishStore $store,
 		private readonly FocusAreaStore $focusAreaStore,
 		private readonly ExtensionRegistry $extensionRegistry,
+		private readonly LanguageFactory $languageFactory,
 	) {
 		parent::__construct( $queryModule, $moduleName, 'crw' );
 		$this->translateInstalled = $this->extensionRegistry->isLoaded( 'Translate' );
@@ -122,6 +124,12 @@ class ApiQueryWishes extends ApiQueryBase {
 				$this->getModulePrefix()
 			);
 
+			// Include language and direction info, if requested.
+			if ( in_array( Wish::PARAM_LANG_INFO, $params['prop'] ) ) {
+				$wishData['lang'] = $wish->getLang();
+				$wishData['dir'] = $this->languageFactory->getLanguage( $wish->getLang() )->getDir();
+			}
+
 			// Add focus area page title and namespace, if applicable.
 			$focusAreaPage = $wish->getFocusAreaPage();
 			if ( $focusAreaPage ) {
@@ -139,6 +147,12 @@ class ApiQueryWishes extends ApiQueryBase {
 				);
 				if ( $focusArea ) {
 					$wishData['focusareatitle'] = $focusArea->getTitle();
+
+					if ( in_array( Wish::PARAM_LANG_INFO, $params['prop'] ) ) {
+						$wishData['focusarealang'] = $focusArea->getLang();
+						$wishData['focusareadir'] = $this->languageFactory->getLanguage( $focusArea->getLang() )
+							->getDir();
+					}
 				}
 			}
 
@@ -196,6 +210,7 @@ class ApiQueryWishes extends ApiQueryBase {
 					Wish::PARAM_VOTE_COUNT,
 					Wish::PARAM_CREATED,
 					Wish::PARAM_UPDATED,
+					Wish::PARAM_LANG_INFO,
 					Wish::PARAM_BASE_LANG,
 				],
 				ApiBase::PARAM_HELP_MSG_PER_VALUE => [
@@ -211,6 +226,7 @@ class ApiQueryWishes extends ApiQueryBase {
 					Wish::PARAM_VOTE_COUNT => "$apiHelpMsgPrefix-prop-votecount",
 					Wish::PARAM_CREATED => "$apiHelpMsgPrefix-prop-created",
 					Wish::PARAM_UPDATED => "$apiHelpMsgPrefix-prop-updated",
+					Wish::PARAM_LANG_INFO => "$apiHelpMsgPrefix-prop-langinfo",
 				],
 			],
 			'sort' => [

@@ -22,7 +22,8 @@
 		<template #item-title="{ item, row }">
 			<a
 				:href="mw.Title.makeTitle( row.crwns, row.crwtitle ).getUrl()"
-				:lang="getLangAttr( row )"
+				:lang="row.lang"
+				:dir="row.dir"
 			>
 				<span v-if="focusareas.length === 1">
 					{{ item }}
@@ -85,7 +86,7 @@
 const { defineComponent, computed, nextTick, ref, ComputedRef, Ref, watch } = require( 'vue' );
 const { CdxInfoChip, CdxMessage, CdxTable } = require( '../codex.js' );
 const { formatDate } = require( 'mediawiki.DateFormatter' );
-const { CommunityRequestsStatuses, CommunityRequestsWishPagePrefix } = require( '../common/config.json' );
+const { CommunityRequestsStatuses } = require( '../common/config.json' );
 const Util = require( '../common/Util.js' );
 const api = new mw.Api();
 
@@ -292,7 +293,7 @@ module.exports = exports = defineComponent( {
 				list: 'communityrequests-wishes',
 				crwprop: columns.value
 					.map( ( column ) => column.id )
-					.concat( [ 'baselang' ] )
+					.concat( [ 'baselang', 'langinfo' ] )
 					.join( '|' ),
 				crwlang: props.lang,
 				crwsort: apiSort.value,
@@ -330,7 +331,7 @@ module.exports = exports = defineComponent( {
 
 			pending.value = false;
 
-			// Fire the wikipage.content hook to trigger dynamic updates in the wishlist, such as MinT translations.
+			// Fire the wikipage.content hook to trigger dynamic updates, such as MinT translations.
 			await nextTick();
 			mw.hook( 'wikipage.content' ).fire( mw.util.$content.find( '.ext-communityrequests-wishes' ) );
 
@@ -391,6 +392,8 @@ module.exports = exports = defineComponent( {
 			if ( row.crfatitle ) {
 				focusAreaLabel = document.createElement( 'a' );
 				focusAreaLabel.href = mw.Title.makeTitle( row.crfans, row.crfatitle ).getUrl();
+				focusAreaLabel.lang = row.focusarealang;
+				focusAreaLabel.dir = row.focusareadir;
 				focusAreaLabel.textContent = row.focusareatitle;
 			} else {
 				focusAreaLabel = document.createElement( 'span' );
@@ -410,27 +413,6 @@ module.exports = exports = defineComponent( {
 			return CommunityRequestsStatuses[ status ] ?
 				CommunityRequestsStatuses[ status ].style :
 				'notice';
-		}
-
-		/**
-		 * Get the appropriate `lang` attribute for the wish title link.
-		 *
-		 * @param {Object} row
-		 * @return {string}
-		 */
-		function getLangAttr( row ) {
-			if ( row.baselang === props.lang ) {
-				return row.baselang;
-			}
-			const langCodeMatches = mw.Title.makeTitle( row.crwns, row.crwtitle )
-				.getPrefixedDb()
-				.slice( CommunityRequestsWishPagePrefix.length )
-				// Strip ID and trailing forward slash.
-				.match( /^[0-9]*\/(.*)$/ );
-			if ( langCodeMatches && langCodeMatches[ 1 ] ) {
-				return langCodeMatches[ 1 ];
-			}
-			return row.baselang;
 		}
 
 		fetchWishes();
@@ -460,7 +442,6 @@ module.exports = exports = defineComponent( {
 			onLoadMore,
 			wishIsInFocusAreaHTML,
 			wishStatusStyle,
-			getLangAttr,
 			Util,
 			showTagLimit: 3
 		};

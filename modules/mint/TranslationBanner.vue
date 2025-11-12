@@ -84,7 +84,11 @@ module.exports = exports = defineComponent( {
 					// Disable by returning to untranslated values.
 					node.nodeValue = node.nodeValueUntranslated;
 					node.parentElement.lang = node.langOriginal;
-					node.parentElement.dir = node.dirOriginal;
+					if ( node.dirOriginal ) {
+						node.parentElement.dir = node.dirOriginal;
+					} else {
+						node.parentElement.removeAttribute( 'dir' );
+					}
 					continue;
 				}
 

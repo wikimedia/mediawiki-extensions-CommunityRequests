@@ -60,8 +60,6 @@ class WishRenderer extends AbstractRenderer {
 	}
 
 	private function renderWishInternal( array $args ): string {
-		$language = $this->parser->getTargetLanguage();
-
 		// Title and status.
 		$this->setDisplayTitleAndIndicator();
 
@@ -73,7 +71,8 @@ class WishRenderer extends AbstractRenderer {
 		);
 		$descHtml = $this->getDivRaw(
 			'description',
-			$this->parser->recursiveTagParse( $args[Wish::PARAM_DESCRIPTION] ?? '' )
+			$this->parser->recursiveTagParse( $args[Wish::PARAM_DESCRIPTION] ?? '' ),
+			$this->parser->getTargetLanguage(),
 		);
 
 		// Focus area.
@@ -171,7 +170,8 @@ class WishRenderer extends AbstractRenderer {
 			'audience',
 			$this->parser->recursiveTagParse(
 				$this->getArg( Wish::PARAM_AUDIENCE, '' )
-			)
+			),
+			$this->parser->getTargetLanguage(),
 		);
 
 		// Phabricator tasks.

@@ -59,6 +59,7 @@
 	"apihelp-query+communityrequests-wishes-paramvalue-prop-created": "Date and time the wish was created",
 	"apihelp-query+communityrequests-wishes-paramvalue-prop-updated": "Date and time the wish was last updated",
 	"apihelp-query+communityrequests-wishes-paramvalue-prop-baselang": "The base language of the wish from which translations are made",
+	"apihelp-query+communityrequests-wishes-paramvalue-prop-langinfo": "Include language code and directionality of the wish and its focus area, if applicable",
 	"apihelp-query+communityrequests-wishes-paramvalue-sort-created": "Sort by creation date",
 	"apihelp-query+communityrequests-wishes-paramvalue-sort-updated": "Sort by last updated date",
 	"apihelp-query+communityrequests-wishes-paramvalue-sort-votecount": "Sort by number of supporters",

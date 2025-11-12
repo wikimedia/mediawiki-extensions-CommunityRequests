@@ -185,7 +185,8 @@
 				"CommunityRequests.Logger",
 				"CommunityRequests.WishStore",
 				"CommunityRequests.FocusAreaStore",
-				"ExtensionRegistry"
+				"ExtensionRegistry",
+				"LanguageFactory"
 			]
 		}
 	},

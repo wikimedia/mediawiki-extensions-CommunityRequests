@@ -61,18 +61,19 @@ class FocusAreaRenderer extends AbstractRenderer {
 		$out .= Html::element(
 			'div',
 			[ 'class' => 'mw-heading mw-heading2' ],
-			$this->parser->msg( 'communityrequests-wish-description-heading' )->text()
+			$this->msg( 'communityrequests-wish-description-heading' )->text()
 		);
 		$out .= $this->getDivRaw(
 			'description',
-			$this->parser->recursiveTagParse( $this->getArg( FocusArea::PARAM_DESCRIPTION, '' ) )
+			$this->parser->recursiveTagParse( $this->getArg( FocusArea::PARAM_DESCRIPTION, '' ) ),
+			$this->parser->getTargetLanguage(),
 		);
 
 		// Other details.
 		$out .= Html::element(
 			'div',
 			[ 'class' => 'mw-heading mw-heading3' ],
-			$this->parser->msg( 'communityrequests-wish-other-details-heading' )->text()
+			$this->msg( 'communityrequests-wish-other-details-heading' )->text()
 		);
 		$out .= Html::rawElement(
 			'ul',
@@ -127,7 +128,8 @@ class FocusAreaRenderer extends AbstractRenderer {
 				);
 				$out .= $this->getDivRaw(
 					'owners',
-					$this->parser->recursiveTagParse( $owners )
+					$this->parser->recursiveTagParse( $owners ),
+					$this->parser->getTargetLanguage(),
 				);
 			}
 
@@ -139,7 +141,8 @@ class FocusAreaRenderer extends AbstractRenderer {
 				);
 				$out .= $this->getDivRaw(
 					'volunteers',
-					$this->parser->recursiveTagParse( $volunteers )
+					$this->parser->recursiveTagParse( $volunteers ),
+					$this->parser->getTargetLanguage(),
 				);
 			}
 		}

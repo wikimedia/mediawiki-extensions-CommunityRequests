@@ -360,7 +360,7 @@ class CommunityRequestsHooks implements
 	}
 
 	/**
-	 * Replace the vote- and wish-count strip markers with messages containing the counts.
+	 * Replace strip markers and set output language.
 	 *
 	 * @param Parser $parser
 	 * @param string &$text
@@ -369,6 +369,14 @@ class CommunityRequestsHooks implements
 		if ( !$this->config->isEnabled() ) {
 			return;
 		}
+
+		if ( $this->config->isWishOrFocusAreaPage( $parser->getPage() ) ||
+			$this->config->isWishOrFocusAreaIndexPage( $parser->getPage() )
+		) {
+			// Ensure the output language matches user interface language (T407349).
+			$parser->getOutput()->setLanguage( $parser->getOptions()->getUserLangObj() );
+		}
+
 		$data = $parser->getOutput()->getExtensionData( self::EXT_DATA_KEY );
 		if ( !$data
 			|| ( !isset( $data[AbstractWishlistEntity::PARAM_ENTITY_TYPE] )
@@ -395,6 +403,7 @@ class CommunityRequestsHooks implements
 				$parser->msg( "communityrequests-{$data[AbstractWishlistEntity::PARAM_ENTITY_TYPE]}-voting-info" )
 					->numParams( $voteCount )
 					->params( $voteCount )
+					->inLanguage( $parser->getOptions()->getUserLangObj() )
 					->parse(),
 				$text
 			);
@@ -407,7 +416,7 @@ class CommunityRequestsHooks implements
 				[ $parser->getPage()->__toString() ]
 			);
 			foreach ( $data[AbstractWishlistEntity::PARAM_WISH_COUNT] as $faPageId => $wishCount ) {
-				$wishCountFormatted = $parser->getTargetLanguage()->formatNum( $wishCount );
+				$wishCountFormatted = $parser->getOptions()->getUserLangObj()->formatNum( $wishCount );
 				$msg = $parser->msg( 'communityrequests-focus-area-view-wishes', $wishCountFormatted, $wishCount );
 				$text = str_replace( AbstractRenderer::getWishCountStripMarker( $faPageId ), $msg->parse(), $text );
 			}

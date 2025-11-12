@@ -21,6 +21,10 @@ class ApiQueryWishesTest extends ApiTestCase {
 
 	use WishlistTestTrait;
 
+	protected function getStore(): WishStore {
+		return $this->getServiceContainer()->get( 'CommunityRequests.WishStore' );
+	}
+
 	public function testExecuteNoWishes(): void {
 		[ $ret ] = $this->doApiRequest( [
 			'action' => 'query',
@@ -30,15 +34,13 @@ class ApiQueryWishesTest extends ApiTestCase {
 		$this->assertSame( [], $ret['query']['communityrequests-wishes'] );
 	}
 
-	protected function getStore(): WishStore {
-		return $this->getServiceContainer()->get( 'CommunityRequests.WishStore' );
-	}
-
 	public function testExecuteSortByCreated(): void {
 		$queryKey = 'communityrequests-wishes';
+		$this->createTestFocusAreaWithApi( [ 'baselang' => 'de' ] );
 		$this->createTestWishWithApi( [
 			'title' => 'Test Wish 1',
 			'created' => '2023-10-01T00:00:00Z',
+			'focusarea' => 'FA1',
 		] );
 		$this->createTestWishWithApi( [
 			'title' => 'Test Wish 2',
@@ -54,10 +56,15 @@ class ApiQueryWishesTest extends ApiTestCase {
 			'list' => 'communityrequests-wishes',
 			'crwsort' => 'created',
 			'crwdir' => 'ascending',
+			'crwprop' => 'title|langinfo',
 			'crwlang' => 'en',
 		] );
 		$this->assertCount( 3, $ret['query'][$queryKey] );
 		$this->assertSame( 'Test Wish 1', $ret['query'][$queryKey][0]['title'] );
+		$this->assertSame( 'en', $ret['query'][$queryKey][0]['lang'] );
+		$this->assertSame( 'ltr', $ret['query'][$queryKey][0]['dir'] );
+		$this->assertSame( 'de', $ret['query'][$queryKey][0]['focusarealang'] );
+		$this->assertSame( 'ltr', $ret['query'][$queryKey][0]['focusareadir'] );
 		$this->assertSame( 'Test Wish 2', $ret['query'][$queryKey][1]['title'] );
 		$this->assertSame( 'Test Wish 3', $ret['query'][$queryKey][2]['title'] );
 
@@ -267,11 +274,11 @@ class ApiQueryWishesTest extends ApiTestCase {
 	public function testExecuteWithLanguageFallbacks(): void {
 		$this->markTestSkippedIfExtensionNotLoaded( 'Translate' );
 
-		// Create a wish in French.
+		// Create a wish in Arabic.
 		$this->insertTestWish(
 			'Community Wishlist/W1',
-			'fr',
-			[ Wish::PARAM_TITLE => '<translate>Original French title</translate>' ],
+			'ar',
+			[ Wish::PARAM_TITLE => '<translate>Original Arabic title</translate>' ],
 		);
 		// Add an English translation.
 		$this->insertTestWish(
@@ -279,29 +286,35 @@ class ApiQueryWishesTest extends ApiTestCase {
 			'en',
 			[
 				Wish::PARAM_TITLE => 'Title in English',
-				Wish::PARAM_BASE_LANG => 'fr'
+				Wish::PARAM_BASE_LANG => 'ar'
 			],
 		);
 
 		[ $ret ] = $this->doApiRequest( [
 			'action' => 'query',
 			'list' => 'communityrequests-wishes',
-			'crwlang' => 'fr',
+			'crwlang' => 'ar',
+			'crwprop' => 'title|langinfo',
 		] );
-		$wishesFr = $ret['query']['communityrequests-wishes'];
-		$this->assertCount( 1, $wishesFr );
-		$this->assertSame( 'Community Wishlist/W1', $wishesFr[0]['crwtitle'] );
-		$this->assertSame( 'Original French title', $wishesFr[0][Wish::PARAM_TITLE] );
+		$wishesAr = $ret['query']['communityrequests-wishes'];
+		$this->assertCount( 1, $wishesAr );
+		$this->assertSame( 'Community Wishlist/W1', $wishesAr[0]['crwtitle'] );
+		$this->assertSame( 'Original Arabic title', $wishesAr[0][Wish::PARAM_TITLE] );
+		$this->assertSame( 'ar', $wishesAr[0]['lang'] );
+		$this->assertSame( 'rtl', $wishesAr[0]['dir'] );
 
 		[ $ret ] = $this->doApiRequest( [
 			'action' => 'query',
 			'list' => 'communityrequests-wishes',
 			'crwlang' => 'en',
+			'crwprop' => 'title|langinfo',
 		] );
 		$wishesEn = $ret['query']['communityrequests-wishes'];
 		$this->assertCount( 1, $wishesEn );
 		$this->assertSame( 'Community Wishlist/W1/en', $wishesEn[0]['crwtitle'] );
 		$this->assertSame( 'Title in English', $wishesEn[0][Wish::PARAM_TITLE] );
+		$this->assertSame( 'en', $wishesEn[0]['lang'] );
+		$this->assertSame( 'ltr', $wishesEn[0]['dir'] );
 	}
 
 	public function testExecuteWithManyWishes(): void {
@@ -477,7 +490,7 @@ class ApiQueryWishesTest extends ApiTestCase {
 		return $ret;
 	}
 
-	private function createTestFocusAreaWithApi(): array {
+	private function createTestFocusAreaWithApi( $params = [] ): array {
 		$params = [
 			'action' => 'focusareaedit',
 			'status' => 'under-review',
@@ -488,6 +501,7 @@ class ApiQueryWishesTest extends ApiTestCase {
 			'volunteers' => "* [[User:Volunteer1]]\n* [[User:Volunteer2]]",
 			'created' => '2025-09-11T12:00:00Z',
 			'baselang' => 'en',
+			...$params,
 		];
 		PermissionHooks::$allowManualEditing = true;
 		[ $ret ] = $this->doApiRequestWithToken( $params );

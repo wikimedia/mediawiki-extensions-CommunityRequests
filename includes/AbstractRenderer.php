@@ -7,6 +7,7 @@ use MediaWiki\EditPage\EditPage;
 use MediaWiki\Extension\CommunityRequests\FocusArea\FocusAreaStore;
 use MediaWiki\Extension\CommunityRequests\Wish\WishStore;
 use MediaWiki\Html\Html;
+use MediaWiki\Language\Language;
 use MediaWiki\Linker\LinkRenderer;
 use MediaWiki\Parser\CoreTagHooks;
 use MediaWiki\Parser\Parser;
@@ -167,6 +168,14 @@ abstract class AbstractRenderer implements MessageLocalizer {
 
 	// HTML helpers for rendering wish or focus area pages.
 
+	/**
+	 * Generate a div element for the specified field and text.
+	 * This is used for sections of entity pages, giving them a unique CSS class.
+	 *
+	 * @param string $field
+	 * @param string $text
+	 * @return string Safe HTML
+	 */
 	protected function getDiv( string $field, string $text ): string {
 		return Html::element(
 			'div',
@@ -175,10 +184,25 @@ abstract class AbstractRenderer implements MessageLocalizer {
 		);
 	}
 
-	protected function getDivRaw( string $field, string $html ): string {
+	/**
+	 * Same as ::getDiv() but for raw HTML content.
+	 * This is usually used for displaying user-submitted content on entity pages.
+	 * As such, it accepts an optional $lang parameter to set the lang/dir attributes
+	 * accordingly so the nodes are translatable by the ext.communityrequests.mint module.
+	 *
+	 * @param string $field
+	 * @param string $html
+	 * @param ?Language $lang
+	 * @return string Raw HTML
+	 */
+	protected function getDivRaw( string $field, string $html, ?Language $lang = null ): string {
 		return Html::rawElement(
 			'div',
-			[ 'class' => "ext-communityrequests-{$this->rendererType}--$field" ],
+			[
+				'class' => "ext-communityrequests-{$this->rendererType}--$field",
+				'lang' => $lang?->getCode(),
+				'dir' => $lang?->getDir(),
+			],
 			"\n$html\n"
 		);
 	}
@@ -361,7 +385,7 @@ abstract class AbstractRenderer implements MessageLocalizer {
 	 * @return string
 	 */
 	protected function formatDate( string $date ): string {
-		return htmlspecialchars( $this->parser->getTargetLanguage()->timeanddate(
+		return htmlspecialchars( $this->parser->getOptions()->getUserLangObj()->timeanddate(
 			$date,
 			true,
 			$this->parser->getOptions()->getDateFormat()
@@ -478,12 +502,12 @@ abstract class AbstractRenderer implements MessageLocalizer {
 		if ( $this->config->isWishPage( $this->parser->getPage() ) ) {
 			$backLink .= $this->linkRenderer->makeKnownLink(
 				Title::newFromText( $this->config->getWishIndexPage() ),
-				$this->parser->msg( 'communityrequests-view-all-wishes' )->text()
+				$this->msg( 'communityrequests-view-all-wishes' )->text()
 			);
 		} else {
 			$backLink .= $this->linkRenderer->makeKnownLink(
 				Title::newFromText( $this->config->getFocusAreaIndexPage() ),
-				$this->parser->msg( 'communityrequests-view-all-focus-areas' )->text()
+				$this->msg( 'communityrequests-view-all-focus-areas' )->text()
 			);
 		}
 		return $languageLinks . $backLink;
@@ -597,8 +621,9 @@ abstract class AbstractRenderer implements MessageLocalizer {
 					"ext-communityrequests-{$this->rendererType}--title",
 					$classAttr,
 				],
-				'lang' => $langAttr,
-				'dir' => $dirAttr,
+				// Set lang/dir to match the target language if it wasn't already specified.
+				'lang' => $langAttr ?? $this->parser->getTargetLanguage()->getCode(),
+				'dir' => $dirAttr ?? $this->parser->getTargetLanguage()->getDir(),
 			],
 			$titleHtml
 		);

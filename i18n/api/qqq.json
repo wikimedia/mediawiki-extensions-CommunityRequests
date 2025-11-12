@@ -61,6 +61,7 @@
 	"apihelp-query+communityrequests-wishes-paramvalue-prop-created": "{{doc-apihelp-paramvalue|query+wishes|prop|created}}",
 	"apihelp-query+communityrequests-wishes-paramvalue-prop-updated": "{{doc-apihelp-paramvalue|query+wishes|prop|updated}}",
 	"apihelp-query+communityrequests-wishes-paramvalue-prop-baselang": "{{doc-apihelp-paramvalue|query+wishes|prop|baselang}}",
+	"apihelp-query+communityrequests-wishes-paramvalue-prop-langinfo": "{{doc-apihelp-paramvalue|query+wishes|prop|langinfo}}",
 	"apihelp-query+communityrequests-wishes-paramvalue-sort-created": "{{doc-apihelp-paramvalue|query+wishes|sort|created}}",
 	"apihelp-query+communityrequests-wishes-paramvalue-sort-updated": "{{doc-apihelp-paramvalue|query+wishes|sort|updated}}",
 	"apihelp-query+communityrequests-wishes-paramvalue-sort-votecount": "{{doc-apihelp-paramvalue|query+wishes|sort|votecount}}",

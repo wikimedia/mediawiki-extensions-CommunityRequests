@@ -164,8 +164,8 @@ class ApiQueryWishesTest extends ApiTestCase {
 		$this->assertCount( 4, $ret['query'][$queryKey] );
 		$this->assertSame( 'Test Wish C', $ret['query'][$queryKey][0]['title'] );
 		$this->assertSame( 'Test Wish A', $ret['query'][$queryKey][1]['title'] );
-		$this->assertSame( 'A fine wish', $ret['query'][$queryKey][2]['title'] );
-		$this->assertSame( 'A French translation', $ret['query'][$queryKey][3]['title'] );
+		$this->assertSame( 'A French translation', $ret['query'][$queryKey][2]['title'] );
+		$this->assertSame( 'A fine wish', $ret['query'][$queryKey][3]['title'] );
 	}
 
 	/**
@@ -201,12 +201,12 @@ class ApiQueryWishesTest extends ApiTestCase {
 			[
 				'titles' => $titles,
 				'dir' => 'descending',
-				'result' => [ 'Walrus', 'walrus', 'aardvark' ],
+				'result' => [ 'Walrus', 'walrus', 'AArdvark' ],
 			],
 			[
 				'titles' => $titles,
 				'dir' => 'ascending',
-				'result' => [ 'Walrus', 'AArdvark', 'Aardvark' ],
+				'result' => [ 'AArdvark', 'Aardvark', 'aardvark' ],
 			],
 		];
 	}

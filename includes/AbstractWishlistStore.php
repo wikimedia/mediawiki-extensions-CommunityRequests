@@ -379,6 +379,15 @@ abstract class AbstractWishlistStore {
 			static::SORT_ASC :
 			static::SORT_DESC;
 
+		$orderBy = $orderPrecedence;
+		// Add page to the end of the sort columns, for repeatability.
+		$orderBy[] = static::pageField();
+		// For MySQL, cast to string for case-insensitive ordering.
+		if ( $dbr->getType() === 'mysql' ) {
+			$orderSql = 'CONVERT( ' . $dbr->addIdentifierQuotes( static::titleField() ) . ' USING utf8mb4 )';
+			$orderBy[ array_search( static::titleField(), $orderBy ) ] = $orderSql;
+		}
+
 		$select = $dbr->newSelectQueryBuilder()
 			->caller( __METHOD__ )
 			->table( static::tableName() )
@@ -406,7 +415,7 @@ abstract class AbstractWishlistStore {
 						. ')'
 				], $dbr::LIST_AND )
 			], $dbr::LIST_OR ) )
-			->orderBy( $orderPrecedence, $sortDir )
+			->orderBy( $orderBy, $sortDir )
 			// Leave room for the fallback languages.
 			->limit( $limit * ( count( $langs ) + 1 ) );
 

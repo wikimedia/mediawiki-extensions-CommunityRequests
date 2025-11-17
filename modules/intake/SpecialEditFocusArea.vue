@@ -5,16 +5,16 @@
 		:disabled="formDisabled"
 		@change="formChanged = true"
 	>
-		<status-section
+		<status-field
 			v-model:status="focusArea.status"
 			entity-type="focus-area"
 			@update:status="formChanged = true"
-		></status-section>
+		></status-field>
 		<input
 			:value="focusArea.status"
 			type="hidden"
 			name="status">
-		<description-section
+		<description-field
 			v-model:title="focusArea.title"
 			v-model:description="focusArea.description"
 			:title-status="titleStatus"
@@ -25,7 +25,7 @@
 			"
 			@update:description="formChanged = true"
 			@update:pre-submit-promise="addPreSubmitFn"
-		></description-section>
+		></description-field>
 		<cdx-field
 			class="ext-communityrequests-intake__short-description"
 		>
@@ -89,7 +89,7 @@
 			name="baselang"
 		>
 
-		<footer-section
+		<form-footer
 			:exists="exists"
 			:publish-msg="$i18n( 'communityrequests-focus-area-publish' ).text()"
 			:save-msg="$i18n( 'communityrequests-focus-area-save' ).text()"
@@ -97,7 +97,7 @@
 			:form-error="formError"
 			:form-error-msg="formErrorMsg"
 			@submit="handleSubmit"
-		></footer-section>
+		></form-footer>
 	</cdx-field>
 </template>
 
@@ -111,9 +111,9 @@ const {
 	CommunityRequestsStatuses
 } = require( '../common/config.json' );
 const Util = require( '../common/Util.js' );
-const StatusSection = require( './StatusSection.vue' );
-const DescriptionSection = require( './DescriptionSection.vue' );
-const FooterSection = require( './FooterSection.vue' );
+const StatusField = require( './StatusField.vue' );
+const DescriptionField = require( './DescriptionField.vue' );
+const FormFooter = require( './FormFooter.vue' );
 
 const api = new mw.Api();
 const defaultStatusKey = Object.keys( CommunityRequestsStatuses )
@@ -129,9 +129,9 @@ module.exports = exports = defineComponent( {
 	components: {
 		CdxField,
 		CdxTextArea,
-		StatusSection,
-		DescriptionSection,
-		FooterSection
+		StatusField,
+		DescriptionField,
+		FormFooter
 	},
 	props: {
 		baselang: { type: String, default: mw.config.get( 'wgUserLanguage' ) },

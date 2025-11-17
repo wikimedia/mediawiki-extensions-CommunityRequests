@@ -17,7 +17,7 @@ const { CdxField, CdxSelect } = require( '../codex.js' );
 const { CommunityRequestsStatuses } = require( '../common/config.json' );
 
 module.exports = exports = defineComponent( {
-	name: 'StatusSection',
+	name: 'StatusField',
 	components: {
 		CdxField,
 		CdxSelect

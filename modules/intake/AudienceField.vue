@@ -25,7 +25,7 @@ const { defineComponent, ref, watch, Ref } = require( 'vue' );
 const audienceMaxChars = mw.config.get( 'intakeAudienceMaxChars' );
 
 module.exports = exports = defineComponent( {
-	name: 'AudienceSection',
+	name: 'AudienceField',
 	components: {
 		CdxField,
 		CdxTextInput

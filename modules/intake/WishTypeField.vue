@@ -33,7 +33,7 @@ const { CdxField, CdxRadio } = require( '../codex.js' );
 const { CommunityRequestsWishTypes } = require( '../common/config.json' );
 
 module.exports = exports = defineComponent( {
-	name: 'TypeSection',
+	name: 'TypeField',
 	components: {
 		CdxField,
 		CdxRadio

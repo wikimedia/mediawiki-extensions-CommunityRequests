@@ -16,7 +16,7 @@ const { defineComponent, ref, Ref } = require( 'vue' );
 const { CdxField, CdxSelect } = require( '../codex.js' );
 
 module.exports = exports = defineComponent( {
-	name: 'FocusAreaSection',
+	name: 'FocusAreaField',
 	components: {
 		CdxField,
 		CdxSelect

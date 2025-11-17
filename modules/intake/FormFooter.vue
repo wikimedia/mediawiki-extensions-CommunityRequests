@@ -38,7 +38,7 @@ const { defineComponent } = require( 'vue' );
 const { CdxButton, CdxMessage } = require( '../codex.js' );
 
 module.exports = exports = defineComponent( {
-	name: 'FooterSection',
+	name: 'FormFooter',
 	components: {
 		CdxButton,
 		CdxMessage

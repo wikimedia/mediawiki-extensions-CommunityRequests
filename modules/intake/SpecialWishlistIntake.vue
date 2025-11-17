@@ -5,26 +5,26 @@
 		:disabled="formDisabled"
 		@change="formChanged = true"
 	>
-		<status-section
+		<status-field
 			v-if="isWishlistManager"
 			v-model:status="wish.status"
 			entity-type="wish"
 			@update:status="formChanged = true"
-		></status-section>
+		></status-field>
 		<input
 			:value="wish.status"
 			type="hidden"
 			name="status">
-		<focus-area-section
+		<focus-area-field
 			v-if="isWishlistManager"
 			v-model:focus-area="wish.focusarea"
 			@update:focus-area="formChanged = true"
-		></focus-area-section>
+		></focus-area-field>
 		<input
 			:value="wish.focusarea"
 			type="hidden"
 			name="focusarea">
-		<description-section
+		<description-field
 			v-model:title="wish.title"
 			v-model:description="wish.description"
 			:title-status="titleStatus"
@@ -34,24 +34,24 @@
 			:description-help-text="$i18n( 'communityrequests-description-description' ).text()"
 			@update:description="formChanged = true"
 			@update:pre-submit-promise="addPreSubmitFn"
-		></description-section>
-		<wish-type-section
+		></description-field>
+		<wish-type-field
 			:type="wish.type"
 			:status="typeStatus"
 			@update:type="$event => ( wish.type = $event )"
-		></wish-type-section>
+		></wish-type-field>
 		<tags-field
 			v-model:tags="wish.tags"
 			:optional-label="true"
 			:show-description="true"
 		></tags-field>
-		<audience-section
+		<audience-field
 			v-model:audience="wish.audience"
 			:status="audienceStatus"
-		></audience-section>
-		<phabricator-tasks
+		></audience-field>
+		<phabricator-tasks-field
 			v-model:tasks="wish.phabtasks"
-		></phabricator-tasks>
+		></phabricator-tasks-field>
 		<input
 			:value="created"
 			type="hidden"
@@ -73,7 +73,7 @@
 			name="baselang"
 		>
 
-		<footer-section
+		<form-footer
 			:exists="exists"
 			:return-to="returnTo"
 			:form-error="formError"
@@ -81,7 +81,7 @@
 			:publish-msg="$i18n( 'communityrequests-publish' ).text()"
 			:save-msg="$i18n( 'communityrequests-save' ).text()"
 			@submit="handleSubmit"
-		></footer-section>
+		></form-footer>
 	</cdx-field>
 </template>
 
@@ -91,14 +91,14 @@ const { computed, defineComponent, nextTick, onMounted, reactive, ref, ComputedR
 const { CdxField } = require( '../codex.js' );
 const { CommunityRequestsHomepage, CommunityRequestsWishIndexPage, CommunityRequestsStatuses } = require( '../common/config.json' );
 const Util = require( '../common/Util.js' );
-const StatusSection = require( './StatusSection.vue' );
-const FocusAreaSection = require( './FocusAreaSection.vue' );
-const WishTypeSection = require( './WishTypeSection.vue' );
+const StatusField = require( './StatusField.vue' );
+const FocusAreaField = require( './FocusAreaField.vue' );
+const WishTypeField = require( './WishTypeField.vue' );
 const TagsField = require( '../common/TagsField.vue' );
-const DescriptionSection = require( './DescriptionSection.vue' );
-const AudienceSection = require( './AudienceSection.vue' );
-const PhabricatorTasks = require( './PhabricatorTasks.vue' );
-const FooterSection = require( './FooterSection.vue' );
+const DescriptionField = require( './DescriptionField.vue' );
+const AudienceField = require( './AudienceField.vue' );
+const PhabricatorTasksField = require( './PhabricatorTasksField.vue' );
+const FormFooter = require( './FormFooter.vue' );
 
 const api = new mw.Api();
 const defaultStatusKey = Object.keys( CommunityRequestsStatuses )
@@ -112,15 +112,15 @@ const preSubmitFns = [];
 module.exports = exports = defineComponent( {
 	name: 'SpecialWishlistIntake',
 	components: {
-		AudienceSection,
+		AudienceField,
 		CdxField,
-		DescriptionSection,
-		FocusAreaSection,
-		FooterSection,
-		PhabricatorTasks,
+		DescriptionField,
+		FocusAreaField,
+		FormFooter,
+		PhabricatorTasksField,
 		TagsField,
-		StatusSection,
-		WishTypeSection
+		StatusField,
+		WishTypeField
 	},
 	props: {
 		audience: { type: String, default: '' },

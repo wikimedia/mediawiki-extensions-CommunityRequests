@@ -55,7 +55,7 @@ const titleMaxChars = mw.config.get( 'intakeTitleMaxChars' );
 let descriptionField;
 
 module.exports = exports = defineComponent( {
-	name: 'DescriptionSection',
+	name: 'DescriptionField',
 	components: {
 		CdxField,
 		CdxTextInput

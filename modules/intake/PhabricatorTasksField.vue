@@ -33,7 +33,7 @@ const { CdxField, CdxChipInput } = require( '../codex.js' );
  * itself.
  */
 module.exports = exports = defineComponent( {
-	name: 'PhabricatorTasks',
+	name: 'PhabricatorTasksField',
 	components: {
 		CdxField,
 		CdxChipInput

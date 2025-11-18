@@ -232,5 +232,7 @@
 	"communityrequests-vote-update-summary": "Unterstützungsstimme aktualisieren",
 	"communityrequests-vote-remove-summary": "Unterstützungsstimme entfernen",
 	"communityrequests-wish-count": "$1 {{PLURAL:$2|Wunsch|Wünsche}}",
-	"communityrequests-vote-count": "$1 {{PLURAL:$2|Unterstützer}}"
+	"communityrequests-vote-count": "$1 {{PLURAL:$2|Unterstützer}}",
+	"communityrequests-wish-talk-subtitle": "Diskussion für $1 vorgeschlagen von $2",
+	"communityrequests-focus-area-talk-subtitle": "Diskussion für $1"
 }

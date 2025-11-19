@@ -23,7 +23,7 @@ use RevisionSearchResult;
 /**
  * @group CommunityRequests
  * @covers \MediaWiki\Extension\CommunityRequests\HookHandler\SearchHooks
- * @covers \MediaWiki\Extension\CommunityRequests\HookHandler\WishlistEntityTrait
+ * @covers \MediaWiki\Extension\CommunityRequests\WishlistEntityTrait
  */
 class SearchHooksTest extends MediaWikiUnitTestCase {
 

@@ -15,10 +15,10 @@ class PreferencesHooks implements GetPreferencesHook {
 
 	public const PREF_MACHINETRANSLATION = 'usemachinetranslation';
 
-	protected bool $translateInstalled;
+	private bool $translateInstalled;
 
 	public function __construct(
-		private readonly WishlistConfig $config,
+		protected readonly WishlistConfig $config,
 		?ExtensionRegistry $extensionRegistry = null
 	) {
 		$extensionRegistry ??= ExtensionRegistry::getInstance();

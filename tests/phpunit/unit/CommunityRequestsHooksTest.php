@@ -26,7 +26,7 @@ use Psr\Log\NullLogger;
 /**
  * @group CommunityRequests
  * @covers \MediaWiki\Extension\CommunityRequests\HookHandler\CommunityRequestsHooks
- * @covers \MediaWiki\Extension\CommunityRequests\HookHandler\WishlistEntityTrait
+ * @covers \MediaWiki\Extension\CommunityRequests\WishlistEntityTrait
  * @covers \MediaWiki\Extension\CommunityRequests\RendererFactory
  */
 class CommunityRequestsHooksTest extends MediaWikiUnitTestCase {

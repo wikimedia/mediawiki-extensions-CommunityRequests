@@ -6,6 +6,7 @@ namespace MediaWiki\Extension\CommunityRequests\HookHandler;
 use MediaWiki\Extension\CommunityRequests\FocusArea\FocusAreaStore;
 use MediaWiki\Extension\CommunityRequests\Wish\WishStore;
 use MediaWiki\Extension\CommunityRequests\WishlistConfig;
+use MediaWiki\Extension\CommunityRequests\WishlistEntityTrait;
 use MediaWiki\Hook\ChangesListInsertArticleLinkHook;
 use MediaWiki\Page\PageReference;
 use MediaWiki\RecentChanges\ChangesList;
@@ -21,11 +22,11 @@ class ChangesListHooks implements ChangesListInsertArticleLinkHook {
 	use WishlistEntityTrait;
 
 	public function __construct(
-		private readonly WishlistConfig $config,
-		private readonly WishStore $wishStore,
-		private readonly FocusAreaStore $focusAreaStore,
-		private readonly TitleFormatter $titleFormatter,
-		private readonly LoggerInterface $logger,
+		protected readonly WishlistConfig $config,
+		protected readonly WishStore $wishStore,
+		protected readonly FocusAreaStore $focusAreaStore,
+		protected readonly TitleFormatter $titleFormatter,
+		protected readonly LoggerInterface $logger,
 	) {
 	}
 

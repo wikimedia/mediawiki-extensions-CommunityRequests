@@ -16,6 +16,7 @@ use MediaWiki\Extension\CommunityRequests\FocusArea\FocusAreaStore;
 use MediaWiki\Extension\CommunityRequests\RendererFactory;
 use MediaWiki\Extension\CommunityRequests\Wish\WishStore;
 use MediaWiki\Extension\CommunityRequests\WishlistConfig;
+use MediaWiki\Extension\CommunityRequests\WishlistEntityTrait;
 use MediaWiki\Hook\LinksUpdateCompleteHook;
 use MediaWiki\Hook\LoginFormValidErrorMessagesHook;
 use MediaWiki\Hook\ParserAfterTidyHook;
@@ -74,16 +75,16 @@ class CommunityRequestsHooks implements
 	public static bool $allowManualEditing = false;
 
 	public function __construct(
-		private readonly WishlistConfig $config,
-		private readonly WishStore $wishStore,
-		private readonly FocusAreaStore $focusAreaStore,
-		private readonly EntityFactory $entityFactory,
-		private readonly LinkRenderer $linkRenderer,
-		private readonly PermissionManager $permissionManager,
-		private readonly SpecialPageFactory $specialPageFactory,
-		private readonly LoggerInterface $logger,
-		private readonly Config $mainConfig,
-		private readonly WikiPageFactory $wikiPageFactory,
+		protected readonly WishlistConfig $config,
+		protected readonly WishStore $wishStore,
+		protected readonly FocusAreaStore $focusAreaStore,
+		protected readonly EntityFactory $entityFactory,
+		protected readonly LinkRenderer $linkRenderer,
+		protected readonly PermissionManager $permissionManager,
+		protected readonly SpecialPageFactory $specialPageFactory,
+		protected readonly LoggerInterface $logger,
+		protected readonly Config $mainConfig,
+		protected readonly WikiPageFactory $wikiPageFactory,
 		?ExtensionRegistry $extensionRegistry = null
 	) {
 		$extensionRegistry ??= ExtensionRegistry::getInstance();

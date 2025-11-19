@@ -11,7 +11,7 @@ use MediaWiki\Page\PageIdentity;
 class TranslateHooks implements TranslateTitlePageTranslationHook {
 
 	public function __construct(
-		private readonly WishlistConfig $config,
+		protected readonly WishlistConfig $config,
 	) {
 	}
 

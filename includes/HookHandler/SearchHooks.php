@@ -7,6 +7,7 @@ use MediaWiki\Extension\CommunityRequests\FocusArea\FocusArea;
 use MediaWiki\Extension\CommunityRequests\FocusArea\FocusAreaStore;
 use MediaWiki\Extension\CommunityRequests\Wish\WishStore;
 use MediaWiki\Extension\CommunityRequests\WishlistConfig;
+use MediaWiki\Extension\CommunityRequests\WishlistEntityTrait;
 use MediaWiki\Search\Hook\ShowSearchHitHook;
 use MediaWiki\Specials\SpecialSearch;
 use MediaWiki\Title\Title;
@@ -22,11 +23,11 @@ class SearchHooks implements ShowSearchHitHook {
 	use WishlistEntityTrait;
 
 	public function __construct(
-		private readonly WishlistConfig $config,
-		private readonly WishStore $wishStore,
-		private readonly FocusAreaStore $focusAreaStore,
-		private readonly LoggerInterface $logger,
-		private readonly TitleFormatter $titleFormatter,
+		protected readonly WishlistConfig $config,
+		protected readonly WishStore $wishStore,
+		protected readonly FocusAreaStore $focusAreaStore,
+		protected readonly LoggerInterface $logger,
+		protected readonly TitleFormatter $titleFormatter,
 	) {
 	}
 

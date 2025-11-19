@@ -20,7 +20,7 @@ use Psr\Log\NullLogger;
 /**
  * @group CommunityRequests
  * @covers \MediaWiki\Extension\CommunityRequests\HookHandler\ChangesListHooks
- * @covers \MediaWiki\Extension\CommunityRequests\HookHandler\WishlistEntityTrait
+ * @covers \MediaWiki\Extension\CommunityRequests\WishlistEntityTrait
  */
 class ChangesListHooksTest extends MediaWikiUnitTestCase {
 

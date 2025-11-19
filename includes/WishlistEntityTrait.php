@@ -1,14 +1,11 @@
 <?php
 declare( strict_types = 1 );
 
-namespace MediaWiki\Extension\CommunityRequests\HookHandler;
+namespace MediaWiki\Extension\CommunityRequests;
 
 use InvalidArgumentException;
-use MediaWiki\Extension\CommunityRequests\AbstractWishlistEntity;
-use MediaWiki\Extension\CommunityRequests\AbstractWishlistStore;
 use MediaWiki\Extension\CommunityRequests\FocusArea\FocusAreaStore;
 use MediaWiki\Extension\CommunityRequests\Wish\WishStore;
-use MediaWiki\Extension\CommunityRequests\WishlistConfig;
 use MediaWiki\Html\Html;
 use MediaWiki\Page\PageIdentity;
 use MediaWiki\Page\PageReference;
@@ -19,11 +16,11 @@ use Psr\Log\LoggerInterface;
 
 trait WishlistEntityTrait {
 
-	private readonly WishlistConfig $config;
-	private readonly WishStore $wishStore;
-	private readonly FocusAreaStore $focusAreaStore;
-	private readonly TitleFormatter $titleFormatter;
-	private readonly LoggerInterface $logger;
+	protected readonly WishlistConfig $config;
+	protected readonly WishStore $wishStore;
+	protected readonly FocusAreaStore $focusAreaStore;
+	protected readonly TitleFormatter $titleFormatter;
+	protected readonly LoggerInterface $logger;
 
 	/**
 	 * @var array<string, AbstractWishlistEntity> Cache of loaded entities by page ID/language.
@@ -44,9 +41,9 @@ trait WishlistEntityTrait {
 		$cacheKey = $identity->getId() . '|' . $lang;
 		if ( isset( static::$entities[$cacheKey] ) ) {
 			$entity = static::$entities[$cacheKey];
-			$this->logger->info( __METHOD__ . ": Cache hit for {$entity->getPage()} with key $cacheKey\n" );
+			$this->logger->info( __METHOD__ . ": Cache hit for {$entity->getPage()} with key $cacheKey" );
 		} else {
-			$this->logger->info( __METHOD__ . ": Cache miss for $canonicalPage with key $cacheKey\n" );
+			$this->logger->info( __METHOD__ . ": Cache miss for $canonicalPage with key $cacheKey" );
 			$entity = $this->getStoreForPage( $canonicalPage )->get( $canonicalPage, $lang );
 			if ( $entity ) {
 				static::$entities[$cacheKey] = $entity;
@@ -54,7 +51,7 @@ trait WishlistEntityTrait {
 		}
 
 		if ( !$entity ) {
-			$this->logger->info( __METHOD__ . ": Entity not found for page {$canonicalPage}\n" );
+			$this->logger->info( __METHOD__ . ": Entity not found for page $canonicalPage" );
 			return null;
 		}
 

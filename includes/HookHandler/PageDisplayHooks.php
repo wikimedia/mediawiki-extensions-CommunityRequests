@@ -9,6 +9,7 @@ use MediaWiki\Extension\CommunityRequests\Vote\VoteStore;
 use MediaWiki\Extension\CommunityRequests\Wish\Wish;
 use MediaWiki\Extension\CommunityRequests\Wish\WishStore;
 use MediaWiki\Extension\CommunityRequests\WishlistConfig;
+use MediaWiki\Extension\CommunityRequests\WishlistEntityTrait;
 use MediaWiki\Html\Html;
 use MediaWiki\Linker\LinkRenderer;
 use MediaWiki\Output\Hook\BeforePageDisplayHook;
@@ -37,15 +38,15 @@ class PageDisplayHooks implements
 	use WishlistEntityTrait;
 
 	public function __construct(
-		private readonly WishlistConfig $config,
-		private readonly WishStore $wishStore,
-		private readonly FocusAreaStore $focusAreaStore,
-		private readonly VoteStore $voteStore,
-		private readonly UserOptionsManager $userOptionsManager,
-		private readonly SpecialPageFactory $specialPageFactory,
-		private readonly NamespaceInfo $namespaceInfo,
-		private readonly LinkRenderer $linkRenderer,
-		private readonly LoggerInterface $logger,
+		protected readonly WishlistConfig $config,
+		protected readonly WishStore $wishStore,
+		protected readonly FocusAreaStore $focusAreaStore,
+		protected readonly VoteStore $voteStore,
+		protected readonly UserOptionsManager $userOptionsManager,
+		protected readonly SpecialPageFactory $specialPageFactory,
+		protected readonly NamespaceInfo $namespaceInfo,
+		protected readonly LinkRenderer $linkRenderer,
+		protected readonly LoggerInterface $logger,
 	) {
 	}
 

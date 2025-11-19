@@ -69,6 +69,7 @@
 		"RevisionDataUpdates": "main",
 		"ShowSearchHit": "search",
 		"SkinTemplateNavigation::Universal": "main",
+		"TitleIsMovable": "permission",
 		"TranslateTitlePageTranslation": "translate",
 		"getUserPermissionsErrorsExpensive": "permission"
 	},

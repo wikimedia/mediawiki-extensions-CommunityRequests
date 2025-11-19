@@ -5,6 +5,7 @@ namespace MediaWiki\Extension\CommunityRequests\HookHandler;
 
 use MediaWiki\Context\RequestContext;
 use MediaWiki\Extension\CommunityRequests\WishlistConfig;
+use MediaWiki\Hook\TitleIsMovableHook;
 use MediaWiki\Page\PageIdentity;
 use MediaWiki\Permissions\Hook\GetUserPermissionsErrorsExpensiveHook;
 use MediaWiki\Permissions\PermissionManager;
@@ -14,7 +15,7 @@ use MediaWiki\User\User;
 use Psr\Log\LoggerInterface;
 use Wikimedia\Message\MessageSpecifier;
 
-class PermissionHooks implements GetUserPermissionsErrorsExpensiveHook {
+class PermissionHooks implements GetUserPermissionsErrorsExpensiveHook, TitleIsMovableHook {
 
 	public function __construct(
 		protected readonly WishlistConfig $config,
@@ -107,5 +108,18 @@ class PermissionHooks implements GetUserPermissionsErrorsExpensiveHook {
 					str_starts_with( $identity->getDBkey(), 'EditFocusArea' )
 				)
 			);
+	}
+
+	/**
+	 * Prevent entity pages from being moved.
+	 *
+	 * @param Title $title
+	 * @param bool &$result
+	 * @return void
+	 */
+	public function onTitleIsMovable( $title, &$result ) {
+		if ( $this->config->isEnabled() && $this->config->isWishOrFocusAreaPage( $title ) ) {
+			$result = false;
+		}
 	}
 }

@@ -118,6 +118,20 @@ class PermissionHooksTest extends MediaWikiUnitTestCase {
 		];
 	}
 
+	public function testTitleIsMovable(): void {
+		$handler = $this->getHandler();
+
+		$title = $this->makeMockTitle( 'Community Wishlist/W123' );
+		$result = true;
+		$handler->onTitleIsMovable( $title, $result );
+		$this->assertFalse( $result );
+
+		$title2 = $this->makeMockTitle( 'Some Other Page' );
+		$result2 = true;
+		$handler->onTitleIsMovable( $title2, $result2 );
+		$this->assertTrue( $result2 );
+	}
+
 	private function getHandler(
 		array $serviceOptions = [],
 		?PermissionManager $permissionManager = null,

@@ -139,12 +139,12 @@ class FocusAreaStore extends AbstractWishlistStore {
 		$data = [
 			static::entityTypeField() => AbstractWishlistStore::ENTITY_TYPE_FOCUS_AREA,
 			static::pageField() => $focusArea->getPage()->getId(),
-			static::baseLangField() => $focusArea->getBaseLang(),
-			static::createdField() => $dbw->timestamp( $focusArea->getCreated() ?: wfTimestampNow() ),
 		];
 		$dataSet = [
-			static::updatedField() => $dbw->timestamp( $focusArea->getUpdated() ?: wfTimestampNow() ),
 			static::statusField() => $focusArea->getStatus(),
+			static::createdField() => $dbw->timestamp( $focusArea->getCreated() ?: wfTimestampNow() ),
+			static::updatedField() => $dbw->timestamp( $focusArea->getUpdated() ?: wfTimestampNow() ),
+			static::baseLangField() => $focusArea->getBaseLang(),
 		];
 
 		// Set votes only if not null, otherwise leave unchanged.

@@ -453,4 +453,23 @@ END;
 		$this->insertTestFocusArea();
 		$this->assertSame( 2, $this->getStore()->getCount() );
 	}
+
+	public function testChangePageLanguage(): void {
+		$wish = $this->insertTestWish( null, 'fr' );
+		$wishTitle = Title::newFromPageIdentity( $wish->getPage() );
+		$this->assertSame( 'fr', $wishTitle->getPageLanguage()->getCode() );
+		$this->assertSame( 'fr', $this->getStore()->get( $wishTitle )->getBaseLang() );
+		// Manually change to English.
+		$this->getStore()->setPageLanguage( $wish->getPage()->getId(), 'en' );
+		$this->assertSame( 'en', Title::newFromPageIdentity( $wish->getPage() )->getPageLanguage()->getCode() );
+		$wikitext = $this->getServiceContainer()
+			->getWikiPageFactory()
+			->newFromId( $wish->getPage()->getId() )
+			->getContent()
+			->getText();
+		$wikitext = str_replace( '|baselang = fr', '|baselang = en', $wikitext );
+		$this->insertPage( $wish->getPage(), $wikitext );
+		$updatedWish = $this->getStore()->get( $wish->getPage() );
+		$this->assertSame( 'en', $updatedWish->getBaseLang() );
+	}
 }

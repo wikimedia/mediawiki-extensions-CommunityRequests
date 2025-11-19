@@ -125,11 +125,6 @@ class WishRendererTest extends MediaWikiIntegrationTestCase {
 		$this->assertStringContainsString( '<b>2 Unterstützer</b>', $parserOutputDe->getRawText() );
 	}
 
-	public function testChangePageLanguage(): void {
-		$wish = $this->insertTestWish( 'Community Wishlist/W123', 'fr' );
-		$this->assertSame( 'fr', Title::newFromPageIdentity( $wish->getPage() )->getPageLanguage()->getCode() );
-	}
-
 	public function testRenderAfterVotesPageCreation(): void {
 		$wish = $this->insertTestWish( 'Community Wishlist/W123', 'en', [
 			Wish::PARAM_STATUS => 'prioritized',

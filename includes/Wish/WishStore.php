@@ -145,7 +145,6 @@ class WishStore extends AbstractWishlistStore {
 		$data = [
 			static::entityTypeField() => AbstractWishlistStore::ENTITY_TYPE_WISH,
 			static::pageField() => $wish->getPage()->getId(),
-			static::baseLangField() => $wish->getBaseLang(),
 		];
 		$dataSet = [
 			static::actorField() => $proposer,
@@ -154,6 +153,7 @@ class WishStore extends AbstractWishlistStore {
 			static::focusAreaField() => $wish->getFocusAreaPage()?->getId() ?: null,
 			static::createdField() => $dbw->timestamp( $created ),
 			static::updatedField() => $dbw->timestamp( $wish->getUpdated() ?: wfTimestampNow() ),
+			static::baseLangField() => $wish->getBaseLang(),
 		];
 
 		// Set votes only if not null, otherwise leave unchanged.

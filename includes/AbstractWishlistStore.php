@@ -13,6 +13,7 @@ use MediaWiki\Page\PageReferenceValue;
 use MediaWiki\Page\PageStore;
 use MediaWiki\Parser\ParserFactory;
 use MediaWiki\Revision\RevisionStore;
+use MediaWiki\Title\Title;
 use MediaWiki\Title\TitleFormatter;
 use MediaWiki\Title\TitleParser;
 use Psr\Log\LoggerInterface;
@@ -706,6 +707,8 @@ abstract class AbstractWishlistStore {
 	/**
 	 * Set the language of a wish or focus area page.
 	 * This method updates the page_lang field in the page table.
+	 *
+	 * @fixme We should have the user set the language correctly from the beginning, see T409992
 	 */
 	public function setPageLanguage( int $pageId, string $newLang ): void {
 		$dbw = $this->dbProvider->getPrimaryDatabase();
@@ -714,6 +717,8 @@ abstract class AbstractWishlistStore {
 			->set( [ 'page_lang' => $newLang ] )
 			->where( [ 'page_id' => $pageId ] )
 			->caller( __METHOD__ )->execute();
+		// Force re-render of the page so that language-based content (parser functions etc.) get updated.
+		Title::newFromID( $pageId )->invalidateCache();
 	}
 
 	/**

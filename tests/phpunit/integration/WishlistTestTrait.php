@@ -162,7 +162,6 @@ trait WishlistTestTrait {
 		// Insert and assert existence and language.
 		$ret = $this->insertPage( $insertTitle, $wikitext );
 		$this->assertGreaterThan( 0, $ret['id'] );
-		$this->runDeferredUpdates();
 		$newTitle = Title::newFromText( $ret['title']->getFullText() );
 		$this->assertSame( $lang, $newTitle->getPageLanguage()->getCode() );
 

@@ -5,7 +5,7 @@ namespace MediaWiki\Extension\CommunityRequests\Tests\Integration;
 
 use MediaWiki\Api\ApiUsageException;
 use MediaWiki\Extension\CommunityRequests\AbstractWishlistStore;
-use MediaWiki\Extension\CommunityRequests\HookHandler\CommunityRequestsHooks;
+use MediaWiki\Extension\CommunityRequests\HookHandler\PermissionHooks;
 use MediaWiki\Extension\CommunityRequests\Wish\WishStore;
 use MediaWiki\MainConfigNames;
 use MediaWiki\Tests\Api\ApiTestCase;
@@ -45,7 +45,7 @@ class ApiWishEditTest extends ApiTestCase {
 		}
 
 		// Make the request.
-		CommunityRequestsHooks::$allowManualEditing = true;
+		PermissionHooks::$allowManualEditing = true;
 		[ $ret ] = $this->doApiRequestWithToken( $params );
 
 		// If we were asserting an error, we're done.
@@ -247,7 +247,7 @@ class ApiWishEditTest extends ApiTestCase {
 	public function testExecuteParsingFailureAndIdGeneration(): void {
 		// Ensure we have a user to work with.
 		User::createNew( 'TestUser' );
-		CommunityRequestsHooks::$allowManualEditing = true;
+		PermissionHooks::$allowManualEditing = true;
 
 		// Create an initial valid wish with the API to ensure the ID generation increments.
 		$params = [
@@ -333,7 +333,7 @@ class ApiWishEditTest extends ApiTestCase {
 		$oldParams = array_merge( $defaultParams, $oldParams );
 		$newParams = array_merge( $defaultParams, $newParams );
 
-		CommunityRequestsHooks::$allowManualEditing = true;
+		PermissionHooks::$allowManualEditing = true;
 		[ $res ] = $this->doApiRequestWithToken( $oldParams );
 		$oldWish = $this->getStore()->get(
 			Title::newFromText( $res['wishedit']['wish'] ),
@@ -349,7 +349,7 @@ class ApiWishEditTest extends ApiTestCase {
 		}
 
 		$newParams['wish'] = $res['wishedit']['wish'];
-		CommunityRequestsHooks::$allowManualEditing = true;
+		PermissionHooks::$allowManualEditing = true;
 		[ $res ] = $this->doApiRequestWithToken( $newParams );
 
 		if ( $res['wishedit']['nochange'] ?? false ) {

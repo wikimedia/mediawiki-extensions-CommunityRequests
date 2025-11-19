@@ -5,7 +5,7 @@ namespace MediaWiki\Extension\CommunityRequests\Api;
 
 use MediaWiki\Api\ApiMain;
 use MediaWiki\Extension\CommunityRequests\FocusArea\FocusAreaStore;
-use MediaWiki\Extension\CommunityRequests\HookHandler\CommunityRequestsHooks;
+use MediaWiki\Extension\CommunityRequests\HookHandler\PermissionHooks;
 use MediaWiki\Extension\CommunityRequests\Vote\Vote;
 use MediaWiki\Extension\CommunityRequests\Vote\VoteStore;
 use MediaWiki\Extension\CommunityRequests\Wish\WishStore;
@@ -65,7 +65,7 @@ class ApiWishlistVote extends ApiWishlistEditBase {
 			$this->params[Vote::PARAM_COMMENT] ?? ''
 		);
 		if ( $saveStatus->isOK() === false ) {
-			CommunityRequestsHooks::$allowManualEditing = false;
+			PermissionHooks::$allowManualEditing = false;
 			$this->dieWithError( $saveStatus->getMessages()[0] );
 		}
 	}

@@ -70,7 +70,7 @@
 		"ShowSearchHit": "search",
 		"SkinTemplateNavigation::Universal": "main",
 		"TranslateTitlePageTranslation": "translate",
-		"getUserPermissionsErrorsExpensive": "main"
+		"getUserPermissionsErrorsExpensive": "permission"
 	},
 	"HookHandlers": {
 		"main": {
@@ -115,6 +115,15 @@
 				"SpecialPageFactory",
 				"NamespaceInfo",
 				"LinkRenderer",
+				"CommunityRequests.Logger"
+			]
+		},
+		"permission": {
+			"class": "MediaWiki\\Extension\\CommunityRequests\\HookHandler\\PermissionHooks",
+			"services": [
+				"CommunityRequests.WishlistConfig",
+				"PermissionManager",
+				"SpecialPageFactory",
 				"CommunityRequests.Logger"
 			]
 		},

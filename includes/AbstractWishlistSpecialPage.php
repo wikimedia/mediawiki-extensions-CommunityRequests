@@ -8,6 +8,7 @@ use MediaWiki\Api\ApiUsageException;
 use MediaWiki\Context\DerivativeContext;
 use MediaWiki\EditPage\EditPage;
 use MediaWiki\Extension\CommunityRequests\HookHandler\CommunityRequestsHooks;
+use MediaWiki\Extension\CommunityRequests\HookHandler\PermissionHooks;
 use MediaWiki\Html\Html;
 use MediaWiki\HTMLForm\HTMLForm;
 use MediaWiki\Page\PageIdentity;
@@ -185,9 +186,9 @@ abstract class AbstractWishlistSpecialPage extends FormSpecialPage {
 		$path = $this->getApiPath();
 		$action = $path . 'edit';
 
-		// Set the static CommunityRequestHooks::$allowManualEditing to tell the
+		// Set the static PermissionHooks::$allowManualEditing to tell the
 		// GetUserPermissionsErrors hook handler that this edit was made using the special page.
-		CommunityRequestsHooks::$allowManualEditing = true;
+		PermissionHooks::$allowManualEditing = true;
 
 		$context = new DerivativeContext( $this->getContext() );
 		$context->setRequest( new DerivativeRequest( $this->getRequest(), [

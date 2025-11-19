@@ -6,7 +6,7 @@ namespace MediaWiki\Extension\CommunityRequests\Tests\Integration;
 use MediaWiki\Api\ApiUsageException;
 use MediaWiki\Extension\CommunityRequests\AbstractWishlistStore;
 use MediaWiki\Extension\CommunityRequests\FocusArea\FocusAreaStore;
-use MediaWiki\Extension\CommunityRequests\HookHandler\CommunityRequestsHooks;
+use MediaWiki\Extension\CommunityRequests\HookHandler\PermissionHooks;
 use MediaWiki\Tests\Api\ApiTestCase;
 use MediaWiki\Title\Title;
 
@@ -39,7 +39,7 @@ class ApiFocusAreaEditTest extends ApiTestCase {
 		}
 
 		// Make the request.
-		CommunityRequestsHooks::$allowManualEditing = true;
+		PermissionHooks::$allowManualEditing = true;
 		[ $ret ] = $this->doApiRequestWithToken( $params, null, $this->getTestSysop()->getUser() );
 
 		// If we were asserting an error, we're done.
@@ -190,7 +190,7 @@ class ApiFocusAreaEditTest extends ApiTestCase {
 		$oldParams = array_merge( $defaultParams, $oldParams );
 		$newParams = array_merge( $defaultParams, $newParams );
 
-		CommunityRequestsHooks::$allowManualEditing = true;
+		PermissionHooks::$allowManualEditing = true;
 		[ $res ] = $this->doApiRequestWithToken( $oldParams );
 		$oldFocusArea = $this->getStore()->get(
 			Title::newFromText( $res['focusareaedit']['focusarea'] ),
@@ -206,7 +206,7 @@ class ApiFocusAreaEditTest extends ApiTestCase {
 		}
 
 		$newParams['focusarea'] = $res['focusareaedit']['focusarea'];
-		CommunityRequestsHooks::$allowManualEditing = true;
+		PermissionHooks::$allowManualEditing = true;
 		[ $res ] = $this->doApiRequestWithToken( $newParams );
 
 		$revision = $this->getServiceContainer()

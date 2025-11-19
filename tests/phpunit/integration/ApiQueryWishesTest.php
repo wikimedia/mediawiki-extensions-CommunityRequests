@@ -4,7 +4,7 @@ declare( strict_types = 1 );
 namespace MediaWiki\Extension\CommunityRequests\Tests\Integration;
 
 use MediaWiki\Api\ApiUsageException;
-use MediaWiki\Extension\CommunityRequests\HookHandler\CommunityRequestsHooks;
+use MediaWiki\Extension\CommunityRequests\HookHandler\PermissionHooks;
 use MediaWiki\Extension\CommunityRequests\Wish\Wish;
 use MediaWiki\Extension\CommunityRequests\Wish\WishStore;
 use MediaWiki\Tests\Api\ApiTestCase;
@@ -472,7 +472,7 @@ class ApiQueryWishesTest extends ApiTestCase {
 			'baselang' => $params['baselang'] ?? 'en',
 			...$params,
 		];
-		CommunityRequestsHooks::$allowManualEditing = true;
+		PermissionHooks::$allowManualEditing = true;
 		[ $ret ] = $this->doApiRequestWithToken( $params );
 		return $ret;
 	}
@@ -489,7 +489,7 @@ class ApiQueryWishesTest extends ApiTestCase {
 			'created' => '2025-09-11T12:00:00Z',
 			'baselang' => 'en',
 		];
-		CommunityRequestsHooks::$allowManualEditing = true;
+		PermissionHooks::$allowManualEditing = true;
 		[ $ret ] = $this->doApiRequestWithToken( $params );
 		return $ret;
 	}

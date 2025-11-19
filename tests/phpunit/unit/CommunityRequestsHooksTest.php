@@ -14,10 +14,7 @@ use MediaWiki\Page\WikiPageFactory;
 use MediaWiki\Permissions\PermissionManager;
 use MediaWiki\Registration\ExtensionRegistry;
 use MediaWiki\Skin\SkinTemplate;
-use MediaWiki\Status\Status;
 use MediaWiki\Tests\Unit\FakeQqxMessageLocalizer;
-use MediaWiki\Tests\Unit\MockServiceDependenciesTrait;
-use MediaWiki\Tests\Unit\Permissions\MockAuthorityTrait;
 use MediaWiki\User\User;
 use MediaWikiUnitTestCase;
 use MockTitleTrait;
@@ -32,8 +29,6 @@ use Psr\Log\NullLogger;
 class CommunityRequestsHooksTest extends MediaWikiUnitTestCase {
 
 	use MockWishlistConfigTrait;
-	use MockServiceDependenciesTrait;
-	use MockAuthorityTrait;
 	use MockTitleTrait;
 
 	/**
@@ -152,97 +147,6 @@ class CommunityRequestsHooksTest extends MediaWikiUnitTestCase {
 			'no applicable tabs beforehand' => [
 				[ 'tabs' => [ 'foo' => [], 'bar' => [] ] ],
 				[ 'foo', 'bar', 'wishlist-edit' ],
-			]
-		];
-	}
-
-	/**
-	 * @dataProvider provideManuallyEditing
-	 */
-	public function testManuallyEditing(
-		array $opts = [],
-		bool $expectedReturn = true,
-		array $expectedResult = []
-	): void {
-		$opts = array_merge(
-			[
-				'title' => $this->makeMockTitle( 'Community Wishlist/W123' ),
-				'action' => 'edit',
-				'canManuallyEdit' => true,
-				'allowManualEditing' => false,
-			],
-			$opts
-		);
-		$user = $this->createNoOpMock( User::class, [ '__toString' ] );
-		$status = $this->createNoOpMock( Status::class, [ 'getMessages' ] );
-		$status->expects( $this->atMost( 1 ) )
-			->method( 'getMessages' )
-			->willReturn( [ 'badaccess-groups' ] );
-		$permissionManager = $this->createNoOpMock(
-			PermissionManager::class,
-			[ 'userHasRight', 'newFatalPermissionDeniedStatus' ]
-		);
-		$permissionManager->expects( $this->atMost( 1 ) )
-			->method( 'userHasRight' )
-			->with( $user, 'manually-edit-wishlist' )
-			->willReturn( $opts['canManuallyEdit'] );
-		$permissionManager->expects( $this->atMost( 1 ) )
-			->method( 'newFatalPermissionDeniedStatus' )
-			->with( 'manually-edit-wishlist' )
-			->willReturn( $status );
-		CommunityRequestsHooks::$allowManualEditing = $opts['allowManualEditing'];
-		$handler = $this->getHandler( [], $permissionManager );
-
-		$result = [];
-		$ret = $handler->onGetUserPermissionsErrorsExpensive(
-			$opts['title'],
-			$user,
-			$opts['action'],
-			$result
-		);
-		$this->assertSame( $expectedReturn, $ret );
-		if ( !$expectedReturn ) {
-			$this->assertSame( $expectedResult[0][0], $result[0][0] );
-			$this->assertSame( $expectedResult[0][1]->getDBKey(), $result[0][1]->getDBKey() );
-			$this->assertSame( $expectedResult[1], $result[1] );
-		}
-	}
-
-	public function provideManuallyEditing(): array {
-		return [
-			[
-				[ 'canManuallyEdit' => true ],
-				true,
-			],
-			[
-				[ 'canManuallyEdit' => false ],
-				false,
-				[
-					[ 'communityrequests-cant-manually-edit', $this->makeMockTitle( 'Special:WishlistIntake' ) ],
-					'badaccess-groups'
-				]
-			],
-			[
-				[
-					'canManuallyEdit' => false,
-					'allowManualEditing' => true,
-				],
-				true,
-			],
-			[
-				[
-					'title' => $this->makeMockTitle( 'Community Wishlist/FA123' ),
-					'canManuallyEdit' => false,
-				],
-				false,
-				[
-					[ 'communityrequests-cant-manually-edit', $this->makeMockTitle( 'Special:EditFocusArea' ) ],
-					'badaccess-groups'
-				]
-			],
-			[
-				[ 'action' => 'view' ],
-				true,
 			]
 		];
 	}

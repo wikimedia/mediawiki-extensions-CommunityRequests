@@ -9,6 +9,7 @@ use MediaWiki\Api\ApiUsageException;
 use MediaWiki\Context\DerivativeContext;
 use MediaWiki\Extension\CommunityRequests\AbstractWishlistEntity;
 use MediaWiki\Extension\CommunityRequests\HookHandler\CommunityRequestsHooks;
+use MediaWiki\Extension\CommunityRequests\HookHandler\PermissionHooks;
 use MediaWiki\Extension\CommunityRequests\Vote\Vote;
 use MediaWiki\Extension\CommunityRequests\Vote\VoteStore;
 use MediaWiki\Extension\CommunityRequests\WishlistConfig;
@@ -146,8 +147,8 @@ class ApiWishlistEditBase extends ApiBase {
 			$summary .= $this->msg( 'colon-separator' )->text() . $comment;
 		}
 
-		// Skip permission checks in CommunityRequestsHooks::onGetUserPermissionsErrorsExpensive()
-		CommunityRequestsHooks::$allowManualEditing = true;
+		// Skip permission checks in PermissionHooks::onGetUserPermissionsErrorsExpensive()
+		PermissionHooks::$allowManualEditing = true;
 
 		// Save the updated votes page.
 		$saveStatus = $this->saveInternal(
@@ -164,7 +165,7 @@ class ApiWishlistEditBase extends ApiBase {
 		// Purge the cache of the entity page so the vote count updates.
 		$this->wikiPageFactory->newFromTitle( $entity->getPage() )->doPurge();
 
-		// Set session variable so the edit is tagged in CommunityRequestsHooks::onRecentChange_save(),
+		// Set session variable so the edit is tagged in ChangeTagHooks::onRecentChange_save(),
 		// and a post-edit notice is shown by the ext.communityrequests.voting module.
 		$this->getRequest()->getSession()->set( CommunityRequestsHooks::SESSION_KEY, $sessionValue );
 		$resultData = $saveStatus->getValue()->getResultData()['edit'];

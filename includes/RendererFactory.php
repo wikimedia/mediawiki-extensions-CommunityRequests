@@ -95,17 +95,4 @@ class RendererFactory {
 			default => null,
 		};
 	}
-
-	/**
-	 * Adds a tracking category to the parser if the page is a wish or focus area page.
-	 *
-	 * @param Parser $parser
-	 * @param string $category
-	 */
-	private function addTrackingCategory( Parser $parser, string $category ): void {
-		if ( $this->config->isEntityPage( $parser->getPage() ) ) {
-			$parser->addTrackingCategory( $category );
-		}
-	}
-
 }

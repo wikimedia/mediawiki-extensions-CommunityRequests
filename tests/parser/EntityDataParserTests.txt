@@ -22,7 +22,7 @@ Community Wishlist/W1
 !! text
 {{#CommunityRequests: wish
 |title = Test Wish
-|status = prioritized
+|status = community-opportunity
 |focusarea = FA1
 |type = change
 |audience = [[Test]] audience
@@ -31,7 +31,8 @@ Community Wishlist/W1
 |created = 2023-10-01T12:00:00Z
 |proposer = Maintenance script
 |baselang = en
-|description = This is a [[test]] {{wish}}.}}
+|description = This is a [[test]] {{wish}}.
+}}
 !! end
 
 !! article
@@ -84,7 +85,7 @@ Status
 !! wikitext
 {{#CommunityRequests: data|id=W1|field=status}}
 !! html
-<p>Prioritized
+<p>community-opportunity
 </p>
 !! end
 
@@ -94,6 +95,15 @@ Title
 {{#CommunityRequests: data|id=W1|field=title}}
 !! html
 <p>Test Wish
+</p>
+!! end
+
+!! test
+Title lang
+!! wikitext
+{{#CommunityRequests: data|id=W1|field=title_lang}}
+!! html
+<p>en
 </p>
 !! end
 

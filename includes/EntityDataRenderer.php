@@ -8,6 +8,8 @@ use MediaWiki\Title\Title;
 
 class EntityDataRenderer extends AbstractRenderer {
 
+	use WishlistEntityTrait;
+
 	protected string $rendererType = 'entityData';
 	private const ALLOWED_FIELDS = [
 		'status' => AbstractWishlistEntity::PARAM_STATUS,
@@ -43,25 +45,17 @@ class EntityDataRenderer extends AbstractRenderer {
 			);
 		}
 
-		$store = $this->config->isWishPage( $entityPageRef ) ? $this->wishStore : $this->focusAreaStore;
-
+		$store = $this->getStoreForPage( $entityPageRef );
 		$entityTitle = Title::newFromPageReference( $entityPageRef );
-		/* @todo: Cache entities in AbstractWishlistStore; see also SearchHooks::$entities */
-		$entity = $store->get( $entityTitle, $lang );
+		$entity = $this->getMaybeCachedEntity( $entityTitle, $lang );
 		if ( !$entity ) {
-			$this->logger->debug( __METHOD__ . ": Entity not found. {0}", [ $entityTitle->getPrefixedText() ] );
+			$this->logger->debug( __METHOD__ . ": Entity not found. $entityPageRef" );
 			return $this->getErrorMessageRaw(
 				"communityrequests-{$store->entityType()}-not-found",
 				[ $entityTitle->getPrefixedText(), $entityId ]
 			);
 		}
 
-		$value = $entity->toArray( $this->config )[self::ALLOWED_FIELDS[ $field ]] ?? '';
-		return match ( $field ) {
-			'status' => $this->msg(
-				$this->config->getStatusLabelFromWikitextVal( $store->entityType(), $value )
-			)->escaped(),
-			default => (string)$value,
-		};
+		return strval( $entity->toArray( $this->config )[self::ALLOWED_FIELDS[ $field ]] ?? '' );
 	}
 }

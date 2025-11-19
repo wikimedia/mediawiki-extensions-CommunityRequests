@@ -233,5 +233,7 @@
 	"communityrequests-vote-update-summary": "تحديث تصويت الدعم",
 	"communityrequests-vote-remove-summary": "إزالة تصويت الدعم",
 	"communityrequests-wish-count": "$1 {{PLURAL:$2| أمنية|أمنيات}}",
-	"communityrequests-vote-count": "$1 {{PLURAL:$2| مؤيد|مؤيدون}}"
+	"communityrequests-vote-count": "$1 {{PLURAL:$2| مؤيد|مؤيدون}}",
+	"communityrequests-wish-talk-subtitle": "مناقشة بقيمة $1 مقترحة من قبل $2",
+	"communityrequests-focus-area-talk-subtitle": "مناقشة مقابل $1"
 }

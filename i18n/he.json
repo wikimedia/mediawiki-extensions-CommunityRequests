@@ -234,5 +234,7 @@
 	"communityrequests-vote-update-summary": "עדכון הצבעת תמיכה",
 	"communityrequests-vote-remove-summary": "הסרת הצבעת תמיכה",
 	"communityrequests-wish-count": "{{PLURAL:$2|משאלה אחת|$1 משאלות}}",
-	"communityrequests-vote-count": "{{PLURAL:$2|תומך אחד|$1 תומכים}}"
+	"communityrequests-vote-count": "{{PLURAL:$2|תומך אחד|$1 תומכים}}",
+	"communityrequests-wish-talk-subtitle": "דיון על $1 הוצע על־ידי $2",
+	"communityrequests-focus-area-talk-subtitle": "דיונים על $1"
 }

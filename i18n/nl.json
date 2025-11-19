@@ -233,5 +233,7 @@
 	"communityrequests-vote-update-summary": "Steunstem bijgewerkt",
 	"communityrequests-vote-remove-summary": "Steunstem verwijderd",
 	"communityrequests-wish-count": "$1 wens{{PLURAL:$2||en}}",
-	"communityrequests-vote-count": "$1 voorstander{{PLURAL:$2||s}}"
+	"communityrequests-vote-count": "$1 voorstander{{PLURAL:$2||s}}",
+	"communityrequests-wish-talk-subtitle": "Overleg voor $1 voorgesteld door $2",
+	"communityrequests-focus-area-talk-subtitle": "Overleg voor $1"
 }

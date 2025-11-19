@@ -231,5 +231,7 @@
 	"communityrequests-vote-update-summary": "Actualización dun voto de apoio",
 	"communityrequests-vote-remove-summary": "Eliminación dun voto de apoio",
 	"communityrequests-wish-count": "$1 {{PLURAL:$2|desexo|desexos}}",
-	"communityrequests-vote-count": "$1 {{PLURAL:$2|incondicional|incondicionais}}"
+	"communityrequests-vote-count": "$1 {{PLURAL:$2|incondicional|incondicionais}}",
+	"communityrequests-wish-talk-subtitle": "Conversa sobre «$1» proposta por $2",
+	"communityrequests-focus-area-talk-subtitle": "Conversa sobre «$1»"
 }

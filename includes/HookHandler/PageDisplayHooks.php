@@ -3,6 +3,8 @@ declare( strict_types = 1 );
 
 namespace MediaWiki\Extension\CommunityRequests\HookHandler;
 
+use DifferenceEngine;
+use MediaWiki\Diff\Hook\DifferenceEngineRenderRevisionAddParserOutputHook;
 use MediaWiki\Extension\CommunityRequests\FocusArea\FocusAreaStore;
 use MediaWiki\Extension\CommunityRequests\Vote\Vote;
 use MediaWiki\Extension\CommunityRequests\Vote\VoteStore;
@@ -18,6 +20,7 @@ use MediaWiki\Output\OutputPage;
 use MediaWiki\Page\Article;
 use MediaWiki\Page\Hook\BeforeDisplayNoArticleTextHook;
 use MediaWiki\Page\PageReference;
+use MediaWiki\Page\WikiPage;
 use MediaWiki\SpecialPage\SpecialPageFactory;
 use MediaWiki\Title\NamespaceInfo;
 use MediaWiki\Title\Title;
@@ -32,6 +35,7 @@ use Wikimedia\Rdbms\IDBAccessObject;
 class PageDisplayHooks implements
 	BeforeDisplayNoArticleTextHook,
 	BeforePageDisplayHook,
+	DifferenceEngineRenderRevisionAddParserOutputHook,
 	OutputPageParserOutputHook
 {
 
@@ -203,6 +207,29 @@ class PageDisplayHooks implements
 					->parse(),
 				'ext-communityrequests-entity-talk-header'
 			)
+		);
+	}
+
+	/**
+	 * DifferenceEngine::showDiffPage() overrides the display title originally set in AbstractRenderer.
+	 * This hook allows us to restore it, only needing to wrap it with the 'difference-title' message.
+	 *
+	 * @param DifferenceEngine $differenceEngine
+	 * @param OutputPage $out
+	 * @param \MediaWiki\Parser\ParserOutput $parserOutput
+	 * @param WikiPage $wikiPage
+	 */
+	public function onDifferenceEngineRenderRevisionAddParserOutput(
+		$differenceEngine, $out, $parserOutput, $wikiPage
+	): void {
+		if ( !$this->config->isEnabled() || !$this->config->isEntityPage( $out->getTitle() ) ) {
+			return;
+		}
+		$out->setPageTitle(
+			$differenceEngine->msg( 'difference-title' )
+				// Sanitized in AbstractRenderer::setDisplayTitleAndIndicator()
+				->rawParams( $parserOutput->getDisplayTitle() )
+				->text()
 		);
 	}
 }

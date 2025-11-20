@@ -56,6 +56,7 @@
 		"BeforePageDisplay": "pageDisplay",
 		"ChangesListInsertArticleLink": "changesList",
 		"ChangeTagsListActive": "changeTag",
+		"DifferenceEngineRenderRevisionAddParserOutput": "pageDisplay",
 		"GetPreferences": "preferences",
 		"LinksUpdateComplete": "main",
 		"ListDefinedTags": "changeTag",

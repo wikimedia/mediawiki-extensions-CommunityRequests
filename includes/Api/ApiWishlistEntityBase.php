@@ -219,33 +219,33 @@ abstract class ApiWishlistEntityBase extends ApiWishlistEditBase {
 			return [ $this->msg( "communityrequests-entity-summary-$field-updated" )
 				->inContentLanguage()
 				->text() ];
+		} elseif ( $oldValue === null ) {
+			return [];
 		}
+
 		$msgKey = "communityrequests-entity-summary-{$field}";
-		if ( $oldValue ) {
-			if ( $isArrayField ) {
-				$added = array_diff( $value, $oldValue );
-				$removed = array_diff( $oldValue, $value );
-				$parts = [];
-				if ( $added ) {
-					$parts[] = $this->msg(
-						"$msgKey-added",
-						$this->getLanguage()->commaList( $added ),
-						count( $added )
-					)->inContentLanguage()->text();
-				}
-				if ( $removed ) {
-					$parts[] = $this->msg(
-						"$msgKey-removed",
-						$this->getLanguage()->commaList( $removed ),
-						count( $removed )
-					)->inContentLanguage()->text();
-				}
-				return $parts;
-			} else {
-				return [ $this->msg( "$msgKey-changed", $oldValue, $value )->inContentLanguage()->text() ];
+		if ( $isArrayField ) {
+			$added = array_diff( $value, $oldValue );
+			$removed = array_diff( $oldValue, $value );
+			$parts = [];
+			if ( $added ) {
+				$parts[] = $this->msg(
+					"$msgKey-added",
+					$this->getLanguage()->commaList( $added ),
+					count( $added )
+				)->inContentLanguage()->text();
 			}
+			if ( $removed ) {
+				$parts[] = $this->msg(
+					"$msgKey-removed",
+					$this->getLanguage()->commaList( $removed ),
+					count( $removed )
+				)->inContentLanguage()->text();
+			}
+			return $parts;
+		} else {
+			return [ $this->msg( "$msgKey-changed", $oldValue, $value )->inContentLanguage()->text() ];
 		}
-		return [];
 	}
 
 	private function getValuesForEditSummary( AbstractWishlistEntity $entity ): array {
@@ -255,11 +255,7 @@ abstract class ApiWishlistEntityBase extends ApiWishlistEditBase {
 			$value = $callback ?
 				$callback( $entityData[$field] ?? null ) :
 				$entityData[$field] ?? null;
-			if ( in_array( $field, $this->store->getExtTranslateFields() ) &&
-				$this->translatablePageParser?->containsMarkup( $value )
-			) {
-				$value = $this->translatablePageParser->cleanupTags( $value );
-			}
+			// First do a pre-save transformation, as we will be comparing against the saved value.
 			if ( in_array( $field, $this->store->getWikitextFields() ) && !is_array( $value ) ) {
 				/** @var WikitextContent $content */
 				$content = $this->transformer->preSaveTransform(
@@ -270,6 +266,12 @@ abstract class ApiWishlistEntityBase extends ApiWishlistEditBase {
 				);
 				'@phan-var WikitextContent $content';
 				$value = $content->getText();
+			}
+			// Remove translation markup if it is a translatable field.
+			if ( in_array( $field, $this->store->getExtTranslateFields() ) &&
+				$this->translatablePageParser?->containsMarkup( $value )
+			) {
+				$value = $this->translatablePageParser->cleanupTags( $value );
 			}
 
 			$ret[$field] = $value;

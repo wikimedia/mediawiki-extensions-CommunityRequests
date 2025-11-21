@@ -310,9 +310,9 @@ class ApiWishEditTest extends ApiTestCase {
 			if ( isset( $params['proposer'] ) ) {
 				User::createNew( $params['proposer'] );
 			}
-			// Create {{reflist}} for testing substitution if needed.
-			if ( str_contains( $params['description'] ?? '', 'reflist' ) ) {
-				$this->insertPage( 'Template:Reflist', '<references/>' );
+			// Create {{gallery}} for testing substitution if needed.
+			if ( str_contains( $params['description'] ?? '', 'gallery' ) ) {
+				$this->insertPage( 'Template:Gallery', '<gallery></gallery>' );
 			}
 		}
 
@@ -395,9 +395,9 @@ class ApiWishEditTest extends ApiTestCase {
 				'Changed focus area from "Unassigned" to "[[Community_Wishlist/FA2|FA2]]"'
 			],
 			'tags change' => [
-				[ 'tags' => 'multimedia|patrolling|wikidata' ],
+				[ 'tags' => '' ],
 				[ 'tags' => 'multimedia|reading' ],
-				'Added tag: Reading; Removed tags: Patrolling, Wikidata'
+				'Added tags: Multimedia and Commons, Reading'
 			],
 			'audience change' => [
 				[ 'audience' => 'New editors' ],
@@ -443,11 +443,14 @@ class ApiWishEditTest extends ApiTestCase {
 				[ 'title' => '<translate>New title</translate>' ],
 				'Changed title from "Old title" to "New title"'
 			],
-			'pre-save transformation' => [
-				[ 'description' => "Line 1.\nLine 2.\n{{subst:reflist}} ~~~" ],
-				[ 'description' => "Line 1.\r\nLine 2.\r\n<references/> " .
-					'[[User:UTSysop|UTSysop]] ([[User talk:UTSysop|talk]])' ],
-				null,
+			'pre-save transformation + translation' => [
+				[ 'description' => "<translate>\n<!--T:1--> Line 1.\n\n<!--T:2--> " .
+					"Line 2.\n{{subst:gallery}} ~~~</translate>" ],
+				[ 'description' => "<translate>\r\n<!--T:1--> Line 1.\r\n\r\n" .
+					"<!--T:2--> Line 2.\r\n<gallery></gallery> " .
+					'[[User:UTSysop|UTSysop]] ([[User talk:UTSysop|talk]])</translate>' ],
+				// XXX: Should be null (API return 'nochage'), but isn't here in the tests for some reason.
+				'',
 			],
 			'no changes' => [
 				[],

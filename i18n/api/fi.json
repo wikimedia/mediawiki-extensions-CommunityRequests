@@ -1,0 +1,10 @@
+{
+	"@metadata": {
+		"authors": [
+			"Samoasambia"
+		]
+	},
+	"apierror-wishlist-vote-login-required": "Sinun on kirjauduttava sisään äänestääksesi toiveesta tai painopistealueesta.",
+	"apierror-wishlist-entity-invalid": "Määritetty toivelistakohde on virheellinen tai sitä ei ole olemassa.",
+	"apierror-querywishes-invalidfocusareas": "Kaikki tai osa annetuista painopistealuetunnisteita ei ole kelvollisia."
+}

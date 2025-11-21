@@ -231,5 +231,7 @@
 	"communityrequests-vote-update-summary": "Voto de appoio actualisate",
 	"communityrequests-vote-remove-summary": "Voto de appoio removite",
 	"communityrequests-wish-count": "$1 desiro{{PLURAL:$2||s}}",
-	"communityrequests-vote-count": "$1 appoiante{{PLURAL:$2||s}}"
+	"communityrequests-vote-count": "$1 appoiante{{PLURAL:$2||s}}",
+	"communityrequests-wish-talk-subtitle": "Discussion pro $1 proponite per $2",
+	"communityrequests-focus-area-talk-subtitle": "Discussion pro $1"
 }

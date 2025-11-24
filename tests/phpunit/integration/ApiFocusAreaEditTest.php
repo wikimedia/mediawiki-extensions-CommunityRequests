@@ -161,7 +161,7 @@ class ApiFocusAreaEditTest extends ApiTestCase {
 		$this->doApiRequestWithToken( $params );
 	}
 
-	public function provideTestExecuteParsingFailure(): array {
+	public static function provideTestExecuteParsingFailure(): array {
 		return [
 			'stray pipe in shortdescription' => [
 				[ 'shortdescription' => 'This is a | test short desc with stray pipes' ]
@@ -215,7 +215,7 @@ class ApiFocusAreaEditTest extends ApiTestCase {
 		$this->assertSame( $expectedSummary, $revision->getComment()->text );
 	}
 
-	public function provideGetEditSummary(): array {
+	public static function provideGetEditSummary(): array {
 		return [
 			'title changes' => [
 				[ 'title' => 'Old Title' ],

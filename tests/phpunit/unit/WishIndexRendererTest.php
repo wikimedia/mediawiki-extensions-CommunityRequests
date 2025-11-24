@@ -106,7 +106,7 @@ class WishIndexRendererTest extends MediaWikiUnitTestCase {
 		$renderer->render();
 	}
 
-	public function provideTestJsVars(): array {
+	public static function provideTestJsVars(): array {
 		return [
 			[
 				[],

@@ -35,7 +35,7 @@ class PreferencesHooksTest extends MediaWikiUnitTestCase {
 		$this->assertSame( $expectedPrefs, $preferences );
 	}
 
-	public function provideOnGetPreferences(): array {
+	public static function provideOnGetPreferences(): array {
 		return [
 			'disabled' => [ false, false, [] ],
 			'enabled without Translate' => [

@@ -362,7 +362,7 @@ class ApiWishEditTest extends ApiTestCase {
 		$this->assertSame( $expectedSummary, $revision->getComment()->text );
 	}
 
-	public function provideGetEditSummary(): array {
+	public static function provideGetEditSummary(): array {
 		return [
 			'title change' => [
 				[ 'title' => 'Old Title' ],

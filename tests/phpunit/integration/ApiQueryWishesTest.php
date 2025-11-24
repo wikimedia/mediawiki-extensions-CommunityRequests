@@ -189,7 +189,7 @@ class ApiQueryWishesTest extends ApiTestCase {
 		$this->assertArrayEquals( $expectedResult, $result );
 	}
 
-	public function provideExecuteSortByTitleCaseInsensitive(): array {
+	public static function provideExecuteSortByTitleCaseInsensitive(): array {
 		$titles = [
 			'Walrus',
 			'aardvark',
@@ -390,7 +390,7 @@ class ApiQueryWishesTest extends ApiTestCase {
 		$this->assertSame( $count, $ret['query']['communityrequests-wishes-metadata']['count'] );
 	}
 
-	public function provideExecuteFilterByTag(): array {
+	public static function provideExecuteFilterByTag(): array {
 		return [
 			[ 'crwtags' => null, 'count' => 3 ],
 			[ 'crwtags' => 'categories', 'count' => 2 ],
@@ -421,7 +421,7 @@ class ApiQueryWishesTest extends ApiTestCase {
 		$this->assertCount( $count, $ret['query']['communityrequests-wishes'] );
 	}
 
-	public function provideExecuteFilterByFocusArea(): array {
+	public static function provideExecuteFilterByFocusArea(): array {
 		return [
 			[ 'crwfocusareas' => null, 'count' => 4 ],
 			[ 'crwfocusareas' => 'FA1', 'count' => 1 ],

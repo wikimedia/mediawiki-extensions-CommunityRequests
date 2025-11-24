@@ -177,7 +177,7 @@ class WishRendererTest extends MediaWikiIntegrationTestCase {
 		);
 	}
 
-	public function provideMarkupInTitle(): array {
+	public static function provideMarkupInTitle(): array {
 		return [
 			'normal' => [
 				'Normal Title',

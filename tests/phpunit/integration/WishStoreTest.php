@@ -383,7 +383,7 @@ END;
 		);
 	}
 
-	public function provideNormalizeArrayValues(): array {
+	public static function provideNormalizeArrayValues(): array {
 		return [
 			'from SPECIAL to WIKITEXT' => [
 				[

@@ -615,7 +615,6 @@ abstract class AbstractRenderer implements MessageLocalizer {
 				$values[0]['attributes']['CLASS'] ?? null,
 			];
 		}
-		xml_parser_free( $xmlParser );
 		return $ret;
 	}
 }

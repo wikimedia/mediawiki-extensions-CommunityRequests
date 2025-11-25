@@ -4,7 +4,6 @@ declare( strict_types = 1 );
 namespace MediaWiki\Extension\CommunityRequests\Api;
 
 use MediaWiki\Api\ApiBase;
-use MediaWiki\Extension\CommunityRequests\AbstractWishlistEntity;
 use MediaWiki\Extension\CommunityRequests\FocusArea\FocusArea;
 use MediaWiki\Extension\CommunityRequests\FocusArea\FocusAreaStore;
 use MediaWiki\Page\PageIdentity;
@@ -32,16 +31,6 @@ class ApiFocusAreaEdit extends ApiWishlistEntityBase {
 			$this->store->normalizeArrayValues( $params, FocusAreaStore::ARRAY_DELIMITER_WIKITEXT ),
 			$this->config
 		);
-	}
-
-	/** @inheritDoc */
-	protected function getEditSummaryFields( AbstractWishlistEntity $entity ): array {
-		'@phan-var FocusArea $entity';
-		return array_merge( parent::getEditSummaryFields( $entity ), [
-			FocusArea::PARAM_SHORT_DESCRIPTION => null,
-			FocusArea::PARAM_OWNERS => null,
-			FocusArea::PARAM_VOLUNTEERS => null,
-		] );
 	}
 
 	/** @inheritDoc */

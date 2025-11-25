@@ -204,8 +204,7 @@
 				"WikiPageFactory",
 				"CommunityRequests.WishStore",
 				"CommunityRequests.VoteStore",
-				"TitleParser",
-				"ContentTransformer",
+				"CommunityRequests.ChangesProcessorFactory",
 				"UserFactory"
 			],
 			"optional_services": [
@@ -219,8 +218,7 @@
 				"CommunityRequests.Logger",
 				"WikiPageFactory",
 				"CommunityRequests.FocusAreaStore",
-				"TitleParser",
-				"ContentTransformer"
+				"CommunityRequests.ChangesProcessorFactory"
 			],
 			"optional_services": [
 				"Translate:TranslatablePageParser"

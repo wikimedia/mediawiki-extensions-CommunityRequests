@@ -19,7 +19,10 @@ use MediaWiki\User\User;
  * @covers \MediaWiki\Extension\CommunityRequests\Api\ApiWishEdit
  * @covers \MediaWiki\Extension\CommunityRequests\Api\ApiWishlistEntityBase
  * @covers \MediaWiki\Extension\CommunityRequests\Api\ApiWishlistEditBase
+ * @covers \MediaWiki\Extension\CommunityRequests\ChangesProcessorFactory
+ * @covers \MediaWiki\Extension\CommunityRequests\AbstractChangesProcessor
  * @covers \MediaWiki\Extension\CommunityRequests\HookHandler\CommunityRequestsHooks
+ * @covers \MediaWiki\Extension\CommunityRequests\Wish\WishChangesProcessor
  * @covers \MediaWiki\Extension\CommunityRequests\Wish\WishStore
  */
 class ApiWishEditTest extends ApiTestCase {

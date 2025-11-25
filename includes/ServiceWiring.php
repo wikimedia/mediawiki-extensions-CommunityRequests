@@ -2,6 +2,7 @@
 declare( strict_types = 1 );
 
 use MediaWiki\Config\ServiceOptions;
+use MediaWiki\Extension\CommunityRequests\ChangesProcessorFactory;
 use MediaWiki\Extension\CommunityRequests\EntityFactory;
 use MediaWiki\Extension\CommunityRequests\FocusArea\FocusAreaStore;
 use MediaWiki\Extension\CommunityRequests\IdGenerator\IdGenerator;
@@ -17,6 +18,20 @@ use Psr\Log\LoggerInterface;
 
 /** @phpcs-require-sorted-array */
 return [
+	'CommunityRequests.ChangesProcessorFactory' => static function (
+		MediaWikiServices $services
+	): ChangesProcessorFactory {
+		return new ChangesProcessorFactory(
+			$services->get( 'CommunityRequests.WishlistConfig' ),
+			$services->get( 'CommunityRequests.WishStore' ),
+			$services->get( 'CommunityRequests.FocusAreaStore' ),
+			$services->get( 'ContentTransformer' ),
+			$services->has( 'Translate:TranslatablePageParser' ) ?
+				$services->get( 'Translate:TranslatablePageParser' ) :
+				null,
+			$services->get( 'CommunityRequests.Logger' ),
+		);
+	},
 	'CommunityRequests.EntityFactory' => static function ( MediaWikiServices $services ): EntityFactory {
 		return new EntityFactory(
 			$services->get( 'CommunityRequests.WishlistConfig' ),

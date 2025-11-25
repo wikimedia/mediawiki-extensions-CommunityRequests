@@ -16,7 +16,10 @@ use MediaWiki\Title\Title;
  * @covers \MediaWiki\Extension\CommunityRequests\Api\ApiFocusAreaEdit
  * @covers \MediaWiki\Extension\CommunityRequests\Api\ApiWishlistEntityBase
  * @covers \MediaWiki\Extension\CommunityRequests\Api\ApiWishlistEditBase
+ * @covers \MediaWiki\Extension\CommunityRequests\ChangesProcessorFactory
+ * @covers \MediaWiki\Extension\CommunityRequests\AbstractChangesProcessor
  * @covers \MediaWiki\Extension\CommunityRequests\HookHandler\CommunityRequestsHooks
+ * @covers \MediaWiki\Extension\CommunityRequests\FocusArea\FocusAreaChangesProcessor
  * @covers \MediaWiki\Extension\CommunityRequests\FocusArea\FocusAreaStore
  */
 class ApiFocusAreaEditTest extends ApiTestCase {

@@ -98,5 +98,6 @@
 	"communityrequests-support-label": "Ënnerstëtzen",
 	"tag-community-wishlist": "[[Special:MyLanguage/Community Wishlist|Communautéitswonschlëscht]]",
 	"communityrequests-wish-count": "$1 {{PLURAL:$2|Wonsch|Wënsch}}",
-	"communityrequests-vote-count": "$1 {{PLURAL:$2|Ënnerstëtzer}}"
+	"communityrequests-vote-count": "$1 {{PLURAL:$2|Ënnerstëtzer}}",
+	"communityrequests-focus-area-talk-subtitle": "Diskussioun fir $1"
 }

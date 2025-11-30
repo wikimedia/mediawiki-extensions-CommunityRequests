@@ -253,6 +253,42 @@
 	"DefaultUserOptions": {
 		"usemachinetranslation": 0
 	},
+	"LogTypes": [ "communityrequests" ],
+	"LogNames": {
+		"communityrequests": "communityrequests-log-name"
+	},
+	"LogActionsHandlers": {
+		"communityrequests/*": {
+			"class": "MediaWiki\\Extension\\CommunityRequests\\CommunityRequestsLogFormatter",
+			"services": [
+				"CommunityRequests.WishlistConfig",
+				"CommunityRequests.WishStore",
+				"CommunityRequests.FocusAreaStore",
+				"TitleFormatter",
+				"TitleFactory",
+				"CommunityRequests.Logger"
+			]
+		}
+	},
+	"ActionFilteredLogs": {
+		"communityrequests": {
+			"wish-create": [
+				"wish-create"
+			],
+			"wish-status-change": [
+				"wish-status-change"
+			],
+			"wish-focusarea-change": [
+				"wish-focusarea-change"
+			],
+			"focus-area-create": [
+				"focus-area-create"
+			],
+			"focus-area-status-change": [
+				"focus-area-status-change"
+			]
+		}
+	},
 	"ResourceFileModulePaths": {
 		"localBasePath": "modules",
 		"remoteExtPath": "CommunityRequsts/modules"

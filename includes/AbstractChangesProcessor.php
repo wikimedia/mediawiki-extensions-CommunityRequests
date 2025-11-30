@@ -9,6 +9,7 @@ use MediaWiki\Context\IContextSource;
 use MediaWiki\Extension\Translate\PageTranslation\TranslatablePageParser;
 use MediaWiki\Language\Language;
 use MediaWiki\Language\LocalizationContext;
+use MediaWiki\Logging\ManualLogEntry;
 use MediaWiki\Parser\ParserOptions;
 use Psr\Log\LoggerInterface;
 use Wikimedia\Bcp47Code\Bcp47Code;
@@ -18,11 +19,12 @@ use Wikimedia\Bcp47Code\Bcp47Code;
  * which can then be used for generating edit summaries, notifications, log entries, and
  * supplying change info to the EditFilterMergedContent hook handler.
  *
- * Use ChangesProcessorFactory to create an instance of this class for a new pair of entities.
+ * Use ChangesProcessorFactory to create instances of this class for a new pair of entities.
  *
  * Entrypoints:
  * * ::getChanges() - get a structured array of changes.
  * * ::getEditSummary() - get an automatic edit summary based on the changes.
+ * * ::addLogEntries() - add log entries based on the changes.
  */
 abstract class AbstractChangesProcessor implements LocalizationContext {
 
@@ -83,7 +85,7 @@ abstract class AbstractChangesProcessor implements LocalizationContext {
 	 * field value and returns a processed value for the summary.
 	 *
 	 * Subclasses can override to add more fields, while ::getEditSummaryFields()
-	 * can be overridden to change processing for edit summaries.
+	 * and ::getLogEntryFields() can override to change processing for those use cases.
 	 *
 	 * @return array<string, ?callable>
 	 */
@@ -273,6 +275,71 @@ abstract class AbstractChangesProcessor implements LocalizationContext {
 		// * communityrequests-publish-focusarea-summary
 		return $this->msg( "communityrequests-publish-{$this->store->entityType()}-summary", $entity->getTitle() )
 			->inContentLanguage()->text();
+	}
+
+	// Log entries.
+
+	/**
+	 * Insert and publish log entries for the changes between the old and new entity.
+	 */
+	public function addLogEntries(): void {
+		if ( !$this->oldEntity ) {
+			// Single log entry for creation.
+			$this->publishLogEntry(
+				$this->getLogEntry( $this->store->entityType() . '-create' )
+			);
+			return;
+		}
+
+		$changes = $this->getChanges( $this->getLogEntryFields() );
+		if ( count( $changes ) === 0 ) {
+			$this->logger->debug( 'No changes to log for entity ' . $this->entity->getPage() );
+			return;
+		}
+
+		foreach ( $changes as $field => $change ) {
+			$this->logger->debug( "Logging change for field '$field': old={$change['old']}, new={$change['new']}" );
+			$logEntry = $this->getLogEntry(
+				$this->store->entityType() . "-$field-change",
+				$change['new'],
+				$change['old']
+			);
+			$this->publishLogEntry( $logEntry );
+		}
+	}
+
+	/**
+	 * The fields that, if changed, we want to log. See ::getFields() for details.
+	 *
+	 * For logging, we want i18n transformation isolated in CommunityRequestsLogFormatter so
+	 * the language-agnostic wikitext values are stored in the log_params for easier querying.
+	 *
+	 * @return array<string, ?callable>
+	 */
+	protected function getLogEntryFields(): array {
+		return [
+			// Only log status changes, + what's in the subclass overrides (i.e. focus area for wishes).
+			AbstractWishlistEntity::PARAM_STATUS => null,
+		];
+	}
+
+	private function getLogEntry( string $subtype, ?string $new = null, ?string $old = null ): ManualLogEntry {
+		$logEntry = new ManualLogEntry( 'communityrequests', $subtype );
+		$logEntry->setTarget( $this->entity->getPage() );
+		$logEntry->setPerformer( $this->context->getUser() );
+		if ( $this->oldEntity ) {
+			$logEntry->setParameters( [
+				'4::old' => $old,
+				'5::new' => $new,
+			] );
+		}
+		return $logEntry;
+	}
+
+	private function publishLogEntry( ManualLogEntry $logEntry ): int {
+		$logId = $logEntry->insert();
+		$logEntry->publish( $logId );
+		return $logId;
 	}
 
 	// Helper methods implementing LocalizationContext interface.

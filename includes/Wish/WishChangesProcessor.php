@@ -66,4 +66,11 @@ class WishChangesProcessor extends AbstractChangesProcessor {
 		}
 		return $summary;
 	}
+
+	/** @inheritDoc */
+	protected function getLogEntryFields(): array {
+		return array_merge( parent::getLogEntryFields(), [
+			Wish::PARAM_FOCUS_AREA => null,
+		] );
+	}
 }

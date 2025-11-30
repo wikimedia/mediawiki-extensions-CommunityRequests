@@ -118,13 +118,17 @@ abstract class ApiWishlistEntityBase extends ApiWishlistEditBase {
 		?AbstractWishlistEntity $oldEntity = null,
 	): StatusValue {
 		$changes = $this->changesProcessorFactory->newChangesProcessor( $this->getContext(), $entity, $oldEntity );
-		return $this->saveInternal(
+		$status = $this->saveInternal(
 			Title::newFromPageIdentity( $entity->getPage() )->getPrefixedDBkey(),
 			$entity->toWikitext( $this->config )->getText(),
 			$changes->getEditSummary(),
 			$token,
 			$baseRevId
 		);
+		if ( $status->isOK() ) {
+			$changes->addLogEntries();
+		}
+		return $status;
 	}
 
 	/**

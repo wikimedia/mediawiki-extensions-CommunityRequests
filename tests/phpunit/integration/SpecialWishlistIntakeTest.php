@@ -109,6 +109,10 @@ class SpecialWishlistIntakeTest extends SpecialPageTestBase {
 	}
 
 	public function testSubmitTitleNormalization(): void {
+		if ( !$this->getServiceContainer()->getExtensionRegistry()->isLoaded( 'Translate' ) ) {
+			$this->markTestSkipped( 'Translate extension is not installed' );
+		}
+
 		$fauxRequest = new FauxRequest( [
 			'entitytitle' => '<translate><!--T:1--> Title with {{template}} and <nowiki/></translate>',
 			'status' => 'under-review',

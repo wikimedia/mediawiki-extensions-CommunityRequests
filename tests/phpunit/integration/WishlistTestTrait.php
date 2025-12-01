@@ -127,6 +127,10 @@ trait WishlistTestTrait {
 		array $defaultData = [],
 		bool $markForTranslation = true,
 	): ?AbstractWishlistEntity {
+		if ( $lang !== 'en' && !$this->getServiceContainer()->getExtensionRegistry()->isLoaded( 'Translate' ) ) {
+			$this->markTestSkipped( 'Translate extension is not installed.' );
+		}
+
 		if ( $title === null ) {
 			$id = $this->getStore()->getNewId();
 			$title = Title::newFromText( $this->getStore()->getPagePrefix() . $id );
@@ -166,10 +170,7 @@ trait WishlistTestTrait {
 		$this->assertSame( $lang, $newTitle->getPageLanguage()->getCode() );
 
 		$fetchMethod = AbstractWishlistStore::FETCH_WIKITEXT_RAW;
-		$translateInstalled = $this->getServiceContainer()
-			->getExtensionRegistry()
-			->isLoaded( 'Translate' );
-		if ( $shouldMarkForTranslation && $translateInstalled ) {
+		if ( $shouldMarkForTranslation ) {
 			$this->markForTranslation( $ret['title'] );
 			$fetchMethod = AbstractWishlistStore::FETCH_WIKITEXT_TRANSLATED;
 		}
@@ -183,6 +184,9 @@ trait WishlistTestTrait {
 	 * This method should be called after inserting a test wish that contains translatable content.
 	 */
 	public function markForTranslation( Title|string $title ): void {
+		if ( !$this->getServiceContainer()->getExtensionRegistry()->isLoaded( 'Translate' ) ) {
+			$this->markTestSkipped( 'Translate extension is not installed.' );
+		}
 		if ( is_string( $title ) ) {
 			$title = Title::newFromText( $title );
 		}

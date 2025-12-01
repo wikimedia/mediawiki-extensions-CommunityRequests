@@ -87,7 +87,9 @@ class ApiWishEditTest extends ApiTestCase {
 		$this->assertSame( $expectedSummary, $revision->getComment()->text );
 
 		// If the baselang is not the site language, we expect translations to be stored in that language.
-		if ( $ret['wishedit']['baselang'] !== $this->getConfVar( MainConfigNames::LanguageCode ) ) {
+		if ( $ret['wishedit']['baselang'] !== $this->getConfVar( MainConfigNames::LanguageCode ) &&
+			$this->getServiceContainer()->getExtensionRegistry()->isLoaded( 'Translate' )
+		) {
 			$translationLang = $this->getDb()->newSelectQueryBuilder()
 				->select( AbstractWishlistStore::translationLangField() )
 				->from( AbstractWishlistStore::translationsTableName() )

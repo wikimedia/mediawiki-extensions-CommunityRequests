@@ -144,6 +144,9 @@ class NukeWishlist extends Maintenance {
 	 * Delete all pages in the Translation namespace related to the given entity type.
 	 */
 	private function deleteTranslationNsPages(): void {
+		if ( !$this->getServiceContainer()->getExtensionRegistry()->isLoaded( 'Translate' ) ) {
+			return;
+		}
 		$this->output( "Deleting translation namespace pages...\n" );
 		$count = $this->deletePages( NS_TRANSLATIONS );
 		$this->output( "$count {$this->store->entityType()} translation pages deleted.\n" );

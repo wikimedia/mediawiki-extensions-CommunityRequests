@@ -1,8 +1,29 @@
 {
 	"@metadata": {
 		"authors": [
-			"Aoum"
+			"Aoum",
+			"Peterxy12"
 		]
 	},
-	"apihelp-query+communityrequests-wishes-param-prop": "要获取的属性。"
+	"apihelp-wishedit-summary": "建立或更新社群愿望清单的愿望。",
+	"apihelp-wishedit-param-wish": "要更新的愿望。可以是完整的页面标题、带有前缀的愿望ID（例如“W123”）或整数形式的愿望ID。留空以建立新愿望。",
+	"apihelp-wishedit-param-status": "愿望的状态。",
+	"apihelp-wishedit-param-focusarea": "愿望所属的重点领域。可以是完整的页面标题、带有前缀的重点领域ID（例如“FA123”）或整数形式的重点领域ID。",
+	"apihelp-wishedit-param-title": "愿望的标题。",
+	"apihelp-wishedit-param-description": "愿望的描述。可能包含wikitext。",
+	"apihelp-wishedit-param-type": "愿望的类型。",
+	"apihelp-wishedit-param-audience": "愿望主要惠及的用户群体（例如“新用户”或“管理员”）。",
+	"apihelp-wishedit-param-tags": "与愿望相关的标签清单。",
+	"apihelp-wishedit-param-phabtasks": "Phabricator工单ID清单（例如“T1234”）。",
+	"apihelp-wishedit-param-proposer": "提出愿望的用户。",
+	"apihelp-wishedit-param-created": "愿望的建立日期和时间。",
+	"apihelp-query+communityrequests-wishes-param-prop": "要获取的属性。",
+	"apihelp-query+communityrequests-wishes-paramvalue-prop-type": "愿望的类型",
+	"apihelp-query+communityrequests-wishes-paramvalue-prop-title": "愿望的标题",
+	"apihelp-query+communityrequests-wishes-paramvalue-prop-focusarea": "愿望所属的重点领域",
+	"apihelp-query+communityrequests-wishes-paramvalue-prop-description": "愿望的描述",
+	"apihelp-query+communityrequests-wishes-paramvalue-sort-created": "按创建日期排序",
+	"apihelp-query+communityrequests-wishes-paramvalue-sort-updated": "按最后更新日期排序",
+	"apihelp-query+communityrequests-wishes-paramvalue-sort-votecount": "按支持者人数排序",
+	"apihelp-query+communityrequests-wishes-paramvalue-sort-title": "按标题排序"
 }

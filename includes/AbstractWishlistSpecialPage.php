@@ -44,6 +44,7 @@ abstract class AbstractWishlistSpecialPage extends FormSpecialPage {
 			return;
 		}
 		$this->requireNamedUser( 'communityrequests-please-log-in' );
+		$this->checkExecutePermissions( $this->getUser() );
 
 		$this->entityId = $this->store->getIdFromInput( $par );
 

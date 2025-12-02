@@ -11,6 +11,7 @@
 		]
 	},
 	"communityrequests-desc": "管理wiki社区的技术建议和请求的系统。",
+	"communityrequests-wish-loading-error": "在解析愿望文字时出现错误。其中可能包含无效wikitext。请[$1 刷新]后再试一次、或者使用[[$2|源代码编辑器]]、或者在[[$3|讨论页]]寻求协助。",
 	"communityrequests-edit-with-form": "用表单编辑",
 	"communityrequests-form-subtitle": "欢迎来到新的社群愿望清单。请填写以下表单以提交您的愿望。",
 	"communityrequests-description": "描述您的问题",

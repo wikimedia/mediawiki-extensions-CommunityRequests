@@ -209,7 +209,7 @@ class WishlistConfig {
 	 * @return bool
 	 */
 	public function isWishPage( ?PageReference $reference ): bool {
-		return $this->isEntityPage( $reference, $this->wishPagePrefix );
+		return $this->isEntityPageInternal( $reference, $this->wishPagePrefix );
 	}
 
 	/**
@@ -219,7 +219,7 @@ class WishlistConfig {
 	 * @return bool
 	 */
 	public function isFocusAreaPage( ?PageReference $reference ): bool {
-		return $this->isEntityPage( $reference, $this->focusAreaPagePrefix );
+		return $this->isEntityPageInternal( $reference, $this->focusAreaPagePrefix );
 	}
 
 	/**
@@ -228,11 +228,11 @@ class WishlistConfig {
 	 * @param ?PageReference $reference
 	 * @return bool
 	 */
-	public function isWishOrFocusAreaPage( ?PageReference $reference ): bool {
+	public function isEntityPage( ?PageReference $reference ): bool {
 		return $this->isWishPage( $reference ) || $this->isFocusAreaPage( $reference );
 	}
 
-	private function isEntityPage( ?PageReference $reference, string $prefix ): bool {
+	private function isEntityPageInternal( ?PageReference $reference, string $prefix ): bool {
 		if ( $reference === null ) {
 			return false;
 		}
@@ -340,7 +340,7 @@ class WishlistConfig {
 			$reference = PageReferenceValue::localReference( $entityPage->getNamespace(), $entityPage->getDBkey() );
 		}
 
-		return $this->isWishOrFocusAreaPage( $reference ) ? $reference : null;
+		return $this->isEntityPage( $reference ) ? $reference : null;
 	}
 
 	/**
@@ -383,7 +383,7 @@ class WishlistConfig {
 	 * @param ?PageReference $reference
 	 * @return bool
 	 */
-	public function isWishOrFocusAreaIndexPage( ?PageReference $reference ): bool {
+	public function isEntityIndexPage( ?PageReference $reference ): bool {
 		return $this->isWishIndexPage( $reference ) || $this->isFocusAreaIndexPage( $reference );
 	}
 
@@ -416,7 +416,7 @@ class WishlistConfig {
 	 * @return ?string The display ID, e.g. "W1" or "FA1".
 	 */
 	public function getEntityWikitextVal( ?PageReference $reference ): ?string {
-		if ( !$reference || !$this->isWishOrFocusAreaPage( $reference ) ) {
+		if ( !$reference || !$this->isEntityPage( $reference ) ) {
 			return null;
 		}
 		$fullPrefix = $this->isWishPage( $reference ) ? $this->wishPagePrefix : $this->focusAreaPagePrefix;
@@ -492,7 +492,7 @@ class WishlistConfig {
 	 */
 	public function getVotesPageRefForEntity( PageReference $entityRef ): ?PageReference {
 		$entityRef = $this->getCanonicalEntityPageRef( $entityRef );
-		if ( !$this->isWishOrFocusAreaPage( $entityRef ) ) {
+		if ( !$this->isEntityPage( $entityRef ) ) {
 			return null;
 		}
 		return PageReferenceValue::localReference(

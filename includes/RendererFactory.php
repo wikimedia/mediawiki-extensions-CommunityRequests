@@ -103,7 +103,7 @@ class RendererFactory {
 	 * @param string $category
 	 */
 	private function addTrackingCategory( Parser $parser, string $category ): void {
-		if ( $this->config->isWishOrFocusAreaPage( $parser->getPage() ) ) {
+		if ( $this->config->isEntityPage( $parser->getPage() ) ) {
 			$parser->addTrackingCategory( $category );
 		}
 	}

@@ -113,7 +113,7 @@ class CommunityRequestsHooks implements
 	 * @param DeferrableUpdate[] &$updates
 	 */
 	public function onRevisionDataUpdates( $title, $renderedRevision, &$updates ) {
-		if ( !$this->config->isEnabled() || !$this->config->isWishOrFocusAreaPage( $title ) ) {
+		if ( !$this->config->isEnabled() || !$this->config->isEntityPage( $title ) ) {
 			return;
 		}
 		$method = __METHOD__;
@@ -174,7 +174,7 @@ class CommunityRequestsHooks implements
 		ManualLogEntry $logEntry,
 		int $archivedRevisionCount
 	) {
-		if ( !$this->config->isEnabled() || !$this->config->isWishOrFocusAreaPage( $page ) ) {
+		if ( !$this->config->isEnabled() || !$this->config->isEntityPage( $page ) ) {
 			return;
 		}
 
@@ -205,7 +205,7 @@ class CommunityRequestsHooks implements
 	public function onLinksUpdateComplete( $linksUpdate, $ticket ) {
 		$title = $linksUpdate->getTitle();
 		if ( !$this->config->isEnabled() ||
-			( !$this->config->isWishOrFocusAreaPage( $title ) && !$this->config->isVotesPage( $title ) )
+			( !$this->config->isEntityPage( $title ) && !$this->config->isVotesPage( $title ) )
 		) {
 			return;
 		}
@@ -268,7 +268,7 @@ class CommunityRequestsHooks implements
 	 * @param array &$links
 	 */
 	public function onSkinTemplateNavigation__Universal( $sktemplate, &$links ): void {
-		if ( !$this->config->isEnabled() || !$this->config->isWishOrFocusAreaPage( $sktemplate->getRelevantTitle() ) ) {
+		if ( !$this->config->isEnabled() || !$this->config->isEntityPage( $sktemplate->getRelevantTitle() ) ) {
 			return;
 		}
 
@@ -370,8 +370,8 @@ class CommunityRequestsHooks implements
 			return;
 		}
 
-		if ( $this->config->isWishOrFocusAreaPage( $parser->getPage() ) ||
-			$this->config->isWishOrFocusAreaIndexPage( $parser->getPage() )
+		if ( $this->config->isEntityPage( $parser->getPage() ) ||
+			$this->config->isEntityIndexPage( $parser->getPage() )
 		) {
 			// Ensure the output language matches user interface language (T407349).
 			$parser->getOutput()->setLanguage( $parser->getOptions()->getUserLangObj() );

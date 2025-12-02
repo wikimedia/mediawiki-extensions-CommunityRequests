@@ -51,7 +51,7 @@ class SearchHooks implements ShowSearchHitHook {
 		$searchPage, $result, $terms, &$link, &$redirect, &$section,
 		&$extract, &$score, &$size, &$date, &$related, &$html
 	) {
-		if ( !$this->config->isEnabled() || !$this->config->isWishOrFocusAreaPage( $result->getTitle() ) ) {
+		if ( !$this->config->isEnabled() || !$this->config->isEntityPage( $result->getTitle() ) ) {
 			return;
 		}
 

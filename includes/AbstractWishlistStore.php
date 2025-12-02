@@ -256,7 +256,7 @@ abstract class AbstractWishlistStore {
 		?string $lang = null,
 		int $fetchWikitext = self::FETCH_WIKITEXT_NONE,
 	): ?AbstractWishlistEntity {
-		if ( !$this->config->isWishOrFocusAreaPage( $page ) ) {
+		if ( !$this->config->isEntityPage( $page ) ) {
 			return null;
 		}
 

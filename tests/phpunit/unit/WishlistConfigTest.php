@@ -109,9 +109,9 @@ class WishlistConfigTest extends MediaWikiUnitTestCase {
 		$this->assertSame( [ 'open', 'unknown' ], $this->config->getStatusWikitextValsEligibleForVoting() );
 	}
 
-	public function testIsWishOrFocusAreaPage(): void {
-		$this->assertTrue( $this->config->isWishOrFocusAreaPage( $this->makeMockTitle( 'Community Wishlist/W123' ) ) );
-		$this->assertTrue( $this->config->isWishOrFocusAreaPage( $this->makeMockTitle( 'Community Wishlist/FA123' ) ) );
+	public function testIsEntityPage(): void {
+		$this->assertTrue( $this->config->isEntityPage( $this->makeMockTitle( 'Community Wishlist/W123' ) ) );
+		$this->assertTrue( $this->config->isEntityPage( $this->makeMockTitle( 'Community Wishlist/FA123' ) ) );
 
 		$this->assertFalse( $this->config->isWishPage( $this->makeMockTitle( '123' ) ) );
 		$this->assertFalse( $this->config->isWishPage( $this->makeMockTitle( 'W123' ) ) );
@@ -134,12 +134,12 @@ class WishlistConfigTest extends MediaWikiUnitTestCase {
 		);
 	}
 
-	public function testIsWishOrFocusAreaIndexPage(): void {
+	public function testIsEntityIndexPage(): void {
 		$this->assertTrue(
-			$this->config->isWishOrFocusAreaIndexPage( $this->makeMockTitle( 'Community Wishlist/Wishes' ) )
+			$this->config->isEntityIndexPage( $this->makeMockTitle( 'Community Wishlist/Wishes' ) )
 		);
 		$this->assertTrue(
-			$this->config->isWishOrFocusAreaIndexPage( $this->makeMockTitle( 'Community Wishlist/Focus areas' ) )
+			$this->config->isEntityIndexPage( $this->makeMockTitle( 'Community Wishlist/Focus areas' ) )
 		);
 
 		$this->assertTrue( $this->config->isWishIndexPage( $this->makeMockTitle( 'Community Wishlist/Wishes' ) ) );

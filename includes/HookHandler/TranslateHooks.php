@@ -17,7 +17,7 @@ class TranslateHooks implements TranslateTitlePageTranslationHook {
 
 	/** @inheritDoc */
 	public function onTranslateTitlePageTranslation( TranslateTitleEnum &$state, PageIdentity $pageIdentity ): void {
-		if ( $this->config->isEnabled() && $this->config->isWishOrFocusAreaPage( $pageIdentity ) ) {
+		if ( $this->config->isEnabled() && $this->config->isEntityPage( $pageIdentity ) ) {
 			$state = TranslateTitleEnum::DISABLED;
 		}
 	}

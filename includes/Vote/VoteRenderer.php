@@ -12,7 +12,7 @@ class VoteRenderer extends AbstractRenderer {
 	protected string $rendererType = 'vote';
 
 	public function render(): string {
-		if ( !$this->config->isWishOrFocusAreaPage( $this->parser->getPage() ) &&
+		if ( !$this->config->isEntityPage( $this->parser->getPage() ) &&
 			!$this->config->isVotesPage( $this->parser->getPage() )
 		) {
 			return '';

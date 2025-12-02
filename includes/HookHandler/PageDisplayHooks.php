@@ -59,7 +59,7 @@ class PageDisplayHooks implements
 	 */
 	public function onBeforeDisplayNoArticleText( $article ) {
 		if ( !$this->config->isEnabled() ||
-			!$this->config->isWishOrFocusAreaPage( $article->getTitle() ) ||
+			!$this->config->isEntityPage( $article->getTitle() ) ||
 			$article->getOldID()
 		) {
 			return true;
@@ -91,15 +91,15 @@ class PageDisplayHooks implements
 	public function onBeforePageDisplay( $out, $skin ): void {
 		if ( !$this->config->isEnabled() ||
 			!(
-				$this->config->isWishOrFocusAreaPage( $out->getTitle() ) ||
-				$this->config->isWishOrFocusAreaIndexPage( $out->getTitle() )
+				$this->config->isEntityPage( $out->getTitle() ) ||
+				$this->config->isEntityIndexPage( $out->getTitle() )
 			)
 		) {
 			return;
 		}
 
 		// Post-edit success message.
-		if ( $this->config->isWishOrFocusAreaPage( $out->getTitle() ) &&
+		if ( $this->config->isEntityPage( $out->getTitle() ) &&
 			$out->getRequest()->getSession()->get( CommunityRequestsHooks::SESSION_KEY )
 		) {
 			$postEditVal = $out->getRequest()->getSession()->get( CommunityRequestsHooks::SESSION_KEY );
@@ -146,8 +146,8 @@ class PageDisplayHooks implements
 		if (
 			// Do static checks first before querying user options.
 			(
-				$this->config->isWishOrFocusAreaPage( $out->getTitle() ) ||
-				$this->config->isWishOrFocusAreaIndexPage( $out->getTitle() )
+				$this->config->isEntityPage( $out->getTitle() ) ||
+				$this->config->isEntityIndexPage( $out->getTitle() )
 			) &&
 			$this->userOptionsManager->getBoolOption( $out->getUser(), PreferencesHooks::PREF_MACHINETRANSLATION )
 		) {
@@ -170,7 +170,7 @@ class PageDisplayHooks implements
 			return;
 		}
 		$subjectTitle = Title::newFromLinkTarget( $this->namespaceInfo->getSubjectPage( $title ) );
-		if ( !$this->config->isWishOrFocusAreaPage( $subjectTitle ) || !$subjectTitle->exists() ) {
+		if ( !$this->config->isEntityPage( $subjectTitle ) || !$subjectTitle->exists() ) {
 			return;
 		}
 

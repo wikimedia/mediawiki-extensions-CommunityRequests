@@ -101,7 +101,7 @@ class PermissionHooks implements GetUserPermissionsErrorsExpensiveHook, TitleIsM
 	}
 
 	private function isEntityPageOrEditPage( PageIdentity $identity ): bool {
-		return $this->config->isWishOrFocusAreaPage( $identity ) ||
+		return $this->config->isEntityPage( $identity ) ||
 			$this->config->isVotesPage( $identity ) || (
 				$identity->getNamespace() === NS_SPECIAL && (
 					str_starts_with( $identity->getDBkey(), 'WishlistIntake' ) ||
@@ -118,7 +118,7 @@ class PermissionHooks implements GetUserPermissionsErrorsExpensiveHook, TitleIsM
 	 * @return void
 	 */
 	public function onTitleIsMovable( $title, &$result ) {
-		if ( $this->config->isEnabled() && $this->config->isWishOrFocusAreaPage( $title ) ) {
+		if ( $this->config->isEnabled() && $this->config->isEntityPage( $title ) ) {
 			$result = false;
 		}
 	}

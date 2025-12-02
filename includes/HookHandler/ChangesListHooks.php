@@ -44,7 +44,7 @@ class ChangesListHooks implements ChangesListInsertArticleLinkHook {
 		$changesList, &$articlelink, &$s, $rc, $unpatrolled, $watched
 	): void {
 		$pageRef = $rc->getPage();
-		if ( $this->config->isEnabled() && $this->config->isWishOrFocusAreaPage( $pageRef ) ) {
+		if ( $this->config->isEnabled() && $this->config->isEntityPage( $pageRef ) ) {
 			'@phan-var PageReference $pageRef';
 			$title = Title::newFromPageReference( $pageRef );
 			$entity = $this->getMaybeCachedEntity( $title, $changesList->getLanguage()->getCode() );

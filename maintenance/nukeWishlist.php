@@ -159,7 +159,7 @@ class NukeWishlist extends Maintenance {
 		foreach ( $rows as $row ) {
 			$page = PageIdentityValue::localIdentity( (int)$row->page_id, (int)$row->page_namespace, $row->page_title );
 
-			if ( $this->config->isWishOrFocusAreaIndexPage( $page ) ) {
+			if ( $this->config->isEntityIndexPage( $page ) ) {
 				// Skip index pages and any translation subpages.
 				continue;
 			}
@@ -182,7 +182,7 @@ class NukeWishlist extends Maintenance {
 
 				if ( $entity ) {
 					$this->store->delete( $entity->getPage()->getId(), $entity->getBaseLang() );
-				} elseif ( $this->config->isWishOrFocusAreaPage( $page ) ) {
+				} elseif ( $this->config->isEntityPage( $page ) ) {
 					$this->output(
 						"No entity found for page {$page->__toString()}, skipping related data deletion.\n"
 					);

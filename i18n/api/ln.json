@@ -1,8 +1,0 @@
-{
-	"@metadata": {
-		"authors": [
-			"Marphy 123"
-		]
-	},
-	"apihelp-query+communityrequests-wishes-param-focusareas": "Limite ba résultats na kaka ba posa oyo na moko ya ba zones oyo ya focus, oyo ezuami na valeur ya wikitexte (c.a.d. 'FAx' esika x ezali nombre entier) to valeur spéciale 'unassigned' pona ba souhaits oyo ezali na esika ya focus te."
-}

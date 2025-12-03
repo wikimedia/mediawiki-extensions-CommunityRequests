@@ -3,7 +3,8 @@
 		"authors": [
 			"Mainframe98",
 			"McDutchie",
-			"Siebrand"
+			"Siebrand",
+			"Sjoerddebruin"
 		]
 	},
 	"communityrequests-desc": "Een systeem voor het beheren van de technische suggesties en verzoeken van een wikigemeenschap.",
@@ -211,7 +212,7 @@
 	"communityrequests-entity-summary-shortdescription-updated": "Korte beschrijving bijgewerkt",
 	"communityrequests-entity-summary-owners-updated": "Eigenaren bijgewerkt",
 	"communityrequests-entity-summary-volunteers-updated": "Vrijwilligers bijgewerkt",
-	"communityrequests-support-label": "Ondersteuning",
+	"communityrequests-support-label": "Steun",
 	"communityrequests-update-label": "Bijwerken",
 	"communityrequests-error-category": "Pagina's met fouten in de Gezamenlijke verlanglijst",
 	"communityrequests-error-category-desc": "De pagina’s in deze categorie zijn wensen of aandachtsgebieden uit de Gezamenlijke verlanglijst die fouten bevatten.",

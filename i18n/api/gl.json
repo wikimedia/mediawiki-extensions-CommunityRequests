@@ -59,6 +59,7 @@
 	"apihelp-query+communityrequests-wishes-paramvalue-prop-created": "Data e hora de creación do desexo",
 	"apihelp-query+communityrequests-wishes-paramvalue-prop-updated": "Data e hora da última actualización do desexo",
 	"apihelp-query+communityrequests-wishes-paramvalue-prop-baselang": "A lingua base do desexo desde a que se fan as traducións",
+	"apihelp-query+communityrequests-wishes-paramvalue-prop-langinfo": "Inclúe o código e a direccionalidade da lingua do desexo e mais a área de enfoque, se corresponde",
 	"apihelp-query+communityrequests-wishes-paramvalue-sort-created": "Ordenar por data de creación",
 	"apihelp-query+communityrequests-wishes-paramvalue-sort-updated": "Ordenar por data da última actualización",
 	"apihelp-query+communityrequests-wishes-paramvalue-sort-votecount": "Ordenar por número de incondicionais",

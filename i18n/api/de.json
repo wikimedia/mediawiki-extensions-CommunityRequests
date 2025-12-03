@@ -60,6 +60,7 @@
 	"apihelp-query+communityrequests-wishes-paramvalue-prop-created": "Datum und Uhrzeit der Wunscherstellung",
 	"apihelp-query+communityrequests-wishes-paramvalue-prop-updated": "Datum und Uhrzeit der letzten Aktualisierung des Wunsches",
 	"apihelp-query+communityrequests-wishes-paramvalue-prop-baselang": "Die Basissprache des Wunsches, aus der die Übersetzungen erstellt werden",
+	"apihelp-query+communityrequests-wishes-paramvalue-prop-langinfo": "Inklusive Sprachcode und gegebenenfalls die Ausrichtung des Wunsches und dessen Schwerpunktbereich",
 	"apihelp-query+communityrequests-wishes-paramvalue-sort-created": "Nach Erstelldatum sortieren",
 	"apihelp-query+communityrequests-wishes-paramvalue-sort-updated": "Nach dem letzten Aktualisierungsdatum sortieren",
 	"apihelp-query+communityrequests-wishes-paramvalue-sort-votecount": "Nach Anzahl der Unterstützer sortieren",

@@ -420,6 +420,7 @@
 					"name": "common/config.json",
 					"config": [
 						"CommunityRequestsFocusAreaIndexPage",
+						"CommunityRequestsFocusAreaPagePrefix",
 						"CommunityRequestsTags",
 						"CommunityRequestsWishIndexPage",
 						"CommunityRequestsWishPagePrefix"

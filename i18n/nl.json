@@ -3,7 +3,8 @@
 		"authors": [
 			"Mainframe98",
 			"McDutchie",
-			"Siebrand"
+			"Siebrand",
+			"Sjoerddebruin"
 		]
 	},
 	"communityrequests-desc": "Een systeem voor het beheren van de technische suggesties en verzoeken van een wikigemeenschap.",
@@ -197,7 +198,7 @@
 	"communityrequests-save-wish-summary": "Bijwerken van de wens “$1”",
 	"communityrequests-publish-focus-area-summary": "Publicatie van het aandachtsgebied “$1”",
 	"communityrequests-save-focus-area-summary": "Bijwerken van het aandachtsgebied “$1”",
-	"communityrequests-support-label": "Ondersteuning",
+	"communityrequests-support-label": "Steun",
 	"communityrequests-update-label": "Bijwerken",
 	"communityrequests-error-category": "Pagina's met fouten in de Gezamenlijke verlanglijst",
 	"communityrequests-error-category-desc": "De pagina’s in deze categorie zijn wensen of aandachtsgebieden uit de Gezamenlijke verlanglijst die fouten bevatten.",

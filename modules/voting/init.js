@@ -88,7 +88,7 @@ function showPostEditBanner() {
 	messageContent.textContent = mw.msg( messageContentMsg ) + ' ';
 	// Message container.
 	const messageContainer = document.createElement( 'div' );
-	messageContainer.className = 'cdx-message cdx-message--block cdx-message--success';
+	messageContainer.className = 'cdx-message cdx-message--block cdx-message--success cdx-message--user-dismissable';
 	messageContainer.ariaLive = 'polite';
 	// Append elements.
 	closeButton.appendChild( closeImg );

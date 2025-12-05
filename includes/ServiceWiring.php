@@ -25,7 +25,9 @@ return [
 			$services->get( 'CommunityRequests.WishlistConfig' ),
 			$services->get( 'CommunityRequests.WishStore' ),
 			$services->get( 'CommunityRequests.FocusAreaStore' ),
-			$services->get( 'ContentTransformer' ),
+			$services->getContentTransformer(),
+			$services->getNotificationService(),
+			$services->getTitleFormatter(),
 			$services->has( 'Translate:TranslatablePageParser' ) ?
 				$services->get( 'Translate:TranslatablePageParser' ) :
 				null,

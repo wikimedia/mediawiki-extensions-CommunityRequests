@@ -8,6 +8,9 @@ use MediaWiki\Extension\CommunityRequests\FocusArea\FocusArea;
 use MediaWiki\Extension\CommunityRequests\FocusArea\FocusAreaStore;
 use MediaWiki\Extension\CommunityRequests\Wish\Wish;
 use MediaWiki\Extension\CommunityRequests\Wish\WishChangesProcessor;
+use MediaWiki\Extension\DiscussionTools\SubscriptionItem;
+use MediaWiki\Extension\DiscussionTools\SubscriptionStore;
+use MediaWiki\Extension\Notifications\Model\Event;
 use MediaWiki\Logging\ManualLogEntry;
 use MediaWikiIntegrationTestCase;
 use MockTitleTrait;
@@ -23,10 +26,128 @@ class WishChangesProcessorTest extends MediaWikiIntegrationTestCase {
 	use MockTitleTrait;
 
 	/**
+	 * @dataProvider provideNotifySubscribers
+	 */
+	public function testNotifySubscribers( array $expected, array $wishParams, ?array $oldWishParams ): void {
+		$this->markTestSkippedIfExtensionNotLoaded( 'Echo' );
+		$this->markTestSkippedIfExtensionNotLoaded( 'DiscussionTools' );
+
+		$mockSubscriptionStore = $this->createNoOpMock( SubscriptionStore::class, [ 'getSubscriptionItemsForTopic' ] );
+		$mockSubscriptionStore->method( 'getSubscriptionItemsForTopic' )
+			->willReturnCallback( function ( string $topic ) {
+				// For focus area subscriptions, return empty.
+				if ( str_starts_with( $topic, 'p-topics-0:Community_Wishlist/FA' ) ) {
+					return [];
+				}
+				return [
+					$this->createConfiguredMock( SubscriptionItem::class, [
+						'getUserIdentity' => $this->getTestUser()->getUserIdentity(),
+					] ),
+				];
+			} );
+		$this->setService( 'DiscussionTools.SubscriptionStore', $mockSubscriptionStore );
+
+		$this->setTemporaryHook( 'BeforeEchoEventInsert',
+			function ( Event $event ) use ( $expected ) {
+				$this->assertSame( $expected['type'], $event->getType() );
+				$this->assertSame( 'Community Wishlist/W123', $event->getTitle()->getPrefixedText() );
+				$this->assertSame(
+					[ $this->getTestUser()->getUser()->getId() ],
+					$event->getExtra()[ Event::RECIPIENTS_IDX ]
+				);
+				$this->assertArrayContains( $expected['extra'], $event->getExtra() );
+			}
+		);
+
+		$this->getChangesProcessor( $wishParams, $oldWishParams )
+			->notifySubscribers( 123 );
+	}
+
+	public static function provideNotifySubscribers(): array {
+		return [
+			'wish status change' => [
+				[
+					'type' => 'communityrequests-wish-status-change',
+					'extra' => [
+						'entityId' => 'W123',
+						'entityTitle' => 'Test Wish',
+						'old' => 'under-review',
+						'new' => 'done',
+					],
+				],
+				[ Wish::PARAM_STATUS => 'done' ],
+				[ Wish::PARAM_STATUS => 'under-review' ],
+			],
+			'focus area change' => [
+				[
+					'type' => 'communityrequests-wish-focus-area-change',
+					'extra' => [
+						'entityId' => 'W123',
+						'entityTitle' => 'Test Wish',
+						'old' => '',
+						'new' => 'FA1',
+					],
+				],
+				[ Wish::PARAM_FOCUS_AREA => '' ],
+				[ Wish::PARAM_FOCUS_AREA => 'FA1' ],
+			],
+		];
+	}
+
+	/**
 	 * @dataProvider provideAddLogEntries
 	 */
 	public function testAddLogEntries( array $expected, array $wishParams, ?array $oldWishParams ): void {
+		$this->setTemporaryHook( 'ManualLogEntryBeforePublish',
+			function ( ManualLogEntry $logEntry ) use ( $expected ) {
+				$this->assertEquals( 'communityrequests', $logEntry->getType() );
+				$this->assertEquals( $expected['action'], $logEntry->getSubtype() );
+				$this->assertEquals( $expected['params'], $logEntry->getParameters() );
+			}
+		);
+
+		$this->getChangesProcessor( $wishParams, $oldWishParams )
+			->addLogEntries();
+	}
+
+	public static function provideAddLogEntries(): array {
+		return [
+			'wish creation' => [
+				[
+					'action' => 'wish-create',
+					'params' => [],
+				],
+				[],
+				null,
+			],
+			'wish status change' => [
+				[
+					'action' => 'wish-status-change',
+					'params' => [
+						'4::old' => 'under-review',
+						'5::new' => 'done',
+					],
+				],
+				[ Wish::PARAM_STATUS => 'done' ],
+				[ Wish::PARAM_STATUS => 'under-review' ],
+			],
+			'focus area change' => [
+				[
+					'action' => 'wish-focusarea-change',
+					'params' => [
+						'4::old' => 'FA1',
+						'5::new' => '',
+					],
+				],
+				[ Wish::PARAM_FOCUS_AREA => '' ],
+				[ Wish::PARAM_FOCUS_AREA => 'FA1' ],
+			],
+		];
+	}
+
+	private function getChangesProcessor( array $wishParams, ?array $oldWishParams ): WishChangesProcessor {
 		$config = $this->getServiceContainer()->get( 'CommunityRequests.WishlistConfig' );
+
 		$wish = Wish::newFromWikitextParams(
 			$this->makeMockTitle( 'Community Wishlist/W123' ),
 			'en',
@@ -79,53 +200,8 @@ class WishChangesProcessorTest extends MediaWikiIntegrationTestCase {
 		$context->setUser( $this->getTestUser()->getUser() );
 
 		/** @var WishChangesProcessor $changesProcessor */
-		$changesProcessor = $this->getServiceContainer()
+		return $this->getServiceContainer()
 			->get( 'CommunityRequests.ChangesProcessorFactory' )
 			->newChangesProcessor( $context, $wish, $oldWish );
-
-		$this->setTemporaryHook( 'ManualLogEntryBeforePublish',
-			function ( ManualLogEntry $logEntry ) use ( $expected ) {
-				$this->assertEquals( 'communityrequests', $logEntry->getType() );
-				$this->assertEquals( $expected['action'], $logEntry->getSubtype() );
-				$this->assertEquals( $expected['params'], $logEntry->getParameters() );
-			}
-		);
-
-		$changesProcessor->addLogEntries();
-	}
-
-	public static function provideAddLogEntries(): array {
-		return [
-			'wish creation' => [
-				[
-					'action' => 'wish-create',
-					'params' => [],
-				],
-				[],
-				null,
-			],
-			'wish status change' => [
-				[
-					'action' => 'wish-status-change',
-					'params' => [
-						'4::old' => 'under-review',
-						'5::new' => 'done',
-					],
-				],
-				[ Wish::PARAM_STATUS => 'done' ],
-				[ Wish::PARAM_STATUS => 'under-review' ],
-			],
-			'focus area change' => [
-				[
-					'action' => 'wish-focusarea-change',
-					'params' => [
-						'4::old' => 'FA1',
-						'5::new' => '',
-					],
-				],
-				[ Wish::PARAM_FOCUS_AREA => '' ],
-				[ Wish::PARAM_FOCUS_AREA => 'FA1' ],
-			],
-		];
 	}
 }

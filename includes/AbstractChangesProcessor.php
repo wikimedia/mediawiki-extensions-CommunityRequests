@@ -6,11 +6,24 @@ namespace MediaWiki\Extension\CommunityRequests;
 use MediaWiki\Content\Transform\ContentTransformer;
 use MediaWiki\Content\WikitextContent;
 use MediaWiki\Context\IContextSource;
+use MediaWiki\Extension\CommunityRequests\FocusArea\FocusAreaStore;
+use MediaWiki\Extension\CommunityRequests\Wish\Wish;
+use MediaWiki\Extension\CommunityRequests\Wish\WishStore;
+use MediaWiki\Extension\DiscussionTools\CommentUtils;
+use MediaWiki\Extension\DiscussionTools\SubscriptionItem;
+use MediaWiki\Extension\DiscussionTools\SubscriptionStore;
 use MediaWiki\Extension\Translate\PageTranslation\TranslatablePageParser;
 use MediaWiki\Language\Language;
 use MediaWiki\Language\LocalizationContext;
 use MediaWiki\Logging\ManualLogEntry;
+use MediaWiki\MediaWikiServices;
+use MediaWiki\Notification\NotificationService;
+use MediaWiki\Notification\RecipientSet;
+use MediaWiki\Notification\Types\WikiNotification;
+use MediaWiki\Page\PageIdentity;
 use MediaWiki\Parser\ParserOptions;
+use MediaWiki\Title\Title;
+use MediaWiki\Title\TitleFormatter;
 use Psr\Log\LoggerInterface;
 use Wikimedia\Bcp47Code\Bcp47Code;
 
@@ -28,16 +41,28 @@ use Wikimedia\Bcp47Code\Bcp47Code;
  */
 abstract class AbstractChangesProcessor implements LocalizationContext {
 
+	use WishlistEntityTrait;
+
 	public function __construct(
 		protected readonly WishlistConfig $config,
-		protected readonly AbstractWishlistStore $store,
+		protected readonly WishStore $wishStore,
+		protected readonly FocusAreaStore $focusAreaStore,
 		protected readonly ContentTransformer $transformer,
+		protected readonly NotificationService $notifications,
+		protected readonly TitleFormatter $titleFormatter,
 		protected readonly ?TranslatablePageParser $translatablePageParser,
 		protected readonly LoggerInterface $logger,
 		protected readonly IContextSource $context,
 		protected readonly AbstractWishlistEntity $entity,
 		protected readonly ?AbstractWishlistEntity $oldEntity = null,
+		protected ?SubscriptionStore $subscriptionStore = null,
 	) {
+		$services = MediaWikiServices::getInstance();
+		if ( $this->config->isNotificationsEnabled() &&
+			$services->getExtensionRegistry()->isLoaded( 'DiscussionTools' )
+		) {
+			$this->subscriptionStore ??= $services->getService( 'DiscussionTools.SubscriptionStore' );
+		}
 	}
 
 	/**
@@ -112,28 +137,48 @@ abstract class AbstractChangesProcessor implements LocalizationContext {
 			$value = is_callable( $callback ) ?
 				$callback( $entityData[$field] ?? null ) :
 				$entityData[$field] ?? null;
-			// First do a pre-save transformation, as we will be comparing against the saved value.
-			if ( in_array( $field, $this->store->getWikitextFields() ) && !is_array( $value ) ) {
-				/** @var WikitextContent $content */
-				$content = $this->transformer->preSaveTransform(
-					new WikitextContent( $value ?? '' ),
-					$entity->getPage(),
-					$this->context->getUser(),
-					ParserOptions::newFromUserAndLang( $this->context->getUser(), $this->getLanguage() )
-				);
-				'@phan-var WikitextContent $content';
-				$value = $content->getText();
-			}
-			// Remove translation markup if it is a translatable field.
-			if ( in_array( $field, $this->store->getExtTranslateFields() ) &&
-				$this->translatablePageParser?->containsMarkup( $value )
-			) {
-				$value = $this->translatablePageParser->cleanupTags( $value );
-			}
-
-			$ret[$field] = $value;
+			$ret[$field] = $this->sanitizeValue( $entity->getPage(), $field, $value );
 		}
 		return $ret;
+	}
+
+	/**
+	 * Sanitize a field value for comparison / reporting.
+	 *
+	 * @param PageIdentity $page Page identity
+	 * @param string $field Field name
+	 * @param string|array|null $value Field value
+	 * @return string|array|null Sanitized value
+	 */
+	protected function sanitizeValue( PageIdentity $page, string $field, string|array|null $value ) {
+		if ( !is_string( $value ) ) {
+			return $value;
+		}
+		// First do a pre-save transformation, as we will be comparing against the saved value.
+		if ( in_array( $field, $this->getStore()->getWikitextFields() ) ) {
+			/** @var WikitextContent $content */
+			$content = $this->transformer->preSaveTransform(
+				new WikitextContent( $value ),
+				$page,
+				$this->context->getUser(),
+				ParserOptions::newFromUserAndLang( $this->context->getUser(), $this->getLanguage() )
+			);
+			'@phan-var WikitextContent $content';
+			$value = $content->getText();
+		}
+		// Remove translation markup if it is a translatable field.
+		if ( in_array( $field, $this->getStore()->getExtTranslateFields() ) &&
+			$this->translatablePageParser?->containsMarkup( $value )
+		) {
+			$value = $this->translatablePageParser->cleanupTags( $value );
+		}
+		return $value;
+	}
+
+	private function getStore(): AbstractWishlistStore {
+		return $this->entity instanceof Wish ?
+			$this->wishStore :
+			$this->focusAreaStore;
 	}
 
 	// Edit summaries.
@@ -185,7 +230,7 @@ abstract class AbstractChangesProcessor implements LocalizationContext {
 				// * communityrequests-status-focus-area-in-progress
 				// * communityrequests-status-focus-area-done
 				return $this->msg(
-					(string)$this->config->getStatusLabelFromWikitextVal( $this->store->entityType(), $status )
+					(string)$this->config->getStatusLabelFromWikitextVal( $this->getStore()->entityType(), $status )
 				)->inContentLanguage()->text();
 			},
 		] );
@@ -206,7 +251,7 @@ abstract class AbstractChangesProcessor implements LocalizationContext {
 		string|array|null $oldValue = null
 	): array {
 		$isArrayField = is_array( $value ) || is_array( $oldValue );
-		$isWikitextField = in_array( $field, $this->store->getWikitextFields(), true );
+		$isWikitextField = in_array( $field, $this->getStore()->getWikitextFields(), true );
 
 		if ( $isWikitextField && !$isArrayField ) {
 			// We don't want to include the value of wikitext fields as they can be very large.
@@ -269,7 +314,7 @@ abstract class AbstractChangesProcessor implements LocalizationContext {
 		// The following messages may be used here:
 		// * communityrequests-publish-wish-summary
 		// * communityrequests-publish-focusarea-summary
-		return $this->msg( "communityrequests-publish-{$this->store->entityType()}-summary", $entity->getTitle() )
+		return $this->msg( "communityrequests-publish-{$this->getStore()->entityType()}-summary", $entity->getTitle() )
 			->inContentLanguage()->text();
 	}
 
@@ -282,7 +327,7 @@ abstract class AbstractChangesProcessor implements LocalizationContext {
 		if ( !$this->oldEntity ) {
 			// Single log entry for creation.
 			$this->publishLogEntry(
-				$this->getLogEntry( $this->store->entityType() . '-create' )
+				$this->getLogEntry( $this->getStore()->entityType() . '-create' )
 			);
 			return;
 		}
@@ -296,7 +341,7 @@ abstract class AbstractChangesProcessor implements LocalizationContext {
 		foreach ( $changes as $field => $change ) {
 			$this->logger->debug( "Logging change for field '$field': old={$change['old']}, new={$change['new']}" );
 			$logEntry = $this->getLogEntry(
-				$this->store->entityType() . "-$field-change",
+				$this->getStore()->entityType() . "-$field-change",
 				$change['new'],
 				$change['old']
 			);
@@ -336,6 +381,86 @@ abstract class AbstractChangesProcessor implements LocalizationContext {
 		$logId = $logEntry->insert();
 		$logEntry->publish( $logId );
 		return $logId;
+	}
+
+	// Notifications.
+
+	/**
+	 * Notify subscribers about changes to the entity.
+	 *
+	 * @param int $revId Revision ID of the change
+	 */
+	public function notifySubscribers( int $revId ): void {
+		if ( !$this->config->isNotificationsEnabled() || !$this->subscriptionStore ) {
+			return;
+		}
+		$changes = $this->getChanges( $this->getNotificationFields() );
+		if ( count( $changes ) === 0 ) {
+			$this->logger->debug( 'No changes to notify for entity ' . $this->entity->getPage() );
+			return;
+		}
+
+		$recipients = $this->locateUsers();
+		foreach ( $changes as $field => $change ) {
+			$this->logger->debug( "Notifying change for field $field: old={$change['old']}, new={$change['new']}" );
+			$this->notifications->notify(
+				$this->getNotification( $field, $change, $revId ),
+				$recipients
+			);
+		}
+	}
+
+	/**
+	 * The fields that, if changed, should trigger notifications to subscribers.
+	 * See ::getFields() for details.
+	 *
+	 * @return array<string, ?callable>
+	 */
+	protected function getNotificationFields(): array {
+		return [
+			AbstractWishlistEntity::PARAM_STATUS => null,
+		];
+	}
+
+	/**
+	 * Get a WikiNotification for a specific field change.
+	 *
+	 * @param string $field Field name
+	 * @param array $change Change info with 'old' and 'new' values
+	 * @param int $revId Revision ID of the change
+	 * @return WikiNotification
+	 */
+	protected function getNotification( string $field, array $change, int $revId ): WikiNotification {
+		return new WikiNotification(
+			'communityrequests-' . $this->getStore()->entityType() . "-$field-change",
+			$this->entity->getPage(),
+			$this->context->getUser(),
+			[
+				'entityId' => $this->config->getEntityWikitextVal( $this->entity->getPage() ),
+				'entityTitle' => $this->entity->getTitle(),
+				'revId' => $revId,
+				'old' => $change['old'],
+				'new' => $change['new'],
+			]
+		);
+	}
+
+	/**
+	 * Locate users subscribed to the entity page via DiscussionTools.
+	 *
+	 * @param ?PageIdentity $identity Page identity to use; defaults to the entity's page.
+	 * @return RecipientSet
+	 */
+	final protected function locateUsers( ?PageIdentity $identity = null ): RecipientSet {
+		$identity ??= Title::newFromPageIdentity( $this->entity->getPage() );
+		$subscribers = array_map(
+			static fn ( SubscriptionItem $item ) => $item->getUserIdentity(),
+			$this->subscriptionStore->getSubscriptionItemsForTopic(
+				CommentUtils::getNewTopicsSubscriptionId( $identity ),
+				[ SubscriptionStore::STATE_SUBSCRIBED, SubscriptionStore::STATE_AUTOSUBSCRIBED ]
+			)
+		);
+		return new RecipientSet( $subscribers );
 	}
 
 	// Helper methods implementing LocalizationContext interface.

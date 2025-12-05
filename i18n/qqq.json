@@ -257,5 +257,14 @@
 	"logentry-communityrequests-wish-status-change": "{{logentry|[[Special:Log/communityrequests]]}}\nAdditional parameters:\n* $4 — The old status value.\n* $5 — The new status value.",
 	"logentry-communityrequests-wish-focusarea-change": "{{logentry|[[Special:Log/communityrequests]]}}\nAdditional parameters:\n* $4 — The old focus area name, or if unassigned the {{msg-mw|communityrequests-focus-area-unassigned}} message.\n* $5 — The new focus area name, or if unassigned the {{msg-mw|communityrequests-focus-area-unassigned}} message.",
 	"logentry-communityrequests-focus-area-create": "{{logentry|[[Special:Log/communityrequests]]}}",
-	"logentry-communityrequests-focus-area-status-change": "{{logentry|[[Special:Log/communityrequests]]}}\nAdditional parameters:\n* $4 — The old status value.\n* $5 — The new status value."
+	"logentry-communityrequests-focus-area-status-change": "{{logentry|[[Special:Log/communityrequests]]}}\nAdditional parameters:\n* $4 — The old status value.\n* $5 — The new status value.",
+	"echo-category-title-communityrequests-notification": "{{doc-echo-category-title|tooltip=echo-pref-tooltip-communityrequests-notification}}",
+	"echo-pref-tooltip-communityrequests-notification": "{{doc-echo-pref-tooltip|title=echo-category-title-communityrequests-notification}}",
+	"communityrequests-notification-header": "Notification header for when an update has been made to a wish or focus area.\n\nParameters:\n* $1 — The entity ID and title of the wish or focus area that was updated.",
+	"communityrequests-notification-bundled": "Notification header for when multiple updates have been made to a wishes or focus areas.",
+	"communityrequests-notification-wish-status-change": "Notification body text shown when the status of a wish has changed.\n\nParameters:\n* $1 — The old status value.\n* $2 — The new status value.",
+	"communityrequests-notification-wish-focusarea-change": "Notification body text shown when the focus area of a wish has changed.\n\nParameters:\n* $1 — The old focus area name, or if unassigned the {{msg-mw|communityrequests-focus-area-unassigned}} message.\n* $2 — The new focus area name, or if unassigned the {{msg-mw|communityrequests-focus-area-unassigned}} message.",
+	"communityrequests-notification-focus-area-status-change": "Notification body text shown when the status of a focus area has changed.\n\nParameters:\n* $1 — The old status value.\n* $2 — The new status value.",
+	"communityrequests-notification-focus-area-wish-added": "Notification body text shown when a wish has been added to a focus area.\n\nParameters:\n* $1 — The entity ID and title of the wish that was added.",
+	"communityrequests-notification-focus-area-wish-removed": "Notification body text shown when a wish has been removed from a focus area.\n\nParameters:\n* $1 — The entity ID and title of the wish that was removed."
 }

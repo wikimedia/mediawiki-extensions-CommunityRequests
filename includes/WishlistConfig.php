@@ -38,6 +38,7 @@ class WishlistConfig {
 	public const VOTES_PAGE_SUFFIX = 'CommunityRequestsVotesPageSuffix';
 	public const WISH_VOTING_ENABLED = 'CommunityRequestsWishVotingEnabled';
 	public const FOCUS_AREA_VOTING_ENABLED = 'CommunityRequestsFocusAreaVotingEnabled';
+	public const NOTIFICATIONS_ENABLED = 'CommunityRequestsNotificationsEnabled';
 	public const CONSTRUCTOR_OPTIONS = [
 		self::DECLINE_TEMPLATE,
 		self::ENABLED,
@@ -54,6 +55,7 @@ class WishlistConfig {
 		self::VOTES_PAGE_SUFFIX,
 		self::WISH_VOTING_ENABLED,
 		self::FOCUS_AREA_VOTING_ENABLED,
+		self::NOTIFICATIONS_ENABLED,
 		MainConfigNames::LanguageCode,
 	];
 
@@ -72,6 +74,7 @@ class WishlistConfig {
 	private string $votesPageSuffix;
 	private bool $wishVotingEnabled;
 	private bool $focusAreaVotingEnabled;
+	private bool $notificationsEnabled;
 	public string $siteLanguage;
 
 	public function __construct(
@@ -95,6 +98,7 @@ class WishlistConfig {
 		$this->votesPageSuffix = $config->get( self::VOTES_PAGE_SUFFIX );
 		$this->wishVotingEnabled = $config->get( self::WISH_VOTING_ENABLED );
 		$this->focusAreaVotingEnabled = $config->get( self::FOCUS_AREA_VOTING_ENABLED );
+		$this->notificationsEnabled = $config->get( self::NOTIFICATIONS_ENABLED );
 		$this->siteLanguage = $config->get( MainConfigNames::LanguageCode );
 	}
 
@@ -158,6 +162,10 @@ class WishlistConfig {
 
 	public function isFocusAreaVotingEnabled(): bool {
 		return $this->focusAreaVotingEnabled;
+	}
+
+	public function isNotificationsEnabled(): bool {
+		return $this->notificationsEnabled;
 	}
 
 	// Helpers

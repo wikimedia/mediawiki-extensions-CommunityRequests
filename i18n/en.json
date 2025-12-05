@@ -254,5 +254,14 @@
 	"logentry-communityrequests-wish-status-change": "$1 {{GENDER:$2|changed}} the status of \"$3\" from \"$4\" to \"$5\"",
 	"logentry-communityrequests-wish-focusarea-change": "$1 {{GENDER:$2|changed}} the focus area of \"$3\" from \"$4\" to \"$5\"",
 	"logentry-communityrequests-focus-area-create": "$1 {{GENDER:$2|created}} the focus area \"$3\"",
-	"logentry-communityrequests-focus-area-status-change": "$1 {{GENDER:$2|changed}} the status of \"$3\" from \"$4\" to \"$5\""
+	"logentry-communityrequests-focus-area-status-change": "$1 {{GENDER:$2|changed}} the status of \"$3\" from \"$4\" to \"$5\"",
+	"echo-category-title-communityrequests-notification": "Community Wishlist",
+	"echo-pref-tooltip-communityrequests-notification": "Notify me about updates to wishes and focus areas in the Community Wishlist that I've subscribed to.",
+	"communityrequests-notification-header": "Update to \"$1\"",
+	"communityrequests-notification-bundled": "Community Wishlist updates",
+	"communityrequests-notification-wish-status-change": "Status changed to \"$1\".",
+	"communityrequests-notification-wish-focusarea-change": "Assigned to the focus area \"$1\".",
+	"communityrequests-notification-focus-area-status-change": "Status changed to \"$1\".",
+	"communityrequests-notification-focus-area-wish-added": "Removed \"$1\".",
+	"communityrequests-notification-focus-area-wish-removed": "Added \"$1\"."
 }

@@ -77,6 +77,7 @@ trait MockWishlistConfigTrait {
 			WishlistConfig::VOTES_PAGE_SUFFIX => '/Votes',
 			WishlistConfig::WISH_VOTING_ENABLED => true,
 			WishlistConfig::FOCUS_AREA_VOTING_ENABLED => true,
+			WishlistConfig::NOTIFICATIONS_ENABLED => true,
 			MainConfigNames::LanguageCode => 'en',
 			...$serviceOptions,
 		] );

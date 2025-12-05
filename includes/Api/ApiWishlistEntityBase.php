@@ -127,6 +127,11 @@ abstract class ApiWishlistEntityBase extends ApiWishlistEditBase {
 		);
 		if ( $status->isOK() ) {
 			$changes->addLogEntries();
+
+			$newRevId = $status->getValue()->getResultData()['edit']['newrevid'] ?? null;
+			if ( $this->config->isNotificationsEnabled() && $newRevId ) {
+				$changes->notifySubscribers( $newRevId );
+			}
 		}
 		return $status;
 	}

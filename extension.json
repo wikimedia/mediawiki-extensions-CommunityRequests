@@ -16,8 +16,9 @@
 	},
 	"suggests": {
 		"extensions": {
-			"Translate": "*",
-			"CodeMirror": "*"
+			"CodeMirror": "*",
+			"DiscussionTools": "*",
+			"Translate": "*"
 		}
 	},
 	"TrackingCategories": [
@@ -775,12 +776,63 @@
 		"CommunityRequestsFocusAreaVotingEnabled": {
 			"description": "Whether to enable voting for focus areas.",
 			"value": true
+		},
+		"CommunityRequestsNotificationsEnabled": {
+			"description": "Whether to enable notifications for notable entity changes. Depends on DiscussionTools being installed.",
+			"value": true
 		}
 	},
 	"attributes": {
-		"CodeMirror": {
-			"TagModes": {
-				"wish": "mediawiki"
+		"Echo": {
+			"NotificationCategories": {
+				"communityrequests": {
+					"label": "communityrequests-notification-category",
+					"priority": 4,
+					"title": "echo-category-title-communityrequests-notification",
+					"tooltip": "echo-pref-tooltip-communityrequests-notification"
+				}
+			},
+			"Notifications": {
+				"communityrequests-wish-status-change": {
+					"category": "communityrequests",
+					"group": "positive",
+					"section": "message",
+					"presentation-model": "MediaWiki\\Extension\\CommunityRequests\\Notification\\WishStatusPresentationModel",
+					"bundle": {
+						"web": true,
+						"expandable": true
+					}
+				},
+				"communityrequests-wish-focus-area-change": {
+					"category": "communityrequests",
+					"group": "positive",
+					"section": "message",
+					"presentation-model": "MediaWiki\\Extension\\CommunityRequests\\Notification\\WishFocusAreaPresentationModel",
+					"bundle": {
+						"web": true,
+						"expandable": true
+					}
+				},
+				"communityrequests-focus-area-status-change": {
+					"category": "communityrequests",
+					"group": "positive",
+					"section": "message",
+					"presentation-model": "MediaWiki\\Extension\\CommunityRequests\\Notification\\FocusAreaStatusPresentationModel",
+					"bundle": {
+						"web": true,
+						"expandable": true
+					}
+				},
+				"communityrequests-focus-area-wish-change": {
+					"category": "communityrequests",
+					"group": "positive",
+					"section": "message",
+					"presentation-model": "MediaWiki\\Extension\\CommunityRequests\\Notification\\FocusAreaWishPresentationModel",
+					"bundle": {
+						"web": true,
+						"expandable": true
+					}
+				}
 			}
 		}
 	},

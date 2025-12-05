@@ -11,6 +11,8 @@ use MediaWiki\Extension\CommunityRequests\Wish\Wish;
 use MediaWiki\Extension\CommunityRequests\Wish\WishChangesProcessor;
 use MediaWiki\Extension\CommunityRequests\Wish\WishStore;
 use MediaWiki\Extension\Translate\PageTranslation\TranslatablePageParser;
+use MediaWiki\Notification\NotificationService;
+use MediaWiki\Title\TitleFormatter;
 use Psr\Log\LoggerInterface;
 
 class ChangesProcessorFactory {
@@ -20,6 +22,8 @@ class ChangesProcessorFactory {
 		protected readonly WishStore $wishStore,
 		protected readonly FocusAreaStore $focusAreaStore,
 		protected readonly ContentTransformer $transformer,
+		protected readonly NotificationService $notifications,
+		protected readonly TitleFormatter $titleFormatter,
 		protected readonly ?TranslatablePageParser $translatablePageParser,
 		protected readonly LoggerInterface $logger,
 	) {
@@ -39,11 +43,13 @@ class ChangesProcessorFactory {
 		?AbstractWishlistEntity $oldEntity = null,
 	): WishChangesProcessor|FocusAreaChangesProcessor {
 		$class = $entity instanceof Wish ? WishChangesProcessor::class : FocusAreaChangesProcessor::class;
-		$store = $entity instanceof Wish ? $this->wishStore : $this->focusAreaStore;
 		return new $class(
 			$this->config,
-			$store,
+			$this->wishStore,
+			$this->focusAreaStore,
 			$this->transformer,
+			$this->notifications,
+			$this->titleFormatter,
 			$this->translatablePageParser,
 			$this->logger,
 			$context,

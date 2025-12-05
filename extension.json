@@ -156,6 +156,10 @@
 		}
 	},
 	"SpecialPages": {
+		"Wishlist": {
+			"class": "MediaWiki\\Extension\\CommunityRequests\\SpecialWishlist",
+			"services": [ "CommunityRequests.WishlistConfig" ]
+		},
 		"WishlistIntake": {
 			"class": "MediaWiki\\Extension\\CommunityRequests\\Wish\\SpecialWishlistIntake",
 			"services": [

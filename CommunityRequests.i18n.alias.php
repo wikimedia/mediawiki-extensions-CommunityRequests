@@ -9,6 +9,7 @@ $magicWords['en'] = [
 $specialPageAliases = [];
 
 $specialPageAliases['en'] = [
+	'Wishlist' => [ 'Wishlist', 'CommunityWishlist' ],
 	'WishlistIntake' => [ 'WishlistIntake' ],
 	'EditFocusArea' => [ 'EditFocusArea' ],
 ];

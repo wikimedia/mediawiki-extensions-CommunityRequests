@@ -182,5 +182,8 @@
 	"action-manage-wishlist": "不受限制地管理社区愿望清单",
 	"group-community-wishlist-manager": "社群愿望清单管理员",
 	"group-community-wishlist-manager-member": "社群愿望清单{{GENDER:$1|管理员}}",
-	"communityrequests-cant-manually-edit": "此社群願望清單頁面必須用[[$1|登記表]]來編輯。"
+	"communityrequests-cant-manually-edit": "此社群願望清單頁面必須用[[$1|登記表]]來編輯。",
+	"communityrequests-vote-add-summary": "添加支持票",
+	"communityrequests-vote-update-summary": "更新支持票",
+	"communityrequests-vote-remove-summary": "移除支持票"
 }

@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"Cookai1205"
+			"Cookai1205",
+			"Kly"
 		]
 	},
 	"apihelp-wishedit-summary": "建立或更新社群願望清單的願望。",
@@ -18,6 +19,10 @@
 	"apihelp-wishedit-param-created": "願望的建立日期和時間。",
 	"apihelp-wishedit-param-baselang": "願望原文語言。",
 	"apierror-wishlist-entity-parse": "無法解析願望清單實體。它可能包含無效wikitext。請確保wikitext中沒有多餘的豎線符號（<code>|</code>）。",
+	"apierror-wishlist-vote-parse": "無法解析願望清單投票。它可能包含無效 wikitext。請確保 wikitext 中沒有多餘的豎線符號（<code>|</code>）。",
+	"apierror-wishlist-vote-login-required": "您必須登入才能對願望或重點領域投票。",
+	"apierror-wishlist-entity-invalid": "指定的願望清單實體無效或不存在。",
+	"apierror-querywishes-invalidfocusareas": "提供的全部或部分重點領域 ID 無效。",
 	"apihelp-focusareaedit-summary": "建立或更新社群願望清單的重點領域。",
 	"apihelp-focusareaedit-param-focusarea": "要更新的重點領域。可以是完整的頁面標題、帶有前綴的重點領域ID（例如「FA123」）或整數形式的重點領域ID。留空以建立新重點領域。",
 	"apihelp-focusareaedit-param-status": "重點領域的狀態。",
@@ -28,8 +33,15 @@
 	"apihelp-focusareaedit-param-volunteers": "志願協助重點領域的社群成員。",
 	"apihelp-focusareaedit-param-created": "重點領域的建立日期和時間。",
 	"apihelp-focusareaedit-param-baselang": "重點領域原文語言。",
+	"apihelp-wishlistvote-summary": "支援社群願望清單中的某個願望或重點領域。",
+	"apihelp-wishlistvote-param-entity": "要投票的願望或重點領域。這可以是完整的頁面標題，或是帶有前綴的 ID（例如：「W123」或「FA123」）。",
+	"apihelp-wishlistvote-param-comment": "投票時可選擇性包含的留言。",
+	"apihelp-wishlistvote-param-voteaction": "要執行的操作。",
 	"apihelp-query+communityrequests-wishes-summary": "從社群願望清單取得願望清單。",
 	"apihelp-query+communityrequests-wishes-param-lang": "用於篩選願望的語言代碼。",
+	"apihelp-query+communityrequests-wishes-param-tags": "限定結果為至少包含一個指定標籤的願望。",
+	"apihelp-query+communityrequests-wishes-param-statuses": "限定結果為僅有以下狀態之一的願望。",
+	"apihelp-query+communityrequests-wishes-param-focusareas": "限定結果為僅在以下重點領域裡的願望並以 wikitext 值識別（即：'FAx'，其中 x 為整數），若是未設定重點領域的願望則以特殊值「未分配」（unassigned）識別。",
 	"apihelp-query+communityrequests-wishes-param-prop": "要取得的願望屬性。",
 	"apihelp-query+communityrequests-wishes-param-sort": "作為排序順序的願望屬性。",
 	"apihelp-query+communityrequests-wishes-param-dir": "排序的方向。",
@@ -48,6 +60,7 @@
 	"apihelp-query+communityrequests-wishes-paramvalue-prop-created": "願望的建立日期和時間",
 	"apihelp-query+communityrequests-wishes-paramvalue-prop-updated": "願望最後更新的日期和時間",
 	"apihelp-query+communityrequests-wishes-paramvalue-prop-baselang": "願望原文語言",
+	"apihelp-query+communityrequests-wishes-paramvalue-prop-langinfo": "包含語言代碼、願望方向和其重點領域（如適用）。",
 	"apihelp-query+communityrequests-wishes-paramvalue-sort-created": "依建立日期排序",
 	"apihelp-query+communityrequests-wishes-paramvalue-sort-updated": "依最後更新日期排序",
 	"apihelp-query+communityrequests-wishes-paramvalue-sort-votecount": "依支持者人數排序",

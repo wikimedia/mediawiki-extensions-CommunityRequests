@@ -48,6 +48,8 @@
 	"apihelp-query+communityrequests-wishes-param-dir": "{{doc-apihelp-param|query+wishes|dir}}",
 	"apihelp-query+communityrequests-wishes-param-limit": "{{doc-apihelp-param|query+wishes|limit}}",
 	"apihelp-query+communityrequests-wishes-param-count": "{{doc-apihelp-param|query+wishes|count}}",
+	"apihelp-query+communityrequests-wishes-param-start": "{{doc-apihelp-param|query+wishes|start}}",
+	"apihelp-query+communityrequests-wishes-param-end": "{{doc-apihelp-param|query+wishes|end}}",
 	"apihelp-query+communityrequests-wishes-paramvalue-prop-status": "{{doc-apihelp-paramvalue|query+wishes|prop|status}}",
 	"apihelp-query+communityrequests-wishes-paramvalue-prop-type": "{{doc-apihelp-paramvalue|query+wishes|prop|type}}",
 	"apihelp-query+communityrequests-wishes-paramvalue-prop-title": "{{doc-apihelp-paramvalue|query+wishes|prop|title}}",

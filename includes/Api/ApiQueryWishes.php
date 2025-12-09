@@ -58,6 +58,8 @@ class ApiQueryWishes extends ApiQueryBase {
 		$filterArg = array_filter( [
 			Wish::PARAM_TAGS => $params[Wish::PARAM_TAGS] ?? null,
 			Wish::PARAM_STATUSES => $params[Wish::PARAM_STATUSES] ?? null,
+			WishStore::FILTER_CREATED_START => $params['start'] ?? null,
+			WishStore::FILTER_CREATED_END => $params['end'] ?? null,
 		] );
 		if ( isset( $params[Wish::PARAM_FOCUS_AREAS] ) ) {
 			$faPageIds = $this->focusAreaStore->getPageIdsFromWikitextValues( $params[Wish::PARAM_FOCUS_AREAS] );
@@ -261,6 +263,14 @@ class ApiQueryWishes extends ApiQueryBase {
 			'count' => [
 				ParamValidator::PARAM_TYPE => 'boolean',
 				ParamValidator::PARAM_DEFAULT => false,
+			],
+			'start' => [
+				ParamValidator::PARAM_TYPE => 'timestamp',
+				ApiBase::PARAM_HELP_MSG => 'apihelp-query+communityrequests-wishes-param-start',
+			],
+			'end' => [
+				ParamValidator::PARAM_TYPE => 'timestamp',
+				ApiBase::PARAM_HELP_MSG => 'apihelp-query+communityrequests-wishes-param-end',
 			],
 			'continue' => [
 				ApiBase::PARAM_HELP_MSG => 'api-help-param-continue',

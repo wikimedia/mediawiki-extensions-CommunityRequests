@@ -46,6 +46,8 @@
 	"apihelp-query+communityrequests-wishes-param-dir": "The direction to sort by.",
 	"apihelp-query+communityrequests-wishes-param-limit": "The maximum number of wishes to return.",
 	"apihelp-query+communityrequests-wishes-param-count": "Include a count of the total number of wishes in the response.",
+	"apihelp-query+communityrequests-wishes-param-start": "Only return wishes created on or after this timestamp.",
+	"apihelp-query+communityrequests-wishes-param-end": "Only return wishes created on or before this timestamp.",
 	"apihelp-query+communityrequests-wishes-paramvalue-prop-status": "Status of the wish",
 	"apihelp-query+communityrequests-wishes-paramvalue-prop-type": "The type of wish",
 	"apihelp-query+communityrequests-wishes-paramvalue-prop-title": "Title of the wish",

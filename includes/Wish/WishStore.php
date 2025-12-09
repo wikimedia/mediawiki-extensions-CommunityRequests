@@ -276,6 +276,18 @@ class WishStore extends AbstractWishlistStore {
 			$select->andWhere( [ 'cr_focus_area' => $filters[self::FILTER_FOCUS_AREAS] ] );
 		}
 
+		// Filter by created date range.
+		if ( isset( $filters[self::FILTER_CREATED_START] ) ) {
+			$select->andWhere(
+				$dbr->expr( self::createdField(), '>=', $dbr->timestamp( $filters[self::FILTER_CREATED_START] ) )
+			);
+		}
+		if ( isset( $filters[self::FILTER_CREATED_END] ) ) {
+			$select->andWhere(
+				$dbr->expr( self::createdField(), '<=', $dbr->timestamp( $filters[self::FILTER_CREATED_END] ) )
+			);
+		}
+
 		return $select;
 	}
 

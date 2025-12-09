@@ -37,6 +37,8 @@ abstract class AbstractWishlistStore {
 	public const SORT_DESC = SelectQueryBuilder::SORT_DESC;
 	public const FILTER_NONE = [];
 	public const FILTER_FOCUS_AREAS = 'focus_area_page_ids';
+	public const FILTER_CREATED_START = 'created_start';
+	public const FILTER_CREATED_END = 'created_end';
 	public const FOCUS_AREA_UNASSIGNED = 'unassigned';
 
 	public const ARRAY_DELIMITER_WIKITEXT = ',';

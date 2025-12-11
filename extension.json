@@ -10,7 +10,8 @@
 	"requires": {
 		"MediaWiki": ">= 1.46",
 		"extensions": {
-			"VisualEditor": "*"
+			"VisualEditor": "*",
+			"TemplateData": "*"
 		}
 	},
 	"suggests": {
@@ -327,6 +328,7 @@
 				"intake/SpecialWishlistIntake.vue",
 				"intake/SpecialEditFocusArea.vue",
 				"intake/AudienceField.vue",
+				"intake/DeclinedReasonField.vue",
 				"intake/DescriptionField.js",
 				"intake/DescriptionField.vue",
 				"intake/FocusAreaField.vue",
@@ -346,6 +348,7 @@
 				{
 					"name": "common/config.json",
 					"config": [
+						"CommunityRequestsDeclineTemplate",
 						"CommunityRequestsEnable",
 						"CommunityRequestsFocusAreaIndexPage",
 						"CommunityRequestsHomepage",
@@ -372,6 +375,9 @@
 			"messages": [
 				"communityrequests-title-label",
 				"communityrequests-title-description",
+				"communityrequests-declined-additional-reason",
+				"communityrequests-declined-reason",
+				"communityrequests-declined-reason-field-description",
 				"communityrequests-description",
 				"communityrequests-focus-area-description",
 				"communityrequests-description-description",
@@ -565,6 +571,10 @@
 		}
 	},
 	"config": {
+		"CommunityRequestsDeclineTemplate": {
+			"description": "Decline template to use when a wish declined for CommunityRequests extension.",
+			"value": "Template:Community Wishlist/Decline"
+		},
 		"CommunityRequestsEnable": {
 			"description": "Whether to enable any functionality of the CommunityRequests extension.",
 			"value": true

@@ -8,6 +8,12 @@
 		<template #label>
 			{{ $i18n( 'communityrequests-status' ) }}
 		</template>
+		<declined-reason-field
+			v-if="entityType === 'wish' && statusValue === 'declined'"
+			:reason="declinedReason"
+			:additional-reason="declinedAdditionalReason"
+		>
+		</declined-reason-field>
 	</cdx-field>
 </template>
 
@@ -16,15 +22,20 @@ const { defineComponent, ref, Ref } = require( 'vue' );
 const { CdxField, CdxSelect } = require( '../codex.js' );
 const { CommunityRequestsStatuses } = require( '../common/config.json' );
 
+const DeclinedReasonField = require( './DeclinedReasonField.vue' );
+
 module.exports = exports = defineComponent( {
 	name: 'StatusField',
 	components: {
 		CdxField,
-		CdxSelect
+		CdxSelect,
+		DeclinedReasonField
 	},
 	props: {
 		status: { type: String, required: true },
-		entityType: { type: String, required: true }
+		entityType: { type: String, required: true },
+		declinedReason: { type: String, default: '' },
+		declinedAdditionalReason: { type: String, default: '' }
 	},
 	emits: [
 		'update:status'

@@ -28,6 +28,7 @@ trait MockWishlistConfigTrait {
 	 */
 	protected function getConfig( array $serviceOptions = [] ): WishlistConfig {
 		$serviceOptions = new ServiceOptions( WishlistConfig::CONSTRUCTOR_OPTIONS, [
+			WishlistConfig::DECLINE_TEMPLATE => 'CommunityRequestsDeclineTemplate',
 			WishlistConfig::ENABLED => true,
 			WishlistConfig::HOMEPAGE => 'Community Wishlist',
 			WishlistConfig::WISH_CATEGORY => 'Category:Community Wishlist',

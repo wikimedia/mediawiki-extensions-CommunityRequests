@@ -31,6 +31,7 @@ class WishlistConfigTest extends MediaWikiUnitTestCase {
 		parent::setUp();
 		$this->config = $this->getConfig(
 			[
+				WishlistConfig::DECLINE_TEMPLATE => 'Template:Community Wishlist/Decline',
 				WishlistConfig::WISH_CATEGORY => 'Category:Wishes',
 				WishlistConfig::FOCUS_AREA_CATEGORY => 'Category:Focus areas',
 				WishlistConfig::TAGS => [
@@ -86,6 +87,7 @@ class WishlistConfigTest extends MediaWikiUnitTestCase {
 		$this->assertSame( '/Votes', $this->config->getVotesPageSuffix() );
 		$this->assertTrue( $this->config->isWishVotingEnabled() );
 		$this->assertTrue( $this->config->isFocusAreaVotingEnabled() );
+		$this->assertSame( 'Template:Community Wishlist/Decline', $this->config->getDeclineTemplate() );
 	}
 
 	public function testGetStatusesEligibleForVoting(): void {
@@ -251,6 +253,7 @@ class WishlistConfigTest extends MediaWikiUnitTestCase {
 	public function testGetDefaultStatusWikitextVal( array $statuses, string $expected ) {
 		$config = new WishlistConfig(
 			new ServiceOptions( WishlistConfig::CONSTRUCTOR_OPTIONS, [
+				WishlistConfig::DECLINE_TEMPLATE => 'Community Wishlist/Decline',
 				WishlistConfig::ENABLED => true,
 				WishlistConfig::HOMEPAGE => '',
 				WishlistConfig::WISH_CATEGORY => '',

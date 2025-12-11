@@ -23,6 +23,7 @@ use TypeError;
  */
 class WishlistConfig {
 
+	public const DECLINE_TEMPLATE = 'CommunityRequestsDeclineTemplate';
 	public const ENABLED = 'CommunityRequestsEnable';
 	public const HOMEPAGE = 'CommunityRequestsHomepage';
 	public const WISH_CATEGORY = 'CommunityRequestsWishCategory';
@@ -38,6 +39,7 @@ class WishlistConfig {
 	public const WISH_VOTING_ENABLED = 'CommunityRequestsWishVotingEnabled';
 	public const FOCUS_AREA_VOTING_ENABLED = 'CommunityRequestsFocusAreaVotingEnabled';
 	public const CONSTRUCTOR_OPTIONS = [
+		self::DECLINE_TEMPLATE,
 		self::ENABLED,
 		self::HOMEPAGE,
 		self::WISH_CATEGORY,
@@ -55,6 +57,7 @@ class WishlistConfig {
 		MainConfigNames::LanguageCode,
 	];
 
+	private string $declineTemplate;
 	private bool $enabled;
 	private string $homepage;
 	private string $wishCategory;
@@ -77,6 +80,7 @@ class WishlistConfig {
 		private readonly TitleFormatter $titleFormatter,
 		private readonly LanguageNameUtils $languageNameUtils,
 	) {
+		$this->declineTemplate = $config->get( self::DECLINE_TEMPLATE );
 		$this->enabled = $config->get( self::ENABLED );
 		$this->homepage = $config->get( self::HOMEPAGE );
 		$this->wishCategory = $config->get( self::WISH_CATEGORY );
@@ -98,6 +102,10 @@ class WishlistConfig {
 
 	public function isEnabled(): bool {
 		return $this->enabled;
+	}
+
+	public function getDeclineTemplate(): string {
+		return $this->declineTemplate;
 	}
 
 	public function getHomepage(): string {

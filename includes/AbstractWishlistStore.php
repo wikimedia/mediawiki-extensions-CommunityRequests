@@ -789,6 +789,20 @@ abstract class AbstractWishlistStore {
 	}
 
 	/**
+	 * Parse wikitext of a wish or focus area parser function invocation into an array of data.
+	 *
+	 * @param string $content
+	 * @return ?array
+	 */
+	public function getDeclineTemplateDataFromWikitextContent( string $content ): ?array {
+		return ( new ArgumentExtractor( $this->parserFactory, $this->titleParser ) )
+			->getTemplateArgs(
+				$this->titleParser->parseTitle( $this->config->getDeclineTemplate(), NS_TEMPLATE ),
+				$content
+			);
+	}
+
+	/**
 	 * Parse wikitext content of a wish or focus area page given its page ID.
 	 *
 	 * @param int $pageId The parsed data from the wikitext.

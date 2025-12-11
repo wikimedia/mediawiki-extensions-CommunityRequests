@@ -3,18 +3,22 @@ declare( strict_types = 1 );
 
 namespace MediaWiki\Extension\CommunityRequests;
 
+use MediaWiki\Linker\LinkTarget;
 use MediaWiki\Parser\Parser;
 use MediaWiki\Parser\ParserFactory;
 use MediaWiki\Parser\ParserOptions;
 use MediaWiki\Parser\PPFrame;
 use MediaWiki\Parser\PPNode;
 use MediaWiki\Parser\PPNode_Hash_Tree;
+use MediaWiki\Title\MalformedTitleException;
+use MediaWiki\Title\TitleParser;
 
 class ArgumentExtractor {
 	private const MAX_DEPTH = 30;
 
 	public function __construct(
 		private readonly ParserFactory $parserFactory,
+		private readonly ?TitleParser $titleParser = null
 	) {
 	}
 
@@ -27,14 +31,33 @@ class ArgumentExtractor {
 	 * @return string[]|null
 	 */
 	public function getFuncArgs( string $func, string $subFunc, string $text ): ?array {
-		$parser = $this->parserFactory->getInstance();
-		$parser->startExternalParse(
-			null, ParserOptions::newFromAnon(), Parser::OT_PLAIN
-		);
+		$parser = $this->getParser();
 		$root = $parser->preprocessToDom( $text );
 		$frame = $parser->getPreprocessor()->newFrame();
 		$synonyms = $parser->getFunctionSynonyms();
 		return $this->getArgsFromNode( $frame, $root, $synonyms, $func, $subFunc, self::MAX_DEPTH );
+	}
+
+	/**
+	 * Get the template arguments for a call to the specified template.
+	 *
+	 * @param LinkTarget $targetTitle
+	 * @param string $text
+	 * @return string[]|null
+	 */
+	public function getTemplateArgs( LinkTarget $targetTitle, string $text ): ?array {
+		$parser = $this->getParser();
+		$root = $parser->preprocessToDom( $text );
+		$frame = $parser->getPreprocessor()->newFrame();
+		return $this->getTemplateArgsFromNode( $frame, $root, $targetTitle, self::MAX_DEPTH );
+	}
+
+	private function getParser(): Parser {
+		$parser = $this->parserFactory->getInstance();
+		$parser->startExternalParse(
+			null, ParserOptions::newFromAnon(), Parser::OT_PLAIN
+		);
+		return $parser;
 	}
 
 	private function getArgsFromNode(
@@ -63,6 +86,38 @@ class ArgumentExtractor {
 			if ( $maxDepth ) {
 				$childSearchResult = $this->getArgsFromNode(
 					$frame, $child, $functionSynonyms, $targetFunc, $targetSubFunc, $maxDepth - 1 );
+				if ( $childSearchResult ) {
+					return $childSearchResult;
+				}
+			}
+		}
+		return null;
+	}
+
+	private function getTemplateArgsFromNode(
+		PPFrame $frame,
+		PPNode $root,
+		LinkTarget $targetTitle,
+		int $maxDepth
+	): ?array {
+		for ( $child = $root->getFirstChild(); $child; $child = $child->getNextSibling() ) {
+			if ( $child instanceof PPNode_Hash_Tree && $child->getName() === 'template' ) {
+				$bits = $child->splitTemplate();
+				$title = null;
+				try {
+					$title = $this->titleParser->parseTitle(
+						trim( $frame->expand( $bits['title'], PPFrame::STRIP_COMMENTS ) ),
+						NS_TEMPLATE
+					);
+				} catch ( MalformedTitleException ) {
+				}
+				if ( $title && $targetTitle->isSameLinkAs( $title ) ) {
+					return $this->extractArgs( $frame, $bits['parts'] );
+				}
+			}
+			if ( $maxDepth ) {
+				$childSearchResult = $this->getTemplateArgsFromNode(
+					$frame, $child, $targetTitle, $maxDepth - 1 );
 				if ( $childSearchResult ) {
 					return $childSearchResult;
 				}

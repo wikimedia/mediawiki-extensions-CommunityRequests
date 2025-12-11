@@ -8,6 +8,8 @@
 		<status-field
 			v-if="isWishlistManager"
 			v-model:status="wish.status"
+			:declined-reason="wish.declinedReason"
+			:declined-additional-reason="wish.declinedAdditionalReason"
 			entity-type="wish"
 			@update:status="formChanged = true"
 		></status-field>
@@ -136,6 +138,8 @@ module.exports = exports = defineComponent( {
 			type: String,
 			default: defaultStatusKey || Object.keys( CommunityRequestsStatuses )[ 0 ]
 		},
+		declinedReason: { type: String, default: '' },
+		declinedAdditionalReason: { type: String, default: '' },
 		title: { type: String, default: '' },
 		type: { type: String, default: '' }
 	},

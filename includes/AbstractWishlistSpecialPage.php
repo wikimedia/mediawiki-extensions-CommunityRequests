@@ -9,6 +9,7 @@ use MediaWiki\Context\DerivativeContext;
 use MediaWiki\EditPage\EditPage;
 use MediaWiki\Extension\CommunityRequests\HookHandler\CommunityRequestsHooks;
 use MediaWiki\Extension\CommunityRequests\HookHandler\PermissionHooks;
+use MediaWiki\Extension\CommunityRequests\Wish\Wish;
 use MediaWiki\Html\Html;
 use MediaWiki\HTMLForm\HTMLForm;
 use MediaWiki\Page\PageIdentity;
@@ -100,9 +101,30 @@ abstract class AbstractWishlistSpecialPage extends FormSpecialPage {
 			return false;
 		}
 
+		$entityArray = $entity->toArray( $this->config );
+		if ( $entityArray[ Wish::PARAM_STATUS ] === 'declined' ) {
+			// Escape the template name for use in a regex, if needed, though here we assume a simple name.
+			// The regex targets {{templateName}} or {{Template:templateName}}
+			// and optionally includes parameters (.*?) inside the braces.
+			$pattern = '/\\{\\{' . preg_quote( $this->config->getDeclineTemplate(), '/' ) . '.*?\\}\\}/is';
+			$matches = [];
+			$wikitext = $entityArray[ 'description' ];
+			preg_match( $pattern, $wikitext, $matches );
+			// Replace all occurrences of the template pattern with an empty string
+			$entityArray[ 'description' ] = preg_replace( $pattern, '', $wikitext );
+
+			if ( count( $matches ) ) {
+				$templateArgs = $this->store->getDeclineTemplateDataFromWikitextContent(
+					$matches[ 0 ]
+				);
+				$entityArray[ 'declined-reason' ] = $templateArgs[ 1 ] ?? '';
+				$entityArray[ 'declined-additional-reason' ] = $templateArgs[ 2 ] ?? '';
+			}
+		}
+
 		$this->getOutput()->addJsConfigVars( [
 			'intakeId' => $entityId,
-			'intakeData' => $entity->toArray( $this->config ),
+			'intakeData' => $entityArray
 		] );
 
 		return true;
@@ -179,6 +201,14 @@ abstract class AbstractWishlistSpecialPage extends FormSpecialPage {
 		// Grab data directly from POST request. We should use the given $data once ::getFormFields() is implemented.
 		$data = $form->getRequest()->getPostValues();
 		$data['title'] = $data['entitytitle'];
+
+		// Add decline template to wish description if wish is declined
+		if ( isset( $data[ 'declined-reason' ] ) ) {
+			$declinedReason = $data[ 'declined-reason' ];
+			$additionalReason = $data[ 'declined-additional-reason' ];
+			$declineTemplate = "{{" . $this->config->getDeclineTemplate() . "|$declinedReason|$additionalReason}}";
+			$data[ 'description' ] = $declineTemplate . "\n" . $data[ 'description' ];
+		}
 
 		// API wants pipe-separated arrays, not CSV.
 		$data = $this->store->normalizeArrayValues( $data, AbstractWishlistStore::ARRAY_DELIMITER_API );

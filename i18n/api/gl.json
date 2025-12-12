@@ -46,6 +46,8 @@
 	"apihelp-query+communityrequests-wishes-param-dir": "A dirección pola que ordenar.",
 	"apihelp-query+communityrequests-wishes-param-limit": "Número máximo de desexos a devolver.",
 	"apihelp-query+communityrequests-wishes-param-count": "Inclúe unha conta do número total de desexos na resposta.",
+	"apihelp-query+communityrequests-wishes-param-start": "Devolver só os desexos creados nesta marca de tempo ou despois.",
+	"apihelp-query+communityrequests-wishes-param-end": "Devolver só os desexos creados nesta marca de tempo ou antes.",
 	"apihelp-query+communityrequests-wishes-paramvalue-prop-status": "Estado do desexo",
 	"apihelp-query+communityrequests-wishes-paramvalue-prop-type": "Tipo de desexo",
 	"apihelp-query+communityrequests-wishes-paramvalue-prop-title": "Título do desexo",

@@ -47,6 +47,8 @@
 	"apihelp-query+communityrequests-wishes-param-dir": "排序的方向。",
 	"apihelp-query+communityrequests-wishes-param-limit": "回傳的願望數量上限。",
 	"apihelp-query+communityrequests-wishes-param-count": "回應中包含願望總數。",
+	"apihelp-query+communityrequests-wishes-param-start": "僅回傳在此時間戳記或之後建立的願望。",
+	"apihelp-query+communityrequests-wishes-param-end": "僅回傳在此時間戳記或之前建立的願望。",
 	"apihelp-query+communityrequests-wishes-paramvalue-prop-status": "願望的狀態",
 	"apihelp-query+communityrequests-wishes-paramvalue-prop-type": "願望的類型",
 	"apihelp-query+communityrequests-wishes-paramvalue-prop-title": "願望的標題",

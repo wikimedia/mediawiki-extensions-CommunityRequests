@@ -47,6 +47,8 @@
 	"apihelp-query+communityrequests-wishes-param-dir": "Die Sortierrichtung.",
 	"apihelp-query+communityrequests-wishes-param-limit": "Die maximale Anzahl der zurückzugebenden Wünsche.",
 	"apihelp-query+communityrequests-wishes-param-count": "Hinzufügen der Zählung der Gesamtzahl der Wünsche in der Antwort.",
+	"apihelp-query+communityrequests-wishes-param-start": "Es werden nur Wünsche zurückgegeben, die am oder nach diesem Zeitpunkt erstellt wurden.",
+	"apihelp-query+communityrequests-wishes-param-end": "Es werden nur Wünsche zurückgegeben, die vor oder am heutigen Tag erstellt wurden.",
 	"apihelp-query+communityrequests-wishes-paramvalue-prop-status": "Status des Wunsches",
 	"apihelp-query+communityrequests-wishes-paramvalue-prop-type": "Die Art des Wunsches",
 	"apihelp-query+communityrequests-wishes-paramvalue-prop-title": "Titel des Wunsches",

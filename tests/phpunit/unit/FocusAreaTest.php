@@ -38,7 +38,7 @@ class FocusAreaTest extends MediaWikiUnitTestCase {
 			[
 				[
 					FocusArea::PARAM_TITLE => 'Improve search functionality',
-					FocusArea::PARAM_STATUS => 1,
+					FocusArea::PARAM_STATUS => 3,
 					FocusArea::PARAM_DESCRIPTION => 'Make [[search]] results more relevant and faster.',
 					FocusArea::PARAM_SHORT_DESCRIPTION => '[[Search]] improvements',
 					FocusArea::PARAM_OWNERS => '[[Community Tech]]',
@@ -48,7 +48,7 @@ class FocusAreaTest extends MediaWikiUnitTestCase {
 				],
 				<<<"END"
 {{#CommunityRequests: focus-area
-| status = unsupported
+| status = community-opportunity
 | title = Improve search functionality
 | description = Make [[search]] results more relevant and faster.
 | shortdescription = [[Search]] improvements
@@ -78,14 +78,14 @@ END
 		return [
 			[
 				[
-					FocusArea::PARAM_STATUS => 1,
+					FocusArea::PARAM_STATUS => 3,
 					FocusArea::PARAM_TITLE => 'Improve search functionality',
 					FocusArea::PARAM_CREATED => '2023-10-01T12:00:00Z',
 					FocusArea::PARAM_BASE_LANG => 'en',
 					FocusArea::PARAM_VOTE_COUNT => 42,
 				],
 				[
-					FocusArea::PARAM_STATUS => 'unsupported',
+					FocusArea::PARAM_STATUS => 'community-opportunity',
 					FocusArea::PARAM_TITLE => 'Improve search functionality',
 					FocusArea::PARAM_DESCRIPTION => null,
 					FocusArea::PARAM_SHORT_DESCRIPTION => '',
@@ -123,7 +123,7 @@ END
 			[
 				[
 					FocusArea::PARAM_TITLE => 'Improve search functionality',
-					FocusArea::PARAM_STATUS => 'unsupported',
+					FocusArea::PARAM_STATUS => 'community-opportunity',
 					FocusArea::PARAM_DESCRIPTION => 'Make [[search]] results more relevant and faster.',
 					FocusArea::PARAM_SHORT_DESCRIPTION => '[[Search]] improvements',
 					FocusArea::PARAM_OWNERS => '[[Community Tech]]',
@@ -132,7 +132,7 @@ END
 				],
 				[
 					FocusArea::PARAM_TITLE => 'Improve search functionality',
-					FocusArea::PARAM_STATUS => 1,
+					FocusArea::PARAM_STATUS => 3,
 					FocusArea::PARAM_DESCRIPTION => 'Make [[search]] results more relevant and faster.',
 					FocusArea::PARAM_SHORT_DESCRIPTION => '[[Search]] improvements',
 					FocusArea::PARAM_OWNERS => '[[Community Tech]]',

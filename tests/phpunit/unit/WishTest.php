@@ -38,7 +38,7 @@ class WishTest extends MediaWikiUnitTestCase {
 			[
 				[
 					Wish::PARAM_TITLE => 'Improve search functionality',
-					Wish::PARAM_STATUS => 1,
+					Wish::PARAM_STATUS => 3,
 					Wish::PARAM_DESCRIPTION => 'Make [[search]] results more relevant and faster.',
 					Wish::PARAM_TYPE => 2,
 					Wish::PARAM_TAGS => [ 0, 6, 7 ],
@@ -49,7 +49,7 @@ class WishTest extends MediaWikiUnitTestCase {
 				],
 				<<<"END"
 {{#CommunityRequests: wish
-| status = unsupported
+| status = community-opportunity
 | type = change
 | title = Improve search functionality
 | focusarea = \n| description = Make [[search]] results more relevant and faster.
@@ -86,13 +86,13 @@ END
 					Wish::PARAM_UPDATED => '2023-10-02T12:00:00Z',
 					Wish::PARAM_PHAB_TASKS => [ 123, 456 ],
 					Wish::PARAM_TAGS => [ 0, 6, 7 ],
-					Wish::PARAM_STATUS => 1,
+					Wish::PARAM_STATUS => 3,
 					Wish::PARAM_TITLE => 'Improve search functionality',
 					Wish::PARAM_TYPE => 2,
 					Wish::PARAM_VOTE_COUNT => 3,
 				],
 				[
-					Wish::PARAM_STATUS => 'unsupported',
+					Wish::PARAM_STATUS => 'community-opportunity',
 					Wish::PARAM_TYPE => 'change',
 					Wish::PARAM_TITLE => 'Improve search functionality',
 					Wish::PARAM_FOCUS_AREA => '',
@@ -162,7 +162,7 @@ END
 			[
 				[
 					Wish::PARAM_TITLE => 'Improve search functionality',
-					Wish::PARAM_STATUS => 'unsupported',
+					Wish::PARAM_STATUS => 'community-opportunity',
 					Wish::PARAM_DESCRIPTION => 'Make [[search]] results more relevant and faster.',
 					Wish::PARAM_TYPE => 'change',
 					Wish::PARAM_TAGS => 'admins, multimedia  , newcomers,bogus',
@@ -173,7 +173,7 @@ END
 				],
 				[
 					Wish::PARAM_TITLE => 'Improve search functionality',
-					Wish::PARAM_STATUS => 1,
+					Wish::PARAM_STATUS => 3,
 					Wish::PARAM_DESCRIPTION => 'Make [[search]] results more relevant and faster.',
 					Wish::PARAM_TYPE => 2,
 					Wish::PARAM_TAGS => [ 0, 8, 9 ],

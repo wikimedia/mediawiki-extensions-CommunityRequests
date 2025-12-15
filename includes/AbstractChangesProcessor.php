@@ -169,8 +169,6 @@ abstract class AbstractChangesProcessor implements LocalizationContext {
 			AbstractWishlistEntity::PARAM_STATUS => function ( string $status ) {
 				// Messages are configurable but by default may include:
 				// * communityrequests-status-wish-under-review
-				// * communityrequests-status-wish-accepted
-				// * communityrequests-status-wish-unsupported
 				// * communityrequests-status-wish-declined
 				// * communityrequests-status-wish-community-opportunity
 				// * communityrequests-status-wish-long-term-opportunity
@@ -179,8 +177,6 @@ abstract class AbstractChangesProcessor implements LocalizationContext {
 				// * communityrequests-status-wish-in-progress
 				// * communityrequests-status-wish-done
 				// * communityrequests-status-focus-area-under-review
-				// * communityrequests-status-focus-area-accepted
-				// * communityrequests-status-focus-area-unsupported
 				// * communityrequests-status-focus-area-declined
 				// * communityrequests-status-focus-area-community-opportunity
 				// * communityrequests-status-focus-area-long-term-opportunity

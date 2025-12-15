@@ -48,8 +48,6 @@ class Util {
 	static wishStatus( status ) {
 		// Messages used here include:
 		// * communityrequests-status-wish-under-review
-		// * communityrequests-status-wish-accepted
-		// * communityrequests-status-wish-unsupported
 		// * communityrequests-status-wish-declined
 		// * communityrequests-status-wish-community-opportunity
 		// * communityrequests-status-wish-long-term-opportunity

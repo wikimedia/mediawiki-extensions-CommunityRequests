@@ -722,12 +722,6 @@
 					"voting": false,
 					"default": true
 				},
-				"accepted": {
-					"id": 9
-				},
-				"unsupported": {
-					"id": 1
-				},
 				"declined": {
 					"id": 2,
 					"excluded": true,

@@ -16,9 +16,14 @@ class TranslateHooks implements TranslateTitlePageTranslationHook {
 	}
 
 	/** @inheritDoc */
-	public function onTranslateTitlePageTranslation( TranslateTitleEnum &$state, PageIdentity $pageIdentity ): void {
-		if ( $this->config->isEnabled() && $this->config->isEntityPage( $pageIdentity ) ) {
+	public function onTranslateTitlePageTranslation(
+		TranslateTitleEnum &$state,
+		PageIdentity $page,
+		?string &$reason
+	): void {
+		if ( $this->config->isEnabled() && $this->config->isEntityPage( $page ) ) {
 			$state = TranslateTitleEnum::DISABLED;
+			$reason = wfMessage( 'communityrequests-translate-title-disabled-reason' )->escaped();
 		}
 	}
 }

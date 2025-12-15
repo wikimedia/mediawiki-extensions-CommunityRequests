@@ -239,5 +239,6 @@
 	"communityrequests-wish-count": "Label for the number of the number of wishes in a focus area.\n\nParameters:\n* $1 — Formatted number of wishes.\n* $2 — Unformatted integer number of wishes, to determine plural grammar.",
 	"communityrequests-vote-count": "Label for the number of votes a wish or focus area has received.\n\nParameters:\n* $1 — Formatted number of supporters.\n* $2 — Unformatted integer number of supporters, to determine plural grammar.",
 	"communityrequests-wish-talk-subtitle": "Subtitle text shown on the talk page of a wish.\n\nParameters:\n* $1 — Link to the wish page with the entity ID and title as the link text.\n* $2 — Links to proposer's user and user talk pages.",
-	"communityrequests-focus-area-talk-subtitle": "Subtitle text shown on the talk page of a focus area.\n\nParameters:\n* $1 — Link to the focus area page with the entity ID and title as the link text."
+	"communityrequests-focus-area-talk-subtitle": "Subtitle text shown on the talk page of a focus area.\n\nParameters:\n* $1 — Link to the focus area page with the entity ID and title as the link text.",
+	"communityrequests-translate-title-disabled-reason": "The reason why translation of page titles is disabled at Special:PageTranslation."
 }

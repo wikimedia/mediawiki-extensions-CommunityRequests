@@ -234,5 +234,6 @@
 	"communityrequests-wish-count": "$1 {{PLURAL:$2|Wunsch|Wünsche}}",
 	"communityrequests-vote-count": "$1 {{PLURAL:$2|Unterstützer}}",
 	"communityrequests-wish-talk-subtitle": "Diskussion für $1 vorgeschlagen von $2",
-	"communityrequests-focus-area-talk-subtitle": "Diskussion für $1"
+	"communityrequests-focus-area-talk-subtitle": "Diskussion für $1",
+	"communityrequests-translate-title-disabled-reason": "Die Seiten der Community-Wunschliste haben einen eigenen, übersetzbaren Anzeigetitel."
 }

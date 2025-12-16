@@ -235,5 +235,6 @@
 	"communityrequests-wish-count": "$1個{{PLURAL:$2|願望}}",
 	"communityrequests-vote-count": "$1位{{PLURAL:$2|支持者}}",
 	"communityrequests-wish-talk-subtitle": "$1的討論，由$2提出",
-	"communityrequests-focus-area-talk-subtitle": "$1的討論"
+	"communityrequests-focus-area-talk-subtitle": "$1的討論",
+	"communityrequests-translate-title-disabled-reason": "社群願望清單頁面有其可翻譯的顯示標題。"
 }

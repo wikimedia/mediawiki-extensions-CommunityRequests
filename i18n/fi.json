@@ -212,7 +212,7 @@
 	"group-community-wishlist-manager": "Yhteisön toivelistan hallinnoijat",
 	"group-community-wishlist-manager-member": "Yhteisön toivelistan {{GENDER:$1|hallinnoija}}",
 	"communityrequests-cant-manually-edit": "Yhteisön toivelistan sivuja tulee muokata [[$1|syöttölomakkeen]] kautta.",
-	"communityrequests-cant-manually-edit-votes": "Tämän toivelistakohteen äänestäminen on tehtävä [[äänestyslomakkeen]] kautta.",
+	"communityrequests-cant-manually-edit-votes": "Tämän toivelistakohteen äänestäminen on tehtävä [[$1|äänestyslomakkeen]] kautta.",
 	"communityrequests-missing-wish": "Tätä toivetta ei ole olemassa. Voit [{{fullurl:{{#Special:Log}}|page={{FULLPAGENAMEE}}}} selata siihen liittyviä lokeja] ottaaksesi selvää, mitä sille on tapahtunut, tai [[$1|luoda uuden toiveen]].",
 	"communityrequests-missing-focus-area": "Tätä painopistealuetta ei ole olemassa. Voit [{{fullurl:{{#Special:Log}}|page={{FULLPAGENAMEE}}}} selata siihen liittyviä lokeja] ottaaksesi selvää, mitä sille on tapahtunut, tai [[$1|luoda uuden painopistealueen]].",
 	"communityrequests-wishlist-machine-translation": "Ota käyttöön automaattinen kääntäminen [[$1|yhteisön toivelistalla]].",

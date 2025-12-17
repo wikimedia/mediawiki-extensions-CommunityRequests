@@ -233,5 +233,6 @@
 	"communityrequests-wish-count": "$1 {{PLURAL:$2|desexo|desexos}}",
 	"communityrequests-vote-count": "$1 {{PLURAL:$2|incondicional|incondicionais}}",
 	"communityrequests-wish-talk-subtitle": "Conversa sobre «$1» proposta por $2",
-	"communityrequests-focus-area-talk-subtitle": "Conversa sobre «$1»"
+	"communityrequests-focus-area-talk-subtitle": "Conversa sobre «$1»",
+	"communityrequests-translate-title-disabled-reason": "As páxinas da lista de desexos da comunidade teñen o seu propio título traducible para mostrar."
 }

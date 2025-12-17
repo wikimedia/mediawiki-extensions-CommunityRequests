@@ -233,5 +233,6 @@
 	"communityrequests-wish-count": "$1 {{PLURAL:$2|dilek}}",
 	"communityrequests-vote-count": "$1 {{PLURAL:$2|destekçi}}",
 	"communityrequests-wish-talk-subtitle": "$2 tarafından önerilen $1 için tartışma",
-	"communityrequests-focus-area-talk-subtitle": "$1 için tartışma"
+	"communityrequests-focus-area-talk-subtitle": "$1 için tartışma",
+	"communityrequests-translate-title-disabled-reason": "Topluluk Dilek Listesi sayfalarının çevrilebilir başlıkları vardır."
 }

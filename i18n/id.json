@@ -1,10 +1,11 @@
 {
 	"@metadata": {
 		"authors": [
-			"Birusian"
+			"Birusian",
+			"Penyuwangi"
 		]
 	},
-	"communityrequests-wish-loading-error": "There was an error while parsing the wish source text. It may contain invalid wikitext. Please [$1 refresh] and try again, use the [[$2|source editor]], or ask for help on the [[$3|talk page]].",
+	"communityrequests-wish-loading-error": "Terjadi kesalahan saat mengurai teks sumber permintaan. Teks tersebut mungkin berisi teks wiki yang tidak sah. Silakan [$1 segarkan] dan coba lagi, gunakan [[$2|penyunting sumber]], atau minta bantuan di [[$3|halaman pembicaraan]].",
 	"communityrequests-edit-with-form": "Menyunting dengan formulir",
 	"communityrequests-form-subtitle": "Selamat datang di halaman Harapan Komunitas yang terbaru (sebelumnya Survei Harapan Komunitas). Silakan isi formulir berikut untuk menyampaikan permohonan Anda.",
 	"communityrequests-form-error": "Terjadi kesalahan. Silahkan coba simpan lagi, atau minta bantuan di [[$1|halaman pembicaraan]].",
@@ -44,7 +45,7 @@
 	"communityrequests-wish-type-heading": "Jenis permohonan",
 	"communityrequests-wish-audience-heading": "Pengguna yang terkena dampak",
 	"communityrequests-wish-phabricator-heading": "Tiket Phabricator",
-	"communityrequests-wish-other-details-heading": "Detail lainnya",
+	"communityrequests-wish-other-details-heading": "Rincian lainnya",
 	"communityrequests-wish-created": "Dibuat",
 	"communityrequests-wish-updated": "Terakhir diperbarui",
 	"communityrequests-wish-proposer": "Pengirim",

@@ -11,7 +11,8 @@
 			"Marphy 123",
 			"McDutchie",
 			"SleaY",
-			"WillyM"
+			"WillyM",
+			"MusikAnimal"
 		]
 	},
 	"communityrequests-desc": "Un système de gestion des suggestions et des demandes techniques d'une communauté wiki.",
@@ -205,7 +206,7 @@
 	"communityrequests-save-wish-summary": "Mise à jour du souhait « $1 »",
 	"communityrequests-publish-focus-area-summary": "Publication du domaine d’action « $1 »",
 	"communityrequests-save-focus-area-summary": "Mise à jour du domaine d’action « $1 »",
-	"communityrequests-support-label": "Assistance",
+	"communityrequests-support-label": "Soutien",
 	"communityrequests-update-label": "Mettre à jour",
 	"communityrequests-error-category": "Pages avec des erreurs de liste de souhaits de la communauté",
 	"communityrequests-error-category-desc": "Les pages de cette catégorie sont des souhaits de la liste de souhaits de la communauté ou des domaines d’action qui contiennent des erreurs.",

@@ -2,6 +2,7 @@
 	"@metadata": {
 		"authors": [
 			"Aoum",
+			"Pawsdt",
 			"Peterxy12"
 		]
 	},
@@ -18,6 +19,8 @@
 	"apihelp-wishedit-param-proposer": "提出愿望的用户。",
 	"apihelp-wishedit-param-created": "愿望的建立日期和时间。",
 	"apihelp-query+communityrequests-wishes-param-prop": "要获取的属性。",
+	"apihelp-query+communityrequests-wishes-param-start": "仅返回在此时间戳或之后创建的愿望。",
+	"apihelp-query+communityrequests-wishes-param-end": "仅返回在此时间戳或之前创建的愿望。",
 	"apihelp-query+communityrequests-wishes-paramvalue-prop-type": "愿望的类型",
 	"apihelp-query+communityrequests-wishes-paramvalue-prop-title": "愿望的标题",
 	"apihelp-query+communityrequests-wishes-paramvalue-prop-focusarea": "愿望所属的重点领域",

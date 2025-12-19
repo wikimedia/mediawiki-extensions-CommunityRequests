@@ -86,6 +86,7 @@
 	"communityrequests-status-wish-prioritized": "Priorisiert",
 	"communityrequests-status-wish-in-progress": "In Bearbeitung",
 	"communityrequests-status-wish-done": "Fertig",
+	"communityrequests-status-wish-unknown": "Unbekannt",
 	"communityrequests-status-focus-area-under-review": "In der Überprüfung",
 	"communityrequests-status-focus-area-accepted": "Akzeptiert",
 	"communityrequests-status-focus-area-unsupported": "Nicht unterstützt",
@@ -96,6 +97,7 @@
 	"communityrequests-status-focus-area-prioritized": "Priorisiert",
 	"communityrequests-status-focus-area-in-progress": "In Bearbeitung",
 	"communityrequests-status-focus-area-done": "Fertig",
+	"communityrequests-status-focus-area-unknown": "Unbekannt",
 	"communityrequests-error-invalid-status": "Ungültiger Status: „$1“",
 	"communityrequests-edit-wish": "Wunsch bearbeiten",
 	"communityrequests-discuss-wish": "Diskutiere diesen Wunsch",
@@ -235,5 +237,8 @@
 	"communityrequests-vote-count": "$1 {{PLURAL:$2|Unterstützer}}",
 	"communityrequests-wish-talk-subtitle": "Diskussion für $1 vorgeschlagen von $2",
 	"communityrequests-focus-area-talk-subtitle": "Diskussion für $1",
-	"communityrequests-translate-title-disabled-reason": "Die Seiten der Community-Wunschliste haben einen eigenen, übersetzbaren Anzeigetitel."
+	"communityrequests-translate-title-disabled-reason": "Die Seiten der Community-Wunschliste haben einen eigenen, übersetzbaren Anzeigetitel.",
+	"communityrequests-log-name": "Community-Wunschliste-Logbuch",
+	"log-description-communityrequests": "Diese Seite listet relevante Aktionen im Zusammenhang mit Wünschen und Schwerpunkten der Community-Wunschliste auf.",
+	"log-action-filter-communityrequests": "Typ der Aktion:"
 }

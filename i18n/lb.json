@@ -99,5 +99,7 @@
 	"tag-community-wishlist": "[[Special:MyLanguage/Community Wishlist|Communautéitswonschlëscht]]",
 	"communityrequests-wish-count": "$1 {{PLURAL:$2|Wonsch|Wënsch}}",
 	"communityrequests-vote-count": "$1 {{PLURAL:$2|Ënnerstëtzer}}",
-	"communityrequests-focus-area-talk-subtitle": "Diskussioun fir $1"
+	"communityrequests-focus-area-talk-subtitle": "Diskussioun fir $1",
+	"logentry-communityrequests-focus-area-create": "{{GENDER:$2|De(n) $1|D'$1}} huet de Fokusberäich „$3“ ugeluecht",
+	"logentry-communityrequests-focus-area-status-change": "{{GENDER:$2|De(n) $1|D'$1}} huet de Status vu(n) „$3“ vu(n) „$4“ op „$5“ geännert"
 }

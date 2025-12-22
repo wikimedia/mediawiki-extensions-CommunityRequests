@@ -28,10 +28,12 @@
 	"communityrequests-status-wish-declined": "одбијено",
 	"communityrequests-status-wish-in-progress": "у току",
 	"communityrequests-status-wish-done": "урађено",
+	"communityrequests-status-wish-unknown": "Непознато",
 	"communityrequests-status-focus-area-accepted": "Прихваћено",
 	"communityrequests-status-focus-area-declined": "Одбијено",
 	"communityrequests-status-focus-area-in-progress": "У току",
 	"communityrequests-status-focus-area-done": "Готово",
+	"communityrequests-status-focus-area-unknown": "Непознато",
 	"communityrequests-tag-admins": "Админи и стјуарди",
 	"communityrequests-tag-bots-gadgets": "Ботови и геџети",
 	"communityrequests-tag-categories": "Категорије",
@@ -81,5 +83,8 @@
 	"communityrequests-entity-summary-title-changed": "Промењен наслов из „$1“ у „$2“",
 	"communityrequests-entity-summary-tags-added": "{{PLURAL:$2|Додата ознака|Додате ознаке}}: $1",
 	"communityrequests-entity-summary-tags-removed": "{{PLURAL:$2|Уклоњена ознака|Уклоњене ознаке}}: $1",
-	"communityrequests-support-label": "Подршка"
+	"communityrequests-support-label": "Подршка",
+	"logentry-communityrequests-wish-create": "$1 {{GENDER:$2|направио|направила}} је жељу „$3”",
+	"logentry-communityrequests-wish-status-change": "$1 {{GENDER:$2|променио|променила}} је статус „$3” из „$4” у „$5”",
+	"logentry-communityrequests-focus-area-status-change": "$1 {{GENDER:$2|променио|променила}} је статус „$3” из „$4” у „$5”"
 }

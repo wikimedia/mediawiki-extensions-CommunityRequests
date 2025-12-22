@@ -53,6 +53,7 @@
 	"communityrequests-error-invalid-entity-field": "Il parametro 'campo' deve essere uno dei seguenti: $1",
 	"communityrequests-status": "Stato",
 	"communityrequests-status-wish-in-progress": "In corso",
+	"communityrequests-status-wish-unknown": "Sconosciuto",
 	"communityrequests-status-focus-area-under-review": "In fase di revisione",
 	"communityrequests-status-focus-area-accepted": "Accettato",
 	"communityrequests-status-focus-area-unsupported": "Non supportato",
@@ -62,6 +63,7 @@
 	"communityrequests-status-focus-area-near-term-opportunity": "Opportunità a breve termine",
 	"communityrequests-status-focus-area-in-progress": "In corso",
 	"communityrequests-status-focus-area-done": "Fatto",
+	"communityrequests-status-focus-area-unknown": "Sconosciuto",
 	"communityrequests-edit-wish": "Modifica desiderio",
 	"communityrequests-discuss-wish": "Discuti questo desiderio",
 	"communityrequests-wish-description-heading": "Descrizione",
@@ -129,5 +131,11 @@
 	"communityrequests-entity-summary-volunteers-updated": "Aggiornati volontari",
 	"communityrequests-support-label": "Supporto",
 	"communityrequests-vote-remove-summary": "Rimozione del voto di supporto",
-	"communityrequests-vote-count": "$1 {{PLURAL:$2|sostenitore|sostenitori}}"
+	"communityrequests-vote-count": "$1 {{PLURAL:$2|sostenitore|sostenitori}}",
+	"communityrequests-log-name": "Registro dei desideri della comunità",
+	"log-action-filter-communityrequests": "Tipo di azione:",
+	"logentry-communityrequests-wish-status-change": "$1 {{GENDER:$2|ha modificato}} lo stato di \"$3\" da \"$4\" a \"$5\"",
+	"logentry-communityrequests-wish-focusarea-change": "$1 {{GENDER:$2|ha modificato}} l'area di interesse di \"$3\" da \"$4\" a \"$5\"",
+	"logentry-communityrequests-focus-area-create": "$1 {{GENDER:$2|ha creato}} l'area di interesse \"$3\"",
+	"logentry-communityrequests-focus-area-status-change": "$1 {{GENDER:$2|ha modificato}} lo stato di \"$3\" da \"$4\" a \"$5\""
 }

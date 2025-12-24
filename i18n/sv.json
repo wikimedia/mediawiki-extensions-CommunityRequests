@@ -1,6 +1,8 @@
 {
 	"@metadata": {
-		"authors": []
+		"authors": [
+			"Stefan2255"
+		]
 	},
 	"communityrequests-status-wish-in-progress": "Pågående",
 	"communityrequests-edit-wish": "Redigera önskan",
@@ -11,9 +13,9 @@
 	"communityrequests-wish-audience-heading": "Påverkade användare",
 	"communityrequests-wish-phabricator-heading": "Phabricator-ärenden",
 	"communityrequests-wish-other-details-heading": "Övriga detaljer",
-	"communityrequests-wish-created": "Skapad",
-	"communityrequests-wish-updated": "Senast uppdaterad",
-	"communityrequests-wish-proposer": "Författare",
+	"communityrequests-wish-created": "Skapades: $1",
+	"communityrequests-wish-updated": "Senast uppdaterad: $1",
+	"communityrequests-wish-proposer": "Författare: $1",
 	"communityrequests-wishes-status-header": "Status",
 	"communityrequests-wishes-type-header": "Typ",
 	"communityrequests-focus-area-unassigned": "Otilldelad",

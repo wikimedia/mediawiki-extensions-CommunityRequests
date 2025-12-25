@@ -2,6 +2,7 @@
 	"@metadata": {
 		"authors": [
 			"Beta16",
+			"Dream Indigo",
 			"Egidio24"
 		]
 	},
@@ -24,7 +25,7 @@
 	"communityrequests-wishtype-bug-description": "Vuoi che venga risolto un problema o un bug di una funzionalità esistente.",
 	"communityrequests-wishtype-change-label": "Modifica al sistema",
 	"communityrequests-wishtype-change-description": "Vuoi che una funzionalità esistente venga modificata.",
-	"communityrequests-wishtype-unknown-label": "Non ne sono sicuro o non lo so",
+	"communityrequests-wishtype-unknown-label": "Non ne sono sicuro/a o non lo so",
 	"communityrequests-wishtype-unknown-description": "Dopo aver ricevuto il tuo desiderio, gli assegneremo una tipologia apposita.",
 	"communityrequests-wishtype-unknown-label-short": "Sconosciuto",
 	"communityrequests-wishtype-error": "Seleziona una tipologia di desiderio.",
@@ -93,7 +94,7 @@
 	"communityrequests-wish-other-details-heading": "Altri dettagli",
 	"communityrequests-wish-created": "Creato: $1",
 	"communityrequests-wish-updated": "Ultimo aggiornamento: $1",
-	"communityrequests-wish-proposer": "Autore: $1",
+	"communityrequests-wish-proposer": "Autore/rice: $1",
 	"communityrequests-wish-voting": "Voto",
 	"communityrequests-wishes-status-header": "Stato",
 	"communityrequests-wishes-table-caption": "Elenco dei desideri",

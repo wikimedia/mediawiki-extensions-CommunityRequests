@@ -39,6 +39,8 @@
 	"communityrequests-status-wish-declined": "Refuséiert",
 	"communityrequests-status-wish-in-progress": "Amgaang",
 	"communityrequests-status-wish-done": "Fäerdeg",
+	"communityrequests-status-wish-unknown": "Onbekannt",
+	"communityrequests-status-focus-area-unknown": "Onbekannt",
 	"communityrequests-error-invalid-status": "Ongültege Status: „$1“",
 	"communityrequests-edit-wish": "Wonsch änneren",
 	"communityrequests-discuss-wish": "Dëse Wonsch diskutéieren",
@@ -100,6 +102,7 @@
 	"communityrequests-wish-count": "$1 {{PLURAL:$2|Wonsch|Wënsch}}",
 	"communityrequests-vote-count": "$1 {{PLURAL:$2|Ënnerstëtzer}}",
 	"communityrequests-focus-area-talk-subtitle": "Diskussioun fir $1",
+	"logentry-communityrequests-wish-create": "{{GENDER:$2|De(n) $1|D'$1}} huet de Wonsch „$3“ ugeluecht",
 	"logentry-communityrequests-focus-area-create": "{{GENDER:$2|De(n) $1|D'$1}} huet de Fokusberäich „$3“ ugeluecht",
 	"logentry-communityrequests-focus-area-status-change": "{{GENDER:$2|De(n) $1|D'$1}} huet de Status vu(n) „$3“ vu(n) „$4“ op „$5“ geännert"
 }

@@ -62,7 +62,7 @@
 	"apihelp-query+communityrequests-wishes-paramvalue-prop-created": "願望的建立日期和時間",
 	"apihelp-query+communityrequests-wishes-paramvalue-prop-updated": "願望最後更新的日期和時間",
 	"apihelp-query+communityrequests-wishes-paramvalue-prop-baselang": "願望原文語言",
-	"apihelp-query+communityrequests-wishes-paramvalue-prop-langinfo": "包含語言代碼、願望方向和其重點領域（如適用）。",
+	"apihelp-query+communityrequests-wishes-paramvalue-prop-langinfo": "包含願望與其重點領域的語言代碼和書寫方向（如適用）。",
 	"apihelp-query+communityrequests-wishes-paramvalue-sort-created": "依建立日期排序",
 	"apihelp-query+communityrequests-wishes-paramvalue-sort-updated": "依最後更新日期排序",
 	"apihelp-query+communityrequests-wishes-paramvalue-sort-votecount": "依支持者人數排序",

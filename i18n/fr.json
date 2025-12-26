@@ -11,6 +11,7 @@
 			"Marphy 123",
 			"McDutchie",
 			"MusikAnimal",
+			"Poro26",
 			"SleaY",
 			"WillyM"
 		]
@@ -249,6 +250,7 @@
 	"communityrequests-focus-area-talk-subtitle": "Discussion pour $1",
 	"communityrequests-translate-title-disabled-reason": "Les pages de la liste de souhaits de la communauté ont leur propre titre d'affichage traduisible.",
 	"communityrequests-log-name": "Journal des souhaits de la communauté",
+	"log-description-communityrequests": "Cette page répertorie les actions importantes concernant les souhaits et les axes prioritaires de la liste de souhaits de la communauté.",
 	"log-action-filter-communityrequests": "Type d’action :",
 	"log-action-filter-communityrequests-wish-create": "Création de souhaits",
 	"log-action-filter-communityrequests-wish-status-change": "Modification du statut des souhaits",

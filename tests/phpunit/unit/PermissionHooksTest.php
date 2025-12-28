@@ -114,6 +114,18 @@ class PermissionHooksTest extends MediaWikiUnitTestCase {
 			[
 				[ 'action' => 'view' ],
 				true,
+			],
+			[
+				[ 'canManuallyEdit' => false, 'action' => 'undelete' ],
+				false,
+				[
+					[ 'communityrequests-cant-manually-edit', $this->makeMockTitle( 'Special:WishlistIntake' ) ],
+					'badaccess-groups'
+				]
+			],
+			[
+				[ 'canManuallyEdit' => true, 'action' => 'undelete' ],
+				true,
 			]
 		];
 	}

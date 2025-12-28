@@ -28,7 +28,7 @@ class PermissionHooks implements GetUserPermissionsErrorsExpensiveHook, TitleIsM
 	/**
 	 * Whether the user is allowed to manually edit wish and focus area pages.
 	 * This is set to true when the user is editing a wish or focus area using the special pages,
-	 * and in some tests.
+	 * when undeleting pages (and has the 'manually-edit-wishlist' right), and in some tests.
 	 */
 	public static bool $allowManualEditing = false;
 
@@ -44,8 +44,7 @@ class PermissionHooks implements GetUserPermissionsErrorsExpensiveHook, TitleIsM
 	public function onGetUserPermissionsErrorsExpensive( $title, $user, $action, &$result ): bool {
 		if ( !$this->config->isEnabled() || !$this->isEntityPageOrEditPage( $title ) ) {
 			return true;
-		}
-		if ( $action !== 'edit' ) {
+		} elseif ( !in_array( $action, [ 'edit', 'undelete' ] ) ) {
 			return true;
 		}
 
@@ -55,6 +54,14 @@ class PermissionHooks implements GetUserPermissionsErrorsExpensiveHook, TitleIsM
 		}
 
 		$userHasRight = $this->permissionManager->userHasRight( $user, 'manually-edit-wishlist' );
+
+		// Allow 'manually-edit-wishlist' users to undelete pages (T406668).
+		// The 'undelete' permission is checked earlier in UndeletePage, so just the action check is sufficient here.
+		if ( $userHasRight && $action === 'undelete' ) {
+			self::$allowManualEditing = true;
+			return true;
+		}
+
 		if ( !$userHasRight || !$title->exists() ) {
 			$result = [];
 

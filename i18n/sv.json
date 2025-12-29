@@ -5,6 +5,8 @@
 		]
 	},
 	"communityrequests-status-wish-in-progress": "Pågående",
+	"communityrequests-status-wish-unknown": "Okänd",
+	"communityrequests-status-focus-area-unknown": "Okänd",
 	"communityrequests-edit-wish": "Redigera önskan",
 	"communityrequests-discuss-wish": "Diskutera den här önskan",
 	"communityrequests-wish-description-heading": "Beskrivning",
@@ -23,5 +25,18 @@
 	"communityrequests-form-loading": "Laddar intagsformulär...",
 	"communityrequests-form-loading-1": "Om formuläret inte laddar in, se till att du har aktiverat JavaScript.",
 	"communityrequests-form-loading-2": "Har du fortfarande problem kan du be om hjälp på $1.",
-	"communityrequests-please-log-in": "Logga in för att skicka in en önskan."
+	"communityrequests-please-log-in": "Logga in för att skicka in en önskan.",
+	"communityrequests-log-name": "Önskelistalogg för gemenskapen",
+	"log-description-communityrequests": "Den här sidan listar viktiga åtgärder som rör önskemål och fokusområden i gemenskapens önskelista.",
+	"log-action-filter-communityrequests": "Typ av åtgärd:",
+	"log-action-filter-communityrequests-wish-create": "Önskeskapande",
+	"log-action-filter-communityrequests-wish-status-change": "Ändring av önskestatus",
+	"log-action-filter-communityrequests-wish-focusarea-change": "Önskar förändring av fokusområde",
+	"log-action-filter-communityrequests-focus-area-create": "Skapande av fokusområde",
+	"log-action-filter-communityrequests-focus-area-status-change": "Ändring av status för fokusområde",
+	"logentry-communityrequests-wish-create": "$1 {{GENDER:$2|skapade}} önskningen \"$3\"",
+	"logentry-communityrequests-wish-status-change": "$1 {{GENDER:$2|ändrade}} statusen för \"$3\" från \"$4\" till \"$5\"",
+	"logentry-communityrequests-wish-focusarea-change": "$1 {{GENDER:$2|ändrade}} fokusområdet för \"$3\" från \"$4\" till \"$5\"",
+	"logentry-communityrequests-focus-area-create": "$1 {{GENDER:$2|skapade}} fokusområdet \"$3\"",
+	"logentry-communityrequests-focus-area-status-change": "$1 {{GENDER:$2|ändrade}} statusen för \"$3\" från \"$4\" till \"$5\""
 }

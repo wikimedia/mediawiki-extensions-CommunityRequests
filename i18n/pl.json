@@ -2,6 +2,7 @@
 	"@metadata": {
 		"authors": [
 			"Msz2001",
+			"Woytecr",
 			"Zuzannazuzanna"
 		]
 	},
@@ -32,7 +33,7 @@
 	"communityrequests-audience-label": "Główna grupa użytkowników, na których życzenie ma wpływ",
 	"communityrequests-audience-description": "Opisz, na jaką grupę użytkowników i sytuację przede wszystkim wpłynie to życzenie",
 	"communityrequests-audience-error": "Prosimy o wprowadzenie wartości w tym polu (o długości między $1 a $2 {{PLURAL:$2|znakiem|znakami}}).",
-	"communityrequests-phabricator-label": "Zadania na Phabricatorze (opcjonalnie)",
+	"communityrequests-phabricator-label": "Zadania w Phabricatorze",
 	"communityrequests-phabricator-desc": "Wprowadź identyfikatory lub adresy URL zadań na Phabricatorze.",
 	"communityrequests-phabricator-chip-desc": "Lista identyfikatorów zadań na Phabricatorze.",
 	"communityrequests-wish-create-success": "Twoje życzenie zostało przesłane.",
@@ -70,7 +71,7 @@
 	"communityrequests-focus-area-supported": "Poparte przez:",
 	"communityrequests-focus-area-supported-val": "$1 {{PLURAL:$2|ludzi|osobę}}",
 	"communityrequests-focus-area-owners-label": "Odpowiedzialni:",
-	"communityrequests-focus-area-view-wishes": "Zobacz życzenia z tego obszaru",
+	"communityrequests-focus-area-view-wishes": "Zobacz $1 {{PLURAL:$2|życzenie|życzenia|życzeń}} z tego obszaru",
 	"communityrequests-focus-area-wishes-list": "Życzenia w tym obszarze zainteresowania",
 	"communityrequests-focus-area-th-wish": "Życzenie",
 	"communityrequests-focus-area-stakeholders": "Zespoły i partnerzy",

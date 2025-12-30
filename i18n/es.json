@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Avengium",
 			"JorgeElias2302",
 			"MarcoAurelio",
 			"McDutchie"
@@ -48,7 +49,9 @@
 	"communityrequests-status-wish-declined": "Rechazado",
 	"communityrequests-status-wish-in-progress": "En progreso",
 	"communityrequests-status-wish-done": "Hecho",
+	"communityrequests-status-wish-unknown": "Desconocido",
 	"communityrequests-status-focus-area-under-review": "En revisión",
+	"communityrequests-status-focus-area-unknown": "Desconocido",
 	"communityrequests-edit-wish": "Edición de deseo",
 	"communityrequests-wish-description-heading": "Descripción",
 	"communityrequests-wish-focus-area-heading": "Área de enfoque asignada",
@@ -62,5 +65,19 @@
 	"communityrequests-wish-voting": "Votación",
 	"communityrequests-wish-voting-info": "Este deseo tiene actualmente '''$1 {{PLURAL:$2|voto|votos}} a favor'''.",
 	"communityrequests-wishes-status-header": "Estado",
-	"communityrequests-wishes-type-header": "Tipo"
+	"communityrequests-wishes-type-header": "Tipo",
+	"communityrequests-translate-title-disabled-reason": "Las páginas de listas de deseos de la comunidad tienen su propio título de visualización traducible.",
+	"communityrequests-log-name": "Registro de lista de deseos de la comunidad",
+	"log-description-communityrequests": "Esta página enumera acciones notables relacionadas con los deseos de la Lista de deseos de la comunidad y áreas de enfoque.",
+	"log-action-filter-communityrequests": "Tipo de acción:",
+	"log-action-filter-communityrequests-wish-create": "Creación de deseos",
+	"log-action-filter-communityrequests-wish-status-change": "Deseo de cambio de estado",
+	"log-action-filter-communityrequests-wish-focusarea-change": "Deseo cambiar el área de enfoque",
+	"log-action-filter-communityrequests-focus-area-create": "Creación de áreas de enfoque",
+	"log-action-filter-communityrequests-focus-area-status-change": "Cambio de estado del área de enfoque",
+	"logentry-communityrequests-wish-create": "$1 {{GENDER:$2|creó}} el deseo \"$3\"",
+	"logentry-communityrequests-wish-status-change": "$1 {{GENDER:$2|cambió}} el estado de \"$3\" de \"$4\" a \"$5\"",
+	"logentry-communityrequests-wish-focusarea-change": "$1 {{GENDER:$2|cambió}} el área de enfoque de \"$3\" de \"$4\" a \"$5\"",
+	"logentry-communityrequests-focus-area-create": "$1 {{GENDER:$2|creó}} el área de enfoque \"$3\"",
+	"logentry-communityrequests-focus-area-status-change": "$1 {{GENDER:$2|cambió}} el estado de \"$3\" de \"$4\" a \"$5\""
 }

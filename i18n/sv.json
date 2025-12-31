@@ -1,6 +1,8 @@
 {
 	"@metadata": {
-		"authors": []
+		"authors": [
+			"Stefan2255"
+		]
 	},
 	"communityrequests-status-draft": "Utkast",
 	"communityrequests-status-submitted": "Inskickad",

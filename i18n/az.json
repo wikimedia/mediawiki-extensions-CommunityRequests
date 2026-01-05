@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Gadir",
 			"Nemoralis"
 		]
 	},
@@ -51,6 +52,7 @@
 	"communityrequests-wish-description-heading": "Açıqlama",
 	"communityrequests-wish-focus-area-heading": "Təyin edilmiş fokus sahəsi",
 	"communityrequests-wish-type-heading": "İstək növü",
+	"communityrequests-tag-citations": "Sitatlar",
 	"communityrequests-wish-audience-heading": "Təsirlənən istifadəçilər",
 	"communityrequests-wish-phabricator-heading": "Phabricator tapşırıqları",
 	"communityrequests-wish-other-details-heading": "Digər detallar",

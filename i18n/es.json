@@ -3,7 +3,8 @@
 		"authors": [
 			"JorgeElias2302",
 			"McDutchie",
-			"MarcoAurelio"
+			"MarcoAurelio",
+			"Avengium"
 		]
 	},
 	"communityrequests-wish-loading-error": "Se produjo un error al analizar el texto fuente del formulario de deseo. Puede contener wikitexto no válido. Puedes [$1 actualizar la página] e intentar nuevamente, usar el [[$2|editor de código]] o solicitar ayuda en la [[$3|página de discusión]].",
@@ -71,5 +72,7 @@
 	"communityrequests-wishes-type-header": "Tipo",
 	"communityrequests-wishes-projects-header": "Proyectos",
 	"communityrequests-wishes-date-header": "Hora (UTC)",
-	"communityrequests-wishes-status-header": "Estado"
+	"communityrequests-wishes-status-header": "Estado",
+	"communityrequests-focus-area-supported-val": "$1 {{PLURAL:$2|persona|personas}}",
+	"communityrequests-focus-area-owners-label": "Propietarios:"
 }

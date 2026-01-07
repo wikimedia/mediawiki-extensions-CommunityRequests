@@ -73,5 +73,7 @@
 	"communityrequests-wishes-type-header": "Tipo",
 	"communityrequests-wishes-projects-header": "Proyectos",
 	"communityrequests-wishes-date-header": "Hora (UTC)",
-	"communityrequests-wishes-status-header": "Estado"
+	"communityrequests-wishes-status-header": "Estado",
+	"communityrequests-focus-area-supported-val": "$1 {{PLURAL:$2|persona|personas}}",
+	"communityrequests-focus-area-owners-label": "Propietarios:"
 }

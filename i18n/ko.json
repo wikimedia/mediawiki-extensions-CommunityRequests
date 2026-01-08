@@ -22,6 +22,8 @@
 	"communityrequests-status-wish-under-review": "검토 중",
 	"communityrequests-status-wish-unsupported": "미지원",
 	"communityrequests-status-wish-declined": "거부",
+	"communityrequests-status-wish-unknown": "알 수 없음",
+	"communityrequests-status-focus-area-unknown": "알 수 없음",
 	"communityrequests-tags-heading": "태그",
 	"communityrequests-tag-admins": "관리자와 사무장",
 	"communityrequests-tag-categories": "분류",

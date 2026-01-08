@@ -351,9 +351,12 @@ class CommunityRequestsHooks implements
 		$class = $talkPage->exists() ? '' : 'new';
 
 		// Skins build their links from different sources, so we need to set them all.
-		$links['namespaces']['talk']['href'] = $href;
-		$links['namespaces']['talk']['class'] = $class;
-		$links['namespaces']['talk']['link-class'] = $class;
+		// @fixme: can remove this block when T412238 is resolved.
+		if ( isset( $links['namespaces']['talk'] ) ) {
+			$links['namespaces']['talk']['href'] = $href;
+			$links['namespaces']['talk']['class'] = $class;
+			$links['namespaces']['talk']['link-class'] = $class;
+		}
 		$links['associated-pages']['talk']['href'] = $href;
 		$links['associated-pages']['talk']['class'] = $class;
 		$links['associated-pages']['talk']['link-class'] = $class;

@@ -1,12 +1,13 @@
 {
 	"@metadata": {
 		"authors": [
-			"Polda18"
+			"Polda18",
+			"Matěj Suchánek"
 		]
 	},
 	"communityrequests-wish-loading-error": "Při analýze zdrojového textu přání došlo k chybě. Možná obsahuje chybný wikitext. [$1 Obnovte prosím stránku] a zkuste to znovu, použite [[$2|editor zdrojového kódu]] nebo požádejte o pomoc v [[$3|diskusi]].",
 	"communityrequests-edit-with-form": "Editovat pomocí formuláře",
-	"communityrequests-form-subtitle": "Vítejte v novém seznamu přání komunity. Pokud chcete zadat své přání, vyplňte prosím formulář níže.",
+	"communityrequests-form-subtitle": "Vítejte v seznamu přání komunity. Pokud chcete zadat své přání, vyplňte prosím formulář níže.",
 	"communityrequests-form-error": "Něco se nepovedlo. Zkuste prosím uložit znovu nebo požádejte o pomoc v [[$1|diskusi]].",
 	"communityrequests-description": "Popište svůj problém",
 	"communityrequests-description-description": "Detailně vysvětlete své přání nebo problém, který řešíte.",

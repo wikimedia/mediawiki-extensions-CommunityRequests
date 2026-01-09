@@ -232,6 +232,7 @@
 	"communityrequests-vote-add-summary": "Adding support vote",
 	"communityrequests-vote-update-summary": "Updating support vote",
 	"communityrequests-vote-remove-summary": "Removing support vote",
+	"communityrequests-votes-delete-page-summary": "Deleting votes page after entity deletion",
 	"communityrequests-wish-count": "$1 {{PLURAL:$2|wish|wishes}}",
 	"communityrequests-vote-count": "$1 {{PLURAL:$2|supporter|supporters}}",
 	"communityrequests-wish-talk-subtitle": "Discussion for $1 proposed by $2",

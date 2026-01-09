@@ -134,28 +134,4 @@ class VoteRendererTest extends MediaWikiIntegrationTestCase {
 		$focusArea = $this->store->get( Title::newFromText( $focusAreaTitleStr ), 'en' );
 		$this->assertSame( 5, $focusArea->getVoteCount() );
 	}
-
-	/**
-	 * @param string $entityPageTitle
-	 * @param int $numVotes
-	 * @return array
-	 */
-	protected function insertVotes( string $entityPageTitle, int $numVotes ): array {
-		$wikitext = '';
-		for ( $i = 1; $i <= $numVotes; $i++ ) {
-			$wikitext .= <<<END
-{{#CommunityRequests: vote
-|username = TestUser$i
-|timestamp = 3333-01-23T00:00:00Z
-|comment = This is a [[test]] }}
-END;
-		}
-
-		$votesTitle = Title::newFromText( $entityPageTitle . $this->config->getVotesPageSuffix() );
-		return $this->insertPage(
-			$votesTitle,
-			$wikitext,
-			NS_MAIN
-		);
-	}
 }

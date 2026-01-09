@@ -24,6 +24,7 @@ use MediaWiki\Hook\SkinTemplateNavigation__UniversalHook;
 use MediaWiki\Linker\LinkRenderer;
 use MediaWiki\Logging\ManualLogEntry;
 use MediaWiki\MainConfigNames;
+use MediaWiki\Page\DeletePageFactory;
 use MediaWiki\Page\PageStoreRecord;
 use MediaWiki\Page\ProperPageIdentity;
 use MediaWiki\Page\WikiPageFactory;
@@ -72,6 +73,7 @@ class CommunityRequestsHooks implements
 		protected readonly LoggerInterface $logger,
 		protected readonly Config $mainConfig,
 		protected readonly WikiPageFactory $wikiPageFactory,
+		protected readonly DeletePageFactory $deletePageFactory,
 		?ExtensionRegistry $extensionRegistry = null
 	) {
 		$extensionRegistry ??= ExtensionRegistry::getInstance();
@@ -193,6 +195,27 @@ class CommunityRequestsHooks implements
 		$store = $this->getStoreForPage( $page );
 		$store->delete( $canonicalPage->getId(), $lang );
 		$this->logger->debug( __METHOD__ . ': Deleted entity {0}', [ $page->__toString() ] );
+
+		// delete associated votes page
+		$votesPageRef = $this->config->getVotesPageRefForEntity( $canonicalPage );
+		if ( $votesPageRef !== null ) {
+			$votesPageTitle = Title::newFromPageReference( $votesPageRef );
+
+			if ( $votesPageTitle->exists() ) {
+				$votesWikiPage = $this->wikiPageFactory->newFromTitle( $votesPageTitle );
+				$deletePage = $this->deletePageFactory->newDeletePage( $votesWikiPage, $deleter );
+				$status = $deletePage->deleteIfAllowed(
+					wfMessage( 'communityrequests-votes-delete-page-summary' )->text()
+				);
+
+				if ( $status->isOK() ) {
+					$this->logger->debug(
+						__METHOD__ . ': Deleted votes page {0}',
+						[ $votesPageTitle->toPageIdentity()->__toString() ]
+					);
+				}
+			}
+		}
 	}
 
 	/**

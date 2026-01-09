@@ -87,7 +87,8 @@
 				"SpecialPageFactory",
 				"CommunityRequests.Logger",
 				"MainConfig",
-				"WikiPageFactory"
+				"WikiPageFactory",
+				"DeletePageFactory"
 			]
 		},
 		"changesList": {

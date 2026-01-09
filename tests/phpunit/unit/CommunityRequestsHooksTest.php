@@ -10,6 +10,7 @@ use MediaWiki\Extension\CommunityRequests\HookHandler\CommunityRequestsHooks;
 use MediaWiki\Extension\CommunityRequests\Wish\WishStore;
 use MediaWiki\Linker\LinkRenderer;
 use MediaWiki\MainConfigNames;
+use MediaWiki\Page\DeletePageFactory;
 use MediaWiki\Page\WikiPageFactory;
 use MediaWiki\Permissions\PermissionManager;
 use MediaWiki\Registration\ExtensionRegistry;
@@ -169,6 +170,7 @@ class CommunityRequestsHooksTest extends MediaWikiUnitTestCase {
 			new NullLogger(),
 			$mainConfig,
 			$this->createNoOpMock( WikiPageFactory::class ),
+			$this->createNoOpMock( DeletePageFactory::class ),
 			$extensionRegistry
 		);
 	}

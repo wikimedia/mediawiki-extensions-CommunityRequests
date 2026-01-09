@@ -235,6 +235,7 @@
 	"communityrequests-vote-add-summary": "Edit summary for adding a vote using the voting dialog. If the user added a comment, {{msg-mw|colon-separator}} and the comment will be appended to the message.",
 	"communityrequests-vote-update-summary": "Edit summary for updating a vote using the voting dialog. If the user added a comment, {{msg-mw|colon-separator}} and the comment will be appended to the message.",
 	"communityrequests-vote-remove-summary": "Edit summary for removing a vote using the voting dialog.",
+	"communityrequests-votes-delete-page-summary": "Edit summary for when the votes page is deleted, e.g. when the wish or focus area is deleted.",
 	"communityrequests-wish-count": "Label for the number of the number of wishes in a focus area.\n\nParameters:\n* $1 — Formatted number of wishes.\n* $2 — Unformatted integer number of wishes, to determine plural grammar.",
 	"communityrequests-vote-count": "Label for the number of votes a wish or focus area has received.\n\nParameters:\n* $1 — Formatted number of supporters.\n* $2 — Unformatted integer number of supporters, to determine plural grammar.",
 	"communityrequests-wish-talk-subtitle": "Subtitle text shown on the talk page of a wish.\n\nParameters:\n* $1 — Link to the wish page with the entity ID and title as the link text.\n* $2 — Links to proposer's user and user talk pages.",

@@ -10,6 +10,7 @@ use MediaWiki\Extension\CommunityRequests\Wish\Wish;
 use MediaWiki\Extension\CommunityRequests\Wish\WishStore;
 use MediaWiki\Title\Title;
 use MediaWikiIntegrationTestCase;
+use Wikimedia\Rdbms\IDBAccessObject;
 use Wikimedia\Timestamp\ConvertibleTimestamp;
 
 /**
@@ -502,5 +503,37 @@ END;
 		$this->assertNull( $this->getStore()->get( $wishEn->getPage(), 'en' ) );
 		$this->assertNull( $this->getStore()->get( $wishEn->getPage(), 'fr' ) );
 		$this->assertSame( 0, $this->getStore()->getCount() );
+	}
+
+	public function testVotesPageGetsDeletedOnPageDelete(): void {
+		// Create a wish with a votes page
+		$wish = $this->insertTestWish();
+		$wishPage = $wish->getPage();
+
+		// insert votes
+		$this->insertVotes( $wishPage->getDBkey(), 3 );
+		$votesPage = Title::newFromPageReference( $this->config->getVotesPageRefForEntity( $wishPage ) );
+
+		// Sanity checks
+		$this->assertTrue( $wishPage->exists(), 'Wish page should exist' );
+		$this->assertTrue( $votesPage->exists(), 'Votes page should exist' );
+
+		// Delete the wish page
+		$this->deletePage( $wishPage );
+
+		// Recreate Title objects to avoid cached data
+		$wishPageAfter = Title::newFromPageIdentity( $wishPage );
+		$votesPageAfter = Title::newFromPageReference( $votesPage );
+
+		// Both the wish and votes page should be deleted
+		$this->assertFalse(
+			$wishPageAfter->exists( IDBAccessObject::READ_LATEST ),
+			'Wish page should be deleted'
+		);
+
+		$this->assertFalse(
+			$votesPageAfter->exists( IDBAccessObject::READ_LATEST ),
+			'Votes page should be deleted'
+		);
 	}
 }

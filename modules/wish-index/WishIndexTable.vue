@@ -265,13 +265,18 @@ module.exports = exports = defineComponent( {
 		// Non-reactive local variables
 
 		/**
-		 * FIXME: Codex seems to do the math wrong when changing pagination size
-		 * with the `serverPagination` prop set. For now, we only allow the
-		 * given `limit` and hide the pagination size selector.
+		 * Pagination size options for users to select from.
 		 *
 		 * @type {TablePaginationSizeOption[]}
 		 */
-		const paginationSizeOptions = [ { value: props.limit } ];
+		const paginationSizeOptions = [
+			{ value: 10 },
+			{ value: 25 },
+			{ value: 50 },
+			{ value: 100 },
+			{ value: 250 },
+			{ value: 500 }
+		];
 		const previousContinueValues = [];
 		let currentContinueValue = null;
 		let nextContinueValue = null;
@@ -452,10 +457,6 @@ module.exports = exports = defineComponent( {
 <style lang="less">
 @import 'mediawiki.skin.variables.less';
 
-// Hide the pagination size selector; Codex does not handle it correctly with server pagination.
-.cdx-table-pager__start {
-	display: none;
-}
 // Hide the "last page" button until T401027 is resolved.
 .cdx-button.cdx-table-pager__button-last {
 	display: none;

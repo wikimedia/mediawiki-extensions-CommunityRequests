@@ -174,7 +174,7 @@
 	"communityrequests-focus-area-stakeholders": "Team och anknutna",
 	"communityrequests-focus-area-owners": "Ägare",
 	"communityrequests-focus-area-owners-description": "De organisatoriska team som äger detta fokusområde och ansvarar för dess förvaltning och utveckling. Länkar och annan enkel wikitext är tillåtna.",
-	"communityrequests-focus-area-owners-placeholder": "* [[Community Tech]]\n* [[mw:Redigeringsteam|Redigeringsteam]]",
+	"communityrequests-focus-area-owners-placeholder": "* [[Community Tech|Gemenskapsteknik]]\n* [[mw:Editing team|Redigeringsteam]]",
 	"communityrequests-focus-area-volunteers": "Medlemmar i gemenskapen",
 	"communityrequests-focus-area-volunteers-description": "Om det finns volontärer som inte är en del av organisationen men du vill ge dem ett omnämnande, lista dem här. Länkar och annan enkel wikitext är tillåtna.",
 	"communityrequests-focus-area-volunteers-placeholder": "* [[User:Example|Exempel]]\n* [[User:AnotherExample|Ett annat exempel]]",

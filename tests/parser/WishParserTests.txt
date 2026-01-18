@@ -242,7 +242,7 @@ title=Community_Wishlist/W6
 |description =
 }}
 !! html
-wish-status=<span class="error">(communityrequests-error-invalid-status: broken)</span><span class="cdx-info-chip ext-communityrequests-wish--status cdx-info-chip--notice"><span class="cdx-info-chip&#95;_text">(communityrequests-status-wish-under-review)</span></span>
+wish-status=<span class="error">(communityrequests-error-invalid-status: broken)</span><span class="cdx-info-chip ext-communityrequests-wish--status cdx-info-chip--notice"><span class="cdx-info-chip&#95;&#95;text">(communityrequests-status-wish-under-review)</span></span>
 <p><a href="/wiki/Community_Wishlist/Wishes" title="Community Wishlist/Wishes">(communityrequests-view-all-wishes)</a></p><div class="ext-communityrequests-wish"><div class="mw-heading mw-heading2">(communityrequests-wish-description-heading)</div><div class="ext-communityrequests-wish--description">
 </div><div class="mw-heading mw-heading3">(communityrequests-wish-focus-area-heading)</div><div class="ext-communityrequests-wish--focus-area">
 <p>(communityrequests-focus-area-unassigned)

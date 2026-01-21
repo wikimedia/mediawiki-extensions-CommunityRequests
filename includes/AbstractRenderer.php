@@ -305,7 +305,7 @@ abstract class AbstractRenderer implements MessageLocalizer {
 		// We need to wait for the full parser pass to complete to ensure all votes are counted.
 		// Add a strip marker for the vote count to be added later in CommunityRequestsHooks::onParserAfterTidy().
 		$out .= Html::openElement( 'p' );
-		if ( !$this->isDefaultStatus() ) {
+		if ( !$this->isDefaultStatus() || $votingEnabled ) {
 			$out .= self::VOTING_STRIP_MARKER . ' ';
 		}
 		// Messages used in the following block:
@@ -340,8 +340,9 @@ abstract class AbstractRenderer implements MessageLocalizer {
 			}
 		}
 
-		// Transclude the /Votes subpage if it exists and the status is not the default status.
-		if ( !$this->isDefaultStatus() && $basePage ) {
+		// Transclude the /Votes subpage if it exists and the status is not the default status,
+		// or if voting is enabled.
+		if ( $basePage && ( $votingEnabled || !$this->isDefaultStatus() ) ) {
 			$voteSubpagePath = Title::newFromPageReference( $basePage )->getPrefixedDBkey()
 				. $this->config->getVotesPageSuffix();
 			$voteSubpageTitle = Title::newFromText( $voteSubpagePath );

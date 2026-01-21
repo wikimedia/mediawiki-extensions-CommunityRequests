@@ -137,6 +137,32 @@ class WishRendererTest extends MediaWikiIntegrationTestCase {
 		$this->assertStringContainsString( 'The very first vote!', $parserText );
 	}
 
+	public function testVotingSectionVisibleWhenVotingEnabled(): void {
+		// change config status to enable voting for under-review wishes
+		$this->overrideConfigValue( 'CommunityRequestsStatuses', [
+			'under-review' => [
+				'id' => 0,
+				'default' => true,
+				'voting' => true,
+			],
+		] );
+
+		$wish = $this->insertTestWish( 'Community Wishlist/W125', 'en', [
+			Wish::PARAM_TITLE => 'Under-review Wish',
+			Wish::PARAM_STATUS => 'under-review',
+		] );
+		$this->insertPage(
+			$wish->getPage()->getDBkey() . $this->config->getVotesPageSuffix(),
+			'{{#CommunityRequests:vote|username=TestUser1|timestamp=2023-10-01T12:00:00Z' .
+			"|comment=The very first vote!}}\n"
+		);
+		$wikiPage = $this->getWikiPageFactory()->newFromTitle( $wish->getPage() );
+		$parserText = $wikiPage->getParserOutput()->getContentHolderText();
+
+		// Assert votes are visible
+		$this->assertStringContainsString( 'The very first vote!', $parserText );
+	}
+
 	public function testInvalidProposer(): void {
 		$wishTitle = Title::newFromText( 'Community Wishlist/W123' );
 		$wish = $this->insertTestWish( $wishTitle, 'en', [

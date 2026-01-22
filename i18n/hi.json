@@ -73,8 +73,6 @@
 	"communityrequests-error-invalid-proposer": "\"$1\" कोई मान्य सदस्य नहीं है।",
 	"communityrequests-status": "स्थिति",
 	"communityrequests-status-wish-under-review": "समीक्षाधीन",
-	"communityrequests-status-wish-accepted": "स्वीकृत",
-	"communityrequests-status-wish-unsupported": "असमर्थित",
 	"communityrequests-status-wish-declined": "अस्वीकृत",
 	"communityrequests-status-wish-community-opportunity": "सामुदायिक अवसर",
 	"communityrequests-status-wish-long-term-opportunity": "दीर्घकालिक अवसर",

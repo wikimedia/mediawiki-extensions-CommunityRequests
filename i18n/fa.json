@@ -48,7 +48,6 @@
 	"communityrequests-error-required-fields": "{{PLURAL:$2|خانهٔ|خانه‌های}} الزامی خالی: $1",
 	"communityrequests-status": "وضعیت",
 	"communityrequests-status-wish-under-review": "در دست بازبینی",
-	"communityrequests-status-wish-unsupported": "پشتیبانی‌نشده",
 	"communityrequests-status-wish-community-opportunity": "فرصت اجتماعی",
 	"communityrequests-status-wish-long-term-opportunity": "فرصت بلندمدت",
 	"communityrequests-status-wish-near-term-opportunity": "فرصت کوتاه‌مدت",

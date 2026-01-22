@@ -10,7 +10,6 @@
 	"communityrequests-view-all-focus-areas": "睇返晒所有焦點區域。",
 	"communityrequests-error-required-fields": "缺少嘅必填{{PLURAL:$2|欄位}}: $1",
 	"communityrequests-status-wish-under-review": "喺度審查緊",
-	"communityrequests-status-wish-unsupported": "唔支援",
 	"communityrequests-status-wish-declined": "拒絕咗",
 	"communityrequests-status-wish-community-opportunity": "社區機會",
 	"communityrequests-status-wish-long-term-opportunity": "長遠嘅機會",

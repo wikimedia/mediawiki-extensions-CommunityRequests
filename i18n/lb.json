@@ -34,8 +34,6 @@
 	"communityrequests-error-invalid-proposer": "„$1“ ass kee gültege Benotzer.",
 	"communityrequests-error-invalid-type": "„$1“ ass kee gültege Wonschtyp.",
 	"communityrequests-status": "Status",
-	"communityrequests-status-wish-accepted": "Akzeptéiert",
-	"communityrequests-status-wish-unsupported": "Net ënnerstëtzt",
 	"communityrequests-status-wish-declined": "Refuséiert",
 	"communityrequests-status-wish-in-progress": "Amgaang",
 	"communityrequests-status-wish-done": "Fäerdeg",

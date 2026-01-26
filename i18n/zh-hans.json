@@ -237,6 +237,7 @@
 	"communityrequests-vote-add-summary": "添加支持票",
 	"communityrequests-vote-update-summary": "更新支持票",
 	"communityrequests-vote-remove-summary": "移除支持票",
+	"communityrequests-votes-delete-page-summary": "实体删除后删除投票页面",
 	"communityrequests-wish-count": "$1{{PLURAL:$2|愿望}}",
 	"communityrequests-vote-count": "$1{{PLURAL:$2|支持者}}",
 	"communityrequests-wish-talk-subtitle": "$1的讨论，由$2提出",

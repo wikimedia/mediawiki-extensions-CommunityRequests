@@ -72,6 +72,7 @@ class Util {
 			// * communityrequests-tag-categories
 			// * communityrequests-tag-citations
 			// * communityrequests-tag-editing
+			// * communityrequests-tag-hackathonable
 			// * communityrequests-tag-ios
 			// * communityrequests-tag-android
 			// * communityrequests-tag-mobile-web

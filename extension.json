@@ -711,6 +711,10 @@
 					"wiktionary": {
 						"id": 20,
 						"category": "Category:Community Wishlist/Wishes/Wiktionary"
+					},
+					"hackathonable": {
+						"id": 21,
+						"category": "Category:Community Wishlist/Wishes/Hackathonable"
 					}
 				}
 			}

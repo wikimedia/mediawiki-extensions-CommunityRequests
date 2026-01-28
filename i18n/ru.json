@@ -91,6 +91,7 @@
 	"communityrequests-form-loading-1": "Если форма не загружается, пожалуйста, убедитесь, что у вас включен JavaScript.",
 	"communityrequests-form-loading-2": "Если у вас все еще есть проблемы, обратитесь за поддержкой по адресу $1.",
 	"communityrequests-please-log-in": "Пожалуйста, выполните вход, чтобы отправить запрос.",
+	"communityrequests-focus-area-owners-label": "Владельцы:",
 	"communityrequests-focus-area-view-wishes": "Посмотреть пожелания в этом направлении",
 	"communityrequests-focus-area-wishes-list": "Пожелания в этой области",
 	"communityrequests-focus-area-th-wish": "Пожелание",

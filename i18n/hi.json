@@ -194,5 +194,6 @@
 	"communityrequests-wishlist-machine-translation": "[[$1|सामुदायिक इच्छासूची]] में स्वचालित मशीन अनुवाद सक्षम करें।",
 	"communityrequests-vote-add-summary": "समर्थन का मत जोड़ा",
 	"communityrequests-vote-update-summary": "समर्थन का अपडेट किया",
-	"communityrequests-vote-remove-summary": "समर्थन का मत हटाया"
+	"communityrequests-vote-remove-summary": "समर्थन का मत हटाया",
+	"communityrequests-votes-delete-page-summary": "सत्ते के हटाए जाने के बाद मतदान पृष्ठ हटाया"
 }

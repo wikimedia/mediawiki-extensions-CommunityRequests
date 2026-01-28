@@ -222,6 +222,7 @@
 	"communityrequests-vote-add-summary": "Dodanie głosu poparcia",
 	"communityrequests-vote-update-summary": "Zmiana głosu poparcia",
 	"communityrequests-vote-remove-summary": "Usunięcie głosu poparcia",
+	"communityrequests-votes-delete-page-summary": "Usuwanie strony z głosami po usunięciu encji",
 	"communityrequests-wish-count": "$1 {{PLURAL:$2| życzenie|życzenia}}",
 	"communityrequests-vote-count": "$1 {{PLURAL:$2|popierający|popierających}}",
 	"communityrequests-wish-talk-subtitle": "Dyskusja o $1 zapoczątkowana przez $2",

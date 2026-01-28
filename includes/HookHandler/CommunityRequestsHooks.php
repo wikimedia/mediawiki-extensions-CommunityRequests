@@ -274,9 +274,15 @@ class CommunityRequestsHooks implements
 		);
 		$store->save( $entity );
 
-		// (T404748) Update parser cache to ensure displayed content reflects content language
+		// (T404748) Update parser cache to ensure displayed content reflects the current state.
+		// When editing a /Votes page, we must update the parser cache of the canonical entity
+		// page so that vote counts are reflected immediately.
 		if ( $this->translateInstalled ) {
-			$wikiPage = $this->wikiPageFactory->newFromTitle( $title );
+			$isVotesPage = $this->config->isVotesPage( $title );
+			$pageToUpdate = $isVotesPage ?
+				Title::castFromPageIdentity( $canonicalPage ) :
+				$title;
+			$wikiPage = $this->wikiPageFactory->newFromTitle( $pageToUpdate );
 			$wikiPage->doPurge();
 			$wikiPage->updateParserCache();
 		}

@@ -16,7 +16,7 @@ class CommunityRequestsSchemaTest extends AbstractSchemaTestBase {
 	}
 
 	protected static function getSchemaChangesDirectory(): string {
-		return __DIR__ . '/../../../sql/changes';
+		return __DIR__ . '/../../../sql/abstractSchemaChanges';
 	}
 
 	protected static function getSchemaSQLDirs(): array {

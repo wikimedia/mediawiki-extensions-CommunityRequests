@@ -242,5 +242,13 @@
 	"log-description-communityrequests": "הדף הזה מציג רשימת פעולות בולטות שקשורות למשאלות  ותחומי המיקוד של רשימת משאלות הקהילה.",
 	"log-action-filter-communityrequests": "סוג הפעולה:",
 	"log-action-filter-communityrequests-wish-create": "יצירת משאלה",
-	"log-action-filter-communityrequests-wish-status-change": "שינוי מצב משאלה"
+	"log-action-filter-communityrequests-wish-status-change": "שינוי מצב משאלה",
+	"log-action-filter-communityrequests-wish-focusarea-change": "שינוי תחום מיקוד של משאלה",
+	"log-action-filter-communityrequests-focus-area-create": "יצירת תחום מיקוד",
+	"log-action-filter-communityrequests-focus-area-status-change": "שינוי מצב תחום מיקוד",
+	"logentry-communityrequests-wish-create": "$1 {{GENDER:$2|יצר|יצרה}} את המשאלה \"$3\"",
+	"logentry-communityrequests-wish-status-change": "$1 {{GENDER:$2|שינה|שינתה}} את המצב של \"$3\" מ{{GRAMMAR:תחילית|$4}} ל{{GRAMMAR:תחילית|$5}}",
+	"logentry-communityrequests-wish-focusarea-change": "$1 {{GENDER:$2|שינה|שינתה}} את תחום המיקוד של \"$3\" מ{{GRAMMAR:תחילית|$4}} ל{{GRAMMAR:תחילית|$5}}",
+	"logentry-communityrequests-focus-area-create": "$1 {{GENDER:$2|יצר|יצרה}} את תחום המיקוד \"$3\"",
+	"logentry-communityrequests-focus-area-status-change": "$1 {{GENDER:$2|שינה|שינתה}} את המצב של \"$3\" מ{{GRAMMAR:תחילית|$4}} ל{{GRAMMAR:תחילית|$5}}"
 }

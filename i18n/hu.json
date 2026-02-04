@@ -68,5 +68,7 @@
 	"communityrequests-focus-area-no-votes": "Még nincs támogató.",
 	"communityrequests-translation-translatable": "Ez a lap nem $1 nyelvű szöveget tartalmaz.",
 	"communityrequests-translation-progress": "$1 {{PLURAL:$1|szövegrészből}} $2 lefordítva.",
-	"communityrequests-translation-errors": "Hiba történt:"
+	"communityrequests-translation-errors": "Hiba történt:",
+	"communityrequests-wish-talk-subtitle": "A(z) $2 által javasolt $1 megbeszélése",
+	"communityrequests-focus-area-talk-subtitle": "A(z) $1 megbeszélése"
 }

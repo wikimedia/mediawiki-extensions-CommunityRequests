@@ -86,8 +86,8 @@ describe( 'WishlistIntake wish submission', () => {
 			`Author: ${ browser.options.capabilities[ 'mw:user' ] } (talk)`
 		);
 
-		const bot = await Api.mwbot();
-		await bot.delete( pageTitle, 'Test cleanup' ).catch( ( e ) => {
+		const apiClient = await Api.createApiClient();
+		await apiClient.delete( pageTitle, 'Test cleanup' ).catch( ( e ) => {
 			console.error( e );
 		} );
 	} );

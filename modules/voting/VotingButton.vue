@@ -211,7 +211,7 @@ module.exports = exports = defineComponent( {
 			api.postWithEditToken( api.assertCurrentUser( {
 				action: 'wishlistvote',
 				entity: props.entity,
-				comment: commentModel.value,
+				comment: commentModel.value.trim(),
 				voteaction: 'add',
 				formatversion: 2,
 				// Localize errors

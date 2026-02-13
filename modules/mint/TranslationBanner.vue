@@ -11,8 +11,7 @@
 				v-model="enabled"
 				@update:model-value="onToggle"
 			>
-				<!-- eslint-disable vue/no-v-html -->
-				<span v-html="$i18n( 'communityrequests-translation-switch' ).parse()">
+				<span v-i18n-html:communityrequests-translation-switch>
 				</span>
 			</cdx-toggle-switch>
 		</p>

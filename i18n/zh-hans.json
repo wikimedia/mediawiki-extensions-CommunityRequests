@@ -240,7 +240,7 @@
 	"communityrequests-votes-delete-page-summary": "实体删除后删除投票页面",
 	"communityrequests-wish-count": "$1{{PLURAL:$2|愿望}}",
 	"communityrequests-vote-count": "$1{{PLURAL:$2|支持者}}",
-	"communityrequests-wish-talk-subtitle": "$1的讨论，由$2提出",
+	"communityrequests-wish-talk-subtitle": "$1的讨论，愿望由$2提出",
 	"communityrequests-focus-area-talk-subtitle": "$1的讨论",
 	"communityrequests-translate-title-disabled-reason": "社区愿望清单页面有其可翻译的显示标题。",
 	"communityrequests-log-name": "社区愿望清单日志",

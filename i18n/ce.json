@@ -57,6 +57,7 @@
 	"communityrequests-support-wish-confirmed": "ХӀокху лаамна гӀо деш кхаж тесна ахь.",
 	"communityrequests-optional-comment": "Коммент (лаамехь)",
 	"communityrequests-support": "ГӀо",
+	"communityrequests-edit-support": "Хийца комментари",
 	"communityrequests-remove-support-yes": "ХӀаъ",
 	"communityrequests-remove-support-no": "ХӀан-хӀа",
 	"communityrequests-support-error": "ГӀалат даьлла, хьан гӀодар дӀайаздан аьтто ца баьлла.",
@@ -179,6 +180,10 @@
 	"communityrequests-disabled": "Йукъараллин лаамийн могӀаман и функционал карарчу хенахь дӀайаьккхина йу.",
 	"communityrequests-publish-wish-summary": "«$1» лааман публикаци",
 	"communityrequests-publish-focus-area-summary": "«$1» тематикин некъан публикаци",
+	"communityrequests-entity-summary-tags-added": "ТӀетоьхна {{PLURAL:$2|билгало|билгалонаш}}: $1",
+	"communityrequests-entity-summary-tags-removed": "ДӀайаьккхина {{PLURAL:$2|билгало|билгалонаш}}: $1",
+	"communityrequests-entity-summary-audience-updated": "Йукъайаханчу декъашхойн могӀам карладаьккхина",
+	"communityrequests-entity-summary-owners-updated": "Карладаьккхина долахойн могӀам",
 	"communityrequests-support-label": "ГӀо",
 	"communityrequests-update-label": "Карлайаккха",
 	"communityrequests-error-category": "Йукъараллин лаамийн могӀамехь гӀалаташ долу агӀонаш",
@@ -195,5 +200,9 @@
 	"communityrequests-cant-manually-edit": "ХӀара йукъараллин лаамийн могӀаман агӀо хийца йеза [[$1|тӀеэцаран форма]] лелош.",
 	"communityrequests-missing-wish": "И лаам бац. Хьан таро йу [{{fullurl:{{#Special:Log}}|page={{FULLPAGENAMEE}}}} гергара журналаш леха], иза мича йахана хаа, йа [[$1|керла лаам кхолла]].",
 	"communityrequests-missing-focus-area": "ХӀокху фокусан меттиг йац. Хьан йиш йу [{{fullurl:{{#Special:Log}}|page={{FULLPAGENAMEE}}}} гергара журналаш леха], иза мича йахана хаа, йа [[$1|керла фокусан меттиг кхолла]].",
-	"communityrequests-wishlist-machine-translation": "[[$1|Йукъараллин лаамийн могӀам]] чохь авто машенан гочдар дӀахӀоттаде."
+	"communityrequests-wishlist-machine-translation": "[[$1|Йукъараллин лаамийн могӀам]] чохь авто машенан гочдар дӀахӀоттаде.",
+	"communityrequests-vote-add-summary": "Кхаж гӀоьнна тӀетохар",
+	"communityrequests-vote-update-summary": "ГӀоьнна тӀетоьхна кхаж карлабаккхар",
+	"communityrequests-vote-remove-summary": "ГӀоьнна тӀетоьхна кхаж дӀабаккхар",
+	"communityrequests-vote-count": "$1 {{PLURAL:$2|гIолаьцнарг|гIолаьцнарш}}"
 }

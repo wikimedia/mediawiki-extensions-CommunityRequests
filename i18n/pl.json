@@ -89,6 +89,7 @@
 	"communityrequests-status-focus-area-in-progress": "W trakcie",
 	"communityrequests-status-focus-area-done": "Zrealizowane",
 	"communityrequests-status-focus-area-unknown": "Nieznany",
+	"communityrequests-declined-reason": "Powód odrzucenia",
 	"communityrequests-error-invalid-status": "Nieprawidłowy status: „$1”",
 	"communityrequests-edit-wish": "Edytuj życzenie",
 	"communityrequests-discuss-wish": "Przedyskutuj to życzenie",

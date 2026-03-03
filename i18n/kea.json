@@ -1,0 +1,39 @@
+{
+	"@metadata": {
+		"authors": [
+			"GrogeXaKaba",
+			"Letra.berdi"
+		]
+	},
+	"communityrequests-desc": "Un sistéma pa jiria sujistons i sulisitasons tékniku di un kumunidadi uiki.",
+	"communityrequests-edit-with-form": "Idita ku furmulári",
+	"communityrequests-description": "Diskrebi bu prabuléma",
+	"communityrequests-description-description": "Splika na ditalis kal ki é disexu o prabuléma ma bu sa-ta ndresa.",
+	"communityrequests-title-error": "Di sumóla, dijita un balor pa es kanpu (entri $1 i $2 {{PLURAL:$2|karaktéri}}).",
+	"communityrequests-title-description": "Sirtifika ma titlu ta konte un brévi diskrison di disexu o prabuléma.",
+	"communityrequests-description-error": "Di sumóla, dijita un balor pa es kanpu ($1 {{PLURAL:$1|karaktéri}} o más).",
+	"communityrequests-wishtype-label": "Kal tipu ta diskrebe midjór bu disexu?",
+	"communityrequests-wishtype-description": "Pa nvia un pididu di alterason di pulítika, di sumóla, kunsulta prujétu aplikávi.",
+	"communityrequests-wishtype-feature-label": "Sulisitason di funsonalidadi",
+	"communityrequests-wishtype-feature-description": "Bu kre funsonalidadis nobu i funsons ki inda ka ta izisti.",
+	"communityrequests-wishtype-bug-label": "Ralatóri sobri érus",
+	"communityrequests-wishtype-bug-description": "Bu kre ki un prabuléma o éru ben ser kurijidu ku funsonalidadis izistenti.",
+	"communityrequests-wishtype-change-label": "Alterason di sistéma",
+	"communityrequests-wishtype-change-description": "Bu kre altera un funsonalidadi o funson ki dja sta na funsonamentu.",
+	"communityrequests-wishtype-unknown-label": "N ka tene sertésa o N ka sabi",
+	"communityrequests-wishtype-unknown-description": "Dispos di rasebi bu disexu, nu ta atribui un tipu ralivanti.",
+	"communityrequests-wishtype-unknown-label-short": "Diskunxedu",
+	"communityrequests-wishtype-error": "Di sumóla, silesona un tipu di disexu.",
+	"communityrequests-audience-label": "Uzuáris prinsipal afetadu",
+	"communityrequests-audience-description": "Diskrebi kal grupu di uzuáris i situason ta ser más afetadu",
+	"communityrequests-audience-error": "Di sumóla, dijita un balor pa es kanpu (entri $1 i $2 {{PLURAL:$2|karaktéri}}).",
+	"communityrequests-phabricator-desc": "Dijita idintifikadoris o nderésus URL di taréfas di Phabricator.",
+	"communityrequests-phabricator-chip-desc": "Un lista di idintifikadoris di taréfas di Phabricator.",
+	"communityrequests-view-all-wishes": "Udja tudu disexu.",
+	"communityrequests-close": "Fitxa",
+	"communityrequests-publish": "Publika disexu",
+	"communityrequests-save": "Garda alterasons",
+	"communityrequests-support-focus-area": "Apoia ária di fóku",
+	"communityrequests-optional-comment": "Kumentári opusional",
+	"communityrequests-support-focus-area-confirmed": "Bu vota pa apoia es ária di fóku."
+}

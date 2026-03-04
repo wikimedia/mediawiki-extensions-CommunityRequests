@@ -26,9 +26,18 @@ class VoteRenderer extends AbstractRenderer {
 			return '';
 		}
 
-		$missingFields = $this->validateArguments( $args, [ 'username', 'timestamp' ] );
+		$missingFields = $this->validateArguments( $args, [ 'timestamp' ] );
 		if ( $missingFields ) {
 			return $this->getMissingFieldsErrorMessage( $missingFields );
+		}
+		// Must have either a 'username' or 'userid' field.
+		$username = $args['username'] ?? null;
+		if ( isset( $args['userid'] ) && is_numeric( $args['userid'] ) ) {
+			$username = $this->userFactory->newFromId( (int)$args['userid'] )?->getName();
+		}
+		if ( !$username ) {
+			// We want to only use userid moving forward, so advertise that as the missing field.
+			return $this->getMissingFieldsErrorMessage( [ 'userid' ] );
 		}
 
 		$extensionData = $this->parser->getOutput()->getExtensionData( self::EXT_DATA_KEY ) ?? [];
@@ -42,7 +51,7 @@ class VoteRenderer extends AbstractRenderer {
 		$this->logger->debug( __METHOD__ . ": Rendering vote. {0}", [ json_encode( $args ) ] );
 		$this->parser->getOutput()->setExtensionData( self::EXT_DATA_KEY, $extensionData );
 
-		return $this->renderVoteInternal( $args['username'], $args['timestamp'], $args['comment'] );
+		return $this->renderVoteInternal( $username, $args['timestamp'], $args['comment'] );
 	}
 
 	private function renderVoteInternal( string $username, string $timestamp, string $comment ): string {

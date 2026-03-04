@@ -14,6 +14,7 @@ use MediaWiki\Parser\ParserOptions;
 use MediaWiki\Parser\ParserOutput;
 use MediaWiki\Parser\PPFrame;
 use MediaWiki\Tests\Unit\FakeQqxMessageLocalizer;
+use MediaWiki\User\UserFactory;
 use MediaWikiUnitTestCase;
 use MockTitleTrait;
 use Psr\Log\LoggerInterface;
@@ -98,6 +99,7 @@ class WishIndexRendererTest extends MediaWikiUnitTestCase {
 			$focusAreaStore,
 			$this->createNoOpMock( LoggerInterface::class ),
 			$this->createNoOpMock( LinkRenderer::class ),
+			$this->createNoOpMock( UserFactory::class ),
 			$parser,
 			$frame,
 			[]

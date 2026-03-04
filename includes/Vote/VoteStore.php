@@ -50,7 +50,11 @@ class VoteStore {
 				if ( !$data ) {
 					return null;
 				}
-				$user = $this->userFactory->newFromName( $data[Vote::PARAM_USERNAME] );
+				// Migration phase: some old votes may have been stored with username instead of user ID.
+				$userId = is_numeric( $data[Vote::PARAM_USER_ID] ?? '' ) ? (int)$data[Vote::PARAM_USER_ID] : null;
+				$user = $userId ?
+					$this->userFactory->newFromId( $userId ) :
+					$this->userFactory->newFromName( $data[Vote::PARAM_USERNAME] ?? '' );
 				if ( !$user || !$user->isRegistered() ) {
 					return null;
 				}

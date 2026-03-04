@@ -125,11 +125,12 @@ module.exports = exports = defineComponent( {
 	},
 	props: {
 		entity: { type: String, required: true },
+		userid: { type: Number, default: null },
 		username: { type: String, default: null },
 		comment: { type: String, default: '' }
 	},
 	setup( props ) {
-		const hasVoted = !!props.username;
+		const hasVoted = !!props.userid || !!props.username;
 
 		// Reactive properties
 

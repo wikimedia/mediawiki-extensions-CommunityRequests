@@ -13,6 +13,7 @@ use MediaWiki\Extension\CommunityRequests\Wish\WishStore;
 use MediaWiki\Linker\LinkRenderer;
 use MediaWiki\Parser\Parser;
 use MediaWiki\Parser\PPFrame;
+use MediaWiki\User\UserFactory;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -26,6 +27,7 @@ class RendererFactory {
 		private readonly FocusAreaStore $focusAreaStore,
 		private readonly LoggerInterface $logger,
 		private readonly LinkRenderer $linkRenderer,
+		private readonly UserFactory $userFactory,
 	) {
 	}
 
@@ -52,6 +54,7 @@ class RendererFactory {
 				$this->focusAreaStore,
 				$this->logger,
 				$this->linkRenderer,
+				$this->userFactory,
 				$parser,
 				$frame,
 				$args
@@ -81,6 +84,7 @@ class RendererFactory {
 			$this->focusAreaStore,
 			$this->logger,
 			$this->linkRenderer,
+			$this->userFactory,
 			$parser,
 			$frame,
 			$args

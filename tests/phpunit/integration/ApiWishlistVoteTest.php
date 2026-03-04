@@ -59,7 +59,7 @@ class ApiWishlistVoteTest extends ApiTestCase {
 		$this->assertSame( 'Community Wishlist/W123/Votes', $ret['wishlistvote']['title'] );
 		$this->assertSame( 'W123', $ret['wishlistvote']['entity'] );
 		$this->assertSame( 'add', $ret['wishlistvote']['voteaction'] );
-		$this->assertSame( $this->getTestSysop()->getUser()->getName(), $ret['wishlistvote']['username'] );
+		$this->assertSame( $this->getTestSysop()->getUser()->getid(), $ret['wishlistvote']['userid'] );
 		$this->assertSame( 'Mi comentario', $ret['wishlistvote']['comment'] );
 		$this->assertNotNull( $this->getVoteStore()->getForUser( $wish, $this->getTestSysop()->getUser() ) );
 

@@ -57,15 +57,16 @@ class VoteTest extends MediaWikiUnitTestCase {
 			],
 			$this->getConfig()
 		);
+		$user = $this->getUser( 'TestUser' );
 		$vote = new Vote(
 			$entity,
-			$this->getUser( 'TestUser' ),
+			$user,
 			'This is a comment',
 			'2025-01-01T12:00:00Z'
 		);
 		$expected = [
 			'entity' => 'W1',
-			'username' => 'TestUser',
+			'userid' => $user->getId(),
 			'comment' => 'This is a comment',
 			'timestamp' => '2025-01-01T12:00:00Z',
 		];
@@ -73,13 +74,14 @@ class VoteTest extends MediaWikiUnitTestCase {
 	}
 
 	public function testToWikitext() {
+		$user = $this->getUser( 'TestUser' );
 		$vote = new Vote(
 			$this->createMock( AbstractWishlistEntity::class ),
-			$this->getUser( 'TestUser' ),
+			$user,
 			'This is a comment',
 			'2025-01-01T12:00:00Z'
 		);
-		$expected = '{{#CommunityRequests:vote|username=TestUser|' .
+		$expected = "{{#CommunityRequests:vote|userid={$user->getId()}|" .
 			"comment=This is a comment|timestamp=2025-01-01T12:00:00Z}}\n";
 		$this->assertSame( $expected, $vote->toWikitext()->getText() );
 	}
@@ -87,6 +89,7 @@ class VoteTest extends MediaWikiUnitTestCase {
 	private function getUser( string $name ): UserIdentity {
 		$mockUser = $this->createMock( UserIdentity::class );
 		$mockUser->method( 'getName' )->willReturn( $name );
+		$mockUser->method( 'getId' )->willReturn( 5 );
 		return $mockUser;
 	}
 }

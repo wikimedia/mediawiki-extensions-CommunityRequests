@@ -73,17 +73,18 @@ class VoteStoreTest extends MediaWikiIntegrationTestCase {
 
 	public function testGetWikitextWithVoteAdded(): void {
 		$wish = $this->insertTestWishWithVotes();
-		$newVote1 = new Vote( $wish, User::createNew( 'UserD' ), 'Another vote!', '2025-04-04T12:00:00Z' );
+		$userD = User::createNew( 'UserD' );
+		$newVote1 = new Vote( $wish, $userD, 'Another vote!', '2025-04-04T12:00:00Z' );
 		[ $wikitext ] = $this->voteStore->getWikitextWithVoteAdded( $newVote1 );
 		$this->assertStringContainsString(
-			'{{#CommunityRequests:vote|username=UserD|comment=Another vote!|timestamp=2025-04-04T12:00:00Z}}',
+			"{{#CommunityRequests:vote|userid={$userD->getId()}|comment=Another vote!|timestamp=2025-04-04T12:00:00Z}}",
 			$wikitext
 		);
 		// Adding a vote for a user who already voted should replace their old vote.
 		$newVote2 = new Vote( $wish, $this->userObjs[2], 'Modifying my vote', '2025-05-05T12:00:00Z' );
 		[ $wikitext ] = $this->voteStore->getWikitextWithVoteAdded( $newVote2 );
 		$this->assertStringContainsString(
-			'{{#CommunityRequests:vote|username=UserC|comment=Modifying my vote|timestamp=2025-05-05T12:00:00Z}}',
+			'{{#CommunityRequests:vote|userid=3|comment=Modifying my vote|timestamp=2025-05-05T12:00:00Z}}',
 			$wikitext
 		);
 	}
@@ -92,8 +93,8 @@ class VoteStoreTest extends MediaWikiIntegrationTestCase {
 		$wish = $this->insertTestWishWithVotes();
 		[ $wikitext ] = $this->voteStore->getWikitextWithVoteRemoved( $wish, $this->userObjs[1] );
 		$this->assertSame(
-			"{{#CommunityRequests:vote|username=UserA|comment=First vote!|timestamp=2025-01-01T12:00:00Z}}\n" .
-				'{{#CommunityRequests:vote|username=UserC|comment=|timestamp=2025-03-03T12:00:00Z}}',
+			"{{#CommunityRequests:vote|userid=1|comment=First vote!|timestamp=2025-01-01T12:00:00Z}}\n" .
+				'{{#CommunityRequests:vote|userid=3|comment=|timestamp=2025-03-03T12:00:00Z}}',
 			$wikitext
 		);
 	}
@@ -101,12 +102,12 @@ class VoteStoreTest extends MediaWikiIntegrationTestCase {
 	public function testGetDataFromWikitext(): void {
 		$data = $this->voteStore->getDataFromWikitext(
 			new WikitextContent(
-				"{{#CommunityRequests:vote|username=UserA|comment=First vote!\n\nMultiple lines" .
+				"{{#CommunityRequests:vote|userid=1|comment=First vote!\n\nMultiple lines" .
 					"|timestamp=2025-01-01T12:00:00Z}}\n"
 			)
 		);
 		$this->assertSame( [
-			Vote::PARAM_USERNAME => 'UserA',
+			Vote::PARAM_USER_ID => '1',
 			Vote::PARAM_COMMENT => "First vote!\n\nMultiple lines",
 			Vote::PARAM_TIMESTAMP => '2025-01-01T12:00:00Z',
 		], $data );
@@ -129,9 +130,32 @@ class VoteStoreTest extends MediaWikiIntegrationTestCase {
 	public function testVoteWithNoEntityThrowsNoException(): void {
 		$this->insertPage(
 			'Community Wishlist/W123/Votes',
-			"{{#CommunityRequests:vote|username=UserA|comment=Vote without entity|timestamp=2025-06-06T12:00:00Z}}"
+			"{{#CommunityRequests:vote|userid=1|comment=Vote without entity|timestamp=2025-06-06T12:00:00Z}}"
 		);
 		$this->expectNotToPerformAssertions();
+	}
+
+	public function testVoteWithUsername(): void {
+		$wish = $this->insertTestWish();
+		$this->insertPage(
+			$wish->getPage()->getDBkey() . $this->config->getVotesPageSuffix(),
+			"{{#CommunityRequests:vote|username=UserA|comment=|timestamp=2025-07-07T12:00:00Z}}\n" .
+				"{{#CommunityRequests:vote|username=UserB|comment=|timestamp=2025-08-08T12:00:00Z}}\n" .
+				"{{#CommunityRequests:vote|userid=3|comment=|timestamp=2025-09-09T12:00:00Z}}\n"
+		);
+		$votes = $this->voteStore->getAll( $wish );
+		$this->assertCount( 3, $votes );
+		// Add a vote, and the username parameters should be replaced with user IDs.
+		$userD = User::createNew( 'UserD' );
+		$newVote = new Vote( $wish, $userD, 'New vote!', '2025-10-10T12:00:00Z' );
+		[ $wikitext ] = $this->voteStore->getWikitextWithVoteAdded( $newVote );
+		$this->assertSame(
+			"{{#CommunityRequests:vote|userid=1|comment=|timestamp=2025-07-07T12:00:00Z}}\n" .
+				"{{#CommunityRequests:vote|userid=2|comment=|timestamp=2025-08-08T12:00:00Z}}\n" .
+				"{{#CommunityRequests:vote|userid=3|comment=|timestamp=2025-09-09T12:00:00Z}}\n" .
+				"{{#CommunityRequests:vote|userid={$userD->getId()}|comment=New vote!|timestamp=2025-10-10T12:00:00Z}}",
+			$wikitext
+		);
 	}
 
 	private function insertTestWishWithVotes(): Wish {

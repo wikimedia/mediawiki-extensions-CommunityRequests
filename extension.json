@@ -87,6 +87,7 @@
 				"LinkRenderer",
 				"PermissionManager",
 				"SpecialPageFactory",
+				"UserFactory",
 				"CommunityRequests.Logger",
 				"MainConfig",
 				"WikiPageFactory",

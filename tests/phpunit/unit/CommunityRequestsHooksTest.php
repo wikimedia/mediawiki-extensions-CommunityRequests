@@ -17,6 +17,7 @@ use MediaWiki\Registration\ExtensionRegistry;
 use MediaWiki\Skin\SkinTemplate;
 use MediaWiki\Tests\Unit\FakeQqxMessageLocalizer;
 use MediaWiki\User\User;
+use MediaWiki\User\UserFactory;
 use MediaWikiUnitTestCase;
 use MockTitleTrait;
 use Psr\Log\NullLogger;
@@ -167,6 +168,7 @@ class CommunityRequestsHooksTest extends MediaWikiUnitTestCase {
 			$this->createNoOpMock( LinkRenderer::class ),
 			$permissionManager ?: $this->createNoOpMock( PermissionManager::class ),
 			$this->getSpecialPageFactory(),
+			$this->createNoOpMock( UserFactory::class ),
 			new NullLogger(),
 			$mainConfig,
 			$this->createNoOpMock( WikiPageFactory::class ),

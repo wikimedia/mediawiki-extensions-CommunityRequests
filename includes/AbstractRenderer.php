@@ -16,6 +16,7 @@ use MediaWiki\Parser\PPNode;
 use MediaWiki\Parser\Sanitizer;
 use MediaWiki\Registration\ExtensionRegistry;
 use MediaWiki\Title\Title;
+use MediaWiki\User\UserFactory;
 use MessageLocalizer;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
@@ -45,6 +46,7 @@ abstract class AbstractRenderer implements MessageLocalizer {
 	 * @param FocusAreaStore $focusAreaStore
 	 * @param LoggerInterface $logger
 	 * @param LinkRenderer $linkRenderer
+	 * @param UserFactory $userFactory
 	 * @param Parser $parser
 	 * @param PPFrame $frame
 	 * @param (string|PPNode)[] $parts The parser function arguments in unexpanded form
@@ -55,6 +57,7 @@ abstract class AbstractRenderer implements MessageLocalizer {
 		protected readonly FocusAreaStore $focusAreaStore,
 		protected readonly LoggerInterface $logger,
 		protected readonly LinkRenderer $linkRenderer,
+		protected readonly UserFactory $userFactory,
 		protected readonly Parser $parser,
 		protected readonly PPFrame $frame,
 		protected array $parts

@@ -16,6 +16,7 @@ class Vote {
 
 	// Constants used for the parser function and API parameters.
 	public const PARAM_USERNAME = 'username';
+	public const PARAM_USER_ID = 'userid';
 	public const PARAM_COMMENT = 'comment';
 	public const PARAM_TIMESTAMP = 'timestamp';
 	public const PARAM_ENTITY = 'entity';
@@ -23,7 +24,7 @@ class Vote {
 	public const PARAM_BASE_REV_ID = 'baserevid';
 	// Parser function parameter names.
 	public const PARAMS = [
-		self::PARAM_USERNAME,
+		self::PARAM_USER_ID,
 		self::PARAM_COMMENT,
 		self::PARAM_TIMESTAMP,
 	];
@@ -82,7 +83,7 @@ class Vote {
 	public function toArray( WishlistConfig $config ): array {
 		return [
 			self::PARAM_ENTITY => $config->getEntityWikitextVal( $this->entity->getPage() ),
-			self::PARAM_USERNAME => $this->user->getName(),
+			self::PARAM_USER_ID => $this->user->getId(),
 			self::PARAM_COMMENT => $this->comment,
 			self::PARAM_TIMESTAMP => $this->timestamp,
 		];
@@ -95,7 +96,7 @@ class Vote {
 	 */
 	public function toWikitext(): WikitextContent {
 		$wikitext = '{{#CommunityRequests:vote|'
-			. self::PARAM_USERNAME . '=' . $this->user->getName() . '|'
+			. self::PARAM_USER_ID . '=' . $this->user->getId() . '|'
 			. self::PARAM_COMMENT . '=' . $this->comment . '|'
 			. self::PARAM_TIMESTAMP . '=' . $this->timestamp
 			. "}}\n";

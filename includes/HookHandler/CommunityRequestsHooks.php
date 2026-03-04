@@ -39,6 +39,7 @@ use MediaWiki\Skin\SkinTemplate;
 use MediaWiki\SpecialPage\SpecialPageFactory;
 use MediaWiki\Storage\Hook\RevisionDataUpdatesHook;
 use MediaWiki\Title\Title;
+use MediaWiki\User\UserFactory;
 use Psr\Log\LoggerInterface;
 
 class CommunityRequestsHooks implements
@@ -70,6 +71,7 @@ class CommunityRequestsHooks implements
 		protected readonly LinkRenderer $linkRenderer,
 		protected readonly PermissionManager $permissionManager,
 		protected readonly SpecialPageFactory $specialPageFactory,
+		protected readonly UserFactory $userFactory,
 		protected readonly LoggerInterface $logger,
 		protected readonly Config $mainConfig,
 		protected readonly WikiPageFactory $wikiPageFactory,
@@ -84,7 +86,8 @@ class CommunityRequestsHooks implements
 			$wishStore,
 			$focusAreaStore,
 			$this->logger,
-			$linkRenderer
+			$linkRenderer,
+			$userFactory,
 		);
 	}
 

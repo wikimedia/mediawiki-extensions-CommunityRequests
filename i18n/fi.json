@@ -168,6 +168,7 @@
 	"communityrequests-focus-area-th-wish": "Toive",
 	"communityrequests-focus-area-owners": "Omistajat",
 	"communityrequests-focus-area-volunteers": "Yhteisön jäsenet",
+	"communityrequests-focus-area-volunteers-placeholder": "* [[Käyttäjä:Esimerkki|Esimerkki]]\n* [[Käyttäjä:ToinenEsimerkki|Toinen esimerkki]]",
 	"communityrequests-focus-area-voting": "Äänestys",
 	"communityrequests-focus-area-voting-info": "Tällä alueella on '''$1 {{PLURAL:$2|kannattaja|kannattajaa}}''' tällä hetkellä.",
 	"communityrequests-focus-area-voting-info-open": "Äänestys tästä alueesta on auki, kunnes se on valmistunut.",

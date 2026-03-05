@@ -238,7 +238,7 @@ abstract class AbstractWishlistSpecialPage extends FormSpecialPage {
 			$this->getOutput()->addJsConfigVars( [
 				'intakeData' => $this->store->normalizeArrayValues( $data ),
 			] );
-			return $e->getStatusValue();
+			return Status::newFatal( $e->getStatusValue()->getMessages()[0] );
 		}
 
 		$title = Title::newFromText( $api->getResult()->getResultData()[$action][$path] );

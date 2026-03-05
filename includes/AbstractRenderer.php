@@ -519,8 +519,7 @@ abstract class AbstractRenderer implements MessageLocalizer {
 	 */
 	protected function addTrackingCategory( string $key ): void {
 		$parserPage = $this->parser->getPage();
-		$isBasePage = $parserPage !== null &&
-			$this->config->getCanonicalEntityPageRef( $parserPage )->isSamePageAs( $parserPage );
+		$isBasePage = $this->config->getCanonicalEntityPageRef( $parserPage )->isSamePageAs( $parserPage );
 		if ( $isBasePage ) {
 			$this->parser->addTrackingCategory( $key );
 		} else {
@@ -561,14 +560,11 @@ abstract class AbstractRenderer implements MessageLocalizer {
 	protected function setDisplayTitleAndIndicator(): void {
 		$titleSpan = $this->getTitleSpan();
 		$pageRef = $this->parser->getPage();
-		if ( !$pageRef ) {
-			throw new RuntimeException( 'Parser page is missing!' );
-		}
 		$entityPageStr = Title::newFromPageReference( $pageRef )->getPrefixedText();
 		$entityIdSpan = Html::element(
 			'span',
 			[ 'class' => "ext-communityrequests-{$this->rendererType}--id" ],
-			$this->msg( 'parentheses', $entityPageStr )
+			$this->msg( 'parentheses', $entityPageStr )->text()
 		);
 		$this->parser->getOutput()->setDisplayTitle(
 			"$titleSpan $entityIdSpan"

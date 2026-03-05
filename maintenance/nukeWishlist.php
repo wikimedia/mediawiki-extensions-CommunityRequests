@@ -58,6 +58,7 @@ class NukeWishlist extends Maintenance {
 		$this->deletePageFactory = $services->getDeletePageFactory();
 		$this->titleParser = $services->getTitleParser();
 		$this->config = $services->get( 'CommunityRequests.WishlistConfig' );
+		/** @phan-suppress-next-line PhanTypeMismatchPropertyReal */
 		$this->dbw = $services->getConnectionProvider()->getPrimaryDatabase( 'virtual-communityrequests' );
 	}
 

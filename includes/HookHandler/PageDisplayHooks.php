@@ -74,7 +74,7 @@ class PageDisplayHooks implements
 		$text = $context->msg( 'communityrequests-missing-' . ( $isWish ? 'wish' : 'focus-area' ) )
 			->params( $this->specialPageFactory->getPage(
 				$isWish ? 'WishlistIntake' : 'EditFocusArea'
-			)->getPageTitle() )
+			)->getPageTitle()->getPrefixedText() )
 			->plain();
 		$dir = $context->getLanguage()->getDir();
 		$context->getOutput()

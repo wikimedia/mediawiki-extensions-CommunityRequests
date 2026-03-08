@@ -82,6 +82,7 @@ abstract class AbstractWishlistSpecialPage extends FormSpecialPage {
 		$this->getOutput()->addJsConfigVars( [
 			'intakeTitleMaxChars' => AbstractWishlistStore::TITLE_MAX_CHARS,
 			'intakeWishlistManager' => $this->getUser()->isAllowed( 'manage-wishlist' ),
+			'intakePageLangRight' => $this->getUser()->isAllowed( 'pagelang' ),
 			'copyrightWarning' => EditPage::getCopyrightWarning( $this->getFullTitle(), 'parse', $this->getContext() ),
 		] );
 

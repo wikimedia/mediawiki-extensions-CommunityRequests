@@ -5,6 +5,11 @@
 		:disabled="formDisabled"
 		@change="formChanged = true"
 	>
+		<base-lang-field
+			v-model:baselang="focusArea.baselang"
+			:status="baseLangStatus"
+			entity-type="focus-area"
+		></base-lang-field>
 		<status-field
 			v-model:status="focusArea.status"
 			entity-type="focus-area"
@@ -83,11 +88,6 @@
 			type="hidden"
 			name="baserevid"
 		>
-		<input
-			:value="baselang"
-			type="hidden"
-			name="baselang"
-		>
 
 		<form-footer
 			:exists="exists"
@@ -110,7 +110,9 @@ const {
 	CommunityRequestsFocusAreaIndexPage,
 	CommunityRequestsStatuses
 } = require( '../common/config.json' );
+const languages = require( './languages.json' );
 const Util = require( '../common/Util.js' );
+const BaseLangField = require( './BaseLangField.vue' );
 const StatusField = require( './StatusField.vue' );
 const DescriptionField = require( './DescriptionField.vue' );
 const FormFooter = require( './FormFooter.vue' );
@@ -127,11 +129,12 @@ const preSubmitFns = [];
 module.exports = exports = defineComponent( {
 	name: 'SpecialEditFocusArea',
 	components: {
+		BaseLangField,
 		CdxField,
 		CdxTextArea,
-		StatusField,
 		DescriptionField,
-		FormFooter
+		FormFooter,
+		StatusField
 	},
 	props: {
 		baselang: { type: String, default: mw.config.get( 'wgUserLanguage' ) },
@@ -156,6 +159,12 @@ module.exports = exports = defineComponent( {
 		 * @type {Ref<Object>}
 		 */
 		const focusArea = reactive( Object.assign( {}, props ) );
+		/**
+		 * Status of the base language field.
+		 *
+		 * @type {Ref<string>}
+		 */
+		const baseLangStatus = ref( 'default' );
 		/**
 		 * Status of the title field.
 		 *
@@ -249,6 +258,7 @@ module.exports = exports = defineComponent( {
 		 */
 		function validateForm() {
 			formError.value = false;
+			baseLangStatus.value = languages[ focusArea.baselang ] ? 'default' : 'error';
 			// Remove translate tags before checking title length.
 			const title = focusArea.title
 				.replace( /<\/?translate>/g, '' )
@@ -313,6 +323,7 @@ module.exports = exports = defineComponent( {
 
 		return {
 			focusArea,
+			baseLangStatus,
 			titleStatus,
 			descriptionStatus,
 			formChanged,

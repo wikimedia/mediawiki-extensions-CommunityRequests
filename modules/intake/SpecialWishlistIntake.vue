@@ -5,6 +5,11 @@
 		:disabled="formDisabled"
 		@change="formChanged = true"
 	>
+		<base-lang-field
+			v-model:baselang="wish.baselang"
+			:status="baseLangStatus"
+			entity-type="wish"
+		></base-lang-field>
 		<status-field
 			v-if="isWishlistManager"
 			v-model:status="wish.status"
@@ -16,7 +21,8 @@
 		<input
 			:value="wish.status"
 			type="hidden"
-			name="status">
+			name="status"
+		>
 		<focus-area-field
 			v-if="isWishlistManager"
 			v-model:focus-area="wish.focusarea"
@@ -69,11 +75,6 @@
 			type="hidden"
 			name="baserevid"
 		>
-		<input
-			:value="baselang"
-			type="hidden"
-			name="baselang"
-		>
 
 		<form-footer
 			:exists="exists"
@@ -92,7 +93,9 @@
 const { computed, defineComponent, nextTick, onMounted, reactive, ref, ComputedRef, Ref } = require( 'vue' );
 const { CdxField } = require( '../codex.js' );
 const { CommunityRequestsHomepage, CommunityRequestsWishIndexPage, CommunityRequestsStatuses } = require( '../common/config.json' );
+const languages = require( './languages.json' );
 const Util = require( '../common/Util.js' );
+const BaseLangField = require( './BaseLangField.vue' );
 const StatusField = require( './StatusField.vue' );
 const FocusAreaField = require( './FocusAreaField.vue' );
 const WishTypeField = require( './WishTypeField.vue' );
@@ -115,6 +118,7 @@ module.exports = exports = defineComponent( {
 	name: 'SpecialWishlistIntake',
 	components: {
 		AudienceField,
+		BaseLangField,
 		CdxField,
 		DescriptionField,
 		FocusAreaField,
@@ -152,6 +156,12 @@ module.exports = exports = defineComponent( {
 		 * @type {Ref<Object>}
 		 */
 		const wish = reactive( Object.assign( {}, props ) );
+		/**
+		 * Status of the base language field.
+		 *
+		 * @type {Ref<string>}
+		 */
+		const baseLangStatus = ref( 'default' );
 		/**
 		 * Status of the type field.
 		 *
@@ -248,6 +258,7 @@ module.exports = exports = defineComponent( {
 		 */
 		function validateForm() {
 			formError.value = false;
+			baseLangStatus.value = languages[ wish.baselang ] ? 'default' : 'error';
 			// Remove translate tags before checking title length.
 			const title = wish.title.trim()
 				.replace( /<\/?translate>/g, '' )
@@ -326,6 +337,7 @@ module.exports = exports = defineComponent( {
 
 		return {
 			wish,
+			baseLangStatus,
 			typeStatus,
 			titleStatus,
 			descriptionStatus,
@@ -353,7 +365,7 @@ module.exports = exports = defineComponent( {
 }
 
 .ext-communityrequests-intake {
-	.ext-communityrequests-intake__fieldset .cdx-field:not( .ext-communityrequests-intake__status ),
+	.ext-communityrequests-intake__fieldset .cdx-field:not( :first-of-type ),
 	&__footer,
 	&__form-error {
 		margin-top: @spacing-200;

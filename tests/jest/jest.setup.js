@@ -13,6 +13,11 @@ jest.mock( '../../modules/common/config.json', () => {
 	} );
 	return mappedConfig;
 }, { virtual: true } );
+jest.mock(
+	'../../modules/intake/languages.json',
+	() => ( { en: 'English', fr: 'French' } ),
+	{ virtual: true }
+);
 mw.confirmCloseWindow = jest.fn();
 mw.config.set = jest.fn();
 

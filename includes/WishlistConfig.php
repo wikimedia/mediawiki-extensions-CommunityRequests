@@ -7,6 +7,7 @@ use MediaWiki\Config\ConfigException;
 use MediaWiki\Config\ServiceOptions;
 use MediaWiki\Language\LanguageNameUtils;
 use MediaWiki\MainConfigNames;
+use MediaWiki\MediaWikiServices;
 use MediaWiki\Page\PageReference;
 use MediaWiki\Page\PageReferenceValue;
 use MediaWiki\Title\MalformedTitleException;
@@ -689,5 +690,14 @@ class WishlistConfig {
 			}
 		}
 		throw new ConfigException( "ID '$id' not found in configuration." );
+	}
+
+	/**
+	 * Get the list of languages supported on this wiki.
+	 * Used by the ext.communityrequests.intake RL module.
+	 */
+	public static function getLanguages(): array {
+		return MediaWikiServices::getInstance()->getLanguageNameUtils()
+			->getLanguageNames( LanguageNameUtils::AUTONYMS, LanguageNameUtils::SUPPORTED );
 	}
 }

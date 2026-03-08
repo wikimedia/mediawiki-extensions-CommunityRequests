@@ -251,7 +251,8 @@
 		},
 		"community-wishlist-manager": {
 			"manage-wishlist": true,
-			"manually-edit-wishlist": true
+			"manually-edit-wishlist": true,
+			"pagelang": true
 		}
 	},
 	"DefaultUserOptions": {
@@ -316,6 +317,7 @@
 			"codexComponents": [
 				"CdxButton",
 				"CdxChipInput",
+				"CdxCombobox",
 				"CdxField",
 				"CdxIcon",
 				"CdxLabel",
@@ -331,6 +333,7 @@
 				"intake/SpecialWishlistIntake.vue",
 				"intake/SpecialEditFocusArea.vue",
 				"intake/AudienceField.vue",
+				"intake/BaseLangField.vue",
 				"intake/DeclinedReasonField.vue",
 				"intake/DescriptionField.js",
 				"intake/DescriptionField.vue",
@@ -363,6 +366,10 @@
 						"CommunityRequestsStatuses",
 						"CommunityRequestsWishTypes"
 					]
+				},
+				{
+					"name": "intake/languages.json",
+					"callback": "MediaWiki\\Extension\\CommunityRequests\\WishlistConfig::getLanguages"
 				}
 			],
 			"dependencies": [
@@ -417,7 +424,11 @@
 				"communityrequests-close",
 				"communityrequests-intake-focus-area",
 				"communityrequests-focus-area-unassigned",
-				"communityrequests-intake-focus-area"
+				"communityrequests-intake-focus-area",
+				"communityrequests-wish-baselang",
+				"communityrequests-focus-area-baselang",
+				"communityrequests-baselang-error",
+				"communityrequests-baselang-no-results"
 			],
 			"factory": "\\MediaWiki\\Extension\\CommunityRequests\\WishlistMessageLoader::addDynamicMessages"
 		},

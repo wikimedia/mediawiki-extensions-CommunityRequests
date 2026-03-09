@@ -260,6 +260,6 @@
 	"communityrequests-notification-wish-status-change": "已變更狀態為「$1」。",
 	"communityrequests-notification-wish-focusarea-change": "已分配至重點領域「$1」。",
 	"communityrequests-notification-focus-area-status-change": "已變更狀態為「$1」。",
-	"communityrequests-notification-focus-area-wish-added": "已移除「$1」。",
-	"communityrequests-notification-focus-area-wish-removed": "已新增「$1」。"
+	"communityrequests-notification-focus-area-wish-added": "已新增「$1」。",
+	"communityrequests-notification-focus-area-wish-removed": "已移除「$1」。"
 }

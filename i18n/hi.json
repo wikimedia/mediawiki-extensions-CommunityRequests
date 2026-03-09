@@ -259,6 +259,6 @@
 	"communityrequests-notification-wish-status-change": "स्थिति बदलकर \"$1\" की गई।",
 	"communityrequests-notification-wish-focusarea-change": "\"$1\" फ़ोकस क्षेत्र को सौंपी गई।",
 	"communityrequests-notification-focus-area-status-change": "स्थिति बदलकर \"$1\" की गई।",
-	"communityrequests-notification-focus-area-wish-added": "\"$1\" हटाया गया।",
-	"communityrequests-notification-focus-area-wish-removed": "\"$1\" जोड़ा गया।"
+	"communityrequests-notification-focus-area-wish-added": "\"$1\" जोड़ा गया।",
+	"communityrequests-notification-focus-area-wish-removed": "\"$1\" हटाया गया।"
 }

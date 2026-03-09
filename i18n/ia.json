@@ -258,6 +258,6 @@
 	"communityrequests-notification-wish-status-change": "Stato cambiate a “$1”.",
 	"communityrequests-notification-wish-focusarea-change": "Assignate al area de interesse “$1”.",
 	"communityrequests-notification-focus-area-status-change": "Stato cambiate a “$1”.",
-	"communityrequests-notification-focus-area-wish-added": "“$1” removite.",
-	"communityrequests-notification-focus-area-wish-removed": "“$1” addite."
+	"communityrequests-notification-focus-area-wish-added": "“$1” addite.",
+	"communityrequests-notification-focus-area-wish-removed": "“$1” removite."
 }

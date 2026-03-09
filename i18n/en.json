@@ -262,6 +262,6 @@
 	"communityrequests-notification-wish-status-change": "Status changed to \"$1\".",
 	"communityrequests-notification-wish-focusarea-change": "Assigned to the focus area \"$1\".",
 	"communityrequests-notification-focus-area-status-change": "Status changed to \"$1\".",
-	"communityrequests-notification-focus-area-wish-added": "Removed \"$1\".",
-	"communityrequests-notification-focus-area-wish-removed": "Added \"$1\"."
+	"communityrequests-notification-focus-area-wish-added": "Added \"$1\".",
+	"communityrequests-notification-focus-area-wish-removed": "Removed \"$1\"."
 }

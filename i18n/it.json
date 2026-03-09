@@ -143,6 +143,6 @@
 	"communityrequests-notification-wish-status-change": "Stato modificato in \"$1\".",
 	"communityrequests-notification-wish-focusarea-change": "Assegnato all'area di interesse \"$1\".",
 	"communityrequests-notification-focus-area-status-change": "Stato modificato in \"$1\".",
-	"communityrequests-notification-focus-area-wish-added": "Rimosso \"$1\".",
-	"communityrequests-notification-focus-area-wish-removed": "Aggiunto \"$1\"."
+	"communityrequests-notification-focus-area-wish-added": "Aggiunto \"$1\".",
+	"communityrequests-notification-focus-area-wish-removed": "Rimosso \"$1\"."
 }

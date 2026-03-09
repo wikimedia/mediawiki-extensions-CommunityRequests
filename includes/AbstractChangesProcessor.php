@@ -402,7 +402,10 @@ abstract class AbstractChangesProcessor implements LocalizationContext {
 
 		$recipients = $this->locateUsers();
 		foreach ( $changes as $field => $change ) {
-			$this->logger->debug( "Notifying change for field $field: old={$change['old']}, new={$change['new']}" );
+			$this->logger->debug(
+				"Notifying {$recipients->count()} users about change for field $field: " .
+				"old={$change['old']}, new={$change['new']}"
+			);
 			$this->notifications->notify(
 				$this->getNotification( $field, $change, $revId ),
 				$recipients

@@ -80,7 +80,7 @@ class WishChangesProcessorTest extends MediaWikiIntegrationTestCase {
 			],
 			'focus area change' => [
 				[
-					'type' => 'communityrequests-wish-focus-area-change',
+					'type' => 'communityrequests-wish-focusarea-change',
 					'extra' => [
 						'entityId' => 'W123',
 						'entityTitle' => 'Test Wish',
@@ -88,8 +88,8 @@ class WishChangesProcessorTest extends MediaWikiIntegrationTestCase {
 						'new' => 'FA1',
 					],
 				],
-				[ Wish::PARAM_FOCUS_AREA => '' ],
 				[ Wish::PARAM_FOCUS_AREA => 'FA1' ],
+				[ Wish::PARAM_FOCUS_AREA => '' ],
 			],
 		];
 	}
@@ -190,10 +190,14 @@ class WishChangesProcessorTest extends MediaWikiIntegrationTestCase {
 		);
 		$mockFocusAreaStore = $this->createNoOpMock( FocusAreaStore::class, [ 'get' ] );
 		$mockFocusAreaStore->method( 'get' )
-			->willReturnMap( [
-				[ $faTitle1, $focusArea1 ],
-				[ $faTitle2, $focusArea2 ],
-			] );
+			->willReturnCallback( static function ( $title ) use ( $faTitle1, $focusArea1, $faTitle2, $focusArea2 ) {
+				if ( $title->equals( $faTitle1 ) ) {
+					return $focusArea1;
+				} elseif ( $title->equals( $faTitle2 ) ) {
+					return $focusArea2;
+				}
+				return null;
+			} );
 		$this->setService( 'CommunityRequests.FocusAreaStore', $mockFocusAreaStore );
 
 		$context = RequestContext::getMain();

@@ -261,6 +261,7 @@
 	"communityrequests-notification-bundled": "Community Wishlist updates",
 	"communityrequests-notification-wish-status-change": "Status changed to \"$1\".",
 	"communityrequests-notification-wish-focusarea-change": "Assigned to the focus area \"$1\".",
+	"communityrequests-notification-wish-focusarea-unassigned": "Unassigned from the focus area \"$1\".",
 	"communityrequests-notification-focus-area-status-change": "Status changed to \"$1\".",
 	"communityrequests-notification-focus-area-wish-added": "Added \"$1\".",
 	"communityrequests-notification-focus-area-wish-removed": "Removed \"$1\"."

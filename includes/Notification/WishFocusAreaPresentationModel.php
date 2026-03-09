@@ -14,10 +14,12 @@ class WishFocusAreaPresentationModel extends AbstractPresentationModel {
 
 	/** @inheritDoc */
 	public function getBodyMessage(): bool|Message {
-		return $this->msg( 'communityrequests-notification-wish-focusarea-change',
-			$this->event->getExtraParam( 'focusAreaId' ) .
-				$this->msg( 'colon-separator' )->text() . ' ' .
-				$this->event->getExtraParam( 'focusAreaTitle' )
+		$key = $this->event->getExtraParam( 'focusAreaUnassigned' ) ?
+			'communityrequests-notification-wish-focusarea-unassigned' :
+			'communityrequests-notification-wish-focusarea-change';
+		return $this->msg( $key, $this->event->getExtraParam( 'focusAreaId' ) .
+			$this->msg( 'colon-separator' )->text() . ' ' .
+			$this->event->getExtraParam( 'focusAreaTitle' )
 		);
 	}
 }

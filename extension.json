@@ -283,7 +283,8 @@
 				"wish-status-change"
 			],
 			"wish-focusarea-change": [
-				"wish-focusarea-change"
+				"wish-focusarea-change",
+				"wish-focusarea-change-unassigned"
 			],
 			"focus-area-create": [
 				"focus-area-create"
@@ -804,7 +805,7 @@
 						"expandable": true
 					}
 				},
-				"communityrequests-wish-focus-area-change": {
+				"communityrequests-wish-focusarea-change": {
 					"category": "communityrequests",
 					"group": "positive",
 					"section": "message",

@@ -144,17 +144,25 @@ class WishChangesProcessor extends AbstractChangesProcessor {
 		$notification = parent::getNotification( $field, $change, $revId );
 		// For focus area changes, add the focus area ID and title to notification properties.
 		if ( $field === Wish::PARAM_FOCUS_AREA && $change['new'] ) {
-			$faPageRef = $this->config->getEntityPageRefFromWikitextVal( $change['new'] );
-			if ( !$faPageRef ) {
-				return $notification;
-			}
-			$notification->setProperty( 'focusAreaId', $change['new'] );
-			$focusArea = $this->getMaybeCachedEntity(
-				Title::newFromPageReference( $faPageRef ),
-				$this->context->getLanguage()->getCode()
-			);
-			$notification->setProperty( 'focusAreaTitle', $focusArea->getTitle() );
+			return $this->setFocusAreaProps( $notification, $change['new'] );
+		} elseif ( $field === Wish::PARAM_FOCUS_AREA && $change['old'] ) {
+			$notification->setProperty( 'focusAreaUnassigned', true );
+			return $this->setFocusAreaProps( $notification, $change['old'] );
 		}
+		return $notification;
+	}
+
+	private function setFocusAreaProps( WikiNotification $notification, string $faId ): WikiNotification {
+		$faPageRef = $this->config->getEntityPageRefFromWikitextVal( $faId );
+		if ( !$faPageRef ) {
+			return $notification;
+		}
+		$notification->setProperty( 'focusAreaId', $faId );
+		$focusArea = $this->getMaybeCachedEntity(
+			Title::newFromPageReference( $faPageRef ),
+			$this->context->getLanguage()->getCode()
+		);
+		$notification->setProperty( 'focusAreaTitle', $focusArea->getTitle() );
 		return $notification;
 	}
 }

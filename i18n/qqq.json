@@ -264,6 +264,7 @@
 	"communityrequests-notification-bundled": "Notification header for when multiple updates have been made to a wishes or focus areas.",
 	"communityrequests-notification-wish-status-change": "Notification body text shown when the status of a wish has changed.\n\nParameters:\n* $1 — The old status value.\n* $2 — The new status value.",
 	"communityrequests-notification-wish-focusarea-change": "Notification body text shown when the focus area of a wish has changed.\n\nParameters:\n* $1 — The old focus area name, or if unassigned the {{msg-mw|communityrequests-focus-area-unassigned}} message.\n* $2 — The new focus area name, or if unassigned the {{msg-mw|communityrequests-focus-area-unassigned}} message.",
+	"communityrequests-notification-wish-focusarea-unassigned": "Notification body text shown when a wish has been unassigned from a focus area.\n\nParameters:\n* $1 — The old focus area name.",
 	"communityrequests-notification-focus-area-status-change": "Notification body text shown when the status of a focus area has changed.\n\nParameters:\n* $1 — The old status value.\n* $2 — The new status value.",
 	"communityrequests-notification-focus-area-wish-added": "Notification body text shown when a wish has been added to a focus area.\n\nParameters:\n* $1 — The entity ID and title of the wish that was added.",
 	"communityrequests-notification-focus-area-wish-removed": "Notification body text shown when a wish has been removed from a focus area.\n\nParameters:\n* $1 — The entity ID and title of the wish that was removed."

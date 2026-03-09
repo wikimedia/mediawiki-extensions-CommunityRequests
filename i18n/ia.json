@@ -250,5 +250,14 @@
 	"logentry-communityrequests-wish-status-change": "$1 {{GENDER:$2|ha cambiate}} le stato de “$3” de “$4” a “$5”",
 	"logentry-communityrequests-wish-focusarea-change": "$1 {{GENDER:$2|ha cambiate}} le area de interesse de “$3” de “$4” a “$5”",
 	"logentry-communityrequests-focus-area-create": "$1 {{GENDER:$2|ha create}} le area de interesse “$3”",
-	"logentry-communityrequests-focus-area-status-change": "$1 {{GENDER:$2|ha cambiate}} le stato de “$3” de “$4” a “$5”"
+	"logentry-communityrequests-focus-area-status-change": "$1 {{GENDER:$2|ha cambiate}} le stato de “$3” de “$4” a “$5”",
+	"echo-category-title-communityrequests-notification": "Lista de desiros del communitate",
+	"echo-pref-tooltip-communityrequests-notification": "Notificar me sur actualisationes del desiros e del areas de interesse in le Lista de desiros del communitate al quales io me ha abonate.",
+	"communityrequests-notification-header": "Actualisation de “$1”",
+	"communityrequests-notification-bundled": "Actualisationes del Lista de desiros del communitate",
+	"communityrequests-notification-wish-status-change": "Stato cambiate a “$1”.",
+	"communityrequests-notification-wish-focusarea-change": "Assignate al area de interesse “$1”.",
+	"communityrequests-notification-focus-area-status-change": "Stato cambiate a “$1”.",
+	"communityrequests-notification-focus-area-wish-added": "“$1” removite.",
+	"communityrequests-notification-focus-area-wish-removed": "“$1” addite."
 }

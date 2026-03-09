@@ -94,6 +94,9 @@
 	"communityrequests-status-focus-area-in-progress": "काम जारी",
 	"communityrequests-status-focus-area-done": "हो गया",
 	"communityrequests-status-focus-area-unknown": "अज्ञात",
+	"communityrequests-declined-additional-reason": "अस्वीकरण के लिए अतिरिक्त पैरामीटर",
+	"communityrequests-declined-reason": "अस्वीकरण का कारण",
+	"communityrequests-declined-reason-field-description": "\"अस्वीकरण का कारण\" और \"अस्वीकरण के लिए अतिरिक्त पैरामीटर\" विकल्पों के बारे में जानकारी के लिए कृपया [[$1|Decline साँचा]] देखें।",
 	"communityrequests-error-invalid-status": "अमान्य स्थिति: \"$1\"",
 	"communityrequests-edit-wish": "इच्छा सम्पादित करें",
 	"communityrequests-discuss-wish": "इस इच्छा की चर्चा करें",
@@ -248,5 +251,14 @@
 	"logentry-communityrequests-wish-status-change": "$1 ने \"$3\" की स्थिति को \"$4\" से \"$5\" में {{GENDER:$2|बदला}}",
 	"logentry-communityrequests-wish-focusarea-change": "$1 ने \"$3\" के फ़ोकस क्षेत्र को \"$4\" से \"$5\" में {{GENDER:$2|बदला}}",
 	"logentry-communityrequests-focus-area-create": "$1 ने \"$3\" फ़ोकस क्षेत्र {{GENDER:$2|बनाया}}",
-	"logentry-communityrequests-focus-area-status-change": "$1 ने \"$3\" की स्थिति को \"$4\" से \"$5\" में {{GENDER:$2|बदला}}"
+	"logentry-communityrequests-focus-area-status-change": "$1 ने \"$3\" की स्थिति को \"$4\" से \"$5\" में {{GENDER:$2|बदला}}",
+	"echo-category-title-communityrequests-notification": "सामुदायिक इच्छासूची",
+	"echo-pref-tooltip-communityrequests-notification": "मैंने सामुदायिक इच्छासूची में जिन इच्छाओं और फ़ोकस क्षेत्र की सदस्यता ली हुई है, उनपर कोई अपडेट आने पर मुझे सूचित करें।",
+	"communityrequests-notification-header": "\"$1\" पर अपडेट",
+	"communityrequests-notification-bundled": "सामुदायिक इच्छासूची अपडेट्स",
+	"communityrequests-notification-wish-status-change": "स्थिति बदलकर \"$1\" की गई।",
+	"communityrequests-notification-wish-focusarea-change": "\"$1\" फ़ोकस क्षेत्र को सौंपी गई।",
+	"communityrequests-notification-focus-area-status-change": "स्थिति बदलकर \"$1\" की गई।",
+	"communityrequests-notification-focus-area-wish-added": "\"$1\" हटाया गया।",
+	"communityrequests-notification-focus-area-wish-removed": "\"$1\" जोड़ा गया।"
 }

@@ -250,5 +250,14 @@
 	"logentry-communityrequests-wish-status-change": "$1 {{GENDER:$2|cambiou}} o estado de «$3» de «$4» a «$5».",
 	"logentry-communityrequests-wish-focusarea-change": "$1 {{GENDER:$2|cambiou}} a área de enfoque de «$3» de «$4» a «$5».",
 	"logentry-communityrequests-focus-area-create": "$1 {{GENDER:$2|creou}} a área de enfoque «$3»",
-	"logentry-communityrequests-focus-area-status-change": "$1 {{GENDER:$2|cambiou}} o estado de «$3» de «$4» a «$5»."
+	"logentry-communityrequests-focus-area-status-change": "$1 {{GENDER:$2|cambiou}} o estado de «$3» de «$4» a «$5».",
+	"echo-category-title-communityrequests-notification": "Lista de desexos da comunidade",
+	"echo-pref-tooltip-communityrequests-notification": "Notificádeme sobre as actualizacións feitas a desexos e áreas de enfoque da lista de desexos da comunidade aos que teña unha subscrición",
+	"communityrequests-notification-header": "Actualización a «$1»",
+	"communityrequests-notification-bundled": "Actualizacións da lista de desexos da comunidade",
+	"communityrequests-notification-wish-status-change": "Modificouse o estado a «$1».",
+	"communityrequests-notification-wish-focusarea-change": "Asignouse á área de enfoque «$1».",
+	"communityrequests-notification-focus-area-status-change": "Modificouse o estado a «$1».",
+	"communityrequests-notification-focus-area-wish-added": "Eliminouse «$1».",
+	"communityrequests-notification-focus-area-wish-removed": "Engadiuse «$1»."
 }

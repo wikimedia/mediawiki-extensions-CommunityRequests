@@ -95,6 +95,9 @@
 	"communityrequests-status-focus-area-in-progress": "進行中",
 	"communityrequests-status-focus-area-done": "完成",
 	"communityrequests-status-focus-area-unknown": "不明",
+	"communityrequests-declined-additional-reason": "額外拒絕參數",
+	"communityrequests-declined-reason": "拒絕原因",
+	"communityrequests-declined-reason-field-description": "關於「拒絕原因」和「額外拒絕參數」選項的資訊，請參閱[[$1|拒絕模板]]。",
 	"communityrequests-error-invalid-status": "無效狀態：「$1」",
 	"communityrequests-edit-wish": "編輯願望",
 	"communityrequests-discuss-wish": "討論此願望",
@@ -249,5 +252,14 @@
 	"logentry-communityrequests-wish-status-change": "$1已將「$3」的狀態從「$4」{{GENDER:$2|變更}}為「$5」",
 	"logentry-communityrequests-wish-focusarea-change": "$1已將「$3」的重點領域從「$4」{{GENDER:$2|變更}}為「$5」",
 	"logentry-communityrequests-focus-area-create": "$1{{GENDER:$2|已建立}}重點領域「$3」",
-	"logentry-communityrequests-focus-area-status-change": "$1已將「$3」的狀態從「$4」{{GENDER:$2|變更}}為「$5」"
+	"logentry-communityrequests-focus-area-status-change": "$1已將「$3」的狀態從「$4」{{GENDER:$2|變更}}為「$5」",
+	"echo-category-title-communityrequests-notification": "社群願望清單",
+	"echo-pref-tooltip-communityrequests-notification": "當我在社群願望清單中訂閱的願望或重點領域有更新時，通知我。",
+	"communityrequests-notification-header": "「$1」已更新。",
+	"communityrequests-notification-bundled": "社區願望清單更新",
+	"communityrequests-notification-wish-status-change": "已變更狀態為「$1」。",
+	"communityrequests-notification-wish-focusarea-change": "已分配至重點領域「$1」。",
+	"communityrequests-notification-focus-area-status-change": "已變更狀態為「$1」。",
+	"communityrequests-notification-focus-area-wish-added": "已移除「$1」。",
+	"communityrequests-notification-focus-area-wish-removed": "已新增「$1」。"
 }

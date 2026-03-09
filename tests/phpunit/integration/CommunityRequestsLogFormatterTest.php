@@ -79,39 +79,39 @@ class CommunityRequestsLogFormatterTest extends LogFormatterTestCase {
 					],
 				]
 			],
-			'wish-focusarea-change (from null)' => [
+			'wish-focusarea-change (from blank)' => [
 				'row' => [
 					'type' => 'communityrequests',
 					'action' => 'wish-focusarea-change',
 					'title' => 'Community_Wishlist/W123',
 					'namespace' => NS_MAIN,
 					'user_text' => 'TestUser',
-					'params' => [ '4::old' => null, '5::new' => 'FA1' ],
+					'params' => [ '4::old' => '', '5::new' => 'FA1' ],
 				],
 				'extra' => [
 					'text' => 'TestUser changed the focus area of "Test Wish (Community Wishlist/W123)" ' .
 						'from "Unassigned" to "Focus Area 1 (Community Wishlist/FA1)"',
 					'api' => [
-						'old' => null,
+						'old' => '',
 						'new' => 'FA1',
 					],
 				]
 			],
-			'wish-focusarea-change (to null)' => [
+			'wish-focusarea-change (to blank)' => [
 				'row' => [
 					'type' => 'communityrequests',
 					'action' => 'wish-focusarea-change',
 					'title' => 'Community_Wishlist/W123',
 					'namespace' => NS_MAIN,
 					'user_text' => 'TestUser',
-					'params' => [ '4::old' => 'FA1', '5::new' => null ],
+					'params' => [ '4::old' => 'FA1', '5::new' => '' ],
 				],
 				'extra' => [
 					'text' => 'TestUser changed the focus area of "Test Wish (Community Wishlist/W123)" ' .
 						'from "Focus Area 1 (Community Wishlist/FA1)" to "Unassigned"',
 					'api' => [
 						'old' => 'FA1',
-						'new' => null,
+						'new' => '',
 					],
 				]
 			],

@@ -118,7 +118,7 @@ class CommunityRequestsLogFormatter extends LogFormatter {
 	}
 
 	private function getFocusAreaMessage( ?string $val ): ?ScalarParam {
-		if ( $val === null ) {
+		if ( !$val ) {
 			return Message::plaintextParam(
 				$this->msg( 'communityrequests-focus-area-unassigned' )->inUserLanguage()->text()
 			);

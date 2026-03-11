@@ -253,5 +253,7 @@
 	"logentry-communityrequests-wish-status-change": "$1 {{GENDER:$2|שינה|שינתה}} את המצב של \"$3\" מ{{GRAMMAR:תחילית|$4}} ל{{GRAMMAR:תחילית|$5}}",
 	"logentry-communityrequests-wish-focusarea-change": "$1 {{GENDER:$2|שינה|שינתה}} את תחום המיקוד של \"$3\" מ{{GRAMMAR:תחילית|$4}} ל{{GRAMMAR:תחילית|$5}}",
 	"logentry-communityrequests-focus-area-create": "$1 {{GENDER:$2|יצר|יצרה}} את תחום המיקוד \"$3\"",
-	"logentry-communityrequests-focus-area-status-change": "$1 {{GENDER:$2|שינה|שינתה}} את המצב של \"$3\" מ{{GRAMMAR:תחילית|$4}} ל{{GRAMMAR:תחילית|$5}}"
+	"logentry-communityrequests-focus-area-status-change": "$1 {{GENDER:$2|שינה|שינתה}} את המצב של \"$3\" מ{{GRAMMAR:תחילית|$4}} ל{{GRAMMAR:תחילית|$5}}",
+	"communityrequests-notification-header": "עדכון ל־„$1”",
+	"communityrequests-notification-wish-status-change": "המצב השתנה ל־„$1”."
 }

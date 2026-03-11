@@ -258,6 +258,7 @@
 	"communityrequests-notification-bundled": "Aktualisierungen der Community-Wunschliste",
 	"communityrequests-notification-wish-status-change": "Status geändert auf „$1“.",
 	"communityrequests-notification-wish-focusarea-change": "Dem Schwerpunktbereich „$1“ zugeordnet.",
+	"communityrequests-notification-wish-focusarea-unassigned": "Nicht dem Schwerpunktbereich „$1“ zugewiesen.",
 	"communityrequests-notification-focus-area-status-change": "Status geändert auf „$1“.",
 	"communityrequests-notification-focus-area-wish-added": "„$1“ hinzugefügt.",
 	"communityrequests-notification-focus-area-wish-removed": "„$1“ entfernt."

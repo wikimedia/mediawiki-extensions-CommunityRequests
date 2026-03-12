@@ -257,6 +257,7 @@
 	"communityrequests-notification-bundled": "Actualisationes del Lista de desiros del communitate",
 	"communityrequests-notification-wish-status-change": "Stato cambiate a “$1”.",
 	"communityrequests-notification-wish-focusarea-change": "Assignate al area de interesse “$1”.",
+	"communityrequests-notification-wish-focusarea-unassigned": "Retirate del area de interesse “$1”.",
 	"communityrequests-notification-focus-area-status-change": "Stato cambiate a “$1”.",
 	"communityrequests-notification-focus-area-wish-added": "“$1” addite.",
 	"communityrequests-notification-focus-area-wish-removed": "“$1” removite."

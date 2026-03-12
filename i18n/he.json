@@ -254,6 +254,14 @@
 	"logentry-communityrequests-wish-focusarea-change": "$1 {{GENDER:$2|שינה|שינתה}} את תחום המיקוד של \"$3\" מ{{GRAMMAR:תחילית|$4}} ל{{GRAMMAR:תחילית|$5}}",
 	"logentry-communityrequests-focus-area-create": "$1 {{GENDER:$2|יצר|יצרה}} את תחום המיקוד \"$3\"",
 	"logentry-communityrequests-focus-area-status-change": "$1 {{GENDER:$2|שינה|שינתה}} את המצב של \"$3\" מ{{GRAMMAR:תחילית|$4}} ל{{GRAMMAR:תחילית|$5}}",
+	"echo-category-title-communityrequests-notification": "רשימת משאלות הקהילה",
+	"echo-pref-tooltip-communityrequests-notification": "להודיע לי על עדכונים בנוגע למשאלות ותחומי מיקוד שנרשמתי אליהם ברשימת משאלות הקהילה.",
 	"communityrequests-notification-header": "עדכון ל־„$1”",
-	"communityrequests-notification-wish-status-change": "המצב השתנה ל־„$1”."
+	"communityrequests-notification-bundled": "עדכוני משאלות קהילה",
+	"communityrequests-notification-wish-status-change": "המצב השתנה ל־„$1”.",
+	"communityrequests-notification-wish-focusarea-change": "הוקצה לתחום המיקוד \"$1\".",
+	"communityrequests-notification-wish-focusarea-unassigned": "ההקצאה לתחום המיקוד \"$1\" בוטלה.",
+	"communityrequests-notification-focus-area-status-change": "המצב החדש הוא \"$1\".",
+	"communityrequests-notification-focus-area-wish-added": "נוספה \"$1\".",
+	"communityrequests-notification-focus-area-wish-removed": "הוסרה \"$1\"."
 }

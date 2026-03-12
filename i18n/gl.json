@@ -257,6 +257,7 @@
 	"communityrequests-notification-bundled": "Actualizacións da lista de desexos da comunidade",
 	"communityrequests-notification-wish-status-change": "Modificouse o estado a «$1».",
 	"communityrequests-notification-wish-focusarea-change": "Asignouse á área de enfoque «$1».",
+	"communityrequests-notification-wish-focusarea-unassigned": "Desasignouse da área de enfoque «$1».",
 	"communityrequests-notification-focus-area-status-change": "Modificouse o estado a «$1».",
 	"communityrequests-notification-focus-area-wish-added": "Engadiuse «$1».",
 	"communityrequests-notification-focus-area-wish-removed": "Eliminouse «$1»."

@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"HanV",
 			"Mainframe98",
 			"McDutchie",
 			"Siebrand",
@@ -253,5 +254,7 @@
 	"logentry-communityrequests-wish-status-change": "$1 {{GENDER:$2|heeft}} de status van “$3” veranderd van “$4” in “$5”",
 	"logentry-communityrequests-wish-focusarea-change": "$1 {{GENDER:$2|heeft}} het aandachtsgebied van “$3” veranderd van “$4” in “$5”",
 	"logentry-communityrequests-focus-area-create": "$1 {{GENDER:$2|heeft}} het aandachtsgebied “$3” aangemaakt",
-	"logentry-communityrequests-focus-area-status-change": "$1 {{GENDER:$2|heeft}} de status van “$3” veranderd van “$4” in “$5”"
+	"logentry-communityrequests-focus-area-status-change": "$1 {{GENDER:$2|heeft}} de status van “$3” veranderd van “$4” in “$5”",
+	"communityrequests-notification-focus-area-wish-added": "\"$1\" toegevoegd.",
+	"communityrequests-notification-focus-area-wish-removed": "\"$1\" verwijderd."
 }

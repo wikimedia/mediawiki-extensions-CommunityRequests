@@ -1,0 +1,19 @@
+{
+	"@metadata": {
+		"authors": [
+			"Tuwewanzi"
+		]
+	},
+	"communityrequests-wishtype-unknown-label-short": "Oslólwaye šni",
+	"communityrequests-save": "Wayútȟokčapi ékignaka {{GENDER:|yo|ye|yo/ye}}",
+	"communityrequests-focus-area-save": "Wayútȟokčapi ékignaka {{GENDER:|yo|ye|yo/ye}}",
+	"communityrequests-remove-support-yes": "{{GENDER:|Hau|Haƞ|Hau/Haƞ}}",
+	"communityrequests-remove-support-no": "Hiyá",
+	"communityrequests-status-wish-done": "Yuštáƞ",
+	"communityrequests-status-focus-area-done": "Yuštáƞ",
+	"communityrequests-tag-categories": "Očháže",
+	"communityrequests-tag-search": "Wóle",
+	"communityrequests-tag-talk-pages": "Wóglaka",
+	"communityrequests-wish-proposer": "Tuwá owá kiŋ: $1",
+	"communityrequests-wishes-type-header": "Owéčhaže"
+}

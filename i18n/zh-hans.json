@@ -257,5 +257,8 @@
 	"logentry-communityrequests-wish-focusarea-change": "$1已将“$3”的重点领域由“$4”{{GENDER:$2|更改为}}“$5”",
 	"logentry-communityrequests-focus-area-create": "$1{{GENDER:$2|创建了}}重点领域“$3”",
 	"logentry-communityrequests-focus-area-status-change": "$1已将“$3”的状态由“$4”{{GENDER:$2|更改为}}“$5”",
-	"echo-category-title-communityrequests-notification": "社区愿望清单"
+	"echo-category-title-communityrequests-notification": "社区愿望清单",
+	"communityrequests-notification-header": "“$1”已更新",
+	"communityrequests-notification-bundled": "社区愿望清单更新",
+	"communityrequests-notification-wish-status-change": "已更改状态至“$1”。"
 }

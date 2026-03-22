@@ -37,7 +37,7 @@ class PermissionHooksTest extends MediaWikiUnitTestCase {
 	): void {
 		$opts = array_merge(
 			[
-				'title' => $this->makeMockTitle( 'Community Wishlist/W123' ),
+				'title' => static fn ( $testCase ) => $testCase->makeMockTitle( 'Community Wishlist/W123' ),
 				'action' => 'edit',
 				'canManuallyEdit' => true,
 				'allowManualEditing' => false,
@@ -66,7 +66,7 @@ class PermissionHooksTest extends MediaWikiUnitTestCase {
 
 		$result = [];
 		$ret = $handler->onGetUserPermissionsErrorsExpensive(
-			$opts['title'],
+			( $opts['title'] )( $this ),
 			$user,
 			$opts['action'],
 			$result
@@ -74,12 +74,13 @@ class PermissionHooksTest extends MediaWikiUnitTestCase {
 		$this->assertSame( $expectedReturn, $ret );
 		if ( !$expectedReturn ) {
 			$this->assertSame( $expectedResult[0][0], $result[0][0] );
-			$this->assertSame( $expectedResult[0][1]->getDBKey(), $result[0][1]->getDBKey() );
+			$expectedTitle = ( $expectedResult[0][1] )( $this );
+			$this->assertSame( $expectedTitle->getDBKey(), $expectedTitle->getDBKey() );
 			$this->assertSame( $expectedResult[1], $result[1] );
 		}
 	}
 
-	public function provideManuallyEditing(): array {
+	public static function provideManuallyEditing(): array {
 		return [
 			[
 				[ 'canManuallyEdit' => true ],
@@ -89,7 +90,10 @@ class PermissionHooksTest extends MediaWikiUnitTestCase {
 				[ 'canManuallyEdit' => false ],
 				false,
 				[
-					[ 'communityrequests-cant-manually-edit', $this->makeMockTitle( 'Special:WishlistIntake' ) ],
+					[
+						'communityrequests-cant-manually-edit',
+						static fn ( $testCase ) => $testCase->makeMockTitle( 'Special:WishlistIntake' ),
+					],
 					'badaccess-groups'
 				]
 			],
@@ -102,12 +106,15 @@ class PermissionHooksTest extends MediaWikiUnitTestCase {
 			],
 			[
 				[
-					'title' => $this->makeMockTitle( 'Community Wishlist/FA123' ),
+					'title' => static fn ( $testCase ) => $testCase->makeMockTitle( 'Community Wishlist/FA123' ),
 					'canManuallyEdit' => false,
 				],
 				false,
 				[
-					[ 'communityrequests-cant-manually-edit', $this->makeMockTitle( 'Special:EditFocusArea' ) ],
+					[
+						'communityrequests-cant-manually-edit',
+						static fn ( $testCase ) => $testCase->makeMockTitle( 'Special:EditFocusArea' ),
+					],
 					'badaccess-groups'
 				]
 			],
@@ -119,7 +126,10 @@ class PermissionHooksTest extends MediaWikiUnitTestCase {
 				[ 'canManuallyEdit' => false, 'action' => 'undelete' ],
 				false,
 				[
-					[ 'communityrequests-cant-manually-edit', $this->makeMockTitle( 'Special:WishlistIntake' ) ],
+					[
+						'communityrequests-cant-manually-edit',
+						static fn ( $testCase ) => $testCase->makeMockTitle( 'Special:WishlistIntake' ),
+					],
 					'badaccess-groups'
 				]
 			],

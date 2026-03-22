@@ -56,7 +56,7 @@ class PageDisplayHooksTest extends MediaWikiUnitTestCase {
 				'enabled' => true,
 				'wishVotingEnabled' => true,
 				'focusAreaVotingEnabled' => true,
-				'title' => $this->makeMockTitle( 'Community Wishlist/W123' ),
+				'title' => static fn ( $testCase ) => $testCase->makeMockTitle( 'Community Wishlist/W123' ),
 				'postEditVal' => null,
 				'prefersMachineTranslation' => false,
 			],
@@ -85,7 +85,7 @@ class PageDisplayHooksTest extends MediaWikiUnitTestCase {
 		$out->expects( $expectStylesModule ? $this->once() : $this->never() )
 			->method( 'addModuleStyles' )
 			->with( 'ext.communityrequests.styles' );
-		$out->method( 'getTitle' )->willReturn( $opts['title'] );
+		$out->method( 'getTitle' )->willReturn( ( $opts['title'] )( $this ) );
 		$out->expects( $this->atMost( 2 ) )
 			->method( 'getUser' )
 			->willReturn( $this->createMock( User::class ) );
@@ -126,7 +126,7 @@ class PageDisplayHooksTest extends MediaWikiUnitTestCase {
 		$handler->onBeforePageDisplay( $out, $this->createNoOpMock( Skin::class ) );
 	}
 
-	public function provideOnBeforePageDisplay(): array {
+	public static function provideOnBeforePageDisplay(): array {
 		return [
 			'disabled' => [
 				[ 'enabled' => false ],
@@ -134,45 +134,45 @@ class PageDisplayHooksTest extends MediaWikiUnitTestCase {
 				false,
 			],
 			'non-wish page' => [
-				[ 'title' => $this->makeMockTitle( 'Some other page' ) ],
+				[ 'title' => static fn ( $testCase ) => $testCase->makeMockTitle( 'Some other page' ) ],
 				[],
 				false,
 			],
 			'post-edit new wish' => [
 				[
-					'title' => $this->makeMockTitle( 'Community Wishlist/W123' ),
+					'title' => static fn ( $testCase ) => $testCase->makeMockTitle( 'Community Wishlist/W123' ),
 					'postEditVal' => CommunityRequestsHooks::SESSION_VALUE_ENTITY_CREATED,
 				],
 				[ 'ext.communityrequests.voting' ],
 			],
 			'post-edit, vote added' => [
 				[
-					'title' => $this->makeMockTitle( 'Community Wishlist/W123' ),
+					'title' => static fn ( $testCase ) => $testCase->makeMockTitle( 'Community Wishlist/W123' ),
 					'postEditVal' => CommunityRequestsHooks::SESSION_VALUE_VOTE_ADDED,
 				],
 				[ 'ext.communityrequests.voting' ],
 			],
 			'view focus area' => [
-				[ 'title' => $this->makeMockTitle( 'Community Wishlist/FA123' ) ],
+				[ 'title' => static fn ( $testCase ) => $testCase->makeMockTitle( 'Community Wishlist/FA123' ) ],
 				[ 'ext.communityrequests.voting' ],
 			],
 			'view wish, voting disabled' => [
 				[
-					'title' => $this->makeMockTitle( 'Community Wishlist/W123' ),
+					'title' => static fn ( $testCase ) => $testCase->makeMockTitle( 'Community Wishlist/W123' ),
 					'wishVotingEnabled' => false,
 				],
 				[],
 			],
 			'view wish, prefers machine translation' => [
 				[
-					'title' => $this->makeMockTitle( 'Community Wishlist/W123' ),
+					'title' => static fn ( $testCase ) => $testCase->makeMockTitle( 'Community Wishlist/W123' ),
 					'prefersMachineTranslation' => true,
 				],
 				[ 'ext.communityrequests.voting', 'ext.communityrequests.mint' ],
 			],
 			'view wish talk page' => [
 				[
-					'title' => $this->makeMockTitle( 'Talk:Community Wishlist/W123' ),
+					'title' => static fn ( $testCase ) => $testCase->makeMockTitle( 'Talk:Community Wishlist/W123' ),
 				],
 				[],
 			],

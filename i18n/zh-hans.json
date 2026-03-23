@@ -25,6 +25,7 @@
 	"communityrequests-focus-area-not-found": "查无重点领域[[$1|$2]]，因为不是有效的ID或不是通过[[Special:EditFocusArea]]创建的。",
 	"communityrequests-form-error": "发生不明错误。请尝试再次保存，或在[[$1|讨论页]]寻求协助。",
 	"communityrequests-intake-focus-area": "重点领域",
+	"communityrequests-baselang-no-results": "无结果",
 	"communityrequests-description": "描述您的问题",
 	"communityrequests-description-description": "详细说明您的愿望或想解决的问题。",
 	"communityrequests-title-label": "标题",

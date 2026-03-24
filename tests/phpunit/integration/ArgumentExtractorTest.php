@@ -7,6 +7,8 @@ use MediaWiki\Extension\CommunityRequests\ArgumentExtractor;
 use MediaWikiIntegrationTestCase;
 
 /**
+ * @group CommunityRequests
+ * @group Database
  * @covers \MediaWiki\Extension\CommunityRequests\ArgumentExtractor
  */
 class ArgumentExtractorTest extends MediaWikiIntegrationTestCase {

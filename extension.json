@@ -160,6 +160,21 @@
 			]
 		}
 	},
+	"DomainEventIngresses": [
+		{
+			"events": [
+				"PageCreated"
+			],
+			"class": "MediaWiki\\Extension\\CommunityRequests\\EventIngress",
+			"services": [
+				"CommunityRequests.WishlistConfig",
+				"NamespaceInfo"
+			],
+			"optional_services": [
+				"DiscussionTools.SubscriptionStore"
+			]
+		}
+	],
 	"SpecialPages": {
 		"Wishlist": {
 			"class": "MediaWiki\\Extension\\CommunityRequests\\SpecialWishlist",

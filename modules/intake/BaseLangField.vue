@@ -117,6 +117,7 @@ module.exports = exports = defineComponent( {
 		 * @return {string}
 		 */
 		function labelTemplate( langCode ) {
+			langCode = langCode.split( ' ' )[ 0 ];
 			if ( !languages[ langCode ] ) {
 				return '';
 			}

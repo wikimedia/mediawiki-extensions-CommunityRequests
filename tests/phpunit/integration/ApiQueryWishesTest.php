@@ -208,12 +208,12 @@ class ApiQueryWishesTest extends ApiTestCase {
 			[
 				'titles' => $titles,
 				'dir' => 'descending',
-				'result' => [ 'Walrus', 'walrus', 'AArdvark' ],
+				'expectedResult' => [ 'Walrus', 'walrus', 'AArdvark' ],
 			],
 			[
 				'titles' => $titles,
 				'dir' => 'ascending',
-				'result' => [ 'AArdvark', 'Aardvark', 'aardvark' ],
+				'expectedResult' => [ 'AArdvark', 'Aardvark', 'aardvark' ],
 			],
 		];
 	}

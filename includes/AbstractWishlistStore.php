@@ -33,9 +33,11 @@ abstract class AbstractWishlistStore {
 	public const TITLE_MAX_CHARS = 100;
 	public const TITLE_MAX_BYTES = 255;
 	public const MAX_FOCUS_AREAS = 1000;
+	public const ORDER_BY_DEFAULT = null;
 	public const SORT_ASC = SelectQueryBuilder::SORT_ASC;
 	public const SORT_DESC = SelectQueryBuilder::SORT_DESC;
 	public const FILTER_NONE = [];
+	public const FILTER_WISHES = 'wish_page_ids';
 	public const FILTER_FOCUS_AREAS = 'focus_area_page_ids';
 	public const FILTER_CREATED_START = 'created_start';
 	public const FILTER_CREATED_END = 'created_end';
@@ -343,7 +345,7 @@ abstract class AbstractWishlistStore {
 	 * Get a sorted list of wishlist entities in the given language.
 	 *
 	 * @param string $lang Requested language code.
-	 * @param string $orderBy Use AbstractWishlistStore::*field() static methods.
+	 * @param ?string $orderBy Use AbstractWishlistStore::*field() static methods.
 	 * @param string $sort Use AbstractWishlistStore::SORT_ASC or AbstractWishlistStore::SORT_DESC.
 	 * @param int $limit Limit the number of results.
 	 * @param ?array $offset As produced by ApiBase::parseContinueParamOrDie().
@@ -357,7 +359,7 @@ abstract class AbstractWishlistStore {
 	 */
 	public function getAll(
 		string $lang,
-		string $orderBy,
+		?string $orderBy = self::ORDER_BY_DEFAULT,
 		string $sort = self::SORT_DESC,
 		int $limit = 50,
 		?array $offset = null,

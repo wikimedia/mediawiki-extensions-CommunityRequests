@@ -12,6 +12,7 @@ use MediaWiki\Title\TitleFactory;
 use MediaWiki\Title\TitleFormatter;
 use Psr\Log\LoggerInterface;
 use Wikimedia\Message\ScalarParam;
+use Wikimedia\ObjectCache\WANObjectCache;
 
 /**
  * This class formats CommunityRequests log entries.
@@ -34,6 +35,7 @@ class CommunityRequestsLogFormatter extends LogFormatter {
 		protected readonly FocusAreaStore $focusAreaStore,
 		protected readonly TitleFormatter $titleFormatter,
 		protected readonly TitleFactory $titleFactory,
+		protected WANObjectCache $cache,
 		protected readonly LoggerInterface $logger,
 	) {
 		parent::__construct( $entry );

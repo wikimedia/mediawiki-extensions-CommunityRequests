@@ -11,6 +11,7 @@ use MediaWiki\Extension\CommunityRequests\IdGenerator\IdGenerator;
 use MediaWiki\Extension\CommunityRequests\Wish\WishStore;
 use MediaWiki\Page\PageIdentityValue;
 use Wikimedia\Rdbms\IReadableDatabase;
+use Wikimedia\Rdbms\SelectQueryBuilder;
 
 class FocusAreaStore extends AbstractWishlistStore {
 
@@ -169,6 +170,21 @@ class FocusAreaStore extends AbstractWishlistStore {
 		$this->saveTranslations( $focusArea, $dbw );
 
 		$dbw->endAtomic( __METHOD__ );
+	}
+
+	/** @inheritDoc */
+	protected function applyFilters(
+		IReadableDatabase $dbr,
+		SelectQueryBuilder $select,
+		array $filters
+	): SelectQueryBuilder {
+		$select = parent::applyFilters( $dbr, $select, $filters );
+
+		if ( isset( $filters[self::FILTER_FOCUS_AREAS] ) && $filters[self::FILTER_FOCUS_AREAS] ) {
+			$select->andWhere( [ static::pageField() => $filters[self::FILTER_FOCUS_AREAS] ] );
+		}
+
+		return $select;
 	}
 
 	/** @inheritDoc */

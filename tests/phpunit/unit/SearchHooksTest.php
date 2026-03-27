@@ -19,6 +19,8 @@ use MediaWikiUnitTestCase;
 use MockTitleTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\NullLogger;
+use Wikimedia\ObjectCache\EmptyBagOStuff;
+use Wikimedia\ObjectCache\WANObjectCache;
 
 /**
  * @group CommunityRequests
@@ -40,14 +42,14 @@ class SearchHooksTest extends MediaWikiUnitTestCase {
 		$wish = new Wish(
 			$wishTitle,
 			'en',
-			$this->createNoOpMock( UserIdentity::class ),
+			$this->createNoOpMock( UserIdentity::class, [ 'getName' ] ),
 			[
 				Wish::PARAM_TITLE => 'Test wish title',
 				Wish::PARAM_DESCRIPTION => 'Test wish description',
 				Wish::PARAM_VOTE_COUNT => 5,
 			]
 		);
-		$wishStore = $this->createNoOpMock( WishStore::class, [ 'get' ] );
+		$wishStore = $this->createNoOpMock( WishStore::class, [ 'get', 'normalizeArrayValues' ] );
 		$wishStore->expects( $this->once() )
 			->method( 'get' )
 			->willReturn( $wish );
@@ -63,6 +65,7 @@ class SearchHooksTest extends MediaWikiUnitTestCase {
 			$this->createNoOpMock( FocusAreaStore::class ),
 			new NullLogger(),
 			$titleFormatter,
+			new WANObjectCache( [ 'cache' => new EmptyBagOStuff() ] ),
 		);
 
 		$searchPage = $this->getMockSpecialSearch();
@@ -104,7 +107,9 @@ class SearchHooksTest extends MediaWikiUnitTestCase {
 				FocusArea::PARAM_VOTE_COUNT => 5,
 			]
 		);
-		$focusAreaStore = $this->createNoOpMock( FocusAreaStore::class, [ 'get', 'getWishCounts' ] );
+		$focusAreaStore = $this->createNoOpMock( FocusAreaStore::class, [
+			'get', 'getWishCounts', 'normalizeArrayValues'
+		] );
 		$focusAreaStore->expects( $this->once() )
 			->method( 'get' )
 			->willReturn( $focusArea );
@@ -123,6 +128,7 @@ class SearchHooksTest extends MediaWikiUnitTestCase {
 			$focusAreaStore,
 			new NullLogger(),
 			$titleFormatter,
+			new WANObjectCache( [ 'cache' => new EmptyBagOStuff() ] ),
 		);
 
 		$searchPage = $this->getMockSpecialSearch();

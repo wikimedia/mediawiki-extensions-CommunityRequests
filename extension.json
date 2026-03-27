@@ -56,8 +56,10 @@
 	"Hooks": {
 		"BeforeDisplayNoArticleText": "pageDisplay",
 		"BeforePageDisplay": "pageDisplay",
+		"ChangesListInitRows": "changesList",
 		"ChangesListInsertArticleLink": "changesList",
 		"ChangeTagsListActive": "changeTag",
+		"ContributionsLineEnding": "changesList",
 		"DifferenceEngineRenderRevisionAddParserOutput": "pageDisplay",
 		"GetPreferences": "preferences",
 		"LinksUpdateComplete": "main",
@@ -101,7 +103,9 @@
 				"CommunityRequests.WishlistConfig",
 				"CommunityRequests.WishStore",
 				"CommunityRequests.FocusAreaStore",
+				"TitleFactory",
 				"TitleFormatter",
+				"MainWANObjectCache",
 				"CommunityRequests.Logger"
 			]
 		},
@@ -151,7 +155,8 @@
 				"CommunityRequests.WishStore",
 				"CommunityRequests.FocusAreaStore",
 				"CommunityRequests.Logger",
-				"TitleFormatter"
+				"TitleFormatter",
+				"MainWANObjectCache"
 			]
 		},
 		"translate": {
@@ -287,6 +292,7 @@
 				"CommunityRequests.FocusAreaStore",
 				"TitleFormatter",
 				"TitleFactory",
+				"MainWANObjectCache",
 				"CommunityRequests.Logger"
 			]
 		}

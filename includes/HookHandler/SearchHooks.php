@@ -14,6 +14,7 @@ use MediaWiki\Specials\SpecialSearch;
 use MediaWiki\Title\Title;
 use MediaWiki\Title\TitleFormatter;
 use Psr\Log\LoggerInterface;
+use Wikimedia\ObjectCache\WANObjectCache;
 
 /**
  * Hook handlers for customizing search results of wishlist pages.
@@ -28,6 +29,7 @@ class SearchHooks implements ShowSearchHitHook {
 		protected readonly FocusAreaStore $focusAreaStore,
 		protected readonly LoggerInterface $logger,
 		protected readonly TitleFormatter $titleFormatter,
+		protected WANObjectCache $cache,
 	) {
 	}
 

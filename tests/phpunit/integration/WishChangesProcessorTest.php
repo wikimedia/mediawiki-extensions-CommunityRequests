@@ -188,7 +188,7 @@ class WishChangesProcessorTest extends MediaWikiIntegrationTestCase {
 			[ FocusArea::PARAM_TITLE => 'Focus Area 2', FocusArea::PARAM_STATUS => 'prioritized' ],
 			$config,
 		);
-		$mockFocusAreaStore = $this->createNoOpMock( FocusAreaStore::class, [ 'get' ] );
+		$mockFocusAreaStore = $this->createNoOpMock( FocusAreaStore::class, [ 'get', 'normalizeArrayValues' ] );
 		$mockFocusAreaStore->method( 'get' )
 			->willReturnCallback( static function ( $title ) use ( $faTitle1, $focusArea1, $faTitle2, $focusArea2 ) {
 				if ( $title->equals( $faTitle1 ) ) {

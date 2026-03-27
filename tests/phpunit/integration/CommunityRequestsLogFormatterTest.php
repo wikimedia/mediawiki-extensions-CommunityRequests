@@ -216,6 +216,7 @@ class CommunityRequestsLogFormatterTest extends LogFormatterTestCase {
 			$this->getServiceContainer()->get( 'CommunityRequests.FocusAreaStore' ),
 			$this->getServiceContainer()->get( 'TitleFormatter' ),
 			$this->getServiceContainer()->get( 'TitleFactory' ),
+			$this->getServiceContainer()->get( 'MainWANObjectCache' ),
 			$this->getServiceContainer()->get( 'CommunityRequests.Logger' ),
 		);
 

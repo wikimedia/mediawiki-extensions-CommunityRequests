@@ -23,7 +23,7 @@ class TranslateHooks implements TranslateTitlePageTranslationHook {
 	): void {
 		if ( $this->config->isEnabled() && $this->config->isEntityPage( $page ) ) {
 			$state = TranslateTitleEnum::DISABLED;
-			$reason = wfMessage( 'communityrequests-translate-title-disabled-reason' )->escaped();
+			$reason = wfMessage( 'communityrequests-translate-title-disabled-reason' )->text();
 		}
 	}
 }

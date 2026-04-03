@@ -91,7 +91,8 @@
 				"CommunityRequests.Logger",
 				"MainConfig",
 				"WikiPageFactory",
-				"DeletePageFactory"
+				"DeletePageFactory",
+				"ParserCoreTagHooks"
 			]
 		},
 		"changesList": {

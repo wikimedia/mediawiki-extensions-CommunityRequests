@@ -12,6 +12,7 @@ use MediaWiki\Linker\LinkRenderer;
 use MediaWiki\MainConfigNames;
 use MediaWiki\Page\DeletePageFactory;
 use MediaWiki\Page\WikiPageFactory;
+use MediaWiki\Parser\ParserCoreTagHooks;
 use MediaWiki\Permissions\PermissionManager;
 use MediaWiki\Registration\ExtensionRegistry;
 use MediaWiki\Skin\SkinTemplate;
@@ -176,6 +177,7 @@ class CommunityRequestsHooksTest extends MediaWikiUnitTestCase {
 			$mainConfig,
 			$this->createNoOpMock( WikiPageFactory::class ),
 			$this->createNoOpMock( DeletePageFactory::class ),
+			$this->createNoOpMock( ParserCoreTagHooks::class ),
 			$extensionRegistry
 		);
 	}

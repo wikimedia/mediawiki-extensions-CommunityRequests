@@ -29,6 +29,7 @@ use MediaWiki\Page\PageStoreRecord;
 use MediaWiki\Page\ProperPageIdentity;
 use MediaWiki\Page\WikiPageFactory;
 use MediaWiki\Parser\Parser;
+use MediaWiki\Parser\ParserCoreTagHooks;
 use MediaWiki\Permissions\Authority;
 use MediaWiki\Permissions\PermissionManager;
 use MediaWiki\Registration\ExtensionRegistry;
@@ -76,6 +77,7 @@ class CommunityRequestsHooks implements
 		protected readonly Config $mainConfig,
 		protected readonly WikiPageFactory $wikiPageFactory,
 		protected readonly DeletePageFactory $deletePageFactory,
+		protected readonly ParserCoreTagHooks $parserCoreTagHooks,
 		?ExtensionRegistry $extensionRegistry = null
 	) {
 		$extensionRegistry ??= ExtensionRegistry::getInstance();
@@ -88,6 +90,7 @@ class CommunityRequestsHooks implements
 			$this->logger,
 			$linkRenderer,
 			$userFactory,
+			$parserCoreTagHooks,
 		);
 	}
 

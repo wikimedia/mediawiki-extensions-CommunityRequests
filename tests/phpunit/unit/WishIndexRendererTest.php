@@ -10,6 +10,7 @@ use MediaWiki\Extension\CommunityRequests\Wish\WishStore;
 use MediaWiki\Language\Language;
 use MediaWiki\Linker\LinkRenderer;
 use MediaWiki\Parser\Parser;
+use MediaWiki\Parser\ParserCoreTagHooks;
 use MediaWiki\Parser\ParserOptions;
 use MediaWiki\Parser\ParserOutput;
 use MediaWiki\Parser\PPFrame;
@@ -100,6 +101,7 @@ class WishIndexRendererTest extends MediaWikiUnitTestCase {
 			$this->createNoOpMock( LoggerInterface::class ),
 			$this->createNoOpMock( LinkRenderer::class ),
 			$this->createNoOpMock( UserFactory::class ),
+			$this->createNoOpMock( ParserCoreTagHooks::class ),
 			$parser,
 			$frame,
 			[]

@@ -9,8 +9,8 @@ use MediaWiki\Extension\CommunityRequests\Wish\WishStore;
 use MediaWiki\Html\Html;
 use MediaWiki\Language\Language;
 use MediaWiki\Linker\LinkRenderer;
-use MediaWiki\Parser\CoreTagHooks;
 use MediaWiki\Parser\Parser;
+use MediaWiki\Parser\ParserCoreTagHooks;
 use MediaWiki\Parser\PPFrame;
 use MediaWiki\Parser\PPNode;
 use MediaWiki\Parser\Sanitizer;
@@ -47,6 +47,7 @@ abstract class AbstractRenderer implements MessageLocalizer {
 	 * @param LoggerInterface $logger
 	 * @param LinkRenderer $linkRenderer
 	 * @param UserFactory $userFactory
+	 * @param ParserCoreTagHooks $parserCoreTagHooks
 	 * @param Parser $parser
 	 * @param PPFrame $frame
 	 * @param (string|PPNode)[] $parts The parser function arguments in unexpanded form
@@ -58,6 +59,7 @@ abstract class AbstractRenderer implements MessageLocalizer {
 		protected readonly LoggerInterface $logger,
 		protected readonly LinkRenderer $linkRenderer,
 		protected readonly UserFactory $userFactory,
+		protected readonly ParserCoreTagHooks $parserCoreTagHooks,
 		protected readonly Parser $parser,
 		protected readonly PPFrame $frame,
 		protected array $parts
@@ -572,7 +574,7 @@ abstract class AbstractRenderer implements MessageLocalizer {
 		$this->parser->getOutput()->setDisplayTitle(
 			"$titleSpan $entityIdSpan"
 		);
-		CoreTagHooks::indicator(
+		$this->parserCoreTagHooks->indicator(
 			$this->getStatusChipHtml(),
 			[ 'name' => "{$this->rendererType}-status" ],
 			$this->parser,

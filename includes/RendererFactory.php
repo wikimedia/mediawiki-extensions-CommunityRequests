@@ -12,6 +12,7 @@ use MediaWiki\Extension\CommunityRequests\Wish\WishRenderer;
 use MediaWiki\Extension\CommunityRequests\Wish\WishStore;
 use MediaWiki\Linker\LinkRenderer;
 use MediaWiki\Parser\Parser;
+use MediaWiki\Parser\ParserCoreTagHooks;
 use MediaWiki\Parser\PPFrame;
 use MediaWiki\User\UserFactory;
 use Psr\Log\LoggerInterface;
@@ -28,6 +29,7 @@ class RendererFactory {
 		private readonly LoggerInterface $logger,
 		private readonly LinkRenderer $linkRenderer,
 		private readonly UserFactory $userFactory,
+		private readonly ParserCoreTagHooks $parserCoreTagHooks,
 	) {
 	}
 
@@ -55,6 +57,7 @@ class RendererFactory {
 				$this->logger,
 				$this->linkRenderer,
 				$this->userFactory,
+				$this->parserCoreTagHooks,
 				$parser,
 				$frame,
 				$args
@@ -85,6 +88,7 @@ class RendererFactory {
 			$this->logger,
 			$this->linkRenderer,
 			$this->userFactory,
+			$this->parserCoreTagHooks,
 			$parser,
 			$frame,
 			$args

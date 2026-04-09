@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"Tofeiku"
+			"Tofeiku",
+			"SNN95"
 		]
 	},
 	"communityrequests-description": "Terangkan masalah anda",
@@ -24,9 +25,9 @@
 	"communityrequests-wish-audience-heading": "Pengguna yang terkesan",
 	"communityrequests-wish-phabricator-heading": "Tugasan Phabricator",
 	"communityrequests-wish-other-details-heading": "Butiran lain",
-	"communityrequests-wish-created": "Dicipta",
-	"communityrequests-wish-updated": "Kemas kini terakhir",
-	"communityrequests-wish-proposer": "Pengarang",
+	"communityrequests-wish-created": "Dicipta: $1",
+	"communityrequests-wish-updated": "Kemas kini terakhir: $1",
+	"communityrequests-wish-proposer": "Pengarang: $1",
 	"communityrequests-wishes-status-header": "Status",
 	"communityrequests-wishes-type-header": "Jenis",
 	"communityrequests-focus-area-unassigned": "Belum ditugaskan",

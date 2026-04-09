@@ -4,7 +4,8 @@
 			"Amire80",
 			"Neriah",
 			"YaronSh",
-			"מ. רובין"
+			"מ. רובין",
+			"ערן"
 		]
 	},
 	"communityrequests-desc": "מערכת לניהול הצעות ובקשות טכניות של קהילת ויקי.",
@@ -18,6 +19,7 @@
 	"communityrequests-focus-area-not-found": "תחום המיקוד [[$1|$2]] לא נמצא, יש לו מזהה בלתי־תקין או שהוא לא נוצר באמצעות הדף [[Special:EditFocusArea]].",
 	"communityrequests-form-error": "משהו השתבש. נא לנסות לשמור שוב או לבקש עזרה ב[[$1|דף השיחה]].",
 	"communityrequests-intake-focus-area": "תחום מיקוד",
+	"communityrequests-baselang-error": "אנא בחר שפה תקפה.",
 	"communityrequests-description": "נא לתאר את הבעיה שלך",
 	"communityrequests-description-description": "נא להסביר בפירוט את המשאלה או את הבעיה {{GENDER:|שאתה מתייחס|שאת מתייחסת}} אליה.",
 	"communityrequests-title-label": "כותרת",

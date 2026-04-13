@@ -7,7 +7,7 @@ use InvalidArgumentException;
 use MediaWiki\Content\WikitextContent;
 use MediaWiki\Extension\CommunityRequests\IdGenerator\IdGenerator;
 use MediaWiki\Extension\Translate\PageTranslation\TranslatablePageParser;
-use MediaWiki\Languages\LanguageFallback;
+use MediaWiki\Language\LanguageFallback;
 use MediaWiki\Page\PageIdentity;
 use MediaWiki\Page\PageReferenceValue;
 use MediaWiki\Page\PageStore;

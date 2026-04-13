@@ -7,11 +7,11 @@ use InvalidArgumentException;
 use MediaWiki\Extension\CommunityRequests\FocusArea\FocusAreaStore;
 use MediaWiki\Extension\CommunityRequests\Wish\WishStore;
 use MediaWiki\Html\Html;
+use MediaWiki\Language\MessageLocalizer;
 use MediaWiki\Page\PageIdentity;
 use MediaWiki\Page\PageReference;
 use MediaWiki\Title\Title;
 use MediaWiki\Title\TitleFormatter;
-use MessageLocalizer;
 use Psr\Log\LoggerInterface;
 
 trait WishlistEntityTrait {

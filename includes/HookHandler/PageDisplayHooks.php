@@ -3,7 +3,7 @@ declare( strict_types = 1 );
 
 namespace MediaWiki\Extension\CommunityRequests\HookHandler;
 
-use DifferenceEngine;
+use MediaWiki\Diff\DifferenceEngine;
 use MediaWiki\Diff\Hook\DifferenceEngineRenderRevisionAddParserOutputHook;
 use MediaWiki\Extension\CommunityRequests\FocusArea\FocusAreaStore;
 use MediaWiki\Extension\CommunityRequests\Vote\Vote;
@@ -21,11 +21,11 @@ use MediaWiki\Page\Article;
 use MediaWiki\Page\Hook\BeforeDisplayNoArticleTextHook;
 use MediaWiki\Page\PageReference;
 use MediaWiki\Page\WikiPage;
+use MediaWiki\Parser\ParserOutput;
 use MediaWiki\SpecialPage\SpecialPageFactory;
 use MediaWiki\Title\NamespaceInfo;
 use MediaWiki\Title\Title;
-use MediaWiki\User\UserOptionsManager;
-use ParserOutput;
+use MediaWiki\User\Options\UserOptionsManager;
 use Psr\Log\LoggerInterface;
 use Wikimedia\Rdbms\IDBAccessObject;
 

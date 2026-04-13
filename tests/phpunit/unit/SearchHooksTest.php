@@ -10,6 +10,7 @@ use MediaWiki\Extension\CommunityRequests\HookHandler\SearchHooks;
 use MediaWiki\Extension\CommunityRequests\Wish\Wish;
 use MediaWiki\Extension\CommunityRequests\Wish\WishStore;
 use MediaWiki\Language\Language;
+use MediaWiki\Search\RevisionSearchResult;
 use MediaWiki\Specials\SpecialSearch;
 use MediaWiki\Tests\Unit\FakeQqxMessageLocalizer;
 use MediaWiki\Title\TitleFormatter;
@@ -18,7 +19,6 @@ use MediaWikiUnitTestCase;
 use MockTitleTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\NullLogger;
-use RevisionSearchResult;
 
 /**
  * @group CommunityRequests

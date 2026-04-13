@@ -7,7 +7,7 @@ use MediaWiki\ChangeTags\Hook\ChangeTagsListActiveHook;
 use MediaWiki\ChangeTags\Hook\ListDefinedTagsHook;
 use MediaWiki\Context\RequestContext;
 use MediaWiki\Extension\CommunityRequests\WishlistConfig;
-use MediaWiki\Hook\RecentChange_saveHook;
+use MediaWiki\RecentChanges\Hook\RecentChange_saveHook;
 use MediaWiki\RecentChanges\RecentChange;
 
 class ChangeTagHooks implements ChangeTagsListActiveHook, ListDefinedTagsHook, RecentChange_saveHook {

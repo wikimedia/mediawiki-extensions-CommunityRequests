@@ -9,11 +9,11 @@ use MediaWiki\Extension\CommunityRequests\Wish\WishStore;
 use MediaWiki\Extension\CommunityRequests\WishlistConfig;
 use MediaWiki\Extension\CommunityRequests\WishlistEntityTrait;
 use MediaWiki\Search\Hook\ShowSearchHitHook;
+use MediaWiki\Search\SearchResult;
 use MediaWiki\Specials\SpecialSearch;
 use MediaWiki\Title\Title;
 use MediaWiki\Title\TitleFormatter;
 use Psr\Log\LoggerInterface;
-use SearchResult;
 
 /**
  * Hook handlers for customizing search results of wishlist pages.

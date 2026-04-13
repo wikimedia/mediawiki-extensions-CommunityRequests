@@ -10,8 +10,8 @@ use MediaWiki\Extension\CommunityRequests\AbstractWishlistStore;
 use MediaWiki\Extension\CommunityRequests\Wish\SpecialWishlistIntake;
 use MediaWiki\Extension\CommunityRequests\Wish\Wish;
 use MediaWiki\Request\FauxRequest;
+use MediaWiki\Tests\Specials\SpecialPageTestBase;
 use MediaWiki\Title\Title;
-use SpecialPageTestBase;
 
 /**
  * @group Database

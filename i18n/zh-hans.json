@@ -262,6 +262,7 @@
 	"communityrequests-notification-header": "“$1”已更新",
 	"communityrequests-notification-bundled": "社区愿望清单更新",
 	"communityrequests-notification-wish-status-change": "已更改状态至“$1”。",
+	"communityrequests-notification-focus-area-status-change": "状态已更改为“$1”。",
 	"communityrequests-notification-focus-area-wish-added": "加入了“$1”。",
 	"communityrequests-notification-focus-area-wish-removed": "移除了“$1”。"
 }

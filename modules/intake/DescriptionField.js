@@ -76,7 +76,7 @@ class DescriptionField {
 		if ( veModules.includes( 'ext.citoid.visualEditor' ) ) {
 			ve.ui.toolFactory.register( ve.ui.CitoidInspectorTool );
 		}
-		if ( veModules.includes( 'ext.CodeMirror.v6.visualEditor' ) ) {
+		if ( veModules.includes( 'ext.CodeMirror.visualEditor' ) ) {
 			ve.ui.toolFactory.register( ve.ui.CodeMirrorTool );
 		}
 

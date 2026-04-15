@@ -20,6 +20,10 @@
 	"communityrequests-status": "Статус",
 	"communityrequests-status-draft": "Нацрт",
 	"communityrequests-status-blocked": "Блокирано",
+	"communityrequests-edit-wish": "Уреди жељу",
+	"communityrequests-wish-description-heading": "Опис",
+	"communityrequests-wish-type-heading": "Врста жеље",
+	"communityrequests-wish-audience-heading": "Обухваћени корисници",
 	"communityrequests-wish-other-details-heading": "Други детаљи",
 	"communityrequests-wish-created": "Направљено",
 	"communityrequests-wish-proposer": "Аутор",
@@ -28,8 +32,11 @@
 	"communityrequests-wishes-date-header": "Датум (UTC)",
 	"communityrequests-wishes-status-header": "Статус",
 	"communityrequests-form-loading-1": "Ако се образац не учита, омогућите JavaScript.",
+	"communityrequests-focus-area-supported": "Подржали:",
 	"communityrequests-focus-area-owners-label": "Власници:",
+	"communityrequests-focus-area-th-wish": "Жеља",
 	"communityrequests-focus-area-voting": "Гласање",
+	"communityrequests-focus-area-no-votes": "Нема присталица.",
 	"communityrequests-translation-translatable": "Ова страница садржи текст који није на $1.",
 	"communityrequests-translation-errors": "Дошло је до грешке:"
 }

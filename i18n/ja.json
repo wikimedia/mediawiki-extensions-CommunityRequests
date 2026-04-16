@@ -4,7 +4,8 @@
 			"Aphaia",
 			"Cookai1205",
 			"Omotecho",
-			"Shirayuki"
+			"Shirayuki",
+			"Cookie4782"
 		]
 	},
 	"communityrequests-status-wish-in-progress": "進行中",
@@ -17,8 +18,8 @@
 	"communityrequests-wish-phabricator-heading": "Phabricatorタスク",
 	"communityrequests-wish-other-details-heading": "その他",
 	"communityrequests-wish-created": "作成済",
-	"communityrequests-wish-updated": "最終更新",
-	"communityrequests-wish-proposer": "記入者",
+	"communityrequests-wish-updated": "最終更新: $1",
+	"communityrequests-wish-proposer": "作者: $1",
 	"communityrequests-wishes-status-header": "状況",
 	"communityrequests-wishes-type-header": "分類",
 	"communityrequests-focus-area-unassigned": "未割り当て",
@@ -30,7 +31,7 @@
 	"communityrequests-focus-area-supported": "賛同者：",
 	"communityrequests-focus-area-supported-val": "$1{{PLURAL:$2|名}}",
 	"communityrequests-focus-area-owners-label": "主催者：",
-	"communityrequests-focus-area-view-wishes": "この領域の要望を閲覧",
+	"communityrequests-focus-area-view-wishes": "この領域の$1個の{{PLURAL:$2|要望}}を閲覧",
 	"communityrequests-focus-area-wishes-list": "この重点領域の要望",
 	"communityrequests-focus-area-th-wish": "要望",
 	"communityrequests-focus-area-stakeholders": "関連のチームや提携団体",

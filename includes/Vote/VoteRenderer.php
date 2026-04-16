@@ -1,20 +1,21 @@
 <?php
+declare( strict_types = 1 );
 
 namespace MediaWiki\Extension\CommunityRequests\Vote;
 
 use MediaWiki\Extension\CommunityRequests\AbstractRenderer;
-use MediaWiki\Extension\CommunityRequests\AbstractWishlistEntity;
 use MediaWiki\Html\Html;
 use MediaWiki\Page\PageReference;
+use Wikimedia\Parsoid\Core\MergeStrategy;
 
 class VoteRenderer extends AbstractRenderer {
+
+	public const EXT_DATA_VOTE_COUNT = 'CommunityRequests-vote-count';
 
 	protected string $rendererType = 'vote';
 
 	public function render(): string {
-		if ( !$this->config->isEntityPage( $this->parser->getPage() ) &&
-			!$this->config->isVotesPage( $this->parser->getPage() )
-		) {
+		if ( !$this->config->isVotesPage( $this->parser->getPage() ) ) {
 			return '';
 		}
 
@@ -40,21 +41,15 @@ class VoteRenderer extends AbstractRenderer {
 			return $this->getMissingFieldsErrorMessage( [ 'userid' ] );
 		}
 
-		$extensionData = $this->parser->getOutput()->getExtensionData( self::EXT_DATA_KEY ) ?? [];
-		$extensionData[AbstractWishlistEntity::PARAM_VOTE_COUNT] ??= 0;
-		$extensionData[AbstractWishlistEntity::PARAM_VOTE_COUNT]++;
-		// Extension data needed for storage in CommunityRequestsHooks::onLinksUpdateComplete().
-		// This data may already exist if the page is a wish or focus area page.
-		$extensionData[AbstractWishlistEntity::PARAM_ENTITY_TYPE] ??= $entityType;
-		$extensionData[AbstractWishlistEntity::PARAM_LANG] ??= $this->parser->getTargetLanguage()->getCode();
-
-		$this->logger->debug( __METHOD__ . ": Rendering vote. {0}", [ json_encode( $args ) ] );
-		$this->parser->getOutput()->setExtensionData( self::EXT_DATA_KEY, $extensionData );
+		$this->logger->debug( __METHOD__ . ": Recording vote tally for $username" );
+		$this->parser->getOutput()->appendExtensionData( self::EXT_DATA_VOTE_COUNT, 1, MergeStrategy::SUM );
 
 		return $this->renderVoteInternal( $username, $args['timestamp'], $args['comment'] );
 	}
 
 	private function renderVoteInternal( string $username, string $timestamp, string $comment ): string {
+		$this->logger->debug( __METHOD__ . ": Rendering vote. {0}", [ json_encode( func_get_args() ) ] );
+
 		$space = $this->msg( 'word-separator' )->escaped();
 		$out = Html::element( 'span', [ 'class' => 'ext-communityrequests-vote-entry--support' ] ) .
 			Html::element( 'b', [], $this->msg( 'communityrequests-support-label' )->text() ) .

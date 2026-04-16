@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 namespace MediaWiki\Extension\CommunityRequests\HookHandler;
 
 use MediaWiki\Config\Config;
+use MediaWiki\Context\RequestContext;
 use MediaWiki\Deferred\DeferrableUpdate;
 use MediaWiki\Deferred\Hook\LinksUpdateCompleteHook;
 use MediaWiki\Deferred\LinksUpdate\LinksUpdate;
@@ -14,12 +15,14 @@ use MediaWiki\Extension\CommunityRequests\AbstractWishlistStore;
 use MediaWiki\Extension\CommunityRequests\EntityFactory;
 use MediaWiki\Extension\CommunityRequests\FocusArea\FocusAreaStore;
 use MediaWiki\Extension\CommunityRequests\RendererFactory;
+use MediaWiki\Extension\CommunityRequests\Vote\VoteRenderer;
 use MediaWiki\Extension\CommunityRequests\Wish\WishStore;
 use MediaWiki\Extension\CommunityRequests\WishlistConfig;
 use MediaWiki\Extension\CommunityRequests\WishlistEntityTrait;
 use MediaWiki\Linker\LinkRenderer;
 use MediaWiki\Logging\ManualLogEntry;
 use MediaWiki\MainConfigNames;
+use MediaWiki\Page\Article;
 use MediaWiki\Page\DeletePageFactory;
 use MediaWiki\Page\PageStoreRecord;
 use MediaWiki\Page\ProperPageIdentity;
@@ -240,10 +243,14 @@ class CommunityRequestsHooks implements
 		}
 
 		$canonicalPage = $this->getCanonicalEntityPage( $title );
+		$votesPageRef = $this->config->getVotesPageRefForEntity( $canonicalPage );
 		$data = $linksUpdate->getParserOutput()->getExtensionData( self::EXT_DATA_KEY );
+		$voteCount = null;
 
 		// If this a /Votes page, we need to reload the full entity data.
 		if ( $this->config->isVotesPage( $title ) ) {
+			$voteCount = $linksUpdate->getParserOutput()->getExtensionData( VoteRenderer::EXT_DATA_VOTE_COUNT );
+
 			// Always use the base language for votes pages.
 			$baseLang = Title::castFromPageIdentity( $canonicalPage )->getPageLanguage()->getCode();
 			$data[AbstractWishlistEntity::PARAM_LANG] = $baseLang;
@@ -268,10 +275,21 @@ class CommunityRequestsHooks implements
 				) : null;
 		}
 
-		if ( !$data || !isset( $data[AbstractWishlistEntity::PARAM_ENTITY_TYPE] ) ) {
+		if ( !isset( $data[AbstractWishlistEntity::PARAM_ENTITY_TYPE] ) ) {
 			return;
 		}
 
+		if ( $votesPageRef && !$voteCount ) {
+			$voteParserOutput = Article::newFromTitle(
+				Title::newFromPageReference( $votesPageRef ),
+				RequestContext::getMain()
+			)->getParserOutput();
+			if ( $voteParserOutput ) {
+				$voteCount = $voteParserOutput->getExtensionData( VoteRenderer::EXT_DATA_VOTE_COUNT ) ?? 0;
+			}
+		}
+
+		$data[AbstractWishlistEntity::PARAM_VOTE_COUNT] = $voteCount;
 		$store ??= $this->getStoreForType( $data[AbstractWishlistEntity::PARAM_ENTITY_TYPE] );
 		$entity = $this->entityFactory->createFromParserData( $data, $canonicalPage );
 		$this->logger->debug(
@@ -414,30 +432,6 @@ class CommunityRequestsHooks implements
 				&& !isset( $data[AbstractWishlistEntity::PARAM_WISH_COUNT] )
 		) ) {
 			return;
-		}
-
-		// Vote counts on wish and focus area pages.
-		if ( isset( $data[AbstractWishlistEntity::PARAM_ENTITY_TYPE] ) ) {
-			$voteCount = intval( $data[ AbstractWishlistEntity::PARAM_VOTE_COUNT ] ?? 0 );
-			$this->logger->debug(
-				__METHOD__ . ': Replacing voting strip marker in {0} with vote count {1}',
-				[
-					$parser->getPage()->__toString(),
-					$voteCount
-				]
-			);
-			$text = str_replace(
-				AbstractRenderer::VOTING_STRIP_MARKER,
-				// Messages used here:
-				// * communityrequests-focus-area-voting-info
-				// * communityrequests-wish-voting-info
-				$parser->msg( "communityrequests-{$data[AbstractWishlistEntity::PARAM_ENTITY_TYPE]}-voting-info" )
-					->numParams( $voteCount )
-					->params( $voteCount )
-					->inLanguage( $parser->getOptions()->getUserLangObj() )
-					->parse(),
-				$text
-			);
 		}
 
 		// Wish counts.

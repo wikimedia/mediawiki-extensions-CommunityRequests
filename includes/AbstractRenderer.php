@@ -3,15 +3,19 @@ declare( strict_types=1 );
 
 namespace MediaWiki\Extension\CommunityRequests;
 
+use MediaWiki\Context\RequestContext;
 use MediaWiki\EditPage\EditPage;
 use MediaWiki\Extension\CommunityRequests\FocusArea\FocusAreaStore;
+use MediaWiki\Extension\CommunityRequests\Vote\VoteRenderer;
 use MediaWiki\Extension\CommunityRequests\Wish\WishStore;
 use MediaWiki\Html\Html;
 use MediaWiki\Language\Language;
 use MediaWiki\Language\MessageLocalizer;
 use MediaWiki\Linker\LinkRenderer;
+use MediaWiki\Page\Article;
 use MediaWiki\Parser\Parser;
 use MediaWiki\Parser\ParserCoreTagHooks;
+use MediaWiki\Parser\ParserOutput;
 use MediaWiki\Parser\PPFrame;
 use MediaWiki\Parser\PPNode;
 use MediaWiki\Parser\Sanitizer;
@@ -29,7 +33,6 @@ abstract class AbstractRenderer implements MessageLocalizer {
 	public const TRACKING_CATEGORY = 'communityrequests-category';
 	public const ERROR_TRACKING_CATEGORY = 'communityrequests-error-category';
 	public const EXT_DATA_KEY = 'CommunityRequests-ext-data';
-	public const VOTING_STRIP_MARKER = Parser::MARKER_PREFIX . "-communityrequests-voting-" . Parser::MARKER_SUFFIX;
 	// This fragment is also in modules/voting/Button.vue
 	public const LINK_FRAGMENT_VOTING = 'Voting';
 	public const LINK_FRAGMENT_WISHES = 'Wishes';
@@ -294,6 +297,7 @@ abstract class AbstractRenderer implements MessageLocalizer {
 			$this->getArg( AbstractWishlistEntity::PARAM_STATUS, '' ),
 			$this->config->getStatusWikitextValsEligibleForVoting()
 		);
+		$voteCount = $this->getVotePageOutput()?->getExtensionData( VoteRenderer::EXT_DATA_VOTE_COUNT ) ?? 0;
 
 		$out = Html::element(
 			'div',
@@ -307,12 +311,20 @@ abstract class AbstractRenderer implements MessageLocalizer {
 			'class' => "ext-communityrequests-{$this->rendererType}--voting mw-notalk"
 		] );
 
-		// We need to wait for the full parser pass to complete to ensure all votes are counted.
-		// Add a strip marker for the vote count to be added later in CommunityRequestsHooks::onParserAfterTidy().
+		// Add the vote count message.
 		$out .= Html::openElement( 'p' );
 		if ( !$this->isDefaultStatus() || $votingEnabled ) {
-			$out .= self::VOTING_STRIP_MARKER . ' ';
+			// Messages used here:
+			// * communityrequests-focus-area-voting-info
+			// * communityrequests-wish-voting-info
+			$out .= $this->parser->msg( "communityrequests-{$this->rendererType}-voting-info" )
+				->numParams( $voteCount )
+				->params( $voteCount )
+				->inLanguage( $this->parser->getOptions()->getUserLangObj() )
+				->parse();
 		}
+		$out .= ' ';
+
 		// Messages used in the following block:
 		// * communityrequests-focus-area-voting-info-open
 		// * communityrequests-focus-area-voting-info-default
@@ -337,47 +349,68 @@ abstract class AbstractRenderer implements MessageLocalizer {
 			$out .= Html::rawElement( 'noscript', [],
 				$this->getErrorMessage( 'communityrequests-voting-no-js', [], 'p', false )
 			);
-			if ( $basePage ) {
-				$this->parser->getOutput()->setJsConfigVar(
-					'copyrightWarning',
-					EditPage::getCopyrightWarning( $basePage, 'parse', $this )
-				);
-			}
 		}
 
-		// Transclude the /Votes subpage if it exists and the status is not the default status,
-		// or if voting is enabled.
-		if ( $basePage && ( $votingEnabled || !$this->isDefaultStatus() ) ) {
-			$voteSubpagePath = Title::newFromPageReference( $basePage )->getPrefixedDBkey()
-				. $this->config->getVotesPageSuffix();
-			$voteSubpageTitle = Title::newFromText( $voteSubpagePath );
-			if ( $voteSubpageTitle->exists() ) {
-				$voteSubpageContent = $this->parser->recursiveTagParse( '{{:' . $voteSubpagePath . '}}' );
-				if ( $voteSubpageContent ) {
+		// Transclude the /Votes subpage if there are votes to be rendered.
+		if ( $basePage && $voteCount && $votingEnabled ) {
+			$out .= $this->getVotingSectionTransclusion();
 
-					$out .= Html::element(
-						'div',
-						[ 'class' => 'mw-heading mw-heading3' ],
-						$this->msg( "communityrequests-{$this->rendererType}-voters-heading" )->text()
-					);
-				}
-				$out .= $voteSubpageContent;
-				// Add template dependency to ensure the votes subpage is kept up to date.
-				$this->parser->getOutput()->addTemplate(
-					$voteSubpageTitle,
-					$voteSubpageTitle->getId(),
-					$voteSubpageTitle->getLatestRevID()
-				);
-			} else {
-				// Make sure the entity page is updated when the votes subpage is created.
-				$this->parser->getOutput()->addTemplate( $voteSubpageTitle, 0, 0 );
-			}
+			// Set copyrightWarning JS config var for use in the voting Vue app.
+			$this->parser->getOutput()->setJsConfigVar(
+				'copyrightWarning',
+				EditPage::getCopyrightWarning( $basePage, 'parse', $this )
+			);
 		}
 
 		// Close the voting container.
 		$out .= Html::closeElement( 'div' );
 
 		return $out;
+	}
+
+	private function getVotingSectionTransclusion(): string {
+		$parserOutput = $this->getVotePageOutput();
+		$title = Title::newFromPageReference( $this->parser->getPage() );
+		$html = '';
+
+		if ( $title->exists() ) {
+			$voteSubpageContent = $parserOutput?->getContentHolderText() ?? '';
+
+			if ( $voteSubpageContent ) {
+				$html .= Html::element(
+					'div',
+					[ 'class' => 'mw-heading mw-heading3' ],
+					$this->msg( "communityrequests-{$this->rendererType}-voters-heading" )->text()
+				);
+			}
+			$html .= $voteSubpageContent;
+
+			// Add template dependency to ensure the votes subpage is kept up to date.
+			$this->parser->getOutput()->addTemplate(
+				$title,
+				$title->getId(),
+				$title->getLatestRevID()
+			);
+		} else {
+			// Make sure the entity page is updated when the votes subpage is created.
+			$this->parser->getOutput()->addTemplate( $title, 0, 0 );
+		}
+
+		return $html;
+	}
+
+	private function getVotePageOutput(): ?ParserOutput {
+		$basePage = $this->config->getCanonicalEntityPageRef( $this->parser->getPage() );
+		if ( !$basePage ) {
+			return null;
+		}
+		$basePageRef = $this->config->getVotesPageRefForEntity( $basePage );
+		if ( !$basePageRef ) {
+			return null;
+		}
+		$voteSubpageTitle = Title::newFromPageReference( $basePageRef );
+		return Article::newFromTitle( $voteSubpageTitle, RequestContext::getMain() )
+			->getParserOutput() ?: null;
 	}
 
 	/**

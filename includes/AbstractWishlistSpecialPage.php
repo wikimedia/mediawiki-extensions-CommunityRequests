@@ -32,10 +32,9 @@ abstract class AbstractWishlistSpecialPage extends FormSpecialPage {
 		protected AbstractWishlistStore $store,
 		protected TitleParser $titleParser,
 		protected LoggerInterface $logger,
-		string $name,
-		string $restriction = ''
+		string $name
 	) {
-		parent::__construct( $name, $restriction );
+		parent::__construct( $name );
 	}
 
 	/** @inheritDoc */

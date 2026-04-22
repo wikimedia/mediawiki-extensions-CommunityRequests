@@ -25,14 +25,18 @@ class SpecialEditFocusArea extends AbstractWishlistSpecialPage {
 			$focusAreaStore,
 			$titleParser,
 			$logger,
-			'EditFocusArea',
-			'manage-wishlist',
+			'EditFocusArea'
 		);
 	}
 
 	/** @inheritDoc */
 	public function getDescription(): Message {
 		return $this->msg( 'communityrequests-editfocusarea' );
+	}
+
+	/** @inheritDoc */
+	public function getRestriction(): string {
+		return 'manage-wishlist';
 	}
 
 	/** @inheritDoc */

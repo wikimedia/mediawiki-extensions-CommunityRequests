@@ -8,7 +8,7 @@
 	"license-name": "GPL-2.0-or-later",
 	"type": "parserhook",
 	"requires": {
-		"MediaWiki": ">= 1.46",
+		"MediaWiki": ">= 1.47.0",
 		"extensions": {
 			"VisualEditor": "*",
 			"TemplateData": "*"
@@ -184,7 +184,9 @@
 	"SpecialPages": {
 		"Wishlist": {
 			"class": "MediaWiki\\Extension\\CommunityRequests\\SpecialWishlist",
-			"services": [ "CommunityRequests.WishlistConfig" ]
+			"services": [
+				"CommunityRequests.WishlistConfig"
+			]
 		},
 		"WishlistIntake": {
 			"class": "MediaWiki\\Extension\\CommunityRequests\\Wish\\SpecialWishlistIntake",
@@ -279,7 +281,9 @@
 	"DefaultUserOptions": {
 		"usemachinetranslation": 0
 	},
-	"LogTypes": [ "communityrequests" ],
+	"LogTypes": [
+		"communityrequests"
+	],
 	"LogNames": {
 		"communityrequests": "communityrequests-log-name"
 	},

@@ -4,8 +4,10 @@
 			"Cookai1205"
 		]
 	},
-	"communityrequests-audience-label": "主要涉及用戶",
+	"communityrequests-audience-label": "主要受影響用戶",
 	"communityrequests-audience-description": "描述這將主要影響哪些用戶群體和情境",
 	"communityrequests-publish": "發佈願望",
-	"communityrequests-wish-audience-heading": "涉及用戶"
+	"communityrequests-error-invalid-proposer": "「$1」不是有效的用戶。",
+	"communityrequests-tag-bots-gadgets": "機械人和小工具",
+	"communityrequests-wish-audience-heading": "受影響用戶"
 }

@@ -33,7 +33,7 @@
 	"apihelp-focusareaedit-param-volunteers": "志願協助重點領域的社群成員。",
 	"apihelp-focusareaedit-param-created": "重點領域的建立日期和時間。",
 	"apihelp-focusareaedit-param-baselang": "重點領域原文語言。",
-	"apihelp-wishlistvote-summary": "投票支持社群願望清單中的某個願望或重點領域。",
+	"apihelp-wishlistvote-summary": "投票支持社群願望清單中的願望或重點領域。",
 	"apihelp-wishlistvote-param-entity": "要投票的願望或重點領域。這可以是完整的頁面標題，或是帶有前綴的ID（例如：「W123」或「FA123」）。",
 	"apihelp-wishlistvote-param-comment": "投票時可選擇性包含的留言。",
 	"apihelp-wishlistvote-param-voteaction": "要執行的操作。",

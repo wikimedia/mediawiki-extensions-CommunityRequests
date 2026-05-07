@@ -33,7 +33,7 @@ function showPostEditBanner() {
 	closeImg.alt = mw.msg( 'communityrequests-close' );
 	// Close button.
 	const closeButton = document.createElement( 'button' );
-	// eslint-disable-next-line mediawiki/class-doc
+
 	closeButton.className = [
 		'cdx-button',
 		'cdx-button--action-default',

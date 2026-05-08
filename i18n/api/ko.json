@@ -1,8 +1,12 @@
 {
 	"@metadata": {
 		"authors": [
+			"Tensama0415",
 			"Ykhwong"
 		]
 	},
-	"apihelp-query+communityrequests-wishes-paramvalue-sort-updated": "마지막 갱신일로 정렬"
+	"apihelp-query+communityrequests-wishes-paramvalue-sort-created": "만든 날짜순으로 정렬",
+	"apihelp-query+communityrequests-wishes-paramvalue-sort-updated": "마지막 갱신일로 정렬",
+	"apihelp-query+communityrequests-wishes-paramvalue-sort-votecount": "지지자 수 순으로 정렬",
+	"apihelp-query+communityrequests-wishes-paramvalue-sort-title": "제목순으로 정렬"
 }

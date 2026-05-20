@@ -6,6 +6,7 @@ namespace MediaWiki\Extension\CommunityRequests\Wish;
 use MediaWiki\Extension\CommunityRequests\AbstractWishlistSpecialPage;
 use MediaWiki\Extension\CommunityRequests\FocusArea\FocusAreaStore;
 use MediaWiki\Extension\CommunityRequests\WishlistConfig;
+use MediaWiki\Extension\ConfirmEdit\Services\CaptchaFactory;
 use MediaWiki\Message\Message;
 use MediaWiki\Title\Title;
 use MediaWiki\Title\TitleParser;
@@ -25,12 +26,14 @@ class SpecialWishlistIntake extends AbstractWishlistSpecialPage {
 		protected TitleParser $titleParser,
 		protected UserFactory $userFactory,
 		protected LoggerInterface $logger,
+		?CaptchaFactory $captchaFactory,
 	) {
 		parent::__construct(
 			$config,
 			$wishStore,
 			$titleParser,
 			$logger,
+			$captchaFactory,
 			'WishlistIntake',
 		);
 	}

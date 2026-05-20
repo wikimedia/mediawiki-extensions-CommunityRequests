@@ -18,6 +18,7 @@
 	"communityrequests-focus-area-not-found": "Error message shown when a focus area is not found.\n\nParameters:\n* $1 — the page title of the focus area that was not found.\n* $2 — the subpage text (i.e. the focus area ID part)",
 	"communityrequests-wish-submissions-closed": "Error message shown when the submission period for wishes has ended.",
 	"communityrequests-form-error": "General error message.",
+	"communityrequests-captcha-error": "Error message shown when the captcha on the wishlist intake form could not be verified and the submission was blocked.",
 	"communityrequests-intake-focus-area": "Label for the focus area field in the Special:WishlistIntake form.",
 	"communityrequests-baselang-no-results": "Message shown there are no results when searching in the language input.\n{{Identical|No result}}",
 	"communityrequests-wish-baselang": "Label for the language field in the Special:WishlistIntake form.",

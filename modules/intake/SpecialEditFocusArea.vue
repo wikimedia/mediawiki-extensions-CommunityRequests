@@ -278,10 +278,15 @@ module.exports = exports = defineComponent( {
 		function addPreSubmitFn( fn ) {
 			preSubmitFns.push( fn );
 		}
+		// Stop the dispatched submit event from re-entering handleSubmit and disabling the fields.
+		let isDispatchingSubmit = false;
 		/**
 		 * Handle form submission.
 		 */
 		function handleSubmit() {
+			if ( isDispatchingSubmit ) {
+				return;
+			}
 			formDisabled.value = true;
 			Promise.all( preSubmitFns.map( ( p ) => p() ) ).then( () => {
 				formDisabled.value = false;
@@ -294,7 +299,13 @@ module.exports = exports = defineComponent( {
 				formChanged.value = false;
 
 				nextTick( () => {
-					document.querySelector( '#ext-communityrequests-intake-form' ).submit();
+					// Safari 12.1-15 lacks requestSubmit(). hCaptcha needs a submit event.
+					isDispatchingSubmit = true;
+					const submitEvent = new Event( 'submit', { bubbles: true, cancelable: true } );
+					if ( form.dispatchEvent( submitEvent ) ) {
+						form.submit();
+					}
+					isDispatchingSubmit = false;
 				} );
 			} ).catch( handleError.bind( this ) );
 		}

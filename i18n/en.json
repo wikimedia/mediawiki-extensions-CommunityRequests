@@ -15,6 +15,7 @@
 	"communityrequests-focus-area-not-found": "The focus area [[$1|$2]] was not found, is not a valid ID, or was not created via [[Special:EditFocusArea]].",
 	"communityrequests-wish-submissions-closed": "The submission period for wishes has ended.",
 	"communityrequests-form-error": "Something went wrong. Please try saving again, or ask for help on the [[$1|talk page]].",
+	"communityrequests-captcha-error": "Your submission could not be verified. Please complete the captcha and try saving again.",
 	"communityrequests-intake-focus-area": "Focus area",
 	"communityrequests-baselang-no-results": "No results",
 	"communityrequests-wish-baselang": "Language this wish is written in",

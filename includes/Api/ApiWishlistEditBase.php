@@ -76,6 +76,17 @@ class ApiWishlistEditBase extends ApiBase {
 			'notminor' => true,
 		];
 
+		// hCaptcha posts 'h-captcha-response', but ConfirmEdit's edit check reads 'captchaword'.
+		$request = $this->getRequest();
+		$captchaWord = $request->getVal( 'h-captcha-response' ) ?? $request->getVal( 'captchaword' );
+		if ( $captchaWord !== null ) {
+			$apiParams['captchaword'] = $captchaWord;
+		}
+		$captchaId = $request->getVal( 'captchaid' );
+		if ( $captchaId !== null ) {
+			$apiParams['captchaid'] = $captchaId;
+		}
+
 		$context = new DerivativeContext( $this->getContext() );
 		$context->setRequest( new DerivativeRequest( $this->getRequest(), $apiParams ) );
 		$api = new ApiMain( $context, true );
@@ -85,7 +96,14 @@ class ApiWishlistEditBase extends ApiBase {
 		} catch ( ApiUsageException $e ) {
 			return $e->getStatusValue();
 		}
-		return Status::newGood( $api->getResult() );
+
+		// A failed/unsolved CAPTCHA returns a non-'Success' result rather than throwing;
+		// treat it as an error so we surface a message instead of fataling on a missing title.
+		$result = $api->getResult();
+		if ( ( $result->getResultData()['edit']['result'] ?? null ) !== 'Success' ) {
+			return Status::newFatal( 'communityrequests-captcha-error' );
+		}
+		return Status::newGood( $result );
 	}
 
 	/** @inheritDoc */

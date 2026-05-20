@@ -21,6 +21,7 @@
 	"suggests": {
 		"extensions": {
 			"CodeMirror": "*",
+			"ConfirmEdit": "*",
 			"DiscussionTools": "*",
 			"Translate": "*"
 		}
@@ -200,6 +201,9 @@
 				"TitleParser",
 				"UserFactory",
 				"CommunityRequests.Logger"
+			],
+			"optional_services": [
+				"ConfirmEditCaptchaFactory"
 			]
 		},
 		"EditFocusArea": {
@@ -209,6 +213,9 @@
 				"CommunityRequests.FocusAreaStore",
 				"TitleParser",
 				"CommunityRequests.Logger"
+			],
+			"optional_services": [
+				"ConfirmEditCaptchaFactory"
 			]
 		}
 	},

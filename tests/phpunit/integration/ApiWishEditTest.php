@@ -29,6 +29,13 @@ use MediaWiki\User\User;
 class ApiWishEditTest extends ApiTestCase {
 	use WishlistTestTrait;
 
+	protected function tearDown(): void {
+		if ( $this->getServiceContainer()->getExtensionRegistry()->isLoaded( 'ConfirmEdit' ) ) {
+			$this->getServiceContainer()->get( 'ConfirmEditCaptchaFactory' )->unsetGlobalInstancesForTests();
+		}
+		parent::tearDown();
+	}
+
 	protected function getStore(): AbstractWishlistStore {
 		return $this->getServiceContainer()->get( 'CommunityRequests.WishStore' );
 	}
@@ -534,5 +541,49 @@ class ApiWishEditTest extends ApiTestCase {
 		$this->assertArrayHasKey( 'wishlistvote', $ret );
 		$votesPage = Title::makeTitle( NS_MAIN, 'Community Wishlist/W1/Votes' );
 		$this->assertTrue( $votesPage->exists() );
+	}
+
+	/**
+	 * @dataProvider provideCaptcha
+	 */
+	public function testCaptcha( string $answerParam, string $answer, bool $expectSuccess ): void {
+		$this->markTestSkippedIfExtensionNotLoaded( 'ConfirmEdit' );
+		$this->overrideConfigValues( [
+			'CaptchaClass' => 'SimpleCaptcha',
+			'CaptchaTriggers' => [ 'edit' => true, 'create' => true ],
+		] );
+		$captchaFactory = $this->getServiceContainer()->get( 'ConfirmEditCaptchaFactory' );
+		$captchaFactory->unsetGlobalInstancesForTests();
+		$captchaId = $captchaFactory->getGlobalInstance( 'edit' )
+			->storeCaptcha( [ 'question' => '1+1', 'answer' => '2' ] );
+		PermissionHooks::$allowManualEditing = true;
+		$user = $this->getTestUser()->getUser();
+
+		if ( !$expectSuccess ) {
+			$this->expectApiErrorCode( 'communityrequests-captcha-error' );
+		}
+		[ $ret ] = $this->doApiRequestWithToken( [
+			'action' => 'wishedit',
+			Wish::PARAM_TITLE => 'Test Wish',
+			Wish::PARAM_DESCRIPTION => 'This is a test wish.',
+			Wish::PARAM_AUDIENCE => 'everyone',
+			Wish::PARAM_STATUS => 'under-review',
+			Wish::PARAM_TYPE => 'change',
+			Wish::PARAM_CREATED => '2025-10-21T00:00:00Z',
+			Wish::PARAM_PROPOSER => $user->getName(),
+			Wish::PARAM_BASE_LANG => 'en',
+			'captchaid' => $captchaId,
+			$answerParam => $answer,
+		], null, $user );
+		$this->assertSame( 'Community Wishlist/W1', $ret['wishedit']['wish'] );
+		$this->assertArrayHasKey( 'wishlistvote', $ret );
+	}
+
+	public static function provideCaptcha(): array {
+		return [
+			'correct captchaword' => [ 'captchaword', '2', true ],
+			'correct h-captcha-response' => [ 'h-captcha-response', '2', true ],
+			'wrong captchaword' => [ 'captchaword', '3', false ],
+		];
 	}
 }

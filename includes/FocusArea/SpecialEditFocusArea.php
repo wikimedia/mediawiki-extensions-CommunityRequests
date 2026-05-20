@@ -5,6 +5,7 @@ namespace MediaWiki\Extension\CommunityRequests\FocusArea;
 
 use MediaWiki\Extension\CommunityRequests\AbstractWishlistSpecialPage;
 use MediaWiki\Extension\CommunityRequests\WishlistConfig;
+use MediaWiki\Extension\ConfirmEdit\Services\CaptchaFactory;
 use MediaWiki\HTMLForm\HTMLForm;
 use MediaWiki\Message\Message;
 use MediaWiki\Title\Title;
@@ -19,12 +20,14 @@ class SpecialEditFocusArea extends AbstractWishlistSpecialPage {
 		protected FocusAreaStore $focusAreaStore,
 		protected TitleParser $titleParser,
 		protected LoggerInterface $logger,
+		?CaptchaFactory $captchaFactory,
 	) {
 		parent::__construct(
 			$config,
 			$focusAreaStore,
 			$titleParser,
 			$logger,
+			$captchaFactory,
 			'EditFocusArea'
 		);
 	}

@@ -10,6 +10,8 @@ use MediaWiki\EditPage\EditPage;
 use MediaWiki\Extension\CommunityRequests\HookHandler\CommunityRequestsHooks;
 use MediaWiki\Extension\CommunityRequests\HookHandler\PermissionHooks;
 use MediaWiki\Extension\CommunityRequests\Wish\Wish;
+use MediaWiki\Extension\ConfirmEdit\CaptchaTriggers;
+use MediaWiki\Extension\ConfirmEdit\Services\CaptchaFactory;
 use MediaWiki\Html\Html;
 use MediaWiki\HTMLForm\HTMLForm;
 use MediaWiki\Page\PageIdentity;
@@ -32,6 +34,7 @@ abstract class AbstractWishlistSpecialPage extends FormSpecialPage {
 		protected AbstractWishlistStore $store,
 		protected TitleParser $titleParser,
 		protected LoggerInterface $logger,
+		protected ?CaptchaFactory $captchaFactory,
 		string $name
 	) {
 		parent::__construct( $name );
@@ -150,6 +153,51 @@ abstract class AbstractWishlistSpecialPage extends FormSpecialPage {
 			->suppressDefaultSubmit()
 			// Add div that the Vue app will be mounted to. This needs to be inside the server-generated <form> tag.
 			->addHeaderHtml( $container );
+
+		$this->maybeAddCaptchaField( $form );
+	}
+
+	private function maybeAddCaptchaField( HTMLForm $form ): void {
+		if ( $this->captchaFactory === null ) {
+			return;
+		}
+		$captcha = $this->captchaFactory->getGlobalInstance( CaptchaTriggers::EDIT );
+		if ( $captcha->canSkipCaptcha( $this->getUser() ) ) {
+			return;
+		}
+		// Use the entity prefix. ConfirmEditTriggersCaptcha handlers can match on it.
+		$title = Title::newFromText( $this->store->getPagePrefix() . 'CaptchaCheck' )
+			?? Title::makeTitle( NS_MAIN, 'CaptchaCheck' );
+		// Per SimpleCaptcha::shouldCheck(), EDIT covers new and existing pages, CREATE only new.
+		if ( $captcha->triggersCaptcha( CaptchaTriggers::EDIT, $title ) ) {
+			$action = CaptchaTriggers::EDIT;
+		} elseif ( $this->entityId === null && $captcha->triggersCaptcha( CaptchaTriggers::CREATE, $title ) ) {
+			$action = CaptchaTriggers::CREATE;
+		} else {
+			return;
+		}
+		$form->addHeaderHtml( $this->getCaptchaRaw( $action ) );
+	}
+
+	private function getCaptchaRaw( string $action ): string {
+		// Some captcha implementations rely on session state.
+		$this->getRequest()->getSession()->persist();
+
+		$captcha = $this->captchaFactory->getGlobalInstance( $action );
+		$captcha->setTrigger( 'CommunityRequests intake' );
+		$captcha->setAction( $action );
+
+		$output = $this->getOutput();
+		$formInformation = $captcha->getFormInformation( 1, $output );
+		$formMetainfo = $formInformation;
+		unset( $formMetainfo['html'] );
+		$captcha->addFormInformationToOutput( $output, $formMetainfo );
+
+		return Html::rawElement(
+			'div',
+			[ 'class' => 'ext-communityrequests-captcha' ],
+			$formInformation['html']
+		);
 	}
 
 	/**

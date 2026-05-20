@@ -41,6 +41,9 @@ class SpecialWishlistIntakeTest extends SpecialPageTestBase {
 			$services->get( 'TitleParser' ),
 			$services->getUserFactory(),
 			$services->get( 'CommunityRequests.Logger' ),
+			$services->has( 'ConfirmEditCaptchaFactory' )
+				? $services->get( 'ConfirmEditCaptchaFactory' )
+				: null
 		);
 	}
 

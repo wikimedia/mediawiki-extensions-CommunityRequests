@@ -53,7 +53,7 @@ class DeleteOrphanedEntityRowsTest extends MaintenanceBaseTestCase {
 		// XXX: $this->expectOutputString() does not work here for some reason.
 		$this->assertSame(
 			"1 orphaned rows would be deleted.\n",
-			$this->getActualOutput()
+			$this->getActualOutputForAssertion()
 		);
 
 		// Test the actual deletion.
@@ -61,7 +61,7 @@ class DeleteOrphanedEntityRowsTest extends MaintenanceBaseTestCase {
 		$this->maintenance->execute();
 		$this->assertStringContainsString(
 			"1 orphaned rows found. Deleting...\n1 orphaned rows deleted out of 1 found.\n",
-			$this->getActualOutput()
+			$this->getActualOutputForAssertion()
 		);
 
 		// Verify the deleted wish is gone, and the others remain.

@@ -204,7 +204,7 @@
 	"right-manage-wishlist": "제한 없이 공동체 위시리스트를 관리",
 	"action-manage-wishlist": "제한 없이 공동체 위시리스트를 관리할",
 	"right-manually-edit-wishlist": "공동체 위시리스트와 중점 영역을 양식 없이 수동으로 편집",
-	"action-manually-edit-wishlist": "공동체 위시리스트와 중점 영역을 양식 없이 수동으로 편집할",
+	"action-manually-edit-wishlist": "공동체 위시리스트와 중점 영역을 양식 없이 수동으로 편집",
 	"group-community-wishlist-manager": "공동체 위시리스트 관리자",
 	"group-community-wishlist-manager-member": "공동체 위시리스트 {{GENDER:$1|관리자}}",
 	"communityrequests-cant-manually-edit": "이 공동체 위시리스트의 편집은 [[$1|접수 양식]]을 사용하여 수행해야 합니다.",

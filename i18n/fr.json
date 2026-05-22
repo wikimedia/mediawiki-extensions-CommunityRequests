@@ -13,7 +13,8 @@
 			"MusikAnimal",
 			"Poro26",
 			"SleaY",
-			"WillyM"
+			"WillyM",
+			"Jérémy-Günther-Heinz Jähnick"
 		]
 	},
 	"communityrequests-desc": "Un système de gestion des suggestions et des demandes techniques d'une communauté wiki.",
@@ -27,6 +28,7 @@
 	"communityrequests-focus-area-not-found": "Le domaine d'action [[$1|$2 ]] n'a pas été trouvé, n'est pas un ID valide ou n'a pas été créé via [[Special:EditFocusArea]].",
 	"communityrequests-form-error": "Un problème s'est produit. Essayez de sauvegarder à nouveau ou demandez de l'aide sur la [[$1|page de discussion]].",
 	"communityrequests-intake-focus-area": "Domaine d’action",
+	"communityrequests-baselang-no-results": "Aucun résultat",
 	"communityrequests-description": "Décrivez votre problème",
 	"communityrequests-description-description": "Expliquez en détail le souhait ou le problème que vous abordez",
 	"communityrequests-title-label": "Titre",
@@ -118,6 +120,7 @@
 	"communityrequests-tag-categories": "Catégories",
 	"communityrequests-tag-citations": "Références",
 	"communityrequests-tag-editing": "Édition",
+	"communityrequests-tag-hackathonable": "Hackathonable",
 	"communityrequests-tag-ios": "Application iOS Wikipédia",
 	"communityrequests-tag-android": "Application Android Wikipédia",
 	"communityrequests-tag-mobile-web": "Web mobile",

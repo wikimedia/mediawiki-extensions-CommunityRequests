@@ -124,6 +124,8 @@ class WishRendererTest extends MediaWikiIntegrationTestCase {
 	}
 
 	public function testRenderAfterVotesPageCreation(): void {
+		$this->markTestSkippedIfExtensionNotLoaded( 'Translate' );
+
 		$wish = $this->insertTestWish( 'Community Wishlist/W123', 'en', [
 			Wish::PARAM_STATUS => 'prioritized',
 		] );
@@ -138,6 +140,8 @@ class WishRendererTest extends MediaWikiIntegrationTestCase {
 	}
 
 	public function testVotingSectionVisibleWhenVotingEnabled(): void {
+		$this->markTestSkippedIfExtensionNotLoaded( 'Translate' );
+
 		// change config status to enable voting for under-review wishes
 		$this->overrideConfigValue( 'CommunityRequestsStatuses', [
 			'under-review' => [

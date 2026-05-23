@@ -22,6 +22,9 @@ class EventIngressTest extends MediaWikiUnitTestCase {
 	use MockWishlistConfigTrait;
 
 	public function testAutoSubscribe(): void {
+		if ( !class_exists( SubscriptionStore::class ) ) {
+			$this->markTestSkipped( 'Requires DiscussionTools' );
+		}
 		$authority = $this->mockRegisteredUltimateAuthority();
 		$title = $this->makeMockTitle( 'Community Wishlist/W123' );
 		$talkTitle = $this->makeMockTitle( 'Talk:Community Wishlist/W123' );

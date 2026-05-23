@@ -35,6 +35,9 @@ class ApiQueryWishesTest extends ApiTestCase {
 	}
 
 	public function testExecuteSortByCreated(): void {
+		// baselang != en requires Translate extension
+		$this->markTestSkippedIfExtensionNotLoaded( 'Translate' );
+
 		$queryKey = 'communityrequests-wishes';
 		$this->createTestFocusAreaWithApi( [ 'baselang' => 'de' ] );
 		$this->createTestWishWithApi( [

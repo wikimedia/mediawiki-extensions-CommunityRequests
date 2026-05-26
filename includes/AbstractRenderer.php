@@ -8,6 +8,7 @@ use MediaWiki\EditPage\EditPage;
 use MediaWiki\Extension\CommunityRequests\FocusArea\FocusAreaStore;
 use MediaWiki\Extension\CommunityRequests\Vote\VoteRenderer;
 use MediaWiki\Extension\CommunityRequests\Wish\WishStore;
+use MediaWiki\Extension\Translate\PageTranslation\Hooks;
 use MediaWiki\Html\Html;
 use MediaWiki\Language\Language;
 use MediaWiki\Language\MessageLocalizer;
@@ -532,7 +533,7 @@ abstract class AbstractRenderer implements MessageLocalizer {
 	 */
 	protected function getEntityTopSection() {
 		$languageLinks = ExtensionRegistry::getInstance()->isLoaded( 'Translate' ) ?
-			$this->parser->recursiveTagParse( '<languages/>' ) : '';
+			Hooks::languages( '', [], $this->parser ) : '';
 		$backLink = '';
 		if ( $this->config->isWishPage( $this->parser->getPage() ) ) {
 			$backLink .= $this->linkRenderer->makeKnownLink(

@@ -224,7 +224,7 @@ abstract class AbstractWishlistSpecialPage extends FormSpecialPage {
 		$context->setRequest( new DerivativeRequest( $this->getRequest(), [
 			'action' => $action,
 			$path => $this->entityId,
-			'token' => $data['wpEditToken'],
+			'token' => $context->getCsrfTokenSet()->getToken(),
 			...$data,
 		] ) );
 		$api = new ApiMain( $context, true );

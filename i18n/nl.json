@@ -40,7 +40,7 @@
 	"communityrequests-tags-label": "Labels",
 	"communityrequests-tags-description": "Selecteer de labels die het beste bij uw wens passen.",
 	"communityrequests-audience-label": "Primair betroffen gebruikers",
-	"communityrequests-audience-description": "Beschrijf welke gebruikersgroep en situatie dit het meest zal beïnvloeden",
+	"communityrequests-audience-description": "Beschrijf op welke gebruikersgroep en situatie dit het meeste invloed heeft",
 	"communityrequests-audience-error": "Voer een waarde in voor dit veld (tussen $1 en $2 teken{{PLURAL:$2||s}}).",
 	"communityrequests-phabricator-label": "Phabricator-taken",
 	"communityrequests-phabricator-desc": "Voer Phabricator-taak-ID’s of URL’s in.",

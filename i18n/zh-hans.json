@@ -11,7 +11,8 @@
 			"Peterxy12",
 			"Vjfjng",
 			"人间百态",
-			"沈澄心"
+			"沈澄心",
+			"XtexChooser"
 		]
 	},
 	"communityrequests-desc": "管理wiki社区的技术建议和请求的系统。",
@@ -67,7 +68,7 @@
 	"communityrequests-support-dialog-title": "支持“$1”",
 	"communityrequests-support-focus-area": "支持重点领域",
 	"communityrequests-support-focus-area-confirmed": "您已投票支持此重点领域。",
-	"communityrequests-support-wish": "支持中心",
+	"communityrequests-support-wish": "支持愿望",
 	"communityrequests-support-wish-confirmed": "您已投票支持此愿望。",
 	"communityrequests-support-updated": "您的支持票已更新。",
 	"communityrequests-support-removed": "您的支持票已移除。",

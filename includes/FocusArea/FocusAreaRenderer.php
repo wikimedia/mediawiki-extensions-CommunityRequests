@@ -101,7 +101,7 @@ class FocusAreaRenderer extends AbstractRenderer {
 			$this->msg( 'communityrequests-focus-area-wishes-description-3' )->text()
 		);
 
-		$out .= $this->parser->recursiveTagParse(
+		$out .= $this->parser->recursiveTagParseFully(
 			'{{#CommunityRequests: wish-index' .
 			'|focusareas=' . $this->config->getEntityWikitextVal( $this->parser->getPage() ) .
 			'|sort=created' .

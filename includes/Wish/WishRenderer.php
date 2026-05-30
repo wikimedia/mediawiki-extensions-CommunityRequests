@@ -71,7 +71,7 @@ class WishRenderer extends AbstractRenderer {
 		);
 		$descHtml = $this->getDivRaw(
 			'description',
-			$this->parser->recursiveTagParse( $args[Wish::PARAM_DESCRIPTION] ?? '' ),
+			$this->parser->recursiveTagParseFully( $args[Wish::PARAM_DESCRIPTION] ?? '' ),
 			$this->parser->getTargetLanguage(),
 		);
 

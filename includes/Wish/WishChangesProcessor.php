@@ -30,6 +30,9 @@ class WishChangesProcessor extends AbstractChangesProcessor {
 				$this->config->getWishTypeLabelFromWikitextVal( $type ) . '-label'
 			)->inContentLanguage()->text(),
 			Wish::PARAM_FOCUS_AREA => function ( string $focusArea ) {
+				if ( !$this->config->isFocusAreasEnabled() ) {
+					return null;
+				}
 				if ( !$focusArea ) {
 					return $this->msg( 'communityrequests-focus-area-unassigned' )->inContentLanguage()->text();
 				}
@@ -143,11 +146,13 @@ class WishChangesProcessor extends AbstractChangesProcessor {
 	protected function getNotification( string $field, array $change, int $revId ): WikiNotification {
 		$notification = parent::getNotification( $field, $change, $revId );
 		// For focus area changes, add the focus area ID and title to notification properties.
-		if ( $field === Wish::PARAM_FOCUS_AREA && $change['new'] ) {
-			return $this->setFocusAreaProps( $notification, $change['new'] );
-		} elseif ( $field === Wish::PARAM_FOCUS_AREA && $change['old'] ) {
-			$notification->setProperty( 'focusAreaUnassigned', true );
-			return $this->setFocusAreaProps( $notification, $change['old'] );
+		if ( $this->config->isFocusAreasEnabled() ) {
+			if ( $field === Wish::PARAM_FOCUS_AREA && $change['new'] ) {
+				return $this->setFocusAreaProps( $notification, $change['new'] );
+			} elseif ( $field === Wish::PARAM_FOCUS_AREA && $change['old'] ) {
+				$notification->setProperty( 'focusAreaUnassigned', true );
+				return $this->setFocusAreaProps( $notification, $change['old'] );
+			}
 		}
 		return $notification;
 	}

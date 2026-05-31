@@ -98,7 +98,7 @@ class ApiWishEdit extends ApiWishlistEntityBase {
 	/** @inheritDoc */
 	public function getAllowedParams() {
 		// NOTE: Keys should match the Wish::PARAM_* constants where possible.
-		return [
+		$params = [
 			static::entityParam() => [ ParamValidator::PARAM_TYPE => 'string' ],
 			Wish::PARAM_STATUS => [
 				ParamValidator::PARAM_TYPE => array_keys( $this->config->getStatuses() ),
@@ -152,5 +152,12 @@ class ApiWishEdit extends ApiWishlistEntityBase {
 				ApiBase::PARAM_HELP_MSG => 'apihelp-edit-param-baserevid',
 			],
 		];
+
+		// If focus areas are disabled, don't accept the parameter.
+		if ( !$this->config->isFocusAreasEnabled() ) {
+			unset( $params[Wish::PARAM_FOCUS_AREA] );
+		}
+
+		return $params;
 	}
 }

@@ -7,6 +7,7 @@ use MediaWiki\Api\ApiUsageException;
 use MediaWiki\Extension\CommunityRequests\AbstractWishlistStore;
 use MediaWiki\Extension\CommunityRequests\FocusArea\FocusAreaStore;
 use MediaWiki\Extension\CommunityRequests\HookHandler\PermissionHooks;
+use MediaWiki\Extension\CommunityRequests\WishlistConfig;
 use MediaWiki\Tests\Api\ApiTestCase;
 use MediaWiki\Title\Title;
 
@@ -124,6 +125,23 @@ class ApiFocusAreaEditTest extends ApiTestCase {
 				'The "title" parameter must be set.'
 			],
 		];
+	}
+
+	public function testExecuteFocusAreasDisabled(): void {
+		$this->overrideConfigValue( WishlistConfig::FOCUS_AREAS_ENABLED, false );
+		$this->expectException( ApiUsageException::class );
+		$this->expectApiErrorCode( 'focus-areas-disabled' );
+		$this->doApiRequestWithToken( [
+			'action' => 'focusareaedit',
+			'status' => 'under-review',
+			'title' => 'My test focus area',
+			'description' => '[[Test]] {{description}}',
+			'shortdescription' => 'Short [[desc]]',
+			'owners' => "* Community Tech\n* Editing",
+			'volunteers' => "* [[User:Volunteer1]]\n* [[User:Volunteer2]]",
+			'created' => '2023-10-01T12:00:00Z',
+			'baselang' => 'en',
+		] );
 	}
 
 	public function testExecuteNoPermission(): void {

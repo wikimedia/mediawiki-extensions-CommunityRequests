@@ -176,6 +176,7 @@
 	"communityrequests-form-loading-1": "First help message shown while the wish form loads (to help if the form never loads).",
 	"communityrequests-form-loading-2": "Second help message shown while the wish form loads.\n\nParameters:\n* $1 — Wikitext link to help page.",
 	"communityrequests-please-log-in": "Notice text shown if a user is not logged in when they try to open in the wish form.",
+	"communityrequests-focus-areas-disabled": "Error message shown when trying to access focus area pages or features while focus areas are disabled.",
 	"communityrequests-focus-area-description": "Label for the focus area description field in the intake form, as well as the heading for the description section on focus area pages.\n{{Identical|Description}}",
 	"communityrequests-focus-area-description-description": "Description for the focus area description field in the intake form.",
 	"communityrequests-focus-area-short-description": "Label for the focus area short description field in the intake form.",

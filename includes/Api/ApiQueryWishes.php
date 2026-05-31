@@ -133,27 +133,29 @@ class ApiQueryWishes extends ApiQueryBase {
 			}
 
 			// Add focus area page title and namespace, if applicable.
-			$focusAreaPage = $wish->getFocusAreaPage();
-			if ( $focusAreaPage ) {
-				'@phan-var PageIdentity $focusAreaPage';
-				ApiQueryBase::addTitleInfo(
-					$wishData,
-					Title::newFromPageIdentity( $focusAreaPage ),
-					'crfa'
-				);
-				// Focus area title is queried separately
-				// in order to not join between the CommunityRequests tables and core.
-				$focusArea = $this->focusAreaStore->get(
-					$focusAreaPage,
-					$params[Wish::PARAM_LANG] ?? $this->getLanguage()->getCode()
-				);
-				if ( $focusArea ) {
-					$wishData['focusareatitle'] = $focusArea->getTitle();
+			if ( $this->config->isFocusAreasEnabled() ) {
+				$focusAreaPage = $wish->getFocusAreaPage();
+				if ( $focusAreaPage ) {
+					'@phan-var PageIdentity $focusAreaPage';
+					ApiQueryBase::addTitleInfo(
+						$wishData,
+						Title::newFromPageIdentity( $focusAreaPage ),
+						'crfa'
+					);
+					// Focus area title is queried separately
+					// in order to not join between the CommunityRequests tables and core.
+					$focusArea = $this->focusAreaStore->get(
+						$focusAreaPage,
+						$params[Wish::PARAM_LANG] ?? $this->getLanguage()->getCode()
+					);
+					if ( $focusArea ) {
+						$wishData['focusareatitle'] = $focusArea->getTitle();
 
-					if ( in_array( Wish::PARAM_LANG_INFO, $params['prop'] ) ) {
-						$wishData['focusarealang'] = $focusArea->getLang();
-						$wishData['focusareadir'] = $this->languageFactory->getLanguage( $focusArea->getLang() )
-							->getDir();
+						if ( in_array( Wish::PARAM_LANG_INFO, $params['prop'] ) ) {
+							$wishData['focusarealang'] = $focusArea->getLang();
+							$wishData['focusareadir'] = $this->languageFactory->getLanguage( $focusArea->getLang() )
+								->getDir();
+						}
 					}
 				}
 			}
@@ -177,7 +179,7 @@ class ApiQueryWishes extends ApiQueryBase {
 	public function getAllowedParams() {
 		$apiHelpMsgPrefix = 'apihelp-query+communityrequests-wishes-paramvalue';
 		// NOTE: Keys should match the Wish::PARAM_* constants where possible.
-		return [
+		$params = [
 			Wish::PARAM_LANG => [
 				ParamValidator::PARAM_TYPE => 'string',
 			],
@@ -276,5 +278,17 @@ class ApiQueryWishes extends ApiQueryBase {
 				ApiBase::PARAM_HELP_MSG => 'api-help-param-continue',
 			],
 		];
+
+		// If focus areas are disabled, don't accept the parameter.
+		if ( !$this->config->isFocusAreasEnabled() ) {
+			unset( $params[Wish::PARAM_FOCUS_AREAS] );
+			foreach ( $params['prop'][ParamValidator::PARAM_TYPE] as $key => $value ) {
+				if ( $value === Wish::PARAM_FOCUS_AREA ) {
+					unset( $params['prop'][ParamValidator::PARAM_TYPE][$key] );
+				}
+			}
+		}
+
+		return $params;
 	}
 }

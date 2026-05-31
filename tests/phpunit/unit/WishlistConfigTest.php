@@ -87,6 +87,7 @@ class WishlistConfigTest extends MediaWikiUnitTestCase {
 		$this->assertSame( [ 'admins', 'botsgadgets', 'editing' ], array_keys( $this->config->getNavigationTags() ) );
 		$this->assertSame( '/Votes', $this->config->getVotesPageSuffix() );
 		$this->assertTrue( $this->config->isWishVotingEnabled() );
+		$this->assertTrue( $this->config->isFocusAreasEnabled() );
 		$this->assertTrue( $this->config->isFocusAreaVotingEnabled() );
 		$this->assertSame( 'Template:Community Wishlist/Decline', $this->config->getDeclineTemplate() );
 	}
@@ -319,7 +320,6 @@ class WishlistConfigTest extends MediaWikiUnitTestCase {
 	public function testGetDefaultStatusWikitextVal( array $statuses, string $expected ) {
 		$config = new WishlistConfig(
 			new ServiceOptions( WishlistConfig::CONSTRUCTOR_OPTIONS, [
-				WishlistConfig::DECLINE_TEMPLATE => 'Community Wishlist/Decline',
 				WishlistConfig::ENABLED => true,
 				WishlistConfig::HOMEPAGE => '',
 				WishlistConfig::WISH_CATEGORY => '',
@@ -333,9 +333,11 @@ class WishlistConfigTest extends MediaWikiUnitTestCase {
 				WishlistConfig::STATUSES => $statuses,
 				WishlistConfig::VOTES_PAGE_SUFFIX => '',
 				WishlistConfig::WISH_VOTING_ENABLED => true,
+				WishlistConfig::FOCUS_AREAS_ENABLED => true,
 				WishlistConfig::FOCUS_AREA_VOTING_ENABLED => true,
 				WishlistConfig::NOTIFICATIONS_ENABLED => true,
 				WishlistConfig::WISH_SUBMISSIONS_END_DATE => null,
+				WishlistConfig::DECLINE_TEMPLATE => 'Community Wishlist/Decline',
 				MainConfigNames::LanguageCode => '',
 			] ),
 			$this->createMock( TitleParser::class ),

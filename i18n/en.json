@@ -173,6 +173,7 @@
 	"communityrequests-form-loading-1": "If the form does not load, please ensure you have JavaScript enabled.",
 	"communityrequests-form-loading-2": "If you are still having problems, please seek assistance at $1.",
 	"communityrequests-please-log-in": "Please log in to submit a wish.",
+	"communityrequests-focus-areas-disabled": "Focus areas are currently disabled.",
 	"communityrequests-focus-area-description": "Description",
 	"communityrequests-focus-area-description-description": "Describe the focus area in detail, including its scope and how the assigned wishes align with each other.",
 	"communityrequests-focus-area-short-description": "Short description",

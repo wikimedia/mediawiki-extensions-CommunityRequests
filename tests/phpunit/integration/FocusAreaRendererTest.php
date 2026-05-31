@@ -5,6 +5,7 @@ namespace MediaWiki\Extension\CommunityRequests\Tests\Integration;
 
 use MediaWiki\Extension\CommunityRequests\FocusArea\FocusArea;
 use MediaWiki\Extension\CommunityRequests\FocusArea\FocusAreaStore;
+use MediaWiki\Extension\CommunityRequests\WishlistConfig;
 use MediaWiki\Parser\ParserOptions;
 use MediaWiki\Title\Title;
 use MediaWikiIntegrationTestCase;
@@ -33,6 +34,10 @@ class FocusAreaRendererTest extends MediaWikiIntegrationTestCase {
 			FocusArea::PARAM_SHORT_DESCRIPTION => 'A brief description of the focus area.',
 			FocusArea::PARAM_CREATED => '2023-10-01T12:00:00Z',
 		] );
+		if ( !$focusArea ) {
+			$this->expectNotToPerformAssertions();
+			return;
+		}
 		$this->assertGreaterThan( 0, $focusArea->getPage()->getId() );
 		$this->assertSame( $this->config->getStatusIdFromWikitextVal( 'in-progress' ), $focusArea->getStatus() );
 		$this->assertSame( 'Test Focus Area', $focusArea->getTitle() );
@@ -87,14 +92,19 @@ class FocusAreaRendererTest extends MediaWikiIntegrationTestCase {
 	/**
 	 * @dataProvider provideTestErrorCategory
 	 */
-	public function testErrorCategory( string $wikitext, bool $shouldBeInCategory ): void {
+	public function testErrorCategory( string $wikitext, bool $shouldBeInCategory, bool $enabled = true ): void {
+		if ( !$enabled ) {
+			$this->overrideConfigValue( WishlistConfig::FOCUS_AREAS_ENABLED, false );
+		}
 		$ret = $this->insertPage(
 			Title::newFromText( $this->config->getFocusAreaPagePrefix() . '123' ),
 			$wikitext,
 			NS_MAIN
 		);
 		$categories = array_keys( $ret['title']->getParentCategories() );
-		$this->assertContains( 'Category:Community_Wishlist/Focus_areas', $categories );
+		if ( $enabled ) {
+			$this->assertContains( 'Category:Community_Wishlist/Focus_areas', $categories );
+		}
 		if ( $shouldBeInCategory ) {
 			$this->assertContains( 'Category:Pages_with_Community_Wishlist_errors', $categories );
 		} else {
@@ -116,6 +126,11 @@ class FocusAreaRendererTest extends MediaWikiIntegrationTestCase {
 			'unknown status' => [
 				'{{#CommunityRequests: focus-area | title=Invalid Status FA | status=bogus | created=2023-10-01T12:00:00Z | baselang=en | description=Unknown status}}',
 				true,
+			],
+			'focus areas disabled' => [
+				'{{#CommunityRequests: focus-area | title=FA when disabled | status=under-review | created=2023-10-01T12:00:00Z | baselang=en | description=Focus areas are disabled}}',
+				true,
+				false,
 			],
 		];
 	}
@@ -145,5 +160,10 @@ class FocusAreaRendererTest extends MediaWikiIntegrationTestCase {
 		$this->assertContains( 'Category:Community_Wishlist/Focus_areas/de', $categories );
 		$this->assertNotContains( 'Category:Pages_with_Community_Wishlist_errors', $categories );
 		$this->assertNotContains( 'Category:Community_Wishlist', $categories );
+	}
+
+	public function testFocusAreasDisabled(): void {
+		$this->overrideConfigValue( WishlistConfig::FOCUS_AREAS_ENABLED, false );
+		$this->assertNull( $this->insertTestFocusArea() );
 	}
 }

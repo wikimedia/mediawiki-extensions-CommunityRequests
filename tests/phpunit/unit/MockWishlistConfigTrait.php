@@ -28,7 +28,6 @@ trait MockWishlistConfigTrait {
 	 */
 	protected function getConfig( array $serviceOptions = [] ): WishlistConfig {
 		$serviceOptions = new ServiceOptions( WishlistConfig::CONSTRUCTOR_OPTIONS, [
-			WishlistConfig::DECLINE_TEMPLATE => 'CommunityRequestsDeclineTemplate',
 			WishlistConfig::ENABLED => true,
 			WishlistConfig::HOMEPAGE => 'Community Wishlist',
 			WishlistConfig::WISH_CATEGORY => 'Category:Community Wishlist',
@@ -77,9 +76,11 @@ trait MockWishlistConfigTrait {
 			],
 			WishlistConfig::VOTES_PAGE_SUFFIX => '/Votes',
 			WishlistConfig::WISH_VOTING_ENABLED => true,
+			WishlistConfig::FOCUS_AREAS_ENABLED => true,
 			WishlistConfig::FOCUS_AREA_VOTING_ENABLED => true,
 			WishlistConfig::NOTIFICATIONS_ENABLED => true,
 			WishlistConfig::WISH_SUBMISSIONS_END_DATE => null,
+			WishlistConfig::DECLINE_TEMPLATE => 'CommunityRequestsDeclineTemplate',
 			MainConfigNames::LanguageCode => 'en',
 			...$serviceOptions,
 		] );

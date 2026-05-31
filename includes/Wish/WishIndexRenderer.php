@@ -45,12 +45,7 @@ class WishIndexRenderer extends AbstractRenderer {
 					return $this->config->getNavigationTags()[$val] ?? false ? $val : null;
 				}
 			),
-			Wish::PARAM_FOCUS_AREAS => Wish::getFromCsv(
-				$this->getSafeArg( Wish::PARAM_FOCUS_AREAS, '' ),
-				static fn ( $fa ) => preg_match( '/^(?:FA)?(\d+)$/', trim( $fa ), $matches ) ?
-					'FA' . (int)$matches[1] :
-					null
-			),
+			Wish::PARAM_FOCUS_AREAS => $this->getFocusAreasParam(),
 			Wish::PARAM_SHOW_FILTERS => $showFilters
 		] );
 
@@ -69,5 +64,17 @@ class WishIndexRenderer extends AbstractRenderer {
 
 		// TODO: generate full initial HTML with PHP
 		return Html::element( 'div', [ 'class' => 'ext-communityrequests-wishes' ] );
+	}
+
+	private function getFocusAreasParam(): array {
+		if ( !$this->config->isFocusAreasEnabled() ) {
+			return [];
+		}
+		return Wish::getFromCsv(
+			$this->getSafeArg( Wish::PARAM_FOCUS_AREAS, '' ),
+			static fn ( $fa ) => preg_match( '/^(?:FA)?(\d+)$/', trim( $fa ), $matches ) ?
+				'FA' . (int)$matches[1] :
+				null
+		);
 	}
 }

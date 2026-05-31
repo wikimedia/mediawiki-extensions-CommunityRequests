@@ -76,15 +76,20 @@ class WishRenderer extends AbstractRenderer {
 		);
 
 		// Focus area.
-		$focusAreaHeading = Html::element(
-			'div',
-			[ 'class' => 'mw-heading mw-heading3' ],
-			$this->msg( 'communityrequests-wish-focus-area-heading' )->text()
-		);
-		$focusArea = $this->getDivRaw(
-			'focus-area',
-			$this->getFocusAreaLink( $args[Wish::PARAM_FOCUS_AREA] ?? null )
-		);
+		if ( $this->config->isFocusAreasEnabled() ) {
+			$focusAreaHeading = Html::element(
+				'div',
+				[ 'class' => 'mw-heading mw-heading3' ],
+				$this->msg( 'communityrequests-wish-focus-area-heading' )->text()
+			);
+			$focusArea = $this->getDivRaw(
+				'focus-area',
+				$this->getFocusAreaLink( $args[Wish::PARAM_FOCUS_AREA] ?? null )
+			);
+		} else {
+			$focusAreaHeading = '';
+			$focusArea = '';
+		}
 
 		// Wish type.
 		$wishTypeHeading = Html::element(

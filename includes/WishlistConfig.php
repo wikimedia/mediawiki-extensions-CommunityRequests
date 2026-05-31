@@ -25,7 +25,6 @@ use TypeError;
  */
 class WishlistConfig {
 
-	public const DECLINE_TEMPLATE = 'CommunityRequestsDeclineTemplate';
 	public const ENABLED = 'CommunityRequestsEnable';
 	public const HOMEPAGE = 'CommunityRequestsHomepage';
 	public const WISH_CATEGORY = 'CommunityRequestsWishCategory';
@@ -39,11 +38,13 @@ class WishlistConfig {
 	public const STATUSES = 'CommunityRequestsStatuses';
 	public const VOTES_PAGE_SUFFIX = 'CommunityRequestsVotesPageSuffix';
 	public const WISH_VOTING_ENABLED = 'CommunityRequestsWishVotingEnabled';
+	public const FOCUS_AREAS_ENABLED = 'CommunityRequestsFocusAreasEnabled';
 	public const FOCUS_AREA_VOTING_ENABLED = 'CommunityRequestsFocusAreaVotingEnabled';
 	public const NOTIFICATIONS_ENABLED = 'CommunityRequestsNotificationsEnabled';
 	public const WISH_SUBMISSIONS_END_DATE = 'CommunityRequestsWishSubmissionsEndDate';
+	public const DECLINE_TEMPLATE = 'CommunityRequestsDeclineTemplate';
+
 	public const CONSTRUCTOR_OPTIONS = [
-		self::DECLINE_TEMPLATE,
 		self::ENABLED,
 		self::HOMEPAGE,
 		self::WISH_CATEGORY,
@@ -57,9 +58,11 @@ class WishlistConfig {
 		self::STATUSES,
 		self::VOTES_PAGE_SUFFIX,
 		self::WISH_VOTING_ENABLED,
+		self::FOCUS_AREAS_ENABLED,
 		self::FOCUS_AREA_VOTING_ENABLED,
 		self::NOTIFICATIONS_ENABLED,
 		self::WISH_SUBMISSIONS_END_DATE,
+		self::DECLINE_TEMPLATE,
 		MainConfigNames::LanguageCode,
 	];
 
@@ -77,6 +80,7 @@ class WishlistConfig {
 	private array $statuses;
 	private string $votesPageSuffix;
 	private bool $wishVotingEnabled;
+	private bool $focusAreasEnabled;
 	private bool $focusAreaVotingEnabled;
 	private bool $notificationsEnabled;
 	private ?string $wishSubmissionsEndDate;
@@ -88,7 +92,6 @@ class WishlistConfig {
 		private readonly TitleFormatter $titleFormatter,
 		private readonly LanguageNameUtils $languageNameUtils,
 	) {
-		$this->declineTemplate = $config->get( self::DECLINE_TEMPLATE );
 		$this->enabled = $config->get( self::ENABLED );
 		$this->homepage = $config->get( self::HOMEPAGE );
 		$this->wishCategory = $config->get( self::WISH_CATEGORY );
@@ -102,9 +105,11 @@ class WishlistConfig {
 		$this->statuses = $config->get( self::STATUSES );
 		$this->votesPageSuffix = $config->get( self::VOTES_PAGE_SUFFIX );
 		$this->wishVotingEnabled = $config->get( self::WISH_VOTING_ENABLED );
+		$this->focusAreasEnabled = $config->get( self::FOCUS_AREAS_ENABLED );
 		$this->focusAreaVotingEnabled = $config->get( self::FOCUS_AREA_VOTING_ENABLED );
 		$this->notificationsEnabled = $config->get( self::NOTIFICATIONS_ENABLED );
 		$this->wishSubmissionsEndDate = $config->get( self::WISH_SUBMISSIONS_END_DATE );
+		$this->declineTemplate = $config->get( self::DECLINE_TEMPLATE );
 		$this->siteLanguage = $config->get( MainConfigNames::LanguageCode );
 	}
 
@@ -112,10 +117,6 @@ class WishlistConfig {
 
 	public function isEnabled(): bool {
 		return $this->enabled;
-	}
-
-	public function getDeclineTemplate(): string {
-		return $this->declineTemplate;
 	}
 
 	public function getHomepage(): string {
@@ -166,6 +167,10 @@ class WishlistConfig {
 		return $this->wishVotingEnabled;
 	}
 
+	public function isFocusAreasEnabled(): bool {
+		return $this->focusAreasEnabled;
+	}
+
 	public function isFocusAreaVotingEnabled(): bool {
 		return $this->focusAreaVotingEnabled;
 	}
@@ -179,6 +184,10 @@ class WishlistConfig {
 			$this->wishSubmissionsEndDate,
 			self::WISH_SUBMISSIONS_END_DATE
 		);
+	}
+
+	public function getDeclineTemplate(): string {
+		return $this->declineTemplate;
 	}
 
 	// Helpers

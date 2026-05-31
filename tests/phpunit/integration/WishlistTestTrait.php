@@ -36,14 +36,15 @@ trait WishlistTestTrait {
 
 	protected function setUp(): void {
 		parent::setUp();
-		$this->config = $this->getServiceContainer()->get( 'CommunityRequests.WishlistConfig' );
 		$this->overrideConfigValues( [
 			MainConfigNames::NamespacesWithSubpages => [ NS_MAIN => true ],
 			MainConfigNames::LanguageCode => 'en',
 			MainConfigNames::PageLanguageUseDB => true,
 			WishlistConfig::ENABLED => true,
 			WishlistConfig::WISH_SUBMISSIONS_END_DATE => null,
+			WishlistConfig::FOCUS_AREAS_ENABLED => true,
 		] );
+		$this->config = $this->getServiceContainer()->get( 'CommunityRequests.WishlistConfig' );
 		$this->setService( 'LocalServerObjectCache', new EmptyBagOStuff() );
 	}
 
@@ -107,6 +108,9 @@ trait WishlistTestTrait {
 		array $data = [],
 		bool $markForTranslation = true,
 	): ?FocusArea {
+		if ( !$this->config->isFocusAreasEnabled() ) {
+			return null;
+		}
 		$defaultData = [
 			FocusArea::PARAM_TITLE => 'Test Focus Area',
 			FocusArea::PARAM_DESCRIPTION => 'This is a test focus area.',

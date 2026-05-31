@@ -33,6 +33,21 @@ class SpecialEditFocusArea extends AbstractWishlistSpecialPage {
 	}
 
 	/** @inheritDoc */
+	public function execute( $par ) {
+		if ( !$this->config->isFocusAreasEnabled() ) {
+			$this->setHeaders();
+			$this->getOutput()->showErrorPage(
+				'communityrequests-editfocusarea',
+				'communityrequests-focus-areas-disabled',
+				[],
+				$this->config->getHomepage(),
+			);
+			return;
+		}
+		parent::execute( $par );
+	}
+
+	/** @inheritDoc */
 	public function getDescription(): Message {
 		return $this->msg( 'communityrequests-editfocusarea' );
 	}
@@ -78,5 +93,10 @@ class SpecialEditFocusArea extends AbstractWishlistSpecialPage {
 	/** @inheritDoc */
 	protected function getApiPath(): string {
 		return 'focusarea';
+	}
+
+	/** @inheritDoc */
+	public function isListed(): bool {
+		return parent::isListed() && $this->config->isFocusAreasEnabled();
 	}
 }

@@ -390,6 +390,7 @@
 					"config": [
 						"CommunityRequestsDeclineTemplate",
 						"CommunityRequestsEnable",
+						"CommunityRequestsFocusAreasEnabled",
 						"CommunityRequestsFocusAreaIndexPage",
 						"CommunityRequestsHomepage",
 						"CommunityRequestsFAQPage",
@@ -583,6 +584,7 @@
 				{
 					"name": "common/config.json",
 					"config": [
+						"CommunityRequestsFocusAreasEnabled",
 						"CommunityRequestsStatuses",
 						"CommunityRequestsTags",
 						"CommunityRequestsWishIndexPage",
@@ -623,10 +625,6 @@
 		}
 	},
 	"config": {
-		"CommunityRequestsDeclineTemplate": {
-			"description": "Decline template to use when a wish declined for CommunityRequests extension.",
-			"value": "Template:Community Wishlist/Decline"
-		},
 		"CommunityRequestsEnable": {
 			"description": "Whether to enable any functionality of the CommunityRequests extension.",
 			"value": true
@@ -843,6 +841,10 @@
 			"description": "Whether to enable voting for wishes.",
 			"value": true
 		},
+		"CommunityRequestsFocusAreasEnabled": {
+			"description": "Whether to enable focus areas, which are groupings of wishes that can be voted on together.",
+			"value": true
+		},
 		"CommunityRequestsFocusAreaVotingEnabled": {
 			"description": "Whether to enable voting for focus areas.",
 			"value": true
@@ -854,6 +856,10 @@
 		"CommunityRequestsWishSubmissionsEndDate": {
 			"description": "The date after which wish submissions are no longer accepted. (e.g. '2026-01-01T00:00:00Z')",
 			"value": null
+		},
+		"CommunityRequestsDeclineTemplate": {
+			"description": "Decline template to add to the description when a wish is declined using Special:WishlistIntake.",
+			"value": "Template:Community Wishlist/Decline"
 		}
 	},
 	"attributes": {

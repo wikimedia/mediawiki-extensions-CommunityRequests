@@ -21,6 +21,11 @@ class FocusAreaIndexRenderer extends AbstractRenderer {
 		if ( !$this->config->isEnabled() ) {
 			return '';
 		}
+
+		if ( !$this->config->isFocusAreasEnabled() ) {
+			return $this->getErrorMessage( 'communityrequests-focus-areas-disabled', [] );
+		}
+
 		$this->parser->addTrackingCategory( self::TRACKING_CATEGORY );
 		$outputHTML = '';
 

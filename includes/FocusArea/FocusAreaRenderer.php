@@ -20,8 +20,13 @@ class FocusAreaRenderer extends AbstractRenderer {
 		if ( !$this->config->isEnabled() || !$this->config->isFocusAreaPage( $this->parser->getPage() ) ) {
 			return '';
 		}
+
+		if ( !$this->config->isFocusAreasEnabled() ) {
+			return $this->getErrorMessage( 'communityrequests-focus-areas-disabled', [] );
+		}
+
 		$args = $this->getArgs();
-		$args[FocusArea::PARAM_DESCRIPTION] ??= '';
+		$args[ FocusArea::PARAM_DESCRIPTION ] ??= '';
 
 		$this->addTrackingCategory( self::FOCUS_AREA_TRACKING_CATEGORY );
 		$this->parser->getOptions()->setSuppressSectionEditLinks();
@@ -39,11 +44,11 @@ class FocusAreaRenderer extends AbstractRenderer {
 		}
 
 		// These need to be set here because we need them for display in ::renderFocusAreaInternal().
-		$args[FocusArea::PARAM_UPDATED] = $this->parser->getRevisionTimestamp();
-		$args[FocusArea::PARAM_CREATED] ??= $args[FocusArea::PARAM_UPDATED];
+		$args[ FocusArea::PARAM_UPDATED ] = $this->parser->getRevisionTimestamp();
+		$args[ FocusArea::PARAM_CREATED ] ??= $args[FocusArea::PARAM_UPDATED];
 
-		$args[FocusArea::PARAM_ENTITY_TYPE] = 'focus-area';
-		$args[FocusArea::PARAM_LANG] = $this->parser->getTargetLanguage()->getCode();
+		$args[ FocusArea::PARAM_ENTITY_TYPE ] = 'focus-area';
+		$args[ FocusArea::PARAM_LANG ] = $this->parser->getTargetLanguage()->getCode();
 
 		$this->logger->debug( __METHOD__ . ": Rendering focus area. {0}", [ json_encode( $args ) ] );
 		$this->parser->getOutput()->setExtensionData( self::EXT_DATA_KEY, $args );

@@ -16,6 +16,7 @@
 					:clear-field="clearFilters"
 				></statuses-filter>
 				<focus-areas-filter
+					v-if="focusAreasEnabled"
 					v-model:focusareas="filters.focusareas"
 					:clear-field="clearFilters"
 				></focus-areas-filter>
@@ -41,6 +42,7 @@
 <script>
 const { defineComponent, nextTick, reactive, ref, Reactive, Ref } = require( 'vue' );
 const { CdxAccordion, CdxButton } = require( '../codex.js' );
+const { CommunityRequestsFocusAreasEnabled } = require( '../common/config.json' );
 const FocusAreasFilter = require( './FocusAreasFilter.vue' );
 const StatusesFilter = require( './StatusesFilter.vue' );
 const TagsField = require( '../common/TagsField.vue' );
@@ -80,6 +82,13 @@ module.exports = exports = defineComponent( {
 		const clearFilters = ref( false );
 
 		/**
+		 * Whether focus areas are enabled.
+		 *
+		 * @type {boolean}
+		 */
+		const focusAreasEnabled = CommunityRequestsFocusAreasEnabled;
+
+		/**
 		 * Clear all filter fields.
 		 */
 		function onClearAllFilters() {
@@ -93,6 +102,7 @@ module.exports = exports = defineComponent( {
 		return {
 			clearFilters,
 			filters,
+			focusAreasEnabled,
 			onClearAllFilters
 		};
 	}

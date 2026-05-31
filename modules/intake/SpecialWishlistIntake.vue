@@ -24,7 +24,7 @@
 			name="status"
 		>
 		<focus-area-field
-			v-if="isWishlistManager"
+			v-if="isWishlistManager && focusAreasEnabled"
 			v-model:focus-area="wish.focusarea"
 			@update:focus-area="formChanged = true"
 		></focus-area-field>
@@ -112,6 +112,7 @@ const { computed, defineComponent, nextTick, onMounted, reactive, ref, ComputedR
 const { CdxField } = require( '../codex.js' );
 const {
 	CommunityRequestsFAQPage,
+	CommunityRequestsFocusAreasEnabled,
 	CommunityRequestsHomepage,
 	CommunityRequestsWishIndexPage,
 	CommunityRequestsStatuses
@@ -283,6 +284,12 @@ module.exports = exports = defineComponent( {
 		 */
 		const isWishlistManager = Util.isWishlistManager();
 		/**
+		 * Whether focus areas are enabled.
+		 *
+		 * @type {boolean}
+		 */
+		const focusAreasEnabled = CommunityRequestsFocusAreasEnabled;
+		/**
 		 * Whether the wish already exists (is being edited) or is a new wish.
 		 *
 		 * @type {boolean}
@@ -426,6 +433,7 @@ module.exports = exports = defineComponent( {
 			CommunityRequestsFAQPage,
 			standardAvailableTags,
 			isWishlistManager,
+			focusAreasEnabled,
 			exists,
 			returnTo,
 			addPreSubmitFn,

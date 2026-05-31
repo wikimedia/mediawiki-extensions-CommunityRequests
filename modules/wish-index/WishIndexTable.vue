@@ -25,7 +25,7 @@
 				:lang="row.lang"
 				:dir="row.dir"
 			>
-				<span v-if="focusareas.length === 1">
+				<span v-if="focusareas.length === 1 || !focusAreasEnabled">
 					{{ item }}
 				</span>
 				<span v-else class="ext-communityrequests-wishes--title-link">
@@ -33,7 +33,7 @@
 				</span>
 			</a>
 			<div
-				v-if="focusareas.length !== 1"
+				v-if="focusareas.length !== 1 && focusAreasEnabled"
 				class="ext-communityrequests-wishes--focusarea-text"
 			>
 				<!-- eslint-disable-next-line vue/no-v-html -->
@@ -86,7 +86,7 @@
 const { defineComponent, computed, nextTick, ref, ComputedRef, Ref, watch } = require( 'vue' );
 const { CdxInfoChip, CdxMessage, CdxTable } = require( '../codex.js' );
 const { formatDate } = require( 'mediawiki.DateFormatter' );
-const { CommunityRequestsStatuses } = require( '../common/config.json' );
+const { CommunityRequestsFocusAreasEnabled, CommunityRequestsStatuses } = require( '../common/config.json' );
 const Util = require( '../common/Util.js' );
 const api = new mw.Api();
 
@@ -136,7 +136,7 @@ module.exports = exports = defineComponent( {
 			},
 			title: {
 				id: 'title',
-				label: props.focusareas.length === 1 ?
+				label: props.focusareas.length === 1 || !CommunityRequestsFocusAreasEnabled ?
 					mw.msg( 'communityrequests-wishes-title-header' ) :
 					mw.msg( 'communityrequests-wishes-title-and-focusarea-header' ),
 				allowSort: true
@@ -264,6 +264,12 @@ module.exports = exports = defineComponent( {
 
 		// Non-reactive local variables
 
+		/**
+		 * Whether focus aras are enabled.
+		 *
+		 * @type {boolean}
+		 */
+		const focusAreasEnabled = CommunityRequestsFocusAreasEnabled;
 		/**
 		 * Pagination size options for users to select from.
 		 *
@@ -440,6 +446,7 @@ module.exports = exports = defineComponent( {
 			pending,
 			table,
 			totalWishCount,
+			focusAreasEnabled,
 			paginationSizeOptions,
 			mw,
 			formatDate,

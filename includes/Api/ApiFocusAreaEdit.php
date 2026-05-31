@@ -14,6 +14,9 @@ class ApiFocusAreaEdit extends ApiWishlistEntityBase {
 
 	/** @inheritDoc */
 	public function execute() {
+		if ( !$this->config->isFocusAreasEnabled() ) {
+			$this->dieWithError( 'apierror-focus-areas-disabled' );
+		}
 		$this->checkUserRightsAny( 'manage-wishlist' );
 		parent::execute();
 	}

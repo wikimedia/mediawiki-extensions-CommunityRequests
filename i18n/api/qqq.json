@@ -23,6 +23,7 @@
 	"apierror-wishlist-vote-parse": "{{doc-apierror}}",
 	"apierror-wishlist-vote-login-required": "{{doc-apierror}}",
 	"apierror-wishlist-entity-invalid": "{{doc-apierror}}",
+	"apierror-focus-areas-disabled": "{{doc-apierror}}",
 	"apierror-querywishes-invalidfocusareas": "{{doc-apierror}}",
 	"apihelp-focusareaedit-summary": "{{doc-apihelp-summary|focusareaedit}}",
 	"apihelp-focusareaedit-param-focusarea": "{{doc-apihelp-param|focusareaedit|focusarea}}",

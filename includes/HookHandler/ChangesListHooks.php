@@ -94,7 +94,7 @@ class ChangesListHooks implements
 	 * @param array &$attribs
 	 */
 	public function onContributionsLineEnding( $pager, &$ret, $row, &$classes, &$attribs ): void {
-		if ( !$this->config->isEnabled() ) {
+		if ( !$this->config->isEnabled() || !isset( $row->page_id ) ) {
 			return;
 		}
 		$pageIdentity = PageIdentityValue::localIdentity(

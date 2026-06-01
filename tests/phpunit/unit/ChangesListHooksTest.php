@@ -8,6 +8,7 @@ use MediaWiki\Extension\CommunityRequests\HookHandler\ChangesListHooks;
 use MediaWiki\Extension\CommunityRequests\Wish\Wish;
 use MediaWiki\Extension\CommunityRequests\Wish\WishStore;
 use MediaWiki\Language\Language;
+use MediaWiki\Pager\ContributionsPager;
 use MediaWiki\RecentChanges\ChangesList;
 use MediaWiki\RecentChanges\RecentChange;
 use MediaWiki\Tests\Unit\FakeQqxMessageLocalizer;
@@ -85,6 +86,62 @@ class ChangesListHooksTest extends MediaWikiUnitTestCase {
 		] );
 
 		$handler->onChangesListInitRows( $changesList, $rows );
+	}
+
+	public function testOnContributionsLineEnding(): void {
+		$wishTitle = $this->makeMockTitle( 'Community Wishlist/W1' );
+		$handler = $this->getHandler( $wishTitle );
+
+		$pager = $this->createNoOpMock(
+			ContributionsPager::class,
+			[ 'getLanguage', 'getTemplateParams', 'getProcessedTemplate', 'msg' ]
+		);
+		$pager->expects( $this->once() )
+			->method( 'getLanguage' )
+			->willReturn( $this->createConfiguredMock( Language::class, [ 'getCode' => 'en' ] ) );
+		$pager->expects( $this->once() )
+			->method( 'getTemplateParams' )
+			->willReturn( [] );
+		$pager->expects( $this->once() )
+			->method( 'getProcessedTemplate' )
+			->willReturnCallback( static fn ( $templateParams ) => $templateParams['articleLink'] );
+		$pager->expects( $this->once() )
+			->method( 'msg' )
+			->willReturnCallback( [ new FakeQqxMessageLocalizer(), 'msg' ] );
+		$ret = '';
+		$row = (object)[
+			'page_id' => $wishTitle->getArticleID(),
+			'page_namespace' => $wishTitle->getNamespace(),
+			'page_title' => $wishTitle->getDBkey(),
+		];
+		$classes = [];
+		$attribs = [];
+
+		$handler->onContributionsLineEnding( $pager, $ret, $row, $classes, $attribs );
+
+		$this->assertSame(
+			'<a title="Test wish title"><span class="ext-communityrequests-entity-link--label">Test wish title</span>' .
+			' <span class="mw-title ext-communityrequests-entity-link--id" style="font-size: 0.85em;">' .
+			'(parentheses: Community Wishlist/W1)</span></a>',
+			$ret
+		);
+	}
+
+	public function testOnContributionsLineEndingDeletedPage(): void {
+		$wishTitle = $this->makeMockTitle( 'Community Wishlist/W1', [ 'id' => 0 ] );
+		$handler = $this->getHandler( $wishTitle );
+		$pager = $this->createNoOpMock( ContributionsPager::class );
+		$ret = 'Original contents';
+		// Now page_id as we're simulating a deleted page.
+		$row = (object)[
+			'page_namespace' => $wishTitle->getNamespace(),
+			'page_title' => $wishTitle->getDBkey(),
+		];
+		$classes = [];
+		$attribs = [];
+
+		$handler->onContributionsLineEnding( $pager, $ret, $row, $classes, $attribs );
+		$this->assertSame( 'Original contents', $ret );
 	}
 
 	private function getHandler( ?Title $wishTitle = null ): ChangesListHooks {

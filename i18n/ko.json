@@ -4,7 +4,8 @@
 			"Ykhwong",
 			"Bisang",
 			"YeBoy371",
-			"Tensama0415"
+			"Tensama0415",
+			"解浪"
 		]
 	},
 	"communityrequests-desc": "위키 커뮤니티의 기술적 제안 및 요청을 관리하는 시스템.",
@@ -66,7 +67,7 @@
 	"communityrequests-focus-area-owners": "소유자",
 	"communityrequests-focus-area-volunteers": "공동체 구성원",
 	"communityrequests-focus-area-voting": "투표",
-	"communityrequests-focus-area-voting-not-logged-in": "이 중점 영역을 지지하려면 로그인하세요",
+	"communityrequests-focus-area-voting-not-logged-in": "이 중점 분야를 지지하려면 로그인하세요",
 	"communityrequests-focus-area-voters-heading": "이 분야의 지지자",
 	"communityrequests-focus-area-no-votes": "아직 지지자가 없습니다.",
 	"communityrequests-translation-translatable": "이 문서에는 $1로 되어 있지 않은 문구가 포함되어 있습니다.",

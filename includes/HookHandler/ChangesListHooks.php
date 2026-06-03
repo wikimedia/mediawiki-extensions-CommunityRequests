@@ -3,30 +3,29 @@ declare( strict_types = 1 );
 
 namespace MediaWiki\Extension\CommunityRequests\HookHandler;
 
+use MediaWiki\Context\RequestContext;
 use MediaWiki\Extension\CommunityRequests\FocusArea\FocusAreaStore;
 use MediaWiki\Extension\CommunityRequests\Wish\WishStore;
 use MediaWiki\Extension\CommunityRequests\WishlistConfig;
 use MediaWiki\Extension\CommunityRequests\WishlistEntityTrait;
-use MediaWiki\Hook\ContributionsLineEndingHook;
-use MediaWiki\Page\PageIdentityValue;
-use MediaWiki\Pager\ContributionsPager;
+use MediaWiki\Linker\Hook\HtmlPageLinkRendererEndHook;
+use MediaWiki\Linker\LinkRenderer;
+use MediaWiki\Linker\LinkTarget;
 use MediaWiki\RecentChanges\ChangesList;
 use MediaWiki\RecentChanges\Hook\ChangesListInitRowsHook;
-use MediaWiki\RecentChanges\Hook\ChangesListInsertArticleLinkHook;
-use MediaWiki\RecentChanges\RecentChange;
+use MediaWiki\Title\Title;
 use MediaWiki\Title\TitleFactory;
 use MediaWiki\Title\TitleFormatter;
 use Psr\Log\LoggerInterface;
-use stdClass;
+use Wikimedia\HtmlArmor\HtmlArmor;
 use Wikimedia\ObjectCache\WANObjectCache;
 
 /**
  * Hook handlers involving the appearance of entity pages in change lists such as recent changes and the watchlist.
  */
 class ChangesListHooks implements
-	ChangesListInsertArticleLinkHook,
 	ChangesListInitRowsHook,
-	ContributionsLineEndingHook
+	HtmlPageLinkRendererEndHook
 {
 	use WishlistEntityTrait;
 
@@ -39,31 +38,6 @@ class ChangesListHooks implements
 		protected WANObjectCache $cache,
 		protected readonly LoggerInterface $logger,
 	) {
-	}
-
-	/**
-	 * Customize article links for wish and focus area pages in change lists.
-	 *
-	 * @param ChangesList $changesList
-	 * @param string &$articlelink HTML of link to page.
-	 * @param string &$s HTML of row that is being constructed.
-	 * @param RecentChange $rc
-	 * @param bool $unpatrolled
-	 * @param bool $watched
-	 */
-	public function onChangesListInsertArticleLink(
-		$changesList, &$articlelink, &$s, $rc, $unpatrolled, $watched
-	): void {
-		$pageRef = $rc->getPage();
-		if ( $this->config->isEnabled() && $pageRef && $this->config->isEntityPage( $pageRef ) ) {
-			$title = $this->titleFactory->newFromPageReference( $pageRef );
-			$entity = $this->getMaybeCachedEntity( $title, $changesList->getLanguage()->getCode() );
-			if ( !$entity ) {
-				$this->logger->error( __METHOD__ . ": Could not load entity for page {$title->toPageIdentity()}" );
-				return;
-			}
-			$articlelink = $this->getEntityLink( $entity, $changesList );
-		}
 	}
 
 	/**
@@ -85,34 +59,48 @@ class ChangesListHooks implements
 	}
 
 	/**
-	 * Customize links for wish and focus area pages at Special:Contributions.
+	 * Customize link rendering for wish and focus area pages wherever LinkRenderer is used,
+	 * which includes change lists and other places.
 	 *
-	 * @param ContributionsPager $pager
+	 * @see https://www.mediawiki.org/wiki/Manual:Hooks/HtmlPageLinkRendererEnd
+	 *
+	 * @param LinkRenderer $linkRenderer
+	 * @param LinkTarget $target
+	 * @param bool $isKnown
+	 * @param string|HtmlArmor &$text
+	 * @param string[] &$attribs
 	 * @param string &$ret
-	 * @param stdClass $row
-	 * @param array &$classes
-	 * @param array &$attribs
 	 */
-	public function onContributionsLineEnding( $pager, &$ret, $row, &$classes, &$attribs ): void {
-		if ( !$this->config->isEnabled() || !isset( $row->page_id ) ) {
+	public function onHtmlPageLinkRendererEnd( $linkRenderer, $target, $isKnown, &$text, &$attribs, &$ret ) {
+		if ( !$this->config->isEnabled() || !$isKnown ) {
 			return;
 		}
-		$pageIdentity = PageIdentityValue::localIdentity(
-			(int)$row->page_id,
-			(int)$row->page_namespace,
-			$row->page_title
-		);
-		if ( !$this->config->isEntityPage( $pageIdentity ) ) {
+
+		// Don't alter links in wikitext output, mainly because Parsoid-rendered
+		// HTML is incompatible with this hook. See T343483 (WikiLambda) and T131176 (WikiBase).
+		$context = RequestContext::getMain();
+		if ( !$context->hasTitle() ) {
 			return;
 		}
-		$entity = $this->getMaybeCachedEntity( $pageIdentity, $pager->getLanguage()->getCode() );
+
+		$targetTitle = Title::newFromLinkTarget( $target );
+		if ( !$this->config->isEntityPage( $targetTitle ) ) {
+			return;
+		}
+
+		// Don't re-write the label if the label is already set,
+		// such as the "prev" and "cur" links on history pages, etc.
+		// This is the same hack used by WikiBase and WikiLambda.
+		if ( $text !== null && $targetTitle->getFullText() !== HtmlArmor::getHtml( $text ) ) {
+			return;
+		}
+
+		$entity = $this->getMaybeCachedEntity( $targetTitle, $context->getLanguage()->getCode() );
 		if ( !$entity ) {
 			return;
 		}
-		// Feels hacky, but better than creating our own ContributionsPager subclass
-		// solely to format title links. All ContributionsPager methods we call are public.
-		$templateParams = $pager->getTemplateParams( $row, $classes );
-		$templateParams['articleLink'] = $this->getEntityLink( $entity, $pager );
-		$ret = $pager->getProcessedTemplate( $templateParams );
+
+		// Return as HTML that shouldn't be escaped (safety is ensured by getEntityLink()).
+		$text = new HtmlArmor( $this->getEntityLink( $entity, $context ) );
 	}
 }

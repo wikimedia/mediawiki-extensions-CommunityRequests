@@ -2,7 +2,8 @@
 	"@metadata": {
 		"authors": [
 			"Jon Harald Søby",
-			"Laaknor"
+			"Laaknor",
+			"EdoAug"
 		]
 	},
 	"communityrequests-desc": "Et system for å behandle et wikifellesskaps tekniske forslag og forespørsler.",

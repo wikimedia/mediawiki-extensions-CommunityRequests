@@ -40,5 +40,7 @@
 	"communityrequests-focus-area-volunteers": "Ahli komuniti",
 	"communityrequests-focus-area-no-votes": "Tiada penyokong lagi.",
 	"communityrequests-translation-translatable": "Laman ini mengandungi teks yang bukan dalam $1.",
-	"communityrequests-translation-errors": "Ralat berlaku:"
+	"communityrequests-translation-errors": "Ralat berlaku:",
+	"tag-community-wishlist": "[[Special:MyLanguage/Community Wishlist|Senarai Hajat Komuniti]]",
+	"group-community-wishlist-manager-member": "{{GENDER:$1|pengurus}} Senarai Hajat Komuniti"
 }

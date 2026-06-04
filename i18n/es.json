@@ -4,7 +4,8 @@
 			"JorgeElias2302",
 			"McDutchie",
 			"MarcoAurelio",
-			"Avengium"
+			"Avengium",
+			"No se"
 		]
 	},
 	"communityrequests-wish-loading-error": "Se produjo un error al analizar el texto fuente del formulario de deseo. Puede contener wikitexto no válido. Puedes [$1 actualizar la página] e intentar nuevamente, usar el [[$2|editor de código]] o solicitar ayuda en la [[$3|página de discusión]].",
@@ -67,5 +68,6 @@
 	"communityrequests-wishes-status-header": "Estado",
 	"communityrequests-wishes-type-header": "Tipo",
 	"communityrequests-focus-area-supported-val": "$1 {{PLURAL:$2|persona|personas}}",
-	"communityrequests-focus-area-owners-label": "Propietarios:"
+	"communityrequests-focus-area-owners-label": "Propietarios:",
+	"communityrequests-missing-wish": "Este deseo no existe. Puedes [{{fullurl:{{#Special:Log}}|page={{FULLPAGENAMEE}}}} buscar en los registros relacionados] para averiguar dónde fue, o [[$1|crear un nuevo deseo]]."
 }

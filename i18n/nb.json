@@ -2,7 +2,8 @@
 	"@metadata": {
 		"authors": [
 			"Jon Harald Søby",
-			"Laaknor"
+			"Laaknor",
+			"EdoAug"
 		]
 	},
 	"communityrequests-desc": "Et system for å behandle et wikifellesskaps tekniske forslag og forespørsler.",
@@ -16,6 +17,10 @@
 	"communityrequests-focus-area-not-found": "Fokusområdet [[$1]] ble ikke funnet, det er ikke en gyldig ID, eller det ble ikke opprettet via [[Special:EditFocusArea]].",
 	"communityrequests-form-error": "Noe gikk galt. Prøv å lagre på nytt, eller be om hjelp på [[$1|diskusjonssiden]].",
 	"communityrequests-intake-focus-area": "Fokusområde",
+	"communityrequests-baselang-no-results": "Ingen resultater",
+	"communityrequests-wish-baselang": "Språket dette ønsket er skrevet på",
+	"communityrequests-focus-area-baselang": "Språket dette fokusområdet er skrevet på",
+	"communityrequests-baselang-error": "Velg et gyldig språk.",
 	"communityrequests-description": "Beskriv problemet ditt",
 	"communityrequests-description-description": "Forklar detaljert hva ønsket går ut på eller hva problemet består i.",
 	"communityrequests-title-label": "Tittel",
@@ -94,6 +99,7 @@
 	"communityrequests-status-focus-area-in-progress": "Under arbeid",
 	"communityrequests-status-focus-area-done": "Ferdig",
 	"communityrequests-status-focus-area-unknown": "Ukjent",
+	"communityrequests-declined-reason": "Avvist grunn",
 	"communityrequests-error-invalid-status": "Ugyldig status: «$1»",
 	"communityrequests-edit-wish": "Rediger ønske",
 	"communityrequests-discuss-wish": "Diskuter dette ønsket",
@@ -107,6 +113,7 @@
 	"communityrequests-tag-categories": "Kategorier",
 	"communityrequests-tag-citations": "Referanser",
 	"communityrequests-tag-editing": "Redigering",
+	"communityrequests-tag-hackathonable": "Relevant for «hackathon»",
 	"communityrequests-tag-ios": "Wikipedias iOS-app",
 	"communityrequests-tag-android": "Wikipedias Android-app",
 	"communityrequests-tag-mobile-web": "Mobilweb",
@@ -247,5 +254,14 @@
 	"logentry-communityrequests-wish-status-change": "$1 {{GENDER:$2|endret}} statusen til «$3» fra «$4» til «$5»",
 	"logentry-communityrequests-wish-focusarea-change": "$1 {{GENDER:$2|endret}} fokusområdet for «$3» fra «$4» til «$5»",
 	"logentry-communityrequests-focus-area-create": "$1 {{GENDER:$2|opprettet}} fokusområdet «$3»",
-	"logentry-communityrequests-focus-area-status-change": "$1 {{GENDER:$2|endret}} statusen for «$3» fra «$4» til «$5»"
+	"logentry-communityrequests-focus-area-status-change": "$1 {{GENDER:$2|endret}} statusen for «$3» fra «$4» til «$5»",
+	"echo-category-title-communityrequests-notification": "Fellesskapets ønskeliste",
+	"communityrequests-notification-header": "Oppdatering for «$1»",
+	"communityrequests-notification-bundled": "Oppdateringer i fellesskapets ønskeliste",
+	"communityrequests-notification-wish-status-change": "Status endret til «$1».",
+	"communityrequests-notification-wish-focusarea-change": "Tilordnet fokusområdet «$1».",
+	"communityrequests-notification-wish-focusarea-unassigned": "Fjernet fra fokusområdet «$1».",
+	"communityrequests-notification-focus-area-status-change": "Status endret til «$1».",
+	"communityrequests-notification-focus-area-wish-added": "La til «$1».",
+	"communityrequests-notification-focus-area-wish-removed": "Fjernet «$1»."
 }

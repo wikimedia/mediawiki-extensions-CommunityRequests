@@ -50,7 +50,6 @@ class DeleteOrphanedEntityRowsTest extends MaintenanceBaseTestCase {
 		// Test the count.
 		$this->maintenance->setOption( 'dry-run', true );
 		$this->maintenance->execute();
-		// XXX: $this->expectOutputString() does not work here for some reason.
 		$this->assertSame(
 			"1 orphaned rows would be deleted.\n",
 			$this->getActualOutputForAssertion()

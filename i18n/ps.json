@@ -17,5 +17,13 @@
 	"communityrequests-supported": "له مخکې څخه ملاتړشوې",
 	"communityrequests-status-draft": "گارليک",
 	"communityrequests-status-submitted": "سپارل‌شوی",
-	"communityrequests-status-open": "پرانېستل"
+	"communityrequests-status-open": "پرانېستل",
+	"communityrequests-wish-description-heading": "څرگنداوی",
+	"communityrequests-wish-audience-heading": "اغېزمن کارنان",
+	"communityrequests-wish-other-details-heading": "نور سپيناوی",
+	"communityrequests-wishes-type-header": "ډول",
+	"communityrequests-wishes-status-header": "دريځ",
+	"communityrequests-focus-area-supported": "ملاتړی:",
+	"communityrequests-focus-area-supported-val": "$1 {{PLURAL:$2|وگړی|وگړي}}",
+	"communityrequests-focus-area-owners-label": "څښتنان:"
 }

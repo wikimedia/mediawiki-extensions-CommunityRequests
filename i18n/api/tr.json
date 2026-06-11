@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"Joseph"
+			"Joseph",
+			"HakanIST"
 		]
 	},
 	"apihelp-wishedit-summary": "Topluluk Dilek Listesinde bir dilek oluşturun ya da dileğinizi güncelleyin.",
@@ -12,6 +13,7 @@
 	"apihelp-wishedit-param-description": "Dileğin tanımı. Vikimetin içerebilir.",
 	"apihelp-wishedit-param-type": "Dileğin türü.",
 	"apihelp-wishedit-param-audience": "Dileğin gerçekleşmesinden faydalanacak olan birincil kullanıcı grubu (ör. \"yeni kullanıcılar\" ya da \"yöneticiler\").",
+	"apihelp-wishedit-param-tags": "Şunların listesi: etikets associated ile wish.",
 	"apihelp-wishedit-param-phabtasks": "Phabricator görev kimliklerinin listesi (ör. \"T1234\").",
 	"apihelp-wishedit-param-proposer": "Dileği öneren kullanıcı.",
 	"apihelp-wishedit-param-created": "Dileğin oluşturulduğu tarih ve saat.",
@@ -26,8 +28,15 @@
 	"apihelp-focusareaedit-param-volunteers": "Odak alanına yardım etmek için gönüllü olan topluluk üyeleri.",
 	"apihelp-focusareaedit-param-created": "Odak alanının oluşturulduğu tarih ve saat.",
 	"apihelp-focusareaedit-param-baselang": "Çevirilerin yapıldığı odak alanının baz alındığı dil.",
+	"apihelp-wishlistvote-summary": "Topluluk Dilek Listesinde bir dilek veya odak alanını destekle.",
+	"apihelp-wishlistvote-param-entity": "Oy verilecek dilek veya odak alanı. Bu, tam sayfa başlığı veya ön ekli bir kimlik (ör. \"W123\" veya \"FA123\") olabilir.",
+	"apihelp-wishlistvote-param-comment": "An seçenekal yorum için include ile vote.",
+	"apihelp-wishlistvote-param-voteaction": "Gerçekleştirilecek eylem.",
 	"apihelp-query+communityrequests-wishes-summary": "Topluluk Dilek Listesinden dileklerin bir listesini alın.",
 	"apihelp-query+communityrequests-wishes-param-lang": "Dilekleri süzmek için dil kodu.",
+	"apihelp-query+communityrequests-wishes-param-tags": "Sonuçları belirtilen etiketlerden en az birine sahip dileklerle sınırla.",
+	"apihelp-query+communityrequests-wishes-param-statuses": "Sonuçları yalnızca bu durumlardan birine sahip dileklerle sınırla.",
+	"apihelp-query+communityrequests-wishes-param-focusareas": "Sonuçları vikimetin değeriyle (yani x'in bir tamsayı olduğu 'FAx') veya odak alanı ayarlanmamış dilekler için 'unassigned' özel değeriyle tanımlanan bu odak alanlarından birindeki dileklerle sınırla.",
 	"apihelp-query+communityrequests-wishes-param-prop": "Alınacak dilek özellikleri.",
 	"apihelp-query+communityrequests-wishes-param-sort": "Sıralama yapılacak dilek özelliği.",
 	"apihelp-query+communityrequests-wishes-param-dir": "Sıralama yönü.",
@@ -39,11 +48,13 @@
 	"apihelp-query+communityrequests-wishes-paramvalue-prop-focusarea": "Dileğin ait olduğu odak alanı",
 	"apihelp-query+communityrequests-wishes-paramvalue-prop-description": "Dileğin tanımı",
 	"apihelp-query+communityrequests-wishes-paramvalue-prop-audience": "Dileğin yararını gören birincil kullanıcı grubu",
+	"apihelp-query+communityrequests-wishes-paramvalue-prop-tags": "Dilekle ilişkili etiketler",
 	"apihelp-query+communityrequests-wishes-paramvalue-prop-phabtasks": "Dilekle ilişkili Phabricator görevleri",
 	"apihelp-query+communityrequests-wishes-paramvalue-prop-proposer": "Dileği öneren kullanıcı",
 	"apihelp-query+communityrequests-wishes-paramvalue-prop-votecount": "Dileği destekleyen kullanıcı sayısı",
 	"apihelp-query+communityrequests-wishes-paramvalue-prop-created": "Dileğin oluşturulduğu tarih ve saat",
 	"apihelp-query+communityrequests-wishes-paramvalue-prop-updated": "Dileğin son güncellendiği tarih ve saat",
+	"apihelp-query+communityrequests-wishes-paramvalue-prop-baselang": "Çevirilerin yapıldığı dileğin temel dili",
 	"apihelp-query+communityrequests-wishes-paramvalue-sort-created": "Oluşturma tarihine göre sırala",
 	"apihelp-query+communityrequests-wishes-paramvalue-sort-updated": "Son güncelleme tarihine göre sırala",
 	"apihelp-query+communityrequests-wishes-paramvalue-sort-votecount": "Destekçi sayısına göre sırala",

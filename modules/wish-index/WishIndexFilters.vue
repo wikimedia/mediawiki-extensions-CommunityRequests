@@ -104,10 +104,9 @@ module.exports = exports = defineComponent( {
 }
 
 .ext-communityrequests-wishes--filters {
-
 	&-fields {
 		display: grid;
-		grid-template-columns: repeat(2, 1fr);
+		grid-template-columns: repeat( 2, 1fr );
 		gap: @spacing-100;
 		/* Single column on mobile. */
 		@media screen and ( max-width: @max-width-breakpoint-mobile ) {
@@ -121,6 +120,7 @@ module.exports = exports = defineComponent( {
 			margin-top: 0;
 		}
 	}
+
 	&-buttons {
 		float: right;
 		margin-bottom: @spacing-100;

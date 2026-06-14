@@ -1,6 +1,7 @@
 {
 	"extends": "stylelint-config-wikimedia",
 	"rules": {
-		"no-empty-source": null
+		"no-empty-source": null,
+		"selector-max-id": null
 	}
 }

@@ -49,7 +49,7 @@ class FocusAreaStoreTest extends MediaWikiIntegrationTestCase {
 	}
 
 	public function testSaveWithNoPage(): void {
-		$fauxPage = Title::newFromText( 'Community Wishlist/FA111' );
+		$fauxPage = Title::makeTitle( NS_MAIN, 'Community Wishlist/FA111' );
 		$wish = new FocusArea(
 			$fauxPage,
 			'en',

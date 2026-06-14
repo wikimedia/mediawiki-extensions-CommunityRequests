@@ -59,7 +59,7 @@ class NukeWishlistTest extends MaintenanceBaseTestCase {
 		$this->maintenance->setOption( 'wishes', true );
 		$this->maintenance->execute();
 		$this->expectOutputRegex( "/^2 wish page\(s\) and their related data have been deleted\./m" );
-		$legacyWish = Title::newFromText( 'Community Wishlist/Wishes/Legacy wish' );
+		$legacyWish = Title::makeTitle( NS_MAIN, 'Community Wishlist/Wishes/Legacy wish' );
 		$this->assertTrue( $legacyWish->exists() );
 	}
 
@@ -69,7 +69,7 @@ class NukeWishlistTest extends MaintenanceBaseTestCase {
 		$this->maintenance->setOption( 'legacy', true );
 		$this->maintenance->execute();
 		$this->expectOutputRegex( "/^1 wish page\(s\) and their related data have been deleted\./m" );
-		$legacyWish = Title::newFromText( 'Community Wishlist/Wishes/Legacy wish' );
+		$legacyWish = Title::makeTitle( NS_MAIN, 'Community Wishlist/Wishes/Legacy wish' );
 		$this->assertFalse( $legacyWish->exists() );
 		$this->newSelectQueryBuilder()
 			->select( 'COUNT(*)' )
@@ -89,7 +89,7 @@ class NukeWishlistTest extends MaintenanceBaseTestCase {
 			".*\\n2 focus-area page\(s\) and their related data have been deleted\.\\n" .
 			".*/s"
 		);
-		$legacyWish = Title::newFromText( 'Community Wishlist/Wishes/Legacy wish' );
+		$legacyWish = Title::makeTitle( NS_MAIN, 'Community Wishlist/Wishes/Legacy wish' );
 		$this->assertTrue( $legacyWish->exists() );
 	}
 

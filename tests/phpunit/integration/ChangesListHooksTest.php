@@ -54,7 +54,7 @@ class ChangesListHooksTest extends MediaWikiIntegrationTestCase {
 		$handler = $this->getHandler( $wishTitle );
 
 		$context = RequestContext::getMain();
-		$context->setTitle( Title::newFromText( 'Special:Contributions' ) );
+		$context->setTitle( Title::makeTitle( NS_SPECIAL, 'Contributions' ) );
 		$context->setLanguage( $this->getServiceContainer()->getLanguageFactory()->getLanguage( 'en' ) );
 
 		$ret = '';

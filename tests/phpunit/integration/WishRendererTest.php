@@ -168,7 +168,7 @@ class WishRendererTest extends MediaWikiIntegrationTestCase {
 	}
 
 	public function testInvalidProposer(): void {
-		$wishTitle = Title::newFromText( 'Community Wishlist/W123' );
+		$wishTitle = Title::makeTitle( NS_MAIN, 'Community Wishlist/W123' );
 		$wish = $this->insertTestWish( $wishTitle, 'en', [
 			Wish::PARAM_PROPOSER => 'NonExistentUser',
 		] );

@@ -126,7 +126,7 @@ class SpecialWishlistIntakeTest extends SpecialPageTestBase {
 		RequestContext::getMain()->setRequest( $fauxRequest );
 		$this->executeSpecialPage( '', $fauxRequest, null, $this->getTestUser()->getAuthority() );
 
-		$wish = $this->getStore()->get( Title::newFromText( 'Community Wishlist/W1' ) );
+		$wish = $this->getStore()->get( Title::makeTitle( NS_MAIN, 'Community Wishlist/W1' ) );
 		$this->assertSame(
 			'Title with {{template}} and <nowiki/>',
 			$wish->getTitle(),

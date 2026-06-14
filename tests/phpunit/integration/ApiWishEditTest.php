@@ -490,7 +490,7 @@ class ApiWishEditTest extends ApiTestCase {
 		[ $ret ] = $this->doApiRequestWithToken( $params, null, $user );
 		$this->assertSame( 'Community Wishlist/W1', $ret['wishedit']['wish'] );
 		$this->assertArrayHasKey( 'wishlistvote', $ret );
-		$votesPage = Title::newFromText( 'Community Wishlist/W1/Votes' );
+		$votesPage = Title::makeTitle( NS_MAIN, 'Community Wishlist/W1/Votes' );
 		$this->assertTrue( $votesPage->exists() );
 	}
 }

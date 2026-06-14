@@ -51,7 +51,7 @@ class WishStoreTest extends MediaWikiIntegrationTestCase {
 	}
 
 	public function testSaveWishWithNoPage(): void {
-		$fauxPage = Title::newFromText( 'Community Wishlist/W111' );
+		$fauxPage = Title::makeTitle( NS_MAIN, 'Community Wishlist/W111' );
 		$wish = new Wish(
 			$fauxPage,
 			'en',
@@ -323,7 +323,7 @@ Example text
 |created=2222-01-23T00:00:00Z
 }}
 END;
-		$title = Title::newFromText( 'W999' );
+		$title = Title::makeTitle( NS_MAIN, 'W999' );
 		$this->insertPage( $title, $wikitext );
 
 		$actual = $this->getStore()->getDataFromPageId( $title->getId() );

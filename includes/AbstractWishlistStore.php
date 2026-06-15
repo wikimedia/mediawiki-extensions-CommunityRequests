@@ -782,7 +782,7 @@ abstract class AbstractWishlistStore {
 	public function getDataFromWikitextContent( WikitextContent $content ): ?array {
 		return ( new ArgumentExtractor( $this->parserFactory ) )
 			->getFuncArgs(
-				'communityrequests',
+				'CommunityRequests',
 				$this->entityType(),
 				$content->getText()
 			);

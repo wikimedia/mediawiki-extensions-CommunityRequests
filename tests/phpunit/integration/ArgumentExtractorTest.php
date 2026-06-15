@@ -91,7 +91,7 @@ class ArgumentExtractorTest extends MediaWikiIntegrationTestCase {
 		$extractor = new ArgumentExtractor(
 			$services->getParserFactory(),
 		);
-		$result = $extractor->getFuncArgs( 'communityrequests', 'wish', $input );
+		$result = $extractor->getFuncArgs( 'CommunityRequests', 'wish', $input );
 		$this->assertEquals( $expected, $result );
 	}
 }

@@ -153,7 +153,7 @@ class VoteStore {
 			$content = $content->getText();
 		}
 		return ( new ArgumentExtractor( $this->parserFactory ) )
-			->getFuncArgs( 'communityrequests', 'vote', $content );
+			->getFuncArgs( 'CommunityRequests', 'vote', $content );
 	}
 
 	private function getRevRecord( AbstractWishlistEntity $entity ): ?RevisionRecord {

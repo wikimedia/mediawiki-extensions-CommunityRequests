@@ -3,7 +3,7 @@
 $magicWords = [];
 
 $magicWords['en'] = [
-	'communityrequests' => [ 1, 'CommunityRequests' ],
+	'CommunityRequests' => [ 1, 'CommunityRequests' ],
 ];
 
 $specialPageAliases = [];

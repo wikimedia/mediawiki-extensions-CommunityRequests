@@ -103,7 +103,7 @@ class CommunityRequestsHooks implements
 			return;
 		}
 		$parser->setFunctionHook(
-			'communityrequests',
+			'CommunityRequests',
 			$this->rendererFactory->render( ... ),
 			Parser::SFH_OBJECT_ARGS
 		);

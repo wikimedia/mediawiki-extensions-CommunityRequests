@@ -9,6 +9,10 @@
 	"communityrequests-wishtype-error": "مهرباني وکړئ د هيلې يو ډول غوره کړئ.",
 	"communityrequests-focus-area-create-success": "ستاسو د پام‌وړسيمه سپارل شوې ده.",
 	"communityrequests-support": "ملاتړ",
+	"communityrequests-edit-support": "څرگندونه سمول",
+	"communityrequests-remove-support": "ملاتړ لرې‌کول",
+	"communityrequests-remove-support-yes": "هو",
+	"communityrequests-remove-support-no": "نه",
 	"communityrequests-status": "دريځ",
 	"communityrequests-status-wish-under-review": "بياکتنې لاندې",
 	"communityrequests-status-wish-accepted": "منل‌شوی",
@@ -18,7 +22,14 @@
 	"communityrequests-status-wish-long-term-opportunity": "اوږدمهاله وار",
 	"communityrequests-status-wish-near-term-opportunity": "نږدې راتلونکی وار",
 	"communityrequests-status-wish-prioritized": "لومړيتوب",
+	"communityrequests-status-wish-in-progress": "د پرمختگ بهير کې",
 	"communityrequests-status-wish-done": "وشو",
+	"communityrequests-status-focus-area-under-review": "بياکتنې لاندې",
+	"communityrequests-status-focus-area-declined": "ناگاره‌شوی",
+	"communityrequests-status-focus-area-community-opportunity": "ټولنې وار",
+	"communityrequests-status-focus-area-long-term-opportunity": "اوږدمهاله وار",
+	"communityrequests-status-focus-area-near-term-opportunity": "نږدې راتلونکی وار",
+	"communityrequests-status-focus-area-prioritized": "لومړيتوب",
 	"communityrequests-status-focus-area-in-progress": "د پرمختگ بهير کې",
 	"communityrequests-status-focus-area-done": "وشو",
 	"communityrequests-wish-description-heading": "څرگنداوی",
@@ -63,5 +74,6 @@
 	"communityrequests-focus-area-owners-label": "څښتنان:",
 	"communityrequests-focus-area-voting-info-closed": "د دې تمرکز سيمې ملاتړ وسمهال ناچارن‌شوی دی.",
 	"communityrequests-support-label": "ملاتړ",
-	"communityrequests-cant-manually-edit": "د دې ټولنې د خوښلړ مخ سمول بايد د [[$1|ترلاسه‌کولو فورمې]] په کارولو سره ترسره شي."
+	"communityrequests-cant-manually-edit": "د دې ټولنې د خوښلړ مخ سمول بايد د [[$1|ترلاسه‌کولو فورمې]] په کارولو سره ترسره شي.",
+	"communityrequests-wishlist-machine-translation": "د [[$1|ټولنې خوښ‌لړ]] کې خپلکاره ماشيني ژباړه چارنول."
 }

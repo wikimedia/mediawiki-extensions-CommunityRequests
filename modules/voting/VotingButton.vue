@@ -1,5 +1,5 @@
 <template>
-	<div v-if="hasVoted" class="ext-communityrequests-voting--voted">
+	<div v-if="hasVoted" class="ext-communityrequests-voting--voted translate-no">
 		<div>
 			<div class="ext-communityrequests-voting--voted-message">
 				{{ isWishPage ?

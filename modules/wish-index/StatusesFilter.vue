@@ -1,5 +1,6 @@
 <template>
 	<cdx-field
+		class="translate-no"
 		:is-fieldset="true"
 	>
 		<cdx-multiselect-lookup

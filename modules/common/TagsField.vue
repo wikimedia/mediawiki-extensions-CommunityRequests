@@ -1,6 +1,6 @@
 <template>
 	<cdx-field
-		class="ext-communityrequests-intake__tags"
+		class="ext-communityrequests-intake__tags translate-no"
 		:is-fieldset="true"
 		:optional="optionalLabel"
 		:status="error ? 'error' : 'default'"

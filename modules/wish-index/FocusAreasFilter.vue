@@ -17,7 +17,9 @@
 		>
 		</cdx-multiselect-lookup>
 		<template #label>
-			{{ $i18n( 'communityrequests-wishes-filters-focus-areas-label' ).text() }}
+			<span class="translate-no">
+				{{ $i18n( 'communityrequests-wishes-filters-focus-areas-label' ).text() }}
+			</span>
 		</template>
 		<input
 			:value="focusareas"

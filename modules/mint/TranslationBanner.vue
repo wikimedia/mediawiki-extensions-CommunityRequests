@@ -220,6 +220,12 @@ module.exports = exports = defineComponent( {
 						// Save the lang on the node
 						// for easier access when sending it for translation.
 						node.lang = sourceLang;
+
+						// Make it easier to see what would be translated when ?debug=1 is in the URL.
+						if ( mw.config.get( 'debug' ) ) {
+							node.parentElement.style.background = 'rgba( 0, 0, 255, 0.1 )';
+						}
+
 						return NodeFilter.FILTER_ACCEPT;
 					}
 				);

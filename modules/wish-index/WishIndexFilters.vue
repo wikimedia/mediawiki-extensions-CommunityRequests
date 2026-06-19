@@ -1,7 +1,9 @@
 <template>
 	<cdx-accordion separation="outline" open>
 		<template #title>
-			{{ $i18n( 'communityrequests-wishes-filters-header' ) }}
+			<span class="translate-no">
+				{{ $i18n( 'communityrequests-wishes-filters-header' ) }}
+			</span>
 		</template>
 		<form class="ext-communityrequests-wishes--filters">
 			<div class="ext-communityrequests-wishes--filters-fields">
@@ -21,7 +23,7 @@
 					:clear-field="clearFilters"
 				></focus-areas-filter>
 			</div>
-			<div class="ext-communityrequests-wishes--filters-buttons">
+			<div class="ext-communityrequests-wishes--filters-buttons translate-no">
 				<cdx-button
 					weight="quiet"
 					@click.prevent="onClearAllFilters"

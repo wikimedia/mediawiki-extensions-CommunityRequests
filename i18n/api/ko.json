@@ -21,7 +21,7 @@
 	"apierror-wishlist-entity-parse": "위시리스트 개체를 구문 분석할 수 없습니다. 유효하지 않은 위키텍스트가 포함되어 있을 수 있습니다. 위키텍스트에 불필요한 파이프 문자(<code>|</code>)가 없는지 확인하세요.",
 	"apierror-wishlist-vote-parse": "위시리스트 투표를 구문 분석할 수 없습니다. 유효하지 않은 위키텍스트가 포함되어 있을 수 있습니다. 위키텍스트에 불필요한 파이프 문자(<code>|</code>)가 없는지 확인하세요.",
 	"apierror-wishlist-vote-login-required": "소원이나 중점 분야에 투표하려면 로그인해야 합니다.",
-	"apierror-wishlist-entity-invalid": "지정된 위시리스트 항목이 유효하지 않거나 존재하지 않습니다.",
+	"apierror-wishlist-entity-invalid": "지정된 위시리스트 개체가 유효하지 않거나 존재하지 않습니다.",
 	"apierror-querywishes-invalidfocusareas": "제공된 중점 분야 ID 중 일부 또는 전부가 유효하지 않습니다.",
 	"apihelp-focusareaedit-summary": "공동체 위시리스트에 새로운 중점 분야를 추가하거나 업데이트합니다.",
 	"apihelp-focusareaedit-param-focusarea": "업데이트 할 중점 분야입니다. 이는 전체 문서 제목, 접두사가 포함된 중점 분야 ID (예: \"FA123\") 또는 정수 형태의 중점 분야 ID가 될 수 있습니다. 새 중점 분야를 생성하려면 비워 두세요.",

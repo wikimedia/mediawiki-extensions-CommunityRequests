@@ -3,7 +3,8 @@
 		"authors": [
 			"Msz2001",
 			"Zuzannazuzanna",
-			"Woytecr"
+			"Woytecr",
+			"PanWor"
 		]
 	},
 	"communityrequests-desc": "System zarządzania technicznymi sugestiami i prośbami społeczności wiki.",
@@ -23,7 +24,7 @@
 	"communityrequests-title-error": "Prosimy o wprowadzenie wartości w tym polu (o długości między $1 a $2 {{PLURAL:$2|znakiem|znakami}}).",
 	"communityrequests-title-description": "Upewnij się, że tytuł zawiera krótki opis życzenia lub problemu",
 	"communityrequests-description-error": "Prosimy o wprowadzenie wartości w tym polu (o długości co najmniej $1 {{PLURAL:$1|znaku|znaków}}).",
-	"communityrequests-wishtype-label": "Który rodzaj najlepiej opisuje twoje życzenie?",
+	"communityrequests-wishtype-label": "Który rodzaj najlepiej opisuje Twoje życzenie?",
 	"communityrequests-wishtype-description": "W celu złożenia wniosku o zmianę polityki lub zasad należy skonsultować się z odpowiednim projektem.",
 	"communityrequests-wishtype-feature-label": "Prośba o funkcjonalność",
 	"communityrequests-wishtype-feature-description": "Czyli kiedy prosisz o nowe funkcje, które jeszcze nie istnieją.",
@@ -31,7 +32,7 @@
 	"communityrequests-wishtype-bug-description": "Czyli kiedy chcesz, aby rozwiązano problem lub błąd w istniejącej funkcji.",
 	"communityrequests-wishtype-change-label": "Zmiana systemowa",
 	"communityrequests-wishtype-change-description": "Czyli kiedy chcesz zmienić działanie funkcji, która aktualnie działa.",
-	"communityrequests-wishtype-unknown-label": "Nie wiem lub nie jestem {{GENDER:|pewien|pewna|pewny(-a)}}",
+	"communityrequests-wishtype-unknown-label": "Nie wiem lub nie {{GENDER:|jestem pewien|jestem pewna|mam pewności}}",
 	"communityrequests-wishtype-unknown-description": "Po otrzymaniu twojego życzenia, przypiszemy mu odpowiedni rodzaj.",
 	"communityrequests-wishtype-unknown-label-short": "Nieznany",
 	"communityrequests-wishtype-error": "Prosimy o wybranie rodzaju życzenia.",
@@ -56,7 +57,7 @@
 	"communityrequests-focus-area-save": "Zapisz zmiany",
 	"communityrequests-support-dialog-title": "Poprzyj „$1”",
 	"communityrequests-support-focus-area": "Poprzyj obszar zainteresowań",
-	"communityrequests-support-focus-area-confirmed": "{{GENDER:|Zagłosowałeś|Zagłosowałaś|Zagłosowałeś(-aś)}} za poparciem tego obszaru zainteresowań.",
+	"communityrequests-support-focus-area-confirmed": "{{GENDER:|Zagłosowałeś|Zagłosowałaś|Oddano głos}} za poparciem tego obszaru zainteresowań.",
 	"communityrequests-support-wish": "Poprzyj życzenie",
 	"communityrequests-support-wish-confirmed": "Zagłosowałeś za poparciem tego życzenia.",
 	"communityrequests-support-updated": "Twój głos poparcia został zmieniony.",
@@ -199,7 +200,7 @@
 	"right-manually-edit-wishlist": "Ręczna edycja życzeń Listy Życzeń Społeczności i obszarów zainteresowania bez użycia formularza",
 	"action-manually-edit-wishlist": "ręcznej edycji życzeń Listy Życzeń Społeczności i obszarów zainteresowania bez użycia formularza",
 	"group-community-wishlist-manager": "Zarządzający Listą Życzeń Społeczności",
-	"group-community-wishlist-manager-member": "{{GENDER:$1|Zarządzający|Zarządzający}} Listą Życzeń Społeczności",
+	"group-community-wishlist-manager-member": "{{GENDER:$1|Zarządzający|Zarządzająca}} listą życzeń społeczności",
 	"communityrequests-cant-manually-edit": "Edycji tej strony Listy Życzeń Społeczności należy dokonać za pomocą [[$1|formularza zgłoszeniowego]].",
 	"communityrequests-missing-wish": "To życzenie nie istnieje. Możesz [{{fullurl:{{#Special:Log}}|page={{FULLPAGENAMEE}}}} wyszukać powiązane wpisy rejestru czynności], aby dowiedzieć się, co się z nim stało, lub [[$1|utworzyć nowe życzenie]].",
 	"communityrequests-missing-focus-area": "Ten obszar zainteresowania nie istnieje. Możesz [{{fullurl:{{#Special:Log}}|page={{FULLPAGENAMEE}}}} wyszukać powiązane wpisy rejestru czynności], aby dowiedzieć się, co się z nim stało, lub [[$1|utworzyć nowy obszar zainteresowania]].",

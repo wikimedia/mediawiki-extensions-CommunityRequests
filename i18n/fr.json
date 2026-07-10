@@ -260,5 +260,6 @@
 	"logentry-communityrequests-wish-status-change": "$1 {{GENDER:$2| a changé}} le statut de \" $3 \" de \" $4 \" à \" $5 \"",
 	"logentry-communityrequests-wish-focusarea-change": "$1 {{GENDER:$2| modifié}} la zone d'intérêt de \"$3\" de \"$4\" à \"$5\"",
 	"logentry-communityrequests-focus-area-create": "$1 {{GENDER:$2|a créé}} la zone d'intérêt \"$3\"",
-	"logentry-communityrequests-focus-area-status-change": "$1 {{GENDER:$2| a changé}} le statut de \"$3\" de \"$4\" à \"$5\""
+	"logentry-communityrequests-focus-area-status-change": "$1 {{GENDER:$2| a changé}} le statut de \"$3\" de \"$4\" à \"$5\"",
+	"communityrequests-notification-focus-area-wish-added": "Ajout de « $1 »."
 }

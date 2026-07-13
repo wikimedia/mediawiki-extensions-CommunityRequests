@@ -182,6 +182,20 @@ class WishRendererTest extends MediaWikiIntegrationTestCase {
 		);
 	}
 
+	public function testVotesVisibleWhenVotingDisabled(): void {
+		$wish = $this->insertTestWish();
+		$this->insertPage(
+			$wish->getPage()->getDBkey() . $this->config->getVotesPageSuffix(),
+			'{{#CommunityRequests:vote|username=TestUser1|timestamp=2023-10-01T12:00:00Z' .
+			"|comment=Past support comment!}}\n"
+		);
+		$wikiPage = $this->getWikiPageFactory()->newFromTitle( $wish->getPage() );
+		$parserText = $wikiPage->getParserOutput()->getContentHolderText();
+
+		// Assert past votes/voters are still visible
+		$this->assertStringContainsString( 'Past support comment!', $parserText );
+	}
+
 	/**
 	 * @dataProvider provideMarkupInTitle
 	 */

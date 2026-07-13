@@ -353,14 +353,16 @@ abstract class AbstractRenderer implements MessageLocalizer {
 		}
 
 		// Transclude the /Votes subpage if there are votes to be rendered.
-		if ( $basePage && $voteCount && $votingEnabled ) {
+		if ( $basePage && $voteCount ) {
 			$out .= $this->getVotingSectionTransclusion();
 
 			// Set copyrightWarning JS config var for use in the voting Vue app.
-			$this->parser->getOutput()->setJsConfigVar(
-				'copyrightWarning',
-				EditPage::getCopyrightWarning( $basePage, 'parse', $this )
-			);
+			if ( $votingEnabled ) {
+				$this->parser->getOutput()->setJsConfigVar(
+					'copyrightWarning',
+					EditPage::getCopyrightWarning( $basePage, 'parse', $this )
+				);
+			}
 		}
 
 		// Close the voting container.

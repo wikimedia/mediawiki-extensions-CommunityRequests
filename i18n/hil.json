@@ -8,7 +8,7 @@
 	"communityrequests-wish-loading-error": "May isa ka sayop samtang gina-parse ang wish source text. Mahimo nga nagaunod ini sang indi balido nga wikitext. Palihog [$1 refresh] kag tilawi liwat, gamita ang [[$2|source editor]], ukon magpangayo sang bulig sa [[$3|talk page]].",
 	"communityrequests-edit-with-form": "I-edit gamit ang pormas",
 	"communityrequests-form-subtitle": "Malipayon nga pag-abot sa bag-o nga Wishlist sang Komunidad. Palihog fill fill ang form sa idalum para ma submit ang inyo wish.",
-	"communityrequests-form-error": "May naglain. Palihog tilawi liwat nga magtipig, ukon magpangayo sang bulig sa [[ $1 |talk page]].",
+	"communityrequests-form-error": "May naglain. Palihog tinguhai liwat nga i-save, ukon magpangayo sang bulig sa [[$1|talk page]].",
 	"communityrequests-description": "Ilaragway ang imo problema",
 	"communityrequests-description-description": "Ipaathag sing detalyado ang handom ukon problema nga imo ginasabat.",
 	"communityrequests-title": "Titulo sang handom",

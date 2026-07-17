@@ -1,0 +1,11 @@
+{
+	"@metadata": {
+		"authors": [
+			"شاه زمان پټان"
+		]
+	},
+	"apihelp-query+communityrequests-wishes-paramvalue-sort-created": "د جوړېدو د نېټې له مخې اوډل",
+	"apihelp-query+communityrequests-wishes-paramvalue-sort-updated": "د وروستۍ هممهالېدنې د نېټې له مخې اوډل",
+	"apihelp-query+communityrequests-wishes-paramvalue-sort-votecount": "د ملاتړ کوونکو د شمېر له مخې اوډل",
+	"apihelp-query+communityrequests-wishes-paramvalue-sort-title": "د سرليک له مخې اوډل"
+}

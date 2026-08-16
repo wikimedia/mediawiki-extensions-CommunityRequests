@@ -27,7 +27,7 @@ class DeleteOrphanedEntityRows extends Maintenance {
 	}
 
 	public function execute(): void {
-		$mwDbr = $this->getDB( DB_REPLICA );
+		$mwDbr = $this->getReplicaDB();
 		$crDbw = $this->getServiceContainer()
 			->getConnectionProvider()
 			->getPrimaryDatabase( 'virtual-communityrequests' );

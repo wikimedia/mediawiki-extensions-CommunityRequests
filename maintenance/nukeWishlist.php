@@ -211,7 +211,7 @@ class NukeWishlist extends Maintenance {
 		)->getDBkey();
 		$legacyPath = $this->nukeWishes ? 'Community_Wishlist/Wishes/' : 'Community_Wishlist/Focus_areas/';
 		$excludePrefix = $this->titleParser->parseTitle( $legacyPath )->getDBkey();
-		$dbr = $this->getDB( DB_REPLICA );
+		$dbr = $this->getReplicaDB();
 		$wherePrefix = "page_title REGEXP '" . $prefix . "[[:digit:]]+'";
 		$whereExcludePrefix = $dbr->expr(
 			'page_title',

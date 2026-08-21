@@ -14,7 +14,8 @@
 			"Poro26",
 			"SleaY",
 			"WillyM",
-			"Jérémy-Günther-Heinz Jähnick"
+			"Jérémy-Günther-Heinz Jähnick",
+			"Wladek92"
 		]
 	},
 	"communityrequests-desc": "Un système de gestion des suggestions et des demandes techniques d'une communauté wiki.",
@@ -29,6 +30,7 @@
 	"communityrequests-form-error": "Un problème s'est produit. Essayez de sauvegarder à nouveau ou demandez de l'aide sur la [[$1|page de discussion]].",
 	"communityrequests-intake-focus-area": "Domaine d’action",
 	"communityrequests-baselang-no-results": "Aucun résultat",
+	"communityrequests-wish-baselang": "Langue dans laquelle ce souhait a été écrit",
 	"communityrequests-description": "Décrivez votre problème",
 	"communityrequests-description-description": "Expliquez en détail le souhait ou le problème que vous abordez",
 	"communityrequests-title-label": "Titre",
@@ -107,6 +109,7 @@
 	"communityrequests-status-focus-area-in-progress": "En cours",
 	"communityrequests-status-focus-area-done": "Terminé",
 	"communityrequests-status-focus-area-unknown": "Inconnu",
+	"communityrequests-declined-reason": "Motif du rejet",
 	"communityrequests-error-invalid-status": "Statut invalide : « $1 »",
 	"communityrequests-edit-wish": "Modifier le souhait",
 	"communityrequests-discuss-wish": "Discutez de ce souhait",
@@ -261,5 +264,6 @@
 	"logentry-communityrequests-wish-focusarea-change": "$1 {{GENDER:$2| modifié}} la zone d'intérêt de \"$3\" de \"$4\" à \"$5\"",
 	"logentry-communityrequests-focus-area-create": "$1 {{GENDER:$2|a créé}} la zone d'intérêt \"$3\"",
 	"logentry-communityrequests-focus-area-status-change": "$1 {{GENDER:$2| a changé}} le statut de \"$3\" de \"$4\" à \"$5\"",
+	"echo-category-title-communityrequests-notification": "Liste des souhaits communautaires",
 	"communityrequests-notification-focus-area-wish-added": "Ajout de « $1 »."
 }

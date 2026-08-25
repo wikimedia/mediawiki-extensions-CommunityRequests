@@ -1,11 +1,13 @@
 {
 	"@metadata": {
 		"authors": [
-			"Eduardoaddad"
+			"Eduardoaddad",
+			"User3412"
 		]
 	},
 	"communityrequests-desc": "Um sistema de gerenciamento de sugestões e solicitações técnicas de uma comunidade wiki.",
 	"communityrequests-edit-with-form": "Editar com formulário",
+	"communityrequests-baselang-no-results": "Sem resultados",
 	"communityrequests-description": "Descreva o seu problema",
 	"communityrequests-description-description": "Explique detalhadamente o desejo ou problema que você está abordando.",
 	"communityrequests-title-label": "Título",
@@ -18,12 +20,16 @@
 	"communityrequests-wishtype-error": "Selecione um tipo de desejo.",
 	"communityrequests-tags-label": "Etiquetas",
 	"communityrequests-tags-description": "Selecione as etiquetas que melhor se relacionam com o seu desejo.",
+	"communityrequests-phabricator-label": "Tarefas do Phabricator",
 	"communityrequests-close": "Fechar",
 	"communityrequests-publish": "Publicar desejo",
 	"communityrequests-save": "Salvar alterações",
 	"communityrequests-focus-area-save": "Salvar alterações",
 	"communityrequests-optional-comment": "Comentário opcional",
 	"communityrequests-support": "Suporte",
+	"communityrequests-remove-support-yes": "Sim",
+	"communityrequests-remove-support-no": "Não",
+	"communityrequests-error-invalid-proposer": "\"$1\" não é um usuário válido.",
 	"communityrequests-status": "Status",
 	"communityrequests-status-wish-under-review": "Em revisão",
 	"communityrequests-status-wish-declined": "Recusado",
@@ -31,7 +37,11 @@
 	"communityrequests-status-wish-prioritized": "Priorizado",
 	"communityrequests-status-wish-in-progress": "Em progresso",
 	"communityrequests-status-wish-done": "Concluído",
+	"communityrequests-status-wish-unknown": "Desconhecido",
+	"communityrequests-status-focus-area-done": "Feito",
+	"communityrequests-status-focus-area-unknown": "Desconhecido",
 	"communityrequests-wish-description-heading": "Descrição",
+	"communityrequests-tags-heading": "Etiquetas",
 	"communityrequests-tag-categories": "Categorias",
 	"communityrequests-tag-citations": "Citações",
 	"communityrequests-tag-editing": "Edição",
@@ -56,6 +66,7 @@
 	"communityrequests-wish-updated": "Última atualização: $1",
 	"communityrequests-wish-proposer": "Autor: $1",
 	"communityrequests-wish-voting": "Votação",
+	"communityrequests-wishes-filters-header": "Filtros",
 	"communityrequests-wishes-status-header": "Status",
 	"communityrequests-wishes-table-caption": "Lista de desejos",
 	"communityrequests-wishes-tags-header": "Etiquetas",
@@ -69,5 +80,7 @@
 	"communityrequests-form-loading": "Carregando formulário de registro...",
 	"communityrequests-focus-area-description": "Descrição",
 	"communityrequests-focus-area-short-description": "Breve descrição",
-	"communityrequests-focus-area-voting": "Votação"
+	"communityrequests-focus-area-volunteers": "Membros da comunidade",
+	"communityrequests-focus-area-voting": "Votação",
+	"communityrequests-translation-errors": "Ocorreu um erro:"
 }

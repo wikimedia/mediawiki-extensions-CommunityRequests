@@ -240,8 +240,8 @@
 	"log-action-filter-communityrequests-focus-area-create": "Utworzenie obszaru zainteresowania",
 	"log-action-filter-communityrequests-focus-area-status-change": "Zmiana statusu obszaru zainteresowania",
 	"logentry-communityrequests-wish-create": "{{GENDER:$2|$1 utworzył|$1 utworzyła|$1 utworzył(a)}} życzenie „$3”",
-	"logentry-communityrequests-wish-status-change": "{{GENDER:$2|$1 zmienił|$1 zmieniła|$1 zmienił(a)}} status „$3” z „$4” na „$5”",
-	"logentry-communityrequests-wish-focusarea-change": "{{GENDER:$2|$1 zmienił|$1 zmieniła|$1 zmienił(a)}} obszar zainteresowania dla „$3” z „$4” na „$5”",
+	"logentry-communityrequests-wish-status-change": "{{GENDER:$2|$1 zmienił|$1 zmieniła|$1 zmienił(a)}} status życzenia „$3” z „$4” na „$5”",
+	"logentry-communityrequests-wish-focusarea-change": "{{GENDER:$2|$1 zmienił|$1 zmieniła|$1 zmienił(a)}} obszar zainteresowania życzenia „$3” z „$4” na „$5”",
 	"logentry-communityrequests-focus-area-create": "{{GENDER:$2|$1 utworzył|$1 utworzyła|$1 utworzył(a)}} obszar zainteresowania „$3”",
-	"logentry-communityrequests-focus-area-status-change": "{{GENDER:$2|$1 zmienił|$1 zmieniła|$1 zmienił(a)}} status „$3” z „$4” na „$5”"
+	"logentry-communityrequests-focus-area-status-change": "{{GENDER:$2|$1 zmienił|$1 zmieniła|$1 zmienił(a)}} status życzenia „$3” z „$4” na „$5”"
 }

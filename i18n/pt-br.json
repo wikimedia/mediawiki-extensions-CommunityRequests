@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"Eduardoaddad"
+			"Eduardoaddad",
+			"User3412"
 		]
 	},
 	"communityrequests-desc": "Um sistema de gerenciamento de sugestões e solicitações técnicas de uma comunidade wiki.",
@@ -36,5 +37,7 @@
 	"communityrequests-focus-area-unassigned": "Não atribuído",
 	"communityrequests-submit-wish": "Enviar desejo",
 	"communityrequests-form-loading": "Carregando formulário de registro...",
-	"communityrequests-focus-area-voting": "Votação"
+	"communityrequests-focus-area-volunteers": "Membros da comunidade",
+	"communityrequests-focus-area-voting": "Votação",
+	"communityrequests-translation-errors": "Ocorreu um erro:"
 }

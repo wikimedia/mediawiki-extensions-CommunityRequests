@@ -3,7 +3,6 @@
 namespace MediaWiki\Extension\CommunityRequests\Tests\Integration;
 
 use MediaWiki\Extension\CommunityRequests\IdGenerator\IdGenerator;
-use MediaWiki\MediaWikiServices;
 use MediaWikiIntegrationTestCase;
 
 /**
@@ -18,7 +17,7 @@ use MediaWikiIntegrationTestCase;
 class IdGeneratorTest extends MediaWikiIntegrationTestCase {
 
 	public function testGetNewId(): void {
-		$generator = MediaWikiServices::getInstance()->get( 'CommunityRequests.IdGenerator' );
+		$generator = $this->getServiceContainer()->get( 'CommunityRequests.IdGenerator' );
 		$clone = clone $generator;
 
 		$id1 = $generator->getNewId( IdGenerator::TYPE_WISH );

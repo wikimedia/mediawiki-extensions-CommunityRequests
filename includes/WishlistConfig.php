@@ -187,6 +187,16 @@ class WishlistConfig {
 	}
 
 	/**
+	 * Get the ID for the default status.
+	 */
+	public function getDefaultStatusId(): int {
+		return $this->getIdFromWikitextVal(
+			$this->getDefaultStatusWikitextVal(),
+			$this->statuses
+		);
+	}
+
+	/**
 	 * Get the list of statuses that are eligible for voting.
 	 *
 	 * @return array Full config of statuses, keyed by wikitext value.

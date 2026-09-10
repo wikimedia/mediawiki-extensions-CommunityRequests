@@ -21,7 +21,7 @@ const defaultProps = {
 	shortdescription: 'Test Short Description',
 	owners: '* Community Tech\n* Editing',
 	volunteers: '* User1\n* User2',
-	status: 'draft',
+	status: 'under-review',
 	title: 'Test Title'
 };
 
@@ -48,8 +48,18 @@ describe( 'SpecialEditFocusArea', () => {
 		expect( formData.get( 'shortdescription' ) ).toBe( 'Test Short Description' );
 		expect( formData.get( 'owners' ) ).toBe( '* Community Tech\n* Editing' );
 		expect( formData.get( 'volunteers' ) ).toBe( '* User1\n* User2' );
-		expect( formData.get( 'status' ) ).toBe( 'draft' );
+		expect( formData.get( 'status' ) ).toBe( 'under-review' );
 		expect( formData.get( 'entitytitle' ) ).toBe( 'Test Title' );
 		expect( formData.get( 'baselang' ) ).toBe( 'en' );
+	} );
+
+	it( 'should submit the under-review status when no status is supplied', () => {
+		const props = { ...defaultProps };
+		delete props.status;
+		wrapper = getWrapper( props );
+		const formData = new FormData(
+			document.querySelector( '#ext-communityrequests-intake-form' )
+		);
+		expect( formData.get( 'status' ) ).toBe( 'under-review' );
 	} );
 } );

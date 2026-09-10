@@ -54,7 +54,7 @@ class CommunityRequestsLogFormatterTest extends LogFormatterTestCase {
 				],
 				'extra' => [
 					'text' => 'TestUser changed the status of "Test Wish (Community Wishlist/W123)" ' .
-						'from "Under review" to "Prioritized"',
+						'from "Proposed wish" to "Prioritized by WMF"',
 					'api' => [
 						'old' => 'under-review',
 						'new' => 'prioritized',
@@ -143,7 +143,7 @@ class CommunityRequestsLogFormatterTest extends LogFormatterTestCase {
 				],
 				'extra' => [
 					'text' => 'TestUser changed the status of "Focus Area 1 (Community Wishlist/FA1)" ' .
-						'from "Community opportunity" to "Declined"',
+						'from "Help welcome" to "Declined"',
 					'api' => [
 						'old' => 'community-opportunity',
 						'new' => 'declined',

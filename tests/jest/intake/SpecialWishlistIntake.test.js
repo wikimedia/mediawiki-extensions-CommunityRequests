@@ -23,7 +23,7 @@ const defaultProps = {
 	phabtasks: [ 'T123', 'T456' ],
 	tags: [ 'multimedia', 'wikisource' ],
 	proposer: 'MusikAnimal',
-	status: 'submitted',
+	status: 'under-review',
 	title: 'Test Title',
 	type: 'bug'
 };
@@ -63,9 +63,19 @@ describe( 'SpecialWishlistIntake', () => {
 		expect( formData.get( 'phabtasks' ) ).toBe( 'T123,T456' );
 		expect( formData.get( 'tags' ) ).toBe( 'multimedia,wikisource' );
 		expect( formData.get( 'proposer' ) ).toBe( 'MusikAnimal' );
-		expect( formData.get( 'status' ) ).toBe( 'submitted' );
+		expect( formData.get( 'status' ) ).toBe( 'under-review' );
 		expect( formData.get( 'type' ) ).toBe( 'bug' );
 		expect( formData.get( 'entitytitle' ) ).toBe( 'Test Title' );
+	} );
+
+	it( 'should submit the under-review status when no status is supplied', () => {
+		const props = { ...defaultProps };
+		delete props.status;
+		wrapper = getWrapper( props );
+		const formData = new FormData(
+			document.querySelector( '#ext-communityrequests-intake-form' )
+		);
+		expect( formData.get( 'status' ) ).toBe( 'under-review' );
 	} );
 
 	it( 'should show the status and focus area fields for staff', () => {

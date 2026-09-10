@@ -228,7 +228,7 @@ class ApiFocusAreaEditTest extends ApiTestCase {
 			'status changes' => [
 				[ 'status' => 'under-review' ],
 				[ 'status' => 'prioritized' ],
-				'Changed status from "Under review" to "Prioritized"',
+				'Changed status from "Proposed wish" to "Prioritized by WMF"',
 			],
 			'description changes' => [
 				[ 'description' => 'Old description.' ],
@@ -263,7 +263,7 @@ class ApiFocusAreaEditTest extends ApiTestCase {
 					'shortdescription' => '<translate>Unchanged short desc</translate>',
 					'owners' => '<translate>* Community Tech\n* Editing</translate>'
 				],
-				'Updated description; Changed status from "Under review" to "Prioritized"; Updated owners',
+				'Updated description; Changed status from "Proposed wish" to "Prioritized by WMF"; Updated owners',
 			],
 		];
 	}

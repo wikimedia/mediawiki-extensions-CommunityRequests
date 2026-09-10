@@ -775,7 +775,6 @@
 			"value": {
 				"under-review": {
 					"id": 0,
-					"voting": false,
 					"default": true
 				},
 				"declined": {
@@ -802,6 +801,9 @@
 					"id": 8,
 					"voting": false,
 					"style": "success"
+				},
+				"needs-clarification": {
+					"id": 10
 				}
 			}
 		},

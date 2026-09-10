@@ -210,6 +210,28 @@ END
 		];
 	}
 
+	/**
+	 * @dataProvider provideStatusFallback
+	 */
+	public function testStatusFallback( array $params ): void {
+		$wish = Wish::newFromWikitextParams(
+			$this->makeMockTitle( 'Community Wishlist/W123' ),
+			'en',
+			$params + [ Wish::PARAM_TYPE => 'feature' ],
+			$this->getConfig(),
+			$this->mockRegisteredUltimateAuthority()->getUser(),
+		);
+		$this->assertSame( 0, $wish->getStatus() );
+	}
+
+	public static function provideStatusFallback(): array {
+		return [
+			'missing status' => [ [] ],
+			'empty status' => [ [ Wish::PARAM_STATUS => '' ] ],
+			'invalid status' => [ [ Wish::PARAM_STATUS => 'invalid-status' ] ],
+		];
+	}
+
 	public function testGetTagsFromCsv(): void {
 		$this->assertSame( [], Wish::getTagsFromCsv( '', $this->getConfig() ) );
 		$this->assertSame(

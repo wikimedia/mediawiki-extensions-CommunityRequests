@@ -170,7 +170,7 @@ class WishStoreTest extends MediaWikiIntegrationTestCase {
 		$this->insertTestWish(
 			'Community Wishlist/W2',
 			'en',
-			[ Wish::PARAM_STATUS => 'unsupported' ],
+			[ Wish::PARAM_STATUS => 'needs-clarification' ],
 		);
 		$this->insertTestWish(
 			'Community Wishlist/W3',
@@ -194,7 +194,7 @@ class WishStoreTest extends MediaWikiIntegrationTestCase {
 
 		// When explicitly filtering for all statuses, all should be counted
 		$countAll = $this->getStore()->getCount(
-			[ AbstractWishlistEntity::PARAM_STATUSES => [ 'under-review', 'unsupported', 'declined' ] ]
+			[ AbstractWishlistEntity::PARAM_STATUSES => [ 'under-review', 'needs-clarification', 'declined' ] ]
 		);
 		$this->assertSame( 4, $countAll );
 	}

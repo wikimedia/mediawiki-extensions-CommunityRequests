@@ -161,6 +161,27 @@ END
 		];
 	}
 
+	/**
+	 * @dataProvider provideStatusFallback
+	 */
+	public function testStatusFallback( array $params ): void {
+		$focusArea = FocusArea::newFromWikitextParams(
+			$this->makeMockTitle( 'Community Wishlist/FA123' ),
+			'en',
+			$params,
+			$this->getConfig()
+		);
+		$this->assertSame( 0, $focusArea->getStatus() );
+	}
+
+	public static function provideStatusFallback(): array {
+		return [
+			'missing status' => [ [] ],
+			'empty status' => [ [ FocusArea::PARAM_STATUS => '' ] ],
+			'invalid status' => [ [ FocusArea::PARAM_STATUS => 'invalid-status' ] ],
+		];
+	}
+
 	private function getTestFocusArea( array $focusAreaData ): FocusArea {
 		return new FocusArea(
 			$this->makeMockTitle( 'Community Wishlist/FA123' ),

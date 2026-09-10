@@ -93,6 +93,68 @@ class WishRendererTest extends MediaWikiIntegrationTestCase {
 	}
 
 	/**
+	 * @dataProvider provideStatusChipRendering
+	 */
+	public function testStatusChipRendering( string $entityType, string $status ): void {
+		$prefix = $entityType === 'wish'
+			? $this->config->getWishPagePrefix()
+			: $this->config->getFocusAreaPagePrefix();
+
+		$proposer = $this->getTestUser()->getUser()->getName();
+
+		$page = $this->insertPage(
+			Title::newFromText( $prefix . '123' ),
+			"{{#CommunityRequests: {$entityType} | title=Test | status={$status} | type=change" .
+				" | proposer={$proposer} | created=2026-09-10T12:00:00Z | baselang=en | description=Test }}"
+		);
+		$output = $this->getWikiPageFactory()
+			->newFromTitle( $page['title'] )
+			->getParserOutput();
+
+		$this->assertStringContainsString(
+			"class=\"ext-communityrequests-{$entityType}\"",
+			$output->getContentHolderText()
+		);
+
+		$html = $output->getIndicators()["{$entityType}-status"] ?? '';
+		$chipClass = "cdx-info-chip ext-communityrequests-{$entityType}--status";
+
+		if ( $status === 'community-opportunity' ) {
+			$this->assertStringContainsString( $chipClass, $html );
+			$this->assertStringContainsString( 'Help welcome', $html );
+			$this->assertStringNotContainsString( 'Invalid status:', $html );
+		} elseif ( $status === 'in-progress' ) {
+			$this->assertStringContainsString( $chipClass, $html );
+			$this->assertStringContainsString( 'In progress', $html );
+			$this->assertStringNotContainsString( 'Invalid status:', $html );
+		} elseif ( $status === 'bogus' ) {
+			$this->assertStringContainsString( $chipClass, $html );
+			$this->assertStringContainsString( 'Proposed wish', $html );
+			$this->assertStringContainsString( 'Invalid status:', $html );
+		} else {
+			$this->assertStringContainsString( $chipClass, $html );
+			$this->assertStringContainsString( 'Proposed wish', $html );
+			$this->assertStringNotContainsString( 'Invalid status:', $html );
+		}
+	}
+
+	/**
+	 * @return array<string,array<int,string>>
+	 */
+	public static function provideStatusChipRendering(): array {
+		return [
+			'wish proposed' => [ 'wish', 'under-review' ],
+			'wish in progress' => [ 'wish', 'in-progress' ],
+			'wish help welcome' => [ 'wish', 'community-opportunity' ],
+			'wish invalid status' => [ 'wish', 'bogus' ],
+			'focus area proposed' => [ 'focus-area', 'under-review' ],
+			'focus area in progress' => [ 'focus-area', 'in-progress' ],
+			'focus area help welcome' => [ 'focus-area', 'community-opportunity' ],
+			'focus area invalid status' => [ 'focus-area', 'bogus' ],
+		];
+	}
+
+	/**
 	 * @covers \MediaWiki\Extension\CommunityRequests\HookHandler\CommunityRequestsHooks::onParserAfterTidy
 	 * @covers \MediaWiki\Extension\CommunityRequests\AbstractRenderer::getVotingSection
 	 */
@@ -142,17 +204,9 @@ class WishRendererTest extends MediaWikiIntegrationTestCase {
 	public function testVotingSectionVisibleWhenVotingEnabled(): void {
 		$this->markTestSkippedIfExtensionNotLoaded( 'Translate' );
 
-		// change config status to enable voting for under-review wishes
-		$this->overrideConfigValue( 'CommunityRequestsStatuses', [
-			'under-review' => [
-				'id' => 0,
-				'default' => true,
-				'voting' => true,
-			],
-		] );
-
+		// Use the configured under-review status, which allows voting.
 		$wish = $this->insertTestWish( 'Community Wishlist/W125', 'en', [
-			Wish::PARAM_TITLE => 'Under-review Wish',
+			Wish::PARAM_TITLE => 'Test Wish',
 			Wish::PARAM_STATUS => 'under-review',
 		] );
 		$this->insertPage(
@@ -164,7 +218,9 @@ class WishRendererTest extends MediaWikiIntegrationTestCase {
 		$parserText = $wikiPage->getParserOutput()->getContentHolderText();
 
 		// Assert votes are visible
+		$this->assertStringContainsString( '<b>1 supporter</b>', $parserText );
 		$this->assertStringContainsString( 'The very first vote!', $parserText );
+		$this->assertStringContainsString( 'class="ext-communityrequests-voting"', $parserText );
 	}
 
 	public function testInvalidProposer(): void {
@@ -183,7 +239,7 @@ class WishRendererTest extends MediaWikiIntegrationTestCase {
 	}
 
 	public function testVotesVisibleWhenVotingDisabled(): void {
-		$wish = $this->insertTestWish();
+		$wish = $this->insertTestWish( data: [ Wish::PARAM_STATUS => 'declined' ] );
 		$this->insertPage(
 			$wish->getPage()->getDBkey() . $this->config->getVotesPageSuffix(),
 			'{{#CommunityRequests:vote|username=TestUser1|timestamp=2023-10-01T12:00:00Z' .

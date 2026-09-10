@@ -278,6 +278,10 @@ class WishlistConfigTest extends MediaWikiUnitTestCase {
 		$this->assertSame( $expected, $config->getDefaultStatusWikitextVal() );
 	}
 
+	public function testGetDefaultStatusId(): void {
+		$this->assertSame( 2, $this->config->getDefaultStatusId() );
+	}
+
 	public static function provideGetDefaultStatusWikitextVal(): array {
 		return [
 			'one status, no default' => [

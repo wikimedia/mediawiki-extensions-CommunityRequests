@@ -252,6 +252,7 @@ abstract class AbstractRenderer implements MessageLocalizer {
 				// * communityrequests-status-wish-long-term-opportunity
 				// * communityrequests-status-wish-near-term-opportunity
 				// * communityrequests-status-wish-prioritized
+				// * communityrequests-status-wish-needs-clarification
 				// * communityrequests-status-wish-in-progress
 				// * communityrequests-status-wish-done
 				// * communityrequests-status-focus-area-under-review
@@ -260,6 +261,7 @@ abstract class AbstractRenderer implements MessageLocalizer {
 				// * communityrequests-status-focus-area-long-term-opportunity
 				// * communityrequests-status-focus-area-near-term-opportunity
 				// * communityrequests-status-focus-area-prioritized
+				// * communityrequests-status-focus-area-needs-clarification
 				// * communityrequests-status-focus-area-in-progress
 				// * communityrequests-status-focus-area-done
 				$this->msg( $statusMsg )->text()

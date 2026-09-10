@@ -134,7 +134,9 @@ class FocusArea extends AbstractWishlistEntity {
 		WishlistConfig $config
 	): self {
 		$fields = [
-			self::PARAM_STATUS => $config->getStatusIdFromWikitextVal( $params[self::PARAM_STATUS] ?? '' ),
+			self::PARAM_STATUS => $config->getStatusIdFromWikitextVal(
+				$params[self::PARAM_STATUS] ?? ''
+			) ?? $config->getDefaultStatusId(),
 			self::PARAM_TITLE => $params[self::PARAM_TITLE] ?? '',
 			self::PARAM_DESCRIPTION => $params[self::PARAM_DESCRIPTION] ?? null,
 			self::PARAM_SHORT_DESCRIPTION => $params[self::PARAM_SHORT_DESCRIPTION] ?? '',

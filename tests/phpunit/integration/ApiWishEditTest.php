@@ -378,7 +378,7 @@ class ApiWishEditTest extends ApiTestCase {
 			'status change' => [
 				[ 'status' => 'under-review' ],
 				[ 'status' => 'prioritized' ],
-				'Changed status from "Under review" to "Prioritized"'
+				'Changed status from "Proposed wish" to "Prioritized by WMF"'
 			],
 			'description change' => [
 				[ 'description' => 'Old description.' ],
@@ -439,7 +439,7 @@ class ApiWishEditTest extends ApiTestCase {
 					'tags' => 'reading|wikidata',
 				],
 				'Changed title from "Old Title" to "New Title"; ' .
-					'Updated description; Changed status from "Under review" to "In progress"; ' .
+					'Updated description; Changed status from "Proposed wish" to "In progress"; ' .
 					'Changed type from "Feature request" to "Bug report"; ' .
 					'Changed focus area from "[[Community_Wishlist/FA1|FA1]]" to "Unassigned"; ' .
 					'Added tags: Reading, Wikidata; Removed tags: Multimedia and Commons, Patrolling'

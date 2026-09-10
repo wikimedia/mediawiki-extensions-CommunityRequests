@@ -59,6 +59,7 @@ module.exports = exports = defineComponent( {
 				// * communityrequests-status-wish-draft
 				// * communityrequests-status-wish-submitted
 				// * communityrequests-status-wish-open
+				// * communityrequests-status-wish-needs-clarification
 				// * communityrequests-status-wish-in-progress
 				// * communityrequests-status-wish-delivered
 				// * communityrequests-status-wish-blocked
@@ -66,6 +67,7 @@ module.exports = exports = defineComponent( {
 				// * communityrequests-status-focus-area-draft
 				// * communityrequests-status-focus-area-submitted
 				// * communityrequests-status-focus-area-open
+				// * communityrequests-status-focus-area-needs-clarification
 				// * communityrequests-status-focus-area-in-progress
 				// * communityrequests-status-focus-area-delivered
 				// * communityrequests-status-focus-area-blocked

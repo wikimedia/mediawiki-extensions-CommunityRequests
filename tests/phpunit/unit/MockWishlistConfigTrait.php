@@ -69,7 +69,8 @@ trait MockWishlistConfigTrait {
 				]
 			],
 			WishlistConfig::STATUSES => [
-				'under-review' => [ 'id' => 0, 'default' => true, 'voting' => false ],
+				'under-review' => [ 'id' => 0, 'default' => true ],
+				'needs-clarification' => [ 'id' => 10 ],
 				'community-opportunity' => [ 'id' => 3 ],
 				'declined' => [ 'id' => 6, 'voting' => false ],
 				'in-progress' => [ 'id' => 7 ],

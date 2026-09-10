@@ -207,7 +207,9 @@ class Wish extends AbstractWishlistEntity {
 		$faValue = $config->getFocusAreaPageRefFromWikitextVal( $params[self::PARAM_FOCUS_AREA] ?? '' );
 		$fields = [
 			self::PARAM_TYPE => $config->getWishTypeIdFromWikitextVal( $params[self::PARAM_TYPE] ?? '' ),
-			self::PARAM_STATUS => $config->getStatusIdFromWikitextVal( $params[self::PARAM_STATUS] ?? '' ),
+			self::PARAM_STATUS => $config->getStatusIdFromWikitextVal(
+				$params[self::PARAM_STATUS] ?? ''
+			) ?? $config->getDefaultStatusId(),
 			self::PARAM_TITLE => Sanitizer::decodeCharReferences( $params[self::PARAM_TITLE] ?? '' ),
 			// TODO: It would be better to avoid use of Title here.
 			self::PARAM_FOCUS_AREA => $faValue ? Title::newFromPageReference( $faValue ) : null,

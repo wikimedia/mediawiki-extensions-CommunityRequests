@@ -62,7 +62,7 @@ class FocusAreaIndexRenderer extends AbstractRenderer {
 			$descriptionHtml = Html::rawElement(
 				'div',
 				[ 'class' => 'cdx-card__text__description' ],
-				$this->parser->recursiveTagParse( $focusArea->getShortDescription() )
+				$this->parseFieldWikitext( $focusArea->getShortDescription() )
 			);
 
 			// Link to wishes

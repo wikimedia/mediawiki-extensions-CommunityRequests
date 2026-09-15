@@ -6,6 +6,7 @@ namespace MediaWiki\Extension\CommunityRequests\Tests\Integration;
 use MediaWiki\Extension\CommunityRequests\Wish\Wish;
 use MediaWiki\Extension\CommunityRequests\Wish\WishStore;
 use MediaWiki\Page\WikiPageFactory;
+use MediaWiki\Parser\ParserOptions;
 use MediaWiki\Title\Title;
 use MediaWikiIntegrationTestCase;
 
@@ -250,6 +251,38 @@ class WishRendererTest extends MediaWikiIntegrationTestCase {
 
 		// Assert past votes/voters are still visible
 		$this->assertStringContainsString( 'Past support comment!', $parserText );
+	}
+
+	public function testExtensionTagInFieldsParsoid(): void {
+		$wish = $this->insertTestWish( null, 'en', [
+			Wish::PARAM_DESCRIPTION => 'Code: <pre>x & y</pre> done. See [[Main Page]].',
+			Wish::PARAM_AUDIENCE => 'Users of <pre>z</pre> and [[Main Page]] readers.',
+		] );
+		$parserOptions = ParserOptions::newFromAnon();
+		$parserOptions->setUseParsoid();
+		$text = $this->getWikiPageFactory()->newFromTitle( $wish->getPage() )
+			->getParserOutput( $parserOptions )
+			->getContentHolderText();
+		$this->assertStringNotContainsString( 'UNIQ', $text );
+		$this->assertStringNotContainsString( '<!--LINK', $text );
+		$this->assertStringContainsString( '<pre>x &amp; y</pre>', $text );
+		$this->assertStringContainsString( '<pre>z</pre>', $text );
+		$this->assertStringContainsString( 'Main Page</a>', $text );
+	}
+
+	public function testExtensionTagInFieldsLegacy(): void {
+		$wish = $this->insertTestWish( null, 'en', [
+			Wish::PARAM_DESCRIPTION => 'Code: <pre>x & y</pre> done. See [[Main Page]].',
+			Wish::PARAM_AUDIENCE => 'Users of <pre>z</pre> and [[Main Page]] readers.',
+		] );
+		$text = $this->getWikiPageFactory()->newFromTitle( $wish->getPage() )
+			->getParserOutput( ParserOptions::newFromAnon() )
+			->getContentHolderText();
+		$this->assertStringNotContainsString( 'UNIQ', $text );
+		$this->assertStringNotContainsString( '<!--LINK', $text );
+		$this->assertStringContainsString( '<pre>x &amp; y</pre>', $text );
+		$this->assertStringContainsString( '<pre>z</pre>', $text );
+		$this->assertStringContainsString( 'Main Page</a>', $text );
 	}
 
 	/**

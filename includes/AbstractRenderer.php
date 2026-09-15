@@ -34,6 +34,7 @@ abstract class AbstractRenderer implements MessageLocalizer {
 	public const TRACKING_CATEGORY = 'communityrequests-category';
 	public const ERROR_TRACKING_CATEGORY = 'communityrequests-error-category';
 	public const EXT_DATA_KEY = 'CommunityRequests-ext-data';
+	public const EXT_DATA_TITLE_SPAN = 'CommunityRequests-title-span';
 	// This fragment is also in modules/voting/Button.vue
 	public const LINK_FRAGMENT_VOTING = 'Voting';
 	public const LINK_FRAGMENT_WISHES = 'Wishes';
@@ -84,6 +85,22 @@ abstract class AbstractRenderer implements MessageLocalizer {
 	}
 
 	/**
+	 * Parse user-supplied field wikitext to HTML.
+	 *
+	 * @param string $wikitext
+	 * @param bool $inline Strip the outer <p> so the result can be used in inline context.
+	 * @return string HTML
+	 */
+	protected function parseFieldWikitext( string $wikitext, bool $inline = false ): string {
+		// FIXME: Parser::useParsoidFragments() is marked as internal.
+		if ( !$this->parser->useParsoidFragments() ) {
+			return $this->parser->recursiveTagParse( $wikitext );
+		}
+		$html = $this->parser->recursiveTagParseFully( $wikitext );
+		return $inline ? Parser::stripOuterParagraph( $html ) : $html;
+	}
+
+	/**
 	 * Get a parser strip marker for a focus area card's wish count message.
 	 *
 	 * @param int $pageId
@@ -91,6 +108,31 @@ abstract class AbstractRenderer implements MessageLocalizer {
 	 */
 	public static function getWishCountStripMarker( int $pageId ): string {
 		return Parser::MARKER_PREFIX . "-communityrequests-wishcount-$pageId-" . Parser::MARKER_SUFFIX;
+	}
+
+	/**
+	 * Replace the wish count strip markers in the given HTML with the localized wish counts.
+	 *
+	 * @param Parser $parser
+	 * @param string $text
+	 * @return string
+	 */
+	public static function replaceWishCountStripMarkers( Parser $parser, string $text ): string {
+		$data = $parser->getOutput()->getExtensionData( self::EXT_DATA_KEY );
+		$wishCounts = $data[AbstractWishlistEntity::PARAM_WISH_COUNT] ?? [];
+		if ( !$wishCounts ) {
+			return $text;
+		}
+		$userLang = $parser->getOptions()->getUserLangObj();
+		foreach ( $wishCounts as $faPageId => $wishCount ) {
+			$msg = $parser->msg(
+				'communityrequests-focus-area-view-wishes',
+				$userLang->formatNum( $wishCount ),
+				$wishCount
+			)->inLanguage( $userLang );
+			$text = str_replace( self::getWishCountStripMarker( $faPageId ), $msg->parse(), $text );
+		}
+		return $text;
 	}
 
 	/**
@@ -602,6 +644,9 @@ abstract class AbstractRenderer implements MessageLocalizer {
 	 */
 	protected function setDisplayTitleAndIndicator(): void {
 		$titleSpan = $this->getTitleSpan();
+		// Stashed for PageDisplayHooks, which re-applies the display title at view
+		// time because it doesn't reliably survive the Parsoid render pipeline.
+		$this->parser->getOutput()->setExtensionData( self::EXT_DATA_TITLE_SPAN, $titleSpan );
 		$pageRef = $this->parser->getPage();
 		$entityPageStr = Title::newFromPageReference( $pageRef )->getPrefixedText();
 		$entityIdSpan = Html::element(

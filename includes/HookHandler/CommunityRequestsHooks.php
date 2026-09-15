@@ -426,25 +426,6 @@ class CommunityRequestsHooks implements
 			$parser->getOutput()->setLanguage( $parser->getOptions()->getUserLangObj() );
 		}
 
-		$data = $parser->getOutput()->getExtensionData( self::EXT_DATA_KEY );
-		if ( !$data
-			|| ( !isset( $data[AbstractWishlistEntity::PARAM_ENTITY_TYPE] )
-				&& !isset( $data[AbstractWishlistEntity::PARAM_WISH_COUNT] )
-		) ) {
-			return;
-		}
-
-		// Wish counts.
-		if ( isset( $data[AbstractWishlistEntity::PARAM_WISH_COUNT] ) ) {
-			$this->logger->debug(
-				__METHOD__ . ': Replacing wish count strip markers in {0} with wish counts',
-				[ $parser->getPage()->__toString() ]
-			);
-			foreach ( $data[AbstractWishlistEntity::PARAM_WISH_COUNT] as $faPageId => $wishCount ) {
-				$wishCountFormatted = $parser->getOptions()->getUserLangObj()->formatNum( $wishCount );
-				$msg = $parser->msg( 'communityrequests-focus-area-view-wishes', $wishCountFormatted, $wishCount );
-				$text = str_replace( AbstractRenderer::getWishCountStripMarker( $faPageId ), $msg->parse(), $text );
-			}
-		}
+		$text = AbstractRenderer::replaceWishCountStripMarkers( $parser, $text );
 	}
 }

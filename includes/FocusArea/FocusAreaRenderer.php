@@ -65,7 +65,7 @@ class FocusAreaRenderer extends AbstractRenderer {
 		);
 		$out .= $this->getDivRaw(
 			'description',
-			$this->parser->recursiveTagParse( $this->getArg( FocusArea::PARAM_DESCRIPTION, '' ) ),
+			$this->parseFieldWikitext( $this->getArg( FocusArea::PARAM_DESCRIPTION, '' ) ),
 			$this->parser->getTargetLanguage(),
 		);
 
@@ -128,7 +128,7 @@ class FocusAreaRenderer extends AbstractRenderer {
 				);
 				$out .= $this->getDivRaw(
 					'owners',
-					$this->parser->recursiveTagParse( $owners ),
+					$this->parseFieldWikitext( $owners ),
 					$this->parser->getTargetLanguage(),
 				);
 			}
@@ -141,7 +141,7 @@ class FocusAreaRenderer extends AbstractRenderer {
 				);
 				$out .= $this->getDivRaw(
 					'volunteers',
-					$this->parser->recursiveTagParse( $volunteers ),
+					$this->parseFieldWikitext( $volunteers ),
 					$this->parser->getTargetLanguage(),
 				);
 			}

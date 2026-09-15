@@ -5,6 +5,7 @@ namespace MediaWiki\Extension\CommunityRequests\HookHandler;
 
 use MediaWiki\Diff\DifferenceEngine;
 use MediaWiki\Diff\Hook\DifferenceEngineRenderRevisionAddParserOutputHook;
+use MediaWiki\Extension\CommunityRequests\AbstractRenderer;
 use MediaWiki\Extension\CommunityRequests\FocusArea\FocusAreaStore;
 use MediaWiki\Extension\CommunityRequests\Vote\Vote;
 use MediaWiki\Extension\CommunityRequests\Vote\VoteStore;
@@ -13,6 +14,7 @@ use MediaWiki\Extension\CommunityRequests\Wish\WishStore;
 use MediaWiki\Extension\CommunityRequests\WishlistConfig;
 use MediaWiki\Extension\CommunityRequests\WishlistEntityTrait;
 use MediaWiki\Html\Html;
+use MediaWiki\Language\MessageLocalizer;
 use MediaWiki\Linker\LinkRenderer;
 use MediaWiki\Output\Hook\BeforePageDisplayHook;
 use MediaWiki\Output\Hook\OutputPageParserOutputHook;
@@ -163,14 +165,35 @@ class PageDisplayHooks implements
 	}
 
 	/**
-	 * Add a link to the entity page atop talk pages, using the translated entity title as the label (T406993).
+	 * Re-apply the display title on Parsoid-rendered entity pages, and add a link to
+	 * the entity page atop talk pages, using the translated entity title as the label (T406993).
 	 *
 	 * @param OutputPage $outputPage
 	 * @param ParserOutput $parserOutput
 	 */
 	public function onOutputPageParserOutput( $outputPage, $parserOutput ): void {
 		$title = $outputPage->getTitle();
-		if ( !$this->config->isEnabled() || !$title->isTalkPage() ) {
+		if ( !$this->config->isEnabled() ) {
+			return;
+		}
+
+		if ( $this->config->isEntityPage( $title ) &&
+			$parserOutput->getContentHolder()->isParsoidContent()
+		) {
+			$displayTitle = $this->buildEntityDisplayTitle( $parserOutput, $title, $outputPage );
+			if ( $displayTitle !== null ) {
+				// The display title set at parse time (AbstractRenderer) does not
+				// reliably survive the Parsoid render pipeline, and core fills in the
+				// raw page title when it's missing. Set it on the ParserOutput for
+				// Article::adjustDisplayTitle(), and on the OutputPage in case the
+				// hook received a clone.
+				$parserOutput->setDisplayTitle( $displayTitle );
+				$outputPage->setPageTitle( $displayTitle );
+				$outputPage->setDisplayTitle( $displayTitle );
+			}
+		}
+
+		if ( !$title->isTalkPage() ) {
 			return;
 		}
 		$subjectTitle = Title::newFromLinkTarget( $this->namespaceInfo->getSubjectPage( $title ) );
@@ -225,11 +248,43 @@ class PageDisplayHooks implements
 		if ( !$this->config->isEnabled() || !$this->config->isEntityPage( $out->getTitle() ) ) {
 			return;
 		}
+		$displayTitle = $this->buildEntityDisplayTitle( $parserOutput, $out->getTitle(), $differenceEngine )
+			// Sanitized in AbstractRenderer::setDisplayTitleAndIndicator()
+			?? $parserOutput->getDisplayTitle();
+		if ( $displayTitle === false ) {
+			return;
+		}
 		$out->setPageTitle(
 			$differenceEngine->msg( 'difference-title' )
-				// Sanitized in AbstractRenderer::setDisplayTitleAndIndicator()
-				->rawParams( $parserOutput->getDisplayTitle() )
+				->rawParams( $displayTitle )
 				->text()
 		);
+	}
+
+	/**
+	 * Build the entity display title (title span + entity ID span) from the title span
+	 * stashed in the ParserOutput at parse time, localizing the ID span to the viewer.
+	 *
+	 * @param ParserOutput $parserOutput
+	 * @param Title $title
+	 * @param MessageLocalizer $localizer
+	 * @return string|null HTML, or null if no title span was stashed.
+	 */
+	private function buildEntityDisplayTitle(
+		ParserOutput $parserOutput,
+		Title $title,
+		MessageLocalizer $localizer
+	): ?string {
+		$titleSpan = (string)$parserOutput->getExtensionData( AbstractRenderer::EXT_DATA_TITLE_SPAN );
+		if ( $titleSpan === '' ) {
+			return null;
+		}
+		$entityType = $this->config->isWishPage( $title ) ? 'wish' : 'focus-area';
+		$entityIdSpan = Html::element(
+			'span',
+			[ 'class' => "ext-communityrequests-$entityType--id" ],
+			$localizer->msg( 'parentheses', $title->getPrefixedText() )->text()
+		);
+		return "$titleSpan $entityIdSpan";
 	}
 }

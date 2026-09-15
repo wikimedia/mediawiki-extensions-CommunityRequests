@@ -6,6 +6,7 @@ namespace MediaWiki\Extension\CommunityRequests\Tests\Integration;
 use MediaWiki\Extension\CommunityRequests\AbstractWishlistStore;
 use MediaWiki\Extension\CommunityRequests\FocusArea\FocusArea;
 use MediaWiki\Extension\CommunityRequests\Wish\Wish;
+use MediaWiki\Parser\ParserOptions;
 use MediaWiki\Title\Title;
 use MediaWikiIntegrationTestCase;
 
@@ -33,6 +34,29 @@ class VoteRendererTest extends MediaWikiIntegrationTestCase {
 
 		$wish = $this->store->get( Title::newFromText( $wishTitleStr ), 'en' );
 		$this->assertSame( 3, $wish->getVoteCount() );
+	}
+
+	public function testExtensionTagInCommentParsoid(): void {
+		$this->store = $this->getServiceContainer()->get( 'CommunityRequests.WishStore' );
+
+		$wishTitleStr = $this->config->getWishPagePrefix() . '123';
+		$this->insertTestWish( $wishTitleStr );
+		$votesTitle = Title::newFromText( $wishTitleStr . $this->config->getVotesPageSuffix() );
+		$this->insertPage(
+			$votesTitle,
+			'{{#CommunityRequests: vote|username=TestUser1|timestamp=2025-01-01T00:00:00Z' .
+				'|comment=See <pre>c</pre> and [[Main Page]]}}'
+		);
+		$parserOptions = ParserOptions::newFromAnon();
+		$parserOptions->setUseParsoid();
+		$text = $this->getServiceContainer()->getWikiPageFactory()
+			->newFromTitle( $votesTitle )
+			->getParserOutput( $parserOptions )
+			->getContentHolderText();
+		$this->assertStringNotContainsString( 'UNIQ', $text );
+		$this->assertStringNotContainsString( '<!--LINK', $text );
+		$this->assertStringContainsString( '<pre>c</pre>', $text );
+		$this->assertStringContainsString( 'Main Page</a>', $text );
 	}
 
 	public function testCountVotesOnFocusAreaPage(): void {

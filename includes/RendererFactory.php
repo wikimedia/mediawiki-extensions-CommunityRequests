@@ -42,6 +42,32 @@ class RendererFactory {
 	 * @return array|string
 	 */
 	public function render( Parser $parser, PPFrame $frame, array $args ): array|string {
+		// FIXME: Parser::useParsoidFragments() is marked as internal.
+		if ( !$parser->useParsoidFragments() || $parser->getOutputType() !== Parser::OT_PREPROCESS ) {
+			return $this->renderInternal( $parser, $frame, $args );
+		}
+		// FIXME: Use Parsoid-native parser function
+		// Under Parsoid, the parser function runs in a preprocess-only parser that
+		// defers extension tags as 'exttag' strip markers for Parsoid to handle.
+		// Since we return fully rendered HTML, those markers would never be
+		// unstripped and leak as UNIQ...QINU text. Switch to OT_HTML so extension
+		// tags in entity fields are executed here, then unstrip before returning.
+		$parser->setOutputType( Parser::OT_HTML );
+		try {
+			$ret = $this->renderInternal( $parser, $frame, $args );
+		} finally {
+			$parser->setOutputType( Parser::OT_PREPROCESS );
+		}
+		if ( is_array( $ret ) ) {
+			$ret[0] = $parser->getStripState()->unstripBoth( $ret[0] );
+			// ParserAfterTidy does not run under Parsoid, so replace the focus area
+			// wish count markers here instead.
+			$ret[0] = AbstractRenderer::replaceWishCountStripMarkers( $parser, $ret[0] );
+		}
+		return $ret;
+	}
+
+	private function renderInternal( Parser $parser, PPFrame $frame, array $args ): array|string {
 		$entityType = trim( $frame->expand( $args[0] ) );
 		$renderer = $this->maybeGetInstance( $parser, $frame, $args, $entityType );
 		if ( $renderer ) {

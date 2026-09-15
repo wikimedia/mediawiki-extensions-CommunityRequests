@@ -5,6 +5,7 @@ namespace MediaWiki\Extension\CommunityRequests\Tests\Integration;
 
 use MediaWiki\Extension\CommunityRequests\FocusArea\FocusArea;
 use MediaWiki\Extension\CommunityRequests\FocusArea\FocusAreaStore;
+use MediaWiki\Parser\ParserOptions;
 use MediaWiki\Title\Title;
 use MediaWikiIntegrationTestCase;
 
@@ -37,6 +38,50 @@ class FocusAreaRendererTest extends MediaWikiIntegrationTestCase {
 		$this->assertSame( 'Test Focus Area', $focusArea->getTitle() );
 		$this->assertSame( 'A brief description of the focus area.', $focusArea->getShortDescription() );
 		$this->assertSame( '2023-10-01T12:00:00Z', $focusArea->getCreated() );
+	}
+
+	public function testExtensionTagInFieldsParsoid(): void {
+		$focusArea = $this->insertTestFocusArea( null, 'en', [
+			FocusArea::PARAM_DESCRIPTION => 'Code: <pre>x & y</pre> done. See [[Main Page]].',
+			FocusArea::PARAM_OWNERS => '[[Main Page]] owners',
+			FocusArea::PARAM_VOLUNTEERS => 'Volunteers use <pre>v</pre>',
+		] );
+		$parserOptions = ParserOptions::newFromAnon();
+		$parserOptions->setUseParsoid();
+		$text = $this->getServiceContainer()->getWikiPageFactory()
+			->newFromTitle( $focusArea->getPage() )
+			->getParserOutput( $parserOptions )
+			->getContentHolderText();
+		$this->assertStringNotContainsString( 'UNIQ', $text );
+		$this->assertStringNotContainsString( '<!--LINK', $text );
+		$this->assertStringContainsString( '<pre>x &amp; y</pre>', $text );
+		$this->assertStringContainsString( '<pre>v</pre>', $text );
+		$this->assertStringContainsString( 'Main Page</a>', $text );
+	}
+
+	public function testWishCountMarkerReplacedOnIndex(): void {
+		$this->insertTestFocusArea();
+		$indexTitle = Title::newFromText( $this->config->getFocusAreaIndexPage() );
+		$this->insertPage( $indexTitle, '{{#CommunityRequests:focus-area-index|lang=en}}' );
+
+		foreach ( [ true, false ] as $useParsoid ) {
+			$parserOptions = ParserOptions::newFromAnon();
+			$parserOptions->setUserLang( 'qqx' );
+			if ( $useParsoid ) {
+				$parserOptions->setUseParsoid();
+			}
+			$text = $this->getServiceContainer()->getWikiPageFactory()
+				->newFromTitle( $indexTitle )
+				->getParserOutput( $parserOptions, null, true )
+				->getContentHolderText();
+			$parser = $useParsoid ? 'Parsoid' : 'legacy';
+			$this->assertStringNotContainsString( 'UNIQ', $text, "$parser output has a strip marker" );
+			$this->assertStringContainsString(
+				'(communityrequests-focus-area-view-wishes: 0, 0)',
+				$text,
+				"$parser output is missing the wish count"
+			);
+		}
 	}
 
 	/**

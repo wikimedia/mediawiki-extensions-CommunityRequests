@@ -168,7 +168,7 @@ class WishRenderer extends AbstractRenderer {
 		);
 		$audienceHtml = $this->getDivRaw(
 			'audience',
-			$this->parser->recursiveTagParse(
+			$this->parseFieldWikitext(
 				$this->getArg( Wish::PARAM_AUDIENCE, '' )
 			),
 			$this->parser->getTargetLanguage(),

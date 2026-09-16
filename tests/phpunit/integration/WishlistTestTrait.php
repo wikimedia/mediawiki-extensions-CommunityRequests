@@ -41,6 +41,8 @@ trait WishlistTestTrait {
 			MainConfigNames::NamespacesWithSubpages => [ NS_MAIN => true ],
 			MainConfigNames::LanguageCode => 'en',
 			MainConfigNames::PageLanguageUseDB => true,
+			WishlistConfig::ENABLED => true,
+			WishlistConfig::WISH_SUBMISSIONS_END_DATE => null,
 		] );
 		$this->setService( 'LocalServerObjectCache', new EmptyBagOStuff() );
 	}

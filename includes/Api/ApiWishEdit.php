@@ -42,6 +42,24 @@ class ApiWishEdit extends ApiWishlistEntityBase {
 
 	/** @inheritDoc */
 	public function execute() {
+		$params = $this->extractRequestParams();
+
+		$existingWish = null;
+		if ( isset( $params['wish'] ) ) {
+			$title = Title::newFromTextThrow(
+				$this->store->getPagePrefix() .
+				$this->store->getIdFromInput( $params['wish'] )
+			);
+			$existingWish = $this->store->get( $title );
+		}
+
+		if ( $existingWish === null && $this->config->areWishSubmissionsClosed() ) {
+			$this->dieWithError(
+				'communityrequests-wish-submissions-closed',
+				'submissionsclosed'
+			);
+		}
+
 		parent::execute();
 
 		$wisheditResult = $this->getResult()->getResultData();

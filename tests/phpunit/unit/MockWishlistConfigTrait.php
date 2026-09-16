@@ -79,6 +79,7 @@ trait MockWishlistConfigTrait {
 			WishlistConfig::WISH_VOTING_ENABLED => true,
 			WishlistConfig::FOCUS_AREA_VOTING_ENABLED => true,
 			WishlistConfig::NOTIFICATIONS_ENABLED => true,
+			WishlistConfig::WISH_SUBMISSIONS_END_DATE => null,
 			MainConfigNames::LanguageCode => 'en',
 			...$serviceOptions,
 		] );

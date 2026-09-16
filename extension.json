@@ -822,6 +822,10 @@
 		"CommunityRequestsNotificationsEnabled": {
 			"description": "Whether to enable notifications for notable entity changes. Depends on DiscussionTools being installed.",
 			"value": true
+		},
+		"CommunityRequestsWishSubmissionsEndDate": {
+			"description": "The date after which wish submissions are no longer accepted. (e.g. '2026-01-01T00:00:00Z')",
+			"value": null
 		}
 	},
 	"attributes": {

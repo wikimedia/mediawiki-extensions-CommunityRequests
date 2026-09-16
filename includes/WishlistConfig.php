@@ -13,6 +13,7 @@ use MediaWiki\Page\PageReferenceValue;
 use MediaWiki\Title\MalformedTitleException;
 use MediaWiki\Title\TitleFormatter;
 use MediaWiki\Title\TitleParser;
+use MediaWiki\Utils\MWTimestamp;
 use TypeError;
 
 /**
@@ -40,6 +41,7 @@ class WishlistConfig {
 	public const WISH_VOTING_ENABLED = 'CommunityRequestsWishVotingEnabled';
 	public const FOCUS_AREA_VOTING_ENABLED = 'CommunityRequestsFocusAreaVotingEnabled';
 	public const NOTIFICATIONS_ENABLED = 'CommunityRequestsNotificationsEnabled';
+	public const WISH_SUBMISSIONS_END_DATE = 'CommunityRequestsWishSubmissionsEndDate';
 	public const CONSTRUCTOR_OPTIONS = [
 		self::DECLINE_TEMPLATE,
 		self::ENABLED,
@@ -57,6 +59,7 @@ class WishlistConfig {
 		self::WISH_VOTING_ENABLED,
 		self::FOCUS_AREA_VOTING_ENABLED,
 		self::NOTIFICATIONS_ENABLED,
+		self::WISH_SUBMISSIONS_END_DATE,
 		MainConfigNames::LanguageCode,
 	];
 
@@ -76,6 +79,7 @@ class WishlistConfig {
 	private bool $wishVotingEnabled;
 	private bool $focusAreaVotingEnabled;
 	private bool $notificationsEnabled;
+	private ?string $wishSubmissionsEndDate;
 	public string $siteLanguage;
 
 	public function __construct(
@@ -100,6 +104,7 @@ class WishlistConfig {
 		$this->wishVotingEnabled = $config->get( self::WISH_VOTING_ENABLED );
 		$this->focusAreaVotingEnabled = $config->get( self::FOCUS_AREA_VOTING_ENABLED );
 		$this->notificationsEnabled = $config->get( self::NOTIFICATIONS_ENABLED );
+		$this->wishSubmissionsEndDate = $config->get( self::WISH_SUBMISSIONS_END_DATE );
 		$this->siteLanguage = $config->get( MainConfigNames::LanguageCode );
 	}
 
@@ -169,7 +174,25 @@ class WishlistConfig {
 		return $this->notificationsEnabled;
 	}
 
+	public function areWishSubmissionsClosed(): bool {
+		return $this->wishSubmissionsEndDate !== null && $this->isPastEndDate(
+			$this->wishSubmissionsEndDate,
+			self::WISH_SUBMISSIONS_END_DATE
+		);
+	}
+
 	// Helpers
+
+	private function isPastEndDate( string $endDate, string $configName ): bool {
+		$endTimestamp = MWTimestamp::convert( TS_UNIX, $endDate );
+		if ( $endTimestamp === false ) {
+			throw new ConfigException(
+				"$configName must be a timestamp string accepted by MWTimestamp."
+			);
+		}
+
+		return MWTimestamp::now( TS_UNIX ) >= $endTimestamp;
+	}
 
 	/**
 	 * Get the wikitext value for the default status.

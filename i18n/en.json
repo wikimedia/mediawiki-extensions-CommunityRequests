@@ -13,6 +13,7 @@
 	"communityrequests-form-subtitle": "Welcome to the Community Wishlist. Please fill in the form below to submit your wish.",
 	"communityrequests-wish-not-found": "The wish [[$1|$2]] was not found, is not a valid ID, or was not created via [[Special:WishlistIntake]].",
 	"communityrequests-focus-area-not-found": "The focus area [[$1|$2]] was not found, is not a valid ID, or was not created via [[Special:EditFocusArea]].",
+	"communityrequests-wish-submissions-closed": "The submission period for wishes has ended.",
 	"communityrequests-form-error": "Something went wrong. Please try saving again, or ask for help on the [[$1|talk page]].",
 	"communityrequests-intake-focus-area": "Focus area",
 	"communityrequests-baselang-no-results": "No results",

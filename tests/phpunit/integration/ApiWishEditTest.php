@@ -8,6 +8,7 @@ use MediaWiki\Extension\CommunityRequests\AbstractWishlistStore;
 use MediaWiki\Extension\CommunityRequests\HookHandler\PermissionHooks;
 use MediaWiki\Extension\CommunityRequests\Wish\Wish;
 use MediaWiki\Extension\CommunityRequests\Wish\WishStore;
+use MediaWiki\Extension\CommunityRequests\WishlistConfig;
 use MediaWiki\MainConfigNames;
 use MediaWiki\Tests\Api\ApiTestCase;
 use MediaWiki\Title\Title;
@@ -228,6 +229,47 @@ class ApiWishEditTest extends ApiTestCase {
 				'Publishing the wish "Test Wish"'
 			]
 		];
+	}
+
+	public function testCreateFailsWhenSubmissionsClosed(): void {
+		$this->overrideConfigValues( [
+			WishlistConfig::WISH_SUBMISSIONS_END_DATE => '2000-01-01T00:00:00Z',
+		] );
+
+		$this->expectApiErrorCode( 'submissionsclosed' );
+		$this->expectExceptionMessage( 'The submission period for wishes has ended.' );
+		PermissionHooks::$allowManualEditing = true;
+		$this->doApiRequestWithToken( [
+			'action' => 'wishedit',
+			'status' => 'under-review',
+			'title' => 'Test Wish',
+			'description' => 'This is a test wish.',
+			'type' => 'feature',
+			'proposer' => $this->getTestUser()->getUser()->getName(),
+			'created' => '2026-01-01T00:00:00Z',
+			'baselang' => 'en',
+		] );
+	}
+
+	public function testCreateWithNonexistentIdFailsWhenSubmissionsClosed(): void {
+		$this->overrideConfigValues( [
+			WishlistConfig::WISH_SUBMISSIONS_END_DATE => '2000-01-01T00:00:00Z',
+		] );
+
+		$this->expectApiErrorCode( 'submissionsclosed' );
+		$this->expectExceptionMessage( 'The submission period for wishes has ended.' );
+		PermissionHooks::$allowManualEditing = true;
+		$this->doApiRequestWithToken( [
+			'action' => 'wishedit',
+			'wish' => 'W123',
+			'status' => 'under-review',
+			'title' => 'Test Wish',
+			'description' => 'This is a test wish.',
+			'type' => 'feature',
+			'proposer' => $this->getTestUser()->getUser()->getName(),
+			'created' => '2026-01-01T00:00:00Z',
+			'baselang' => 'en',
+		] );
 	}
 
 	public function testExecuteParsingFailure(): void {

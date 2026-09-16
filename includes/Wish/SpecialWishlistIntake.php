@@ -42,6 +42,19 @@ class SpecialWishlistIntake extends AbstractWishlistSpecialPage {
 
 	/** @inheritDoc */
 	public function execute( $entityId ) {
+		if ( $this->config->isEnabled() && !(string)$entityId ) {
+			$this->requireNamedUser( 'communityrequests-please-log-in' );
+			$this->checkExecutePermissions( $this->getUser() );
+
+			if ( $this->config->areWishSubmissionsClosed() ) {
+				$this->getOutput()->showErrorPage(
+					$this->getDescription(),
+					'communityrequests-wish-submissions-closed'
+				);
+				return;
+			}
+		}
+
 		parent::execute( (string)$entityId );
 		if ( !$this->config->isEnabled() ) {
 			return;

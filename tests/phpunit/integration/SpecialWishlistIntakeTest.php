@@ -9,6 +9,7 @@ use MediaWiki\Exception\UserNotLoggedIn;
 use MediaWiki\Extension\CommunityRequests\AbstractWishlistStore;
 use MediaWiki\Extension\CommunityRequests\Wish\SpecialWishlistIntake;
 use MediaWiki\Extension\CommunityRequests\Wish\Wish;
+use MediaWiki\Extension\CommunityRequests\WishlistConfig;
 use MediaWiki\Request\FauxRequest;
 use MediaWiki\Tests\Specials\SpecialPageTestBase;
 use MediaWiki\Title\Title;
@@ -46,6 +47,36 @@ class SpecialWishlistIntakeTest extends SpecialPageTestBase {
 	public function testLoggedOut(): void {
 		$this->expectException( UserNotLoggedIn::class );
 		$this->executeSpecialPage();
+	}
+
+	public function testClosedNewSubmissionShowsErrorWithoutForm(): void {
+		$this->overrideConfigValues( [
+			WishlistConfig::WISH_SUBMISSIONS_END_DATE => '2000-01-01T00:00:00Z',
+		] );
+
+		[ $html ] = $this->executeSpecialPage(
+			'',
+			null,
+			null,
+			$this->getTestUser()->getAuthority(),
+			true
+		);
+
+		$this->assertStringContainsString( 'communityrequests-wish-submissions-closed', $html );
+		$this->assertStringNotContainsString( 'communityrequests-form-subtitle', $html );
+		$this->assertStringNotContainsString( 'ext-communityrequests-intake-form', $html );
+	}
+
+	public function testClosedSubmissionsAllowEditingExistingWish(): void {
+		$this->overrideConfigValues( [
+			WishlistConfig::WISH_SUBMISSIONS_END_DATE => '2000-01-01T00:00:00Z',
+		] );
+		$wish = $this->insertTestWish( 'Community Wishlist/W123' );
+
+		[ $html ] = $this->executeSpecialPage( 'W123', null, null, $wish->getProposer(), true );
+
+		$this->assertStringContainsString( 'communityrequests-form-subtitle', $html );
+		$this->assertStringContainsString( 'ext-communityrequests-intake-form', $html );
 	}
 
 	/**

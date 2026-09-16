@@ -12,6 +12,7 @@ use MediaWiki\Page\PageReferenceValue;
 use MediaWiki\Tests\Unit\MockServiceDependenciesTrait;
 use MediaWiki\Title\TitleFormatter;
 use MediaWiki\Title\TitleParser;
+use MediaWiki\Utils\MWTimestamp;
 use MediaWikiUnitTestCase;
 use MockTitleTrait;
 
@@ -101,6 +102,71 @@ class WishlistConfigTest extends MediaWikiUnitTestCase {
 			]
 		];
 		$this->assertSame( $expected, $this->config->getStatusesEligibleForVoting() );
+	}
+
+	public function testSubmissionsStayOpenWhenVotingDisabled(): void {
+		$config = $this->getConfig( [
+			WishlistConfig::WISH_VOTING_ENABLED => false,
+			WishlistConfig::FOCUS_AREA_VOTING_ENABLED => false,
+			WishlistConfig::WISH_SUBMISSIONS_END_DATE => null,
+		] );
+		$this->assertFalse( $config->areWishSubmissionsClosed() );
+	}
+
+	public function testSubmissionsOpenBeforeEndDate(): void {
+		$previousTime = MWTimestamp::setFakeTime( '2026-09-29T23:59:59Z' );
+		try {
+			$config = $this->getConfig( [
+				WishlistConfig::WISH_SUBMISSIONS_END_DATE => '2026-09-30T00:00:00Z',
+			] );
+			$this->assertFalse( $config->areWishSubmissionsClosed() );
+		} finally {
+			MWTimestamp::setFakeTime( $previousTime );
+		}
+	}
+
+	public function testSubmissionsClosedAtEndDate(): void {
+		$previousTime = MWTimestamp::setFakeTime( '2026-09-30T00:00:00Z' );
+		try {
+			$config = $this->getConfig( [
+				WishlistConfig::WISH_SUBMISSIONS_END_DATE => '2026-09-30T00:00:00Z',
+			] );
+			$this->assertTrue( $config->areWishSubmissionsClosed() );
+		} finally {
+			MWTimestamp::setFakeTime( $previousTime );
+		}
+	}
+
+	/**
+	 * @dataProvider provideInvalidSubmissionEndDate
+	 */
+	public function testInvalidSubmissionEndDateThrowsConfigException(
+		string $configName,
+		string $method,
+		string $endDate
+	): void {
+		$config = $this->getConfig( [
+			$configName => $endDate,
+		] );
+
+		$this->expectException( ConfigException::class );
+		$this->expectExceptionMessage( $configName );
+		$config->$method();
+	}
+
+	public static function provideInvalidSubmissionEndDate(): array {
+		return [
+			'wish submissions, date only' => [
+				WishlistConfig::WISH_SUBMISSIONS_END_DATE,
+				'areWishSubmissionsClosed',
+				'2026-09-30',
+			],
+			'wish submissions, invalid string' => [
+				WishlistConfig::WISH_SUBMISSIONS_END_DATE,
+				'areWishSubmissionsClosed',
+				'not-a-date',
+			],
+		];
 	}
 
 	public function testGetStatusIdsEligibleForVoting(): void {
@@ -269,6 +335,7 @@ class WishlistConfigTest extends MediaWikiUnitTestCase {
 				WishlistConfig::WISH_VOTING_ENABLED => true,
 				WishlistConfig::FOCUS_AREA_VOTING_ENABLED => true,
 				WishlistConfig::NOTIFICATIONS_ENABLED => true,
+				WishlistConfig::WISH_SUBMISSIONS_END_DATE => null,
 				MainConfigNames::LanguageCode => '',
 			] ),
 			$this->createMock( TitleParser::class ),

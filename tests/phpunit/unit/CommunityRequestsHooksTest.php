@@ -76,10 +76,13 @@ class CommunityRequestsHooksTest extends MediaWikiUnitTestCase {
 		$permissionManager = $this->createNoOpMock( PermissionManager::class, [ 'userHasRight' ] );
 		$permissionManager->expects( $this->any() )
 			->method( 'userHasRight' )
-			->willReturnMap( [
-				[ $user, 'manage-wishlist', $opts['canManage'] ],
-				[ $user, 'manually-edit-wishlist', $opts['canManuallyEdit'] ],
-			] );
+			->willReturnCallback(
+				static fn ( $user, $right ) => match ( $right ) {
+					'manage-wishlist' => $opts['canManage'],
+					'manually-edit-wishlist' => $opts['canManuallyEdit'],
+					default => false,
+				}
+			);
 		$handler = $this->getHandler( [], $permissionManager );
 
 		$links = [ 'views' => $opts['tabs'] ];

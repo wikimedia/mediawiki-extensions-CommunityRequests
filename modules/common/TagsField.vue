@@ -3,6 +3,8 @@
 		class="ext-communityrequests-intake__tags"
 		:is-fieldset="true"
 		:optional="optionalLabel"
+		:status="error ? 'error' : 'default'"
+		:messages="{ error }"
 	>
 		<cdx-multiselect-lookup
 			v-model:input-chips="chips"
@@ -11,7 +13,7 @@
 			:keep-input-on-selection="true"
 			:menu-items="menuItems"
 			:menu-config="menuConfig"
-			:aria-label="$i18n( 'communityrequests-tags-label' ).text()"
+			:aria-label="fieldLabel"
 			@input="onInput"
 			@update:selected="onSelection"
 			@blur="validateInstantly"
@@ -19,32 +21,18 @@
 		>
 		</cdx-multiselect-lookup>
 		<template #label>
-			{{ $i18n( 'communityrequests-tags-label' ).text() }}
+			{{ fieldLabel }}
 		</template>
 		<template v-if="showDescription" #description>
-			{{ $i18n( 'communityrequests-tags-description' ).text() }}
+			<!-- eslint-disable-next-line vue/no-v-html -->
+			<span v-html="descriptionHtml"></span>
 		</template>
-		<input
-			:value="tags"
-			type="hidden"
-			name="tags"
-		>
 	</cdx-field>
 </template>
 
 <script>
-const { defineComponent, nextTick, ref, watch } = require( 'vue' );
+const { computed, defineComponent, nextTick, ref, watch } = require( 'vue' );
 const { CdxField, CdxMultiselectLookup } = require( '../codex.js' );
-const { CommunityRequestsTags } = require( './config.json' );
-const Util = require( './Util.js' );
-const tagsList = [];
-let label = '';
-for ( const value in CommunityRequestsTags.navigation ) {
-	label = Util.getTagLabel( value );
-	if ( label ) {
-		tagsList.push( { value, label } );
-	}
-}
 
 module.exports = exports = defineComponent( {
 	name: 'TagsField',
@@ -55,17 +43,29 @@ module.exports = exports = defineComponent( {
 	props: {
 		optionalLabel: { type: Boolean, default: false },
 		showDescription: { type: Boolean, default: false },
-		tags: { type: Array, default: () => [] },
-		clearField: { type: Boolean, default: false }
+		tags: { type: Array, required: true },
+		availableTags: { type: Array, required: true },
+		clearField: { type: Boolean, default: false },
+		labelMessage: { type: String, required: true },
+		descriptionMessage: { type: String, default: '' },
+		descriptionParams: { type: Array, default: () => [] },
+		error: { type: String, default: '' }
 	},
 	emits: [
 		'update:tags'
 	],
 	setup( props, { emit } ) {
-		const chips = ref( tagsList.filter( ( tag ) => props.tags.includes( tag.value ) ) );
+		const chips = ref(
+			props.availableTags.filter( ( tag ) => props.tags.includes( tag.value ) )
+		);
 		const selection = ref( props.tags );
 		const inputValue = ref( '' );
-		const menuItems = ref( tagsList );
+		const menuItems = ref( props.availableTags );
+		const fieldLabel = mw.msg( props.labelMessage );
+		const descriptionHtml = computed( () => props.showDescription ?
+			mw.message( props.descriptionMessage, ...props.descriptionParams ).parse() :
+			''
+		);
 		const menuConfig = {
 			visibleItemLimit: 5
 		};
@@ -91,7 +91,7 @@ module.exports = exports = defineComponent( {
 			}
 			// Reset the search value and menu. T404767.
 			inputValue.value = '';
-			menuItems.value = tagsList;
+			menuItems.value = props.availableTags;
 		}
 
 		/**
@@ -102,7 +102,7 @@ module.exports = exports = defineComponent( {
 		function onInput( value ) {
 			// Reset menu items if the input was cleared.
 			if ( !value ) {
-				menuItems.value = tagsList;
+				menuItems.value = props.availableTags;
 				return;
 			}
 
@@ -112,7 +112,7 @@ module.exports = exports = defineComponent( {
 			}
 
 			// Update menuItems to tags that match the input value.
-			menuItems.value = tagsList.filter(
+			menuItems.value = props.availableTags.filter(
 				( tag ) => tag.label.toLowerCase().includes( value.toLowerCase() )
 			);
 		}
@@ -131,6 +131,8 @@ module.exports = exports = defineComponent( {
 			inputValue,
 			menuItems,
 			menuConfig,
+			fieldLabel,
+			descriptionHtml,
 			validateInstantly,
 			onSelection,
 			onInput

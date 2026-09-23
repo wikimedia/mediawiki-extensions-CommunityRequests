@@ -34,12 +34,20 @@ class WishlistIntakePage extends Page {
 		return $( '.ext-communityrequests-intake__type .cdx-message--error' );
 	}
 
+	get affectedWikisInput() {
+		return $$( '.ext-communityrequests-intake__tags' )[ 0 ].$( '.cdx-chip-input__input' );
+	}
+
+	get firstAffectedWikiOption() {
+		return $$( '.ext-communityrequests-intake__tags' )[ 0 ].$( '.cdx-menu-item' );
+	}
+
 	get tagsInput() {
-		return $( '.ext-communityrequests-intake__tags .cdx-chip-input__input' );
+		return $$( '.ext-communityrequests-intake__tags' )[ 1 ].$( '.cdx-chip-input__input' );
 	}
 
 	get firstTagOption() {
-		return $( '.ext-communityrequests-intake__tags .cdx-menu-item' );
+		return $$( '.ext-communityrequests-intake__tags' )[ 1 ].$( '.cdx-menu-item' );
 	}
 
 	get audienceInput() {

@@ -88,6 +88,9 @@ class Util {
 			// * communityrequests-tag-wikidata
 			// * communityrequests-tag-wikisource
 			// * communityrequests-tag-wiktionary
+			// * communityrequests-tag-large-wikipedias
+			// * communityrequests-tag-other-wikipedias
+			// * communityrequests-tag-sister-projects
 			return mw.msg(
 				tagsConfig[ value ].label ?
 					tagsConfig[ value ].label :

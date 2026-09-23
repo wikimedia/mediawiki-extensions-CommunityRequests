@@ -385,6 +385,7 @@
 						"CommunityRequestsEnable",
 						"CommunityRequestsFocusAreaIndexPage",
 						"CommunityRequestsHomepage",
+						"CommunityRequestsFAQPage",
 						"CommunityRequestsWishCategory",
 						"CommunityRequestsWishIndexPage",
 						"CommunityRequestsWishPagePrefix",
@@ -431,6 +432,9 @@
 				"communityrequests-wishtype-description",
 				"communityrequests-tags-label",
 				"communityrequests-tags-description",
+				"communityrequests-affected-wikis-label",
+				"communityrequests-affected-wikis-description",
+				"communityrequests-affected-wikis-error",
 				"communityrequests-support-label",
 				"communityrequests-audience-label",
 				"communityrequests-audience-description",
@@ -624,6 +628,10 @@
 			"description": "The title of the page to use as the homepage for Community Requests.",
 			"value": "Community Wishlist"
 		},
+		"CommunityRequestsFAQPage": {
+			"description": "The title of the page to use as the FAQ page for Community Requests.",
+			"value": "Community Wishlist/FAQ#definition"
+		},
 		"CommunityRequestsWishCategory": {
 			"description": "The category to put all wishes in.",
 			"value": "Category:Community Wishlist/Wishes"
@@ -766,6 +774,21 @@
 					"hackathonable": {
 						"id": 21,
 						"category": "Category:Community Wishlist/Wishes/Hackathonable"
+					},
+					"large-wikipedias": {
+						"id": 22,
+						"category": "Category:Community Wishlist/Wishes/Large Wikipedias",
+						"type": "affected-wikis"
+					},
+					"other-wikipedias": {
+						"id": 23,
+						"category": "Category:Community Wishlist/Wishes/Other Wikipedias",
+						"type": "affected-wikis"
+					},
+					"sister-projects": {
+						"id": 24,
+						"category": "Category:Community Wishlist/Wishes/Sister projects",
+						"type": "affected-wikis"
 					}
 				}
 			}

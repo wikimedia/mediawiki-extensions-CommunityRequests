@@ -69,6 +69,7 @@ function mockMwConfigGet( config = {} ) {
 			intakeId: null,
 			intakeTitleMaxChars: 255,
 			intakeWishlistManager: false,
+			intakePageLangRight: false,
 			intakeVeModules: [],
 			copyrightWarning: 'All contributions <em>are</em>.'
 		},

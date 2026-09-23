@@ -49,10 +49,28 @@
 			@update:type="$event => ( wish.type = $event )"
 		></wish-type-field>
 		<tags-field
-			v-model:tags="wish.tags"
+			v-if="affectedWikisAvailableTags.length"
+			v-model:tags="affectedWikisTags"
+			:available-tags="affectedWikisAvailableTags"
+			label-message="communityrequests-affected-wikis-label"
+			description-message="communityrequests-affected-wikis-description"
+			:description-params="[ CommunityRequestsFAQPage ]"
+			:error="affectedWikisError"
+			:show-description="true"
+		></tags-field>
+		<tags-field
+			v-model:tags="standardTags"
+			:available-tags="standardAvailableTags"
+			label-message="communityrequests-tags-label"
+			description-message="communityrequests-tags-description"
 			:optional-label="true"
 			:show-description="true"
 		></tags-field>
+		<input
+			:value="wish.tags"
+			type="hidden"
+			name="tags"
+		>
 		<audience-field
 			v-model:audience="wish.audience"
 			:status="audienceStatus"
@@ -92,7 +110,12 @@
 /* eslint-disable vue/no-unused-properties */
 const { computed, defineComponent, nextTick, onMounted, reactive, ref, ComputedRef, Ref } = require( 'vue' );
 const { CdxField } = require( '../codex.js' );
-const { CommunityRequestsHomepage, CommunityRequestsWishIndexPage, CommunityRequestsStatuses } = require( '../common/config.json' );
+const {
+	CommunityRequestsFAQPage,
+	CommunityRequestsHomepage,
+	CommunityRequestsWishIndexPage,
+	CommunityRequestsStatuses
+} = require( '../common/config.json' );
 const languages = require( './languages.json' );
 const Util = require( '../common/Util.js' );
 const BaseLangField = require( './BaseLangField.vue' );
@@ -137,6 +160,7 @@ module.exports = exports = defineComponent( {
 		focusarea: { type: String, default: '' },
 		phabtasks: { type: Array, default: () => [] },
 		tags: { type: Array, default: () => [] },
+		availableTags: { type: Array, required: true },
 		proposer: { type: String, default: mw.config.get( 'wgUserName' ) },
 		status: {
 			type: String,
@@ -156,6 +180,32 @@ module.exports = exports = defineComponent( {
 		 * @type {Ref<Object>}
 		 */
 		const wish = reactive( Object.assign( {}, props ) );
+		const affectedWikisAvailableTags = props.availableTags.filter(
+			( tag ) => tag.type === 'affected-wikis'
+		);
+		const standardAvailableTags = props.availableTags.filter(
+			( tag ) => tag.type === 'standard'
+		);
+		const affectedWikisTagValues = affectedWikisAvailableTags.map( ( tag ) => tag.value );
+		const standardTagValues = standardAvailableTags.map( ( tag ) => tag.value );
+		const affectedWikisTags = computed( {
+			get: () => wish.tags.filter( ( tag ) => affectedWikisTagValues.includes( tag ) ),
+			set: ( value ) => {
+				wish.tags = [
+					...wish.tags.filter( ( tag ) => standardTagValues.includes( tag ) ),
+					...value
+				];
+			}
+		} );
+		const standardTags = computed( {
+			get: () => wish.tags.filter( ( tag ) => standardTagValues.includes( tag ) ),
+			set: ( value ) => {
+				wish.tags = [
+					...wish.tags.filter( ( tag ) => affectedWikisTagValues.includes( tag ) ),
+					...value
+				];
+			}
+		} );
 		/**
 		 * Status of the base language field.
 		 *
@@ -168,6 +218,12 @@ module.exports = exports = defineComponent( {
 		 * @type {Ref<string>}
 		 */
 		const typeStatus = ref( 'default' );
+		/**
+		 * Error message for the affected wikis field.
+		 *
+		 * @type {Ref<string>}
+		 */
+		const affectedWikisError = ref( '' );
 		/**
 		 * Status of the title field.
 		 *
@@ -266,8 +322,14 @@ module.exports = exports = defineComponent( {
 			titleStatus.value = ( title.length < 5 || title.length > titleMaxChars ) ? 'error' : 'default';
 			descriptionStatus.value = ( wish.description.length < 50 ) ? 'error' : 'default';
 			typeStatus.value = wish.type === '' ? 'error' : 'default';
+			affectedWikisError.value = !exists &&
+				affectedWikisAvailableTags.length > 0 &&
+				affectedWikisTags.value.length === 0 ?
+				mw.msg( 'communityrequests-affected-wikis-error' ) :
+				'';
 			audienceStatus.value = ( wish.audience.length < 5 || wish.audience.length > 300 ) ? 'error' : 'default';
 			return typeStatus.value !== 'error' &&
+				!affectedWikisError.value &&
 				titleStatus.value !== 'error' &&
 				descriptionStatus.value !== 'error' &&
 				audienceStatus.value !== 'error';
@@ -339,6 +401,7 @@ module.exports = exports = defineComponent( {
 			wish,
 			baseLangStatus,
 			typeStatus,
+			affectedWikisError,
 			titleStatus,
 			descriptionStatus,
 			audienceStatus,
@@ -346,6 +409,11 @@ module.exports = exports = defineComponent( {
 			formDisabled,
 			formError,
 			formErrorMsg,
+			affectedWikisTags,
+			standardTags,
+			affectedWikisAvailableTags,
+			CommunityRequestsFAQPage,
+			standardAvailableTags,
 			isWishlistManager,
 			exists,
 			returnTo,

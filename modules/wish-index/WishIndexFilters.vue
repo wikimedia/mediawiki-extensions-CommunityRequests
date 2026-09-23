@@ -7,7 +7,9 @@
 			<div class="ext-communityrequests-wishes--filters-fields">
 				<tags-field
 					v-model:tags="filters.tags"
+					:available-tags="availableTags"
 					:clear-field="clearFilters"
+					label-message="communityrequests-tags-label"
 				></tags-field>
 				<statuses-filter
 					v-model:statuses="filters.statuses"
@@ -55,6 +57,7 @@ module.exports = exports = defineComponent( {
 	props: {
 		// eslint-disable-next-line vue/no-unused-properties -- Used in a mixin
 		tags: { type: Array, default: () => [] },
+		availableTags: { type: Array, required: true },
 		// eslint-disable-next-line vue/no-unused-properties -- Used in a mixin
 		statuses: { type: Array, default: () => [] },
 		// eslint-disable-next-line vue/no-unused-properties -- Used in a mixin

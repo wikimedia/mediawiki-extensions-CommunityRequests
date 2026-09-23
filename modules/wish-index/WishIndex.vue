@@ -3,6 +3,7 @@
 		<wish-index-filters
 			v-if="wishesData.showfilters"
 			:tags="wishlistFilters.tags"
+			:available-tags="availableTags"
 			:statuses="wishlistFilters.statuses"
 			:focusareas="wishlistFilters.focusareas"
 			@submit="updateWishIndexTable"
@@ -33,6 +34,7 @@ module.exports = exports = defineComponent( {
 	props: {
 		// eslint-disable-next-line vue/no-unused-properties -- Used in a mixin
 		tags: { type: Array, default: () => [] },
+		availableTags: { type: Array, required: true },
 		// eslint-disable-next-line vue/no-unused-properties -- Used in a mixin
 		statuses: { type: Array, default: () => [] },
 		// eslint-disable-next-line vue/no-unused-properties -- Used in a mixin

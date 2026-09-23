@@ -46,6 +46,9 @@ describe( 'WishlistIntake wish submission', () => {
 		await IntakePage.descriptionEditable.waitForClickable();
 		await IntakePage.descriptionEditable.setValue( 'This is a test description.\n'.repeat( 10 ) );
 		await IntakePage.firstWishTypeInput.click();
+		await IntakePage.affectedWikisInput.click();
+		await IntakePage.firstAffectedWikiOption.waitForClickable();
+		await IntakePage.firstAffectedWikiOption.click();
 		await IntakePage.tagsInput.click();
 		await IntakePage.firstTagOption.waitForClickable();
 		await IntakePage.firstTagOption.click();
@@ -77,7 +80,7 @@ describe( 'WishlistIntake wish submission', () => {
 			'This is a test description.'
 		);
 		await expect( await ViewWishPage.wishType.getText() ).toBe( 'Feature request' );
-		await expect( await ViewWishPage.tags.getText() ).toBe( 'Admins and stewards' );
+		await expect( await ViewWishPage.tags.getText() ).toBe( 'Large Wikipedias, Admins and stewards' );
 		await expect( ( await ViewWishPage.audience.getText() ).trim() ).toBe(
 			'This is a test audience'
 		);

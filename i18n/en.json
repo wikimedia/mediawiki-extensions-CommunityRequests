@@ -20,7 +20,7 @@
 	"communityrequests-focus-area-baselang": "Language this focus area is written in",
 	"communityrequests-baselang-error": "Please select a valid language.",
 	"communityrequests-description": "Describe your problem",
-	"communityrequests-description-description": "Explain in detail the wish or problem you are addressing.",
+	"communityrequests-description-description": "Explain in detail the wish or problem you are addressing. How will addressing this wish or problem improve your experience or the experience of others on wikis?",
 	"communityrequests-title-label": "Title",
 	"communityrequests-title-error": "Please enter a value for this field (between $1 and $2 {{PLURAL:$2|character|characters}}).",
 	"communityrequests-title-description": "Make sure your title contains a brief description of the wish or problem.",

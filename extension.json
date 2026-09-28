@@ -789,6 +789,10 @@
 						"id": 24,
 						"category": "Category:Community Wishlist/Wishes/Sister projects",
 						"type": "affected-wikis"
+					},
+					"abstract-wikipedia": {
+						"id": 25,
+						"category": "Category:Community Wishlist/Wishes/Abstract Wikipedia"
 					}
 				}
 			}

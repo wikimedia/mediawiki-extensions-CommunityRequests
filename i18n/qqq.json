@@ -138,6 +138,7 @@
 	"communityrequests-tag-large-wikipedias": "A keyword or phrase used for categorization and filtering of wishes.",
 	"communityrequests-tag-other-wikipedias": "A keyword or phrase used for categorization and filtering of wishes.",
 	"communityrequests-tag-sister-projects": "A keyword or phrase used for categorization and filtering of wishes.",
+	"communityrequests-tag-abstract-wikipedia": "A keyword or phrase used for categorization and filtering of wishes.",
 	"communityrequests-wish-audience-heading": "Heading for the 'affected users' section of wish pages. Similar to {{msg-mw|communityrequests-audience-label}} which is used on the form field for the same content.",
 	"communityrequests-wish-phabricator-heading": "Heading for the 'Phabricator tasks' section of wish pages. Similar to {{msg-mw|communityrequests-phabricator-label}} which is used on the form field for the same content.",
 	"communityrequests-wish-other-details-heading": "Heading for the 'other details' section of wish pages, containing dates, author, etc.",

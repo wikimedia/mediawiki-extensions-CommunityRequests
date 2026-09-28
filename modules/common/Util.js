@@ -91,6 +91,7 @@ class Util {
 			// * communityrequests-tag-large-wikipedias
 			// * communityrequests-tag-other-wikipedias
 			// * communityrequests-tag-sister-projects
+			// * communityrequests-tag-abstract-wikipedia
 			return mw.msg(
 				tagsConfig[ value ].label ?
 					tagsConfig[ value ].label :

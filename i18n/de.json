@@ -21,7 +21,7 @@
 	"communityrequests-focus-area-baselang": "Sprache, in der dieser Schwerpunktbereich verfasst ist",
 	"communityrequests-baselang-error": "Bitte wähle eine gültige Sprache aus.",
 	"communityrequests-description": "Beschreibe dein Problem",
-	"communityrequests-description-description": "Erläutere ausführlich den Wunsch oder das Problem, das du ansprichst",
+	"communityrequests-description-description": "Erläutere ausführlich den Wunsch oder das Problem, das du ansprichst. Inwiefern wird die Umsetzung dieses Wunsches oder die Lösung dieses Problems deine Erfahrung oder die Erfahrung anderer auf Wikis verbessern?",
 	"communityrequests-title-label": "Titel",
 	"communityrequests-title-error": "Bitte gib einen Wert für dieses Feld ein (zwischen $1 und $2 {{PLURAL:$2|Zeichen}}).",
 	"communityrequests-title-description": "Achte darauf, dass der Titel eine kurze Beschreibung des Wunsches/Problems enthält.",

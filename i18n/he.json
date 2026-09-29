@@ -24,7 +24,7 @@
 	"communityrequests-focus-area-baselang": "השפה שתחום המיקוד הזה כתוב בה",
 	"communityrequests-baselang-error": "נא לבחור שפה תקינה.",
 	"communityrequests-description": "נא לתאר את הבעיה שלך",
-	"communityrequests-description-description": "נא להסביר בפירוט את המשאלה או את הבעיה {{GENDER:|שאתה מתייחס|שאת מתייחסת}} אליה.",
+	"communityrequests-description-description": "נא להסביר בפירוט את המשאלה או את הבעיה {{GENDER:|שאתה מתייחס|שאת מתייחסת}} אליה. איך הגשמת המשאלה הזאת תשפר את החוויה שלך או של אחרים באתרי הוויקי?",
 	"communityrequests-title-label": "כותרת",
 	"communityrequests-title-error": "נא להזין ערך עבור השדה הזה (בין $1 ל־$2 {{PLURAL:$2|תווים}}).",
 	"communityrequests-title-description": "נא לוודא שהכותרת שלך מכילה תיאור קצר של המשאלה או הבעיה.",

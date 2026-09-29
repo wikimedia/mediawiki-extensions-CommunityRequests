@@ -2,7 +2,8 @@
 	"@metadata": {
 		"authors": [
 			"Firilacroco",
-			"Trotinel Iftode"
+			"Trotinel Iftode",
+			"Vellion Eagle"
 		]
 	},
 	"communityrequests-description-description": "Explicați în detaliu dorința sau problema pe care o abordați.",
@@ -12,6 +13,8 @@
 	"communityrequests-audience-description": "Descrieți ce situație și grup de utilizatori și vor fi afectați cel mai mult",
 	"communityrequests-audience-error": "Vă rugăm să introduceți o valoare pentru acest câmp (între $1 și $2 {{PLURAL:$2|caractere|de caractere}}).",
 	"communityrequests-phabricator-desc": "Introduceți ID-urile sau URL-urile sarcinii Phabricator.",
+	"communityrequests-wish-edit-success": "Dorința dvs. a fost salvată.",
+	"communityrequests-focus-area-edit-success": "Zona dvs. de interes a fost salvată.",
 	"communityrequests-focus-area-supported": "Sprijinit de:",
 	"communityrequests-focus-area-wishes-list": "Dorințe în acest domeniu de interes",
 	"communityrequests-focus-area-volunteers": "Membrii comunității",

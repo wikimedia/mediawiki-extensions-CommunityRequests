@@ -19,7 +19,7 @@
 	"communityrequests-form-error": "Coś poszło nie tak. Spróbuj zapisać ponownie lub poproś o pomoc na [[$1|stronie dyskusji]].",
 	"communityrequests-intake-focus-area": "Obszar zainteresowania",
 	"communityrequests-description": "Opisz swój problem",
-	"communityrequests-description-description": "Opisz szczegółowo życzenie lub problem, które zgłaszasz.",
+	"communityrequests-description-description": "Opisz szczegółowo życzenie lub problem, które zgłaszasz. W jaki sposób rozwiązanie tego życzenia lub problemu poprawi Twoje wrażenia lub wrażenia innych osób korzystających z wiki?",
 	"communityrequests-title-label": "Tytuł",
 	"communityrequests-title-error": "Prosimy o wprowadzenie wartości w tym polu (o długości między $1 a $2 {{PLURAL:$2|znakiem|znakami}}).",
 	"communityrequests-title-description": "Upewnij się, że tytuł zawiera krótki opis życzenia lub problemu",

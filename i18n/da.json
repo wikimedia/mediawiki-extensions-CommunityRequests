@@ -14,6 +14,7 @@
 	"communityrequests-form-subtitle": "Velkommen til fællesskabets ønskeliste. Udfyld venligst formularen nedenfor for at indsende dit ønske.",
 	"communityrequests-wish-not-found": "Ønsket [[$1|$2]] blev ikke fundet, er ikke et gyldigt ID, eller blev ikke oprettet via [[Special:WishlistIntake]].",
 	"communityrequests-focus-area-not-found": "Fokusområdet [[$1|$2]] blev ikke fundet, er ikke et gyldigt ID, eller blev ikke oprettet via [[Special:EditFocusArea]].",
+	"communityrequests-wish-submissions-closed": "Fristen for at indsende ønsker er udløbet.",
 	"communityrequests-form-error": "Noget gik galt. Prøv at gemme igen, eller bed om hjælp på [[$1|diskussionssiden]].",
 	"communityrequests-intake-focus-area": "Fokusområde",
 	"communityrequests-baselang-no-results": "Ingen resultater",

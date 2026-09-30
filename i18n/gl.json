@@ -13,6 +13,7 @@
 	"communityrequests-form-subtitle": "Recibe a benvida á lista de desexos da comunidade. Enche o seguinte formulario para enviar a túa petición.",
 	"communityrequests-wish-not-found": "Non se atopou o desexo «[[$1|$2]]», non é un identificador válido ou ben non se creou mediante [[Special:WishlistIntake]].",
 	"communityrequests-focus-area-not-found": "Non se atopou a área de enfoque «[[$1|$2]]», non é un identificador válido ou ben non se creou mediante [[Special:EditFocusArea]].",
+	"communityrequests-wish-submissions-closed": "Rematou o prazo de envío de desexos.",
 	"communityrequests-form-error": "Algo saíu mal. Intenta gardar de novo ou pide axuda na [[$1|páxina de conversa]].",
 	"communityrequests-intake-focus-area": "Área de enfoque",
 	"communityrequests-baselang-no-results": "Non hai resultados",

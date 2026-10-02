@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Blockernagnto",
 			"Cookai1205",
 			"Kly",
 			"LowensteinYang"
@@ -22,7 +23,7 @@
 	"communityrequests-focus-area-baselang": "此重點領域的撰寫語言",
 	"communityrequests-baselang-error": "請選擇有效的語言。",
 	"communityrequests-description": "描述您的問題",
-	"communityrequests-description-description": "詳細說明您的願望或想解決的問題。",
+	"communityrequests-description-description": "詳細說明您的願望或想解決的問題。實現這個願望或解決這個問題將如何改善您或其他使用者在維基上的體驗？",
 	"communityrequests-title-label": "標題",
 	"communityrequests-title-error": "請在此欄位中輸入一個值（介於$1至$2個{{PLURAL:$2|字元}}）。",
 	"communityrequests-title-description": "確保您的標題包含願望或問題的簡短描述。",
@@ -81,9 +82,9 @@
 	"communityrequests-error-invalid-entity-id": "未找到ID為「$1」的實體。",
 	"communityrequests-error-invalid-entity-field": "「field」參數必須是下列值之一：$1",
 	"communityrequests-status": "狀態",
-	"communityrequests-status-wish-under-review": "審查中",
+	"communityrequests-status-wish-under-review": "提出的願望",
 	"communityrequests-status-wish-declined": "已拒絕",
-	"communityrequests-status-wish-community-opportunity": "社群機會",
+	"communityrequests-status-wish-community-opportunity": "歡迎協助",
 	"communityrequests-status-wish-long-term-opportunity": "長期機會",
 	"communityrequests-status-wish-near-term-opportunity": "短期機會",
 	"communityrequests-status-wish-prioritized": "優先",

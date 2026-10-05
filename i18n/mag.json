@@ -1,0 +1,27 @@
+{
+	"@metadata": {
+		"authors": [
+			"ऐक्टिवेटेड्"
+		]
+	},
+	"communityrequests-tag-admins": "प्रशासक आउ कोषाध्यक्ष",
+	"communityrequests-tag-newcomers": "नया योगदानकर्ता",
+	"communityrequests-tag-notifications": "अधिसूचना",
+	"communityrequests-tag-patrolling": "परीक्षण",
+	"communityrequests-tag-reading": "पठन",
+	"communityrequests-tag-search": "खोज",
+	"communityrequests-tag-talk-pages": "वार्ता पन्ना",
+	"communityrequests-tag-templates": "साँचा",
+	"communityrequests-tag-translation": "अनुवाद",
+	"communityrequests-tag-watchlist-rc": "ध्यानसूची आउ हालके परिवर्तन",
+	"communityrequests-tag-wikidata": "विकिडेटा",
+	"communityrequests-tag-wikisource": "विकिस्रोत",
+	"communityrequests-tag-wiktionary": "विकिकोश",
+	"communityrequests-wish-audience-heading": "प्रभावित प्रयोगकर्ता",
+	"communityrequests-wish-phabricator-heading": "फब्रिकेटर कार्य",
+	"communityrequests-wish-other-details-heading": "अन्य विवरण",
+	"communityrequests-wish-created": "निर्मित: $1",
+	"communityrequests-wish-updated": "अन्तिम अद्यतन: $1",
+	"communityrequests-wish-proposer": "लेखक: $1",
+	"communityrequests-wish-voting": "मतदान"
+}

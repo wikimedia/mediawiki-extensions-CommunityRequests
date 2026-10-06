@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"Tacsipacsi"
+			"Tacsipacsi",
+			"Dj"
 		]
 	},
 	"communityrequests-desc": "Egy wiki közösségének műszaki javaslatait és kéréseit kezelő rendszer.",
@@ -13,6 +14,7 @@
 	"communityrequests-title-description": "Győződj meg róla, hogy a cím tartalmazza a kívánság vagy probléma rövid leírását.",
 	"communityrequests-description-error": "Írj be egy értéket ebbe a mezőbe (legalább $1 {{PLURAL:$1|karakter}}).",
 	"communityrequests-wishtype-label": "Melyik típus írja le a legjobban a kívánságodat?",
+	"communityrequests-wishtype-description": "Szabályzatmódosítási kérelem benyújtásához fordulj az érintett projekthez.",
 	"communityrequests-wishtype-feature-label": "Funkciókérés",
 	"communityrequests-wishtype-feature-description": "Új, még nem létező funkciót szeretnél.",
 	"communityrequests-wishtype-bug-label": "Hibajelentés",
@@ -64,7 +66,7 @@
 	"communityrequests-wish-focus-area-heading": "Hozzárendelt fókuszterület",
 	"communityrequests-wish-type-heading": "Kívánságtípus",
 	"communityrequests-wish-related-heading": "Kapcsolódó projektek",
-	"communityrequests-wish-audience-heading": "Érintett szerkesztők",
+	"communityrequests-wish-audience-heading": "Érintett felhasználók",
 	"communityrequests-wish-phabricator-heading": "Phabricator-feladatok",
 	"communityrequests-wish-other-details-heading": "Egyéb részletek",
 	"communityrequests-wish-created": "Létrehozva",

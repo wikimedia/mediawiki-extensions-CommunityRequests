@@ -15,6 +15,7 @@
 	"communityrequests-form-subtitle": "أهلاً بكم في قائمة أمنيات المجتمع. يُرجى تعبئة النموذج أدناه لإرسال أمنياتكم.",
 	"communityrequests-wish-not-found": "لم يتم العثور على الرغبة [[$1|$2]]، أو أنها ليست معرفًا صالحًا، أو لم يتم إنشاؤها عبر [[Special:WishlistIntake]].",
 	"communityrequests-focus-area-not-found": "لم يتم العثور على منطقة التركيز [[$1|$2]]، أو أنها ليست معرفًا صالحًا، أو لم يتم إنشاؤها عبر [[Special:EditFocusArea]].",
+	"communityrequests-wish-submissions-closed": "انتهت فترة تقديم الأمنيات.",
 	"communityrequests-form-error": "خطأ ما قد حدث. يرجى محاولة الحفظ مرة أخرى أو طلب المساعدة على [[$1|صفحة النقاش]].",
 	"communityrequests-intake-focus-area": "منطقة التركيز",
 	"communityrequests-baselang-no-results": "لا توجد نتائج",

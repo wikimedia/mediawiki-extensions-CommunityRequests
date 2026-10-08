@@ -51,8 +51,6 @@ class Util {
 		// * communityrequests-status-wish-needs-clarification
 		// * communityrequests-status-wish-declined
 		// * communityrequests-status-wish-community-opportunity
-		// * communityrequests-status-wish-long-term-opportunity
-		// * communityrequests-status-wish-near-term-opportunity
 		// * communityrequests-status-wish-prioritized
 		// * communityrequests-status-wish-in-progress
 		// * communityrequests-status-wish-done

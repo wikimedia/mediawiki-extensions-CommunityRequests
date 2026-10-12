@@ -2,6 +2,7 @@
 	"@metadata": {
 		"authors": [
 			"Eduardoaddad",
+			"Fúlvio",
 			"User3412"
 		]
 	},
@@ -9,7 +10,7 @@
 	"communityrequests-edit-with-form": "Editar com formulário",
 	"communityrequests-baselang-no-results": "Sem resultados",
 	"communityrequests-description": "Descreva o seu problema",
-	"communityrequests-description-description": "Explique detalhadamente o desejo ou problema que você está abordando.",
+	"communityrequests-description-description": "Explique detalhadamente o desejo ou problema que você está abordando. De que forma atender a esse desejo ou resolver esse problema melhorará a sua experiência ou a de outras pessoas nas wikis?",
 	"communityrequests-title-label": "Título",
 	"communityrequests-wishtype-feature-label": "Solicitação de recurso",
 	"communityrequests-wishtype-bug-label": "Relatório de erro",
@@ -32,14 +33,14 @@
 	"communityrequests-remove-support-no": "Não",
 	"communityrequests-error-invalid-proposer": "\"$1\" não é um usuário válido.",
 	"communityrequests-status": "Status",
-	"communityrequests-status-wish-under-review": "Em revisão",
+	"communityrequests-status-wish-under-review": "Desejo proposto",
 	"communityrequests-status-wish-declined": "Recusado",
-	"communityrequests-status-wish-community-opportunity": "Oportunidade comunitária",
-	"communityrequests-status-wish-prioritized": "Priorizado",
+	"communityrequests-status-wish-community-opportunity": "A ajuda é bem-vinda",
+	"communityrequests-status-wish-prioritized": "Priorizado pela WMF",
 	"communityrequests-status-wish-in-progress": "Em progresso",
 	"communityrequests-status-wish-done": "Concluído",
 	"communityrequests-status-wish-unknown": "Desconhecido",
-	"communityrequests-status-focus-area-prioritized": "Priorizado",
+	"communityrequests-status-focus-area-prioritized": "Priorizado pela WMF",
 	"communityrequests-status-focus-area-in-progress": "Em progresso",
 	"communityrequests-status-focus-area-done": "Feito",
 	"communityrequests-status-focus-area-unknown": "Desconhecido",

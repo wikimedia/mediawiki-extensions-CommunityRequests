@@ -392,6 +392,16 @@ abstract class AbstractRenderer implements MessageLocalizer {
 			);
 		}
 
+		// Make sure the entity page is updated when the votes subpage is created or edited.
+		$votesPageTitle = $this->getVotesPageTitle();
+		if ( $votesPageTitle ) {
+			$this->parser->getOutput()->addTemplate(
+				$votesPageTitle,
+				$votesPageTitle->getId(),
+				$votesPageTitle->getLatestRevID()
+			);
+		}
+
 		// Transclude the /Votes subpage if there are votes to be rendered.
 		if ( $basePage && $voteCount ) {
 			$out .= $this->getVotingSectionTransclusion();
@@ -412,47 +422,32 @@ abstract class AbstractRenderer implements MessageLocalizer {
 	}
 
 	private function getVotingSectionTransclusion(): string {
-		$parserOutput = $this->getVotePageOutput();
-		$title = Title::newFromPageReference( $this->parser->getPage() );
-		$html = '';
-
-		if ( $title->exists() ) {
-			$voteSubpageContent = $parserOutput?->getContentHolderText() ?? '';
-
-			if ( $voteSubpageContent ) {
-				$html .= Html::element(
-					'div',
-					[ 'class' => 'mw-heading mw-heading3' ],
-					$this->msg( "communityrequests-{$this->rendererType}-voters-heading" )->text()
-				);
-			}
-			$html .= $voteSubpageContent;
-
-			// Add template dependency to ensure the votes subpage is kept up to date.
-			$this->parser->getOutput()->addTemplate(
-				$title,
-				$title->getId(),
-				$title->getLatestRevID()
-			);
-		} else {
-			// Make sure the entity page is updated when the votes subpage is created.
-			$this->parser->getOutput()->addTemplate( $title, 0, 0 );
+		$voteSubpageContent = $this->getVotePageOutput()?->getContentHolderText() ?? '';
+		if ( !$voteSubpageContent ) {
+			return '';
 		}
-
-		return $html;
+		return Html::element(
+			'div',
+			[ 'class' => 'mw-heading mw-heading3' ],
+			$this->msg( "communityrequests-{$this->rendererType}-voters-heading" )->text()
+		) . $voteSubpageContent;
 	}
 
-	private function getVotePageOutput(): ?ParserOutput {
+	private function getVotesPageTitle(): ?Title {
 		$basePage = $this->config->getCanonicalEntityPageRef( $this->parser->getPage() );
 		if ( !$basePage ) {
 			return null;
 		}
-		$basePageRef = $this->config->getVotesPageRefForEntity( $basePage );
-		if ( !$basePageRef ) {
+		$votesPageRef = $this->config->getVotesPageRefForEntity( $basePage );
+		return $votesPageRef ? Title::newFromPageReference( $votesPageRef ) : null;
+	}
+
+	private function getVotePageOutput(): ?ParserOutput {
+		$votesPageTitle = $this->getVotesPageTitle();
+		if ( !$votesPageTitle ) {
 			return null;
 		}
-		$voteSubpageTitle = Title::newFromPageReference( $basePageRef );
-		return Article::newFromTitle( $voteSubpageTitle, RequestContext::getMain() )
+		return Article::newFromTitle( $votesPageTitle, RequestContext::getMain() )
 			->getParserOutput() ?: null;
 	}
 

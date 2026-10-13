@@ -7,6 +7,7 @@ use MediaWiki\Extension\CommunityRequests\Wish\Wish;
 use MediaWiki\Extension\CommunityRequests\Wish\WishStore;
 use MediaWiki\Page\WikiPageFactory;
 use MediaWiki\Parser\ParserOptions;
+use MediaWiki\Parser\ParserOutputLinkTypes;
 use MediaWiki\Title\Title;
 use MediaWikiIntegrationTestCase;
 
@@ -251,6 +252,61 @@ class WishRendererTest extends MediaWikiIntegrationTestCase {
 
 		// Assert past votes/voters are still visible
 		$this->assertStringContainsString( 'Past support comment!', $parserText );
+	}
+
+	/**
+	 * The wish page must depend on its /Votes subpage, so that creating or
+	 * editing the subpage updates the wish page.
+	 *
+	 * @dataProvider provideUseParsoid
+	 */
+	public function testVotesPageDependency( bool $useParsoid ): void {
+		$wish = $this->insertTestWish( 'Community Wishlist/W123', 'en', [
+			Wish::PARAM_STATUS => 'under-review',
+		] );
+		$votesTitle = Title::newFromText(
+			$wish->getPage()->getDBkey() . $this->config->getVotesPageSuffix()
+		);
+		$parserOptions = ParserOptions::newFromAnon();
+		$parserOptions->setUseParsoid( $useParsoid );
+		$wikiPage = $this->getWikiPageFactory()->newFromTitle( $wish->getPage() );
+
+		// No /Votes subpage yet
+		$templates = $wikiPage->getParserOutput( $parserOptions, null, true )
+			->getLinkList( ParserOutputLinkTypes::TEMPLATE );
+		$this->assertContainsEquals(
+			[ 'link' => $votesTitle->getTitleValue(), 'pageid' => 0, 'revid' => 0 ],
+			$templates
+		);
+
+		$this->insertPage(
+			$votesTitle,
+			'{{#CommunityRequests:vote|username=TestUser1|timestamp=2023-10-01T12:00:00Z' .
+			"|comment=The very first vote!}}\n"
+		);
+		$votesTitle = Title::newFromText( $votesTitle->getPrefixedText() );
+		$templates = $wikiPage->getParserOutput( $parserOptions, null, true )
+			->getLinkList( ParserOutputLinkTypes::TEMPLATE );
+		$this->assertContainsEquals(
+			[
+				'link' => $votesTitle->getTitleValue(),
+				'pageid' => $votesTitle->getId(),
+				'revid' => $votesTitle->getLatestRevID(),
+			],
+			$templates
+		);
+		$this->assertNotContainsEquals(
+			Title::newFromPageIdentity( $wish->getPage() )->getTitleValue(),
+			array_column( $templates, 'link' ),
+			'The wish page should not depend on itself'
+		);
+	}
+
+	public static function provideUseParsoid(): array {
+		return [
+			'legacy parser' => [ false ],
+			'Parsoid' => [ true ],
+		];
 	}
 
 	public function testExtensionTagInFieldsParsoid(): void {

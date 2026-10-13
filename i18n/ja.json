@@ -6,9 +6,11 @@
 			"Omotecho",
 			"Shirayuki",
 			"Cookie4782",
-			"Tensama0415"
+			"Tensama0415",
+			"Waki285"
 		]
 	},
+	"communityrequests-desc": "ウィキコミュニティからの技術的な提案や要望を管理するシステム。",
 	"communityrequests-status-draft": "下書き",
 	"communityrequests-status-submitted": "投稿済",
 	"communityrequests-status-open": "オープン",

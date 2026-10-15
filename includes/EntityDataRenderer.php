@@ -56,6 +56,7 @@ class EntityDataRenderer extends AbstractRenderer {
 			);
 		}
 
-		return strval( $entity->toArray( $this->config )[self::ALLOWED_FIELDS[ $field ]] ?? '' );
+		$value = $entity->toArray( $this->config )[self::ALLOWED_FIELDS[ $field ]] ?? '';
+		return htmlspecialchars( strval( $value ) );
 	}
 }

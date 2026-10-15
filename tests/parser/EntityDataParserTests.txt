@@ -36,6 +36,21 @@ Community Wishlist/W1
 !! end
 
 !! article
+Community Wishlist/W2
+!! text
+{{#CommunityRequests: wish
+|title = <script>alert(1)</script>
+|status = under-review
+|type = feature
+|audience = Everyone
+|created = 2023-10-01T12:00:00Z
+|proposer = Maintenance script
+|baselang = <svg onload=alert(1)>
+|description = Markup in the title and base language.
+}}
+!! end
+
+!! article
 Community Wishlist/W1/Votes
 !! text
 {{#CommunityRequests: vote
@@ -131,5 +146,23 @@ Vote count
 {{#CommunityRequests: data|id=W1|field=vote_count}}
 !! html
 <p>1
+</p>
+!! end
+
+!! test
+Title with HTML is escaped
+!! wikitext
+{{#CommunityRequests: data|id=W2|field=title}}
+!! html
+<p>&lt;script&gt;alert(1)&lt;/script&gt;
+</p>
+!! end
+
+!! test
+Title lang with HTML is escaped
+!! wikitext
+{{#CommunityRequests: data|id=W2|field=title_lang}}
+!! html
+<p>&lt;svg onload=alert(1)&gt;
 </p>
 !! end

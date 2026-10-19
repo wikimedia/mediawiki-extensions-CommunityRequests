@@ -1,0 +1,13 @@
+{
+	"@metadata": {
+		"authors": [
+			"KormiSK"
+		]
+	},
+	"communityrequests-affected-wikis-label": "Primárne postihnuté wiki",
+	"communityrequests-affected-wikis-description": "Pozrite si definíciu v [[$1|často kladených otázkach]].",
+	"communityrequests-tag-large-wikipedias": "Veľké Wikipédie",
+	"communityrequests-tag-other-wikipedias": "Iné Wikipédie",
+	"communityrequests-tag-sister-projects": "Sesterské projekty",
+	"communityrequests-tag-abstract-wikipedia": "Abstraktná Wikipédia"
+}

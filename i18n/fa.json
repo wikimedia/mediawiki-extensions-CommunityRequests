@@ -2,14 +2,15 @@
 	"@metadata": {
 		"authors": [
 			"Jeeputer",
-			"Mohammad ebz"
+			"Mohammad ebz",
+			"LProfo"
 		]
 	},
 	"communityrequests-desc": "سامانه‌ای برای مدیریت پیشنهادها و درخواست‌های فنی جامعهٔ یک ویکی.",
 	"communityrequests-wish-loading-error": "هنگام تجزیهٔ متن مبدأ خواسته خطایی رخ داد. ممکن است متن حاوی ویکی‌متن نامعتبر باشد. لطفاً صفحه را [$1 تازه‌سازی کنید] و دوباره تلاش کنید، از [[$2|ویرایشگر متنی]] استفاده کنید، یا در [[$3|صفحهٔ بحث]] از دیگران راهنمایی بخواهید.",
 	"communityrequests-edit-with-form": "ویرایش با فرم",
 	"communityrequests-form-subtitle": "به فهرست تازهٔ خواسته‌های اجتماع خوش آمدید. لطفاً برای ثبت خواستهٔ خود فرم زیر را پر کنید.",
-	"communityrequests-form-error": "مشکلی پیش آمد. لطفاً ذخیره‌سازی مجدد را بیازمایید، یا در [[$1|صفحهٔ بحث]] از دیگران راهنمایی بخواهید.",
+	"communityrequests-form-error": "مشکلی پیش آمد. لطفاً ذخیره‌سازی دوباره را بیازمایید، یا در [[$1|صفحهٔ بحث]] از دیگران راهنمایی بخواهید.",
 	"communityrequests-description": "مشکل خود را شرح دهید",
 	"communityrequests-description-description": "خواسته یا مشکلی که به آن اشاره دارید را با جزئیات شرح دهید.",
 	"communityrequests-title": "عنوان خواسته",

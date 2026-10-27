@@ -45,6 +45,7 @@
 	"communityrequests-status-wish-in-progress": "Amgaang",
 	"communityrequests-status-wish-done": "Fäerdeg",
 	"communityrequests-status-wish-unknown": "Onbekannt",
+	"communityrequests-status-focus-area-in-progress": "Amgaang",
 	"communityrequests-status-focus-area-unknown": "Onbekannt",
 	"communityrequests-declined-additional-reason": "Zousätzlechen ofgeleente Parameter",
 	"communityrequests-error-invalid-status": "Ongültege Status: „$1“",

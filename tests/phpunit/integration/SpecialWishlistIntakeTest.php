@@ -139,6 +139,22 @@ class SpecialWishlistIntakeTest extends SpecialPageTestBase {
 		$this->assertSame( 'Community Wishlist/W1', $sp->getSkin()->getRelevantTitle()->getPrefixedText() );
 	}
 
+	public function testSubmitCannotOverrideApiAction(): void {
+		[ $html ] = $this->executeSpecialPage(
+			'',
+			new FauxRequest( [
+				'action' => 'edit',
+				'entitytitle' => 'Test Wish',
+				'text' => 'Replaced text',
+			], true ),
+			'qqx',
+			$this->getTestUser()->getAuthority()
+		);
+
+		// 'status' is a wishedit parameter, so this error shows that wishedit ran.
+		$this->assertStringContainsString( '(paramvalidator-missingparam: status', $html );
+	}
+
 	public function testSubmitTitleNormalization(): void {
 		if ( !$this->getServiceContainer()->getExtensionRegistry()->isLoaded( 'Translate' ) ) {
 			$this->markTestSkipped( 'Translate extension is not installed' );

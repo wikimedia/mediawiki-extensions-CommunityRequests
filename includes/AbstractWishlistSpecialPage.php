@@ -221,11 +221,12 @@ abstract class AbstractWishlistSpecialPage extends FormSpecialPage {
 		PermissionHooks::$allowManualEditing = true;
 
 		$context = new DerivativeContext( $this->getContext() );
+		// Put $data first. POST values must not replace the action, entity ID or token.
 		$context->setRequest( new DerivativeRequest( $this->getRequest(), [
+			...$data,
 			'action' => $action,
 			$path => $this->entityId,
 			'token' => $data['wpEditToken'],
-			...$data,
 		] ) );
 		$api = new ApiMain( $context, true );
 		try {

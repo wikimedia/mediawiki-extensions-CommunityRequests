@@ -9,6 +9,7 @@ use MediaWiki\Exception\UserNotLoggedIn;
 use MediaWiki\Extension\CommunityRequests\AbstractWishlistStore;
 use MediaWiki\Extension\CommunityRequests\Wish\SpecialWishlistIntake;
 use MediaWiki\Extension\CommunityRequests\Wish\Wish;
+use MediaWiki\Request\FauxRequest;
 use SpecialPageTestBase;
 
 /**
@@ -102,5 +103,21 @@ class SpecialWishlistIntakeTest extends SpecialPageTestBase {
 		$sp->setContext( $context );
 		$sp->execute( 'W1' );
 		$this->assertSame( 'Community Wishlist/W1', $sp->getSkin()->getRelevantTitle()->getPrefixedText() );
+	}
+
+	public function testSubmitCannotOverrideApiAction(): void {
+		[ $html ] = $this->executeSpecialPage(
+			'',
+			new FauxRequest( [
+				'action' => 'edit',
+				'entitytitle' => 'Test Wish',
+				'text' => 'Replaced text',
+			], true ),
+			'qqx',
+			$this->getTestUser()->getAuthority()
+		);
+
+		// 'status' is a wishedit parameter, so this error shows that wishedit ran.
+		$this->assertStringContainsString( '(paramvalidator-missingparam: status', $html );
 	}
 }

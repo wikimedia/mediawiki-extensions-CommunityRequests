@@ -4,7 +4,17 @@
 			"ऐक्टिवेटेड्"
 		]
 	},
+	"communityrequests-tags-label": "टैग",
+	"communityrequests-tags-heading": "टैग",
+	"communityrequests-tags-more": "+ $1 आउ",
 	"communityrequests-tag-admins": "प्रशासक आउ कोषाध्यक्ष",
+	"communityrequests-tag-categories": "श्रेणी",
+	"communityrequests-tag-citations": "उद्धरण",
+	"communityrequests-tag-editing": "सम्पादन",
+	"communityrequests-tag-ios": "विकिपीडिया iOS एप",
+	"communityrequests-tag-android": "विकिपीडिया एण्ड्राइड एप",
+	"communityrequests-tag-mobile-web": "मोबाइल जाल",
+	"communityrequests-tag-multimedia-commons": "मल्टीमीडिया आउ कामन्स",
 	"communityrequests-tag-newcomers": "नया योगदानकर्ता",
 	"communityrequests-tag-notifications": "अधिसूचना",
 	"communityrequests-tag-patrolling": "परीक्षण",

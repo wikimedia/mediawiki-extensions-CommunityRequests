@@ -13,6 +13,7 @@
 	"communityrequests-form-subtitle": "د ټولنې غوښتنلړ ته ښه راغلاست. مهرباني وکړئ د خپلې غوښتنې د سپارلو لپاره لاندې فورمه ډکه کړئ.",
 	"communityrequests-wish-not-found": "[[$1|$2]] غوښتنه ونه موندل شوه، باوري پېژند نه دی، يا د [[Special:WishlistIntake]] له لارې جوړه شوې نه ده.",
 	"communityrequests-focus-area-not-found": "د [[$1|$2]] پام‌وړ سيمه ونه موندل شوه، باوري پېژند نه دی، يا د [[Special:EditFocusArea]] له لارې جوړه شوې نه ده.",
+	"communityrequests-wish-submissions-closed": "د غوښتنو سپارلو موده پای ته ورسېده.",
 	"communityrequests-form-error": "يو څه ناسم پېښ شول. مهرباني وکړئ بياځلي د خوندي‌کولو هڅه وکړئ، يا د [[$1|خبرو اترو مخ]] کې د مرستې غوښتنه وکړئ.",
 	"communityrequests-intake-focus-area": "پام‌وړ سيمه",
 	"communityrequests-baselang-no-results": "هېڅ پايلې نشته",

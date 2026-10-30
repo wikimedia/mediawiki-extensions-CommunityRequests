@@ -7,7 +7,7 @@
 			"Blockernagnto"
 		]
 	},
-	"communityrequests-desc": "管理wiki社群的技術建議和請求的系統。",
+	"communityrequests-desc": "是一個管理wiki社群的技術建議和請求的系統。",
 	"communityrequests-wish-loading-error": "在解析願望文字時出現錯誤。其中可能包含無效wikitext。請[$1 重新整理]後再試一次、或者使用[[$2|原始碼編輯器]]、或者在[[$3|討論頁]]尋求協助。",
 	"communityrequests-unknown-parser-function": "'$1'解析器函數參數無效。",
 	"communityrequests-edit-with-form": "用表單編輯",
@@ -42,8 +42,8 @@
 	"communityrequests-wishtype-error": "請選擇願望類型。",
 	"communityrequests-tags-label": "標籤",
 	"communityrequests-tags-description": "選擇與您的願望最相關的標籤。",
-	"communityrequests-audience-label": "主要受影響使用者",
-	"communityrequests-audience-description": "說明這將主要影響哪些使用者群體和情境",
+	"communityrequests-audience-label": "主要受影響的使用者",
+	"communityrequests-audience-description": "說明這將主要影響到哪些使用者群體和情境",
 	"communityrequests-audience-error": "請在此欄位中輸入一個值（介於$1至$2個{{PLURAL:$2|字元}}）。",
 	"communityrequests-phabricator-label": "Phabricator工單",
 	"communityrequests-phabricator-desc": "輸入Phabricator工單ID或URL。",

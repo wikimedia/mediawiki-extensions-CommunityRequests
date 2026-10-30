@@ -15,6 +15,7 @@
 	"communityrequests-focus-area-not-found": "Aagga diiradda [[$1|$2]] lama helin, ma aha aqoonsi sax ah, ama laguma abuurin iyada oo loo marayo [[Special:EditFocusArea]].",
 	"communityrequests-wish-submissions-closed": "Muddadii soo gudbinta rabitaannada way dhammaatay.",
 	"communityrequests-form-error": "Waxbaa khaldamay. Fadlan isku day inaad mar kale kaydiso, ama caawimaad ka codso [[$1|bogga doodda]].",
+	"communityrequests-captcha-error": "Gudbintaada lama xaqiijin karin. Fadlan dhammaystir captcha oo isku day inaad mar kale kaydiso.",
 	"communityrequests-intake-focus-area": "Aagga diiradda",
 	"communityrequests-baselang-no-results": "Natiijooyin ma jiraan",
 	"communityrequests-wish-baselang": "Luqadda rabitaankan lagu qoray",

@@ -314,6 +314,35 @@ class WishlistConfigTest extends MediaWikiUnitTestCase {
 		$this->assertNull( $this->config->getStatusLabelFromWikitextVal( 'wish', 'bogus' ) );
 	}
 
+	public function testGetWishTypeWikitextValFromId(): void {
+		$this->assertSame( 'feature', $this->config->getWishTypeWikitextValFromId( 0 ) );
+		$this->assertSame( 'change', $this->config->getWishTypeWikitextValFromId( 2 ) );
+		// A type that was removed from configuration falls back to the default type.
+		$this->assertSame( 'feature', $this->config->getWishTypeWikitextValFromId( 99 ) );
+	}
+
+	public function testGetStatusWikitextValFromId(): void {
+		$this->assertSame( 'open', $this->config->getStatusWikitextValFromId( 0 ) );
+		$this->assertSame( 'closed', $this->config->getStatusWikitextValFromId( 1 ) );
+		// A status that was removed from configuration falls back to the default status.
+		$this->assertSame( 'unknown', $this->config->getStatusWikitextValFromId( 99 ) );
+	}
+
+	public function testGetTagWikitextValFromId(): void {
+		$this->assertSame( 'admins', $this->config->getTagWikitextValFromId( 0 ) );
+		$this->assertSame( 'editing', $this->config->getTagWikitextValFromId( 2 ) );
+		$this->assertNull( $this->config->getTagWikitextValFromId( 99 ) );
+	}
+
+	public function testGetTagWikitextValsFromIds(): void {
+		$this->assertSame( [], $this->config->getTagWikitextValsFromIds( [] ) );
+		// Tags that were removed from configuration are left out.
+		$this->assertSame(
+			[ 'admins', 'editing' ],
+			$this->config->getTagWikitextValsFromIds( [ 0, 99, 2 ] )
+		);
+	}
+
 	/**
 	 * @dataProvider provideGetDefaultStatusWikitextVal
 	 */

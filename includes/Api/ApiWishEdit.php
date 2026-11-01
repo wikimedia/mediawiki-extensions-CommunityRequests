@@ -119,10 +119,7 @@ class ApiWishEdit extends ApiWishlistEntityBase {
 				ParamValidator::PARAM_REQUIRED => true,
 			],
 			Wish::PARAM_TAGS => [
-				ParamValidator::PARAM_TYPE => array_values( array_map(
-					fn ( array $tag ) => $this->config->getTagWikitextValFromId( $tag['id'] ),
-					$this->config->getNavigationTags()
-				) ),
+				ParamValidator::PARAM_TYPE => array_keys( $this->config->getNavigationTags() ),
 				ParamValidator::PARAM_ISMULTI => true,
 			],
 			Wish::PARAM_AUDIENCE => [

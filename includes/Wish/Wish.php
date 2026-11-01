@@ -146,10 +146,7 @@ class Wish extends AbstractWishlistEntity {
 			self::PARAM_FOCUS_AREA => $config->getEntityWikitextVal( $this->getFocusAreaPage() ) ?: '',
 			self::PARAM_DESCRIPTION => $this->description,
 			self::PARAM_AUDIENCE => $this->audience,
-			self::PARAM_TAGS => array_map(
-				static fn ( $id ) => $config->getTagWikitextValFromId( $id ),
-				$this->tags
-			),
+			self::PARAM_TAGS => $config->getTagWikitextValsFromIds( $this->tags ),
 			self::PARAM_PHAB_TASKS => array_map( static fn ( $t ) => "T$t", $this->phabtasks ),
 			self::PARAM_PROPOSER => $this->proposer?->getName(),
 			self::PARAM_VOTE_COUNT => $this->votecount,
@@ -169,10 +166,7 @@ class Wish extends AbstractWishlistEntity {
 				self::PARAM_STATUS => $config->getStatusWikitextValFromId( $this->status ),
 				self::PARAM_TYPE => $config->getWishTypeWikitextValFromId( $this->type ),
 				self::PARAM_TITLE => $this->getTitleSanitizedForWikitext(),
-				self::PARAM_TAGS => array_map(
-					static fn ( $id ) => $config->getTagWikitextValFromId( $id ),
-					$this->tags
-				),
+				self::PARAM_TAGS => $config->getTagWikitextValsFromIds( $this->tags ),
 				self::PARAM_PHAB_TASKS => array_map( static fn ( $id ) => "T$id", $this->phabtasks ),
 				self::PARAM_FOCUS_AREA => $config->getEntityWikitextVal( $this->focusarea ) ?: '',
 				self::PARAM_CREATED => MWTimestamp::convert( TS_ISO_8601, $this->created ),

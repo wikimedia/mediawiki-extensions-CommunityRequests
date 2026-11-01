@@ -210,12 +210,23 @@ class WishlistConfig {
 	 * @return string Wikitext value.
 	 */
 	public function getDefaultStatusWikitextVal(): string {
-		foreach ( $this->statuses as $statusVal => $statusInfo ) {
-			if ( $statusInfo['default'] ?? false ) {
-				return $statusVal;
+		return $this->getDefaultWikitextVal( $this->statuses );
+	}
+
+	/**
+	 * Get the wikitext value for the default entry of an enum-esque configuration array.
+	 * This is either the one with `default: true` or the first in the list if no default is configured.
+	 *
+	 * @param array $config
+	 * @return string Wikitext value.
+	 */
+	private function getDefaultWikitextVal( array $config ): string {
+		foreach ( $config as $val => $info ) {
+			if ( $info['default'] ?? false ) {
+				return $val;
 			}
 		}
-		return array_keys( $this->statuses )[0];
+		return array_keys( $config )[0];
 	}
 
 	/**
@@ -685,35 +696,51 @@ class WishlistConfig {
 
 	/**
 	 * Get the wikitext value from a wish type ID.
+	 * The default wish type is used if the ID is no longer in the configuration.
 	 *
 	 * @param int $id
 	 * @return string
-	 * @throws ConfigException If the ID is not found in the configuration.
 	 */
 	public function getWishTypeWikitextValFromId( int $id ): string {
-		return $this->getWikitextValFromId( $id, $this->wishTypes );
+		return $this->getWikitextValFromId( $id, $this->wishTypes ) ??
+			$this->getDefaultWikitextVal( $this->wishTypes );
 	}
 
 	/**
 	 * Get the wikitext value from a tag ID.
 	 *
 	 * @param int $id
-	 * @return string
-	 * @throws ConfigException If the ID is not found in the configuration.
+	 * @return ?string Null if the ID is not in the configuration.
 	 */
-	public function getTagWikitextValFromId( int $id ): string {
+	public function getTagWikitextValFromId( int $id ): ?string {
 		return $this->getWikitextValFromId( $id, $this->navigationTags );
 	}
 
 	/**
+	 * Get the wikitext values from a list of tag IDs.
+	 * IDs that are no longer in the configuration are left out.
+	 *
+	 * @param int[] $ids
+	 * @return string[]
+	 */
+	public function getTagWikitextValsFromIds( array $ids ): array {
+		$vals = array_map(
+			fn ( int $id ): ?string => $this->getTagWikitextValFromId( $id ),
+			$ids
+		);
+		return array_values( array_filter( $vals, static fn ( ?string $val ): bool => $val !== null ) );
+	}
+
+	/**
 	 * Get the wikitext value from a status ID.
+	 * The default status is used if the ID is no longer in the configuration.
 	 *
 	 * @param int $id
 	 * @return string
-	 * @throws ConfigException If the ID is not found in the configuration.
 	 */
 	public function getStatusWikitextValFromId( int $id ): string {
-		return $this->getWikitextValFromId( $id, $this->statuses );
+		return $this->getWikitextValFromId( $id, $this->statuses ) ??
+			$this->getDefaultStatusWikitextVal();
 	}
 
 	/**
@@ -722,16 +749,15 @@ class WishlistConfig {
 	 *
 	 * @param int $id
 	 * @param array $config
-	 * @return string
-	 * @throws ConfigException If the ID is not found in the configuration.
+	 * @return ?string Null if the ID is not in the configuration.
 	 */
-	private function getWikitextValFromId( int $id, array $config ): string {
+	private function getWikitextValFromId( int $id, array $config ): ?string {
 		foreach ( $config as $key => $item ) {
 			if ( (int)$item['id'] === $id ) {
 				return $key;
 			}
 		}
-		throw new ConfigException( "ID '$id' not found in configuration." );
+		return null;
 	}
 
 	/**

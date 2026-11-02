@@ -16,6 +16,7 @@
 	"communityrequests-focus-area-not-found": "Fokusområdet [[$1|$2]] blev ikke fundet, er ikke et gyldigt ID, eller blev ikke oprettet via [[Special:EditFocusArea]].",
 	"communityrequests-wish-submissions-closed": "Fristen for at indsende ønsker er udløbet.",
 	"communityrequests-form-error": "Noget gik galt. Prøv at gemme igen, eller bed om hjælp på [[$1|diskussionssiden]].",
+	"communityrequests-captcha-error": "Dit indlæg kunne ikke bekræftes. Du må udfylde captcha og prøve at gemme igen.",
 	"communityrequests-intake-focus-area": "Fokusområde",
 	"communityrequests-baselang-no-results": "Ingen resultater",
 	"communityrequests-wish-baselang": "Sprog, som dette ønske er skrevet på",

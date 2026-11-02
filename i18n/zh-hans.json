@@ -28,6 +28,7 @@
 	"communityrequests-focus-area-not-found": "查无重点领域[[$1|$2]]，因为不是有效的ID或不是通过[[Special:EditFocusArea]]创建的。",
 	"communityrequests-wish-submissions-closed": "愿望提交期已结束。",
 	"communityrequests-form-error": "发生不明错误。请尝试再次保存，或在[[$1|讨论页]]寻求协助。",
+	"communityrequests-captcha-error": "您的提交未能通过验证。请完成验证码后重试保存。",
 	"communityrequests-intake-focus-area": "重点领域",
 	"communityrequests-baselang-no-results": "无结果",
 	"communityrequests-wish-baselang": "此愿望的撰写语言",

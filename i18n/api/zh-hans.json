@@ -2,6 +2,7 @@
 	"@metadata": {
 		"authors": [
 			"Aoum",
+			"GuoPC",
 			"Pawsdt",
 			"Peterxy",
 			"Peterxy12"
@@ -24,6 +25,7 @@
 	"apierror-wishlist-vote-parse": "无法解析愿望清单投票。它可能包含无效wikitext。请确保wikitext中没有多余的竖线符号（<code>|</code>）。",
 	"apierror-wishlist-vote-login-required": "您必须登录才能对愿望或重点领域投票。",
 	"apierror-wishlist-entity-invalid": "指定的愿望清单实体无效或不存在。",
+	"apierror-focus-areas-disabled": "重点领域目前已禁用。",
 	"apierror-querywishes-invalidfocusareas": "提供的全部或部分重点领域ID无效。",
 	"apihelp-focusareaedit-summary": "创建或更新社区愿望清单的重点领域。",
 	"apihelp-focusareaedit-param-focusarea": "要更新的重点领域。可以是完整的页面标题、带有前缀的重点领域ID（例如“FA123”）或整数形式的重点领域ID。留空以创建新重点领域。",

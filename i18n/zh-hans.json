@@ -186,6 +186,7 @@
 	"communityrequests-form-loading-1": "如果表单未加载，请确保您已启用JavaScript。",
 	"communityrequests-form-loading-2": "如果您仍遇到问题，请在$1寻求协助。",
 	"communityrequests-please-log-in": "请登录以提交愿望。",
+	"communityrequests-focus-areas-disabled": "重点领域目前已禁用。",
 	"communityrequests-focus-area-description": "描述",
 	"communityrequests-focus-area-description-description": "详细描述重点领域，包括其范围以及分配的愿望如何相互一致。",
 	"communityrequests-focus-area-short-description": "简短描述",

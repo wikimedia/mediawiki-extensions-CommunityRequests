@@ -4,7 +4,9 @@
 			"Volvox"
 		]
 	},
+	"communityrequests-unknown-parser-function": "De Parserfunktiounsparameter „$1“ ass ongülteg.",
 	"communityrequests-wish-not-found": "De Wonsch [[$1|$2]] gouf net fonnt, ass keng gülteg ID oder gouf net iwwer [[Special:WishlistIntake]] ugeluecht.",
+	"communityrequests-intake-focus-area": "Fokusberäich",
 	"communityrequests-description": "Beschreift Äre Problem",
 	"communityrequests-title-label": "Titel",
 	"communityrequests-description-error": "Gitt wgl. e Wäert fir dat hei Feld un ($1 oder méi {{PLURAL:$1|Zeechen}}).",
@@ -41,7 +43,9 @@
 	"communityrequests-status-wish-declined": "Refuséiert",
 	"communityrequests-status-wish-in-progress": "Amgaang",
 	"communityrequests-status-wish-done": "Fäerdeg",
+	"communityrequests-status-focus-area-declined": "Refuséiert",
 	"communityrequests-status-focus-area-in-progress": "Amgaang",
+	"communityrequests-status-focus-area-done": "Fäerdeg",
 	"communityrequests-error-invalid-status": "Ongültege Status: „$1“",
 	"communityrequests-edit-wish": "Wonsch änneren",
 	"communityrequests-discuss-wish": "Dëse Wonsch diskutéieren",

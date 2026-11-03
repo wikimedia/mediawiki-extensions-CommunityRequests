@@ -77,5 +77,7 @@
 	"communityrequests-wishes-date-header": "Hora (UTC)",
 	"communityrequests-wishes-status-header": "Estado",
 	"communityrequests-focus-area-supported-val": "$1 {{PLURAL:$2|persona|personas}}",
-	"communityrequests-focus-area-owners-label": "Propietarios:"
+	"communityrequests-focus-area-owners-label": "Propietarios:",
+	"communityrequests-translation-translatable": "Esta página contiene texto que no está en $1.",
+	"communityrequests-translation-switch": "Traducirlo automáticamente usando la [https://www.mediawiki.org/wiki/Special:MyLanguage/MinT herramienta de traducción automática de Wikimedia]."
 }

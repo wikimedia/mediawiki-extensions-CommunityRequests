@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"Joseph"
+			"Joseph",
+			"Rumixist"
 		]
 	},
 	"communityrequests-desc": "Bir viki topluluğunun teknik öneri ve isteklerini yönetme sistemi.",
@@ -75,9 +76,9 @@
 	"communityrequests-error-invalid-entity-id": "\"$1\" kimliği ile hiçbir varlık bulunamadı.",
 	"communityrequests-error-invalid-entity-field": "'Alan' değişkeni şunlardan biri olmalıdır: $1",
 	"communityrequests-status": "Durum",
-	"communityrequests-status-wish-under-review": "İnceleniyor",
+	"communityrequests-status-wish-under-review": "Önerilen dilek",
 	"communityrequests-status-wish-declined": "Geri çevrildi",
-	"communityrequests-status-wish-community-opportunity": "Topluluk fırsatı",
+	"communityrequests-status-wish-community-opportunity": "Yardıma açık",
 	"communityrequests-status-wish-prioritized": "Öncelikli",
 	"communityrequests-status-wish-in-progress": "Devam ediyor",
 	"communityrequests-status-wish-done": "Yapıldı",

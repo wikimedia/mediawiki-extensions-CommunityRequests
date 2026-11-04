@@ -43,6 +43,7 @@ class WishlistConfig {
 	public const NOTIFICATIONS_ENABLED = 'CommunityRequestsNotificationsEnabled';
 	public const WISH_SUBMISSIONS_END_DATE = 'CommunityRequestsWishSubmissionsEndDate';
 	public const DECLINE_TEMPLATE = 'CommunityRequestsDeclineTemplate';
+	public const ANON_MACHINE_TRANSLATION_ENABLED = 'CommunityRequestsAnonMachineTranslationEnabled';
 
 	public const CONSTRUCTOR_OPTIONS = [
 		self::ENABLED,
@@ -63,6 +64,7 @@ class WishlistConfig {
 		self::NOTIFICATIONS_ENABLED,
 		self::WISH_SUBMISSIONS_END_DATE,
 		self::DECLINE_TEMPLATE,
+		self::ANON_MACHINE_TRANSLATION_ENABLED,
 		MainConfigNames::LanguageCode,
 	];
 
@@ -84,6 +86,7 @@ class WishlistConfig {
 	private bool $focusAreaVotingEnabled;
 	private bool $notificationsEnabled;
 	private ?string $wishSubmissionsEndDate;
+	private bool $anonMachineTranslationEnabled;
 	public string $siteLanguage;
 
 	public function __construct(
@@ -110,6 +113,7 @@ class WishlistConfig {
 		$this->notificationsEnabled = $config->get( self::NOTIFICATIONS_ENABLED );
 		$this->wishSubmissionsEndDate = $config->get( self::WISH_SUBMISSIONS_END_DATE );
 		$this->declineTemplate = $config->get( self::DECLINE_TEMPLATE );
+		$this->anonMachineTranslationEnabled = $config->get( self::ANON_MACHINE_TRANSLATION_ENABLED );
 		$this->siteLanguage = $config->get( MainConfigNames::LanguageCode );
 	}
 
@@ -188,6 +192,10 @@ class WishlistConfig {
 
 	public function getDeclineTemplate(): string {
 		return $this->declineTemplate;
+	}
+
+	public function isAnonMachineTranslationEnabled(): bool {
+		return $this->anonMachineTranslationEnabled;
 	}
 
 	// Helpers

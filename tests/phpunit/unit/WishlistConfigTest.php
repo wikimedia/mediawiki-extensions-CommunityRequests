@@ -90,6 +90,7 @@ class WishlistConfigTest extends MediaWikiUnitTestCase {
 		$this->assertTrue( $this->config->isFocusAreasEnabled() );
 		$this->assertTrue( $this->config->isFocusAreaVotingEnabled() );
 		$this->assertSame( 'Template:Community Wishlist/Decline', $this->config->getDeclineTemplate() );
+		$this->assertFalse( $this->config->isAnonMachineTranslationEnabled() );
 	}
 
 	public function testGetStatusesEligibleForVoting(): void {
@@ -367,6 +368,7 @@ class WishlistConfigTest extends MediaWikiUnitTestCase {
 				WishlistConfig::NOTIFICATIONS_ENABLED => true,
 				WishlistConfig::WISH_SUBMISSIONS_END_DATE => null,
 				WishlistConfig::DECLINE_TEMPLATE => 'Community Wishlist/Decline',
+				WishlistConfig::ANON_MACHINE_TRANSLATION_ENABLED => false,
 				MainConfigNames::LanguageCode => '',
 			] ),
 			$this->createMock( TitleParser::class ),

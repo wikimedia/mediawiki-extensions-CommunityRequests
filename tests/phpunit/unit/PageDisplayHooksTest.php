@@ -59,6 +59,8 @@ class PageDisplayHooksTest extends MediaWikiUnitTestCase {
 				'title' => static fn ( $testCase ) => $testCase->makeMockTitle( 'Community Wishlist/W123' ),
 				'postEditVal' => null,
 				'prefersMachineTranslation' => false,
+				'userType' => 'anon',
+				'anonMachineTranslationEnabled' => false,
 			],
 			$opts
 		);
@@ -74,21 +76,22 @@ class PageDisplayHooksTest extends MediaWikiUnitTestCase {
 		] );
 		$out->expects( $this->atMost( 1 ) )
 			->method( 'addBodyClasses' );
-		$out->expects( $this->atLeast( count( $expectedModules ) ) )
-			->method( 'addModules' )
-			->willReturnMap(
-				array_map(
-					static fn ( $m ) => [ $m ],
-					$expectedModules
-				)
-			);
+		$addedModules = [];
+		$out->method( 'addModules' )
+			->willReturnCallback( static function ( $module ) use ( &$addedModules ) {
+				$addedModules[] = $module;
+			} );
 		$out->expects( $expectStylesModule ? $this->once() : $this->never() )
 			->method( 'addModuleStyles' )
 			->with( 'ext.communityrequests.styles' );
 		$out->method( 'getTitle' )->willReturn( ( $opts['title'] )( $this ) );
+		$user = $this->createMock( User::class );
+		$user->method( 'isRegistered' )->willReturn( $opts['userType'] !== 'anon' );
+		$user->method( 'isNamed' )->willReturn( $opts['userType'] === 'named' );
+		$user->method( 'isTemp' )->willReturn( $opts['userType'] === 'temp' );
 		$out->expects( $this->atMost( 2 ) )
 			->method( 'getUser' )
-			->willReturn( $this->createMock( User::class ) );
+			->willReturn( $user );
 		if ( in_array( 'ext.communityrequests.voting', $expectedModules ) ) {
 			$out->expects( $this->atMost( 1 ) )
 				->method( 'addJsConfigVars' )
@@ -122,8 +125,10 @@ class PageDisplayHooksTest extends MediaWikiUnitTestCase {
 			WishlistConfig::ENABLED => $opts['enabled'],
 			WishlistConfig::WISH_VOTING_ENABLED => $opts['wishVotingEnabled'],
 			WishlistConfig::FOCUS_AREA_VOTING_ENABLED => $opts['focusAreaVotingEnabled'],
+			WishlistConfig::ANON_MACHINE_TRANSLATION_ENABLED => $opts['anonMachineTranslationEnabled'],
 		], null, $userOptionsManager );
 		$handler->onBeforePageDisplay( $out, $this->createNoOpMock( Skin::class ) );
+		$this->assertSame( $expectedModules, array_values( array_unique( $addedModules ) ) );
 	}
 
 	public static function provideOnBeforePageDisplay(): array {
@@ -163,18 +168,81 @@ class PageDisplayHooksTest extends MediaWikiUnitTestCase {
 				],
 				[],
 			],
-			'view wish, prefers machine translation' => [
+			'view wish, named user, prefers machine translation, anon MT disabled' => [
 				[
 					'title' => static fn ( $testCase ) => $testCase->makeMockTitle( 'Community Wishlist/W123' ),
+					// Disabled to skip the vote lookup for registered users.
+					'wishVotingEnabled' => false,
+					'userType' => 'named',
 					'prefersMachineTranslation' => true,
+					'anonMachineTranslationEnabled' => false,
 				],
-				[ 'ext.communityrequests.voting', 'ext.communityrequests.mint' ],
+				[ 'ext.communityrequests.mint' ],
+			],
+			'view wish, named user, does not prefer machine translation, anon MT disabled' => [
+				[
+					'title' => static fn ( $testCase ) => $testCase->makeMockTitle( 'Community Wishlist/W123' ),
+					// Disabled to skip the vote lookup for registered users.
+					'wishVotingEnabled' => false,
+					'userType' => 'named',
+					'prefersMachineTranslation' => false,
+					'anonMachineTranslationEnabled' => false,
+				],
+				[],
+			],
+			'view wish, anon user, prefers machine translation, anon MT disabled' => [
+				[
+					'title' => static fn ( $testCase ) => $testCase->makeMockTitle( 'Community Wishlist/W123' ),
+					// Disabled to skip the vote lookup for registered users.
+					'wishVotingEnabled' => false,
+					'userType' => 'anon',
+					'prefersMachineTranslation' => true,
+					'anonMachineTranslationEnabled' => false,
+				],
+				[],
+			],
+			'view wish, anon user, prefers machine translation, anon MT enabled' => [
+				[
+					'title' => static fn ( $testCase ) => $testCase->makeMockTitle( 'Community Wishlist/W123' ),
+					// Disabled to skip the vote lookup for registered users.
+					'wishVotingEnabled' => false,
+					'userType' => 'anon',
+					'prefersMachineTranslation' => true,
+					'anonMachineTranslationEnabled' => true,
+				],
+				[ 'ext.communityrequests.mint' ],
+			],
+			'view wish, temp user, prefers machine translation, anon MT disabled' => [
+				[
+					'title' => static fn ( $testCase ) => $testCase->makeMockTitle( 'Community Wishlist/W123' ),
+					// Disabled to skip the vote lookup for registered users.
+					'wishVotingEnabled' => false,
+					'userType' => 'temp',
+					'prefersMachineTranslation' => true,
+					'anonMachineTranslationEnabled' => false,
+				],
+				[],
+			],
+			'view wish, temp user, prefers machine translation, anon MT enabled' => [
+				[
+					'title' => static fn ( $testCase ) => $testCase->makeMockTitle( 'Community Wishlist/W123' ),
+					// Disabled to skip the vote lookup for registered users.
+					'wishVotingEnabled' => false,
+					'userType' => 'temp',
+					'prefersMachineTranslation' => true,
+					'anonMachineTranslationEnabled' => true,
+				],
+				[ 'ext.communityrequests.mint' ],
 			],
 			'view wish talk page' => [
 				[
-					'title' => static fn ( $testCase ) => $testCase->makeMockTitle( 'Talk:Community Wishlist/W123' ),
+					'title' => static fn ( $testCase ) => $testCase->makeMockTitle(
+						'Community Wishlist/W123',
+						[ 'namespace' => NS_TALK ]
+					),
 				],
 				[],
+				false,
 			],
 		];
 	}

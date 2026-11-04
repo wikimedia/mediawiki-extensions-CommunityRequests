@@ -155,6 +155,7 @@ class PageDisplayHooks implements
 				$this->config->isEntityPage( $out->getTitle() ) ||
 				$this->config->isEntityIndexPage( $out->getTitle() )
 			) &&
+			( $out->getUser()->isNamed() || $this->config->isAnonMachineTranslationEnabled() ) &&
 			$this->userOptionsManager->getBoolOption( $out->getUser(), PreferencesHooks::PREF_MACHINETRANSLATION )
 		) {
 			$out->addModules( 'ext.communityrequests.mint' );

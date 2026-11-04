@@ -81,6 +81,7 @@ trait MockWishlistConfigTrait {
 			WishlistConfig::NOTIFICATIONS_ENABLED => true,
 			WishlistConfig::WISH_SUBMISSIONS_END_DATE => null,
 			WishlistConfig::DECLINE_TEMPLATE => 'CommunityRequestsDeclineTemplate',
+			WishlistConfig::ANON_MACHINE_TRANSLATION_ENABLED => false,
 			MainConfigNames::LanguageCode => 'en',
 			...$serviceOptions,
 		] );

@@ -860,6 +860,10 @@
 		"CommunityRequestsDeclineTemplate": {
 			"description": "Decline template to add to the description when a wish is declined using Special:WishlistIntake.",
 			"value": "Template:Community Wishlist/Decline"
+		},
+		"CommunityRequestsAnonMachineTranslationEnabled": {
+			"description": "Whether to load the machine translation module for anonymous users. Temporary accounts are treated as anonymous users. Named users always get it if their 'usemachinetranslation' preference is on.",
+			"value": false
 		}
 	},
 	"attributes": {

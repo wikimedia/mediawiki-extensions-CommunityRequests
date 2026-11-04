@@ -3,13 +3,19 @@ declare( strict_types = 1 );
 
 namespace MediaWiki\Extension\CommunityRequests\Tests\Integration;
 
+use MediaWiki\Context\RequestContext;
 use MediaWiki\Extension\CommunityRequests\AbstractRenderer;
 use MediaWiki\Extension\CommunityRequests\AbstractWishlistStore;
 use MediaWiki\Extension\CommunityRequests\FocusArea\FocusArea;
 use MediaWiki\Extension\CommunityRequests\Wish\Wish;
+use MediaWiki\Extension\CommunityRequests\WishlistConfig;
+use MediaWiki\MainConfigNames;
 use MediaWiki\Page\Article;
 use MediaWiki\Parser\ParserOptions;
+use MediaWiki\Request\FauxRequest;
+use MediaWiki\Tests\User\TempUser\TempUserTestTrait;
 use MediaWiki\Title\Title;
+use MediaWiki\User\User;
 use MediaWikiIntegrationTestCase;
 
 /**
@@ -20,6 +26,7 @@ use MediaWikiIntegrationTestCase;
  */
 class PageDisplayHooksTest extends MediaWikiIntegrationTestCase {
 	use WishlistTestTrait;
+	use TempUserTestTrait;
 
 	protected function getStore(): AbstractWishlistStore {
 		return $this->store;
@@ -105,5 +112,51 @@ class PageDisplayHooksTest extends MediaWikiIntegrationTestCase {
 			'ext-communityrequests',
 			$article->getContext()->getOutput()->getPageTitle()
 		);
+	}
+
+	/**
+	 * @dataProvider provideMachineTranslationModule
+	 */
+	public function testMachineTranslationModule(
+		string $userType,
+		bool $anonEnabled,
+		bool $expectLoaded
+	): void {
+		$this->overrideConfigValues( [
+			// Disabled to skip the vote lookup for registered users.
+			WishlistConfig::WISH_VOTING_ENABLED => false,
+			WishlistConfig::ANON_MACHINE_TRANSLATION_ENABLED => $anonEnabled,
+			MainConfigNames::DefaultUserOptions => [ 'usemachinetranslation' => 1 ] +
+				$this->getServiceContainer()->getMainConfig()->get( MainConfigNames::DefaultUserOptions ),
+		] );
+		$this->enableAutoCreateTempUser();
+
+		$context = new RequestContext();
+		$context->setTitle( Title::newFromText( $this->config->getWishPagePrefix() . '1' ) );
+		$context->setUser( $this->getUserOfType( $userType ) );
+		$out = $context->getOutput();
+		$this->getServiceContainer()->getHookContainer()->run( 'BeforePageDisplay', [ $out, $context->getSkin() ] );
+
+		$this->assertSame( $expectLoaded, in_array( 'ext.communityrequests.mint', $out->getModules() ) );
+	}
+
+	public static function provideMachineTranslationModule(): array {
+		return [
+			'named user, anon MT disabled' => [ 'named', false, true ],
+			'named user, anon MT enabled' => [ 'named', true, true ],
+			'anon user, anon MT disabled' => [ 'anon', false, false ],
+			'anon user, anon MT enabled' => [ 'anon', true, true ],
+			'temp user, anon MT disabled' => [ 'temp', false, false ],
+			'temp user, anon MT enabled' => [ 'temp', true, true ],
+		];
+	}
+
+	private function getUserOfType( string $userType ): User {
+		return match ( $userType ) {
+			'named' => $this->getTestUser()->getUser(),
+			'anon' => $this->getServiceContainer()->getUserFactory()->newAnonymous(),
+			'temp' => $this->getServiceContainer()->getTempUserCreator()
+				->create( null, new FauxRequest() )->getUser(),
+		};
 	}
 }

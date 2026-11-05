@@ -9,6 +9,7 @@
 		<p>
 			<cdx-toggle-switch
 				v-model="enabled"
+				:disabled="inProgress > 0"
 				@update:model-value="onToggle"
 			>
 				<span v-i18n-html:communityrequests-translation-switch>
@@ -21,13 +22,9 @@
 				.params( [ translatedNodeCount, translatableNodeCount ] )
 				.text() }}
 		</div>
-		<div v-if="enabled && errors.length > 0" class="wishlist-translation-errors">
+		<div v-if="enabled && errorText" class="wishlist-translation-errors">
 			<strong>{{ $i18n( 'communityrequests-translation-errors' ).text() }}</strong>
-			<ul>
-				<li v-for="error in errors" :key="error">
-					{{ error }}
-				</li>
-			</ul>
+			{{ errorText }}
 		</div>
 	</cdx-message>
 </template>
@@ -38,6 +35,7 @@ const { CdxMessage, CdxProgressBar, CdxToggleSwitch } = require( '../codex.js' )
 const { cdxIconRobot } = require( './icons.json' );
 const storage = require( 'mediawiki.storage' ).local;
 const storageName = 'wishlist-intake-translation-enabled';
+const requestTimeoutMs = 30000;
 
 module.exports = exports = defineComponent( {
 	name: 'TranslationBanner',
@@ -57,7 +55,7 @@ module.exports = exports = defineComponent( {
 		const inProgress = ref( 0 );
 		const translatableNodes = ref( [] );
 		const translatedNodeCount = ref( 0 );
-		const errors = ref( [] );
+		const errorText = ref( '' );
 
 		// Computed properties
 
@@ -72,14 +70,32 @@ module.exports = exports = defineComponent( {
 
 		// Functions
 
-		async function onToggle() {
+		let currentRun = Promise.resolve();
+
+		/**
+		 * Queue a run so that the wikipage.content hook can't start a parallel one.
+		 *
+		 * @return {Promise}
+		 */
+		function onToggle() {
+			// Catch so that one failed run doesn't block all later runs.
+			currentRun = currentRun.then( applyToggle ).catch( mw.log.error );
+			return currentRun;
+		}
+
+		async function applyToggle() {
 			storage.set( storageName, enabled.value ? '1' : '0' );
+			errorText.value = '';
 			for ( const node of translatableNodes.value ) {
 				if ( !node.isConnected ) {
 					// May have been removed since being queried in init.js
 					continue;
 				}
 				if ( !enabled.value ) {
+					if ( node.nodeValueTranslated === undefined ) {
+						// Never translated, so nothing to restore.
+						continue;
+					}
 					// Disable by returning to untranslated values.
 					node.nodeValue = node.nodeValueUntranslated;
 					node.parentElement.lang = node.langOriginal;
@@ -108,11 +124,11 @@ module.exports = exports = defineComponent( {
 					);
 					node.parentElement.style.opacity = '';
 					inProgress.value--;
-					node.langOriginal = node.lang;
-					node.dirOriginal = node.dir;
-					if ( translatedHtml === '' ) {
+					if ( translatedHtml === null ) {
 						return;
 					}
+					node.langOriginal = node.lang;
+					node.dirOriginal = node.dir;
 					node.parentElement.lang = props.targetLang;
 					node.parentElement.dir = props.targetLangDir;
 					translatedNodeCount.value++;
@@ -125,32 +141,47 @@ module.exports = exports = defineComponent( {
 		/**
 		 * @param {string} html
 		 * @param {string} srcLang
-		 * @return {Promise<string>}
+		 * @return {Promise<string|null>} Null on failure, after setting the error.
 		 */
 		async function getTranslation( html, srcLang ) {
 			const url = `https://cxserver.wikimedia.org/v1/mt/${ srcLang }/${ props.targetLang }/MinT`;
-			const response = await fetch( url, {
-				method: 'POST',
-				headers: {
-					Accept: 'application/json',
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify( { html: html } )
-			} );
-			const body = await response.text();
+			// Old browsers without AbortController (Safari < 12.1) get no timeout.
+			const controller = window.AbortController ? new AbortController() : null;
+			const timeoutId = controller &&
+				setTimeout( () => controller.abort(), requestTimeoutMs );
+			let body;
+			try {
+				const response = await fetch( url, {
+					method: 'POST',
+					headers: {
+						Accept: 'application/json',
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify( { html: html } ),
+					signal: controller && controller.signal
+				} );
+				body = await response.text();
+			} catch ( e ) {
+				errorText.value = mw.msg( e.name === 'AbortError' ?
+					'communityrequests-translation-error-timeout' :
+					'communityrequests-translation-error-network'
+				);
+				return null;
+			} finally {
+				clearTimeout( timeoutId );
+			}
 
 			// It is not always JSON that is returned. T373418.
-			// @todo i18n for error messages
-			let responseBody = '';
+			let responseBody;
 			try {
 				responseBody = JSON.parse( body );
 			} catch ( e ) {
-				errors.value.push( 'Unable to decode MinT response: ' + body );
-				return '';
+				responseBody = {};
 			}
 			if ( !responseBody.contents ) {
-				errors.value.push( 'No MinT response contents. Response was: ' + body );
-				return '';
+				mw.log.warn( 'Invalid MinT response: ' + body );
+				errorText.value = mw.msg( 'communityrequests-translation-error-invalid-response' );
+				return null;
 			}
 
 			// Wrap output with spaces if the input was (MinT strips them).
@@ -302,7 +333,7 @@ module.exports = exports = defineComponent( {
 			inProgress,
 			translatedNodeCount,
 			translatableNodeCount,
-			errors,
+			errorText,
 			userLanguageName,
 			onToggle
 		};

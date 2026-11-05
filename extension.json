@@ -499,7 +499,10 @@
 				"communityrequests-translation-translatable",
 				"communityrequests-translation-switch",
 				"communityrequests-translation-progress",
-				"communityrequests-translation-errors"
+				"communityrequests-translation-errors",
+				"communityrequests-translation-error-network",
+				"communityrequests-translation-error-timeout",
+				"communityrequests-translation-error-invalid-response"
 			]
 		},
 		"ext.communityrequests.voting": {

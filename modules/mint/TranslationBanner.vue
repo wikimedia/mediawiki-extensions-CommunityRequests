@@ -206,6 +206,8 @@ module.exports = exports = defineComponent( {
 						if ( sourceLang === targetLang ||
 							// Skip style elements.
 							node.parentElement instanceof HTMLStyleElement ||
+							// Skip noscript, whose content is raw HTML when JS is enabled.
+							node.parentElement.tagName === 'NOSCRIPT' ||
 							// Skip if any parent has `.translate-no`. T161486.
 							// @todo Fix this to permit `.translate-yes`
 							// to be inside a `.translate-no`.

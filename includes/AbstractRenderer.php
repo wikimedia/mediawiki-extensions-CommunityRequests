@@ -230,7 +230,7 @@ abstract class AbstractRenderer implements MessageLocalizer {
 	protected function getDiv( string $field, string $text ): string {
 		return Html::element(
 			'div',
-			[ 'class' => "ext-communityrequests-{$this->rendererType}--$field" ],
+			[ 'class' => "ext-communityrequests-{$this->rendererType}--$field translate-no" ],
 			$text
 		);
 	}
@@ -240,6 +240,7 @@ abstract class AbstractRenderer implements MessageLocalizer {
 	 * This is usually used for displaying user-submitted content on entity pages.
 	 * As such, it accepts an optional $lang parameter to set the lang/dir attributes
 	 * accordingly so the nodes are translatable by the ext.communityrequests.mint module.
+	 * Without $lang, the translate-no class is added so the content is not translated.
 	 *
 	 * @param string $field
 	 * @param string $html
@@ -250,7 +251,10 @@ abstract class AbstractRenderer implements MessageLocalizer {
 		return Html::rawElement(
 			'div',
 			[
-				'class' => "ext-communityrequests-{$this->rendererType}--$field",
+				'class' => [
+					"ext-communityrequests-{$this->rendererType}--$field",
+					'translate-no' => $lang === null,
+				],
 				'lang' => $lang?->getCode(),
 				'dir' => $lang?->getDir(),
 			],
@@ -265,7 +269,7 @@ abstract class AbstractRenderer implements MessageLocalizer {
 	 * @return string HTML for status chip
 	 */
 	protected function getStatusChipHtml( ?string $wikitextVal = null ): string {
-		$cssClass = "cdx-info-chip ext-communityrequests-{$this->rendererType}--status";
+		$cssClass = "cdx-info-chip ext-communityrequests-{$this->rendererType}--status translate-no";
 
 		$wikitextVal ??= $this->getArgs()[ AbstractWishlistEntity::PARAM_STATUS ] ?? '';
 
@@ -317,7 +321,7 @@ abstract class AbstractRenderer implements MessageLocalizer {
 	protected function getListItem( string $field, string $param ): string {
 		return Html::rawElement(
 			'li',
-			[ 'class' => "ext-communityrequests-{$this->rendererType}--$field" ],
+			[ 'class' => "ext-communityrequests-{$this->rendererType}--$field translate-no" ],
 			// Messages used here include:
 			// * communityrequests-wish-created
 			// * communityrequests-wish-updated
@@ -342,7 +346,7 @@ abstract class AbstractRenderer implements MessageLocalizer {
 
 		$out = Html::element(
 			'div',
-			[ 'class' => 'mw-heading mw-heading2', 'id' => self::LINK_FRAGMENT_VOTING ],
+			[ 'class' => 'mw-heading mw-heading2 translate-no', 'id' => self::LINK_FRAGMENT_VOTING ],
 			// Messages used here:
 			// * communityrequests-focus-area-voting
 			// * communityrequests-wish-voting
@@ -353,7 +357,7 @@ abstract class AbstractRenderer implements MessageLocalizer {
 		] );
 
 		// Add the vote count message.
-		$out .= Html::openElement( 'p' );
+		$out .= Html::openElement( 'p', [ 'class' => 'translate-no' ] );
 		if ( !$this->isDefaultStatus() || $votingEnabled ) {
 			// Messages used here:
 			// * communityrequests-focus-area-voting-info
@@ -428,7 +432,7 @@ abstract class AbstractRenderer implements MessageLocalizer {
 		}
 		return Html::element(
 			'div',
-			[ 'class' => 'mw-heading mw-heading3' ],
+			[ 'class' => 'mw-heading mw-heading3 translate-no' ],
 			$this->msg( "communityrequests-{$this->rendererType}-voters-heading" )->text()
 		) . $voteSubpageContent;
 	}
@@ -575,12 +579,14 @@ abstract class AbstractRenderer implements MessageLocalizer {
 		if ( $this->config->isWishPage( $this->parser->getPage() ) ) {
 			$backLink .= $this->linkRenderer->makeKnownLink(
 				Title::newFromText( $this->config->getWishIndexPage() ),
-				$this->msg( 'communityrequests-view-all-wishes' )->text()
+				$this->msg( 'communityrequests-view-all-wishes' )->text(),
+				[ 'class' => 'translate-no' ]
 			);
 		} else {
 			$backLink .= $this->linkRenderer->makeKnownLink(
 				Title::newFromText( $this->config->getFocusAreaIndexPage() ),
-				$this->msg( 'communityrequests-view-all-focus-areas' )->text()
+				$this->msg( 'communityrequests-view-all-focus-areas' )->text(),
+				[ 'class' => 'translate-no' ]
 			);
 		}
 		return $languageLinks . $backLink;
@@ -642,7 +648,7 @@ abstract class AbstractRenderer implements MessageLocalizer {
 		$entityPageStr = Title::newFromPageReference( $pageRef )->getPrefixedText();
 		$entityIdSpan = Html::element(
 			'span',
-			[ 'class' => "ext-communityrequests-{$this->rendererType}--id" ],
+			[ 'class' => "ext-communityrequests-{$this->rendererType}--id translate-no" ],
 			$this->msg( 'parentheses', $entityPageStr )->text()
 		);
 		$this->parser->getOutput()->setDisplayTitle(

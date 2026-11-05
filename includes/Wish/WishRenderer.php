@@ -66,7 +66,7 @@ class WishRenderer extends AbstractRenderer {
 		// Description.
 		$descHeading = Html::element(
 			'div',
-			[ 'class' => 'mw-heading mw-heading2' ],
+			[ 'class' => 'mw-heading mw-heading2 translate-no' ],
 			$this->msg( 'communityrequests-wish-description-heading' )->text()
 		);
 		$descHtml = $this->getDivRaw(
@@ -79,7 +79,7 @@ class WishRenderer extends AbstractRenderer {
 		if ( $this->config->isFocusAreasEnabled() ) {
 			$focusAreaHeading = Html::element(
 				'div',
-				[ 'class' => 'mw-heading mw-heading3' ],
+				[ 'class' => 'mw-heading mw-heading3 translate-no' ],
 				$this->msg( 'communityrequests-wish-focus-area-heading' )->text()
 			);
 			$focusArea = $this->getDivRaw(
@@ -94,7 +94,7 @@ class WishRenderer extends AbstractRenderer {
 		// Wish type.
 		$wishTypeHeading = Html::element(
 			'div',
-			[ 'class' => 'mw-heading mw-heading3' ],
+			[ 'class' => 'mw-heading mw-heading3 translate-no' ],
 			$this->msg( 'communityrequests-wish-type-heading' )->text()
 		);
 
@@ -159,7 +159,7 @@ class WishRenderer extends AbstractRenderer {
 		if ( count( $tagLinks ) > 0 ) {
 			$tagsHeading = Html::element(
 				'div',
-				[ 'class' => 'mw-heading mw-heading3', 'id' => 'tags' ],
+				[ 'class' => 'mw-heading mw-heading3 translate-no', 'id' => 'tags' ],
 				$this->msg( 'communityrequests-tags-heading' )->text()
 			);
 			$tagsHtml = $this->getDivRaw( 'tags', $this->commaList( array_filter( $tagLinks ) ) );
@@ -168,7 +168,7 @@ class WishRenderer extends AbstractRenderer {
 		// Audience.
 		$audienceHeading = Html::element(
 			'div',
-			[ 'class' => 'mw-heading mw-heading3' ],
+			[ 'class' => 'mw-heading mw-heading3 translate-no' ],
 			$this->msg( 'communityrequests-wish-audience-heading' )->text()
 		);
 		$audienceHtml = $this->getDivRaw(
@@ -199,7 +199,7 @@ class WishRenderer extends AbstractRenderer {
 		if ( count( $tasks ) ) {
 			$tasksHeading = Html::element(
 				'div',
-				[ 'class' => 'mw-heading mw-heading3' ],
+				[ 'class' => 'mw-heading mw-heading3 translate-no' ],
 				$this->msg( 'communityrequests-wish-phabricator-heading' )->text()
 			);
 			$tasksHtml = $this->getDivRaw(
@@ -211,7 +211,7 @@ class WishRenderer extends AbstractRenderer {
 		// Other details.
 		$detailsHeading = Html::element(
 			'div',
-			[ 'class' => 'mw-heading mw-heading3' ],
+			[ 'class' => 'mw-heading mw-heading3 translate-no' ],
 			$this->msg( 'communityrequests-wish-other-details-heading' )->text()
 		);
 		$proposerVal = $this->getArg( Wish::PARAM_PROPOSER, '' );

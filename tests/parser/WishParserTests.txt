@@ -50,22 +50,22 @@ title=Community_Wishlist/W1
 |baselang = en
 |description = This is a [[test]] {{wish}}.}}
 !! html
-<p><a href="/wiki/Community_Wishlist/Wishes" title="Community Wishlist/Wishes">View all wishes.</a></p><div class="ext-communityrequests-wish"><div class="mw-heading mw-heading2">Description</div><div class="ext-communityrequests-wish--description" lang="en" dir="ltr">
+<p><a href="/wiki/Community_Wishlist/Wishes" class="translate-no" title="Community Wishlist/Wishes">View all wishes.</a></p><div class="ext-communityrequests-wish"><div class="mw-heading mw-heading2 translate-no">Description</div><div class="ext-communityrequests-wish--description" lang="en" dir="ltr">
 <p>This is a <a href="/wiki/Test" title="Test">test</a> This is a test template for parser tests.
 </p>
-</div><div class="mw-heading mw-heading3">Assigned focus area</div><div class="ext-communityrequests-wish--focus-area">
+</div><div class="mw-heading mw-heading3 translate-no">Assigned focus area</div><div class="ext-communityrequests-wish--focus-area translate-no">
 <p>Unassigned
 </p>
-</div><div class="mw-heading mw-heading3">Type of wish</div><div class="ext-communityrequests-wish--wish-type">System change</div><div class="mw-heading mw-heading3" id="tags">Tags</div><div class="ext-communityrequests-wish--tags">
+</div><div class="mw-heading mw-heading3 translate-no">Type of wish</div><div class="ext-communityrequests-wish--wish-type translate-no">System change</div><div class="mw-heading mw-heading3 translate-no" id="tags">Tags</div><div class="ext-communityrequests-wish--tags translate-no">
 <p><a href="/index.php?title=Community_Wishlist/Wishes&amp;tags=multimedia" title="Community Wishlist/Wishes">Multimedia and Commons</a><span class="translate-no">, </span><a href="/index.php?title=Community_Wishlist/Wishes&amp;tags=wikisource" title="Community Wishlist/Wishes">Wikisource</a>
 </p>
-</div><div class="mw-heading mw-heading3">Affected users</div><div class="ext-communityrequests-wish--audience" lang="en" dir="ltr">
+</div><div class="mw-heading mw-heading3 translate-no">Affected users</div><div class="ext-communityrequests-wish--audience" lang="en" dir="ltr">
 <p><a href="/wiki/Test" title="Test">Test</a> audience
 </p>
-</div><div class="mw-heading mw-heading3">Phabricator tasks</div><div class="ext-communityrequests-wish--phabtasks">
+</div><div class="mw-heading mw-heading3 translate-no">Phabricator tasks</div><div class="ext-communityrequests-wish--phabtasks translate-no">
 <p><a href="http://example.org/wiki/phab:T123" class="extiw" title="phab:T123">T123</a><span class="translate-no">, </span><a href="http://example.org/wiki/phab:T456" class="extiw" title="phab:T456">T456</a>
 </p>
-</div><div class="mw-heading mw-heading3">Other details</div><ul><li class="ext-communityrequests-wish--created">Created: 12:00, 1 October 2023</li><li class="ext-communityrequests-wish--updated">Last updated: 00:02, 1 January 1970</li><li class="ext-communityrequests-wish--proposer">Author: <a href="/wiki/User:Maintenance_script" title="User:Maintenance script">Maintenance script</a> (<a href="/wiki/User_talk:Maintenance_script" title="User talk:Maintenance script">talk</a>)</li></ul><div class="mw-heading mw-heading2" id="Voting">Voting</div><div class="ext-communityrequests-wish--voting mw-notalk"><p>This wish currently has <b>0 supporters</b>. Voting for this wish is open until it is completed.</p><div class="ext-communityrequests-voting"></div><noscript><p class="error">Sorry, JavaScript is required to vote in the Community Wishlist.</p></noscript></div></div>
+</div><div class="mw-heading mw-heading3 translate-no">Other details</div><ul><li class="ext-communityrequests-wish--created translate-no">Created: 12:00, 1 October 2023</li><li class="ext-communityrequests-wish--updated translate-no">Last updated: 00:02, 1 January 1970</li><li class="ext-communityrequests-wish--proposer translate-no">Author: <a href="/wiki/User:Maintenance_script" title="User:Maintenance script">Maintenance script</a> (<a href="/wiki/User_talk:Maintenance_script" title="User talk:Maintenance script">talk</a>)</li></ul><div class="mw-heading mw-heading2 translate-no" id="Voting">Voting</div><div class="ext-communityrequests-wish--voting mw-notalk"><p class="translate-no">This wish currently has <b>0 supporters</b>. Voting for this wish is open until it is completed.</p><div class="ext-communityrequests-voting"></div><noscript><p class="error">Sorry, JavaScript is required to vote in the Community Wishlist.</p></noscript></div></div>
 !! end
 
 !! test
@@ -85,22 +85,22 @@ title=Community_Wishlist/W2
 |baselang = en
 |description = This is a wish without voting.}}
 !! html
-<p><a href="/wiki/Community_Wishlist/Wishes" title="Community Wishlist/Wishes">View all wishes.</a></p><div class="ext-communityrequests-wish"><div class="mw-heading mw-heading2">Description</div><div class="ext-communityrequests-wish--description" lang="en" dir="ltr">
+<p><a href="/wiki/Community_Wishlist/Wishes" class="translate-no" title="Community Wishlist/Wishes">View all wishes.</a></p><div class="ext-communityrequests-wish"><div class="mw-heading mw-heading2 translate-no">Description</div><div class="ext-communityrequests-wish--description" lang="en" dir="ltr">
 <p>This is a wish without voting.
 </p>
-</div><div class="mw-heading mw-heading3">Assigned focus area</div><div class="ext-communityrequests-wish--focus-area">
+</div><div class="mw-heading mw-heading3 translate-no">Assigned focus area</div><div class="ext-communityrequests-wish--focus-area translate-no">
 <p>Unassigned
 </p>
-</div><div class="mw-heading mw-heading3">Type of wish</div><div class="ext-communityrequests-wish--wish-type">System change</div><div class="mw-heading mw-heading3" id="tags">Tags</div><div class="ext-communityrequests-wish--tags">
+</div><div class="mw-heading mw-heading3 translate-no">Type of wish</div><div class="ext-communityrequests-wish--wish-type translate-no">System change</div><div class="mw-heading mw-heading3 translate-no" id="tags">Tags</div><div class="ext-communityrequests-wish--tags translate-no">
 <p><a href="/index.php?title=Community_Wishlist/Wishes&amp;tags=multimedia" title="Community Wishlist/Wishes">Multimedia and Commons</a><span class="translate-no">, </span><a href="/index.php?title=Community_Wishlist/Wishes&amp;tags=wikisource" title="Community Wishlist/Wishes">Wikisource</a>
 </p>
-</div><div class="mw-heading mw-heading3">Affected users</div><div class="ext-communityrequests-wish--audience" lang="en" dir="ltr">
+</div><div class="mw-heading mw-heading3 translate-no">Affected users</div><div class="ext-communityrequests-wish--audience" lang="en" dir="ltr">
 <p>Example audience
 </p>
-</div><div class="mw-heading mw-heading3">Phabricator tasks</div><div class="ext-communityrequests-wish--phabtasks">
+</div><div class="mw-heading mw-heading3 translate-no">Phabricator tasks</div><div class="ext-communityrequests-wish--phabtasks translate-no">
 <p><a href="http://example.org/wiki/phab:T123" class="extiw" title="phab:T123">T123</a><span class="translate-no">, </span><a href="http://example.org/wiki/phab:T456" class="extiw" title="phab:T456">T456</a>
 </p>
-</div><div class="mw-heading mw-heading3">Other details</div><ul><li class="ext-communityrequests-wish--created">Created: 12:00, 1 October 2023</li><li class="ext-communityrequests-wish--updated">Last updated: 00:02, 1 January 1970</li><li class="ext-communityrequests-wish--proposer">Author: <a href="/wiki/User:Maintenance_script" title="User:Maintenance script">Maintenance script</a> (<a href="/wiki/User_talk:Maintenance_script" title="User talk:Maintenance script">talk</a>)</li></ul><div class="mw-heading mw-heading2" id="Voting">Voting</div><div class="ext-communityrequests-wish--voting mw-notalk"><p>This wish currently has <b>0 supporters</b>. Supporting this wish is currently disabled.</p></div></div>
+</div><div class="mw-heading mw-heading3 translate-no">Other details</div><ul><li class="ext-communityrequests-wish--created translate-no">Created: 12:00, 1 October 2023</li><li class="ext-communityrequests-wish--updated translate-no">Last updated: 00:02, 1 January 1970</li><li class="ext-communityrequests-wish--proposer translate-no">Author: <a href="/wiki/User:Maintenance_script" title="User:Maintenance script">Maintenance script</a> (<a href="/wiki/User_talk:Maintenance_script" title="User talk:Maintenance script">talk</a>)</li></ul><div class="mw-heading mw-heading2 translate-no" id="Voting">Voting</div><div class="ext-communityrequests-wish--voting mw-notalk"><p class="translate-no">This wish currently has <b>0 supporters</b>. Supporting this wish is currently disabled.</p></div></div>
 !! end
 
 !! test
@@ -120,22 +120,22 @@ title=Community_Wishlist/W2
 |baselang = en
 |description = This is a wish without voting.}}
 !! html
-<p><a href="/wiki/Community_Wishlist/Wishes" title="Community Wishlist/Wishes">View all wishes.</a></p><div class="ext-communityrequests-wish"><div class="mw-heading mw-heading2">Description</div><div class="ext-communityrequests-wish--description" lang="en" dir="ltr">
+<p><a href="/wiki/Community_Wishlist/Wishes" class="translate-no" title="Community Wishlist/Wishes">View all wishes.</a></p><div class="ext-communityrequests-wish"><div class="mw-heading mw-heading2 translate-no">Description</div><div class="ext-communityrequests-wish--description" lang="en" dir="ltr">
 <p>This is a wish without voting.
 </p>
-</div><div class="mw-heading mw-heading3">Assigned focus area</div><div class="ext-communityrequests-wish--focus-area">
+</div><div class="mw-heading mw-heading3 translate-no">Assigned focus area</div><div class="ext-communityrequests-wish--focus-area translate-no">
 <p>Unassigned
 </p>
-</div><div class="mw-heading mw-heading3">Type of wish</div><div class="ext-communityrequests-wish--wish-type">System change</div><div class="mw-heading mw-heading3" id="tags">Tags</div><div class="ext-communityrequests-wish--tags">
+</div><div class="mw-heading mw-heading3 translate-no">Type of wish</div><div class="ext-communityrequests-wish--wish-type translate-no">System change</div><div class="mw-heading mw-heading3 translate-no" id="tags">Tags</div><div class="ext-communityrequests-wish--tags translate-no">
 <p><a href="/index.php?title=Community_Wishlist/Wishes&amp;tags=multimedia" title="Community Wishlist/Wishes">Multimedia and Commons</a><span class="translate-no">, </span><a href="/index.php?title=Community_Wishlist/Wishes&amp;tags=wikisource" title="Community Wishlist/Wishes">Wikisource</a>
 </p>
-</div><div class="mw-heading mw-heading3">Affected users</div><div class="ext-communityrequests-wish--audience" lang="en" dir="ltr">
+</div><div class="mw-heading mw-heading3 translate-no">Affected users</div><div class="ext-communityrequests-wish--audience" lang="en" dir="ltr">
 <p>Example audience
 </p>
-</div><div class="mw-heading mw-heading3">Phabricator tasks</div><div class="ext-communityrequests-wish--phabtasks">
+</div><div class="mw-heading mw-heading3 translate-no">Phabricator tasks</div><div class="ext-communityrequests-wish--phabtasks translate-no">
 <p><a href="http://example.org/wiki/phab:T123" class="extiw" title="phab:T123">T123</a><span class="translate-no">, </span><a href="http://example.org/wiki/phab:T456" class="extiw" title="phab:T456">T456</a>
 </p>
-</div><div class="mw-heading mw-heading3">Other details</div><ul><li class="ext-communityrequests-wish--created">Created: 12:00, 1 October 2023</li><li class="ext-communityrequests-wish--updated">Last updated: 00:02, 1 January 1970</li><li class="ext-communityrequests-wish--proposer">Author: <a href="/wiki/User:Maintenance_script" title="User:Maintenance script">Maintenance script</a> (<a href="/wiki/User_talk:Maintenance_script" title="User talk:Maintenance script">talk</a>)</li></ul><div class="mw-heading mw-heading2" id="Voting">Voting</div><div class="ext-communityrequests-wish--voting mw-notalk"><p>This wish currently has <b>0 supporters</b>. Supporting this wish is currently disabled.</p></div></div>
+</div><div class="mw-heading mw-heading3 translate-no">Other details</div><ul><li class="ext-communityrequests-wish--created translate-no">Created: 12:00, 1 October 2023</li><li class="ext-communityrequests-wish--updated translate-no">Last updated: 00:02, 1 January 1970</li><li class="ext-communityrequests-wish--proposer translate-no">Author: <a href="/wiki/User:Maintenance_script" title="User:Maintenance script">Maintenance script</a> (<a href="/wiki/User_talk:Maintenance_script" title="User talk:Maintenance script">talk</a>)</li></ul><div class="mw-heading mw-heading2 translate-no" id="Voting">Voting</div><div class="ext-communityrequests-wish--voting mw-notalk"><p class="translate-no">This wish currently has <b>0 supporters</b>. Supporting this wish is currently disabled.</p></div></div>
 !! end
 
 !! test
@@ -174,19 +174,19 @@ language=qqx
 |baselang = en
 |description = This is a wish with an invalid type.}}
 !! html
-<p><a href="/wiki/Community_Wishlist/Wishes" title="Community Wishlist/Wishes">(communityrequests-view-all-wishes)</a></p><div class="ext-communityrequests-wish"><div class="mw-heading mw-heading2">(communityrequests-wish-description-heading)</div><div class="ext-communityrequests-wish--description" lang="qqx" dir="ltr">
+<p><a href="/wiki/Community_Wishlist/Wishes" class="translate-no" title="Community Wishlist/Wishes">(communityrequests-view-all-wishes)</a></p><div class="ext-communityrequests-wish"><div class="mw-heading mw-heading2 translate-no">(communityrequests-wish-description-heading)</div><div class="ext-communityrequests-wish--description" lang="qqx" dir="ltr">
 <p>This is a wish with an invalid type.
 </p>
-</div><div class="mw-heading mw-heading3">(communityrequests-wish-focus-area-heading)</div><div class="ext-communityrequests-wish--focus-area">
+</div><div class="mw-heading mw-heading3 translate-no">(communityrequests-wish-focus-area-heading)</div><div class="ext-communityrequests-wish--focus-area translate-no">
 <p>(communityrequests-focus-area-unassigned)
 </p>
-</div><div class="mw-heading mw-heading3">(communityrequests-wish-type-heading)</div><div class="ext-communityrequests-wish--wish-type">(communityrequests-wishtype-unknown-label)</div><div class="mw-heading mw-heading3">(communityrequests-wish-audience-heading)</div><div class="ext-communityrequests-wish--audience" lang="qqx" dir="ltr">
+</div><div class="mw-heading mw-heading3 translate-no">(communityrequests-wish-type-heading)</div><div class="ext-communityrequests-wish--wish-type translate-no">(communityrequests-wishtype-unknown-label)</div><div class="mw-heading mw-heading3 translate-no">(communityrequests-wish-audience-heading)</div><div class="ext-communityrequests-wish--audience" lang="qqx" dir="ltr">
 <p>Example audience
 </p>
-</div><div class="mw-heading mw-heading3">(communityrequests-wish-phabricator-heading)</div><div class="ext-communityrequests-wish--phabtasks">
+</div><div class="mw-heading mw-heading3 translate-no">(communityrequests-wish-phabricator-heading)</div><div class="ext-communityrequests-wish--phabtasks translate-no">
 <p><a href="http://example.org/wiki/phab:T123" class="extiw" title="phab:T123">T123</a><span class="translate-no">(comma-separator)</span><a href="http://example.org/wiki/phab:T456" class="extiw" title="phab:T456">T456</a>
 </p>
-</div><div class="mw-heading mw-heading3">(communityrequests-wish-other-details-heading)</div><ul><li class="ext-communityrequests-wish--created">(communityrequests-wish-created: 12:00, 1 (october) 2023)</li><li class="ext-communityrequests-wish--updated">(communityrequests-wish-updated: 00:02, 1 (january) 1970)</li><li class="ext-communityrequests-wish--proposer">(communityrequests-wish-proposer: (signature: Maintenance script, Maintenance script))</li></ul><div class="mw-heading mw-heading2" id="Voting">(communityrequests-wish-voting)</div><div class="ext-communityrequests-wish--voting mw-notalk"><p>(communityrequests-wish-voting-info: 0, 0) (communityrequests-wish-voting-info-open)</p><div class="ext-communityrequests-voting"></div><noscript><p class="error">(communityrequests-voting-no-js)</p></noscript></div></div>
+</div><div class="mw-heading mw-heading3 translate-no">(communityrequests-wish-other-details-heading)</div><ul><li class="ext-communityrequests-wish--created translate-no">(communityrequests-wish-created: 12:00, 1 (october) 2023)</li><li class="ext-communityrequests-wish--updated translate-no">(communityrequests-wish-updated: 00:02, 1 (january) 1970)</li><li class="ext-communityrequests-wish--proposer translate-no">(communityrequests-wish-proposer: (signature: Maintenance script, Maintenance script))</li></ul><div class="mw-heading mw-heading2 translate-no" id="Voting">(communityrequests-wish-voting)</div><div class="ext-communityrequests-wish--voting mw-notalk"><p class="translate-no">(communityrequests-wish-voting-info: 0, 0) (communityrequests-wish-voting-info-open)</p><div class="ext-communityrequests-voting"></div><noscript><p class="error">(communityrequests-voting-no-js)</p></noscript></div></div>
 !! end
 
 !! test
@@ -206,19 +206,19 @@ language=qqx
 |baselang = he
 |description = זהו [[test]] {{wish}}}}
 !! html
-<p><a href="/wiki/Community_Wishlist/Wishes" title="Community Wishlist/Wishes">(communityrequests-view-all-wishes)</a></p><div class="ext-communityrequests-wish"><div class="mw-heading mw-heading2">(communityrequests-wish-description-heading)</div><div class="ext-communityrequests-wish--description" lang="qqx" dir="ltr">
+<p><a href="/wiki/Community_Wishlist/Wishes" class="translate-no" title="Community Wishlist/Wishes">(communityrequests-view-all-wishes)</a></p><div class="ext-communityrequests-wish"><div class="mw-heading mw-heading2 translate-no">(communityrequests-wish-description-heading)</div><div class="ext-communityrequests-wish--description" lang="qqx" dir="ltr">
 <p>זהו <a href="/wiki/Test" title="Test">test</a> This is a test template for parser tests
 </p>
-</div><div class="mw-heading mw-heading3">(communityrequests-wish-focus-area-heading)</div><div class="ext-communityrequests-wish--focus-area">
+</div><div class="mw-heading mw-heading3 translate-no">(communityrequests-wish-focus-area-heading)</div><div class="ext-communityrequests-wish--focus-area translate-no">
 <p>(communityrequests-focus-area-unassigned)
 </p>
-</div><div class="mw-heading mw-heading3">(communityrequests-wish-type-heading)</div><div class="ext-communityrequests-wish--wish-type">(communityrequests-wishtype-change-label)</div><div class="mw-heading mw-heading3" id="tags">(communityrequests-tags-heading)</div><div class="ext-communityrequests-wish--tags">
+</div><div class="mw-heading mw-heading3 translate-no">(communityrequests-wish-type-heading)</div><div class="ext-communityrequests-wish--wish-type translate-no">(communityrequests-wishtype-change-label)</div><div class="mw-heading mw-heading3 translate-no" id="tags">(communityrequests-tags-heading)</div><div class="ext-communityrequests-wish--tags translate-no">
 <p><a href="/index.php?title=Community_Wishlist/Wishes&amp;tags=multimedia" title="Community Wishlist/Wishes">(communityrequests-tag-multimedia-commons)</a><span class="translate-no">(comma-separator)</span><a href="/index.php?title=Community_Wishlist/Wishes&amp;tags=wikisource" title="Community Wishlist/Wishes">(communityrequests-tag-wikisource)</a>
 </p>
-</div><div class="mw-heading mw-heading3">(communityrequests-wish-audience-heading)</div><div class="ext-communityrequests-wish--audience" lang="qqx" dir="ltr">
+</div><div class="mw-heading mw-heading3 translate-no">(communityrequests-wish-audience-heading)</div><div class="ext-communityrequests-wish--audience" lang="qqx" dir="ltr">
 <p>קהל לדוגמה
 </p>
-</div><div class="mw-heading mw-heading3">(communityrequests-wish-other-details-heading)</div><ul><li class="ext-communityrequests-wish--created">(communityrequests-wish-created: 12:00, 1 (october) 2023)</li><li class="ext-communityrequests-wish--updated">(communityrequests-wish-updated: 00:02, 1 (january) 1970)</li><li class="ext-communityrequests-wish--proposer">(communityrequests-wish-proposer: (signature: Maintenance script, Maintenance script))</li></ul><div class="mw-heading mw-heading2" id="Voting">(communityrequests-wish-voting)</div><div class="ext-communityrequests-wish--voting mw-notalk"><p>(communityrequests-wish-voting-info: 0, 0) (communityrequests-wish-voting-info-closed)</p></div></div>
+</div><div class="mw-heading mw-heading3 translate-no">(communityrequests-wish-other-details-heading)</div><ul><li class="ext-communityrequests-wish--created translate-no">(communityrequests-wish-created: 12:00, 1 (october) 2023)</li><li class="ext-communityrequests-wish--updated translate-no">(communityrequests-wish-updated: 00:02, 1 (january) 1970)</li><li class="ext-communityrequests-wish--proposer translate-no">(communityrequests-wish-proposer: (signature: Maintenance script, Maintenance script))</li></ul><div class="mw-heading mw-heading2 translate-no" id="Voting">(communityrequests-wish-voting)</div><div class="ext-communityrequests-wish--voting mw-notalk"><p class="translate-no">(communityrequests-wish-voting-info: 0, 0) (communityrequests-wish-voting-info-closed)</p></div></div>
 !! end
 
 !! test
@@ -228,7 +228,7 @@ showindicators=1
 language=qqx
 title=Community_Wishlist/W6
 !! metadata
-wish-status=<span class="error">(communityrequests-error-invalid-status: broken)</span><span class="cdx-info-chip ext-communityrequests-wish--status cdx-info-chip--notice"><span class="cdx-info-chip&#95;&#95;text">(communityrequests-status-wish-under-review)</span></span>
+wish-status=<span class="error">(communityrequests-error-invalid-status: broken)</span><span class="cdx-info-chip ext-communityrequests-wish--status translate-no cdx-info-chip--notice"><span class="cdx-info-chip&#95;&#95;text">(communityrequests-status-wish-under-review)</span></span>
 !! wikitext
 {{#CommunityRequests: wish
 |title = Test Wish
@@ -243,12 +243,12 @@ wish-status=<span class="error">(communityrequests-error-invalid-status: broken)
 |description =
 }}
 !! html
-<p><a href="/wiki/Community_Wishlist/Wishes" title="Community Wishlist/Wishes">(communityrequests-view-all-wishes)</a></p><div class="ext-communityrequests-wish"><div class="mw-heading mw-heading2">(communityrequests-wish-description-heading)</div><div class="ext-communityrequests-wish--description" lang="qqx" dir="ltr">
-</div><div class="mw-heading mw-heading3">(communityrequests-wish-focus-area-heading)</div><div class="ext-communityrequests-wish--focus-area">
+<p><a href="/wiki/Community_Wishlist/Wishes" class="translate-no" title="Community Wishlist/Wishes">(communityrequests-view-all-wishes)</a></p><div class="ext-communityrequests-wish"><div class="mw-heading mw-heading2 translate-no">(communityrequests-wish-description-heading)</div><div class="ext-communityrequests-wish--description" lang="qqx" dir="ltr">
+</div><div class="mw-heading mw-heading3 translate-no">(communityrequests-wish-focus-area-heading)</div><div class="ext-communityrequests-wish--focus-area translate-no">
 <p>(communityrequests-focus-area-unassigned)
 </p>
-</div><div class="mw-heading mw-heading3">(communityrequests-wish-type-heading)</div><div class="ext-communityrequests-wish--wish-type">(communityrequests-wishtype-change-label)</div><div class="mw-heading mw-heading3">(communityrequests-wish-audience-heading)</div><div class="ext-communityrequests-wish--audience" lang="qqx" dir="ltr">
+</div><div class="mw-heading mw-heading3 translate-no">(communityrequests-wish-type-heading)</div><div class="ext-communityrequests-wish--wish-type translate-no">(communityrequests-wishtype-change-label)</div><div class="mw-heading mw-heading3 translate-no">(communityrequests-wish-audience-heading)</div><div class="ext-communityrequests-wish--audience" lang="qqx" dir="ltr">
 <p>Example audience
 </p>
-</div><div class="mw-heading mw-heading3">(communityrequests-wish-other-details-heading)</div><ul><li class="ext-communityrequests-wish--created">(communityrequests-wish-created: 05:54, 10 (october) 2025)</li><li class="ext-communityrequests-wish--updated">(communityrequests-wish-updated: 00:02, 1 (january) 1970)</li><li class="ext-communityrequests-wish--proposer">(communityrequests-wish-proposer: (signature: Maintenance script, Maintenance script))</li></ul><div class="mw-heading mw-heading2" id="Voting">(communityrequests-wish-voting)</div><div class="ext-communityrequests-wish--voting mw-notalk"><p>(communityrequests-wish-voting-info: 0, 0) (communityrequests-wish-voting-info-closed)</p></div></div>
+</div><div class="mw-heading mw-heading3 translate-no">(communityrequests-wish-other-details-heading)</div><ul><li class="ext-communityrequests-wish--created translate-no">(communityrequests-wish-created: 05:54, 10 (october) 2025)</li><li class="ext-communityrequests-wish--updated translate-no">(communityrequests-wish-updated: 00:02, 1 (january) 1970)</li><li class="ext-communityrequests-wish--proposer translate-no">(communityrequests-wish-proposer: (signature: Maintenance script, Maintenance script))</li></ul><div class="mw-heading mw-heading2 translate-no" id="Voting">(communityrequests-wish-voting)</div><div class="ext-communityrequests-wish--voting mw-notalk"><p class="translate-no">(communityrequests-wish-voting-info: 0, 0) (communityrequests-wish-voting-info-closed)</p></div></div>
 !! end

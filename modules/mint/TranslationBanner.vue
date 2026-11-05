@@ -258,22 +258,26 @@ module.exports = exports = defineComponent( {
 				return JSON.parse( stored );
 			}
 			const url = 'https://cxserver.wikimedia.org/v1/list/mt';
-			const response = await fetch( url );
-			const body = await response.text();
-			const sourceLangs = [];
+			let mintLangs;
 			try {
-				const mintLangs = JSON.parse( body ).MinT;
-				// The API maps each language to those that it can be translated to,
-				// but we want a list of all possible source langs for our target.
-				if ( mintLangs[ targetLang ] ) {
-					for ( const sourceLang of Object.keys( mintLangs ) ) {
-						if ( mintLangs[ sourceLang ].includes( targetLang ) ) {
-							sourceLangs.push( sourceLang );
-						}
+				const response = await fetch( url );
+				mintLangs = ( await response.json() ).MinT;
+			} catch ( e ) {
+				mintLangs = null;
+			}
+			if ( !mintLangs ) {
+				// Do not cache a failed request, so the next page load tries again.
+				return [];
+			}
+			const sourceLangs = [];
+			// The API maps each language to those that it can be translated to,
+			// but we want a list of all possible source langs for our target.
+			if ( mintLangs[ targetLang ] ) {
+				for ( const sourceLang of Object.keys( mintLangs ) ) {
+					if ( mintLangs[ sourceLang ].includes( targetLang ) ) {
+						sourceLangs.push( sourceLang );
 					}
 				}
-			} catch ( e ) {
-				// Unable to parse response.
 			}
 			// Store for 24 hours.
 			storage.set( localStorageKey, JSON.stringify( sourceLangs ), 60 * 60 * 24 );

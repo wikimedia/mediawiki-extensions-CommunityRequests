@@ -52,10 +52,18 @@ class VoteRenderer extends AbstractRenderer {
 
 		$space = $this->msg( 'word-separator' )->escaped();
 		$out = Html::element( 'span', [ 'class' => 'ext-communityrequests-vote-entry--support' ] ) .
-			Html::element( 'b', [], $this->msg( 'communityrequests-support-label' )->text() ) .
+			Html::element(
+				'b',
+				[ 'class' => 'translate-no' ],
+				$this->msg( 'communityrequests-support-label' )->text()
+			) .
 			$space . $this->parseFieldWikitext( $comment, true ) .
-			$space . $this->msg( 'signature', $username, $username )->parse() .
-			$space . $this->formatDate( $timestamp );
+			$space . Html::rawElement(
+				'span',
+				[ 'class' => 'translate-no' ],
+				$this->msg( 'signature', $username, $username )->parse() .
+					$space . $this->formatDate( $timestamp )
+			);
 
 		return Html::rawElement(
 			'div',

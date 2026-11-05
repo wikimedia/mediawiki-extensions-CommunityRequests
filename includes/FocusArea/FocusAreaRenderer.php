@@ -63,11 +63,7 @@ class FocusAreaRenderer extends AbstractRenderer {
 		$this->setDisplayTitleAndIndicator();
 
 		// Description.
-		$out .= Html::element(
-			'div',
-			[ 'class' => 'mw-heading mw-heading2 translate-no' ],
-			$this->msg( 'communityrequests-wish-description-heading' )->text()
-		);
+		$out .= $this->getHeading( 'communityrequests-wish-description-heading', 2 );
 		$out .= $this->getDivRaw(
 			'description',
 			$this->parseFieldWikitext( $this->getArg( FocusArea::PARAM_DESCRIPTION, '' ) ),
@@ -75,11 +71,7 @@ class FocusAreaRenderer extends AbstractRenderer {
 		);
 
 		// Other details.
-		$out .= Html::element(
-			'div',
-			[ 'class' => 'mw-heading mw-heading3 translate-no' ],
-			$this->msg( 'communityrequests-wish-other-details-heading' )->text()
-		);
+		$out .= $this->getHeading( 'communityrequests-wish-other-details-heading', 3 );
 		$out .= Html::rawElement(
 			'ul',
 			[],
@@ -94,11 +86,7 @@ class FocusAreaRenderer extends AbstractRenderer {
 		);
 
 		// Wishes.
-		$out .= Html::element(
-			'div',
-			[ 'class' => 'mw-heading mw-heading2 translate-no', 'id' => self::LINK_FRAGMENT_WISHES ],
-			$this->msg( 'communityrequests-focus-area-wishes-list' )->text()
-		);
+		$out .= $this->getHeading( 'communityrequests-focus-area-wishes-list', 2, self::LINK_FRAGMENT_WISHES );
 		$out .= $this->getDiv(
 			'wishes-desc',
 			$this->msg( 'communityrequests-focus-area-wishes-description-1' )->text() . ' ' .
@@ -119,18 +107,10 @@ class FocusAreaRenderer extends AbstractRenderer {
 		$owners = $this->getArg( FocusArea::PARAM_OWNERS, '' );
 		$volunteers = $this->getArg( FocusArea::PARAM_VOLUNTEERS, '' );
 		if ( $owners || $volunteers ) {
-			$out .= Html::element(
-				'div',
-				[ 'class' => 'mw-heading mw-heading2 translate-no' ],
-				$this->msg( 'communityrequests-focus-area-stakeholders' )->text()
-			);
+			$out .= $this->getHeading( 'communityrequests-focus-area-stakeholders', 2 );
 
 			if ( $owners ) {
-				$out .= Html::rawElement(
-					'div',
-					[ 'class' => 'mw-heading mw-heading3 translate-no' ],
-					$this->msg( 'communityrequests-focus-area-owners' )->escaped()
-				);
+				$out .= $this->getHeading( 'communityrequests-focus-area-owners', 3 );
 				$out .= $this->getDivRaw(
 					'owners',
 					$this->parseFieldWikitext( $owners ),
@@ -139,11 +119,7 @@ class FocusAreaRenderer extends AbstractRenderer {
 			}
 
 			if ( $volunteers ) {
-				$out .= Html::rawElement(
-					'div',
-					[ 'class' => 'mw-heading mw-heading3 translate-no' ],
-					$this->msg( 'communityrequests-focus-area-volunteers' )->escaped()
-				);
+				$out .= $this->getHeading( 'communityrequests-focus-area-volunteers', 3 );
 				$out .= $this->getDivRaw(
 					'volunteers',
 					$this->parseFieldWikitext( $volunteers ),

@@ -263,6 +263,23 @@ abstract class AbstractRenderer implements MessageLocalizer {
 	}
 
 	/**
+	 * Get a heading for an interface message, with the translate-no class
+	 * so that the ext.communityrequests.mint module does not translate it.
+	 *
+	 * @param string $msgKey
+	 * @param int $level Heading level (2 or 3)
+	 * @param ?string $id
+	 * @return string HTML
+	 */
+	protected function getHeading( string $msgKey, int $level, ?string $id = null ): string {
+		return Html::element(
+			'div',
+			[ 'class' => "mw-heading mw-heading$level translate-no", 'id' => $id ],
+			$this->msg( $msgKey )->text()
+		);
+	}
+
+	/**
 	 * Get status chip HTML for the current entity type.
 	 *
 	 * @param ?string $wikitextVal If not provided, will use the status from $this->getArgs().
@@ -344,13 +361,13 @@ abstract class AbstractRenderer implements MessageLocalizer {
 		);
 		$voteCount = $this->getVotePageOutput()?->getExtensionData( VoteRenderer::EXT_DATA_VOTE_COUNT ) ?? 0;
 
-		$out = Html::element(
-			'div',
-			[ 'class' => 'mw-heading mw-heading2 translate-no', 'id' => self::LINK_FRAGMENT_VOTING ],
+		$out = $this->getHeading(
 			// Messages used here:
 			// * communityrequests-focus-area-voting
 			// * communityrequests-wish-voting
-			$this->msg( "communityrequests-{$this->rendererType}-voting" )->text()
+			"communityrequests-{$this->rendererType}-voting",
+			2,
+			self::LINK_FRAGMENT_VOTING
 		);
 		$out .= Html::openElement( 'div', [
 			'class' => "ext-communityrequests-{$this->rendererType}--voting mw-notalk"
@@ -430,11 +447,8 @@ abstract class AbstractRenderer implements MessageLocalizer {
 		if ( !$voteSubpageContent ) {
 			return '';
 		}
-		return Html::element(
-			'div',
-			[ 'class' => 'mw-heading mw-heading3 translate-no' ],
-			$this->msg( "communityrequests-{$this->rendererType}-voters-heading" )->text()
-		) . $voteSubpageContent;
+		return $this->getHeading( "communityrequests-{$this->rendererType}-voters-heading", 3 ) .
+			$voteSubpageContent;
 	}
 
 	private function getVotesPageTitle(): ?Title {

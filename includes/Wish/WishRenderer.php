@@ -64,11 +64,7 @@ class WishRenderer extends AbstractRenderer {
 		$this->setDisplayTitleAndIndicator();
 
 		// Description.
-		$descHeading = Html::element(
-			'div',
-			[ 'class' => 'mw-heading mw-heading2 translate-no' ],
-			$this->msg( 'communityrequests-wish-description-heading' )->text()
-		);
+		$descHeading = $this->getHeading( 'communityrequests-wish-description-heading', 2 );
 		$descHtml = $this->getDivRaw(
 			'description',
 			$this->parser->recursiveTagParseFully( $args[Wish::PARAM_DESCRIPTION] ?? '' ),
@@ -77,11 +73,7 @@ class WishRenderer extends AbstractRenderer {
 
 		// Focus area.
 		if ( $this->config->isFocusAreasEnabled() ) {
-			$focusAreaHeading = Html::element(
-				'div',
-				[ 'class' => 'mw-heading mw-heading3 translate-no' ],
-				$this->msg( 'communityrequests-wish-focus-area-heading' )->text()
-			);
+			$focusAreaHeading = $this->getHeading( 'communityrequests-wish-focus-area-heading', 3 );
 			$focusArea = $this->getDivRaw(
 				'focus-area',
 				$this->getFocusAreaLink( $args[Wish::PARAM_FOCUS_AREA] ?? null )
@@ -92,11 +84,7 @@ class WishRenderer extends AbstractRenderer {
 		}
 
 		// Wish type.
-		$wishTypeHeading = Html::element(
-			'div',
-			[ 'class' => 'mw-heading mw-heading3 translate-no' ],
-			$this->msg( 'communityrequests-wish-type-heading' )->text()
-		);
+		$wishTypeHeading = $this->getHeading( 'communityrequests-wish-type-heading', 3 );
 
 		$typeArg = $this->getArg( Wish::PARAM_TYPE, '' );
 		$typeLabel = $this->config->getWishTypeLabelFromWikitextVal( $typeArg );
@@ -157,20 +145,12 @@ class WishRenderer extends AbstractRenderer {
 		$tagsHtml = '';
 		$tagsHeading = '';
 		if ( count( $tagLinks ) > 0 ) {
-			$tagsHeading = Html::element(
-				'div',
-				[ 'class' => 'mw-heading mw-heading3 translate-no', 'id' => 'tags' ],
-				$this->msg( 'communityrequests-tags-heading' )->text()
-			);
+			$tagsHeading = $this->getHeading( 'communityrequests-tags-heading', 3, 'tags' );
 			$tagsHtml = $this->getDivRaw( 'tags', $this->commaList( array_filter( $tagLinks ) ) );
 		}
 
 		// Audience.
-		$audienceHeading = Html::element(
-			'div',
-			[ 'class' => 'mw-heading mw-heading3 translate-no' ],
-			$this->msg( 'communityrequests-wish-audience-heading' )->text()
-		);
+		$audienceHeading = $this->getHeading( 'communityrequests-wish-audience-heading', 3 );
 		$audienceHtml = $this->getDivRaw(
 			'audience',
 			$this->parseFieldWikitext(
@@ -197,11 +177,7 @@ class WishRenderer extends AbstractRenderer {
 		$tasksHeading = '';
 		$tasksHtml = '';
 		if ( count( $tasks ) ) {
-			$tasksHeading = Html::element(
-				'div',
-				[ 'class' => 'mw-heading mw-heading3 translate-no' ],
-				$this->msg( 'communityrequests-wish-phabricator-heading' )->text()
-			);
+			$tasksHeading = $this->getHeading( 'communityrequests-wish-phabricator-heading', 3 );
 			$tasksHtml = $this->getDivRaw(
 				'phabtasks',
 				$this->commaList( array_filter( $tasks ) )
@@ -209,11 +185,7 @@ class WishRenderer extends AbstractRenderer {
 		}
 
 		// Other details.
-		$detailsHeading = Html::element(
-			'div',
-			[ 'class' => 'mw-heading mw-heading3 translate-no' ],
-			$this->msg( 'communityrequests-wish-other-details-heading' )->text()
-		);
+		$detailsHeading = $this->getHeading( 'communityrequests-wish-other-details-heading', 3 );
 		$proposerVal = $this->getArg( Wish::PARAM_PROPOSER, '' );
 
 		$detailsHtml = Html::rawElement(

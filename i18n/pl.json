@@ -228,7 +228,7 @@
 	"communityrequests-votes-delete-page-summary": "Usuwanie strony z głosami po usunięciu encji",
 	"communityrequests-wish-count": "$1 {{PLURAL:$2| życzenie|życzenia}}",
 	"communityrequests-vote-count": "$1 {{PLURAL:$2|popierający|popierających}}",
-	"communityrequests-wish-talk-subtitle": "Dyskusja o $1 zapoczątkowana przez $2",
+	"communityrequests-wish-talk-subtitle": "Dyskusja o $1, zapoczątkowanym przez $2",
 	"communityrequests-focus-area-talk-subtitle": "Dyskusja o $1",
 	"communityrequests-translate-title-disabled-reason": "Strony Listy życzeń społeczności mają własny, możliwy do przetłumaczenia tytuł wyświetlany.",
 	"communityrequests-log-name": "Działania dotyczące Listy życzeń społeczności",

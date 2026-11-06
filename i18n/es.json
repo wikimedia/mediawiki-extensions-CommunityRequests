@@ -72,6 +72,8 @@
 	"communityrequests-wishes-type-header": "Tipo",
 	"communityrequests-focus-area-supported-val": "$1 {{PLURAL:$2|persona|personas}}",
 	"communityrequests-focus-area-owners-label": "Propietarios:",
+	"communityrequests-translation-translatable": "Esta página contiene texto que no está en $1.",
+	"communityrequests-translation-switch": "Traducirlo automáticamente usando la [https://www.mediawiki.org/wiki/Special:MyLanguage/MinT herramienta de traducción automática de Wikimedia].",
 	"communityrequests-missing-wish": "Este deseo no existe. Puedes [{{fullurl:{{#Special:Log}}|page={{FULLPAGENAMEE}}}} buscar en los registros relacionados] para averiguar dónde fue, o [[$1|crear un nuevo deseo]].",
 	"communityrequests-translate-title-disabled-reason": "Las páginas de listas de deseos de la comunidad tienen su propio título de visualización traducible.",
 	"communityrequests-log-name": "Registro de lista de deseos de la comunidad",

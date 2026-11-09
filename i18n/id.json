@@ -2,6 +2,7 @@
 	"@metadata": {
 		"authors": [
 			"Birusian",
+			"Exploraz",
 			"Penyuwangi",
 			"Veracious"
 		]
@@ -48,9 +49,9 @@
 	"communityrequests-wish-audience-heading": "Pengguna yang terkena dampak",
 	"communityrequests-wish-phabricator-heading": "Tiket Phabricator",
 	"communityrequests-wish-other-details-heading": "Rincian lainnya",
-	"communityrequests-wish-created": "Dibuat",
-	"communityrequests-wish-updated": "Terakhir diperbarui",
-	"communityrequests-wish-proposer": "Pengirim",
+	"communityrequests-wish-created": "Dibuat: $1",
+	"communityrequests-wish-updated": "Terakhir diperbarui: $1",
+	"communityrequests-wish-proposer": "Pembuat: $1",
 	"communityrequests-wishes-status-header": "Status",
 	"communityrequests-wishes-type-header": "Jenis",
 	"communityrequests-focus-area-unassigned": "Tidak ditugaskan",

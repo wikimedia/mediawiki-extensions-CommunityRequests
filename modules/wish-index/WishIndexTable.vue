@@ -17,7 +17,9 @@
 		@load-more="onLoadMore"
 	>
 		<template #empty-state>
-			{{ $i18n( 'communityrequests-wishes-table-empty' ).text() }}
+			<span class="translate-no">
+				{{ $i18n( 'communityrequests-wishes-table-empty' ).text() }}
+			</span>
 		</template>
 		<template #item-title="{ item, row }">
 			<a
@@ -44,7 +46,7 @@
 			<div
 				v-for="( tag, index ) in item.slice( 0, showTagLimit )"
 				:key="index"
-				class="ext-communityrequests-wishes--tag"
+				class="ext-communityrequests-wishes--tag translate-no"
 			>
 				<cdx-info-chip :status="wishStatusStyle( tag )">
 					{{ Util.getTagLabel( tag ) }}
@@ -52,7 +54,7 @@
 			</div>
 			<a
 				v-if="item.length > showTagLimit"
-				class="ext-communityrequests-wishes--more-tags-link"
+				class="ext-communityrequests-wishes--more-tags-link translate-no"
 				:href="mw.Title.makeTitle( row.crwns, row.crwtitle ).getUrl() + '#tags'"
 				:title="mw.language.listToText( item.slice( showTagLimit ).map(
 					( t ) => mw.msg( 'quotation-marks', Util.getTagLabel( t ) )
@@ -62,12 +64,17 @@
 			</a>
 		</template>
 		<template #item-status="{ item }">
-			<cdx-info-chip :status="wishStatusStyle( item )">
+			<cdx-info-chip class="translate-no" :status="wishStatusStyle( item )">
 				{{ Util.wishStatus( item ) }}
 			</cdx-info-chip>
 		</template>
+		<template #item-votecount="{ item }">
+			<span class="translate-no">{{ item }}</span>
+		</template>
 		<template #item-created="{ item }">
-			{{ formatDate( Date.parse( item ) ) }}
+			<span class="translate-no">
+				{{ formatDate( Date.parse( item ) ) }}
+			</span>
 		</template>
 		<template v-if="error" #tbody>
 			<tr>
@@ -83,7 +90,7 @@
 </template>
 
 <script>
-const { defineComponent, computed, nextTick, ref, ComputedRef, Ref, watch } = require( 'vue' );
+const { defineComponent, computed, nextTick, onMounted, ref, ComputedRef, Ref, watch } = require( 'vue' );
 const { CdxInfoChip, CdxMessage, CdxTable } = require( '../codex.js' );
 const { formatDate } = require( 'mediawiki.DateFormatter' );
 const { CommunityRequestsFocusAreasEnabled, CommunityRequestsStatuses } = require( '../common/config.json' );
@@ -344,6 +351,7 @@ module.exports = exports = defineComponent( {
 
 			// Fire the wikipage.content hook to trigger dynamic updates, such as MinT translations.
 			await nextTick();
+			markInterfaceText();
 			mw.hook( 'wikipage.content' ).fire( mw.util.$content.find( '.ext-communityrequests-wishes' ) );
 
 			// If a section header is being linked to, re-scroll to it after
@@ -408,10 +416,33 @@ module.exports = exports = defineComponent( {
 				focusAreaLabel.textContent = row.focusareatitle;
 			} else {
 				focusAreaLabel = document.createElement( 'span' );
-				focusAreaLabel.className = 'ext-communityrequests-wishes--focusarea-unassigned';
+				focusAreaLabel.className = 'ext-communityrequests-wishes--focusarea-unassigned translate-no';
 				focusAreaLabel.textContent = mw.message( 'communityrequests-focus-area-unassigned' ).escaped();
 			}
-			return mw.message( 'communityrequests-wishes-in-focusarea-text', focusAreaLabel ).parse();
+			const wrapper = document.createElement( 'span' );
+			mw.message( 'communityrequests-wishes-in-focusarea-text', focusAreaLabel ).parseDom()
+				.each( ( i, node ) => {
+					// Only the focus area title should be translated, not the text around it.
+					if ( node.nodeType === Node.TEXT_NODE ) {
+						const span = document.createElement( 'span' );
+						span.className = 'translate-no';
+						span.textContent = node.nodeValue;
+						node = span;
+					}
+					wrapper.appendChild( node );
+				} );
+			return wrapper.innerHTML;
+		}
+
+		/**
+		 * Add translate-no to the parts of the table that Codex renders
+		 * and that we can't set a class on.
+		 */
+		function markInterfaceText() {
+			Array.prototype.forEach.call(
+				table.value.$el.querySelectorAll( 'caption, thead, .cdx-table-pager' ),
+				( el ) => el.classList.add( 'translate-no' )
+			);
 		}
 
 		/**
@@ -425,6 +456,9 @@ module.exports = exports = defineComponent( {
 				CommunityRequestsStatuses[ status ].style :
 				'notice';
 		}
+
+		// The header exists before the wishes load, and MinT may see it then.
+		onMounted( markInterfaceText );
 
 		fetchWishes();
 

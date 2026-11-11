@@ -3,7 +3,8 @@
 		"authors": [
 			"Birusian",
 			"Penyuwangi",
-			"Veracious"
+			"Veracious",
+			"Exploraz"
 		]
 	},
 	"communityrequests-wish-loading-error": "Terjadi kesalahan saat mengurai teks sumber permintaan. Teks tersebut mungkin berisi teks wiki yang tidak sah. Silakan [$1 segarkan] dan coba lagi, gunakan [[$2|penyunting sumber]], atau minta bantuan di [[$3|halaman pembicaraan]].",
@@ -48,9 +49,9 @@
 	"communityrequests-wish-audience-heading": "Pengguna yang terkena dampak",
 	"communityrequests-wish-phabricator-heading": "Tiket Phabricator",
 	"communityrequests-wish-other-details-heading": "Rincian lainnya",
-	"communityrequests-wish-created": "Dibuat",
-	"communityrequests-wish-updated": "Terakhir diperbarui",
-	"communityrequests-wish-proposer": "Pengirim",
+	"communityrequests-wish-created": "Dibuat: $1",
+	"communityrequests-wish-updated": "Terakhir diperbarui: $1",
+	"communityrequests-wish-proposer": "Pembuat: $1",
 	"communityrequests-wishes-status-header": "Status",
 	"communityrequests-wishes-type-header": "Jenis",
 	"communityrequests-focus-area-unassigned": "Tidak ditugaskan",

@@ -7,8 +7,8 @@
 			"Blockernagnto"
 		]
 	},
-	"communityrequests-desc": "是一個管理wiki社群的技術建議和請求的系統。",
-	"communityrequests-wish-loading-error": "在解析願望文字時出現錯誤。其中可能包含無效wikitext。請[$1 重新整理]後再試一次、或者使用[[$2|原始碼編輯器]]、或者在[[$3|討論頁]]尋求協助。",
+	"communityrequests-desc": "是一個管理wiki社群的技術上的建議和請求的系統。",
+	"communityrequests-wish-loading-error": "在解析願望文字時出現錯誤。其中可能包含無效的wikitext。請[$1 重新整理]後再試一次、或者使用[[$2|原始碼編輯器]]、或者在[[$3|討論頁]]尋求協助。",
 	"communityrequests-unknown-parser-function": "'$1'解析器函數參數無效。",
 	"communityrequests-edit-with-form": "用表單編輯",
 	"communityrequests-wishlistintake": "社群願望清單登記表",

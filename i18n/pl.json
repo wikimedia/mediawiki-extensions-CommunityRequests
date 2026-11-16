@@ -188,6 +188,7 @@
 	"communityrequests-translation-switch": "Przetłumacz automatycznie za pomocą [https://www.mediawiki.org/wiki/Special:MyLanguage/MinT narzędzia do tłumaczenia maszynowego Wikimedia].",
 	"communityrequests-translation-progress": "Przetłumaczono $1 z $2 {{PLURAL:$2|części}} tekstu.",
 	"communityrequests-translation-errors": "Wystąpił błąd:",
+	"communityrequests-translation-error-invalid-response": "Usługa tłumaczenia maszynowego zwróciła nieprawidłową odpowiedź.",
 	"communityrequests-disabled": "Ta funkcjonalność listy życzeń społeczności jest obecnie wyłączona.",
 	"communityrequests-publish-wish-summary": "Publikacja życzenia „$1”",
 	"communityrequests-publish-focus-area-summary": "Publikacja obszaru zainteresowania „$1”",

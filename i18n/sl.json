@@ -6,5 +6,7 @@
 	},
 	"communityrequests-wishtype-unknown-label-short": "Neznano",
 	"communityrequests-translation-translatable": "Ta stran vsebuje besedilo, ki ni v $1.",
-	"communityrequests-translation-switch": "Samodejno prevajaj z uporabo [https://www.mediawiki.org/wiki/Special:MyLanguage/MinT Wikimedijinega orodja za strojno prevajanje]."
+	"communityrequests-translation-switch": "Samodejno prevajaj z uporabo [https://www.mediawiki.org/wiki/Special:MyLanguage/MinT Wikimedijinega orodja za strojno prevajanje].",
+	"communityrequests-translation-error-network": "Ni bilo mogoče povezati s storitvijo strojnega prevajanja.",
+	"communityrequests-translation-error-invalid-response": "Storitev strojnega prevajanja je vrnila neveljaven odgovor."
 }

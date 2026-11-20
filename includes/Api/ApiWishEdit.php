@@ -53,7 +53,7 @@ class ApiWishEdit extends ApiWishlistEntityBase {
 			$existingWish = $this->store->get( $title );
 		}
 
-		if ( $existingWish === null && $this->config->areWishSubmissionsClosed() ) {
+		if ( $existingWish === null && $this->config->areWishSubmissionsClosedFor( $this->getAuthority() ) ) {
 			$this->dieWithError(
 				'communityrequests-wish-submissions-closed',
 				'submissionsclosed'

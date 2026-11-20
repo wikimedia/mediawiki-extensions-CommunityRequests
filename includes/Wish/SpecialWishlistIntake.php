@@ -49,7 +49,7 @@ class SpecialWishlistIntake extends AbstractWishlistSpecialPage {
 			$this->requireNamedUser( 'communityrequests-please-log-in' );
 			$this->checkExecutePermissions( $this->getUser() );
 
-			if ( $this->config->areWishSubmissionsClosed() ) {
+			if ( $this->config->areWishSubmissionsClosedFor( $this->getAuthority() ) ) {
 				$this->getOutput()->showErrorPage(
 					$this->getDescription(),
 					'communityrequests-wish-submissions-closed'

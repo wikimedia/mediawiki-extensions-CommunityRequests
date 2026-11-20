@@ -10,6 +10,7 @@ use MediaWiki\MainConfigNames;
 use MediaWiki\MediaWikiServices;
 use MediaWiki\Page\PageReference;
 use MediaWiki\Page\PageReferenceValue;
+use MediaWiki\Permissions\Authority;
 use MediaWiki\Title\MalformedTitleException;
 use MediaWiki\Title\TitleFormatter;
 use MediaWiki\Title\TitleParser;
@@ -188,6 +189,10 @@ class WishlistConfig {
 			$this->wishSubmissionsEndDate,
 			self::WISH_SUBMISSIONS_END_DATE
 		);
+	}
+
+	public function areWishSubmissionsClosedFor( Authority $performer ): bool {
+		return $this->areWishSubmissionsClosed() && !$performer->isAllowed( 'manage-wishlist' );
 	}
 
 	public function getDeclineTemplate(): string {

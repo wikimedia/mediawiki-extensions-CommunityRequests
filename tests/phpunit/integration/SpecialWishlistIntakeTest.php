@@ -70,6 +70,24 @@ class SpecialWishlistIntakeTest extends SpecialPageTestBase {
 		$this->assertStringNotContainsString( 'ext-communityrequests-intake-form', $html );
 	}
 
+	public function testClosedNewSubmissionShowsFormToManager(): void {
+		$this->overrideConfigValues( [
+			WishlistConfig::WISH_SUBMISSIONS_END_DATE => '2000-01-01T00:00:00Z',
+		] );
+
+		[ $html ] = $this->executeSpecialPage(
+			'',
+			null,
+			null,
+			$this->getTestUser( [ 'community-wishlist-manager' ] )->getAuthority(),
+			true
+		);
+
+		$this->assertStringNotContainsString( 'communityrequests-wish-submissions-closed', $html );
+		$this->assertStringContainsString( 'communityrequests-form-subtitle', $html );
+		$this->assertStringContainsString( 'ext-communityrequests-intake-form', $html );
+	}
+
 	public function testClosedSubmissionsAllowEditingExistingWish(): void {
 		$this->overrideConfigValues( [
 			WishlistConfig::WISH_SUBMISSIONS_END_DATE => '2000-01-01T00:00:00Z',

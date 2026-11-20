@@ -10,6 +10,7 @@ use MediaWiki\Language\LanguageNameUtils;
 use MediaWiki\MainConfigNames;
 use MediaWiki\Page\PageReferenceValue;
 use MediaWiki\Tests\Unit\MockServiceDependenciesTrait;
+use MediaWiki\Tests\Unit\Permissions\MockAuthorityTrait;
 use MediaWiki\Title\TitleFormatter;
 use MediaWiki\Title\TitleParser;
 use MediaWiki\Utils\MWTimestamp;
@@ -25,6 +26,7 @@ class WishlistConfigTest extends MediaWikiUnitTestCase {
 	use MockWishlistConfigTrait;
 	use MockServiceDependenciesTrait;
 	use MockTitleTrait;
+	use MockAuthorityTrait;
 
 	protected WishlistConfig $config;
 
@@ -134,6 +136,45 @@ class WishlistConfigTest extends MediaWikiUnitTestCase {
 				WishlistConfig::WISH_SUBMISSIONS_END_DATE => '2026-09-30T00:00:00Z',
 			] );
 			$this->assertTrue( $config->areWishSubmissionsClosed() );
+		} finally {
+			MWTimestamp::setFakeTime( $previousTime );
+		}
+	}
+
+	public function testSubmissionsClosedForNonManagerAtEndDate(): void {
+		$previousTime = MWTimestamp::setFakeTime( '2026-09-30T00:00:00Z' );
+		try {
+			$config = $this->getConfig( [
+				WishlistConfig::WISH_SUBMISSIONS_END_DATE => '2026-09-30T00:00:00Z',
+			] );
+			$performer = $this->mockRegisteredAuthorityWithoutPermissions( [ 'manage-wishlist' ] );
+			$this->assertTrue( $config->areWishSubmissionsClosedFor( $performer ) );
+		} finally {
+			MWTimestamp::setFakeTime( $previousTime );
+		}
+	}
+
+	public function testSubmissionsOpenForManagerAtEndDate(): void {
+		$previousTime = MWTimestamp::setFakeTime( '2026-09-30T00:00:00Z' );
+		try {
+			$config = $this->getConfig( [
+				WishlistConfig::WISH_SUBMISSIONS_END_DATE => '2026-09-30T00:00:00Z',
+			] );
+			$performer = $this->mockRegisteredAuthorityWithPermissions( [ 'manage-wishlist' ] );
+			$this->assertFalse( $config->areWishSubmissionsClosedFor( $performer ) );
+		} finally {
+			MWTimestamp::setFakeTime( $previousTime );
+		}
+	}
+
+	public function testSubmissionsOpenForNonManagerBeforeEndDate(): void {
+		$previousTime = MWTimestamp::setFakeTime( '2026-09-29T23:59:59Z' );
+		try {
+			$config = $this->getConfig( [
+				WishlistConfig::WISH_SUBMISSIONS_END_DATE => '2026-09-30T00:00:00Z',
+			] );
+			$performer = $this->mockRegisteredAuthorityWithoutPermissions( [ 'manage-wishlist' ] );
+			$this->assertFalse( $config->areWishSubmissionsClosedFor( $performer ) );
 		} finally {
 			MWTimestamp::setFakeTime( $previousTime );
 		}

@@ -857,7 +857,7 @@
 			"value": true
 		},
 		"CommunityRequestsWishSubmissionsEndDate": {
-			"description": "The date after which wish submissions are no longer accepted. (e.g. '2026-01-01T00:00:00Z')",
+			"description": "The date after which wish submissions are no longer accepted, except from users with the manage-wishlist right. (e.g. '2026-01-01T00:00:00Z')",
 			"value": null
 		},
 		"CommunityRequestsDeclineTemplate": {

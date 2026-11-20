@@ -243,6 +243,8 @@ class ApiWishEditTest extends ApiTestCase {
 			WishlistConfig::WISH_SUBMISSIONS_END_DATE => '2000-01-01T00:00:00Z',
 		] );
 
+		$user = $this->getTestUser()->getUser();
+
 		$this->expectApiErrorCode( 'submissionsclosed' );
 		$this->expectExceptionMessage( 'The submission period for wishes has ended.' );
 		PermissionHooks::$allowManualEditing = true;
@@ -252,16 +254,18 @@ class ApiWishEditTest extends ApiTestCase {
 			'title' => 'Test Wish',
 			'description' => 'This is a test wish.',
 			'type' => 'feature',
-			'proposer' => $this->getTestUser()->getUser()->getName(),
+			'proposer' => $user->getName(),
 			'created' => '2026-01-01T00:00:00Z',
 			'baselang' => 'en',
-		] );
+		], null, $user );
 	}
 
 	public function testCreateWithNonexistentIdFailsWhenSubmissionsClosed(): void {
 		$this->overrideConfigValues( [
 			WishlistConfig::WISH_SUBMISSIONS_END_DATE => '2000-01-01T00:00:00Z',
 		] );
+
+		$user = $this->getTestUser()->getUser();
 
 		$this->expectApiErrorCode( 'submissionsclosed' );
 		$this->expectExceptionMessage( 'The submission period for wishes has ended.' );
@@ -273,10 +277,31 @@ class ApiWishEditTest extends ApiTestCase {
 			'title' => 'Test Wish',
 			'description' => 'This is a test wish.',
 			'type' => 'feature',
-			'proposer' => $this->getTestUser()->getUser()->getName(),
+			'proposer' => $user->getName(),
 			'created' => '2026-01-01T00:00:00Z',
 			'baselang' => 'en',
+		], null, $user );
+	}
+
+	public function testManagerCanCreateWhenSubmissionsClosed(): void {
+		$this->overrideConfigValues( [
+			WishlistConfig::WISH_SUBMISSIONS_END_DATE => '2000-01-01T00:00:00Z',
 		] );
+		$manager = $this->getTestUser( [ 'community-wishlist-manager' ] )->getUser();
+
+		PermissionHooks::$allowManualEditing = true;
+		[ $ret ] = $this->doApiRequestWithToken( [
+			'action' => 'wishedit',
+			'status' => 'under-review',
+			'title' => 'Test Wish',
+			'description' => 'This is a test wish.',
+			'type' => 'feature',
+			'proposer' => $manager->getName(),
+			'created' => '2026-01-01T00:00:00Z',
+			'baselang' => 'en',
+		], null, $manager );
+
+		$this->assertSame( 'Community Wishlist/W1', $ret['wishedit']['wish'] );
 	}
 
 	public function testExecuteParsingFailure(): void {

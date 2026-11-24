@@ -154,10 +154,10 @@ module.exports = exports = defineComponent( {
 				const response = await fetch( url, {
 					method: 'POST',
 					headers: {
-						Accept: 'application/json'
+						Accept: 'application/json',
+						'Content-Type': 'application/json'
 					},
-					// Form data instead of JSON avoids a CORS preflight request.
-					body: new URLSearchParams( { html: html } ),
+					body: JSON.stringify( { html: html } ),
 					signal: controller && controller.signal
 				} );
 				body = await response.text();
